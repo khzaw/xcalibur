@@ -1,0 +1,27 @@
+﻿Build started 10/19/2014 1:59:08 PM.
+     1>Project "C:\Users\KaungHtet\Dropbox\school\CS3201\cs3201code\xcalibur\SPA\SPA.vcxproj" on node 2 (build target(s)).
+     1>PrepareForBuild:
+         Creating directory "C:\Users\KaungHtet\Dropbox\school\CS3201\cs3201code\xcalibur\Debug\".
+       InitializeBuildStatus:
+         Creating "Debug\SPA.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\source\DesignExtractor.cpp ..\source\Parser.cpp ..\source\PKB.cpp ..\source\TNode.cpp
+         TNode.cpp
+         PKB.cpp
+         Parser.cpp
+         DesignExtractor.cpp
+         Generating Code...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"C:\Users\KaungHtet\Dropbox\school\CS3201\cs3201code\xcalibur\Debug\SPA.lib" /NOLOGO Debug\DesignExtractor.obj
+         Debug\Parser.obj
+         Debug\PKB.obj
+         Debug\TNode.obj
+         SPA.vcxproj -> C:\Users\KaungHtet\Dropbox\school\CS3201\cs3201code\xcalibur\Debug\SPA.lib
+       FinalizeBuildStatus:
+         Deleting file "Debug\SPA.unsuccessfulbuild".
+         Touching "Debug\SPA.lastbuildstate".
+     1>Done Building Project "C:\Users\KaungHtet\Dropbox\school\CS3201\cs3201code\xcalibur\SPA\SPA.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.20

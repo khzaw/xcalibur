@@ -16,11 +16,12 @@
     <ClCompile Include="..\source\PKB.cpp" />
     <ClCompile Include="..\source\QTNode.cpp" />
     <ClCompile Include="..\source\QueryTree.cpp" />
-    <ClCompile Include="..\source\TNode.cpp" />
+    <ClCompile Include="AST.cpp" />
     <ClCompile Include="Follows.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="Parent.cpp" />
     <ClCompile Include="ProcTable.cpp" />
+    <ClCompile Include="TNode.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="VarTable.cpp" />
   </ItemGroup>
@@ -28,11 +29,12 @@
     <ClInclude Include="..\source\PKB.h" />
     <ClInclude Include="..\source\QTNode.h" />
     <ClInclude Include="..\source\QueryTree.h" />
-    <ClInclude Include="..\source\TNode.h" />
+    <ClInclude Include="AST.h" />
     <ClInclude Include="Follows.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Parent.h" />
     <ClInclude Include="ProcTable.h" />
+    <ClInclude Include="TNode.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="VarTable.h" />
   </ItemGroup>

@@ -27,9 +27,6 @@
     <ClCompile Include="..\source\PKB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\TNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Lexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -54,12 +51,15 @@
     <ClCompile Include="VarTable.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
+    <ClCompile Include="AST.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="TNode.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\PKB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\TNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Token.h">
@@ -84,6 +84,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="VarTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AST.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

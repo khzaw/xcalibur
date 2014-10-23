@@ -1,8 +1,13 @@
-﻿Build started 10/22/2014 6:51:06 PM.
-Project "C:\Users\KaungHtet\Dropbox\school\CS3201\cs3201code\xcalibur\SPA\SPA.vcxproj" on node 2 (clean target(s)).
-Project file contains ToolsVersion="12.0". This toolset may be unknown or missing, in which case you may be able to resolve this by installing the appropriate version of MSBuild, or the build may have been forced to a particular ToolsVersion for policy reasons. Treating the project as if it had ToolsVersion="4.0". For more information, please see http://go.microsoft.com/fwlink/?LinkId=291333.
-Done Building Project "C:\Users\KaungHtet\Dropbox\school\CS3201\cs3201code\xcalibur\SPA\SPA.vcxproj" (clean target(s)).
+﻿Build started 23/10/2014 5:05:21 PM.
+     1>Project "F:\cs3201\xcalibur\SPA\SPA.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Touching "Debug\SPA.unsuccessfulbuild".
+       ClCompile:
+         F:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Token.cpp
+         Token.cpp
+     1>f:\cs3201\xcalibur\spa\token.cpp(3): fatal error C1004: unexpected end-of-file found
+     1>Done Building Project "F:\cs3201\xcalibur\SPA\SPA.vcxproj" (build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:00.01
+Time Elapsed 00:00:00.59

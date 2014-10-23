@@ -20,7 +20,9 @@
     <ClCompile Include="Follows.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="Parent.cpp" />
+    <ClCompile Include="ProcTable.cpp" />
     <ClCompile Include="Token.cpp" />
+    <ClCompile Include="VarTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\PKB.h" />
@@ -30,7 +32,9 @@
     <ClInclude Include="Follows.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Parent.h" />
+    <ClInclude Include="ProcTable.h" />
     <ClInclude Include="Token.h" />
+    <ClInclude Include="VarTable.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>

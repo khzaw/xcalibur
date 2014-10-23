@@ -17,7 +17,9 @@
     <ClCompile Include="..\source\QTNode.cpp" />
     <ClCompile Include="..\source\QueryTree.cpp" />
     <ClCompile Include="..\source\TNode.cpp" />
+    <ClCompile Include="Follows.cpp" />
     <ClCompile Include="Lexer.cpp" />
+    <ClCompile Include="Parent.cpp" />
     <ClCompile Include="Token.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -25,7 +27,9 @@
     <ClInclude Include="..\source\QTNode.h" />
     <ClInclude Include="..\source\QueryTree.h" />
     <ClInclude Include="..\source\TNode.h" />
+    <ClInclude Include="Follows.h" />
     <ClInclude Include="Lexer.h" />
+    <ClInclude Include="Parent.h" />
     <ClInclude Include="Token.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

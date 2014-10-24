@@ -6,68 +6,66 @@
 #include "AST.h"
 using namespace std;
 
-/************** Constructors **********************/
-// constructor 
+
 AST::AST(){
 }
 
-template<class T>
-TNode* AST::createNode(string nodeT, T data, int s,int p){
-stringstream ss;
-ss << data;
-string str = ss.str();
-TNode* n = new TNode(nodeT, str,s,p);
+TNode AST::createNode(string nodeT, string data, int s,int p){
+TNode n(nodeT,data,s,p);
 return n;
 }
 
-void AST::insertRoot(TNode* n){
+void AST::insertRoot(TNode n){
 root.push_back(n);
 }
 
-TNode*  AST::getRootNode(){
+TNode  AST::getRootNode(){
 	return root[0];
 }
 
- void AST::assignChild(TNode *n, TNode* c){
-	 n->addChild(c);
+ TNode AST::assignChild(TNode n, TNode c){
+	 n.addChild(c);
+	 cout << n.getNumChildren() << endl;
+	 return n;
 }
 
- void AST::assignParent(TNode *n, TNode *p){
-	 n->addParent(p);
+ TNode AST::assignParent(TNode n, TNode p){
+	 n.addParent(p);
+	 	 return n;
 }
 
- string AST::getTNodeType(TNode* n){
-	return n->getNodeType();
+ string AST::getTNodeType(TNode n){
+	return n.getNodeType();
 }
 
-string AST::getTNodeValue(TNode* n){
-	return n->getData();
+string AST::getTNodeValue(TNode n){
+	return n.getData();
 }
 
-int AST::getTNodeStmtNum(TNode* n){
-	return n->getStmtNum();
+int AST::getTNodeStmtNum(TNode n){
+	return n.getStmtNum();
 }
 
-int AST::getTNodeProcedure(TNode* n){
-	return n->getProcIndex();
+int AST::getTNodeProcedure(TNode n){
+	return n.getProcIndex();
 }
 
-TNode* AST::getTNodeParent(TNode* n){
-	return n->getParent();
+TNode AST::getTNodeParent(TNode n){
+	return n.getParent();
 }
 
-vector<TNode*> AST::getTNodeChild(TNode* n){
-	return n->getChildren();
+TNode AST::getTNodeChild(TNode n, int index){
+	return n.getChild(index);
 }
 
-bool isNodeType(TNode* n,string s){
-	return (n->getNodeType() == s);
+vector<TNode> AST::getTNodeChildren(TNode n){
+	return n.getChildren();
 }
 
-template<class T>
-bool isNodeValue(TNode* n,T v){
-	stringstream ss;
-    ss << v;
-    string str = ss.str();
-	return (n->getData() == str);
+bool AST::isNodeType(TNode n,string s){
+	return (n.getNodeType() == s);
+}
+
+bool AST::isNodeValue(TNode n,string v){
+	return (n.getData() == v);
 }

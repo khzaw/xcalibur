@@ -57,6 +57,12 @@
     <ClCompile Include="TNode.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
+    <ClCompile Include="Modifies.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="Uses.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\PKB.h">
@@ -90,6 +96,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Modifies.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Uses.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

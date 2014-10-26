@@ -14,7 +14,7 @@ int main() {
 	int token = WHITESPACE;
 	string test;
 
-	Lexer Lex("y = xa3bc + 223 + y;");
+	Lexer Lex("procedure hehehe { y = xa3bc + 223 + ChArlie; x = a + b + c; z = 1 + 3 * 4; }");
 
 	while(token != EOL) {
 		token = Lex.lex();

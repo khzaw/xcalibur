@@ -10,7 +10,7 @@ using namespace std;
 class Parser {
 private:
 	string filename;
-	Token nextToken;
+	int nextToken;
 	int loc;
 	string procedureName;
 	Lexer lexer;
@@ -20,8 +20,8 @@ public:
 	void parse(string filename);
 	~Parser();
 private:
-	Token getToken();
-	void match(Token token);
+	int getToken();
+	void match(int token);
 	void program();
 	void procedure();
 	void stmtLst();

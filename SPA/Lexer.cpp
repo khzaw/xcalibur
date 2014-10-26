@@ -54,6 +54,8 @@ void Lexer::getChar() {
 	if(nextChar == '*') charClass = TIMES;
 	if(nextChar == '=') charClass = EQ;
 	if(nextChar == ';') charClass = SEMICOLON;
+	if(nextChar == '{') charClass = OPEN_BLOCK;
+	if(nextChar == '}') charClass = CLOSE_BLOCK;
 }
 
 void Lexer::addChar() {
@@ -70,41 +72,49 @@ int Lexer::lex() {
 
 	switch(charClass) {
 	case LETTER:
-		addChar();
-		getChar();
+		addChar(); getChar();
 		while(charClass == LETTER || charClass == DIGIT) {
-			addChar();
-			getChar();
+			addChar(); getChar();
 		}
 		return IDENT;
 		break;
 	
 	case DIGIT:
-		addChar();
-		getChar();
+		addChar(); getChar();
 		while(charClass == DIGIT) {
-			addChar();
-			getChar();
+			addChar(); getChar();
 		}
 		return INT_LIT;
 		break;
 
 	case PLUS:
-		addChar();
-		getChar();
+		addChar(); getChar();
 		return PLUS;
 		break;
 
+	case TIMES:
+		addChar(); getChar();
+		return TIMES;
+		break;
+
 	case EQ:
-		addChar();
-		getChar();
+		addChar(); getChar();
 		return EQ;
 		break;
 
 	case SEMICOLON:
-		addChar();
-		getChar();
+		addChar(); getChar();
 		return SEMICOLON;
+		break;
+
+	case OPEN_BLOCK:
+		addChar(); getChar();
+		return OPEN_BLOCK;
+		break;
+
+	case CLOSE_BLOCK:
+		addChar(); getChar();
+		return CLOSE_BLOCK;
 		break;
 	}
 }

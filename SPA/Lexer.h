@@ -17,7 +17,9 @@ enum token_type {
 	TIMES,
 	EQ,
 	INT_LIT,
-	SEMICOLON
+	SEMICOLON,
+	OPEN_BLOCK,		// {
+	CLOSE_BLOCK,	// }
 };
 
 class Lexer {

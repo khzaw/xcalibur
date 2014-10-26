@@ -1,9 +1,24 @@
 #include <iostream>
 #include <string>
+#include "Token.h"
+
 
 using namespace std;
 
-enum {DIGIT, LETTER, ERROR, SPACE, EOL, PLUS, TIMES, IDENT, INT_LIT};
+enum token_type {
+	IDENT,
+	CONSTANT,
+	ERROR,
+	LETTER,
+	DIGIT,
+	WHITESPACE,
+	EOL,
+	PLUS,
+	TIMES,
+	EQ,
+	INT_LIT,
+	SEMICOLON
+};
 
 class Lexer {
 
@@ -18,8 +33,8 @@ private:
 public:
 	int lex();
 	void setNewInput(string in);
-	Lexer(string in="");
-	virtual ~Lexer();
+	Lexer(string inputString);
+	~Lexer();
 
 private:
 	void addChar();

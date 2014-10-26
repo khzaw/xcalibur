@@ -1,0 +1,5 @@
+procedure woohoo {
+	a = 3;
+	x = b;
+	b = c;
+}

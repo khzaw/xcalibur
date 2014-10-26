@@ -1,16 +1,45 @@
 #pragma once
 
-#include<stdio.h>
-#include <iostream>
-#include <string>
-#include <vector>
+#include <fstream>
+
+#include "Parser.h"
+#include "Token.h"
+
 
 using namespace std;
 
-#include "PKB.h"
-#include "TNode.h"
+Parser::Parser() {
+	this->nextToken = Token ("");
+	this->procedureName = "";
 
-int Parse () {
+}
 
-	return 0;
+void Parser::parse(string filename) {
+	if(!(Parser::checkFileExists)) {
+		cout << filename << " does not exist!";
+		return;
+	}
+
+	string currentLine, programString;
+	ifstream inputFile;
+	inputFile.open(filename);
+	while(!inputFile.eof()) {
+		getline(inputFile, currentLine);
+		programString += " " + currentLine;
+	}
+	inputFile.close();
+	this->lexer = Lexer(programString);
+	// program();
+
+	
+}
+
+void Parser::program() {
+	nextToken = getToken();
+	procedure();
+}
+
+
+Token Parser::getToken() {
+	
 }

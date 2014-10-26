@@ -14,10 +14,15 @@ const_value: INTEGER
 */
 
 #include "Lexer.h"
+#include <iostream>
 
 using namespace std;
 
-Lexer::Lexer(string in): input(in), charClass(ERROR), nextChar(' '), lexeme("") {
+Lexer::Lexer(string in) {
+	this->input = in;
+	this->charClass = ERROR;
+	this->nextChar = ' ';
+	this->lexeme = "";
 	getChar();
 }
 
@@ -43,10 +48,12 @@ void Lexer::getChar() {
 	if(nextChar > 47 && nextChar < 58)
 		charClass = DIGIT;
 
-	if(nextChar == ' ') charClass = SPACE;
+	if(nextChar == ' ') charClass = WHITESPACE;
 	if(nextChar == '$') charClass = EOL;
 	if(nextChar == '+') charClass = PLUS;
 	if(nextChar == '*') charClass = TIMES;
+	if(nextChar == '=') charClass = EQ;
+	if(nextChar == ';') charClass = SEMICOLON;
 }
 
 void Lexer::addChar() {
@@ -56,17 +63,10 @@ void Lexer::addChar() {
 int Lexer::lex() {
 	lexeme = "";
 
-	while(charClass == SPACE) getChar();
+	while(charClass == WHITESPACE) getChar();
 
-	if(charClass == ERROR) {
-		addChar();
-		getChar();
-		return ERROR;
-	}
-
-	if(charClass == EOL) {
-		return EOL;
-	}
+	if(charClass == ERROR) { addChar(); getChar(); return ERROR; }
+	if(charClass == EOL) { return EOL; }
 
 	switch(charClass) {
 	case LETTER:
@@ -93,6 +93,18 @@ int Lexer::lex() {
 		addChar();
 		getChar();
 		return PLUS;
+		break;
+
+	case EQ:
+		addChar();
+		getChar();
+		return EQ;
+		break;
+
+	case SEMICOLON:
+		addChar();
+		getChar();
+		return SEMICOLON;
 		break;
 	}
 }

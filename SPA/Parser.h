@@ -1,13 +1,14 @@
 #pragma once
 #include <iostream>
 #include "Lexer.h"
+#include "Lexeme.h"
 
 
 using namespace std;
 
 class Parser {
 	string filename;
-	int nextToken;
+	Lexeme nextToken;
 	int loc;
 	string procedureName;
 	Lexer lexer;
@@ -18,7 +19,7 @@ public:
 	void parse();
 	~Parser();
 private:
-	int getToken();
+	Lexeme getToken();
 	void match(int token);
 	void program();
 	void procedure();

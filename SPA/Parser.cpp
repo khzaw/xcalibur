@@ -18,6 +18,7 @@ const_value: INTEGER
 
 #include "Parser.h"
 #include "Lexer.h"
+#include "Lexeme.h"
 
 using namespace std;
 
@@ -26,9 +27,10 @@ Parser::Parser() {
 
 Parser::Parser(string file) {
 	this->procedureName = "";
-	this->nextToken = ERROR;
+	this->nextToken = Lexeme();
 	this->filename = file;
 	this->loc = 0;
+	this->lexer = Lexer("");
 	parse();
 }
 
@@ -50,7 +52,8 @@ void Parser::parse() {
 		programString += " " + currentLine;
 	}
 	inputFile.close();
-	cout << programString << endl;
+	lexer = Lexer(programString);
+	program();
 }
 
 bool Parser::checkFileExists() {
@@ -61,15 +64,18 @@ bool Parser::checkFileExists() {
 }
 
 void Parser::program() {
-	//nextToken = getToken();
-	//procedure();
+	nextToken = getToken();
+	procedure();
 }
 
 void Parser::procedure() {
-	
 }
 
 
 void Parser::match(int token) {
 
+}
+
+Lexeme Parser::getToken() {
+	return lexer.lex();
 }

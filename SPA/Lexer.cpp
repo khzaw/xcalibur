@@ -65,13 +65,13 @@ void Lexer::addChar() {
 	lexeme += nextChar;
 }
 
-int Lexer::lex() {
+Lexeme Lexer::lex() {
 	lexeme = "";
 
 	while(charClass == WHITESPACE) getChar();
 
-	if(charClass == ERROR) { addChar(); getChar(); return ERROR; }
-	if(charClass == EOL) { return EOL; }
+	if(charClass == ERROR) { addChar(); getChar(); return Lexeme(ERROR, lexeme); }
+	if(charClass == EOL) { return Lexeme(EOL, lexeme); }
 
 	switch(charClass) {
 	case LETTER:
@@ -79,7 +79,7 @@ int Lexer::lex() {
 		while(charClass == LETTER || charClass == DIGIT) {
 			addChar(); getChar();
 		}
-		return IDENT;
+		return Lexeme(IDENT, lexeme);
 		break;
 	
 	case DIGIT:
@@ -87,37 +87,37 @@ int Lexer::lex() {
 		while(charClass == DIGIT) {
 			addChar(); getChar();
 		}
-		return INT_LIT;
+		return Lexeme(INT_LIT, lexeme);
 		break;
 
 	case PLUS:
 		addChar(); getChar();
-		return PLUS;
+		return Lexeme(PLUS, lexeme);
 		break;
 
 	case TIMES:
 		addChar(); getChar();
-		return TIMES;
+		return Lexeme(TIMES, lexeme);;
 		break;
 
 	case EQ:
 		addChar(); getChar();
-		return EQ;
+		return Lexeme(EQ, lexeme);
 		break;
 
 	case SEMICOLON:
 		addChar(); getChar();
-		return SEMICOLON;
+		return Lexeme(SEMICOLON, lexeme);
 		break;
 
 	case OPEN_BLOCK:
 		addChar(); getChar();
-		return OPEN_BLOCK;
+		return Lexeme(OPEN_BLOCK, lexeme);
 		break;
 
 	case CLOSE_BLOCK:
 		addChar(); getChar();
-		return CLOSE_BLOCK;
+		return Lexeme(CLOSE_BLOCK, lexeme);
 		break;
 	}
 }

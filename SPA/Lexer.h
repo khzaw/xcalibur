@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
-#include "Token.h"
+#include "Lexeme.h"
 
 
 using namespace std;
@@ -34,7 +34,7 @@ private:
 	string input;
 
 public:
-	int lex();
+	Lexeme lex();
 	void setNewInput(string in);
 	Lexer();
 	Lexer(string inputString);

@@ -190,3 +190,8 @@ UpgradeLog*.htm
 # Microsoft Fakes
 FakesAssemblies/
 *.sdf
+
+*.vcproj
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user

@@ -1,13 +1,74 @@
-﻿Build started 23/10/2014 5:05:21 PM.
-     1>Project "F:\cs3201\xcalibur\SPA\SPA.vcxproj" on node 2 (build target(s)).
-     1>InitializeBuildStatus:
-         Touching "Debug\SPA.unsuccessfulbuild".
+﻿Build started 10/26/2014 8:29:16 PM.
+     1>Project "C:\Users\KaungHtet\Documents\GitHub\xcalibur\SPA\SPA.vcxproj" on node 2 (rebuild target(s)).
+     1>PrepareForBuild:
+         Creating directory "C:\Users\KaungHtet\Documents\GitHub\xcalibur\Debug\".
+       InitializeBuildStatus:
+         Creating "Debug\SPA.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         F:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Token.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\source\DesignExtractor.cpp ..\source\Parser.cpp ..\source\PKB.cpp ..\source\QTNode.cpp ..\source\QueryTree.cpp AST.cpp Follows.cpp Lexer.cpp Modifies.cpp Parent.cpp ProcTable.cpp TNode.cpp Token.cpp Uses.cpp VarTable.cpp
+         VarTable.cpp
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\vartable.cpp(32): warning C4018: '<' : signed/unsigned mismatch
+         Uses.cpp
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\uses.cpp(21): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\uses.cpp(31): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\uses.cpp(40): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\uses.cpp(61): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\uses.cpp(71): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\uses.cpp(80): warning C4018: '<' : signed/unsigned mismatch
          Token.cpp
-     1>f:\cs3201\xcalibur\spa\token.cpp(3): fatal error C1004: unexpected end-of-file found
-     1>Done Building Project "F:\cs3201\xcalibur\SPA\SPA.vcxproj" (build target(s)) -- FAILED.
+         TNode.cpp
+         ProcTable.cpp
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\proctable.cpp(39): warning C4018: '<' : signed/unsigned mismatch
+         Parent.cpp
+         Modifies.cpp
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\modifies.cpp(23): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\modifies.cpp(33): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\modifies.cpp(42): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\modifies.cpp(63): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\modifies.cpp(73): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\modifies.cpp(82): warning C4018: '<' : signed/unsigned mismatch
+         Lexer.cpp
+         Follows.cpp
+         AST.cpp
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\ast.cpp(27): error C2664: 'TNode::addChild' : cannot convert parameter 1 from 'TNode' to 'TNode *'
+                 No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\ast.cpp(33): error C2664: 'TNode::addParent' : cannot convert parameter 1 from 'TNode' to 'TNode *'
+                 No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\ast.cpp(54): error C2664: 'TNode::TNode(const TNode &)' : cannot convert parameter 1 from 'TNode *' to 'const TNode &'
+                 Reason: cannot convert from 'TNode *' to 'const TNode'
+                 No constructor could take the source type, or constructor overload resolution was ambiguous
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\ast.cpp(58): error C2664: 'TNode::TNode(const TNode &)' : cannot convert parameter 1 from 'TNode *' to 'const TNode &'
+                 Reason: cannot convert from 'TNode *' to 'const TNode'
+                 No constructor could take the source type, or constructor overload resolution was ambiguous
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\ast.cpp(62): error C2664: 'std::vector<_Ty>::vector(const std::vector<_Ty> &)' : cannot convert parameter 1 from 'std::vector<_Ty>' to 'const std::vector<_Ty> &'
+                 with
+                 [
+                     _Ty=TNode
+                 ]
+                 Reason: cannot convert from 'std::vector<_Ty>' to 'const std::vector<_Ty>'
+                 with
+                 [
+                     _Ty=TNode *
+                 ]
+                 and
+                 [
+                     _Ty=TNode
+                 ]
+                 No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
+         QueryTree.cpp
+     1>c1xx : fatal error C1083: Cannot open source file: '..\source\QueryTree.cpp': No such file or directory
+         QTNode.cpp
+     1>c1xx : fatal error C1083: Cannot open source file: '..\source\QTNode.cpp': No such file or directory
+         PKB.cpp
+     1>c1xx : fatal error C1083: Cannot open source file: '..\source\PKB.cpp': No such file or directory
+         Parser.cpp
+     1>c1xx : fatal error C1083: Cannot open source file: '..\source\Parser.cpp': No such file or directory
+         DesignExtractor.cpp
+     1>c1xx : fatal error C1083: Cannot open source file: '..\source\DesignExtractor.cpp': No such file or directory
+         Generating Code...
+     1>c:\users\kaunghtet\documents\github\xcalibur\spa\lexer.cpp(98): warning C4715: 'Lexer::lex' : not all control paths return a value
+     1>Done Building Project "C:\Users\KaungHtet\Documents\GitHub\xcalibur\SPA\SPA.vcxproj" (rebuild target(s)) -- FAILED.
 
 Build FAILED.
 
-Time Elapsed 00:00:00.59
+Time Elapsed 00:00:12.53

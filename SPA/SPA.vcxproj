@@ -11,11 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\DesignExtractor.cpp" />
-    <ClCompile Include="..\source\Parser.cpp" />
-    <ClCompile Include="..\source\PKB.cpp" />
-    <ClCompile Include="..\source\QTNode.cpp" />
-    <ClCompile Include="..\source\QueryTree.cpp" />
+    <ClCompile Include="DesignExtractor.cpp" />
+    <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="PKB.cpp" />
+    <ClCompile Include="QTNode.cpp" />
+    <ClCompile Include="QueryTree.cpp" />
     <ClCompile Include="AST.cpp" />
     <ClCompile Include="Follows.cpp" />
     <ClCompile Include="Lexer.cpp" />
@@ -28,14 +28,15 @@
     <ClCompile Include="VarTable.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\PKB.h" />
-    <ClInclude Include="..\source\QTNode.h" />
-    <ClInclude Include="..\source\QueryTree.h" />
+    <ClInclude Include="PKB.h" />
+    <ClInclude Include="QTNode.h" />
+    <ClInclude Include="QueryTree.h" />
     <ClInclude Include="AST.h" />
     <ClInclude Include="Follows.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Modifies.h" />
     <ClInclude Include="Parent.h" />
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="ProcTable.h" />
     <ClInclude Include="TNode.h" />
     <ClInclude Include="Token.h" />

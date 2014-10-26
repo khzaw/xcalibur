@@ -12,59 +12,71 @@ TNode::TNode(){
 }
 
 
-TNode::TNode(string nodeT, string value, int s,int p) {
-    data =  value;
-	nodeType = nodeT;
-	stmtNum = s;
-	procIndex= p;
+TNode::TNode(string nodeT, string data, int s,int p) {
+    this->data =  data;
+	this->nodeType = nodeT;
+	this->stmtNum = s;
+	this->procIndex= p;
 }
 
 string TNode::getData()  {
-    return data;
+    return this->data;
 }
 
 
 int TNode::getStmtNum()  {
-    return stmtNum;
+    return this->stmtNum;
 }
 
 
 int TNode::getProcIndex()  {
-    return procIndex;
+    return this->procIndex;
 }
 
 
 string TNode::getNodeType()  {
-    return nodeType;
+    return this->nodeType;
 }
 
 
-void TNode::setData(string value) {
-    data = value;
+void TNode::setData(string data) {
+    this->data = data;
 }
 
 
-void  TNode::addParent(TNode p) {
-	parent.push_back(p);
+void TNode::addParent(TNode *p) {
+    parent = p;
 }
 
 
-void TNode::addChild(TNode c) {
+void TNode::addChild(TNode *c) {
     children.push_back(c);
 }
 
-vector<TNode> TNode::getChildren() {
+
+/**
+ Need to refine and handle null nodes
+template<class T>
+TNode<T>* TNode<T>::findChild(const T& data) const {
+    for(int i=0; i<children.size(); i++)
+        if(children[i]->getData() == data)
+            return children[i];
+    return ;
+}
+*/
+
+vector<TNode*> TNode::getChildren() const {
     return children;
 }
 
-TNode TNode::getChild(int indx) {
+TNode* TNode::getChild(int indx) const {
     return children[indx];
 }
 
-TNode TNode::getParent(){
-    return parent[0];
+TNode* TNode::getParent() const {
+    return parent;
 }
 
-int TNode::getNumChildren() {
+int TNode::getNumChildren() const {
     return children.size();
 }

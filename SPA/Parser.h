@@ -1,14 +1,11 @@
 #pragma once
 #include <iostream>
-#include "Token.h"
 #include "Lexer.h"
-
 
 
 using namespace std;
 
 class Parser {
-private:
 	string filename;
 	int nextToken;
 	int loc;
@@ -17,7 +14,8 @@ private:
 
 public:
 	Parser();
-	void parse(string filename);
+	Parser(string filename);
+	void parse();
 	~Parser();
 private:
 	int getToken();

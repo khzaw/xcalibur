@@ -1,7 +1,9 @@
+#pragma once
 #if !defined(_TEST_)
 #define _TEST_
 
 #include <iostream>
+#include "Parser.h"
 #include "Lexer.h"
 
 using namespace std;
@@ -20,10 +22,13 @@ int main() {
 		token = Lex.lex();
 		cout << "lexeme : \"" << Lex.lexeme << "\" token: " << convertToken(token) << endl;
 	}
+	cout << endl << " ====================" << endl;
+
+	Parser Pa("simple_sample.txt");
 
 	string t;
-	cout << endl << " ====================" << endl;
 	cin >> t;
+
 
 
 }
@@ -41,6 +46,8 @@ string convertToken(int t) {
 	case TIMES: return "TIMES";
 	case SEMICOLON: return "SEMICOLON";
 	case EQ: return "EQ";
+	case OPEN_BLOCK: return "OPEN_BLOCK";
+	case CLOSE_BLOCK: return "CLOSE_BLOCK";
 	default: return "UNKNOWN";
 	}
 }

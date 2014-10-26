@@ -18,6 +18,9 @@ const_value: INTEGER
 
 using namespace std;
 
+Lexer::Lexer() {
+}
+
 Lexer::Lexer(string in) {
 	this->input = in;
 	this->charClass = ERROR;

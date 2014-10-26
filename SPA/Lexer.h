@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include "Token.h"
@@ -5,22 +6,22 @@
 
 using namespace std;
 
-enum token_type {
-	IDENT,
-	CONSTANT,
-	ERROR,
-	LETTER,
-	DIGIT,
-	WHITESPACE,
-	EOL,
-	PLUS,
-	TIMES,
-	EQ,
-	INT_LIT,
-	SEMICOLON,
-	OPEN_BLOCK,		// {
-	CLOSE_BLOCK,	// }
-};
+	enum TOKEN_TYPE {
+		IDENT,
+		CONSTANT,
+		ERROR,
+		LETTER,
+		DIGIT,
+		WHITESPACE,
+		EOL,
+		PLUS,
+		TIMES,
+		EQ,
+		INT_LIT,
+		SEMICOLON,
+		OPEN_BLOCK,		// {
+		CLOSE_BLOCK,	// }
+	};
 
 class Lexer {
 
@@ -35,6 +36,7 @@ private:
 public:
 	int lex();
 	void setNewInput(string in);
+	Lexer();
 	Lexer(string inputString);
 	~Lexer();
 

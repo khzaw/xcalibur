@@ -1,4 +1,14 @@
 # git ignore file
+*.vcproj
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.log
+AutoTester/Debug/AutoTester.log
+IntegrationTesting/Debug/IntegrationTesting.log
+UnitTesting/Debug/UnitTesting.log
+
+
 
 *.opensdf
 ## Ignore Visual Studio temporary files, build results, and
@@ -191,8 +201,4 @@ UpgradeLog*.htm
 FakesAssemblies/
 *.sdf
 
-*.vcproj
-*.vcxproj
-*.vcxproj.filters
-*.vcxproj.user
-*.log
+

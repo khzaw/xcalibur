@@ -5,11 +5,6 @@
 
 using namespace std;
 
-//string[] KEYWORDS = {
-//	"procedure",
-//	"while"
-//};
-
 class Lexeme {
 public:
 	int token;

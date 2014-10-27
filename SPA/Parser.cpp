@@ -15,6 +15,7 @@ proc_name: NAME
 const_value: INTEGER
 */
 #include <fstream>
+#include <iostream>
 
 #include "Parser.h"
 #include "Lexer.h"
@@ -53,7 +54,7 @@ void Parser::parse() {
 	}
 	inputFile.close();
 	lexer = Lexer(programString);
-	//program();
+	program();
 }
 
 void Parser::printOut() {
@@ -78,16 +79,31 @@ void Parser::program() {
 }
 
 void Parser::procedure() {
-//	match(KEYWORDS[0]);
-//	match("proc_name");
-//	match("{");
-
-//	match("}");
+	match(KEYWORDS[0]);
+	match(PROC_NAME);
+	match("{");
+//	stmtLst();
+//  match("}");
 }
 
 
 void Parser::match(string s) {
+	// next_token
+//	switch(nextToken.token) {
+		// detemrine whether keywords or not
+//	}
 
+}
+
+void Parser::match(int name) {
+	switch(name) {
+	case PROC_NAME:
+		procedureName = nextToken.name;
+		cout << "procedureName: " + procedureName << endl; 
+	default:
+		nextToken = getToken();
+		break;
+	}
 }
 
 Lexeme Parser::getToken() {

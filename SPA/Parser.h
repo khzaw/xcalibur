@@ -20,7 +20,7 @@ class Parser {
 	string filename;
 	Lexeme nextToken;
 	int loc;
-	string procedureName;
+	string procName;
 	Lexer lexer;
 
 public:
@@ -32,11 +32,16 @@ public:
 private:
 	Lexeme getToken();
 	void match(string s);
-	void match(int i);
 	void program();
 	void procedure();
 	void stmtLst();
 	void stmt();
+	void expr();
+	void exprPrime();
+	void variableName();
+	void procedureName();
+	void constantValue();
+	void factor();
 	void error();
 	bool checkFileExists();
 };

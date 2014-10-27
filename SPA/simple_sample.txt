@@ -1,5 +1,10 @@
-procedure woohoo {
-	a = 3;
-	x = b;
-	b = c;
+procedure Second {
+x = 0;
+i = 5;
+while i {
+	x = x + 2 + y;
+	i = i + 1;
+	while x { a = b;}
+	}
+z = y + 3 + 2 + 123123 + ChArlie;
 }

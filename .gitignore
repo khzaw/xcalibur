@@ -1,8 +1,5 @@
 # git ignore file
-*.vcproj
-*.vcxproj
-*.vcxproj.filters
-*.vcxproj.user
+*.user
 *.log
 
 

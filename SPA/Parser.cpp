@@ -17,9 +17,11 @@ const_value: INTEGER
 #include <fstream>
 #include <iostream>
 
+#include "AST.h"
 #include "Parser.h"
 #include "Lexer.h"
 #include "Lexeme.h"
+#include "PKBController.h"
 
 using namespace std;
 
@@ -32,6 +34,7 @@ Parser::Parser(string file) {
 	this->filename = file;
 	this->loc = 0;
 	this->lexer = Lexer("");
+	this->controller = PKBController(); 
 	parse();
 }
 
@@ -145,19 +148,20 @@ void Parser::exprPrime() {
 
 void Parser::variableName() {
 	// TODO check valid variable name
-	cout << "variableName: " << nextToken.name << endl;
+	// cout << "variableName: " << nextToken.name << endl;
 	nextToken = getToken();
 }
 
 void Parser::constantValue() {
-	cout << "constantValue: " << nextToken.name << endl;
+	// cout << "constantValue: " << nextToken.name << endl;
 	nextToken = getToken();
 }
 
 void Parser::procedureName() {
 	// TODO check valid variable name
 	procName = nextToken.name;
-	cout << "procName: " << nextToken.name << endl;
+	// cout << "procName: " << nextToken.name << endl;
+	controller.procTable.insertProc(procName);
 	nextToken = getToken();
 }
 

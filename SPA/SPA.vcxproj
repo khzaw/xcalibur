@@ -20,7 +20,9 @@
     <ClCompile Include="Parent.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="PKB.cpp" />
+    <ClCompile Include="PKBController.cpp" />
     <ClCompile Include="ProcTable.cpp" />
+    <ClCompile Include="QueryParser.cpp" />
     <ClCompile Include="TNode.cpp" />
     <ClCompile Include="VarTable.cpp" />
   </ItemGroup>
@@ -34,6 +36,7 @@
     <ClInclude Include="Parser.h" />
     <CIInclude Include="Parser.h" />
     <ClInclude Include="PKB.h" />
+    <ClInclude Include="PKBController.h" />
     <ClInclude Include="ProcTable.h" />
     <ClInclude Include="TNode.h" />
     <ClInclude Include="VarTable.h" />

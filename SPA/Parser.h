@@ -3,6 +3,7 @@
 #include <set>
 #include "Lexer.h"
 #include "Lexeme.h"
+#include "PKBController.h"
 
 using namespace std;
 
@@ -22,6 +23,7 @@ class Parser {
 	int loc;
 	string procName;
 	Lexer lexer;
+	PKBController controller;
 
 public:
 	Parser();

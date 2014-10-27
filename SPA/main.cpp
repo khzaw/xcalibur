@@ -25,6 +25,7 @@ int main() {
 
 	//Parser Pa("not_so_simple_sample.txt");
 	Parser Pa("simple_sample.txt");
+	Pa.getController().varTable.printTable();
 	
 	string t;
 	cin >> t;

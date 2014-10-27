@@ -31,6 +31,7 @@ public:
 	void parse();
 	~Parser();
 	void printOut();
+	PKBController getController();
 private:
 	Lexeme getToken();
 	void match(string s);

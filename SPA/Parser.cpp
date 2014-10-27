@@ -149,6 +149,7 @@ void Parser::exprPrime() {
 void Parser::variableName() {
 	// TODO check valid variable name
 	// cout << "variableName: " << nextToken.name << endl;
+	controller.varTable.insertVar(nextToken.name);
 	nextToken = getToken();
 }
 
@@ -174,6 +175,10 @@ void Parser::match(string s) {
 		cout << "Syntax error: Expecting " << s << " on line number " << loc << endl;
 	}
 
+}
+
+PKBController Parser::getController() {
+	return controller;
 }
 
 Lexeme Parser::getToken() {

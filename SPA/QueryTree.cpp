@@ -8,6 +8,16 @@ typedef QueryTree QUERYTREE;
 typedef QTNode NODE;
 
 /******* Constructors *******/
+QueryTree::QueryTree(){
+	NODE* queryTreeRoot = new NODE("PQL Query");
+	rootNode = *queryTreeRoot;
+	NODE* resultRoot = new NODE("result", *queryTreeRoot);
+	rootNode.addChild(*resultRoot);
+	NODE* suchthatRoot = new NODE("such that", *queryTreeRoot);
+	rootNode.addChild(*suchthatRoot);
+	NODE* patternRoot = new NODE("pattern", *queryTreeRoot);
+	rootNode.addChild(*patternRoot);
+}
 QueryTree::QueryTree(NODE newRoot){
 	rootNode = newRoot;
 }
@@ -17,6 +27,6 @@ NODE QueryTree::getRootNode(){
 	return rootNode;
 }
 QUERYTREE QueryTree::getSubtreeFromNode(NODE node){
-	// TODO: traverse from root node, find a node equal to 'node', create new QueryTree with root = node, return QueryTree
+	return QueryTree(node);
 }
    

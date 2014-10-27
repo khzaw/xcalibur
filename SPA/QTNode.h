@@ -1,7 +1,7 @@
 // File name: QTNode.h
 //header guard at start of header file
-#ifndef QTQTNode_H
-#define QTQTNode_H
+#ifndef QTNODE_H
+#define QTNODE_H
 
 #include <string>
 #include <vector>
@@ -16,6 +16,7 @@ class QTNode {
 	public:
       // Constructor
 	  QTNode();
+	  QTNode(STRING);
 	  QTNode(STRING, QTNode); 
 	  
 	  // Accessor
@@ -24,7 +25,7 @@ class QTNode {
 	  STRING getKey();
 	  
 	  // Mutator
-	  VOID setChild(QTNode);
+	  VOID addChild(QTNode);
 	  VOID setParent(QTNode);
 	  VOID setKey(STRING);
    

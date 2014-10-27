@@ -14,6 +14,10 @@ QTNode::QTNode(){
 
 }
 
+QTNode::QTNode(STRING newKey){
+	key=newKey;
+}
+
 QTNode::QTNode(STRING newKey, QTNode newParent){
 	key = newKey;
 	parent = &newParent;
@@ -33,7 +37,7 @@ STRING QTNode::getKey(){
 }
 
 /******* Mutators *******/
-VOID QTNode::setChild(QTNode newChild){
+VOID QTNode::addChild(QTNode newChild){
 	children.push_back(newChild);
 }
 

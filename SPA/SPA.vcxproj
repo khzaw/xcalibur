@@ -22,7 +22,8 @@
     <ClCompile Include="PKB.cpp" />
     <ClCompile Include="PKBController.cpp" />
     <ClCompile Include="ProcTable.cpp" />
-    <ClCompile Include="QueryParser.cpp" />
+    <ClCompile Include="QTNode.cpp" />
+    <ClCompile Include="QueryTree.cpp" />
     <ClCompile Include="TNode.cpp" />
     <ClCompile Include="VarTable.cpp" />
   </ItemGroup>
@@ -38,6 +39,8 @@
     <ClInclude Include="PKB.h" />
     <ClInclude Include="PKBController.h" />
     <ClInclude Include="ProcTable.h" />
+    <ClInclude Include="QTNode.h" />
+    <ClInclude Include="QueryTree.h" />
     <ClInclude Include="TNode.h" />
     <ClInclude Include="VarTable.h" />
   </ItemGroup>

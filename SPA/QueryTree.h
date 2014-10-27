@@ -11,6 +11,7 @@ typedef QTNode NODE;
 class QueryTree {
    public:
       // Constructor
+	  QueryTree();
 	  QueryTree(NODE); 
 	  
 	  // Accessor

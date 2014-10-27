@@ -54,10 +54,13 @@
     <ClCompile Include="VarTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QueryParser.cpp">
+    <ClCompile Include="PKBController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PKBController.cpp">
+    <ClCompile Include="QTNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -96,6 +99,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PKBController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QTNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

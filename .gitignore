@@ -4,9 +4,6 @@
 *.vcxproj.filters
 *.vcxproj.user
 *.log
-AutoTester/Debug/AutoTester.log
-IntegrationTesting/Debug/IntegrationTesting.log
-UnitTesting/Debug/UnitTesting.log
 
 
 

@@ -2,7 +2,21 @@
 #include <iostream>
 #include <string>
 #include "Lexeme.h"
+/*
+NAME: LETTER(LETTER|DIGIT)
+INTERGER: DIGIT+
 
+procedure: 'procedure' proc_name '{' stmtLst '}'
+stmtLst: stmt+
+stmt: assign|while
+while: 'while' var_name '{' stmtLst '}'
+assign: var_name '=' expr ';'
+expr: expr '+' factor | factor
+factor: var_name | const_value
+var_name: NAME
+proc_name: NAME
+const_value: INTEGER
+*/
 
 using namespace std;
 
@@ -20,7 +34,7 @@ using namespace std;
 		INT_LIT,
 		SEMICOLON,
 		OPEN_BLOCK,		// {
-		CLOSE_BLOCK,	    // }
+		CLOSE_BLOCK,	// }
 		TAB_CHAR,		// \t
 	};
 

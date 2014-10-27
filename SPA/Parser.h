@@ -1,16 +1,26 @@
 #pragma once
 #include <iostream>
+#include <set>
 #include "Lexer.h"
 #include "Lexeme.h"
 
-
 using namespace std;
+
+static string KEYWORDS[] = {
+	"procedure",
+	"while"
+};
+
+enum NAME {
+	PROC_NAME,
+	VAR_NAME
+};
 
 class Parser {
 	string filename;
 	Lexeme nextToken;
 	int loc;
-	string procedureName;
+	string procName;
 	Lexer lexer;
 
 public:
@@ -26,6 +36,12 @@ private:
 	void procedure();
 	void stmtLst();
 	void stmt();
+	void expr();
+	void exprPrime();
+	void variableName();
+	void procedureName();
+	void constantValue();
+	void factor();
 	void error();
 	bool checkFileExists();
 };

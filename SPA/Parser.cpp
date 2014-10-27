@@ -15,6 +15,7 @@ proc_name: NAME
 const_value: INTEGER
 */
 #include <fstream>
+#include <iostream>
 
 #include "Parser.h"
 #include "Lexer.h"
@@ -26,7 +27,7 @@ Parser::Parser() {
 }
 
 Parser::Parser(string file) {
-	this->procedureName = "";
+	this->procName = "";
 	this->nextToken = Lexeme();
 	this->filename = file;
 	this->loc = 0;
@@ -53,7 +54,7 @@ void Parser::parse() {
 	}
 	inputFile.close();
 	lexer = Lexer(programString);
-	//program();
+	program();
 }
 
 void Parser::printOut() {
@@ -78,15 +79,96 @@ void Parser::program() {
 }
 
 void Parser::procedure() {
-//	match(KEYWORDS[0]);
-//	match("proc_name");
-//	match("{");
+	match(KEYWORDS[0]);
+	procedureName();
+	match("{");
+	stmtLst();
+    match("}");
+}
 
-//	match("}");
+void Parser::stmtLst() {
+	stmt();
+	if(nextToken.token == CLOSE_BLOCK) return;
+	else stmtLst();
+}
+
+void Parser::stmt() {
+	if(nextToken.token == IDENT && nextToken.name == "while") {			// while statement
+		match(KEYWORDS[1]);
+		variableName();
+		match("{");
+		stmtLst();
+		match("}");
+	} else if(nextToken.token == IDENT) {
+		variableName();
+		match("=");
+		expr();
+		match(";");
+
+	}
+
+}
+
+void Parser::expr() {
+	// expr: expr '+' factor | factor
+	/*
+	 * this is a left-recursive grammar, top down parsing can't handle this
+	 * transform it into
+	 * expr: FE'
+	 * E' : +TE' | epsilon
+	 */
+	factor();
+	exprPrime();
+		
+}
+
+
+void Parser::factor() {
+	// factor: var_name | const_value
+	if(nextToken.token == IDENT) {			// TODO: check valid IDENT (not keywords)
+		variableName();
+	} else {
+		// INT_LIT;
+		constantValue();
+	}
+}
+
+void Parser::exprPrime() {
+	if(nextToken.token == PLUS) {
+		match("+");
+		factor();
+		exprPrime();
+	} else {
+		return;
+	}
+}
+
+void Parser::variableName() {
+	// TODO check valid variable name
+	cout << "variableName: " << nextToken.name << endl;
+	nextToken = getToken();
+}
+
+void Parser::constantValue() {
+	cout << "constantValue: " << nextToken.name << endl;
+	nextToken = getToken();
+}
+
+void Parser::procedureName() {
+	// TODO check valid variable name
+	procName = nextToken.name;
+	cout << "procName: " << nextToken.name << endl;
+	nextToken = getToken();
 }
 
 
 void Parser::match(string s) {
+	if(nextToken.name == s) {
+		//loc++;
+		nextToken = getToken();
+	} else {
+		cout << "Syntax error: Expecting " << s << " on line number " << loc << endl;
+	}
 
 }
 

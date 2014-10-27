@@ -8,7 +8,7 @@
 
 using namespace std;
 
-TNode::TNode(){
+TNode::TNode() {
 }
 
 

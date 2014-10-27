@@ -3,7 +3,6 @@
 
 using namespace std;
 
-
 class TNode {
 
 private:
@@ -12,8 +11,8 @@ private:
 	string nodeType;
 	int procIndex;
 	int stmtNum;
-    TNode *parent;
-    vector<TNode*> children;
+	vector<TNode> parent;
+    vector<TNode> children;
 	
 
 public:
@@ -25,13 +24,12 @@ public:
 	int getStmtNum() ;
     int getProcIndex() ;
 	string getNodeType() ;
-	TNode* getChild(int) const;
-    TNode* getParent() const;
-	vector<TNode*> getChildren() const;
-	int getNumChildren() const;
+	TNode getChild(int) ;
+    TNode getParent() ;
+	vector<TNode> getChildren() ;
+	int getNumChildren() ;
 	//Mutator for node
     void setData(string data);
-	void addParent(TNode* p);
-    void addChild(TNode* c);
-    //TNode<T>* findChild(const T& data) const;
+	void addParent(TNode p);
+    void addChild(TNode c);
 };

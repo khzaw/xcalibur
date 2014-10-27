@@ -1,34 +1,36 @@
 // File name: QTNode.h
+//header guard at start of header file
+#ifndef QTQTNode_H
+#define QTQTNode_H
+
 #include <string>
 #include <vector>
 
 using namespace std;
 
-class QTNode;
-
 typedef int INDEX;
 typedef string STRING;
-typedef vector<QTNode> LIST;
-typedef QTNode NODE;
 typedef void VOID;
 
 class QTNode {
-   public:
+	public:
       // Constructor
-	  QTNode(STRING, NODE); 
+	  QTNode();
+	  QTNode(STRING, QTNode); 
 	  
 	  // Accessor
 	  INDEX getNumChild();
-      NODE getChild(INDEX);
+      QTNode getChild(INDEX);
 	  STRING getKey();
 	  
 	  // Mutator
-	  VOID setChild(NODE);
-	  VOID setParent(NODE);
+	  VOID setChild(QTNode);
+	  VOID setParent(QTNode);
 	  VOID setKey(STRING);
    
-private:
+	private:
       STRING key;
-	  NODE* parent;
-	  LIST children;
+	  QTNode* parent;
+	  vector<QTNode> children;
 };
+#endif

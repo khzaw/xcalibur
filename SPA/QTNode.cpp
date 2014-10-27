@@ -7,12 +7,14 @@ using namespace std;
 
 typedef int INDEX;
 typedef string STRING;
-typedef vector<QTNode> LIST;
-typedef QTNode NODE;
 typedef void VOID;
 
 /******* Constructors *******/
-QTNode::QTNode(STRING newKey, NODE newParent){
+QTNode::QTNode(){
+
+}
+
+QTNode::QTNode(STRING newKey, QTNode newParent){
 	key = newKey;
 	parent = &newParent;
 }
@@ -22,7 +24,7 @@ INDEX QTNode::getNumChild(){
 	return children.size();
 }
 
-NODE QTNode::getChild(INDEX index){
+QTNode QTNode::getChild(INDEX index){
 	return children.at(index);
 }
 
@@ -31,11 +33,11 @@ STRING QTNode::getKey(){
 }
 
 /******* Mutators *******/
-VOID QTNode::setChild(NODE newChild){
+VOID QTNode::setChild(QTNode newChild){
 	children.push_back(newChild);
 }
 
-VOID QTNode::setParent(NODE newParent){
+VOID QTNode::setParent(QTNode newParent){
 	parent = &newParent;
 }
 

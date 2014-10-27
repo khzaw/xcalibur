@@ -1,44 +1,58 @@
 #pragma once
 
 #include<stdio.h>
-#include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
+
+#include "QueryParser.h"
+#include "Lexer.h"
+#include "QTNode.h"
+#include "QueryTree.h"
 
 using namespace std;
 
-#include "Lexer.h"
-/*
-Token next_token;
-vector<string> design_entity;
-vector<string> relation_references;
+QueryParser::QueryParser(){
 
-void Match(Token token) {
-	if(next_token = token) {
-		//get next token
+}
+
+QueryParser::QueryParser(string s) {
+	this->nextToken = Lexeme();
+	this->lexer = Lexer(s);
+	parse();
+}
+
+void QueryParser::parse() {
+	matchDeclaration();
+	matchSelect();
+}
+
+void QueryParser::match(string s) {
+	if (nextToken.name.compare(s) == 0) {
+		nextToken = getToken();
 	} else {
-		//throw exception
+		throw("exception");
 	}
 }
 
-void MatchDeclarationVariables() {
-	Match(var_name);
-	// add variable to a table
-	if (next_token.compare(";")) {
-		//get next_token
-		return;
+void QueryParser::match(int type) {
+	if (nextToken.token = type) {
+		nextToken = getToken();
 	} else {
-		Match(",");
-		MatchVariableDeclaration();
+	
 	}
 }
 
-void MatchDeclaration() {
-	for (int i = 0; i < design_entity.size(); i++) {
-		if(next_token.compare("Select") != 0) {
+Lexeme QueryParser::getToken() {
+	return lexer.lex();
+}
+
+void QueryParser::matchDeclaration() {
+	for (int i = 0; i < DESIGN_ENTITIES.size(); i++) {
+		if(nextToken.name.compare("Select") != 0) {
 			try {
-				Match(design_entity[i]);
-				MatchDeclarationVariables();
+				match(DESIGN_ENTITIES[i]);
+				matchDeclarationVariables();
 				i = 0;
 			} catch (string e) {
 				continue;
@@ -47,82 +61,221 @@ void MatchDeclaration() {
 			return;
 		}
 	}
-
-	//if reaches here, no "Select" statement or invalid design-entity
 }
 
-void MatchAttributeCondition() {
+void QueryParser::matchDeclarationVariables() {
+	string var = nextToken.name;
+	match(IDENT);
+	synonyms.push_back(var);
+
+	if(nextToken.name.compare(";") == 0) {
+		return;
+	} else {
+		match(",");
+		matchDeclarationVariables();
+	}
+}
+
+void QueryParser::matchSelect() {
+	match("Select");
+	if (nextToken.name.compare("BOOLEAN") == 0) {
+		match("BOOLEAN");
+		// add bool to solution subtree
+	} else {
+		matchTuple();	
+	}
+
+	matchConditions();	
+}
+
+void QueryParser::matchTuple() {
+	if (nextToken.name.compare("<") == 0) {
+		match("<");
+		matchTupleElements(1);
+		match(">");
+	} else {
+		matchTupleElements(0);
+	}
+}
+
+// if times is zero, does not make a recursive call
+void QueryParser::matchTupleElements(int times) {
+	string elem = nextToken.name;
+	match(IDENT);
+	// add to solution subtree
+
+	if (times != 0 && nextToken.name.compare(",") == 0) {
+		matchTupleElements(1);
+	}
+}
+
+void QueryParser::matchConditions() {
+	if(nextToken.name.compare("such") == 0) {
+		match("such");
+		match("that");
+		matchSuchThat();
+	} 
+	
+	if (nextToken.name.compare("pattern") == 0) {
+		matchPattern();
+	} 
+	
+	if (nextToken.name.compare("with") == 0) {
+		matchWith();
+	}
+
+	if(nextToken.token != EOL) {
+		matchConditions();
+	}
+}
+
+void QueryParser::matchSuchThat() {
+	matchSuchThatConditions();
+	if(nextToken.name.compare("and") == 0) {
+		matchSuchThatConditions();
+	}
+}
+
+void QueryParser::matchSuchThatConditions(){
+	string relation = nextToken.name;
+	nextToken = getToken();
+	if(nextToken.token == TIMES) {
+		relation += "*";
+		nextToken = getToken();
+	}
+
+	if (relation.compare("Modifies") == 0) {
+		matchModifies();
+	} else if (relation.compare("Uses") == 0) {
+		matchUses();
+	} else if (relation.compare("Calls") == 0) {
+		matchCalls(0);
+	} else if (relation.compare("Calls*") == 0) {
+		matchCalls(1);
+	} else if (relation.compare("Parent") == 0) {
+		matchParent(0);
+	} else if (relation.compare("Parent*") == 0) {
+		matchParent(1);
+	} else if (relation.compare("Follows") == 0) {
+		matchFollows(0);
+	} else if (relation.compare("Follows*") == 0) {
+		matchFollows(1);
+	} 
+}
+
+void QueryParser::matchModifies() {
+
+}
+
+void QueryParser::matchUses() {
 	
 }
 
-void MatchPatternCondition() {
-
-}
-
-void MatchRelationRef(){
-	Match("(");
-	//
-	Match(")");
-}
-
-void MatchRelationCondition() {
-	Match("that");
-	MatchRelationRef();
-	if(next_token.compare("and") == 0) {
-		//get next token
-		MatchRelationCondition();
-	}
-}
-
-void MatchConditions() {
-	if(next_token.compare("such") == 0) {
-		MatchRelationCondition();
-	} else if (next_token.compare("pattern") == 0) {
-		MatchPatternCondition();
-	} else if (next_token.compare("with) == 0) {
-		MatchAttributeCondition();
-	}
-}
-
-void MatchTupleElements() {
-	Match(elem);
-	if (next_token.compare(",")) {
-		//get next token
-		MatchTupleElements();
-	}
-}
-
-void MatchTuple() {
-	if (next_token.compare("<") == 0) {
-		Match("<");
-		MatchTupleElements();
-		Match(">");
+// if transitive is != 0, Calls*, otherwise, Calls
+void QueryParser::matchCalls(int transitive) {
+	if (transitive) {
+		//create Calls* Node
 	} else {
-		//Match elem
+		//create Calls Node
 	}
+
+	match("(");
+	//matchEntRef
+	//set as first child
+	match(",");
+	//matchEntRef
+	//set as second child 
+	match(")");
+
+	//Insert into QT
 }
 
-void MatchSelect() {
-	Match("Select");
-	if (next_token.compare("BOOLEAN") == 0) {
-		Match("BOOLEAN");
+// if transitive is != 0, Parent*, otherwise, Parent 
+void QueryParser::matchParent(int transitive) {
+	if (transitive) {
+		//Create Parent* Node
 	} else {
-		MatchTuple();
-		MatchConditions();		
+		//Create Parent Node
 	}
+
+	match("(");
+	//matchStmtRef
+	//set as first child
+	match(",");
+	//matchStmtRef
+	//set as second child 
+	match(")");
+
+	//Insert into QT
+}
+
+// if transitive is != 0, Follows*, otherwise, Follows
+void QueryParser::matchFollows(int transitive) {
+	if (transitive) {
+		//Create Follows* Node
+	} else {
+		//Create Follows Node
+	}
+
+	match("(");
+	//matchStmtRef
+	//set as first child
+	match(",");
+	//matchStmtRef
+	//set as second child 
+	match(")");
+
+	//Insert into QT
+}
+
+/*
+QTNode QueryParser::matchVarRef() {
+	QTNode qtpi;
+	if(nextToken.name.compare("_") == 0) {
+		
+	} else if (nextToken.token == IDENT) {
+	
+	} else if (nexToken.token == "\"") {
+		match(IDENT);
+		match ("\"");
+	}
+
+	return qtpi;	
+}
+
+QTNode QueryParser::matchEntRef() {
+	QTNode qtpi;
+	if(nextToken.name.compare("_") == 0) {
+		
+	} else if (nextToken.token == INT_LIT) {
+	
+	} else if (nextToken.token == IDENT) {
+	
+	} else if (nexToken.token == "\"") {
+		match(IDENT);
+		match ("\"");
+	}
+
+	return qtpi;
+}
+
+QTNode QueryParser::matchStmtRef() {
+	QTNode qtpi;
+	if(nextToken.name.compare("_") == 0) {
+		
+	} else if (nextToken.token == INT_LIT) {
+	
+	} else if (nextToken.token == IDENT) {
+	
+	} 
+
+	return qtpi;
 }
 */
 
+void QueryParser::matchPattern() {
+	
+}
 
-int Parse () {
-	/*
-	try {
-		MatchDeclaration();
-		MatchSelect();
-	} catch (string e) {
-		cout << e;
-	}
-
-	*/
-	return 0;
+void QueryParser::matchWith() {
 }

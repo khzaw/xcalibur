@@ -25,5 +25,5 @@ bool Lexeme::equals(Lexeme l) {
 }
 
 ostream& operator <<(ostream &strm, const Lexeme &lexeme) {
-	return strm << "Lexeme(" << lexeme.token << "," << lexeme.name << ")"; 
+	return strm << "Lexeme(" << TOKEN_TYPE_STRINGS[lexeme.token] << "," << lexeme.name << ")"; 
 }

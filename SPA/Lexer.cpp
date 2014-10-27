@@ -59,6 +59,7 @@ void Lexer::getChar() {
 	if(nextChar == ';') charClass = SEMICOLON;
 	if(nextChar == '{') charClass = OPEN_BLOCK;
 	if(nextChar == '}') charClass = CLOSE_BLOCK;
+	if(nextChar == '\t') charClass = TAB_CHAR;
 }
 
 void Lexer::addChar() {
@@ -68,7 +69,7 @@ void Lexer::addChar() {
 Lexeme Lexer::lex() {
 	lexeme = "";
 
-	while(charClass == WHITESPACE) getChar();
+	while(charClass == WHITESPACE || charClass == TAB_CHAR) getChar();
 
 	if(charClass == ERROR) { addChar(); getChar(); return Lexeme(ERROR, lexeme); }
 	if(charClass == EOL) { return Lexeme(EOL, lexeme); }

@@ -53,7 +53,16 @@ void Parser::parse() {
 	}
 	inputFile.close();
 	lexer = Lexer(programString);
-	program();
+	//program();
+}
+
+void Parser::printOut() {
+	Lexeme token;
+	while(!token.equals(Lexeme(EOL, ""))) {
+		token = lexer.lex();
+		cout << "lexeme: \"" << token << endl;
+	}
+	cout << endl << "=========" << endl;
 }
 
 bool Parser::checkFileExists() {
@@ -69,10 +78,15 @@ void Parser::program() {
 }
 
 void Parser::procedure() {
+//	match(KEYWORDS[0]);
+//	match("proc_name");
+//	match("{");
+
+//	match("}");
 }
 
 
-void Parser::match(int token) {
+void Parser::match(string s) {
 
 }
 

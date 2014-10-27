@@ -18,9 +18,10 @@ public:
 	Parser(string filename);
 	void parse();
 	~Parser();
+	void printOut();
 private:
 	Lexeme getToken();
-	void match(int token);
+	void match(string s);
 	void program();
 	void procedure();
 	void stmtLst();

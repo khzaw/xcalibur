@@ -20,7 +20,26 @@ using namespace std;
 		INT_LIT,
 		SEMICOLON,
 		OPEN_BLOCK,		// {
-		CLOSE_BLOCK,	// }
+		CLOSE_BLOCK,	    // }
+		TAB_CHAR,		// \t
+	};
+
+	static string TOKEN_TYPE_STRINGS[] = {
+		"IDENT",
+		"CONSTANT",
+		"ERROR",
+		"LETTER",
+		"DIGIT",
+		"WHITESPACE",
+		"EOL",
+		"PLUS",
+		"TIMES",
+		"EQ",
+		"INT_LIT",
+		"SEMICOLON",
+		"OPEN_BLOCK",
+		"CLOSE_BLOCK",
+		"TAB_CHAR"
 	};
 
 class Lexer {

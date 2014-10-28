@@ -1,4 +1,7 @@
 // File name: QueryTree.h
+//header guard at start of header file
+#ifndef QUERYTREE_H
+#define QUERYTREE_H
 #include "QTNode.h"
 
 using namespace std;
@@ -21,3 +24,4 @@ class QueryTree {
 private:
       NODE rootNode;
 };
+#endif

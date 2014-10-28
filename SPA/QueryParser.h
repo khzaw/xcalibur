@@ -2,12 +2,17 @@
 #include <iostream>
 #include <set>
 #include <vector>
+#include <map>
+
 #include "Lexer.h"
 #include "Lexeme.h"
+#include "QTNode.h"
+#include "QueryTree.h"
 
 using namespace std;
 
-static const string arr[] = {"procedure",
+static const string arr[] = {
+	"procedure",
 	"stmtLst",
 	"stmt",
 	"assign",
@@ -40,7 +45,8 @@ class QueryParser {
 	Lexeme nextToken;
 	Lexer lexer;
 	string query;
-	vector<string> synonyms;
+	map<string, string> synonyms;
+	QueryTree qt;
 
 public:
 	QueryParser();
@@ -53,7 +59,7 @@ private:
 	void match(string s);
 	void match(int relation);
 	void matchDeclaration();
-	void matchDeclarationVariables();
+	void matchDeclarationVariables(string entity);
 	void matchSelect();
 	void matchTuple();
 	void matchTupleElements(int times);

@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <map>
 
 #include "QueryParser.h"
 #include "Lexer.h"
@@ -19,6 +20,8 @@ QueryParser::QueryParser(){
 QueryParser::QueryParser(string s) {
 	this->nextToken = Lexeme();
 	this->lexer = Lexer(s);
+	QueryTree* temp = new QueryTree();
+	this->qt = *temp;
 	parse();
 }
 
@@ -52,7 +55,7 @@ void QueryParser::matchDeclaration() {
 		if(nextToken.name.compare("Select") != 0) {
 			try {
 				match(DESIGN_ENTITIES[i]);
-				matchDeclarationVariables();
+				matchDeclarationVariables(DESIGN_ENTITIES[i]);
 				i = 0;
 			} catch (string e) {
 				continue;
@@ -63,16 +66,16 @@ void QueryParser::matchDeclaration() {
 	}
 }
 
-void QueryParser::matchDeclarationVariables() {
+void QueryParser::matchDeclarationVariables(string entity) {
 	string var = nextToken.name;
 	match(IDENT);
-	synonyms.push_back(var);
+	synonyms.insert(pair<string, string>(var, entity));
 
 	if(nextToken.name.compare(";") == 0) {
 		return;
 	} else {
 		match(",");
-		matchDeclarationVariables();
+		matchDeclarationVariables(entity);
 	}
 }
 
@@ -85,7 +88,7 @@ void QueryParser::matchSelect() {
 		matchTuple();	
 	}
 
-	matchConditions();	
+	matchConditions();
 }
 
 void QueryParser::matchTuple() {

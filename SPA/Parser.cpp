@@ -66,7 +66,7 @@ void Parser::printOut() {
 		token = lexer.lex();
 		cout << "lexeme: \"" << token << endl;
 	}
-	cout << endl << "=========" << endl;
+	cout << "=========" << endl;
 }
 
 bool Parser::checkFileExists() {
@@ -83,36 +83,56 @@ void Parser::program() {
 
 void Parser::procedure() {
 	match(KEYWORDS[0]);
+
 	procedureName();
+	TNode procNode = TNode(TNODE_NAMES[PROC_NODE], procName, 0, 0);
+
 	match("{");
-	stmtLst();
+
+	TNode procStmtLstNode = createASTNode(STMTLST_NODE, "", procNode);
+	stmtLst(procStmtLstNode);
+
     match("}");
 }
 
-void Parser::stmtLst() {
-	stmt();
+void Parser::stmtLst(TNode parent) {
+	stmt(parent);
 	if(nextToken.token == CLOSE_BLOCK) return;
-	else stmtLst();
+	else stmtLst(parent);
 }
 
-void Parser::stmt() {
+
+void Parser::stmt(TNode parent) {
 	if(nextToken.token == IDENT && nextToken.name == "while") {			// while statement
+		TNode whileNode = createASTNode(WHILE_NODE, nextToken.name, parent);
 		match(KEYWORDS[1]);
+
+		TNode whileVarNode = createASTNode(VAR_NODE, nextToken.name, whileNode);	// whileVar
 		variableName();
+
 		match("{");
-		stmtLst();
+
+		TNode whileStmtLstNode = createASTNode(STMTLST_NODE, "", whileNode);
+		stmtLst(whileStmtLstNode);
+
 		match("}");
 	} else if(nextToken.token == IDENT) {
+
+		//cout << "parent of assignment: " <<  parent.getNodeType() << endl;
+		TNode assignNode = createASTNode(ASSIGN_NODE, "", parent);
+
+		TNode varNode = createASTNode(VAR_NODE, nextToken.name, assignNode);
 		variableName();
+
 		match("=");
-		expr();
+		expr(assignNode);
 		match(";");
 
 	}
 
 }
 
-void Parser::expr() {
+void Parser::expr(TNode assignNode) {
 	// expr: expr '+' factor | factor
 	/*
 	 * this is a left-recursive grammar, top down parsing can't handle this
@@ -120,49 +140,68 @@ void Parser::expr() {
 	 * expr: FE'
 	 * E' : +TE' | epsilon
 	 */
-	factor();
-	exprPrime();
+
+	factor(assignNode);
+	exprPrime(assignNode);
 		
 }
 
 
-void Parser::factor() {
+void Parser::factor(TNode assignNode) {
 	// factor: var_name | const_value
 	if(nextToken.token == IDENT) {			// TODO: check valid IDENT (not keywords)
+		TNode varNode = createASTNode(VAR_NODE, nextToken.name, assignNode);
 		variableName();
 	} else {
 		// INT_LIT;
+		TNode constantNode = createASTNode(CONSTANT_NODE, nextToken.name, assignNode);
 		constantValue();
 	}
 }
 
-void Parser::exprPrime() {
+void Parser::exprPrime(TNode assignNode) {
 	if(nextToken.token == PLUS) {
+
+		TNode plusNode = createASTNode(PLUS_NODE, nextToken.name, assignNode);
 		match("+");
-		factor();
-		exprPrime();
+
+		factor(assignNode);
+		exprPrime(assignNode);
 	} else {
 		return;
 	}
 }
 
+TNode Parser::createASTNode(int nodeType, string name, TNode parentNode, int lineNo, int parentProc) {
+	TNode node = TNode(TNODE_NAMES[nodeType], name, lineNo, parentProc);
+	if(nodeType == PROC_NODE) {
+		controller.procTable.insertProc(name);
+		controller.ast.insertRoot(node);
+	}
+	controller.ast.assignChild(parentNode, node);
+	// cout << "PARENT : " <<  parentNode.getNodeType() << "\t" << "CHILD: " << TNODE_NAMES[nodeType] << "," << node.getData() << endl;
+	return node;
+}
+
 void Parser::variableName() {
 	// TODO check valid variable name
-	// cout << "variableName: " << nextToken.name << endl;
+	cout << "variableName: " << nextToken.name << endl;
 	controller.varTable.insertVar(nextToken.name);
 	nextToken = getToken();
 }
 
+
 void Parser::constantValue() {
-	// cout << "constantValue: " << nextToken.name << endl;
+	 //cout << "constantValue: " << nextToken.name << endl;
 	nextToken = getToken();
 }
 
 void Parser::procedureName() {
 	// TODO check valid variable name
 	procName = nextToken.name;
-	// cout << "procName: " << nextToken.name << endl;
-	controller.procTable.insertProc(procName);
+	 //cout << "procName: " << nextToken.name << endl;
+
+	
 	nextToken = getToken();
 }
 
@@ -172,7 +211,7 @@ void Parser::match(string s) {
 		//loc++;
 		nextToken = getToken();
 	} else {
-		cout << "Syntax error: Expecting " << s << " on line number " << loc << endl;
+		//cout << "Syntax error: Expecting " << s << " on line number " << loc << endl;
 	}
 
 }

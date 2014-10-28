@@ -37,14 +37,16 @@ private:
 	void match(string s);
 	void program();
 	void procedure();
-	void stmtLst();
-	void stmt();
-	void expr();
-	void exprPrime();
+	void stmtLst(TNode parent);
+	void stmt(TNode parent);
+	void expr(TNode assignNode);
+	void exprPrime(TNode assignNode);
 	void variableName();
 	void procedureName();
 	void constantValue();
-	void factor();
+	void factor(TNode assignNode);
 	void error();
 	bool checkFileExists();
+	// node creation
+	TNode createASTNode(int nodeType, string name, TNode parentNode, int lineNo=0, int parentProc=0);
 };

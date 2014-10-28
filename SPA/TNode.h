@@ -4,6 +4,26 @@
 
 using namespace std;
 
+enum TNODE_TYPE {
+	PROC_NODE,
+	VAR_NODE,
+	STMTLST_NODE,
+	PLUS_NODE,
+	WHILE_NODE,
+	ASSIGN_NODE,
+	CONSTANT_NODE
+};
+
+static string TNODE_NAMES[] = {
+	"PROC_NODE",
+	"VAR_NODE",
+	"STMTLST_NODE",
+	"PLUS_NODE",
+	"WHILE_NODE",
+	"ASSIGN_NODE",
+	"CONSTANT_NODE"
+};
+
 class TNode {
 
 private:

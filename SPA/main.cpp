@@ -14,18 +14,17 @@ int main() {
 	
 	cout << "testing lexer" << endl;
 
-	Lexeme token;
-	Lexer Lex("procedure hehehe { y = xa3bc + 223 + ChArlie; x = a + b + c; z = 1 + 3 * 4; }");
+//	Lexeme token;
+//	Lexer Lex("procedure hehehe { y = xa3bc + 223 + ChArlie; x = a + b + c; z = 1 + 3 * 4; }");
 
-	while(!token.equals(Lexeme(EOL, ""))) {
-		token = Lex.lex();
-		cout << "lexeme : \"" << token << endl;
-	}
+//	while(!token.equals(Lexeme(EOL, ""))) {
+//		token = Lex.lex();
+//		cout << "lexeme : \"" << token << endl;
+//	}
 	cout << endl << " ====================" << endl;
 
 	//Parser Pa("not_so_simple_sample.txt");
 	Parser Pa("simple_sample.txt");
-	Pa.getController().varTable.printTable();
 	
 	string t;
 	cin >> t;

@@ -113,6 +113,12 @@
     <ClInclude Include="QueryParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FollowsRecord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ParentRecord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="simple_sample.txt">

@@ -1,50 +1,97 @@
-#include <string>
-#include <stdlib.h>
-#include <sstream>
-#include <iostream>
-#include <vector>
-#include <set>
 #include "Parent.h"
+#include <list>
+
 using namespace std;
 
-// constructor 
 Parent::Parent(){
-set<pair<int,int>> set;
 }
 
-void Parent::insertParent(int stmt1,int stmt2){
-parentVec.push_back(make_pair(stmt1,stmt2));
+void Parent::insertParent(int stmt1, int stmt2){
+	ParentRecord record(stmt1, stmt2);
+	records.push_back(record);
 }
 
-set<int> Parent::getParent(int){
-//#TODO
-set<int> parentSet;
-return parentSet;
+list<int> Parent::getChildren(int stmt){
+	list<int> listChildren;
+	for(int i=0; i<records.size();i++){
+			if(records[i].getParent()==stmt){
+				listChildren.push_back(records[i].getChild());
+			}
+		}
+		return listChildren;
+	}
+	
+list<int> Parent::getParents(int stmt){
+	list<int> listParents;
+	for(int i=0; i<records.size();i++){
+			if(records[i].getChild()==stmt){
+				listParents.push_back(records[i].getParent());
+			}
+		}
+		return listParents;
+	}
+	
+list<int> Parent::getChildrenStar(int stmt){
+	list<int> children;
+	children = Parent::recursiveChildrenStar(children,stmt);
+	return children;
 }
 
-set<int> Parent::getChild(int){
-//#TODO
-set<int> childSet;
-return childSet;
+list<int> Parent::recursiveChildrenStar(list<int> &children,int stmt){
+	list<int> childrenSublist ;
+	childrenSublist = Parent::getChildren(stmt);
+	if(childrenSublist.size()==0)
+		return children;
+	children.insert(children.end(), childrenSublist.begin(), childrenSublist.end());
+	for(std::list<int>::iterator it=childrenSublist.begin(); it != childrenSublist.end(); ++it){
+		recursiveChildrenStar(children,*it);
+	}
+	return children;
 }
 
-bool Parent::ifParent(int stmt1,int stmt2){
-//#TODO
-return NULL;
+list<int> Parent::getParentStar(int stmt){
+	list<int> parents;
+	parents = Parent::recursiveParentStar(parents,stmt);
+	return parents;
 }
 
-set<int> Parent::getParentStar(int){
-//#TODO
-set<int> parentStarSet;
-return parentStarSet;
+list<int> Parent::recursiveParentStar(list<int> &parents,int stmt){
+	list<int> parentsSublist ;
+	parentsSublist = Parent::getParents(stmt);
+	if(parentsSublist.size()==0)
+		return parents;
+	parents.insert(parents.end(), parentsSublist.begin(), parentsSublist.end());
+	for(std::list<int>::iterator it=parentsSublist.begin(); it != parentsSublist.end(); ++it){
+		recursiveParentStar(parents,*it);
+	}
+	return parents;
 }
-set<int> Parent::getChildStar(int){
-//#TODO
-set<int> childStarSet;
-return childStarSet;
+	
+bool Parent::isParentTrue(int stmt1, int stmt2){
+	list<int> children ;
+	children = Parent::getChildren(stmt1);
+	for (std::list<int>::iterator it=children.begin(); it != children.end(); ++it){
+		if(*it==stmt2)
+			return true;
+	}
+	return false;
 }
 
-bool Parent::ifParentStar(int stmt1, int stmt2){
-//#TODO
-return NULL;
+list<int> Parent::getAllChildrenStmt(){
+	list<int> children ;
+	for (int i=0; i<records.size();i++){
+		children.push_back(records[i].getChild());
+	}
+	children.unique();
+	return children;
 }
+
+list<int> Parent::getAllParentStmt(){
+	list<int> parents ;
+	for (int i=0; i<records.size();i++){
+		parents.push_back(records[i].getParent());
+	}
+	parents.unique();
+	return parents;
+}
+

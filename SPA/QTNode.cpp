@@ -23,6 +23,10 @@ QTNode::QTNode(STRING newKey, QTNode newParent){
 	parent = &newParent;
 }
 
+QTNode::QTNode(int newKey) {
+	value = newKey;
+}
+
 /******* Accessors *******/
 INDEX QTNode::getNumChild(){
 	return children.size();

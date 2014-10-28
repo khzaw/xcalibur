@@ -83,7 +83,8 @@ void QueryParser::matchSelect() {
 	match("Select");
 	if (nextToken.name.compare("BOOLEAN") == 0) {
 		match("BOOLEAN");
-		// add bool to solution subtree
+		QTNode* newNode = new QTNode("BOOLEAN");
+		qt.getRootNode().getChild(0).addChild(*newNode);
 	} else {
 		matchTuple();	
 	}
@@ -105,9 +106,11 @@ void QueryParser::matchTuple() {
 void QueryParser::matchTupleElements(int times) {
 	string elem = nextToken.name;
 	match(IDENT);
-	// add to solution subtree
+	QTNode* answerNode = new QTNode(elem);
+	qt.getRootNode().getChild(0).addChild(*answerNode);
 
-	if (times != 0 && nextToken.name.compare(",") == 0) {
+	if ((times != 0) && (nextToken.name.compare(",") == 0)) {
+		match(",");
 		matchTupleElements(1);
 	}
 }
@@ -167,117 +170,149 @@ void QueryParser::matchSuchThatConditions(){
 }
 
 void QueryParser::matchModifies() {
+	QTNode modifiesNode = *(new QTNode("Modifies"));
 
+	match("(");
+	modifiesNode.addChild(matchEntRef());
+	match(",");
+	modifiesNode.addChild(matchVarRef());
+	match(")");
+	
+	qt.getRootNode().getChild(1).addChild(modifiesNode);
 }
 
 void QueryParser::matchUses() {
+	QTNode usesNode = *(new QTNode("Uses"));
+
+	match("(");
+	usesNode.addChild(matchEntRef());
+	match(",");
+	usesNode.addChild(matchVarRef());
+	match(")");
 	
+	qt.getRootNode().getChild(1).addChild(usesNode);
 }
 
 // if transitive is != 0, Calls*, otherwise, Calls
 void QueryParser::matchCalls(int transitive) {
+	QTNode callNode;
 	if (transitive) {
-		//create Calls* Node
+		callNode = *(new QTNode("Calls"));
 	} else {
-		//create Calls Node
+		callNode = *(new QTNode("Calls*"));
 	}
 
 	match("(");
-	//matchEntRef
-	//set as first child
+	callNode.addChild(matchEntRef());
 	match(",");
-	//matchEntRef
-	//set as second child 
+	callNode.addChild(matchEntRef());
 	match(")");
 
-	//Insert into QT
+	qt.getRootNode().getChild(1).addChild(callNode);
 }
 
 // if transitive is != 0, Parent*, otherwise, Parent 
 void QueryParser::matchParent(int transitive) {
+	QTNode parentNode;
 	if (transitive) {
-		//Create Parent* Node
+		parentNode = *(new QTNode("Parent"));
 	} else {
-		//Create Parent Node
+		parentNode = *(new QTNode("Parent*"));
 	}
 
 	match("(");
-	//matchStmtRef
-	//set as first child
+	parentNode.addChild(matchStmtRef());
 	match(",");
-	//matchStmtRef
-	//set as second child 
+	parentNode.addChild(matchStmtRef());
 	match(")");
 
-	//Insert into QT
+	qt.getRootNode().getChild(1).addChild(parentNode);
 }
 
 // if transitive is != 0, Follows*, otherwise, Follows
 void QueryParser::matchFollows(int transitive) {
+	QTNode followsNode;
 	if (transitive) {
-		//Create Follows* Node
+		followsNode = *(new QTNode("Follows"));
 	} else {
-		//Create Follows Node
+		followsNode = *(new QTNode("Follows*"));
 	}
 
 	match("(");
-	//matchStmtRef
-	//set as first child
+	followsNode.addChild(matchStmtRef());
 	match(",");
-	//matchStmtRef
-	//set as second child 
+	followsNode.addChild(matchStmtRef());
 	match(")");
 
-	//Insert into QT
+	qt.getRootNode().getChild(1).addChild(followsNode);
 }
 
-/*
+
 QTNode QueryParser::matchVarRef() {
-	QTNode qtpi;
+	QTNode* qtpi;
 	if(nextToken.name.compare("_") == 0) {
-		
+		qtpi = new QTNode("_");
+		match("_");
 	} else if (nextToken.token == IDENT) {
-	
-	} else if (nexToken.token == "\"") {
+		qtpi = new QTNode(nextToken.name);
+		match(IDENT);
+	} else if (nextToken.name.compare("\"") == 0) {
+		qtpi = new QTNode("\"" + nextToken.name + "\"") ;
 		match(IDENT);
 		match ("\"");
 	}
 
-	return qtpi;	
+	return *qtpi;	
 }
 
 QTNode QueryParser::matchEntRef() {
-	QTNode qtpi;
+	QTNode* qtpi;
 	if(nextToken.name.compare("_") == 0) {
-		
+		qtpi = new QTNode("_");
+		match("_");
 	} else if (nextToken.token == INT_LIT) {
-	
+		qtpi = new QTNode(stoi(nextToken.name));
+		match(INT_LIT);
 	} else if (nextToken.token == IDENT) {
-	
-	} else if (nexToken.token == "\"") {
+		qtpi = new QTNode(nextToken.name);
+		match(IDENT);
+	} else if (nextToken.name.compare("\"") == 0) {
+		qtpi = new QTNode("\"" + nextToken.name + "\"") ;
 		match(IDENT);
 		match ("\"");
 	}
 
-	return qtpi;
+	return *qtpi;
 }
 
 QTNode QueryParser::matchStmtRef() {
-	QTNode qtpi;
+	QTNode* qtpi;
 	if(nextToken.name.compare("_") == 0) {
-		
+		qtpi = new QTNode("_");
+		match("_");
 	} else if (nextToken.token == INT_LIT) {
-	
+		qtpi = new QTNode(stoi(nextToken.name));
+		match(INT_LIT);
 	} else if (nextToken.token == IDENT) {
-	
+		qtpi = new QTNode(nextToken.name);
+		match(IDENT);
 	} 
 
-	return qtpi;
+	return *qtpi;
 }
-*/
 
 void QueryParser::matchPattern() {
-	
+	matchPatternConditions();
+	if(nextToken.name.compare("and") == 0) {
+		matchPatternConditions();
+	}
+}
+
+void QueryParser::matchPatternConditions(){
+	/*
+	string patternSynonym = nextToken.name;
+	match(IDENT);
+	*/
 }
 
 void QueryParser::matchWith() {

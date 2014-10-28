@@ -75,4 +75,7 @@ private:
 	void matchPatternConditions();
 	void matchWith();
 	void matchWithConditions();
+	QTNode matchVarRef();
+	QTNode matchEntRef();
+	QTNode matchStmtRef();
 };

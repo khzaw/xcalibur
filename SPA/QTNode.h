@@ -17,6 +17,7 @@ class QTNode {
       // Constructor
 	  QTNode();
 	  QTNode(STRING);
+	  QTNode(int);
 	  QTNode(STRING, QTNode); 
 	  
 	  // Accessor
@@ -31,6 +32,7 @@ class QTNode {
    
 	private:
       STRING key;
+	  int value;
 	  QTNode* parent;
 	  vector<QTNode> children;
 };

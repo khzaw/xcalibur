@@ -11,7 +11,7 @@ typedef QTNode NODE;
 QueryTree::QueryTree(){
 	NODE* queryTreeRoot = new NODE("PQL Query");
 	rootNode = *queryTreeRoot;
-	NODE* resultRoot = new NODE("result", *queryTreeRoot);
+	NODE* resultRoot = new NODE("tuples", *queryTreeRoot);
 	rootNode.addChild(*resultRoot);
 	NODE* suchthatRoot = new NODE("such that", *queryTreeRoot);
 	rootNode.addChild(*suchthatRoot);

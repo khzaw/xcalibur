@@ -13,11 +13,13 @@
   <ItemGroup>
     <ClCompile Include="AST.cpp" />
     <ClCompile Include="Follows.cpp" />
+    <ClCompile Include="FollowsRecord.cpp" />
     <ClCompile Include="Lexeme.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="Modifies.cpp" />
     <ClCompile Include="Parent.cpp" />
+    <ClCompile Include="ParentRecord.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="PKB.cpp" />
     <ClCompile Include="PKBController.cpp" />

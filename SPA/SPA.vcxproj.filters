@@ -69,6 +69,12 @@
     <ClCompile Include="QueryEvaluator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FollowsRecord.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="ParentRecord.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lexer.h">
@@ -117,8 +123,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="QueryEvaluator.h">
-	  <Filter>Header Files</Filter>
-	</ClInclude>
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="FollowsRecord.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -1,28 +1,26 @@
-#include <string>
-#include <set>
+#include <iostream>
 #include <vector>
+#include "FollowsRecord.h"
+#include <list>
+
 using namespace std;
 
-//public functions
-class Follows{
+class Follows {
 
-private:
-int follower, followee;
-vector<pair<int,int>> followVec;
-
-public:
-//Constructor 
-Follows();
-
-//Accessor
-set<int> getFollowee(int);
-set<int> getFollower(int);
-bool ifFollows(int,int);
-set<int> getFolloweeStar(int);
-set<int> getFollowerStar(int);
-bool ifFollowsStar(int,int);
-
-//Mutator
-void insertFollows(int,int);
-
+	private :
+	vector<FollowsRecord> records;
+	list<int>recursiveFollowerStar(list<int>&,int);
+	list<int>recursiveFolloweesStar(list<int>&,int);
+	
+	public :
+	Follows();
+	void insertFollows(int,int);
+	list<int> getFollowers(int);
+	list<int> getFollowees(int);
+	bool isFollowsTrue(int,int);
+	list<int> getFollowersStar(int);
+	list<int> getFolloweesStar(int);
+	list<int> getAllFollowerStmt();
+	list<int> getAllFolloweeStmt();
+	
 };

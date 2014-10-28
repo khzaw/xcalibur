@@ -117,6 +117,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="QueryEvaluator.h">
+	  <Filter>Header Files</Filter>
+	</ClInclude>
+    <ClInclude Include="FollowsRecord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ParentRecord.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

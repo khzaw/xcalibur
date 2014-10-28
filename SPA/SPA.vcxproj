@@ -32,10 +32,12 @@
   <ItemGroup>
     <ClInclude Include="AST.h" />
     <ClInclude Include="Follows.h" />
+    <ClInclude Include="FollowsRecord.h" />
     <ClInclude Include="Lexeme.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Modifies.h" />
     <ClInclude Include="Parent.h" />
+    <ClInclude Include="ParentRecord.h" />
     <ClInclude Include="Parser.h" />
     <CIInclude Include="Parser.h" />
     <ClInclude Include="PKB.h" />

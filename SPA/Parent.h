@@ -1,30 +1,26 @@
-#include <string>
-#include <set>
+#include <iostream>
+#include <vector>
+#include "ParentRecord.h"
+#include <list>
+
 using namespace std;
 
-//public functions
-class Parent{
+class Parent {
 
-private:
-int parent, child;
-vector<pair<int,int>> parentVec;
-
-public:
-//Constructor 
-Parent(); 
-
-//Accessor
-set<int> getParent(int);
-set<int> getChild(int);
-bool ifParent(int,int);
-set<int> getParentStar(int);
-set<int> getChildStar(int);
-bool ifParentStar(int,int);
-
-//Mutator
-void insertParent(int,int);
-
-
-
-
+	private :
+	vector<ParentRecord> records;
+	list<int>recursiveChildrenStar(list<int>&,int);
+	list<int>recursiveParentStar(list<int>&,int);
+	
+	public :
+	Parent();
+	void insertParent(int,int);
+	list<int> getChildren(int);
+	list<int> getParents(int);
+	bool isParentTrue(int,int);
+	list<int> getChildrenStar(int);
+	list<int> getParentStar(int);
+	list<int> getAllChildrenStmt();
+	list<int> getAllParentStmt();
+	
 };

@@ -1,13 +1,13 @@
 #pragma once
 #include <iostream>
 #include <set>
+#include <vector>
 #include "Lexer.h"
 #include "Lexeme.h"
 
 using namespace std;
 
-static vector<string> DESIGN_ENTITIES = {
-	"procedure",
+static const string arr[] = {"procedure",
 	"stmtLst",
 	"stmt",
 	"assign",
@@ -17,8 +17,9 @@ static vector<string> DESIGN_ENTITIES = {
 	"variable",
 	"constant",
 	"prog_line"
-	//plus, minus, times
+	//plus, minus, times};
 };
+static vector<string> DESIGN_ENTITIES(arr, arr + sizeof(arr) / sizeof(arr[0]) );
 
 enum RELATION {
 	MODIFIES,
@@ -68,4 +69,4 @@ private:
 	void matchPatternConditions();
 	void matchWith();
 	void matchWithConditions();
-}
+};

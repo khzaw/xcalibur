@@ -48,7 +48,7 @@ Lexeme QueryParser::getToken() {
 }
 
 void QueryParser::matchDeclaration() {
-	for (int i = 0; i < DESIGN_ENTITIES.size(); i++) {
+	for (size_t i = 0; i < DESIGN_ENTITIES.size(); i++) {
 		if(nextToken.name.compare("Select") != 0) {
 			try {
 				match(DESIGN_ENTITIES[i]);

@@ -15,6 +15,8 @@ QueryTree::QueryTree(){
 	rootNode.addChild(*resultRoot);
 	NODE* suchthatRoot = new NODE("such that", *queryTreeRoot);
 	rootNode.addChild(*suchthatRoot);
+	NODE* withRoot = new NODE("with", *queryTreeRoot);
+	rootNode.addChild(*withRoot);
 	NODE* patternRoot = new NODE("pattern", *queryTreeRoot);
 	rootNode.addChild(*patternRoot);
 }

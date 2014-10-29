@@ -23,23 +23,32 @@ QueryParser::QueryParser(string s) {
 	QueryTree* temp = new QueryTree();
 	this->qt = *temp;
 	parse();
+	qt.printTree();
+}
+
+QueryParser::~QueryParser() {
+
 }
 
 void QueryParser::parse() {
-	matchDeclaration();
-	matchSelect();
+	try {
+		matchDeclaration();
+		matchSelect();
+	} catch (string e) {
+		cout << "Caught Exception";
+	}
 }
 
 void QueryParser::match(string s) {
 	if (nextToken.name.compare(s) == 0) {
 		nextToken = getToken();
 	} else {
-		throw("exception");
+		throw("Exception");
 	}
 }
 
 void QueryParser::match(int type) {
-	if (nextToken.token = type) {
+	if (nextToken.token == type) {
 		nextToken = getToken();
 	} else {
 	
@@ -51,17 +60,20 @@ Lexeme QueryParser::getToken() {
 }
 
 void QueryParser::matchDeclaration() {
-	for (size_t i = 0; i < DESIGN_ENTITIES.size(); i++) {
-		if(nextToken.name.compare("Select") != 0) {
-			try {
+	nextToken = getToken();
+	while(nextToken.name.compare("Select") != 0) {
+		for(size_t i = 0; i < DESIGN_ENTITIES.size(); i++) {
+			//cout << "Matching " + nextToken.name + " with " + DESIGN_ENTITIES[i] << endl;
+			if (nextToken.name.compare(DESIGN_ENTITIES[i]) == 0) {
 				match(DESIGN_ENTITIES[i]);
+				//cout << "Matched with " + DESIGN_ENTITIES[i] << endl;
 				matchDeclarationVariables(DESIGN_ENTITIES[i]);
-				i = 0;
-			} catch (string e) {
-				continue;
+				break;
 			}
-		} else {
-			return;
+		}
+
+		if (nextToken.token == EOL) {
+			break;
 		}
 	}
 }
@@ -71,11 +83,11 @@ void QueryParser::matchDeclarationVariables(string entity) {
 	match(IDENT);
 	synonyms.insert(pair<string, string>(var, entity));
 
-	if(nextToken.name.compare(";") == 0) {
-		return;
-	} else {
+	if(nextToken.name.compare(";") != 0) {
 		match(",");
 		matchDeclarationVariables(entity);
+	} else {
+		match(";");
 	}
 }
 
@@ -106,9 +118,11 @@ void QueryParser::matchTuple() {
 void QueryParser::matchTupleElements(int times) {
 	string elem = nextToken.name;
 	match(IDENT);
-	QTNode* answerNode = new QTNode(elem);
+	
+	QTNode* answerNode = new QTNode(elem, qt.getRootNode().getChild(0));
+	//cout << answerNode->getKey() << endl;
 	qt.getRootNode().getChild(0).addChild(*answerNode);
-
+	//cout << qt.getRootNode().getChild(0).getChild(0).getKey() << endl;
 	if ((times != 0) && (nextToken.name.compare(",") == 0)) {
 		match(",");
 		matchTupleElements(1);

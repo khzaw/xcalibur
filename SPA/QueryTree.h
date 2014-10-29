@@ -20,8 +20,11 @@ class QueryTree {
 	  // Accessor
       NODE getRootNode();
 	  QUERYTREE getSubtreeFromNode(NODE);
+
+	  void printTree();
    
 private:
       NODE rootNode;
+
 };
 #endif

@@ -1,4 +1,5 @@
 // File name: QueryTree.cpp
+#include <iostream>
 #include "QTNode.h"
 #include "QueryTree.h"
 
@@ -30,5 +31,38 @@ NODE QueryTree::getRootNode(){
 }
 QUERYTREE QueryTree::getSubtreeFromNode(NODE node){
 	return QueryTree(node);
+}
+
+void QueryTree::printTree() {
+	cout << "Root Size: " << rootNode.getNumChild() << endl;
+	cout << "Tuples: " << endl;
+	for(int i = 0; i < rootNode.getChild(0).getNumChild(); i++) {	
+		if (rootNode.getChild(0).getChild(i).getKey().empty()) {
+			cout << rootNode.getChild(0).getChild(i).getValue();
+		} else {
+			cout << rootNode.getChild(0).getChild(i).getKey();
+		}
+		cout << ", ";
+	}
+	cout << endl;
+
+	cout << "Such that: " << endl;
+	cout << "Size: " + rootNode.getChild(1).getNumChild();
+	for(int i = 0; i < rootNode.getChild(1).getNumChild(); i++) {	
+		cout << rootNode.getChild(1).getChild(i).getKey();
+		string c1 = rootNode.getChild(1).getChild(i).getChild(0).getKey();
+		string c2 = rootNode.getChild(1).getChild(i).getChild(1).getKey();
+		if (c1.empty()) {
+			cout << "(" << rootNode.getChild(0).getChild(i).getChild(0).getValue();
+		} else {
+			cout << "(" << c1 ;
+		}
+		if (c2.empty()) {
+			cout << "," << rootNode.getChild(0).getChild(i).getChild(1).getValue();
+		} else {
+			cout << "," << c2 ;
+		}
+		cout << ") ";
+	}
 }
    

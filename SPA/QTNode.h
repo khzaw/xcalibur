@@ -19,11 +19,13 @@ class QTNode {
 	  QTNode(STRING);
 	  QTNode(int);
 	  QTNode(STRING, QTNode); 
+	  QTNode(int, QTNode);
 	  
 	  // Accessor
 	  INDEX getNumChild();
       QTNode getChild(INDEX);
 	  STRING getKey();
+	  int getValue();
 	  
 	  // Mutator
 	  VOID addChild(QTNode);

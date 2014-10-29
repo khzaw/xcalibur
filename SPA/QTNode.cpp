@@ -27,6 +27,11 @@ QTNode::QTNode(int newKey) {
 	value = newKey;
 }
 
+QTNode::QTNode(int newKey, QTNode newParent){
+	value = newKey;
+	parent = &newParent;
+}
+
 /******* Accessors *******/
 INDEX QTNode::getNumChild(){
 	return children.size();
@@ -38,6 +43,10 @@ QTNode QTNode::getChild(INDEX index){
 
 STRING QTNode::getKey(){
 	return key;
+}
+
+int QTNode::getValue(){
+	return value;
 }
 
 /******* Mutators *******/

@@ -36,6 +36,11 @@ using namespace std;
 		OPEN_BLOCK,		// {
 		CLOSE_BLOCK,	// }
 		TAB_CHAR,		// \t
+		HEX,
+		OPEN_PARENTHESES,
+		CLOSE_PARENTHESES,
+		COMMA,
+		APOSTROPHE
 	};
 
 	static string TOKEN_TYPE_STRINGS[] = {
@@ -53,7 +58,12 @@ using namespace std;
 		"SEMICOLON",
 		"OPEN_BLOCK",
 		"CLOSE_BLOCK",
-		"TAB_CHAR"
+		"TAB_CHAR",
+		"HEX",
+		"OPEN_PARENTHESES",
+		"CLOSE_PARENTHESES",
+		"COMMA",
+		"APOSTROPHE"
 	};
 
 class Lexer {

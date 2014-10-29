@@ -16,7 +16,7 @@ QueryEvaluator::QueryEvaluator(){
 
 };
 
-QueryEvaluator::QueryEvaluator(PKB newPKB){
+QueryEvaluator::QueryEvaluator(PKB* newPKB){
 	pkb = newPKB;
 };
 

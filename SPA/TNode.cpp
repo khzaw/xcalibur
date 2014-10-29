@@ -8,8 +8,7 @@
 
 using namespace std;
 
-
-TNode::TNode() {
+TNode::TNode(){
 }
 
 
@@ -45,24 +44,24 @@ void TNode::setData(string value) {
 }
 
 
-void  TNode::addParent(TNode p) {
+void  TNode::addParent(TNode *p) {
 	parent.push_back(p);
 }
 
 
-void TNode::addChild(TNode c) {
+void TNode::addChild(TNode *c) {
     children.push_back(c);
 }
 
-vector<TNode> TNode::getChildren() {
+vector<TNode*> TNode::getChildren() {
     return children;
 }
 
-TNode TNode::getChild(int indx) {
+TNode* TNode::getChild(int indx) {
     return children[indx];
 }
 
-TNode TNode::getParent(){
+TNode* TNode::getParent(){
     return parent[0];
 }
 

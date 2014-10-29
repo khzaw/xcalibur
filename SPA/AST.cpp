@@ -15,57 +15,57 @@ TNode n(nodeT,data,s,p);
 return n;
 }
 
-void AST::insertRoot(TNode n){
+void AST::insertRoot(TNode *n){
 root.push_back(n);
 }
 
-TNode  AST::getRootNode(){
+TNode*  AST::getRootNode(){
 	return root[0];
 }
 
- TNode AST::assignChild(TNode n, TNode c){
-	 n.addChild(c);
-	 cout << n.getNumChildren() << endl;
+ TNode* AST::assignChild(TNode *n, TNode *c){
+	 n->addChild(c);
+	 cout << n->getNumChildren() << endl;
 	 return n;
 }
 
- TNode AST::assignParent(TNode n, TNode p){
-	 n.addParent(p);
+ TNode* AST::assignParent(TNode *n, TNode *p){
+	 n->addParent(p);
 	 	 return n;
 }
 
- string AST::getTNodeType(TNode n){
-	return n.getNodeType();
+ string AST::getTNodeType(TNode *n){
+	return n->getNodeType();
 }
 
-string AST::getTNodeValue(TNode n){
-	return n.getData();
+string AST::getTNodeValue(TNode *n){
+	return n->getData();
 }
 
-int AST::getTNodeStmtNum(TNode n){
-	return n.getStmtNum();
+int AST::getTNodeStmtNum(TNode *n){
+	return n->getStmtNum();
 }
 
-int AST::getTNodeProcedure(TNode n){
-	return n.getProcIndex();
+int AST::getTNodeProcedure(TNode *n){
+	return n->getProcIndex();
 }
 
-TNode AST::getTNodeParent(TNode n){
-	return n.getParent();
+TNode* AST::getTNodeParent(TNode *n){
+	return n->getParent();
 }
 
-TNode AST::getTNodeChild(TNode n, int index){
-	return n.getChild(index);
+TNode* AST::getTNodeChild(TNode *n, int index){
+	return n->getChild(index);
 }
 
-vector<TNode> AST::getTNodeChildren(TNode n){
-	return n.getChildren();
+vector<TNode*> AST::getTNodeChildren(TNode *n){
+	return n->getChildren();
 }
 
-bool AST::isNodeType(TNode n,string s){
-	return (n.getNodeType() == s);
+bool AST::isNodeType(TNode *n,string s){
+	return (n->getNodeType() == s);
 }
 
-bool AST::isNodeValue(TNode n,string v){
-	return (n.getData() == v);
+bool AST::isNodeValue(TNode *n,string v){
+	return (n->getData() == v);
 }

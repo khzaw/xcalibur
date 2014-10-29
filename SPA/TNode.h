@@ -24,6 +24,12 @@ static string TNODE_NAMES[] = {
 	"CONSTANT_NODE"
 };
 
+#include <cstddef>
+#include <vector>
+
+using namespace std;
+
+
 class TNode {
 
 private:
@@ -32,8 +38,8 @@ private:
 	string nodeType;
 	int procIndex;
 	int stmtNum;
-	vector<TNode> parent;
-    vector<TNode> children;
+	vector<TNode*> parent;
+    vector<TNode*> children;
 	
 
 public:
@@ -45,12 +51,12 @@ public:
 	int getStmtNum() ;
     int getProcIndex() ;
 	string getNodeType() ;
-	TNode getChild(int) ;
-    TNode getParent() ;
-	vector<TNode> getChildren() ;
+	TNode* getChild(int) ;
+    TNode* getParent() ;
+	vector<TNode *> getChildren() ;
 	int getNumChildren() ;
 	//Mutator for node
     void setData(string data);
-	void addParent(TNode p);
-    void addChild(TNode c);
+	void addParent(TNode *p);
+    void addChild(TNode *c);
 };

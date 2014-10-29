@@ -176,9 +176,9 @@ TNode Parser::createASTNode(int nodeType, string name, TNode parentNode, int lin
 	TNode node = TNode(TNODE_NAMES[nodeType], name, lineNo, parentProc);
 	if(nodeType == PROC_NODE) {
 		controller.procTable.insertProc(name);
-		controller.ast.insertRoot(node);
+		controller.ast.insertRoot(&node);
 	}
-	controller.ast.assignChild(parentNode, node);
+	controller.ast.assignChild(&parentNode, &node);
 	// cout << "PARENT : " <<  parentNode.getNodeType() << "\t" << "CHILD: " << TNODE_NAMES[nodeType] << "," << node.getData() << endl;
 	return node;
 }

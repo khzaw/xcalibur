@@ -21,9 +21,9 @@ QueryParser::QueryParser(string s) {
 	this->nextToken = Lexeme();
 	this->lexer = Lexer(s);
 	QueryTree* temp = new QueryTree();
-	this->qt = *temp;
+	this->qt = temp;
 	parse();
-	qt.printTree();
+	qt->printTree();
 }
 
 QueryParser::~QueryParser() {
@@ -96,7 +96,7 @@ void QueryParser::matchSelect() {
 	if (nextToken.name.compare("BOOLEAN") == 0) {
 		match("BOOLEAN");
 		QTNode* newNode = new QTNode("BOOLEAN");
-		qt.getRootNode().getChild(0).addChild(*newNode);
+		qt->getRootNode()->getChild(0)->addChild(newNode);
 	} else {
 		matchTuple();	
 	}
@@ -118,11 +118,11 @@ void QueryParser::matchTuple() {
 void QueryParser::matchTupleElements(int times) {
 	string elem = nextToken.name;
 	match(IDENT);
-	
-	QTNode* answerNode = new QTNode(elem, qt.getRootNode().getChild(0));
-	//cout << answerNode->getKey() << endl;
-	qt.getRootNode().getChild(0).addChild(*answerNode);
-	//cout << qt.getRootNode().getChild(0).getChild(0).getKey() << endl;
+	QTNode* answerNode = new QTNode(elem);
+	answerNode->setParent(qt->getRootNode()->getChild(0));
+	cout << answerNode->getKey() << endl;
+	qt->getRootNode()->getChild(0)->addChild(answerNode);
+	cout << qt->getRootNode()->getChild(0)->getNumChild() << endl;
 	if ((times != 0) && (nextToken.name.compare(",") == 0)) {
 		match(",");
 		matchTupleElements(1);
@@ -184,85 +184,85 @@ void QueryParser::matchSuchThatConditions(){
 }
 
 void QueryParser::matchModifies() {
-	QTNode modifiesNode = *(new QTNode("Modifies"));
+	QTNode* modifiesNode = new QTNode("Modifies");
 
 	match("(");
-	modifiesNode.addChild(matchEntRef());
+	modifiesNode->addChild(matchEntRef());
 	match(",");
-	modifiesNode.addChild(matchVarRef());
+	modifiesNode->addChild(matchVarRef());
 	match(")");
 	
-	qt.getRootNode().getChild(1).addChild(modifiesNode);
+	qt->getRootNode()->getChild(1)->addChild(modifiesNode);
 }
 
 void QueryParser::matchUses() {
-	QTNode usesNode = *(new QTNode("Uses"));
+	QTNode* usesNode = new QTNode("Uses");
 
 	match("(");
-	usesNode.addChild(matchEntRef());
+	usesNode->addChild(matchEntRef());
 	match(",");
-	usesNode.addChild(matchVarRef());
+	usesNode->addChild(matchVarRef());
 	match(")");
 	
-	qt.getRootNode().getChild(1).addChild(usesNode);
+	qt->getRootNode()->getChild(1)->addChild(usesNode);
 }
 
 // if transitive is != 0, Calls*, otherwise, Calls
 void QueryParser::matchCalls(int transitive) {
-	QTNode callNode;
+	QTNode* callNode;
 	if (transitive) {
-		callNode = *(new QTNode("Calls"));
+		callNode = new QTNode("Calls");
 	} else {
-		callNode = *(new QTNode("Calls*"));
+		callNode = new QTNode("Calls*");
 	}
 
 	match("(");
-	callNode.addChild(matchEntRef());
+	callNode->addChild(matchEntRef());
 	match(",");
-	callNode.addChild(matchEntRef());
+	callNode->addChild(matchEntRef());
 	match(")");
 
-	qt.getRootNode().getChild(1).addChild(callNode);
+	qt->getRootNode()->getChild(1)->addChild(callNode);
 }
 
 // if transitive is != 0, Parent*, otherwise, Parent 
 void QueryParser::matchParent(int transitive) {
-	QTNode parentNode;
+	QTNode* parentNode;
 	if (transitive) {
-		parentNode = *(new QTNode("Parent"));
+		parentNode = new QTNode("Parent");
 	} else {
-		parentNode = *(new QTNode("Parent*"));
+		parentNode = new QTNode("Parent*");
 	}
 
 	match("(");
-	parentNode.addChild(matchStmtRef());
+	parentNode->addChild(matchStmtRef());
 	match(",");
-	parentNode.addChild(matchStmtRef());
+	parentNode->addChild(matchStmtRef());
 	match(")");
 
-	qt.getRootNode().getChild(1).addChild(parentNode);
+	qt->getRootNode()->getChild(1)->addChild(parentNode);
 }
 
 // if transitive is != 0, Follows*, otherwise, Follows
 void QueryParser::matchFollows(int transitive) {
-	QTNode followsNode;
+	QTNode* followsNode;
 	if (transitive) {
-		followsNode = *(new QTNode("Follows"));
+		followsNode = new QTNode("Follows");
 	} else {
-		followsNode = *(new QTNode("Follows*"));
+		followsNode = new QTNode("Follows*");
 	}
 
 	match("(");
-	followsNode.addChild(matchStmtRef());
+	followsNode->addChild(matchStmtRef());
 	match(",");
-	followsNode.addChild(matchStmtRef());
+	followsNode->addChild(matchStmtRef());
 	match(")");
 
-	qt.getRootNode().getChild(1).addChild(followsNode);
+	qt->getRootNode()->getChild(1)->addChild(followsNode);
 }
 
 
-QTNode QueryParser::matchVarRef() {
+QTNode* QueryParser::matchVarRef() {
 	QTNode* qtpi;
 	if(nextToken.name.compare("_") == 0) {
 		qtpi = new QTNode("_");
@@ -276,10 +276,10 @@ QTNode QueryParser::matchVarRef() {
 		match ("\"");
 	}
 
-	return *qtpi;	
+	return qtpi;	
 }
 
-QTNode QueryParser::matchEntRef() {
+QTNode* QueryParser::matchEntRef() {
 	QTNode* qtpi;
 	if(nextToken.name.compare("_") == 0) {
 		qtpi = new QTNode("_");
@@ -296,10 +296,10 @@ QTNode QueryParser::matchEntRef() {
 		match ("\"");
 	}
 
-	return *qtpi;
+	return qtpi;
 }
 
-QTNode QueryParser::matchStmtRef() {
+QTNode* QueryParser::matchStmtRef() {
 	QTNode* qtpi;
 	if(nextToken.name.compare("_") == 0) {
 		qtpi = new QTNode("_");
@@ -312,7 +312,7 @@ QTNode QueryParser::matchStmtRef() {
 		match(IDENT);
 	} 
 
-	return *qtpi;
+	return qtpi;
 }
 
 void QueryParser::matchPattern() {

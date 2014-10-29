@@ -15,16 +15,16 @@ class QueryTree {
    public:
       // Constructor
 	  QueryTree();
-	  QueryTree(NODE); 
+	  QueryTree(NODE*); 
 	  
 	  // Accessor
-      NODE getRootNode();
-	  QUERYTREE getSubtreeFromNode(NODE);
+      NODE* getRootNode();
+	  QUERYTREE* getSubtreeFromNode(NODE*);
 
 	  void printTree();
    
 private:
-      NODE rootNode;
+      NODE* rootNode;
 
 };
 #endif

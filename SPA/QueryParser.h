@@ -46,7 +46,7 @@ class QueryParser {
 	Lexer lexer;
 	string query;
 	map<string, string> synonyms;
-	QueryTree qt;
+	QueryTree* qt;
 
 public:
 	QueryParser();
@@ -75,7 +75,7 @@ private:
 	void matchPatternConditions();
 	void matchWith();
 	void matchWithConditions();
-	QTNode matchVarRef();
-	QTNode matchEntRef();
-	QTNode matchStmtRef();
+	QTNode* matchVarRef();
+	QTNode* matchEntRef();
+	QTNode* matchStmtRef();
 };

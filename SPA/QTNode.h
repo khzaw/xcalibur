@@ -18,24 +18,24 @@ class QTNode {
 	  QTNode();
 	  QTNode(STRING);
 	  QTNode(int);
-	  QTNode(STRING, QTNode); 
-	  QTNode(int, QTNode);
+	  QTNode(STRING, QTNode*); 
+	  QTNode(int, QTNode*);
 	  
 	  // Accessor
 	  INDEX getNumChild();
-      QTNode getChild(INDEX);
+      QTNode* getChild(INDEX);
 	  STRING getKey();
 	  int getValue();
 	  
 	  // Mutator
-	  VOID addChild(QTNode);
-	  VOID setParent(QTNode);
+	  VOID addChild(QTNode*);
+	  VOID setParent(QTNode*);
 	  VOID setKey(STRING);
    
 	private:
       STRING key;
 	  int value;
 	  QTNode* parent;
-	  vector<QTNode> children;
+	  vector<QTNode*> children;
 };
 #endif

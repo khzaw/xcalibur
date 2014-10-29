@@ -89,7 +89,7 @@ void Parser::procedure() {
 
 	match("{");
 
-	TNode procStmtLstNode = createASTNode(STMTLST_NODE, "", procNode);
+	TNode procStmtLstNode = createASTNode(STMTLST_NODE, "", &procNode);
 	stmtLst(procStmtLstNode);
 
     match("}");
@@ -104,24 +104,23 @@ void Parser::stmtLst(TNode parent) {
 
 void Parser::stmt(TNode parent) {
 	if(nextToken.token == IDENT && nextToken.name == "while") {			// while statement
-		TNode whileNode = createASTNode(WHILE_NODE, nextToken.name, parent);
+		TNode whileNode = createASTNode(WHILE_NODE, nextToken.name, &parent);
 		match(KEYWORDS[1]);
 
-		TNode whileVarNode = createASTNode(VAR_NODE, nextToken.name, whileNode);	// whileVar
+		TNode whileVarNode = createASTNode(VAR_NODE, nextToken.name, &whileNode);	// whileVar
 		variableName();
 
 		match("{");
 
-		TNode whileStmtLstNode = createASTNode(STMTLST_NODE, "", whileNode);
+		TNode whileStmtLstNode = createASTNode(STMTLST_NODE, "", &whileNode);
 		stmtLst(whileStmtLstNode);
 
 		match("}");
 	} else if(nextToken.token == IDENT) {
 
 		//cout << "parent of assignment: " <<  parent.getNodeType() << endl;
-		TNode assignNode = createASTNode(ASSIGN_NODE, "", parent);
-
-		TNode varNode = createASTNode(VAR_NODE, nextToken.name, assignNode);
+		TNode assignNode = createASTNode(ASSIGN_NODE, "", &parent); 
+		TNode varNode = createASTNode(VAR_NODE, nextToken.name, &assignNode);
 		variableName();
 
 		match("=");
@@ -150,11 +149,11 @@ void Parser::expr(TNode assignNode) {
 void Parser::factor(TNode assignNode) {
 	// factor: var_name | const_value
 	if(nextToken.token == IDENT) {			// TODO: check valid IDENT (not keywords)
-		TNode varNode = createASTNode(VAR_NODE, nextToken.name, assignNode);
+		TNode varNode = createASTNode(VAR_NODE, nextToken.name, &assignNode);
 		variableName();
 	} else {
 		// INT_LIT;
-		TNode constantNode = createASTNode(CONSTANT_NODE, nextToken.name, assignNode);
+		TNode constantNode = createASTNode(CONSTANT_NODE, nextToken.name, &assignNode);
 		constantValue();
 	}
 }
@@ -162,7 +161,7 @@ void Parser::factor(TNode assignNode) {
 void Parser::exprPrime(TNode assignNode) {
 	if(nextToken.token == PLUS) {
 
-		TNode plusNode = createASTNode(PLUS_NODE, nextToken.name, assignNode);
+		TNode plusNode = createASTNode(PLUS_NODE, nextToken.name, &assignNode);
 		match("+");
 
 		factor(assignNode);
@@ -172,20 +171,20 @@ void Parser::exprPrime(TNode assignNode) {
 	}
 }
 
-TNode Parser::createASTNode(int nodeType, string name, TNode parentNode, int lineNo, int parentProc) {
+TNode Parser::createASTNode(int nodeType, string name, TNode *parentNode, int lineNo, int parentProc) {
 	TNode node = TNode(TNODE_NAMES[nodeType], name, lineNo, parentProc);
 	if(nodeType == PROC_NODE) {
 		controller.procTable.insertProc(name);
 		controller.ast.insertRoot(&node);
 	}
-	controller.ast.assignChild(&parentNode, &node);
-	// cout << "PARENT : " <<  parentNode.getNodeType() << "\t" << "CHILD: " << TNODE_NAMES[nodeType] << "," << node.getData() << endl;
+	controller.ast.assignChild(parentNode, &node);
+	 // cout << "PARENT : " <<  parentNode->getNodeType() << "\t" << "CHILD: " << TNODE_NAMES[nodeType] << "," << node.getData() << endl;
 	return node;
 }
 
 void Parser::variableName() {
 	// TODO check valid variable name
-	cout << "variableName: " << nextToken.name << endl;
+	// cout << "variableName: " << nextToken.name << endl;
 	controller.varTable.insertVar(nextToken.name);
 	nextToken = getToken();
 }

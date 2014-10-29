@@ -25,7 +25,7 @@ TNode*  AST::getRootNode(){
 
  TNode* AST::assignChild(TNode *n, TNode *c){
 	 n->addChild(c);
-	 cout << n->getNumChildren() << endl;
+	 // cout << "number of children : " << n->getNumChildren() << endl;
 	 return n;
 }
 

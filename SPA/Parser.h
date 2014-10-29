@@ -48,5 +48,5 @@ private:
 	void error();
 	bool checkFileExists();
 	// node creation
-	TNode createASTNode(int nodeType, string name, TNode parentNode, int lineNo=0, int parentProc=0);
+	TNode createASTNode(int nodeType, string name, TNode *parentNode, int lineNo=0, int parentProc=0);
 };

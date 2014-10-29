@@ -130,21 +130,22 @@ void QueryParser::matchTupleElements(int times) {
 }
 
 void QueryParser::matchConditions() {
+	//cout << "Matching Conditions" << endl;
 	if(nextToken.name.compare("such") == 0) {
 		match("such");
 		match("that");
 		matchSuchThat();
-	} 
-	
-	if (nextToken.name.compare("pattern") == 0) {
+	} else if (nextToken.name.compare("pattern") == 0) {
 		matchPattern();
-	} 
-	
-	if (nextToken.name.compare("with") == 0) {
+	} else if (nextToken.name.compare("with") == 0) {
 		matchWith();
+	} else {
+		cout << "SYNTAX ERROR" << endl;
+		return;
 	}
 
 	if(nextToken.token != EOL) {
+		cout << nextToken.name << endl;
 		matchConditions();
 	}
 }
@@ -152,6 +153,7 @@ void QueryParser::matchConditions() {
 void QueryParser::matchSuchThat() {
 	matchSuchThatConditions();
 	if(nextToken.name.compare("and") == 0) {
+		match("and");
 		matchSuchThatConditions();
 	}
 }
@@ -211,9 +213,9 @@ void QueryParser::matchUses() {
 void QueryParser::matchCalls(int transitive) {
 	QTNode* callNode;
 	if (transitive) {
-		callNode = new QTNode("Calls");
-	} else {
 		callNode = new QTNode("Calls*");
+	} else {
+		callNode = new QTNode("Calls");
 	}
 
 	match("(");
@@ -229,9 +231,9 @@ void QueryParser::matchCalls(int transitive) {
 void QueryParser::matchParent(int transitive) {
 	QTNode* parentNode;
 	if (transitive) {
-		parentNode = new QTNode("Parent");
-	} else {
 		parentNode = new QTNode("Parent*");
+	} else {
+		parentNode = new QTNode("Parent");
 	}
 
 	match("(");
@@ -247,9 +249,9 @@ void QueryParser::matchParent(int transitive) {
 void QueryParser::matchFollows(int transitive) {
 	QTNode* followsNode;
 	if (transitive) {
-		followsNode = new QTNode("Follows");
-	} else {
 		followsNode = new QTNode("Follows*");
+	} else {
+		followsNode = new QTNode("Follows");
 	}
 
 	match("(");

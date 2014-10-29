@@ -32,7 +32,7 @@ int main() {
 	cout << "testing query lexer" << endl;
 
 	Lexeme token2;
-	string query = "while w; assign a; Select <a,b,c> such that Modifies(w, a)";
+	string query = "while w; assign a; Select <a,b,c> such that Parent*(w, a) and Modifies(yolo, x) Calls(hohoho, hahaha)";
 	Lexer Lex2(query);
 
 	while(!token2.equals(Lexeme(EOL, ""))) {

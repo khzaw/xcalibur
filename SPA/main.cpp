@@ -32,19 +32,22 @@ int main() {
 	cout << "testing query lexer" << endl;
 
 	Lexeme token2;
-	string query = "while w; assign a; Select <a,b,c> such that Parent*(w, a) and Modifies(yolo, x) Calls(hohoho, hahaha)";
-	Lexer Lex2(query);
+	string query;
 
-	while(!token2.equals(Lexeme(EOL, ""))) {
-		token2 = Lex2.lex();
-		cout << "lexeme : \"" << token2 << endl;
+	while(true) {
+		cout << "Enter query:";
+		getline(cin, query);
+		
+		/*
+		Lexer Lex2(query);
+		while(!token2.equals(Lexeme(EOL, ""))) {
+			token2 = Lex2.lex();
+			cout << "lexeme : \"" << token2 << endl;
+		}
+		cout << endl << " ====================" << endl;
+		*/
+		QueryParser QPa(query);
 	}
-	cout << endl << " ====================" << endl;
-
-	QueryParser QPa(query);
-
-	string t;
-	cin >> t;
 }
 
 string convertToken(Lexeme t) {

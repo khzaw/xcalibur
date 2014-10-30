@@ -60,11 +60,6 @@ void Lexer::getChar() {
 	if(nextChar == '{') charClass = OPEN_BLOCK;
 	if(nextChar == '}') charClass = CLOSE_BLOCK;
 	if(nextChar == '\t') charClass = TAB_CHAR;
-	if(nextChar == '#') charClass = HEX;
-	if(nextChar == '(') charClass = OPEN_PARENTHESES;
-	if(nextChar == ')') charClass = CLOSE_PARENTHESES;
-	if(nextChar == ',') charClass = COMMA;
-	if(nextChar == '\"') charClass = APOSTROPHE;
 }
 
 void Lexer::addChar() {
@@ -124,31 +119,6 @@ Lexeme Lexer::lex() {
 	case CLOSE_BLOCK:
 		addChar(); getChar();
 		return Lexeme(CLOSE_BLOCK, lexeme);
-		break;
-
-	case HEX:
-		addChar(); getChar();
-		return Lexeme(HEX, lexeme);
-		break;
-
-	case OPEN_PARENTHESES:
-		addChar(); getChar();
-		return Lexeme(OPEN_PARENTHESES, lexeme);
-		break;
-	
-	case CLOSE_PARENTHESES:
-		addChar(); getChar();
-		return Lexeme(CLOSE_PARENTHESES, lexeme);
-		break;
-
-	case COMMA:
-		addChar(); getChar();
-		return Lexeme(COMMA, lexeme);
-		break;
-	
-	case APOSTROPHE:
-		addChar(); getChar();
-		return Lexeme(APOSTROPHE, lexeme);
 		break;
 	}
 }

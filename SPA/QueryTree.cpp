@@ -38,20 +38,17 @@ QUERYTREE* QueryTree::getSubtreeFromNode(NODE* node){
 }
 
 void QueryTree::printTree() {
-	cout << "Root Size: " << rootNode->getNumChild() << endl;
-	cout << "Tuples: " << endl;
+	cout << "Tuples: ";
 	for(int i = 0; i < rootNode->getChild(0)->getNumChild(); i++) {	
 		if (rootNode->getChild(0)->getChild(i)->getKey().empty()) {
-			cout << rootNode->getChild(0)->getChild(i)->getValue();
+			cout << rootNode->getChild(0)->getChild(i)->getValue() << " ";
 		} else {
-			cout << rootNode->getChild(0)->getChild(i)->getKey();
+			cout << rootNode->getChild(0)->getChild(i)->getKey() << " ";
 		}
-		cout << ", ";
 	}
 	cout << endl;
 
-	cout << "Such that: " << endl;
-	cout << "Size: " << rootNode->getChild(1)->getNumChild() << endl;
+	cout << "Such that: ";
 	for(int i = 0; i < rootNode->getChild(1)->getNumChild(); i++) {	
 		cout << rootNode->getChild(1)->getChild(i)->getKey();
 		string c1 = rootNode->getChild(1)->getChild(i)->getChild(0)->getKey();
@@ -68,5 +65,22 @@ void QueryTree::printTree() {
 		}
 		cout << ") ";
 	}
+	cout << endl;
+
+	cout << "Pattern: ";
+	for(int i = 0; i < rootNode->getChild(2)->getNumChild(); i++) {	
+		if (rootNode->getChild(2)->getChild(i)->getNumChild() == 2) {
+			cout << rootNode->getChild(2)->getChild(i)->getKey() << "(";
+			cout << rootNode->getChild(2)->getChild(i)->getChild(0)->getKey() << "|";
+			cout << rootNode->getChild(2)->getChild(i)->getChild(1)->getKey() << ") ";
+		} else {
+			cout << rootNode->getChild(2)->getChild(i)->getKey() << "(";
+			cout << rootNode->getChild(2)->getChild(i)->getChild(0)->getKey() << "|";
+			cout << rootNode->getChild(2)->getChild(i)->getChild(1)->getKey() << ",";
+			cout << rootNode->getChild(2)->getChild(i)->getChild(2)->getKey() << ") ";
+		}
+	}
+	cout << endl;
+
 }
    

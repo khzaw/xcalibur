@@ -40,7 +40,9 @@ using namespace std;
 		OPEN_PARENTHESES,
 		CLOSE_PARENTHESES,
 		COMMA,
-		APOSTROPHE
+		APOSTROPHE,
+		SIMPLE_IDENT,
+		MINUS
 	};
 
 	static string TOKEN_TYPE_STRINGS[] = {
@@ -63,7 +65,9 @@ using namespace std;
 		"OPEN_PARENTHESES",
 		"CLOSE_PARENTHESES",
 		"COMMA",
-		"APOSTROPHE"
+		"APOSTROPHE",
+		"SIMPLE_IDENT",
+		"MINUS"
 	};
 
 class Lexer {

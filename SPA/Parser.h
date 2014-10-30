@@ -1,16 +1,21 @@
 #pragma once
 #include <iostream>
 #include <set>
+#include <stack>
 #include "Lexer.h"
 #include "Lexeme.h"
 #include "PKBController.h"
+#include "TNode.h"
+#include "Operator.h"
 
 using namespace std;
+
 
 static string KEYWORDS[] = {
 	"procedure",
 	"while"
 };
+
 
 enum NAME {
 	PROC_NAME,
@@ -24,6 +29,8 @@ class Parser {
 	string procName;
 	Lexer lexer;
 	PKBController controller;
+	stack<Operator> operatorStack;
+	stack<TNode> operandStack;
 
 public:
 	Parser();
@@ -40,13 +47,20 @@ private:
 	void stmtLst(TNode parent);
 	void stmt(TNode parent);
 	void expr(TNode assignNode);
-	void exprPrime(TNode assignNode);
+	void exprPrime();
 	void variableName();
 	void procedureName();
 	void constantValue();
-	void factor(TNode assignNode);
+	void factor();
 	void error();
 	bool checkFileExists();
 	// node creation
 	TNode createASTNode(int nodeType, string name, TNode *parentNode, int lineNo=0, int parentProc=0);
+
+	// for operator precedence
+	void popOperator(Operator op);
+	void pushOperator(string op);
+
+	void printOperatorStack();
+	void printOperandStack();
 };

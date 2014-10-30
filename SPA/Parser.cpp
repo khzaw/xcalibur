@@ -16,12 +16,14 @@ const_value: INTEGER
 */
 #include <fstream>
 #include <iostream>
+#include <stack>
 
 #include "AST.h"
 #include "Parser.h"
 #include "Lexer.h"
 #include "Lexeme.h"
 #include "PKBController.h"
+#include "Operator.h"
 
 using namespace std;
 
@@ -82,17 +84,17 @@ void Parser::program() {
 }
 
 void Parser::procedure() {
-	match(KEYWORDS[0]);
+	match(KEYWORDS[0]); nextToken = getToken();
 
 	procedureName();
 	TNode procNode = TNode(TNODE_NAMES[PROC_NODE], procName, 0, 0);
 
-	match("{");
+	match("{"); nextToken = getToken();
 
 	TNode procStmtLstNode = createASTNode(STMTLST_NODE, "", &procNode);
 	stmtLst(procStmtLstNode);
 
-    match("}");
+	match("}"); nextToken = getToken();
 }
 
 void Parser::stmtLst(TNode parent) {
@@ -105,28 +107,26 @@ void Parser::stmtLst(TNode parent) {
 void Parser::stmt(TNode parent) {
 	if(nextToken.token == IDENT && nextToken.name == "while") {			// while statement
 		TNode whileNode = createASTNode(WHILE_NODE, nextToken.name, &parent);
-		match(KEYWORDS[1]);
+		match(KEYWORDS[1]); nextToken = getToken();
 
 		TNode whileVarNode = createASTNode(VAR_NODE, nextToken.name, &whileNode);	// whileVar
-		variableName();
+		variableName(); nextToken = getToken();
 
-		match("{");
+		match("{"); nextToken = getToken();
 
 		TNode whileStmtLstNode = createASTNode(STMTLST_NODE, "", &whileNode);
 		stmtLst(whileStmtLstNode);
 
-		match("}");
+		match("}"); nextToken = getToken();
 	} else if(nextToken.token == IDENT) {
 
-		//cout << "parent of assignment: " <<  parent.getNodeType() << endl;
 		TNode assignNode = createASTNode(ASSIGN_NODE, "", &parent); 
 		TNode varNode = createASTNode(VAR_NODE, nextToken.name, &assignNode);
-		variableName();
+		variableName(); nextToken = getToken();
 
-		match("=");
+		match("="); nextToken = getToken();
 		expr(assignNode);
-		match(";");
-
+		match(";"); nextToken = getToken(); 
 	}
 
 }
@@ -134,42 +134,93 @@ void Parser::stmt(TNode parent) {
 void Parser::expr(TNode assignNode) {
 	// expr: expr '+' factor | factor
 	/*
-	 * this is a left-recursive grammar, top down parsing can't handle this
-	 * transform it into
-	 * expr: FE'
-	 * E' : +TE' | epsilon
-	 */
+	* this is a left-recursive grammar, top down parsing can't handle this
+	* transform it into
+	* expr: FE'
+	* E' : +TE' | epsilon
+	*/
 
-	factor(assignNode);
-	exprPrime(assignNode);
-		
+	
+	operatorStack.push(Operator(OPERATOR_NULL, "NULL"));		// sentinel
+
+	factor();  nextToken = getToken();
+	exprPrime();
+
+	while(!operatorStack.top().isNull()) {
+		popOperator(operatorStack.top());
+	}
+
+	controller.ast.assignChild(&assignNode, &(operandStack.top()));
+	// cout << "PARENT : " <<  assignNode.getNodeType() << "\t" << "CHILD: " << operandStack.top().getNodeType() << "," << operandStack.top().getData() << endl;
+	operatorStack.pop();		// remove the sentinel
 }
 
 
-void Parser::factor(TNode assignNode) {
+void Parser::printOperatorStack() {
+	cout << "Operator Stack" << endl;
+	 for (std::stack<Operator> dump = operatorStack; !dump.empty(); dump.pop())
+		std::cout << dump.top().value << '\n';
+}
+
+void Parser::printOperandStack() {
+	cout << "Operand Stack" << endl;
+	 for (std::stack<TNode> dump = operandStack; !dump.empty(); dump.pop())
+		std::cout << dump.top().getData() << '\n';
+}
+
+void Parser::factor() {
 	// factor: var_name | const_value
 	if(nextToken.token == IDENT) {			// TODO: check valid IDENT (not keywords)
-		TNode varNode = createASTNode(VAR_NODE, nextToken.name, &assignNode);
+		//node = createASTNode(VAR_NODE, nextToken.name, &assignNode);
 		variableName();
+		operandStack.push(TNode(TNODE_NAMES[VAR_NODE], nextToken.name, 0, 0));
 	} else {
 		// INT_LIT;
-		TNode constantNode = createASTNode(CONSTANT_NODE, nextToken.name, &assignNode);
+		//node = createASTNode(CONSTANT_NODE, nextToken.name, &assignNode);
 		constantValue();
+		operandStack.push(TNode(TNODE_NAMES[CONSTANT_NODE], nextToken.name, 0, 0));
 	}
 }
 
-void Parser::exprPrime(TNode assignNode) {
+void Parser::exprPrime() {
+	// parse an operator
 	if(nextToken.token == PLUS) {
 
-		TNode plusNode = createASTNode(PLUS_NODE, nextToken.name, &assignNode);
-		match("+");
+		match("+"); 
+		Operator plusOp(OPERATOR_ADDITION, "+");
 
-		factor(assignNode);
-		exprPrime(assignNode);
+		while(operatorStack.top().op > plusOp.op) {
+
+
+			if(operatorStack.top().isNull()) { // sentinel value reached;
+				operatorStack.pop();
+			}
+
+			popOperator(plusOp);
+		}
+		operatorStack.push(plusOp);
+		nextToken = getToken();
+
+		factor(); nextToken = getToken();
+		exprPrime();
 	} else {
 		return;
 	}
 }
+
+void Parser::popOperator(Operator op) {
+	TNode operatorNode = TNode(TNODE_NAMES[PLUS_NODE], "+", 0, 0);
+
+	TNode rightOperand = operandStack.top(); operandStack.pop();
+	TNode leftOperand = operandStack.top(); operandStack.pop();
+
+	operatorNode.addChild(&leftOperand);
+	operatorNode.addChild(&rightOperand);
+
+	operatorStack.pop();
+	operandStack.push(operatorNode);
+}
+
 
 TNode Parser::createASTNode(int nodeType, string name, TNode *parentNode, int lineNo, int parentProc) {
 	TNode node = TNode(TNODE_NAMES[nodeType], name, lineNo, parentProc);
@@ -178,7 +229,7 @@ TNode Parser::createASTNode(int nodeType, string name, TNode *parentNode, int li
 		controller.ast.insertRoot(&node);
 	}
 	controller.ast.assignChild(parentNode, &node);
-	 // cout << "PARENT : " <<  parentNode->getNodeType() << "\t" << "CHILD: " << TNODE_NAMES[nodeType] << "," << node.getData() << endl;
+	 //cout << "PARENT : " <<  parentNode->getNodeType() << "\t" << "CHILD: " << TNODE_NAMES[nodeType] << "," << node.getData() << endl;
 	return node;
 }
 
@@ -186,29 +237,31 @@ void Parser::variableName() {
 	// TODO check valid variable name
 	// cout << "variableName: " << nextToken.name << endl;
 	controller.varTable.insertVar(nextToken.name);
-	nextToken = getToken();
+	//nextToken = getToken();
 }
 
 
 void Parser::constantValue() {
-	 //cout << "constantValue: " << nextToken.name << endl;
-	nextToken = getToken();
+	//cout << "constantValue: " << nextToken.name << endl;
+	//nextToken = getToken();
 }
 
 void Parser::procedureName() {
 	// TODO check valid variable name
 	procName = nextToken.name;
-	 //cout << "procName: " << nextToken.name << endl;
+	//cout << "procName: " << nextToken.name << endl;
 
-	
+
 	nextToken = getToken();
 }
 
 
 void Parser::match(string s) {
 	if(nextToken.name == s) {
-		//loc++;
-		nextToken = getToken();
+		// match operator
+		if(nextToken.token == PLUS) {
+		} else if(nextToken.token == SEMICOLON) {
+		}
 	} else {
 		//cout << "Syntax error: Expecting " << s << " on line number " << loc << endl;
 	}

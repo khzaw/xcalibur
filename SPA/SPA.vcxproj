@@ -19,6 +19,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="Modifies.cpp" />
+    <ClCompile Include="Operator.cpp" />
     <ClCompile Include="Parent.cpp" />
     <ClCompile Include="ParentRecord.cpp" />
     <ClCompile Include="Parser.cpp" />
@@ -41,6 +42,7 @@
     <ClInclude Include="Lexeme.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Modifies.h" />
+    <ClInclude Include="Operator.h" />
     <ClInclude Include="Parent.h" />
     <ClInclude Include="ParentRecord.h" />
     <ClInclude Include="Parser.h" />

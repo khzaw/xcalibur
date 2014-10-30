@@ -16,12 +16,12 @@ class QueryEvaluator{
 	public:
 		//Constructor
 		QueryEvaluator();
-		QueryEvaluator(PKB);
+		QueryEvaluator(PKB*);
 
 		//Method
 		STRING evaluate(map<STRING, STRING>, QueryTree);
 	
 	private:
-		PKB pkb;
+		PKB* pkb;
 };
 #endif

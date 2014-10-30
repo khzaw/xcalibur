@@ -5,13 +5,13 @@
 #include <iostream>
 #include "Parser.h"
 #include "Lexer.h"
+#include "QueryParser.h"
 
 using namespace std;
 
 string convertToken(Lexeme t);
 
 int main() {
-	
 	cout << "testing lexer" << endl;
 
 //	Lexeme token;
@@ -26,9 +26,28 @@ int main() {
 	//Parser Pa("not_so_simple_sample.txt");
 	Parser Pa("simple_sample.txt");
 	
-	string t;
-	cin >> t;
+	//string t;
+	//cin >> t;
 
+	cout << "testing query lexer" << endl;
+
+	Lexeme token2;
+	string query;
+
+	while(true) {
+		cout << "Enter query:";
+		getline(cin, query);
+		
+		/*
+		Lexer Lex2(query);
+		while(!token2.equals(Lexeme(EOL, ""))) {
+			token2 = Lex2.lex();
+			cout << "lexeme : \"" << token2 << endl;
+		}
+		cout << endl << " ====================" << endl;
+		*/
+		QueryParser QPa(query);
+	}
 }
 
 string convertToken(Lexeme t) {

@@ -4,7 +4,7 @@
 #include <vector>
 #include <map>
 
-#include "Lexer.h"
+#include "QueryLexer.h"
 #include "Lexeme.h"
 #include "QTNode.h"
 #include "QueryTree.h"
@@ -43,39 +43,45 @@ enum RELATION {
 
 class QueryParser {
 	Lexeme nextToken;
-	Lexer lexer;
+	QueryLexer lexer;
 	string query;
 	map<string, string> synonyms;
-	QueryTree qt;
+	QueryTree* qt;
 
 public:
 	QueryParser();
 	QueryParser(string s);
 	~QueryParser();
 	void parse();
+	void printMap();
 
 private:
 	Lexeme getToken();
-	void match(string s);
-	void match(int relation);
+	void match(string);
+	void match(int);
 	void matchDeclaration();
-	void matchDeclarationVariables(string entity);
+	void matchDeclarationVariables(string);
 	void matchSelect();
 	void matchTuple();
-	void matchTupleElements(int times);
+	void matchTupleElements(int);
 	void matchConditions();
 	void matchSuchThat();
 	void matchSuchThatConditions();
 	void matchModifies();
 	void matchUses();
-	void matchCalls(int transitive);
-	void matchParent(int transitive);
-	void matchFollows(int transitive);
+	void matchCalls(int);
+	void matchParent(int);
+	void matchFollows(int);
 	void matchPattern();
 	void matchPatternConditions();
+	void matchPatternAssign(string);
+	string matchExpression(string);
+	string matchFactor(string);
+	void matchPatternWhile(string);
+	void matchPatternIf(string);
 	void matchWith();
 	void matchWithConditions();
-	QTNode matchVarRef();
-	QTNode matchEntRef();
-	QTNode matchStmtRef();
+	QTNode* matchVarRef();
+	QTNode* matchEntRef();
+	QTNode* matchStmtRef();
 };

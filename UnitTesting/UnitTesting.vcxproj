@@ -41,12 +41,13 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)source;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)source;$(SolutionDir)include;C:\Users\Clement\Desktop\2014Modules\2014FALL\CS3201\xcalibur3201\xcalibur\xcalibur\SPA;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(SolutionDir)lib\cppunit_debug.lib;$(SolutionDir)$(Configuration)\SPA.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Clement\Desktop\2014Modules\2014FALL\CS3201\xcalibur3201\xcalibur\xcalibur\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -66,7 +67,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="source\UnitTest.cpp" />
+    <ClCompile Include="TestModifies.cpp" />
+    <ClCompile Include="TestProcTable.cpp" />
+    <ClCompile Include="TestUses.cpp" />
+    <ClCompile Include="TestVarTable.cpp" />
+    <ClCompile Include="UnitTest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TestModifies.h" />
+    <ClInclude Include="TestProcTable.h" />
+    <ClInclude Include="TestUses.h" />
+    <ClInclude Include="TestVarTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

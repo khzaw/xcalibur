@@ -28,10 +28,12 @@
     <ClCompile Include="ProcTable.cpp" />
     <ClCompile Include="QTNode.cpp" />
     <ClCompile Include="QueryEvaluator.cpp" />
+    <ClCompile Include="QueryLexer.cpp" />
     <ClCompile Include="QueryParser.cpp" />
     <ClCompile Include="QueryTree.cpp" />
     <ClCompile Include="StatementTable.cpp" />
     <ClCompile Include="TNode.cpp" />
+    <ClCompile Include="Uses.cpp" />
     <ClCompile Include="VarTable.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -52,10 +54,12 @@
     <ClInclude Include="ProcTable.h" />
     <ClInclude Include="QTNode.h" />
     <ClInclude Include="QueryEvaluator.h" />
+    <ClInclude Include="QueryLexer.h" />
     <ClInclude Include="QueryParser.h" />
     <ClInclude Include="QueryTree.h" />
     <ClInclude Include="StatementTable.h" />
     <ClInclude Include="TNode.h" />
+    <ClInclude Include="Uses.h" />
     <ClInclude Include="VarTable.h" />
   </ItemGroup>
   <ItemGroup>
@@ -67,7 +71,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>

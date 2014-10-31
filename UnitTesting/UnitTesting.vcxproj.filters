@@ -15,8 +15,34 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\UnitTest.cpp">
+    <ClCompile Include="TestModifies.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TestProcTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestUses.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestVarTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TestModifies.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestProcTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestUses.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestVarTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

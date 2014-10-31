@@ -70,10 +70,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FollowsRecord.cpp">
-      <Filter>Source Files\PKB</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ParentRecord.cpp">
-      <Filter>Source Files\PKB</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ConstantTable.cpp">
       <Filter>Source Files</Filter>

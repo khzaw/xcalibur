@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include "FollowsRecord.h"
 #include <list>
 
 using namespace std;
@@ -8,7 +7,7 @@ using namespace std;
 class Follows {
 
 	private :
-	vector<FollowsRecord> records;
+	vector<pair<int,int>> records;
 	list<int>recursiveFollowerStar(list<int>&,int);
 	list<int>recursiveFolloweesStar(list<int>&,int);
 	

@@ -7,15 +7,15 @@ Parent::Parent(){
 }
 
 void Parent::insertParent(int stmt1, int stmt2){
-	ParentRecord record(stmt1, stmt2);
+	pair<int,int> record(stmt1, stmt2);
 	records.push_back(record);
 }
 
 list<int> Parent::getChildren(int stmt){
 	list<int> listChildren;
 	for(int i=0; i<records.size();i++){
-			if(records[i].getParent()==stmt){
-				listChildren.push_back(records[i].getChild());
+			if(records[i].first==stmt){
+				listChildren.push_back(records[i].second);
 			}
 		}
 		return listChildren;
@@ -24,8 +24,8 @@ list<int> Parent::getChildren(int stmt){
 list<int> Parent::getParents(int stmt){
 	list<int> listParents;
 	for(int i=0; i<records.size();i++){
-			if(records[i].getChild()==stmt){
-				listParents.push_back(records[i].getParent());
+			if(records[i].second==stmt){
+				listParents.push_back(records[i].first);
 			}
 		}
 		return listParents;
@@ -80,7 +80,7 @@ bool Parent::isParentTrue(int stmt1, int stmt2){
 list<int> Parent::getAllChildrenStmt(){
 	list<int> children ;
 	for (int i=0; i<records.size();i++){
-		children.push_back(records[i].getChild());
+		children.push_back(records[i].second);
 	}
 	children.unique();
 	return children;
@@ -89,7 +89,7 @@ list<int> Parent::getAllChildrenStmt(){
 list<int> Parent::getAllParentStmt(){
 	list<int> parents ;
 	for (int i=0; i<records.size();i++){
-		parents.push_back(records[i].getParent());
+		parents.push_back(records[i].first);
 	}
 	parents.unique();
 	return parents;

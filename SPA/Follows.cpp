@@ -7,15 +7,15 @@ Follows::Follows(){
 }
 
 void Follows::insertFollows(int stmt1, int stmt2){
-	FollowsRecord record(stmt1, stmt2);
+	pair<int,int> record(stmt1,stmt2);
 	records.push_back(record);
 }
 
 list<int> Follows::getFollowers(int stmt){
 	list<int> listFollowers;
 	for(int i=0; i<records.size();i++){
-			if(records[i].getFollowee()==stmt){
-				listFollowers.push_back(records[i].getFollower());
+			if(records[i].first==stmt){
+				listFollowers.push_back(records[i].second);
 			}
 		}
 		return listFollowers;
@@ -24,8 +24,8 @@ list<int> Follows::getFollowers(int stmt){
 list<int> Follows::getFollowees(int stmt){
 	list<int> listFollowees;
 	for(int i=0; i<records.size();i++){
-			if(records[i].getFollower()==stmt){
-				listFollowees.push_back(records[i].getFollowee());
+			if(records[i].second==stmt){
+				listFollowees.push_back(records[i].first);
 			}
 		}
 		return listFollowees;
@@ -80,7 +80,7 @@ bool Follows::isFollowsTrue(int stmt1, int stmt2){
 list<int> Follows::getAllFollowerStmt(){
 	list<int> followers ;
 	for (int i=0; i<records.size();i++){
-		//followers.push_back(records[i].getFollower());
+		followers.push_back(records[i].second);
 	}
 	followers.unique();
 	return followers;
@@ -89,7 +89,7 @@ list<int> Follows::getAllFollowerStmt(){
 list<int> Follows::getAllFolloweeStmt(){
 	list<int> followees ;
 	for (int i=0; i<records.size();i++){
-		//followees.push_back(*it.getFollowee());
+		followees.push_back(records[i].first);
 	}
 	followees.unique();
 	return followees;

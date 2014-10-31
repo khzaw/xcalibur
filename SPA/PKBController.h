@@ -5,6 +5,7 @@
 #include "AST.h"
 #include "VarTable.h"
 #include "ProcTable.h"
+#include "ConstantTable.h"
 
 using namespace std;
 
@@ -13,6 +14,7 @@ public:
 	VarTable varTable;
 	ProcTable procTable;
 	AST ast;
+	ConstantTable constantTable;
 	PKBController();
 	virtual ~PKBController();
 

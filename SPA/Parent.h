@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include "ParentRecord.h"
 #include <list>
 
 using namespace std;
@@ -8,7 +7,7 @@ using namespace std;
 class Parent {
 
 	private :
-	vector<ParentRecord> records;
+	vector<pair<int,int>> records;
 	list<int>recursiveChildrenStar(list<int>&,int);
 	list<int>recursiveParentStar(list<int>&,int);
 	

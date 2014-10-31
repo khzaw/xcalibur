@@ -244,6 +244,8 @@ void Parser::variableName() {
 void Parser::constantValue() {
 	//cout << "constantValue: " << nextToken.name << endl;
 	//nextToken = getToken();
+	controller.constantTable.insertConst(atoi(nextToken.name.c_str()));
+
 }
 
 void Parser::procedureName() {

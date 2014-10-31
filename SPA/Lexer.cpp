@@ -1,3 +1,4 @@
+#pragma once
 /*
 NAME: LETTER(LETTER|DIGIT)
 INTERGER: DIGIT+

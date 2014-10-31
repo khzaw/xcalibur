@@ -19,7 +19,7 @@ class QueryEvaluator{
 		QueryEvaluator(PKB*);
 
 		//Method
-		STRING evaluate(map<STRING, STRING>, QueryTree);
+		STRING evaluate(map<STRING, STRING>*, QueryTree*);
 	
 	private:
 		PKB* pkb;

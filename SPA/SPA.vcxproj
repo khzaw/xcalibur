@@ -32,6 +32,7 @@
     <ClCompile Include="QueryTree.cpp" />
     <ClCompile Include="StatementTable.cpp" />
     <ClCompile Include="TNode.cpp" />
+    <ClCompile Include="Uses.cpp" />
     <ClCompile Include="VarTable.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +57,7 @@
     <ClInclude Include="QueryTree.h" />
     <ClInclude Include="StatementTable.h" />
     <ClInclude Include="TNode.h" />
+    <ClInclude Include="Uses.h" />
     <ClInclude Include="VarTable.h" />
   </ItemGroup>
   <ItemGroup>

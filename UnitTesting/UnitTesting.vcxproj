@@ -67,15 +67,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="testConstant.cpp" />
+    <ClCompile Include="testFollows.cpp" />
     <ClCompile Include="TestModifies.cpp" />
+    <ClCompile Include="testParent.cpp" />
     <ClCompile Include="TestProcTable.cpp" />
+    <ClCompile Include="testStatement.cpp" />
     <ClCompile Include="TestUses.cpp" />
     <ClCompile Include="TestVarTable.cpp" />
     <ClCompile Include="UnitTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="testConstant.h" />
+    <ClInclude Include="testFollows.h" />
     <ClInclude Include="TestModifies.h" />
+    <ClInclude Include="testParent.h" />
     <ClInclude Include="TestProcTable.h" />
+    <ClInclude Include="testStatement.h" />
     <ClInclude Include="TestUses.h" />
     <ClInclude Include="TestVarTable.h" />
   </ItemGroup>

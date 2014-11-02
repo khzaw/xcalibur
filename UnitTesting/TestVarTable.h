@@ -1,5 +1,5 @@
-#ifndef TestVarTable_h
-#define TestVarTable_h
+#ifndef testVarTable_h
+#define testVarTable_h
 
 // Note 1
 #include <cppunit/extensions/HelperMacros.h>

@@ -1,3 +1,4 @@
+
 #include <cppunit/CompilerOutputter.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/ui/text/TestRunner.h>
@@ -9,17 +10,21 @@ int main(int argc, char* argv[])
 {
 // Get the top level suite from the registry
 //CPPUNIT_NS::Test *suite = CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest();
-	CppUnit::TestSuite *unitSuite = new CppUnit::TestSuite( "All unit test" );
-	unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("VarTableTest").makeTest());	
-	unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ProcTableTest").makeTest());
-	unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ModifiesTest").makeTest());
-	unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("UsesTest").makeTest());	
-	CppUnit::TestFactoryRegistry::getRegistry().addTestToSuite(unitSuite);
-	CppUnit::TextUi::TestRunner runner;
+CppUnit::TestSuite *unitSuite = new CppUnit::TestSuite( "All unit test" );
+unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("VarTableTest").makeTest());	
+unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ProcTableTest").makeTest());
+unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ModifiesTest").makeTest());
+unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("UsesTest").makeTest());	
+unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ParentTest").makeTest());	
+unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("FollowsTest").makeTest());	
+unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ConstantTest").makeTest());	
+unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("StatementTest").makeTest());	
+CppUnit::TestFactoryRegistry::getRegistry().addTestToSuite(unitSuite);
+CppUnit::TextUi::TestRunner runner;
 
 
-	runner.addTest(unitSuite);
-	bool wasSucessful = runner.run();
+runner.addTest(unitSuite);
+bool wasSucessful = runner.run();
 
 //cin.get();
 getchar();

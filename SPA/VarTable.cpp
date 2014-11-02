@@ -27,6 +27,13 @@ string VarTable::getVarName(int n){
 return varVec.at(n);
 }
 
+vector<string> VarTable::getAllVar(){
+	vector<string> var;
+	for(int i=0;i<varVec.size();i++){
+		var.push_back(varVec[i]);
+	}
+	return var;
+}
 
 // get variable index using its string
 int VarTable::getVarIndex(string s){

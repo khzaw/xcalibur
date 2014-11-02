@@ -18,6 +18,7 @@ VarTable();
 int getSize(); 	// returns size of table
 string getVarName(int);	// get variable name using its index
 int getVarIndex(string);	// get variable index using its string
+vector<string> getAllVar(); // get all variables
 bool containsVar(string); // checks if variable is in the var set
 void printTable(); 
 

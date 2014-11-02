@@ -38,6 +38,13 @@ int ConstantTable::getConstIndex(int n){
 	return -1;
 }
 
+vector<int> ConstantTable::getAllConstant(){
+	vector<int> constants;
+	for(int i =0; i <constVec.size();i ++){
+		constants.push_back(constVec[i]);
+	}
+	return constants;
+}
 
 int ConstantTable::getSize(){
 	return constVec.size();

@@ -39,6 +39,7 @@ public:
 	~Parser();
 	void printOut();
 	PKBController getController();
+	int getTotalStatementNumber();
 private:
 	Lexeme getToken();
 	void match(string s);

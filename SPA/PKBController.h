@@ -6,6 +6,8 @@
 #include "VarTable.h"
 #include "ProcTable.h"
 #include "ConstantTable.h"
+#include "Parent.h"
+#include "Follows.h"
 
 using namespace std;
 
@@ -15,6 +17,8 @@ public:
 	ProcTable procTable;
 	AST ast;
 	ConstantTable constantTable;
+	Parent parentTable;
+	Follows followsTable;
 	PKBController();
 	virtual ~PKBController();
 

@@ -87,7 +87,7 @@ void Parser::procedure() {
 	match(KEYWORDS[0]); nextToken = getToken();
 
 	procedureName();
-	TNode procNode = TNode(TNODE_NAMES[PROC_NODE], procName, 0, 0);
+	TNode procNode = TNode(TNODE_NAMES[PROC_NODE], procName, loc, 0);
 
 	match("{"); nextToken = getToken();
 
@@ -106,22 +106,24 @@ void Parser::stmtLst(TNode parent) {
 
 void Parser::stmt(TNode parent) {
 	if(nextToken.token == IDENT && nextToken.name == "while") {			// while statement
-		TNode whileNode = createASTNode(WHILE_NODE, nextToken.name, &parent);
+		loc++;
+		TNode whileNode = createASTNode(WHILE_NODE, nextToken.name, &parent, loc);
 		match(KEYWORDS[1]); nextToken = getToken();
 
-		TNode whileVarNode = createASTNode(VAR_NODE, nextToken.name, &whileNode);	// whileVar
+		TNode whileVarNode = createASTNode(VAR_NODE, nextToken.name, &whileNode, loc);	// whileVar
 		variableName(); nextToken = getToken();
 
 		match("{"); nextToken = getToken();
 
-		TNode whileStmtLstNode = createASTNode(STMTLST_NODE, "", &whileNode);
+		TNode whileStmtLstNode = createASTNode(STMTLST_NODE, "", &whileNode, loc);
 		stmtLst(whileStmtLstNode);
 
 		match("}"); nextToken = getToken();
 	} else if(nextToken.token == IDENT) {
 
-		TNode assignNode = createASTNode(ASSIGN_NODE, "", &parent); 
-		TNode varNode = createASTNode(VAR_NODE, nextToken.name, &assignNode);
+		loc++;
+		TNode assignNode = createASTNode(ASSIGN_NODE, "", &parent, loc); 
+		TNode varNode = createASTNode(VAR_NODE, nextToken.name, &assignNode, loc);
 		variableName(); nextToken = getToken();
 
 		match("="); nextToken = getToken();
@@ -173,12 +175,12 @@ void Parser::factor() {
 	if(nextToken.token == IDENT) {			// TODO: check valid IDENT (not keywords)
 		//node = createASTNode(VAR_NODE, nextToken.name, &assignNode);
 		variableName();
-		operandStack.push(TNode(TNODE_NAMES[VAR_NODE], nextToken.name, 0, 0));
+		operandStack.push(TNode(TNODE_NAMES[VAR_NODE], nextToken.name, loc, 0));
 	} else {
 		// INT_LIT;
 		//node = createASTNode(CONSTANT_NODE, nextToken.name, &assignNode);
 		constantValue();
-		operandStack.push(TNode(TNODE_NAMES[CONSTANT_NODE], nextToken.name, 0, 0));
+		operandStack.push(TNode(TNODE_NAMES[CONSTANT_NODE], nextToken.name, loc, 0));
 	}
 }
 
@@ -209,7 +211,7 @@ void Parser::exprPrime() {
 }
 
 void Parser::popOperator(Operator op) {
-	TNode operatorNode = TNode(TNODE_NAMES[PLUS_NODE], "+", 0, 0);
+	TNode operatorNode = TNode(TNODE_NAMES[PLUS_NODE], "+", loc, 0);
 
 	TNode rightOperand = operandStack.top(); operandStack.pop();
 	TNode leftOperand = operandStack.top(); operandStack.pop();
@@ -276,4 +278,8 @@ PKBController Parser::getController() {
 
 Lexeme Parser::getToken() {
 	return lexer.lex();
+}
+
+int Parser::getTotalStatementNumber() {
+	return loc;
 }

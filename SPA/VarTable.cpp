@@ -24,17 +24,21 @@ void VarTable::insertVar(string s){
 
 // get variable name using its index
 string VarTable::getVarName(int n){
-return varVec.at(n);
+	if(n>this->getSize())
+		throw out_of_range("Index not in varTable");
+	return varVec.at(n);
 }
 
 
 // get variable index using its string
 int VarTable::getVarIndex(string s){
+
 for(int i=0; i< varVec.size(); i++){
 if(varVec.at(i) == s){
 return i;
 }
 }
+throw string ("variable doesn't exist in VarTable");
 return -1;
 }
 

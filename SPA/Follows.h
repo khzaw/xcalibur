@@ -22,5 +22,6 @@ class Follows {
 	vector<int> getFolloweesStar(int);
 	vector<int> getAllFollowerStmt();
 	vector<int> getAllFolloweeStmt();
+	void printAll();
 	
 };

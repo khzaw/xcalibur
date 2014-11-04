@@ -35,6 +35,7 @@ Parser::Parser(string file) {
 	this->nextToken = Lexeme();
 	this->filename = file;
 	this->loc = 0;
+	this->temp = 0;
 	this->lexer = Lexer("");
 	this->controller = PKBController(); 
 	parse();
@@ -106,8 +107,17 @@ void Parser::stmtLst(TNode parent) {
 
 void Parser::stmt(TNode parent) {
 	if(nextToken.token == IDENT && nextToken.name == "while") {			// while statement
-		loc++;
+		loc++; 
 		TNode whileNode = createASTNode(WHILE_NODE, nextToken.name, &parent, loc);
+
+		// for a container stmt, set back to zero
+		if(temp > 0) {
+			controller.followsTable.insertFollows(temp, loc);
+		}
+		temp = 0;
+		containerStack.push(loc);
+
+
 		match(KEYWORDS[1]); nextToken = getToken();
 
 		TNode whileVarNode = createASTNode(VAR_NODE, nextToken.name, &whileNode, loc);	// whileVar
@@ -118,15 +128,24 @@ void Parser::stmt(TNode parent) {
 		TNode whileStmtLstNode = createASTNode(STMTLST_NODE, "", &whileNode, loc);
 		stmtLst(whileStmtLstNode);
 
-		match("}"); nextToken = getToken();
+		match("}"); 
+		temp = containerStack.top();	containerStack.pop();
+		nextToken = getToken();
 	} else if(nextToken.token == IDENT) {
 
 		loc++;
 		TNode assignNode = createASTNode(ASSIGN_NODE, "", &parent, loc); 
+		TNode varNode = createASTNode(VAR_NODE, nextToken.name, &assignNode, loc);
+		//cout << nextToken.name << "\t" << loc << endl;
+		variableName(); 
 		if(parent.getNodeType() == TNODE_NAMES[WHILE_NODE] || parent.getNodeType() == TNODE_NAMES[IF_NODE])
 			controller.parentTable.insertParent(parent.getStmtNum(), loc);
-		TNode varNode = createASTNode(VAR_NODE, nextToken.name, &assignNode, loc);
-		variableName(); nextToken = getToken();
+
+		if(temp > 0) {
+			controller.followsTable.insertFollows(temp, loc);
+		}
+		temp = loc;
+		nextToken = getToken();
 
 		match("="); nextToken = getToken();
 		expr(assignNode);

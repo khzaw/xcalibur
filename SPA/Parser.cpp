@@ -123,6 +123,8 @@ void Parser::stmt(TNode parent) {
 
 		loc++;
 		TNode assignNode = createASTNode(ASSIGN_NODE, "", &parent, loc); 
+		if(parent.getNodeType() == TNODE_NAMES[WHILE_NODE] || parent.getNodeType() == TNODE_NAMES[IF_NODE])
+			controller.parentTable.insertParent(parent.getStmtNum(), loc);
 		TNode varNode = createASTNode(VAR_NODE, nextToken.name, &assignNode, loc);
 		variableName(); nextToken = getToken();
 

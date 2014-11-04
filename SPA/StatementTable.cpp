@@ -17,7 +17,7 @@ void StatementTable::insertStatement(TNode* n){
 }
 
 TNode* StatementTable::getTNode(int n){
-	pair<TNode*,string> stmt = statement[n];
+	pair<TNode*,string> stmt = statement[n-1];
 	return stmt.first;
 }
 // returns a vector of node pointers of nodes matching specified node type
@@ -38,10 +38,8 @@ vector<int> StatementTable::getStmtNumUsingNodeType(string nodeType){
 
 vector<int> stmtList;
 for(int i=0;i<statement.size();i++){
-	cout << " size is " << statement.size() << endl;
-		cout << "statement[i].second" << statement[i].second << endl;
 	if(statement[i].second == nodeType){
-		stmtList.push_back(i);
+		stmtList.push_back(i+1);
 	}
 }
 return stmtList;
@@ -62,4 +60,14 @@ bool StatementTable::containsStatement(string nodeType){
 		}
 	}
 	return false;
+}
+
+bool StatementTable::containsNodeOfStmtAndNodeType(string nodeType, int stmt){
+	for(int i=0;i<statement.size();i++){
+		if(statement[i].second == nodeType && ((i+1)==stmt)){
+			return true;
+		}
+	}
+	return false;
+
 }

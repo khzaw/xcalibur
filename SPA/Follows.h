@@ -8,18 +8,19 @@ class Follows {
 
 	private :
 	vector<pair<int,int>> records;
-	list<int>recursiveFollowerStar(list<int>&,int);
-	list<int>recursiveFolloweesStar(list<int>&,int);
+	vector<int>recursiveFollowerStar(vector<int>&,int);
+	vector<int>recursiveFolloweesStar(vector<int>&,int);
 	
 	public :
 	Follows();
 	void insertFollows(int,int);
-	list<int> getFollowers(int);
-	list<int> getFollowees(int);
+	vector<int> getFollowers(int);
+	vector<int> getFollowees(int);
+	int getSize();
 	bool isFollowsTrue(int,int);
-	list<int> getFollowersStar(int);
-	list<int> getFolloweesStar(int);
-	list<int> getAllFollowerStmt();
-	list<int> getAllFolloweeStmt();
+	vector<int> getFollowersStar(int);
+	vector<int> getFolloweesStar(int);
+	vector<int> getAllFollowerStmt();
+	vector<int> getAllFolloweeStmt();
 	
 };

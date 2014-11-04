@@ -8,18 +8,19 @@ class Parent {
 
 	private :
 	vector<pair<int,int>> records;
-	list<int>recursiveChildrenStar(list<int>&,int);
-	list<int>recursiveParentStar(list<int>&,int);
+	vector<int>recursiveChildrenStar(vector<int>&,int);
+	vector<int>recursiveParentStar(vector<int>&,int);
 	
 	public :
 	Parent();
 	void insertParent(int,int);
-	list<int> getChildren(int);
-	list<int> getParents(int);
+	vector<int> getChildren(int);
+	vector<int> getParents(int);
+	int getSize();
 	bool isParentTrue(int,int);
-	list<int> getChildrenStar(int);
-	list<int> getParentStar(int);
-	list<int> getAllChildrenStmt();
-	list<int> getAllParentStmt();
+	vector<int> getChildrenStar(int);
+	vector<int> getParentStar(int);
+	vector<int> getAllChildrenStmt();
+	vector<int> getAllParentStmt();
 	
 };

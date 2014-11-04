@@ -15,7 +15,6 @@
     <ClCompile Include="ConstantTable.cpp" />
     <ClCompile Include="Follows.cpp" />
     <ClCompile Include="Lexeme.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="Modifies.cpp" />
     <ClCompile Include="Operator.cpp" />

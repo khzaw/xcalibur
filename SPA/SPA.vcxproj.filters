@@ -78,15 +78,12 @@
     <ClCompile Include="StatementTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<<<<<<< HEAD
-=======
     <ClCompile Include="QueryLexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Uses.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
->>>>>>> origin/master
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lexer.h">
@@ -146,15 +143,12 @@
     <ClInclude Include="StatementTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD
-=======
     <ClInclude Include="QueryLexer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Uses.h">
       <Filter>Header Files</Filter>
     </ClInclude>
->>>>>>> origin/master
   </ItemGroup>
   <ItemGroup>
     <None Include="simple_sample.txt">

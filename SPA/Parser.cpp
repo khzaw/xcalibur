@@ -287,11 +287,8 @@ void Parser::procedureName() {
 void Parser::match(string s) {
 	if(nextToken.name == s) {
 		// match operator
-		if(nextToken.token == PLUS) {
-		} else if(nextToken.token == SEMICOLON) {
-		}
 	} else {
-		//cout << "Syntax error: Expecting " << s << " on line number " << loc << endl;
+		cout << "Syntax error: Expecting " << s << " on line number " << loc << endl;
 	}
 
 }

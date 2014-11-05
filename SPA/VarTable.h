@@ -23,7 +23,7 @@ bool containsVar(string); // checks if variable is in the var set
 void printTable(); 
 
 //Mutator
-void insertVar(string); // insert variable into the table if it does not exist
+int insertVar(string); // insert variable into the table if it does not exist
 
 
 

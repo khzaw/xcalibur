@@ -117,6 +117,8 @@ void Parser::stmt(TNode parent) {
 		temp = 0;
 		containerStack.push(loc);
 
+		controller.statementTable.insertStatement(&whileNode);
+
 
 		match(KEYWORDS[1]); nextToken = getToken();
 
@@ -136,6 +138,7 @@ void Parser::stmt(TNode parent) {
 		loc++;
 		TNode assignNode = createASTNode(ASSIGN_NODE, "", &parent, loc); 
 		TNode varNode = createASTNode(VAR_NODE, nextToken.name, &assignNode, loc);
+		controller.statementTable.insertStatement(&assignNode);
 		//cout << nextToken.name << "\t" << loc << endl;
 		variableName(); 
 		if(parent.getNodeType() == TNODE_NAMES[WHILE_NODE] || parent.getNodeType() == TNODE_NAMES[IF_NODE])

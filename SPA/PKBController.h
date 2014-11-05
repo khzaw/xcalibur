@@ -8,6 +8,7 @@
 #include "ConstantTable.h"
 #include "Parent.h"
 #include "Follows.h"
+#include "StatementTable.h"
 
 using namespace std;
 
@@ -19,6 +20,7 @@ public:
 	ConstantTable constantTable;
 	Parent parentTable;
 	Follows followsTable;
+	StatementTable statementTable;
 	PKBController();
 	virtual ~PKBController();
 

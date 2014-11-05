@@ -22,4 +22,8 @@ void TestParser::testTotalFollows() {
 	//CPPUNIT_ASSERT_EQUAL(12, two.controller.followsTable.getSize());
 }
 
+void TestParser::testTotalParents() {
+	CPPUNIT_ASSERT_EQUAL(13, sample.controller.parentTable.getSize());
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(TestParser);

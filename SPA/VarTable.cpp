@@ -17,7 +17,7 @@ VarTable::VarTable(){
 // insert variable into VarTable
 int VarTable::insertVar(string s){
  if (std::find(varVec.begin(), varVec.end(), s) != varVec.end()){
-	 return -1;
+	 return VarTable::getVarIndex(s);
 }else{
 	varVec.push_back(s);
 	return (varVec.size() -1);

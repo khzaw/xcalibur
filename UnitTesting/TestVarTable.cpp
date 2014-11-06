@@ -28,12 +28,13 @@ VarTableTest::testInsert(){
 	CPPUNIT_ASSERT(p.getVarName(0) == "variable1");
 	CPPUNIT_ASSERT(p.getVarName(1) == "variable2");
 	CPPUNIT_ASSERT(p.getVarName(2) == "variable3");
+	CPPUNIT_ASSERT_EQUAL(3,p.insertVar("variable4"));
 	//inserting duplicate procedures
 	//size before inserting
-	CPPUNIT_ASSERT_EQUAL(3,p.getSize());
-	p.insertVar("variable2");
+	CPPUNIT_ASSERT_EQUAL(4,p.getSize());
+	CPPUNIT_ASSERT_EQUAL(1,p.insertVar("variable2"));
 	//size of proctable remains unchanged. duplicate is not inserted
-	CPPUNIT_ASSERT_EQUAL(3,p.getSize());
+	CPPUNIT_ASSERT_EQUAL(4,p.getSize());
 	return;
 }
 

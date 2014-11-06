@@ -56,7 +56,7 @@ private:
 	void variableName();
 	void procedureName();
 	void constantValue();
-	void factor();
+	void factor(bool rightSide=false);
 	void error();
 	bool checkFileExists();
 	// node creation
@@ -70,5 +70,5 @@ private:
 	void printOperandStack();
 
 	void populateModifies(int loc);
-	void populateUses();
+	void populateUses(int loc);
 };

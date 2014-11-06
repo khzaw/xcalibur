@@ -25,4 +25,6 @@ class Uses{
 	vector<pair<int,int>> getUsesProc();
 	void insertUsesProc(int,int);
 	bool isUsesProc(int,int);
+	int getSizeStmtUses();
+	int getSizeProcUses();
 };

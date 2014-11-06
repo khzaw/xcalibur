@@ -126,6 +126,7 @@ void Parser::stmt(TNode parent) {
 
 		TNode whileVarNode = createASTNode(VAR_NODE, nextToken.name, &whileNode, loc);	// whileVar
 		variableName(); 
+		populateUses(loc);
 		nextToken = getToken();
 
 		match("{"); nextToken = getToken();
@@ -177,7 +178,7 @@ void Parser::expr(TNode assignNode) {
 	
 	operatorStack.push(Operator(OPERATOR_NULL, "NULL"));		// sentinel
 
-	factor();  nextToken = getToken();
+	factor(true);  nextToken = getToken();
 	exprPrime();
 
 	while(!operatorStack.top().isNull()) {
@@ -202,11 +203,12 @@ void Parser::printOperandStack() {
 		std::cout << dump.top().getData() << '\n';
 }
 
-void Parser::factor() {
+void Parser::factor(bool rightSide) {
 	// factor: var_name | const_value
 	if(nextToken.token == IDENT) {			// TODO: check valid IDENT (not keywords)
 		//node = createASTNode(VAR_NODE, nextToken.name, &assignNode);
 		variableName();
+		if(rightSide) populateUses(loc);
 		operandStack.push(TNode(TNODE_NAMES[VAR_NODE], nextToken.name, loc, 0));
 	} else {
 		// INT_LIT;
@@ -337,4 +339,22 @@ void Parser::populateModifies(int loc) {
 }
 
 void Parser::populateUses(int loc) {
+	//cout << loc << ", " << lastVarIndex << endl;
+	controller.usesTable.insertUsesStmt(loc, lastVarIndex);
+	controller.usesTable.insertUsesProc(loc, procCount);
+
+	// container statement
+	stack<int> temp = stack<int>();
+	while(containerStack.size() > 0) {
+		int top = containerStack.top();
+		temp.push(top);
+		controller.usesTable.insertUsesStmt(top, lastVarIndex);
+		controller.usesTable.insertUsesProc(top, procCount);
+		containerStack.pop();
+	}
+
+	while(temp.size() > 0) {
+		containerStack.push(temp.top());
+		temp.pop();
+	}
 }

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include "ProcTable.h"
+#include <stdexcpt.h>
 using namespace std;
 
 /************** Constructors **********************/
@@ -31,6 +32,9 @@ bool ProcTable::containsProc(string p){
 
 // get procedure name using its index
 string ProcTable::getProcName(int n){
+	if(n>this->getSize())
+		throw out_of_range("Index not in procTable");
+	else
 	return pTable.at(n);
 }
 
@@ -41,5 +45,6 @@ if(pTable.at(i) == p){
 return i;
 }
 }
+throw string ("procedure doesn't exist in ProcTable");
 return -1;
 }

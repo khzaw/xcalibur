@@ -35,6 +35,7 @@ Parser::Parser(string file) {
 	this->nextToken = Lexeme();
 	this->filename = file;
 	this->loc = 0;
+	this->temp = 0;
 	this->lexer = Lexer("");
 	this->controller = PKBController(); 
 	parse();
@@ -87,7 +88,7 @@ void Parser::procedure() {
 	match(KEYWORDS[0]); nextToken = getToken();
 
 	procedureName();
-	TNode procNode = TNode(TNODE_NAMES[PROC_NODE], procName, 0, 0);
+	TNode procNode = TNode(TNODE_NAMES[PROC_NODE], procName, loc, 0);
 
 	match("{"); nextToken = getToken();
 
@@ -106,23 +107,48 @@ void Parser::stmtLst(TNode parent) {
 
 void Parser::stmt(TNode parent) {
 	if(nextToken.token == IDENT && nextToken.name == "while") {			// while statement
-		TNode whileNode = createASTNode(WHILE_NODE, nextToken.name, &parent);
+		loc++; 
+		TNode whileNode = createASTNode(WHILE_NODE, nextToken.name, &parent, loc);
+
+		// for a container stmt, set back to zero
+		if(temp > 0) {
+			controller.followsTable.insertFollows(temp, loc);
+		}
+		temp = 0;
+		containerStack.push(loc);
+
+		controller.statementTable.insertStatement(&whileNode);
+
+
 		match(KEYWORDS[1]); nextToken = getToken();
 
-		TNode whileVarNode = createASTNode(VAR_NODE, nextToken.name, &whileNode);	// whileVar
+		TNode whileVarNode = createASTNode(VAR_NODE, nextToken.name, &whileNode, loc);	// whileVar
 		variableName(); nextToken = getToken();
 
 		match("{"); nextToken = getToken();
 
-		TNode whileStmtLstNode = createASTNode(STMTLST_NODE, "", &whileNode);
+		TNode whileStmtLstNode = createASTNode(STMTLST_NODE, "", &whileNode, loc);
 		stmtLst(whileStmtLstNode);
 
-		match("}"); nextToken = getToken();
+		match("}"); 
+		temp = containerStack.top();	containerStack.pop();
+		nextToken = getToken();
 	} else if(nextToken.token == IDENT) {
 
-		TNode assignNode = createASTNode(ASSIGN_NODE, "", &parent); 
-		TNode varNode = createASTNode(VAR_NODE, nextToken.name, &assignNode);
-		variableName(); nextToken = getToken();
+		loc++;
+		TNode assignNode = createASTNode(ASSIGN_NODE, "", &parent, loc); 
+		TNode varNode = createASTNode(VAR_NODE, nextToken.name, &assignNode, loc);
+		controller.statementTable.insertStatement(&assignNode);
+		//cout << nextToken.name << "\t" << loc << endl;
+		variableName(); 
+		if(parent.getNodeType() == TNODE_NAMES[WHILE_NODE] || parent.getNodeType() == TNODE_NAMES[IF_NODE])
+			controller.parentTable.insertParent(parent.getStmtNum(), loc);
+
+		if(temp > 0) {
+			controller.followsTable.insertFollows(temp, loc);
+		}
+		temp = loc;
+		nextToken = getToken();
 
 		match("="); nextToken = getToken();
 		expr(assignNode);
@@ -173,12 +199,12 @@ void Parser::factor() {
 	if(nextToken.token == IDENT) {			// TODO: check valid IDENT (not keywords)
 		//node = createASTNode(VAR_NODE, nextToken.name, &assignNode);
 		variableName();
-		operandStack.push(TNode(TNODE_NAMES[VAR_NODE], nextToken.name, 0, 0));
+		operandStack.push(TNode(TNODE_NAMES[VAR_NODE], nextToken.name, loc, 0));
 	} else {
 		// INT_LIT;
 		//node = createASTNode(CONSTANT_NODE, nextToken.name, &assignNode);
 		constantValue();
-		operandStack.push(TNode(TNODE_NAMES[CONSTANT_NODE], nextToken.name, 0, 0));
+		operandStack.push(TNode(TNODE_NAMES[CONSTANT_NODE], nextToken.name, loc, 0));
 	}
 }
 
@@ -209,7 +235,7 @@ void Parser::exprPrime() {
 }
 
 void Parser::popOperator(Operator op) {
-	TNode operatorNode = TNode(TNODE_NAMES[PLUS_NODE], "+", 0, 0);
+	TNode operatorNode = TNode(TNODE_NAMES[PLUS_NODE], "+", loc, 0);
 
 	TNode rightOperand = operandStack.top(); operandStack.pop();
 	TNode leftOperand = operandStack.top(); operandStack.pop();
@@ -261,11 +287,8 @@ void Parser::procedureName() {
 void Parser::match(string s) {
 	if(nextToken.name == s) {
 		// match operator
-		if(nextToken.token == PLUS) {
-		} else if(nextToken.token == SEMICOLON) {
-		}
 	} else {
-		//cout << "Syntax error: Expecting " << s << " on line number " << loc << endl;
+		cout << "Syntax error: Expecting " << s << " on line number " << loc << endl;
 	}
 
 }
@@ -276,4 +299,8 @@ PKBController Parser::getController() {
 
 Lexeme Parser::getToken() {
 	return lexer.lex();
+}
+
+int Parser::getTotalStatementNumber() {
+	return loc;
 }

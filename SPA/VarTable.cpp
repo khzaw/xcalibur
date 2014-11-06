@@ -15,16 +15,20 @@ VarTable::VarTable(){
 }
 
 // insert variable into VarTable
-void VarTable::insertVar(string s){
+int VarTable::insertVar(string s){
  if (std::find(varVec.begin(), varVec.end(), s) != varVec.end()){
+	 return -1;
 }else{
 	varVec.push_back(s);
+	return (varVec.size() -1);
  }
 }
 
 // get variable name using its index
 string VarTable::getVarName(int n){
-return varVec.at(n);
+	if(n>this->getSize())
+		throw out_of_range("Index not in varTable");
+	return varVec.at(n);
 }
 
 vector<string> VarTable::getAllVar(){
@@ -37,11 +41,13 @@ vector<string> VarTable::getAllVar(){
 
 // get variable index using its string
 int VarTable::getVarIndex(string s){
+
 for(int i=0; i< varVec.size(); i++){
 if(varVec.at(i) == s){
 return i;
 }
 }
+throw string ("variable doesn't exist in VarTable");
 return -1;
 }
 

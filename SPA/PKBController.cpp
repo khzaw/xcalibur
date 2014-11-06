@@ -8,6 +8,9 @@ PKBController::PKBController() {
 	this->procTable = ProcTable();
 	this->varTable = VarTable();
 	this->constantTable = ConstantTable();
+	this->parentTable = Parent();
+	this->followsTable = Follows();
+	this->statementTable = StatementTable();
 }
 
 PKBController::~PKBController() {

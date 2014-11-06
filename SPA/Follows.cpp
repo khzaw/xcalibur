@@ -108,3 +108,9 @@ vector<int> Follows::getAllFolloweeStmt(){
 	return followees;
 }
 
+void Follows::printAll() {
+	for(size_t i = 0; i < records.size(); i++) {
+		cout << records[i].first << ", " << records[i].second << endl;
+	}
+}
+

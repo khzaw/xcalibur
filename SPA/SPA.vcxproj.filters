@@ -21,9 +21,6 @@
     <ClCompile Include="Lexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -161,10 +158,5 @@
     <ClInclude Include="QueryLexer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="simple_sample.txt">
-      <Filter>Source Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

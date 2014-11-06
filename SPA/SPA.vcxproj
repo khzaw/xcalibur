@@ -15,7 +15,6 @@
     <ClCompile Include="ConstantTable.cpp" />
     <ClCompile Include="Follows.cpp" />
     <ClCompile Include="Lexeme.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="Modifies.cpp" />
     <ClCompile Include="Operator.cpp" />
@@ -57,9 +56,6 @@
     <ClInclude Include="TNode.h" />
     <ClInclude Include="Uses.h" />
     <ClInclude Include="VarTable.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="simple_sample.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>

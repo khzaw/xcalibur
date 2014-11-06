@@ -11,7 +11,8 @@ enum TNODE_TYPE {
 	PLUS_NODE,
 	WHILE_NODE,
 	ASSIGN_NODE,
-	CONSTANT_NODE
+	CONSTANT_NODE,
+	IF_NODE
 };
 
 static string TNODE_NAMES[] = {
@@ -21,7 +22,8 @@ static string TNODE_NAMES[] = {
 	"PLUS_NODE",
 	"WHILE_NODE",
 	"ASSIGN_NODE",
-	"CONSTANT_NODE"
+	"CONSTANT_NODE",
+	"IF_NODE"
 };
 
 #include <cstddef>

@@ -26,19 +26,22 @@ class Parser {
 	string filename;
 	Lexeme nextToken;
 	int loc;
+	int temp;
 	string procName;
 	Lexer lexer;
-	PKBController controller;
 	stack<Operator> operatorStack;
 	stack<TNode> operandStack;
+	stack<int> containerStack;
 
 public:
+	PKBController controller;
 	Parser();
 	Parser(string filename);
 	void parse();
 	~Parser();
 	void printOut();
 	PKBController getController();
+	int getTotalStatementNumber();
 private:
 	Lexeme getToken();
 	void match(string s);

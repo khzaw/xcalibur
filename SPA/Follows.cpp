@@ -16,7 +16,7 @@ void Follows::insertFollows(int stmt1, int stmt2){
 
 vector<int> Follows::getFollowers(int stmt){
 	vector<int> listFollowers;
-	for(int i=0; i<records.size();i++){
+	for(size_t i=0; i<records.size();i++){
 			if(records[i].first==stmt){
 				listFollowers.push_back(records[i].second);
 			}
@@ -26,7 +26,7 @@ vector<int> Follows::getFollowers(int stmt){
 	
 vector<int> Follows::getFollowees(int stmt){
 	vector<int> listFollowees;
-	for(int i=0; i<records.size();i++){
+	for(size_t i=0; i<records.size();i++){
 			if(records[i].second==stmt){
 				listFollowees.push_back(records[i].first);
 			}
@@ -88,14 +88,15 @@ bool Follows::isFollowsStarTrue(int stmt1, int stmt2){
 			return true;
 	}
 	return false;
+}
 
-int Follows::getSize(){
+int Follows::getSize() {
 	return records.size();
 }
 
 vector<int> Follows::getAllFollowerStmt(){
 	vector<int> followers ;
-	for (int i=0; i<records.size();i++){
+	for (size_t i=0; i<records.size();i++){
 		if(std::find(followers.begin(), followers.end(), records[i].second)!=followers.end()){
 		}else {
 	    followers.push_back(records[i].second);
@@ -107,7 +108,7 @@ vector<int> Follows::getAllFollowerStmt(){
 
 vector<int> Follows::getAllFolloweeStmt(){
 	vector<int> followees ;
-	for (int i=0; i<records.size();i++){
+	for (size_t i=0; i<records.size();i++){
 		if(std::find(followees.begin(), followees.end(), records[i].first)!=followees.end()){
 		}else {
 	    followees.push_back(records[i].first);

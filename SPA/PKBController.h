@@ -11,6 +11,7 @@
 #include "Modifies.h"
 #include "Uses.h"
 #include "StatementTable.h"
+#include "Modifies.h"
 
 using namespace std;
 

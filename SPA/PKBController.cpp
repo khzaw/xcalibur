@@ -13,6 +13,7 @@ PKBController::PKBController() {
 	this->modifiesTable = Modifies();
 	this->usesTable = Uses();
 	this->statementTable = StatementTable();
+	this->modifiesTable = Modifies();
 }
 
 PKBController::~PKBController() {

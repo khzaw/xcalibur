@@ -14,6 +14,14 @@ using namespace std;
 	  }
    }
 
+   int Modifies::getSizeStmtModifies() {
+	   return stmtMod.size();
+   }
+
+   int Modifies::getSizeProcModifies() {
+	   return procMod.size();
+   }
+
 	vector<pair<int,int>> Modifies::getModifiesStmt(){
 		return stmtMod;
 	}

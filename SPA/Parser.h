@@ -27,6 +27,8 @@ class Parser {
 	Lexeme nextToken;
 	int loc;
 	int temp;
+	int lastVarIndex;
+	int procCount;
 	string procName;
 	Lexer lexer;
 	stack<Operator> operatorStack;
@@ -66,4 +68,7 @@ private:
 
 	void printOperatorStack();
 	void printOperandStack();
+
+	void populateModifies(int loc);
+	void populateUses();
 };

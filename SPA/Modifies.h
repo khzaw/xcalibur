@@ -26,4 +26,6 @@ class Modifies{
 	vector<pair<int,int>> getModifiesProc();
 	void insertModifiesProc(int,int);
 	bool isModifiesProc(int,int);
+	int getSizeStmtModifies();
+	int getSizeProcModifies();
 };

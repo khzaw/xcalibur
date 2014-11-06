@@ -36,8 +36,10 @@ Parser::Parser(string file) {
 	this->filename = file;
 	this->loc = 0;
 	this->temp = 0;
+	this->lastVarIndex = -1;
 	this->lexer = Lexer("");
 	this->controller = PKBController(); 
+	this->procCount = 0;
 	parse();
 }
 
@@ -88,7 +90,7 @@ void Parser::procedure() {
 	match(KEYWORDS[0]); nextToken = getToken();
 
 	procedureName();
-	TNode procNode = TNode(TNODE_NAMES[PROC_NODE], procName, loc, 0);
+	TNode procNode = TNode(TNODE_NAMES[PROC_NODE], procName, loc, procCount);
 
 	match("{"); nextToken = getToken();
 
@@ -123,7 +125,8 @@ void Parser::stmt(TNode parent) {
 		match(KEYWORDS[1]); nextToken = getToken();
 
 		TNode whileVarNode = createASTNode(VAR_NODE, nextToken.name, &whileNode, loc);	// whileVar
-		variableName(); nextToken = getToken();
+		variableName(); 
+		nextToken = getToken();
 
 		match("{"); nextToken = getToken();
 
@@ -141,6 +144,7 @@ void Parser::stmt(TNode parent) {
 		controller.statementTable.insertStatement(&assignNode);
 		//cout << nextToken.name << "\t" << loc << endl;
 		variableName(); 
+		populateModifies(loc);
 		if(parent.getNodeType() == TNODE_NAMES[WHILE_NODE] || parent.getNodeType() == TNODE_NAMES[IF_NODE])
 			controller.parentTable.insertParent(parent.getStmtNum(), loc);
 
@@ -148,6 +152,10 @@ void Parser::stmt(TNode parent) {
 			controller.followsTable.insertFollows(temp, loc);
 		}
 		temp = loc;
+
+		// assignment modifies
+		//controller.modifiesTable.insertModifiesStmt(loc, );
+
 		nextToken = getToken();
 
 		match("="); nextToken = getToken();
@@ -262,7 +270,7 @@ TNode Parser::createASTNode(int nodeType, string name, TNode *parentNode, int li
 void Parser::variableName() {
 	// TODO check valid variable name
 	// cout << "variableName: " << nextToken.name << endl;
-	controller.varTable.insertVar(nextToken.name);
+	lastVarIndex = controller.varTable.insertVar(nextToken.name);
 	//nextToken = getToken();
 }
 
@@ -288,7 +296,7 @@ void Parser::match(string s) {
 	if(nextToken.name == s) {
 		// match operator
 	} else {
-		cout << "Syntax error: Expecting " << s << " on line number " << loc << endl;
+		//cout << "Syntax error: Expecting " << nextToken.name << " on line number " << loc << endl;
 	}
 
 }
@@ -303,4 +311,30 @@ Lexeme Parser::getToken() {
 
 int Parser::getTotalStatementNumber() {
 	return loc;
+}
+
+void Parser::populateModifies(int loc) {
+
+	// assignment statement
+	controller.modifiesTable.insertModifiesStmt(loc, lastVarIndex);
+	controller.modifiesTable.insertModifiesProc(loc, procCount);
+
+	// container statement
+	stack<int> temp = stack<int>();
+	while(containerStack.size() > 0) {
+		int top = containerStack.top();
+		temp.push(top);
+		controller.modifiesTable.insertModifiesStmt(top, lastVarIndex);
+		controller.modifiesTable.insertModifiesStmt(top, procCount);
+		containerStack.pop();
+	}
+
+
+	while(temp.size() > 0) {
+		containerStack.push(temp.top());
+		temp.pop();
+	}
+}
+
+void Parser::populateUses(int loc) {
 }

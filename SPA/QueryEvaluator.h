@@ -8,6 +8,13 @@
 #include "QTNode.h"
 #include "PKB.h"
 
+//For Testing
+#include "StatementTable.h"
+#include "Follows.h"
+#include "Modifies.h"
+#include "ProcTable.h"
+#include "VarTable.h"
+
 using namespace std;
 
 typedef string STRING;
@@ -20,6 +27,11 @@ class QueryEvaluator{
 
 		//Method
 		STRING evaluate(map<STRING, STRING>*, QueryTree*);
+
+		//For Testing
+		bool checkSynonymInSuchThat(string, QueryTree*);
+		vector<int> solveForSuchThatFollows(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Follows*, ProcTable*, VarTable*);
+		vector<int> solveForSuchThatModifies(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Modifies*, ProcTable*, VarTable*);
 	
 	private:
 		PKB* pkb;

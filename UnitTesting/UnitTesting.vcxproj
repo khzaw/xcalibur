@@ -41,12 +41,13 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)source;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)source;$(SolutionDir)include;F:\cs3201\xcalibur\SPA;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(SolutionDir)lib\cppunit_debug.lib;$(SolutionDir)$(Configuration)\SPA.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>F:\cs3201\xcalibur\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -66,7 +67,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="source\UnitTest.cpp" />
+    <ClCompile Include="testConstant.cpp" />
+    <ClCompile Include="testFollows.cpp" />
+    <ClCompile Include="TestModifies.cpp" />
+    <ClCompile Include="testParent.cpp" />
+    <ClCompile Include="TestProcTable.cpp" />
+    <ClCompile Include="testQueryEvaluator.cpp" />
+    <ClCompile Include="testStatement.cpp" />
+    <ClCompile Include="TestUses.cpp" />
+    <ClCompile Include="TestVarTable.cpp" />
+    <ClCompile Include="UnitTest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="testConstant.h" />
+    <ClInclude Include="testFollows.h" />
+    <ClInclude Include="TestModifies.h" />
+    <ClInclude Include="testParent.h" />
+    <ClInclude Include="TestProcTable.h" />
+    <ClInclude Include="testQueryEvaluator.h" />
+    <ClInclude Include="testStatement.h" />
+    <ClInclude Include="TestUses.h" />
+    <ClInclude Include="TestVarTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

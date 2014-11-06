@@ -1,0 +1,272 @@
+procedure Rick {
+	never = 10;
+	gonna = give + you;
+	up = 10000;
+
+	foo = 2;
+	chorus = foo;
+	//how do i do inverse b?
+	while forever {
+		while chorus {
+			while never {
+				gonna =  1334;
+				if you then {
+					let = you;
+					down = 314159;
+				} else {
+					if run then {
+						run = around - and;
+						desert = you;
+					} else {
+						if make then {
+							make = you * cry + never;
+							gonna = 0;
+							say = goodbye + (100 * 10 - 1);
+						} else {
+							tell = ( a + (lie - and) * hurt ) + you;	
+		}}}}
+			chorus = 	chorus 		-             	1;
+		}
+	}
+
+
+	times = foo;	// muh comments
+	times2 = foo;	// muh more comments
+	while times
+	{
+		//all is calm, all is bright
+		oOoOoh = give + you + up;
+	}
+	while times2 {Ooh = 2 * (never + gonna - give) + (give - you - up);}
+
+	love = 1000000000;
+	life 
+							= 
+				1 
+									+ 1 
+	+ 1 
+					+ 1   
+
+			+ 1 	
+						- 1
+	;
+	jin = love;
+	jin = life;
+
+	while jin {
+	while jin { while jin {
+	while jin { 	while jin {
+	while jin { 	while jin {
+	while jin { while jin {
+	while jin {
+		walletBalance = walletBalance + shekels;
+		jin = love - life;
+	}}}}
+	}}}
+	}}
+	}
+
+	you = get + NOTHING;
+	you = LOSE;
+	good = day 
+	//heehee
+	//kek
+	* 
+	//huehue
+	//lololol
+	sir;
+
+	while ayy {
+		if lmao {
+
+		}
+
+		// if bool then {
+		remove = ((((((((NORMA))))))));
+		// else {
+		shekels = 100 * forever;
+		//}
+	}
+
+	NOODles = NootNoot;
+
+	if ayy then {
+		while lmao {
+			if ayy then {
+				while lmao {
+					if ayy then {
+						while lmao {
+							if ayy then {
+								while lmao {
+								// Why can't I hold all these tears?
+									cake = lie;
+								// WHHHHHHHHHHHHHHHHHHHHHYYYYYYYYYYY
+								}
+							}
+								else {
+		are			 = you * 			ready;
+			}
+						}
+					}
+					else {
+			are	 	= you						 	* ready;
+					}
+				}
+			} else {
+				are = you * ready;
+			}
+		}
+	} else {
+		are = you * ready;
+	}
+
+
+	scope = global;
+	add = return + void;
+	intTid = blockIdxX;
+	if intTid then {
+
+	} else {
+		scope = (10 * 10 )+ (10 - (10 + 10)) - (10);
+	}
+	intTid = scope;
+
+	while true {
+		true = false;
+		if false then {
+			false = true;
+		} else {
+			true = true;
+		}
+
+		while false {
+			if true then {
+				false = false;
+				true = false;
+				false = true;
+			} else {
+				true = true + false;
+				if true then {
+					true = false;
+				} else {
+					false = false + true;
+					while true {
+						while false {
+							if false then {
+								true = false + true;
+								while true {
+									false = true;
+									if false then {
+										false = false;
+									} else {
+										true = false;
+									}
+								}
+							} else {
+								true = false;
+								false = true;
+								true = false;
+								while true {
+									while false {
+										while true {
+											if false then {
+												true = false;
+											} else {
+												while false {
+													false = false;
+												}
+											}
+										}
+									}
+								}
+
+								true = never + gonna + give + you + up;
+							}
+							//Yeah, shake that boots
+						}
+						// Just like that
+						false = never * let * you * down;
+					}
+				}
+				// testing brackets }
+
+				//Ghandi did nothing wrong
+
+		}
+			// EHH?
+	}
+
+		// SHAKE ME SHAKE ME
+	}
+
+	a 
+		=b
+			+c
+				*d
+					-e
+						*f
+							-g
+								*h
+									*i
+										*j
+											+k
+												-l
+													*m
+														//summit
+													-n
+												+o
+											*p
+										-q
+									*r
+								-s
+							-t
+						*u
+					*v
+				*w
+			-x
+		-y
+	+z;
+
+	medium = 
+					((
+					((
+					((
+		((((((((((((((((((((((((((
+					((
+				   ((((
+				  ((  ((
+				((		((
+			   ((		 ((
+			 ((		  	   ((
+		   ((				 ((
+		 ((					   ((
+		((						((
+				  
+			   (big + small)
+					
+					))
+					))
+				))))))))))
+					))
+					))
+			
+				  	))
+				  	))
+				  	))
+				  	))
+				  	))
+			   ))   ))    ))
+			  ))	))	   ))
+			))		))		))
+		  ))		))		  ))
+		  			))
+		  			))
+		  			))
+		  			))
+		  		  ))))
+		  		  	))
+		  		  	 ;
+
+	last = 
+	((laaste) + ((fundit)+((kecen) + ((azken) + ((aposni) + ((gata) + ((zuihou) + ((huli) + ((dernier) + ((letzte) + ((lalu) + ((ultimo) + ((rasuto) + ((majimag) + (senaste)))))))))))))));
+}

@@ -80,6 +80,15 @@ bool Follows::isFollowsTrue(int stmt1, int stmt2){
 	return false;
 }
 
+bool Follows::isFollowsStarTrue(int stmt1, int stmt2){
+	vector<int> followersStar;
+	followersStar = Follows::getFollowersStar(stmt1);
+	for (std::vector<int>::iterator it=followersStar.begin(); it != followersStar.end(); ++it){
+		if(*it==stmt2)
+			return true;
+	}
+	return false;
+
 int Follows::getSize(){
 	return records.size();
 }

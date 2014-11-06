@@ -20,6 +20,7 @@ class Follows {
 	vector<int> getFollowees(int);
 	int getSize();
 	bool isFollowsTrue(int,int);
+	bool isFollowstarTrue(int,int);
 	vector<int> getFollowersStar(int);
 	vector<int> getFolloweesStar(int);
 	vector<int> getAllFollowerStmt();

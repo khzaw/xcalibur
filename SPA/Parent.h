@@ -19,6 +19,7 @@ class Parent {
 	vector<int> getParents(int);
 	int getSize();
 	bool isParentTrue(int,int);
+	bool isParentStarTrue(int, int);
 	vector<int> getChildrenStar(int);
 	vector<int> getParentStar(int);
 	vector<int> getAllChildrenStmt();

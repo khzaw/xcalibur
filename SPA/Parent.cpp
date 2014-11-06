@@ -85,6 +85,16 @@ bool Parent::isParentTrue(int stmt1, int stmt2){
 	return false;
 }
 
+bool Parent::isParentStarTrue(int stmt1, int stmt2){
+	vector<int> childrenStar ;
+	childrenStar = Parent::getChildrenStar(stmt1);
+	for (std::vector<int>::iterator it=childrenStar.begin(); it != childrenStar.end(); ++it){
+		if(*it==stmt2)
+			return true;
+	}
+	return false;
+}
+
 vector<int> Parent::getAllChildrenStmt(){
 	vector<int> children ;
 	for (int i=0; i<records.size();i++){

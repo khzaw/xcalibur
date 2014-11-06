@@ -58,6 +58,8 @@ void Parser::parse() {
 	while(!inputFile.eof()) {
 		getline(inputFile, currentLine);
 		// can strip out comments from here .. not sure it's the best approach though
+		size_t comment = currentLine.find("//");
+		if(comment != string::npos) currentLine = currentLine.erase(comment);
 		programString += " " + currentLine;
 	}
 	inputFile.close();

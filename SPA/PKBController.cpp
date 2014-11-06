@@ -10,6 +10,8 @@ PKBController::PKBController() {
 	this->constantTable = ConstantTable();
 	this->parentTable = Parent();
 	this->followsTable = Follows();
+	this->modifiesTable = Modifies();
+	this->usesTable = Uses();
 	this->statementTable = StatementTable();
 }
 

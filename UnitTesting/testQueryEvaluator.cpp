@@ -1727,11 +1727,11 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 
 	vector<int> actualResult18 = qe->solveForSuchThatModifies("s1", &table1, query18, &st, &m1, &procTable1, &varTable1); 
 	
-	CPPUNIT_ASSERT_EQUAL(1,actualResult17[0]);
-	CPPUNIT_ASSERT_EQUAL(5,actualResult17[4]);
-	CPPUNIT_ASSERT_EQUAL(8,actualResult17[7]);
-	CPPUNIT_ASSERT_EQUAL(9,actualResult17[8]);
-	CPPUNIT_ASSERT_EQUAL(10,actualResult17[9]);
+	CPPUNIT_ASSERT_EQUAL(1,actualResult18[0]);
+	CPPUNIT_ASSERT_EQUAL(5,actualResult18[4]);
+	CPPUNIT_ASSERT_EQUAL(8,actualResult18[7]);
+	CPPUNIT_ASSERT_EQUAL(9,actualResult18[8]);
+	CPPUNIT_ASSERT_EQUAL(10,actualResult18[9]);
 
 	/**
    Test No: 19
@@ -1791,7 +1791,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies21->addChild(second21);
 	QueryTree* query21 = new QueryTree(modifies21);
 
-	vector<int> actualResult21 = qe->solveForSuchThatModifies("s1", &table1, query17, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult21 = qe->solveForSuchThatModifies("s1", &table1, query21, &st, &m1, &procTable1, &varTable1); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult21[0]);
 	CPPUNIT_ASSERT_EQUAL(5,actualResult21[4]);
@@ -2164,6 +2164,999 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	QueryTree* query38 = new QueryTree(modifies38);
 
 	vector<int> actualResult38 = qe->solveForSuchThatModifies("w1", &table1, query38, &st, &m1, &procTable1, &varTable1); 
+	
+	CPPUNIT_ASSERT_EQUAL(3,actualResult38[0]);
+	CPPUNIT_ASSERT_EQUAL(6,actualResult38[1]);
+	CPPUNIT_ASSERT_EQUAL(7,actualResult38[2]);
+	CPPUNIT_ASSERT_EQUAL(9,actualResult38[3]);
+}
+
+void QueryEvaluatorTest::testSolveForSuchThatUses(){
+	/** SIMPLE source code
+	procedure p1{
+	a = x;
+	b = y;
+	 while c{
+	 d = y;
+	 e =v;
+	 while f{
+	  while g{
+	   h=u;
+		while i{
+		 a=b;
+		 }}}}
+	}
+	**/
+
+	StatementTable st;
+	TNode stmt1("assign","a = x", 1,0);
+	TNode stmt2("assign","b = y", 2,0);
+	TNode stmt3("while","c", 3,0);
+	TNode stmt4("assign","d = t", 4,0);
+	TNode stmt5("assign","e = v", 5,0);
+	TNode stmt6("while","f", 6,0);
+	TNode stmt7("while","g", 7,0);
+	TNode stmt8("assign","h = u", 8,0);
+	TNode stmt9("while","i", 9,0);
+	TNode stmt10("assign","a = b", 10,0);
+
+	st.insertStatement(&stmt1);
+	st.insertStatement(&stmt2);
+	st.insertStatement(&stmt3);
+	st.insertStatement(&stmt4);
+	st.insertStatement(&stmt5);
+	st.insertStatement(&stmt6);
+	st.insertStatement(&stmt7);
+	st.insertStatement(&stmt8);
+	st.insertStatement(&stmt9);
+	st.insertStatement(&stmt10);
+
+	// For Uses maybe you need to build Uses, ProcTable and VarTable
+    Uses m;
+	//uses for procedures
+	m.insertUsesProc(0,2); //var: x
+	m.insertUsesProc(0,3); //var: y
+	m.insertUsesProc(0,4); //var: c
+	m.insertUsesProc(0,6); //var: t
+	m.insertUsesProc(0,8); //var: v 
+	m.insertUsesProc(0,9); //var: f
+	m.insertUsesProc(0,10); //var:g 
+	m.insertUsesProc(0,12); //var: u
+    m.insertUsesProc(0,13); //var: i
+
+	//uses for while statements
+	m.insertUsesStmt(3,1); //var: a
+    m.insertUsesStmt(3,4); //var: d
+	m.insertUsesStmt(3,9); //var: e
+	m.insertUsesStmt(3,6); //var: h
+	m.insertUsesStmt(3,8); //var: a
+	m.insertUsesStmt(3,12); //var: h
+	m.insertUsesStmt(3,10); //var: a
+	m.insertUsesStmt(3,13); //var: h
+    m.insertUsesStmt(6,9); //var: h
+	m.insertUsesStmt(6,12); //var: h
+	m.insertUsesStmt(6,1); //var: h
+	m.insertUsesStmt(6,10); //var: h
+	m.insertUsesStmt(6,13); //var: h
+	m.insertUsesStmt(7,12); //var: h
+	m.insertUsesStmt(7,1); //var: h
+	m.insertUsesStmt(7,10); //var: h
+	m.insertUsesStmt(7,13); //var: h
+	m.insertUsesStmt(9,1); //var: h
+	m.insertUsesStmt(9,13); //var: h
+	
+	//uses for assign statements
+    m.insertUsesStmt(1,2); // var:a
+    m.insertUsesStmt(2,3);  // var:b
+    m.insertUsesStmt(4,6); // var:d
+    m.insertUsesStmt(5,8); // var:e
+    m.insertUsesStmt(8,12); // var:h
+	m.insertUsesStmt(10,1);
+
+	ProcTable p;
+	p.insertProc("p1");
+
+	VarTable v;
+	v.insertVar("a"); // index 0
+	v.insertVar("b"); // index 1
+	v.insertVar("x"); // index 2
+	v.insertVar("y"); // index 3
+	v.insertVar("c"); // index 4
+	v.insertVar("d"); // index 5
+	v.insertVar("t"); // index 6
+	v.insertVar("e"); // index 7
+	v.insertVar("v"); // index 8
+	v.insertVar("f"); // index 9
+	v.insertVar("g"); // index 10
+	v.insertVar("h"); // index 11
+	v.insertVar("u"); // index 12
+	v.insertVar("i"); // index 13
+	v.insertVar("j"); // index 14
+
+	QueryEvaluator* qe = new QueryEvaluator();
+
+	// synonym table, add more if needed
+	map<string, string> table1;
+	table1["s1"]="stmt";
+	table1["s2"]="stmt";
+	table1["a1"]="assign";
+	table1["a2"]="assign";
+	table1["w1"]="while";
+	table1["w2"]="while";
+	table1["v1"]="variable";
+	table1["v2"]="variable";
+	table1["p1"]="procedure";
+
+	/** 
+   Test No: 1
+   Test Type: stmt | <syn1> == <syn2> |  <syn3> specified
+   Query:stmt s1; Select s1 such that Uses(s1, "x")
+   Expected Result: <1>
+   **/
+
+	QTNode* uses1 = new QTNode("Uses");
+	QTNode* first1 = new QTNode("s1");
+	QTNode* second1 = new QTNode("x");
+	first1->setParent(uses1);
+	uses1->addChild(first1);
+	second1->setParent(uses1);
+	uses1->addChild(second1);
+	QueryTree* query1 = new QueryTree(uses1);
+
+	vector<int> actualResult1 = qe->solveForSuchThatUses("s1", &table1, query1, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT(actualResult1[0]==1);
+
+	/** 
+   Test No: 2
+   Test Type: proc | <syn1> == <syn2> |  <syn3> specified
+   Query:procedure p1; Select p1 such that Uses(p1, "x")
+   Expected Result: <p1>
+   **/
+	QTNode* uses2 = new QTNode("Uses");
+	QTNode* first2 = new QTNode("p1");
+	QTNode* second2 = new QTNode("x");
+	first2->setParent(uses2);
+	uses2->addChild(first2);
+	second2->setParent(uses2);
+	uses2->addChild(second2);
+	QueryTree* query2 = new QueryTree(uses2);
+
+	// store procedure name in vector
+	vector<int> actualResult2 = qe->solveForSuchThatUses("p1", &table1, query2, &st, &m, &p, &v); 
+
+	CPPUNIT_ASSERT(actualResult2[0] == 0 );
+
+	/** 
+   Test No: 3
+   Test Type: assign | <syn1> == <syn2> |  <syn3> specified
+   Query:assign a1; Select a1 such that Uses(a1, "b")
+   Expected Result: <10>
+   **/
+	QTNode* uses3 = new QTNode("Uses");
+	QTNode* first3 = new QTNode("a1");
+	QTNode* second3 = new QTNode("b");
+	first3->setParent(uses3);
+	uses3->addChild(first3);
+	second3->setParent(uses3);
+	uses3->addChild(second3);
+	QueryTree* query3 = new QueryTree(uses3);
+
+	vector<int> actualResult3 = qe->solveForSuchThatUses("a1", &table1, query3, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT_EQUAL(10, actualResult3[0]);
+
+	/**
+	 Test No: 4
+   Test Type: while | <syn1> == <syn2> or <syn1> == <syn3>|  <syn3> specified
+   Query:while w1; Select w1 such that Uses(w1, "g")
+   Expected Result: <3,6,7>
+   **/
+	QTNode* uses4 = new QTNode("Uses");
+	QTNode* first4 = new QTNode("w1");
+	QTNode* second4 = new QTNode("g");
+	first4->setParent(uses4);
+	uses4->addChild(first4);
+	second4->setParent(uses4);
+	uses4->addChild(second4);
+	QueryTree* query4 = new QueryTree(uses4);
+
+	vector<int> actualResult4 = qe->solveForSuchThatUses("w1", &table1, query4, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT_EQUAL(3,actualResult4[0]);
+	CPPUNIT_ASSERT_EQUAL(6,actualResult4[1]);
+	CPPUNIT_ASSERT_EQUAL(7,actualResult4[2]);
+
+	/**
+	 Test No: 5
+   Test Type: while | <syn1> == <syn3> |  <syn2> specified
+   Query:variable v1; Select v1 such that Uses(6, v1)
+   Expected Result: <b,f,g,u,i>
+   **/
+	QTNode* uses5 = new QTNode("Uses");
+	QTNode* first5 = new QTNode(6);
+	QTNode* second5 = new QTNode("v1");
+	first5->setParent(uses5);
+	uses5->addChild(first5);
+	second5->setParent(uses5);
+	uses5->addChild(second5);
+	QueryTree* query5 = new QueryTree(uses5);
+
+	vector<int> actualResult5ns = qe->solveForSuchThatUses("v1", &table1, query5, &st, &m, &p, &v); 
+
+	set<int> temp;
+	temp.insert(actualResult5ns.begin(), actualResult5ns.end());
+	
+	vector<int> actualResult5(temp.begin(), temp.end());
+
+	CPPUNIT_ASSERT(actualResult5[0] == 1);
+	CPPUNIT_ASSERT(actualResult5[1] == 9);
+	CPPUNIT_ASSERT(actualResult5[2] == 10);
+	CPPUNIT_ASSERT(actualResult5[3] == 12);
+	CPPUNIT_ASSERT(actualResult5[4] == 13);
+
+	
+	/**
+	 Test No: 6
+   Test Type: assign | <syn1> == <syn3> |  <syn2> specified
+   Query:assign a1; Select a1 such that Uses(7, a1)
+   Expected Result: < > // error -1
+   **/
+	QTNode* uses6 = new QTNode("Uses");
+	QTNode* first6 = new QTNode("7");
+	QTNode* second6 = new QTNode("a1");
+	first6->setParent(uses6);
+	uses6->addChild(first6);
+	second6->setParent(uses6);
+	uses6->addChild(second6);
+	QueryTree* query6 = new QueryTree(uses6);
+
+	vector<int> actualResult6 = qe->solveForSuchThatUses("a1", &table1, query6, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT(actualResult6.empty());
+	
+	/**
+	 Test No: 7
+   Test Type: procedure | <syn1> == <syn2> or <syn1> == <syn3> |  none specified
+   Query:procedure p1, variable v1; Select p1 such that Uses(p1, v1)
+   Expected Result: <p1> --- 
+   **/
+	QTNode* uses7 = new QTNode("Uses");
+	QTNode* first7 = new QTNode("p1");
+	QTNode* second7 = new QTNode("v1");
+	first7->setParent(uses7);
+	uses7->addChild(first7);
+	second7->setParent(uses7);
+	uses7->addChild(second7);
+	QueryTree* query7 = new QueryTree(uses7);
+
+	vector<int> actualResult7 = qe->solveForSuchThatUses("p1", &table1, query7, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT(actualResult7[0] == 0 );
+
+	/**
+   Test No: 8
+   Test Type: stmt | <syn1> == <syn2> or <syn1> == <syn3> |  none specified
+   Query:statement s1, variable v1; Select s1 such that Uses(s1, v1)
+   Expected Result: <1,2,3,4,5,6,7,8,9,10> // 
+   **/
+	QTNode* uses8 = new QTNode("Uses");
+	QTNode* first8 = new QTNode("s1");
+	QTNode* second8 = new QTNode("v1");
+	first8->setParent(uses8);
+	uses8->addChild(first8);
+	second8->setParent(uses8);
+	uses8->addChild(second8);
+	QueryTree* query8 = new QueryTree(uses8);
+
+	vector<int> actualResult8 = qe->solveForSuchThatUses("s1", &table1, query8, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT_EQUAL(1,actualResult8[0]);
+	CPPUNIT_ASSERT_EQUAL(2,actualResult8[1]);
+	CPPUNIT_ASSERT_EQUAL(3,actualResult8[2]);
+	CPPUNIT_ASSERT_EQUAL(4,actualResult8[3]);
+	CPPUNIT_ASSERT_EQUAL(5,actualResult8[4]);
+	CPPUNIT_ASSERT_EQUAL(6,actualResult8[5]);
+	CPPUNIT_ASSERT_EQUAL(7,actualResult8[6]);
+	CPPUNIT_ASSERT_EQUAL(8,actualResult8[7]);
+	CPPUNIT_ASSERT_EQUAL(9,actualResult8[8]);
+	CPPUNIT_ASSERT_EQUAL(10,actualResult8[9]);
+	
+	/**
+   Test No: 9
+   Test Type: while |<syn1> == <syn2> or <syn1> == <syn3> |  none specified
+   Query:while w1, variable v1; Select w1 such that Uses(w1,v1)
+   Expected Result: <3,6,7,9> 
+   **/
+	QTNode* uses9 = new QTNode("Uses");
+	QTNode* first9 = new QTNode("w1");
+	QTNode* second9 = new QTNode("v1");
+	first9->setParent(uses9);
+	uses9->addChild(first9);
+	second9->setParent(uses9);
+	uses9->addChild(second9);
+	QueryTree* query9 = new QueryTree(uses9);
+
+	vector<int> actualResult9 = qe->solveForSuchThatUses("w1", &table1, query9, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT_EQUAL(3,actualResult9[0]);
+	CPPUNIT_ASSERT_EQUAL(6,actualResult9[1]);
+	CPPUNIT_ASSERT_EQUAL(7,actualResult9[2]);
+	CPPUNIT_ASSERT_EQUAL(9,actualResult9[3]);
+
+	
+   /**
+   Test No: 10
+   Test Type: while |<syn1> == <syn2> or <syn1> == <syn3> |  none specified
+   Query:statement s1, variable v1, assignment a1; Select s1 such that Uses(s1,a1)
+   Expected Result: < > // error -1
+   **/
+	QTNode* uses10 = new QTNode("Uses");
+	QTNode* first10 = new QTNode("s1");
+	QTNode* second10 = new QTNode("a1");
+	first10->setParent(uses10);
+	uses10->addChild(first10);
+	second10->setParent(uses10);
+	uses10->addChild(second10);
+	QueryTree* query10 = new QueryTree(uses10);
+
+	vector<int> actualResult10 = qe->solveForSuchThatUses("s1", &table1, query10, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT(actualResult10.empty());
+
+	
+	 /**
+   Test No: 11
+   Test Type: statement |<syn1> != <syn2> and <syn1> != <syn3>| <syn2> specified && <syn3> specified
+   Query:statement s1; Select s1 such that Uses(3, "c")
+   Expected Result: <1,2,3,4,5,6,7,8,9,10>
+   **/
+	QTNode* uses11 = new QTNode("Uses");
+	QTNode* first11 = new QTNode(3);
+	QTNode* second11 = new QTNode("c");
+	first11->setParent(uses11);
+	uses11->addChild(first11);
+	second11->setParent(uses11);
+	uses11->addChild(second11);
+	QueryTree* query11 = new QueryTree(uses11);
+
+	vector<int> actualResult11 = qe->solveForSuchThatUses("s1", &table1, query11, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT_EQUAL(1,actualResult11[0]);
+	CPPUNIT_ASSERT_EQUAL(2,actualResult11[1]);
+	CPPUNIT_ASSERT_EQUAL(3,actualResult11[2]);
+	CPPUNIT_ASSERT_EQUAL(4,actualResult11[3]);
+	CPPUNIT_ASSERT_EQUAL(5,actualResult11[4]);
+	CPPUNIT_ASSERT_EQUAL(6,actualResult11[5]);
+	CPPUNIT_ASSERT_EQUAL(7,actualResult11[6]);
+	CPPUNIT_ASSERT_EQUAL(8,actualResult11[7]);
+	CPPUNIT_ASSERT_EQUAL(9,actualResult11[8]);
+	CPPUNIT_ASSERT_EQUAL(10,actualResult11[9]);
+
+	
+	/**
+   Test No: 12
+   Test Type: assign |<syn1> != <syn2> and <syn1> != <syn3>| <syn2> specified && <syn3> specified
+   Query:assign a1; Select a1 such that Uses(5,"v")
+   Expected Result: <1,2,4,5,8,10> // all assignment statements
+   **/
+	QTNode* uses12 = new QTNode("Uses");
+	QTNode* first12 = new QTNode(5);
+	QTNode* second12 = new QTNode("v");
+	first12->setParent(uses12);
+	uses12->addChild(first12);
+	second12->setParent(uses12);
+	uses12->addChild(second12);
+	QueryTree* query12 = new QueryTree(uses12);
+
+	vector<int> actualResult12 = qe->solveForSuchThatUses("a1", &table1, query12, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT_EQUAL(1, actualResult12[0]);
+	CPPUNIT_ASSERT_EQUAL(2, actualResult12[1]);
+	CPPUNIT_ASSERT_EQUAL(4, actualResult12[2]);
+	CPPUNIT_ASSERT_EQUAL(5, actualResult12[3]);
+	CPPUNIT_ASSERT_EQUAL(8, actualResult12[4]);
+	CPPUNIT_ASSERT_EQUAL(10, actualResult12[5]);
+
+	/**
+   Test No: 13
+   Test Type: while |<syn1> != <syn2> and <syn1> != <syn3>| <syn2> specified && <syn3> specified
+   Query: while w1; Select w1 such that Uses(8,u)
+   Expected Result: <3,6,7,9> // all while stmts
+   **/
+	QTNode* uses13 = new QTNode("Uses");
+	QTNode* first13 = new QTNode(8);
+	QTNode* second13 = new QTNode("u");
+	first13->setParent(uses13);
+	uses13->addChild(first13);
+	second13->setParent(uses13);
+	uses13->addChild(second13);
+	QueryTree* query13 = new QueryTree(uses13);
+
+	vector<int> actualResult13 = qe->solveForSuchThatUses("w1", &table1, query13, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT_EQUAL(3, actualResult13[0]);
+	CPPUNIT_ASSERT_EQUAL(6, actualResult13[1]);
+	CPPUNIT_ASSERT_EQUAL(7, actualResult13[2]);
+	CPPUNIT_ASSERT_EQUAL(9, actualResult13[3]);
+
+		/**
+   Test No: 14
+   Test Type: variable |<syn1> != <syn2> and <syn1> != <syn3>| <syn2> specified && <syn3> specified
+   Query: variable v1; Select v1 such that Uses(2,y)
+   Expected Result: <a,b,x,y,c,d,t,e,v,f,g,h,u,i>
+   **/
+	QTNode* uses14 = new QTNode("Uses");
+	QTNode* first14 = new QTNode("s1");
+	QTNode* second14 = new QTNode("a1");
+	first14->setParent(uses14);
+	uses14->addChild(first14);
+	second14->setParent(uses14);
+	uses14->addChild(second14);
+	QueryTree* query14 = new QueryTree(uses14);
+
+	vector<int> actualResult14 = qe->solveForSuchThatUses("v1", &table1, query14, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT(actualResult14[0]== 0);
+	CPPUNIT_ASSERT(actualResult14[1]== 1);
+	CPPUNIT_ASSERT(actualResult14[2]== 2);
+	CPPUNIT_ASSERT(actualResult14[3]== 3);
+	CPPUNIT_ASSERT(actualResult14[7]== 7);
+	CPPUNIT_ASSERT(actualResult14[10]== 10);
+	CPPUNIT_ASSERT(actualResult14[12]== 12);
+	CPPUNIT_ASSERT(actualResult14[13]== 13);
+
+		/**
+   Test No: 14
+   Test Type: variable |<syn1> != <syn2> and <syn1> != <syn3>| <syn2> specified && <syn3> specified
+   Query: variable v1; Select v1 such that Uses(2,y)
+   Expected Result: <a,b,x,y,c,d,t,e,v,f,g,h,u,i>
+   **/
+	QTNode* uses14_5 = new QTNode("Uses");
+	QTNode* first14_5 = new QTNode(2);
+	QTNode* second14_5 = new QTNode("y");
+	first14_5->setParent(uses14_5);
+	uses14_5->addChild(first14_5);
+	second14_5->setParent(uses14_5);
+	uses14_5->addChild(second14_5);
+	QueryTree* query14_5 = new QueryTree(uses14_5);
+
+	vector<int> actualResult14_5 = qe->solveForSuchThatUses("v1", &table1, query14_5, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT(actualResult14_5[0]== 0);
+	CPPUNIT_ASSERT(actualResult14_5[1]== 1);
+	CPPUNIT_ASSERT(actualResult14_5[2]== 2);
+	CPPUNIT_ASSERT(actualResult14_5[3]== 3);
+	CPPUNIT_ASSERT(actualResult14_5[7]== 7);
+	CPPUNIT_ASSERT(actualResult14_5[10]== 10);
+	CPPUNIT_ASSERT(actualResult14_5[12]== 12);
+	CPPUNIT_ASSERT(actualResult14_5[13]== 13);
+
+	/**
+   Test No: 15
+   Test Type: procedure |<syn1> != <syn2> and <syn1> != <syn3>| <syn2> specified && <syn3> specified
+   Query: procedure p1; Select p1 such that Uses(1, "x")
+   Expected Result: <p1>
+   **/
+	QTNode* uses15 = new QTNode("Uses");
+	QTNode* first15 = new QTNode("1");
+	QTNode* second15 = new QTNode("a");
+	first15->setParent(uses15);
+	uses15->addChild(first15);
+	second15->setParent(uses15);
+	uses15->addChild(second15);
+	QueryTree* query15 = new QueryTree(uses15);
+
+	vector<int> actualResult15 = qe->solveForSuchThatUses("p1", &table1, query15, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT(actualResult14[0]== 0);
+	
+	/**
+   Test No: 16
+   Test Type: procedure |<syn1> != <syn2> and <syn1> != <syn3>| <syn2> specified && <syn3> specified
+   Query: procedure p1; Select p1 such that Uses("p1", "h")
+   Expected Result: <>
+   **/
+	QTNode* uses16 = new QTNode("Uses");
+	QTNode* first16 = new QTNode("p1");
+	QTNode* second16 = new QTNode("h");
+	first16->setParent(uses16);
+	uses16->addChild(first16);
+	second16->setParent(uses16);
+	uses16->addChild(second16);
+	QueryTree* query16 = new QueryTree(uses16);
+
+	vector<int> actualResult16 = qe->solveForSuchThatUses("p1", &table1, query16, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT(actualResult16.empty());
+
+	/**
+   Test No: 17
+   Test Type: stmt |<syn1> != <syn2> and <syn1> != <syn3>| <syn2> specified && <syn3> specified
+   Query: statement s1; Select s1 such that Uses("p1", "t")
+   Expected Result: <1,2,3,4,5,6,7,8,9,10>
+   **/
+	QTNode* uses17 = new QTNode("Uses");
+	QTNode* first17 = new QTNode("p1");
+	QTNode* second17 = new QTNode("t");
+	first17->setParent(uses17);
+	uses17->addChild(first17);
+	second17->setParent(uses17);
+	uses17->addChild(second17);
+	QueryTree* query17 = new QueryTree(uses17);
+
+	vector<int> actualResult17 = qe->solveForSuchThatUses("s1", &table1, query17, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT_EQUAL(1,actualResult17[0]);
+	CPPUNIT_ASSERT_EQUAL(5,actualResult17[4]);
+	CPPUNIT_ASSERT_EQUAL(8,actualResult17[7]);
+	CPPUNIT_ASSERT_EQUAL(9,actualResult17[8]);
+	CPPUNIT_ASSERT_EQUAL(10,actualResult17[9]);
+
+	/**
+   Test No: 18
+   Test Type: stmt |<syn1> != <syn2> and <syn1> != <syn3>| <syn3> specified
+   Query: stmt s1,stmt s2; Select s1 such that Uses(s2, "v")
+   Expected Result: <1,2,3,4,5,6,7,8,9,10>
+   **/
+	QTNode* uses18 = new QTNode("Uses");
+	QTNode* first18 = new QTNode("s2");
+	QTNode* second18 = new QTNode("v");
+	first18->setParent(uses18);
+	uses18->addChild(first18);
+	second18->setParent(uses18);
+	uses18->addChild(second18);
+	QueryTree* query18 = new QueryTree(uses18);
+
+	vector<int> actualResult18 = qe->solveForSuchThatUses("s1", &table1, query18, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT_EQUAL(1,actualResult18[0]);
+	CPPUNIT_ASSERT_EQUAL(5,actualResult18[4]);
+	CPPUNIT_ASSERT_EQUAL(8,actualResult18[7]);
+	CPPUNIT_ASSERT_EQUAL(9,actualResult18[8]);
+	CPPUNIT_ASSERT_EQUAL(10,actualResult18[9]);
+
+	/**
+   Test No: 19
+   Test Type: procedure |<syn1> != <syn2> and <syn1> != <syn3>| <syn3> specified
+   Query: stmt s1,procedure p1; Select p1 such that Uses(s1, "f")
+   Expected Result: <p1>
+   **/
+	QTNode* uses19 = new QTNode("Uses");
+	QTNode* first19 = new QTNode("s1");
+	QTNode* second19 = new QTNode("f");
+	first19->setParent(uses19);
+	uses19->addChild(first19);
+	second19->setParent(uses19);
+	uses19->addChild(second19);
+	QueryTree* query19 = new QueryTree(uses19);
+
+	vector<int> actualResult19 = qe->solveForSuchThatUses("p1", &table1, query19, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT(actualResult19[0] == 0);
+
+   /**
+   Test No: 20
+   Test Type: assignment |<syn1> != <syn2> and <syn1> != <syn3>| <syn3> specified
+   Query: assignment a1,stmt s1; Select a1 such that Uses(s1, "c")
+   Expected Result: <1,2,4,5,8,10>
+   **/
+	QTNode* uses20 = new QTNode("Uses");
+	QTNode* first20 = new QTNode("s1");
+	QTNode* second20 = new QTNode("c");
+	first20->setParent(uses20);
+	uses20->addChild(first20);
+	second20->setParent(uses20);
+	uses20->addChild(second20);
+	QueryTree* query20 = new QueryTree(uses20);
+
+	vector<int> actualResult20 = qe->solveForSuchThatUses("a1", &table1, query20, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT_EQUAL(1,actualResult20[0]);
+	CPPUNIT_ASSERT_EQUAL(2,actualResult20[1]);
+	CPPUNIT_ASSERT_EQUAL(4,actualResult20[2]);
+	CPPUNIT_ASSERT_EQUAL(5,actualResult20[3]);
+	CPPUNIT_ASSERT_EQUAL(10,actualResult20[5]);
+
+	/**
+   Test No: 21
+   Test Type: stmt |<syn1> != <syn2> and <syn1> != <syn3>| <syn3> specified
+   Query: stmt s1,assign a1; Select s1 such that Uses(a1, "b")
+   Expected Result: <1,2,3,4,5,6,7,8,9,10>
+   **/
+	QTNode* uses21 = new QTNode("Uses");
+	QTNode* first21 = new QTNode("a1");
+	QTNode* second21 = new QTNode("b");
+	first21->setParent(uses21);
+	uses21->addChild(first21);
+	second21->setParent(uses21);
+	uses21->addChild(second21);
+	QueryTree* query21 = new QueryTree(uses21);
+
+	vector<int> actualResult21 = qe->solveForSuchThatUses("s1", &table1, query21, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT_EQUAL(1,actualResult21[0]);
+	CPPUNIT_ASSERT_EQUAL(5,actualResult21[4]);
+	CPPUNIT_ASSERT_EQUAL(8,actualResult21[7]);
+	CPPUNIT_ASSERT_EQUAL(9,actualResult21[8]);
+	CPPUNIT_ASSERT_EQUAL(10,actualResult21[9]);
+
+   /**
+   Test No: 22
+   Test Type: assign |<syn1> != <syn2> and <syn1> != <syn3>|<syn3> specified
+   Query: assign a1, while w1; Select a1 such that Uses(w1, "f")
+   Expected Result: <1,2,4,5,8,10>
+   **/
+	QTNode* uses22 = new QTNode("Uses");
+	QTNode* first22 = new QTNode("w1");
+	QTNode* second22 = new QTNode("f");
+	first22->setParent(uses22);
+	uses22->addChild(first22);
+	second22->setParent(uses22);
+	uses22->addChild(second22);
+	QueryTree* query22 = new QueryTree(uses22);
+
+	vector<int> actualResult22 = qe->solveForSuchThatUses("a1", &table1, query22, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT_EQUAL(1,actualResult22[0]);
+	CPPUNIT_ASSERT_EQUAL(2,actualResult22[1]);
+	CPPUNIT_ASSERT_EQUAL(4,actualResult22[2]);
+	CPPUNIT_ASSERT_EQUAL(5,actualResult22[3]);
+	CPPUNIT_ASSERT_EQUAL(10,actualResult22[5]);
+
+	/**
+   Test No: 23
+   Test Type: variable |<syn1> != <syn2> and <syn1> != <syn3>| <syn3> specified
+   Query: variable v1, while w1; Select v1 such that Uses(w1, "c")
+   Expected Result: <a,b,x,y,c,d,t,e,v,f,g,h,u,i>
+   **/
+	QTNode* uses23 = new QTNode("Uses");
+	QTNode* first23 = new QTNode("w1");
+	QTNode* second23 = new QTNode("c");
+	first23->setParent(uses23);
+	uses23->addChild(first23);
+	second23->setParent(uses23);
+	uses23->addChild(second23);
+	QueryTree* query23 = new QueryTree(uses23);
+
+	vector<int> actualResult23 = qe->solveForSuchThatUses("v1", &table1, query23, &st, &m, &p, &v); 
+		
+	CPPUNIT_ASSERT(actualResult23[0]== 0);
+	CPPUNIT_ASSERT(actualResult23[1]== 1);
+	CPPUNIT_ASSERT(actualResult23[2]== 2);
+	CPPUNIT_ASSERT(actualResult23[3]== 3);
+	CPPUNIT_ASSERT(actualResult23[7]== 7);
+	CPPUNIT_ASSERT(actualResult23[10]== 10);
+	CPPUNIT_ASSERT(actualResult23[12]== 12);
+	CPPUNIT_ASSERT(actualResult23[13]== 13);
+
+	/**
+   Test No: 24
+   Test Type: while |<syn1> != <syn2> and <syn1> != <syn3>| <syn3> specified
+   Query: while w1, procedure p1; Select w1 such that Uses(p1, "d")
+   Expected Result: <>
+   **/
+	QTNode* uses24 = new QTNode("Uses");
+	QTNode* first24 = new QTNode("p1");
+	QTNode* second24 = new QTNode("d");
+	first24->setParent(uses24);
+	uses24->addChild(first24);
+	second24->setParent(uses24);
+	uses24->addChild(second24);
+	QueryTree* query24 = new QueryTree(uses24);
+
+	vector<int> actualResult24 = qe->solveForSuchThatUses("w1", &table1, query24, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT(actualResult24.empty());
+
+
+   /**
+   Test No: 25
+   Test Type: stmt |<syn1> != <syn2> and <syn1> != <syn3>| <syn2> specified
+   Query: stmt s1, variable v1; Select s1 such that Uses(3, v1)
+   Expected Result: <1,2,3,4,5,6,7,8,9,10>
+   **/
+	QTNode* uses25 = new QTNode("Uses");
+	QTNode* first25 = new QTNode(3);
+	QTNode* second25 = new QTNode("v1");
+	first25->setParent(uses25);
+	uses25->addChild(first25);
+	second25->setParent(uses25);
+	uses25->addChild(second25);
+	QueryTree* query25 = new QueryTree(uses25);
+
+	vector<int> actualResult25 = qe->solveForSuchThatUses("s1", &table1, query25, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT_EQUAL(1,actualResult25[0]);
+	CPPUNIT_ASSERT_EQUAL(5,actualResult25[4]);
+	CPPUNIT_ASSERT_EQUAL(8,actualResult25[7]);
+	CPPUNIT_ASSERT_EQUAL(9,actualResult25[8]);
+	CPPUNIT_ASSERT_EQUAL(10,actualResult25[9]);
+
+
+	/**
+   Test No: 26
+   Test Type: assign |<syn1> != <syn2> and <syn1> != <syn3>| <syn2> specified
+   Query: assign a1, variable v1; Select a1 such that Uses(3, v1)
+   Expected Result: <1,2,4,5,8,10>
+   **/
+	QTNode* uses26 = new QTNode("Uses");
+	QTNode* first26 = new QTNode(3);
+	QTNode* second26 = new QTNode("v1");
+	first26->setParent(uses26);
+	uses26->addChild(first26);
+	second26->setParent(uses26);
+	uses26->addChild(second26);
+	QueryTree* query26 = new QueryTree(uses26);
+
+	vector<int> actualResult26 = qe->solveForSuchThatUses("a1", &table1, query26, &st, &m, &p, &v); 
+	
+    CPPUNIT_ASSERT_EQUAL(1,actualResult26[0]);
+	CPPUNIT_ASSERT_EQUAL(2,actualResult26[1]);
+	CPPUNIT_ASSERT_EQUAL(4,actualResult26[2]);
+	CPPUNIT_ASSERT_EQUAL(5,actualResult26[3]);
+	CPPUNIT_ASSERT_EQUAL(10,actualResult26[5]);
+
+	/**
+   Test No: 27
+   Test Type: while |<syn1> != <syn2> and <syn1> != <syn3>| <syn2> specified
+   Query: while w1, variable v1; Select w1 such that Uses(4,v1)
+   Expected Result: <3,6,7,9>
+   **/
+	QTNode* uses27 = new QTNode("Uses");
+	QTNode* first27 = new QTNode(4);
+	QTNode* second27 = new QTNode("v1");
+	first27->setParent(uses27);
+	uses27->addChild(first27);
+	second27->setParent(uses27);
+	uses27->addChild(second27);
+	QueryTree* query27 = new QueryTree(uses27);
+
+	vector<int> actualResult27 = qe->solveForSuchThatUses("w1", &table1, query27, &st, &m, &p, &v); 
+	
+    CPPUNIT_ASSERT_EQUAL(3,actualResult27[0]);
+	CPPUNIT_ASSERT_EQUAL(6,actualResult27[1]);
+	CPPUNIT_ASSERT_EQUAL(7,actualResult27[2]);
+	CPPUNIT_ASSERT_EQUAL(9,actualResult27[3]);
+
+
+	/**
+   Test No: 28
+   Test Type: while |<syn1> != <syn2> and <syn1> != <syn3>| <syn2> specified
+   Query: while w1, variable v1; Select w1 such that Uses("p1",v1)
+   Expected Result: <3,6,7,9>
+   **/
+	QTNode* uses28 = new QTNode("Uses");
+	QTNode* first28 = new QTNode("p1");
+	QTNode* second28 = new QTNode("v1");
+	first28->setParent(uses28);
+	uses28->addChild(first28);
+	second28->setParent(uses28);
+	uses28->addChild(second28);
+	QueryTree* query28 = new QueryTree(uses28);
+
+	vector<int> actualResult28 = qe->solveForSuchThatUses("w1", &table1, query28, &st, &m, &p, &v); 
+	
+    CPPUNIT_ASSERT_EQUAL(3,actualResult28[0]);
+	CPPUNIT_ASSERT_EQUAL(6,actualResult28[1]);
+	CPPUNIT_ASSERT_EQUAL(7,actualResult28[2]);
+	CPPUNIT_ASSERT_EQUAL(9,actualResult28[3]);
+
+	/**
+   Test No: 29
+   Test Type: variable |<syn1> != <syn2> and <syn1> != <syn3>| <syn2> specified
+   Query: variable v1,variable v2; Select v1 such that Uses(4,v2)
+   Expected Result: <a,b,x,y,c,d,t,e,v,f,g,h,u,i>
+   **/
+	QTNode* uses29 = new QTNode("Uses");
+	QTNode* first29 = new QTNode(4);
+	QTNode* second29 = new QTNode("v2");
+	first29->setParent(uses29);
+	uses29->addChild(first29);
+	second29->setParent(uses29);
+	uses29->addChild(second29);
+	QueryTree* query29 = new QueryTree(uses29);
+
+	vector<int> actualResult29 = qe->solveForSuchThatUses("v1", &table1, query29, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT(actualResult29[0]== 0);
+	CPPUNIT_ASSERT(actualResult29[1]== 1);
+	CPPUNIT_ASSERT(actualResult29[2]== 2);
+	CPPUNIT_ASSERT(actualResult29[3]== 3);
+	CPPUNIT_ASSERT(actualResult29[7]== 7);
+	CPPUNIT_ASSERT(actualResult29[10]== 10);
+	CPPUNIT_ASSERT(actualResult29[12]== 12);
+	CPPUNIT_ASSERT(actualResult29[13]== 13);
+
+	/**
+   Test No: 30
+   Test Type: procedure |<syn1> != <syn2> and <syn1> != <syn3>| <syn2> specified
+   Query: variable v1,procedure p1; Select p1 such that Uses(2,v1)
+   Expected Result: <p1>
+   **/
+	QTNode* uses30 = new QTNode("Uses");
+	QTNode* first30 = new QTNode(4);
+	QTNode* second30 = new QTNode("v1");
+	first30->setParent(uses30);
+	uses30->addChild(first30);
+	second30->setParent(uses30);
+	uses30->addChild(second30);
+	QueryTree* query30 = new QueryTree(uses30);
+
+	vector<int> actualResult30 = qe->solveForSuchThatUses("p1", &table1, query30, &st, &m, &p, &v); 
+	
+    CPPUNIT_ASSERT(actualResult30[0]== 0);
+	
+	/**
+   Test No: 31
+   Test Type: procedure |<syn1> != <syn2> and <syn1> != <syn3>| none specified
+   Query: variable v1,procedure p1, assign a1; Select p1 such that Uses(a1,v1)
+   Expected Result: <p1>
+   **/
+	QTNode* uses31 = new QTNode("Uses");
+	QTNode* first31 = new QTNode("a1");
+	QTNode* second31 = new QTNode("v1");
+	first31->setParent(uses31);
+	uses31->addChild(first31);
+	second31->setParent(uses31);
+	uses31->addChild(second31);
+	QueryTree* query31 = new QueryTree(uses31);
+
+	vector<int> actualResult31 = qe->solveForSuchThatUses("p1", &table1, query31, &st, &m, &p, &v); 
+	
+    CPPUNIT_ASSERT(actualResult31[0]== 0);
+
+	/**
+   Test No: 32
+   Test Type: procedure |<syn1> != <syn2> and <syn1> != <syn3>| none specified
+   Query: variable v1,procedure p1, while w1; Select p1 such that Uses(w1,v1)
+   Expected Result: <p1>
+   **/
+	QTNode* uses32 = new QTNode("Uses");
+	QTNode* first32 = new QTNode("w1");
+	QTNode* second32 = new QTNode("v1");
+	first32->setParent(uses32);
+	uses32->addChild(first32);
+	second32->setParent(uses32);
+	uses32->addChild(second32);
+	QueryTree* query32 = new QueryTree(uses32);
+
+	vector<int> actualResult32 = qe->solveForSuchThatUses("p1", &table1, query32, &st, &m, &p, &v); 
+	
+    CPPUNIT_ASSERT(actualResult32[0]== 0);
+	
+ /**
+   Test No: 33
+   Test Type: stmt |<syn1> != <syn2> and <syn1> != <syn3>|  none specified
+   Query: stmt s1,stmt s2,variable v1; Select s1 such that Uses(s2, v1)
+   Expected Result: <1,2,3,4,5,6,7,8,9,10>
+   **/
+	QTNode* uses33 = new QTNode("Uses");
+	QTNode* first33 = new QTNode("s2");
+	QTNode* second33 = new QTNode("v1");
+	first33->setParent(uses33);
+	uses33->addChild(first33);
+	second33->setParent(uses33);
+	uses33->addChild(second33);
+	QueryTree* query33 = new QueryTree(uses33);
+
+	vector<int> actualResult33 = qe->solveForSuchThatUses("s1", &table1, query33, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT_EQUAL(1,actualResult33[0]);
+	CPPUNIT_ASSERT_EQUAL(5,actualResult33[4]);
+	CPPUNIT_ASSERT_EQUAL(8,actualResult33[7]);
+	CPPUNIT_ASSERT_EQUAL(9,actualResult33[8]);
+	CPPUNIT_ASSERT_EQUAL(10,actualResult33[9]);
+
+	/**
+   Test No: 34
+   Test Type: assign |<syn1> != <syn2> and <syn1> != <syn3>|  none specified
+   Query: stmt s1,assign a1,variable v1; Select a1 such that Uses(s1, v1)
+   Expected Result: <1,2,4,5,8,10>
+   **/
+	QTNode* uses34 = new QTNode("Uses");
+	QTNode* first34 = new QTNode("s1");
+	QTNode* second34 = new QTNode("v1");
+	first34->setParent(uses34);
+	uses34->addChild(first34);
+	second34->setParent(uses34);
+	uses34->addChild(second34);
+	QueryTree* query34 = new QueryTree(uses34);
+
+	vector<int> actualResult34 = qe->solveForSuchThatUses("a1", &table1, query34, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT_EQUAL(1,actualResult34[0]);
+	CPPUNIT_ASSERT_EQUAL(2,actualResult34[1]);
+	CPPUNIT_ASSERT_EQUAL(4,actualResult34[2]);
+	CPPUNIT_ASSERT_EQUAL(5,actualResult34[3]);
+	CPPUNIT_ASSERT_EQUAL(10,actualResult34[5]);
+
+	/**
+   Test No: 35
+   Test Type: assign |<syn1> != <syn2> and <syn1> != <syn3>|  none specified
+   Query: while w1 ,assign a1,variable v1; Select a1 such that Uses(w1, v1)
+   Expected Result: <1,2,4,5,8,10>
+   **/
+	QTNode* uses35 = new QTNode("Uses");
+	QTNode* first35 = new QTNode("w1");
+	QTNode* second35 = new QTNode("v1");
+	first35->setParent(uses35);
+	uses35->addChild(first35);
+	second35->setParent(uses35);
+	uses35->addChild(second35);
+	QueryTree* query35 = new QueryTree(uses35);
+
+	vector<int> actualResult35 = qe->solveForSuchThatUses("a1", &table1, query35, &st, &m, &p, &v); 
+	
+	CPPUNIT_ASSERT_EQUAL(1,actualResult35[0]);
+	CPPUNIT_ASSERT_EQUAL(2,actualResult35[1]);
+	CPPUNIT_ASSERT_EQUAL(4,actualResult35[2]);
+	CPPUNIT_ASSERT_EQUAL(5,actualResult35[3]);
+	CPPUNIT_ASSERT_EQUAL(10,actualResult35[5]);
+
+	/**
+   Test No: 36
+   Test Type: stmt |<syn1> != <syn2> and <syn1> != <syn3>|  none specified
+   Query: stmt s1 ,assign a1,variable v1; Select s1 such that Uses(a1, v1)
+   Expected Result: <1,2,3,4,5,6,7,8,9,10>
+   **/
+	QTNode* uses36 = new QTNode("Uses");
+	QTNode* first36 = new QTNode("a1");
+	QTNode* second36 = new QTNode("v1");
+	first36->setParent(uses36);
+	uses36->addChild(first36);
+	second36->setParent(uses36);
+	uses36->addChild(second36);
+	QueryTree* query36 = new QueryTree(uses36);
+
+	vector<int> actualResult36 = qe->solveForSuchThatUses("s1", &table1, query36, &st, &m, &p, &v); 
+	CPPUNIT_ASSERT_EQUAL(1,actualResult36[0]);
+	CPPUNIT_ASSERT_EQUAL(5,actualResult36[4]);
+	CPPUNIT_ASSERT_EQUAL(8,actualResult36[7]);
+	CPPUNIT_ASSERT_EQUAL(9,actualResult36[8]);
+	CPPUNIT_ASSERT_EQUAL(10,actualResult36[9]);
+
+	/**
+   Test No: 37
+   Test Type: variable|<syn1> != <syn2> and <syn1> != <syn3>|  none specified
+   Query: variable v1 ,assign a1,variable v2; Select v1 such that Uses(a1, v2)
+   Expected Result: <a,b,x,y,c,d,t,e,v,f,g,h,u,i>
+   **/
+	QTNode* uses37 = new QTNode("Uses");
+	QTNode* first37 = new QTNode("a1");
+	QTNode* second37 = new QTNode("v2");
+	first37->setParent(uses37);
+	uses37->addChild(first37);
+	second37->setParent(uses37);
+	uses37->addChild(second37);
+	QueryTree* query37 = new QueryTree(uses37);
+
+	vector<int> actualResult37 = qe->solveForSuchThatUses("v1", &table1, query37, &st, &m, &p, &v); 
+	CPPUNIT_ASSERT(actualResult37[0]== 0);
+	CPPUNIT_ASSERT(actualResult37[1]== 1);
+	CPPUNIT_ASSERT(actualResult37[2]== 2);
+	CPPUNIT_ASSERT(actualResult37[3]== 3);
+	CPPUNIT_ASSERT(actualResult37[7]== 7);
+	CPPUNIT_ASSERT(actualResult37[10]== 10);
+	CPPUNIT_ASSERT(actualResult37[12]== 12);
+	CPPUNIT_ASSERT(actualResult29[13]== 13);
+
+	/**
+   Test No: 38
+   Test Type: while |<syn1> != <syn2> and <syn1> != <syn3>|  none specified
+   Query: procedure p1, variable v1, while w1; Select w1 such that Uses(p1, v1)
+   Expected Result: <3,6,7,9>
+   **/
+	QTNode* uses38 = new QTNode("Uses");
+	QTNode* first38 = new QTNode("p1");
+	QTNode* second38 = new QTNode("v1");
+	first38->setParent(uses38);
+	uses38->addChild(first38);
+	second38->setParent(uses38);
+	uses38->addChild(second38);
+	QueryTree* query38 = new QueryTree(uses38);
+
+	vector<int> actualResult38 = qe->solveForSuchThatUses("w1", &table1, query38, &st, &m, &p, &v); 
 	
 	CPPUNIT_ASSERT_EQUAL(3,actualResult38[0]);
 	CPPUNIT_ASSERT_EQUAL(6,actualResult38[1]);

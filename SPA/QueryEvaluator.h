@@ -7,11 +7,14 @@
 #include "QueryTree.h"
 #include "QTNode.h"
 #include "PKB.h"
+#include "PKBController.h"
 
 //For Testing
 #include "StatementTable.h"
 #include "Follows.h"
+#include "Parent.h"
 #include "Modifies.h"
+#include "Uses.h"
 #include "ProcTable.h"
 #include "VarTable.h"
 
@@ -23,7 +26,7 @@ class QueryEvaluator{
 	public:
 		//Constructor
 		QueryEvaluator();
-		QueryEvaluator(PKB*);
+		QueryEvaluator(PKBController*);
 
 		//Method
 		STRING evaluate(map<STRING, STRING>*, QueryTree*);
@@ -31,9 +34,11 @@ class QueryEvaluator{
 		//For Testing
 		bool checkSynonymInSuchThat(string, QueryTree*);
 		vector<int> solveForSuchThatFollows(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Follows*, ProcTable*, VarTable*);
+		vector<int> solveForSuchThatParent(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Parent*, ProcTable*, VarTable*);
 		vector<int> solveForSuchThatModifies(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Modifies*, ProcTable*, VarTable*);
+		vector<int> solveForSuchThatUses(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Uses*, ProcTable*, VarTable*);
 	
 	private:
-		PKB* pkb;
+		PKBController* pkb;
 };
 #endif

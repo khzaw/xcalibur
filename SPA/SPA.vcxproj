@@ -49,6 +49,7 @@
     <ClInclude Include="ProcTable.h" />
     <ClInclude Include="QTNode.h" />
     <ClInclude Include="QueryEvaluator.h" />
+    <ClInclude Include="QueryException.h" />
     <ClInclude Include="QueryLexer.h" />
     <ClInclude Include="QueryParser.h" />
     <ClInclude Include="QueryTree.h" />

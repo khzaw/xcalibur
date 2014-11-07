@@ -77,7 +77,8 @@ private:
 	void matchPattern();
 	void matchPatternConditions();
 	void matchPatternAssign(string);
-	string matchExpression(string);
+	QTNode* matchExpression();
+	int comparePrecedence(string, string);
 	string matchFactor(string);
 	void matchPatternWhile(string);
 	void matchPatternIf(string);

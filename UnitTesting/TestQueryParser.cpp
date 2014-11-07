@@ -647,3 +647,79 @@ void QueryParserTest::testFollows() {
 	CPPUNIT_ASSERT(qt->getChild(2)->getChild(0)->getKey() == "d");
 	CPPUNIT_ASSERT(qt->getChild(2)->getChild(1)->getKey() == "e");
 }
+
+void QueryParserTest::testAssignPattern() {
+	string q;
+	QueryParser* qp;
+	QTNode* qt;
+	
+	q = "assign a; select a pattern a(b, \"x+y\")";
+	qp = new QueryParser(q);
+	qt = qp->getQueryTree()->getRootNode()->getChild(2);
+	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "assign");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "a");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "b");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getKey() == "+");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getChild(0)->getKey() == "x");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getChild(1)->getKey() == "y");
+
+	q = "assign a; select a pattern a(\"x\", \"x+y+z\")";
+	qp = new QueryParser(q);
+	qt = qp->getQueryTree()->getRootNode()->getChild(2);
+	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "assign");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "a");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "\"x\"");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getKey() == "+");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getChild(0)->getKey() == "+");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getChild(1)->getKey() == "z");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getChild(0)->getChild(0)->getKey() == "x");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getChild(0)->getChild(1)->getKey() == "y");
+
+	q = "assign a; select a pattern a(_, \"w + x+ y +z\")";
+	qp = new QueryParser(q);
+	qt = qp->getQueryTree()->getRootNode()->getChild(2);
+	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "assign");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "a");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getKey() == "+");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getChild(0)->getKey() == "+");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getChild(1)->getKey() == "z");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getChild(0)->getChild(0)->getKey() == "+");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getChild(0)->getChild(1)->getKey() == "y");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getChild(0)->getChild(0)->getChild(0)->getKey() == "w");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getChild(0)->getChild(0)->getChild(1)->getKey() == "x");
+
+	q = "assign a; select a pattern a(b, _\"x+y\")";
+	qp = new QueryParser(q);
+	qt = qp->getQueryTree()->getRootNode()->getChild(2);
+	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "assign");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "a");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "b");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(3)->getKey() == "+");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(3)->getChild(0)->getKey() == "x");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(3)->getChild(1)->getKey() == "y");
+
+	q = "assign a; select a pattern a(b, \"x+y\"_)";
+	qp = new QueryParser(q);
+	qt = qp->getQueryTree()->getRootNode()->getChild(2);
+	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "assign");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "a");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "b");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getKey() == "+");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(3)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getChild(0)->getKey() == "x");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getChild(1)->getKey() == "y");
+
+	q = "assign a; select a pattern a(b, _\"x+y\"_)";
+	qp = new QueryParser(q);
+	qt = qp->getQueryTree()->getRootNode()->getChild(2);
+	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "assign");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "a");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "b");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(3)->getKey() == "+");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(4)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(3)->getChild(0)->getKey() == "x");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(3)->getChild(1)->getKey() == "y");
+}

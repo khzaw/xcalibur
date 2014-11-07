@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <map>
 #include <ctype.h>
+#include <stack>
 
 #include "QueryParser.h"
 #include "QueryLexer.h"
@@ -372,7 +373,7 @@ void QueryParser::matchPatternAssign(string s) {
 	match("(");
 	assignNode->addChild(matchVarRef());
 	match(",");
-	
+	/*
 	string expression = "";
 	if (nextToken.name.compare("_") == 0) {
 		expression += nextToken.name;
@@ -394,8 +395,126 @@ void QueryParser::matchPatternAssign(string s) {
 
 	assignNode->addChild(new QTNode(expression));
 	qt->getRootNode()->getChild(2)->addChild(assignNode);
+	*/
+
+	if(nextToken.name.compare("_") == 0) {
+		match(UNDERSCORE);
+		assignNode->addChild(new QTNode("_"));
+	}
+	match("\"");
+	assignNode->addChild(matchExpression());
+	match("\"");
+	if(nextToken.name.compare("_") == 0) {
+		match(UNDERSCORE);
+		assignNode->addChild(new QTNode("_"));
+	}
+
+	qt->getRootNode()->getChild(2)->addChild(assignNode);
 }
 
+QTNode* QueryParser::matchExpression() {
+	stack<string> operatorStack;
+	stack<QTNode*> operandStack;
+	QTNode* left;
+	QTNode* right;
+	QTNode* current;
+
+	//shunting yard algorithm
+	next:
+	while(nextToken.name.compare("\"") != 0) {
+		string popped;
+		if (nextToken.token == OPEN_PARENTHESES) {
+			match(OPEN_PARENTHESES);
+			operatorStack.push("(");
+		} else if (nextToken.token == CLOSE_PARENTHESES) {
+			match(CLOSE_PARENTHESES);
+			while(!operatorStack.empty()) {
+				popped = operatorStack.top();
+				operatorStack.pop();
+				if (popped.compare("(") == 0) {
+					goto next;
+				} else {
+					//add node(operandStack, popped);
+					right = operandStack.top();
+					operandStack.pop();
+					left = operandStack.top();
+					operandStack.pop();
+					current = new QTNode(popped);
+					current->addChild(left);
+					current->addChild(right);
+					operandStack.push(current);
+				}
+			}
+			//throw unbalance parentheses exception
+		} else {
+			if(nextToken.token == PLUS || nextToken.token == MINUS || nextToken.token == TIMES) {
+				string op1 = nextToken.name;
+				match(op1);
+				string op2;
+				while (!operatorStack.empty() && !(op2 = operatorStack.top()).empty()) {
+					if(comparePrecedence(op1, op2) <= 0) {
+						operatorStack.pop();
+						//addNode(operandStack, o2)
+						right = operandStack.top();
+						operandStack.pop();
+						left = operandStack.top();
+						operandStack.pop();
+						current = new QTNode(op2);
+						current->addChild(left);
+						current->addChild(right);
+						operandStack.push(current);
+					} else {
+						break;
+					}
+				}
+				operatorStack.push(op1);
+			} else {
+				string factor = nextToken.name;
+				if(nextToken.token == INT_LIT) {
+					match(INT_LIT);
+				} else {
+					match(SIMPLE_IDENT);
+				}
+				operandStack.push(new QTNode(factor));
+			}
+		}	
+	}
+	while(!operatorStack.empty()) {
+		string op = operatorStack.top();
+		operatorStack.pop();
+		right = operandStack.top();
+		operandStack.pop();
+		left = operandStack.top();
+		operandStack.pop();
+		current = new QTNode(op);
+		current->addChild(left);
+		current->addChild(right);
+		operandStack.push(current);
+	}
+
+	return operandStack.top();
+}
+
+//if a > b, return 1
+//if a < b, return -1
+//else return 0
+int QueryParser::comparePrecedence(string a, string b) {
+	if (a.compare(b) == 0) {
+		return 0;
+	}
+	if (a.compare("-") == 0 && b.compare("+") == 0) {
+		return 0;
+	}
+	if (a.compare("+") == 0 && b.compare("-") == 0) {
+		return 0;
+	}
+	if (a.compare("*") == 0) {
+		return 1;
+	}
+	return -1;
+}
+
+/*
 string QueryParser::matchExpression(string exp) {
 	if (nextToken.token != CLOSE_PARENTHESES) {
 		exp = matchFactor(exp);
@@ -442,7 +561,7 @@ string QueryParser::matchFactor(string exp) {
 	//cout << "After Match: " << exp << endl;
 	return exp;
 }
-
+*/
 void QueryParser::matchPatternIf (string s) {
 	QTNode* ifNode = new QTNode("if");
 	ifNode->addChild(new QTNode(s));

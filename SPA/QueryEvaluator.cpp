@@ -61,14 +61,14 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = follows->getFollowees(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = follows->getFollowees(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -111,14 +111,14 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -143,14 +143,14 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = follows->getFollowers(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = follows->getFollowers(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -193,14 +193,14 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -237,14 +237,14 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 				}
 			} else if (synonymTable->at(rightSynonym)=="assign"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="assign"&&follows->isFollowsTrue(leftStmtIndex, i)){
+					if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsTrue(leftStmtIndex, i)){
 						isSuchThatTrue = true;
 						break;
 					}
 				}
 			} else if (synonymTable->at(rightSynonym)=="while"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="while"&&follows->isFollowsTrue(leftStmtIndex, i)){
+					if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&follows->isFollowsTrue(leftStmtIndex, i)){
 						isSuchThatTrue = true;
 						break;
 					}
@@ -265,14 +265,14 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 				}
 			} else if (synonymTable->at(leftSynonym)=="assign"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="assign"&&follows->isFollowsTrue(i, rightStmtIndex)){
+					if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsTrue(i, rightStmtIndex)){
 						isSuchThatTrue = true;
 						break;
 					}
 				}
 			} else if (synonymTable->at(leftSynonym)=="while"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="while"&&follows->isFollowsTrue(i, rightStmtIndex)){
+					if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&follows->isFollowsTrue(i, rightStmtIndex)){
 						isSuchThatTrue = true;
 						break;
 					}
@@ -299,7 +299,7 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Follows(s1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&follows->isFollowsTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -309,7 +309,7 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Follows(s1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&follows->isFollowsTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&follows->isFollowsTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -324,7 +324,7 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 			} else if (synonymTable->at(leftSynonym)=="assign"){ // Follows(a1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Follows(a1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<statementTable->getSize(); j++){
 								if (follows->isFollowsTrue(i, j)){
 									isSuchThatTrue = true;
@@ -337,9 +337,9 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Follows(a1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&follows->isFollowsTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -350,9 +350,9 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Follows(a1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&follows->isFollowsTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&follows->isFollowsTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -368,7 +368,7 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 			} else if (synonymTable->at(leftSynonym)=="while"){ // Follows(w1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Follows(w1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
 								if (follows->isFollowsTrue(i, j)){
 									isSuchThatTrue = true;
@@ -380,9 +380,9 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Follows(w1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&follows->isFollowsTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -392,9 +392,9 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Follows(w1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&follows->isFollowsTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&follows->isFollowsTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -464,14 +464,14 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = parent->getParents(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = parent->getParents(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -514,14 +514,14 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -546,14 +546,14 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = parent->getChildren(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = parent->getChildren(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -596,14 +596,14 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -640,14 +640,14 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 				}
 			} else if (synonymTable->at(rightSynonym)=="assign"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="assign"&&parent->isParentTrue(leftStmtIndex, i)){
+					if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&parent->isParentTrue(leftStmtIndex, i)){
 						isSuchThatTrue = true;
 						break;
 					}
 				}
 			} else if (synonymTable->at(rightSynonym)=="while"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="while"&&parent->isParentTrue(leftStmtIndex, i)){
+					if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&parent->isParentTrue(leftStmtIndex, i)){
 						isSuchThatTrue = true;
 						break;
 					}
@@ -668,14 +668,14 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 				}
 			} else if (synonymTable->at(leftSynonym)=="assign"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="assign"&&parent->isParentTrue(i, rightStmtIndex)){
+					if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&parent->isParentTrue(i, rightStmtIndex)){
 						isSuchThatTrue = true;
 						break;
 					}
 				}
 			} else if (synonymTable->at(leftSynonym)=="while"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="while"&&parent->isParentTrue(i, rightStmtIndex)){
+					if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&parent->isParentTrue(i, rightStmtIndex)){
 						isSuchThatTrue = true;
 						break;
 					}
@@ -702,7 +702,7 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Parent(s1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&parent->isParentTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&parent->isParentTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -712,7 +712,7 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Parent(s1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&parent->isParentTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&parent->isParentTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -727,7 +727,7 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 			} else if (synonymTable->at(leftSynonym)=="assign"){ // Parent(a1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Parent(a1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<statementTable->getSize(); j++){
 								if (parent->isParentTrue(i, j)){
 									isSuchThatTrue = true;
@@ -740,9 +740,9 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Parent(a1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&parent->isParentTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&parent->isParentTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -753,9 +753,9 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Parent(a1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&parent->isParentTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&parent->isParentTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -771,7 +771,7 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 			} else if (synonymTable->at(leftSynonym)=="while"){ // Parent(w1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Parent(w1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
 								if (parent->isParentTrue(i, j)){
 									isSuchThatTrue = true;
@@ -783,9 +783,9 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Parent(w1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&parent->isParentTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&parent->isParentTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -795,9 +795,9 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Parent(w1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&parent->isParentTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&parent->isParentTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -868,14 +868,14 @@ vector<int> QueryEvaluator::solveForSuchThatModifies(string selectSynonym, map<S
 						} else if (synonymTable->at(selectSynonym)=="assign"){
 							vector<int> temp = modifies->getModifiersStmt(varIndex);
 							for (size_t i=0; i<temp.size(); i++){
-								if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+								if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 									answer.push_back(temp.at(i));
 								}
 							}
 						} else if (synonymTable->at(selectSynonym)=="while"){
 							vector<int> temp = modifies->getModifiersStmt(varIndex);
 							for (size_t i=0; i<temp.size(); i++){
-								if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+								if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 									answer.push_back(temp.at(i));
 								}
 							}
@@ -909,7 +909,7 @@ vector<int> QueryEvaluator::solveForSuchThatModifies(string selectSynonym, map<S
 							vector<pair<int, int>> result = modifies->getModifiesStmt();
 							set<int> temp;
 							for (size_t i=0; i<result.size(); i++){
-								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="assign"){
+								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="ASSIGN_NODE"){
 									temp.insert(result.at(i).first);
 								}
 							}
@@ -919,7 +919,7 @@ vector<int> QueryEvaluator::solveForSuchThatModifies(string selectSynonym, map<S
 							vector<pair<int, int>> result = modifies->getModifiesStmt();
 							set<int> temp;
 							for (size_t i=0; i<result.size(); i++){
-								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="while"){
+								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="WHILE_NODE"){
 									temp.insert(result.at(i).first);
 								}
 							}
@@ -969,7 +969,7 @@ vector<int> QueryEvaluator::solveForSuchThatModifies(string selectSynonym, map<S
 							vector<pair<int, int>> result = modifies->getModifiesStmt();
 							set<int> temp;
 							for (size_t i=0; i<result.size(); i++){
-								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="assign"){
+								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="ASSIGN_NODE"){
 									temp.insert(result.at(i).second);
 								}
 							}
@@ -979,7 +979,7 @@ vector<int> QueryEvaluator::solveForSuchThatModifies(string selectSynonym, map<S
 							vector<pair<int, int>> result = modifies->getModifiesStmt();
 							set<int> temp;
 							for (size_t i=0; i<result.size(); i++){
-								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="while"){
+								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="WHILE_NODE"){
 									temp.insert(result.at(i).second);
 								}
 							}
@@ -1044,14 +1044,14 @@ vector<int> QueryEvaluator::solveForSuchThatModifies(string selectSynonym, map<S
 								}
 							} else if (synonymTable->at(leftSynonym)=="assign"){
 								for (int i=1; i<=statementTable->getSize(); i++){
-									if (statementTable->getTNode(i)->getNodeType()=="assign"&&modifies->isModifiesStmt(i, varIndex)){
+									if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&modifies->isModifiesStmt(i, varIndex)){
 										isSuchThatTrue = true;
 										break;
 									}
 								}
 							} else if (synonymTable->at(leftSynonym)=="while"){
 								for (int i=1; i<=statementTable->getSize(); i++){
-									if (statementTable->getTNode(i)->getNodeType()=="while"&&modifies->isModifiesStmt(i, varIndex)){
+									if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&modifies->isModifiesStmt(i, varIndex)){
 										isSuchThatTrue = true;
 										break;
 									}
@@ -1116,7 +1116,7 @@ vector<int> QueryEvaluator::solveForSuchThatModifies(string selectSynonym, map<S
 								}
 							} else if (synonymTable->at(leftSynonym)=="assign"){
 								for (int i=1; i<=statementTable->getSize(); i++){
-									if (statementTable->getTNode(i)->getNodeType()=="assign"){
+									if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 										for (int j=0; j<varTable->getSize(); j++){
 											if (modifies->isModifiesStmt(i, j)){
 												isSuchThatTrue = true;
@@ -1129,7 +1129,7 @@ vector<int> QueryEvaluator::solveForSuchThatModifies(string selectSynonym, map<S
 								}
 							} else if (synonymTable->at(leftSynonym)=="while"){
 								for (int i=1; i<=statementTable->getSize(); i++){
-									if (statementTable->getTNode(i)->getNodeType()=="while"){
+									if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 										for (int j=0; j<varTable->getSize(); j++){
 											if (modifies->isModifiesStmt(i, j)){
 												isSuchThatTrue = true;
@@ -1203,14 +1203,14 @@ vector<int> QueryEvaluator::solveForSuchThatUses(string selectSynonym, map<STRIN
 						} else if (synonymTable->at(selectSynonym)=="assign"){
 							vector<int> temp = uses->getUsersStmt(varIndex);
 							for (size_t i=0; i<temp.size(); i++){
-								if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+								if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 									answer.push_back(temp.at(i));
 								}
 							}
 						} else if (synonymTable->at(selectSynonym)=="while"){
 							vector<int> temp = uses->getUsersStmt(varIndex);
 							for (size_t i=0; i<temp.size(); i++){
-								if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+								if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 									answer.push_back(temp.at(i));
 								}
 							}
@@ -1244,7 +1244,7 @@ vector<int> QueryEvaluator::solveForSuchThatUses(string selectSynonym, map<STRIN
 							vector<pair<int, int>> result = uses->getUsesStmt();
 							set<int> temp;
 							for (size_t i=0; i<result.size(); i++){
-								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="assign"){
+								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="ASSIGN_NODE"){
 									temp.insert(result.at(i).first);
 								}
 							}
@@ -1254,7 +1254,7 @@ vector<int> QueryEvaluator::solveForSuchThatUses(string selectSynonym, map<STRIN
 							vector<pair<int, int>> result = uses->getUsesStmt();
 							set<int> temp;
 							for (size_t i=0; i<result.size(); i++){
-								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="while"){
+								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="WHILE_NODE"){
 									temp.insert(result.at(i).first);
 								}
 							}
@@ -1304,7 +1304,7 @@ vector<int> QueryEvaluator::solveForSuchThatUses(string selectSynonym, map<STRIN
 							vector<pair<int, int>> result = uses->getUsesStmt();
 							set<int> temp;
 							for (size_t i=0; i<result.size(); i++){
-								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="assign"){
+								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="ASSIGN_NODE"){
 									temp.insert(result.at(i).second);
 								}
 							}
@@ -1314,7 +1314,7 @@ vector<int> QueryEvaluator::solveForSuchThatUses(string selectSynonym, map<STRIN
 							vector<pair<int, int>> result = uses->getUsesStmt();
 							set<int> temp;
 							for (size_t i=0; i<result.size(); i++){
-								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="while"){
+								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="WHILE_NODE"){
 									temp.insert(result.at(i).second);
 								}
 							}
@@ -1379,14 +1379,14 @@ vector<int> QueryEvaluator::solveForSuchThatUses(string selectSynonym, map<STRIN
 								}
 							} else if (synonymTable->at(leftSynonym)=="assign"){
 								for (int i=1; i<=statementTable->getSize(); i++){
-									if (statementTable->getTNode(i)->getNodeType()=="assign"&&uses->isUsesStmt(i, varIndex)){
+									if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&uses->isUsesStmt(i, varIndex)){
 										isSuchThatTrue = true;
 										break;
 									}
 								}
 							} else if (synonymTable->at(leftSynonym)=="while"){
 								for (int i=1; i<=statementTable->getSize(); i++){
-									if (statementTable->getTNode(i)->getNodeType()=="while"&&uses->isUsesStmt(i, varIndex)){
+									if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&uses->isUsesStmt(i, varIndex)){
 										isSuchThatTrue = true;
 										break;
 									}
@@ -1451,7 +1451,7 @@ vector<int> QueryEvaluator::solveForSuchThatUses(string selectSynonym, map<STRIN
 								}
 							} else if (synonymTable->at(leftSynonym)=="assign"){
 								for (int i=1; i<=statementTable->getSize(); i++){
-									if (statementTable->getTNode(i)->getNodeType()=="assign"){
+									if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 										for (int j=0; j<varTable->getSize(); j++){
 											if (uses->isUsesStmt(i, j)){
 												isSuchThatTrue = true;
@@ -1464,7 +1464,7 @@ vector<int> QueryEvaluator::solveForSuchThatUses(string selectSynonym, map<STRIN
 								}
 							} else if (synonymTable->at(leftSynonym)=="while"){
 								for (int i=1; i<=statementTable->getSize(); i++){
-									if (statementTable->getTNode(i)->getNodeType()=="while"){
+									if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 										for (int j=0; j<varTable->getSize(); j++){
 											if (uses->isUsesStmt(i, j)){
 												isSuchThatTrue = true;
@@ -1551,14 +1551,14 @@ vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* 
 						} else if (synonymTable->at(selectSynonym)=="assign"){
 							vector<int> temp = modifies->getModifiersStmt(varIndex);
 							for (size_t i=0; i<temp.size(); i++){
-								if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+								if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 									answer.push_back(temp.at(i));
 								}
 							}
 						} else if (synonymTable->at(selectSynonym)=="while"){
 							vector<int> temp = modifies->getModifiersStmt(varIndex);
 							for (size_t i=0; i<temp.size(); i++){
-								if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+								if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 									answer.push_back(temp.at(i));
 								}
 							}
@@ -1592,7 +1592,7 @@ vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* 
 							vector<pair<int, int>> result = modifies->getModifiesStmt();
 							set<int> temp;
 							for (size_t i=0; i<result.size(); i++){
-								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="assign"){
+								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="ASSIGN_NODE"){
 									temp.insert(result.at(i).first);
 								}
 							}
@@ -1602,7 +1602,7 @@ vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* 
 							vector<pair<int, int>> result = modifies->getModifiesStmt();
 							set<int> temp;
 							for (size_t i=0; i<result.size(); i++){
-								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="while"){
+								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="WHILE_NODE"){
 									temp.insert(result.at(i).first);
 								}
 							}
@@ -1652,7 +1652,7 @@ vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* 
 							vector<pair<int, int>> result = modifies->getModifiesStmt();
 							set<int> temp;
 							for (size_t i=0; i<result.size(); i++){
-								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="assign"){
+								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="ASSIGN_NODE"){
 									temp.insert(result.at(i).second);
 								}
 							}
@@ -1662,7 +1662,7 @@ vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* 
 							vector<pair<int, int>> result = modifies->getModifiesStmt();
 							set<int> temp;
 							for (size_t i=0; i<result.size(); i++){
-								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="while"){
+								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="WHILE_NODE"){
 									temp.insert(result.at(i).second);
 								}
 							}
@@ -1727,14 +1727,14 @@ vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* 
 								}
 							} else if (synonymTable->at(leftSynonym)=="assign"){
 								for (int i=1; i<=statementTable->getSize(); i++){
-									if (statementTable->getTNode(i)->getNodeType()=="assign"&&modifies->isModifiesStmt(i, varIndex)){
+									if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&modifies->isModifiesStmt(i, varIndex)){
 										isSuchThatTrue = true;
 										break;
 									}
 								}
 							} else if (synonymTable->at(leftSynonym)=="while"){
 								for (int i=1; i<=statementTable->getSize(); i++){
-									if (statementTable->getTNode(i)->getNodeType()=="while"&&modifies->isModifiesStmt(i, varIndex)){
+									if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&modifies->isModifiesStmt(i, varIndex)){
 										isSuchThatTrue = true;
 										break;
 									}
@@ -1799,7 +1799,7 @@ vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* 
 								}
 							} else if (synonymTable->at(leftSynonym)=="assign"){
 								for (int i=1; i<=statementTable->getSize(); i++){
-									if (statementTable->getTNode(i)->getNodeType()=="assign"){
+									if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 										for (int j=0; j<varTable->getSize(); j++){
 											if (modifies->isModifiesStmt(i, j)){
 												isSuchThatTrue = true;
@@ -1812,7 +1812,7 @@ vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* 
 								}
 							} else if (synonymTable->at(leftSynonym)=="while"){
 								for (int i=1; i<=statementTable->getSize(); i++){
-									if (statementTable->getTNode(i)->getNodeType()=="while"){
+									if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 										for (int j=0; j<varTable->getSize(); j++){
 											if (modifies->isModifiesStmt(i, j)){
 												isSuchThatTrue = true;
@@ -1846,7 +1846,15 @@ vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* 
 							answer.push_back(i);
 						}
 					} else {
-						answer = statementTable->getStmtNumUsingNodeType(synonymTable->at(selectSynonym));
+						string str;
+						if (synonymTable->at(selectSynonym)=="assign"){
+							str = "ASSIGN_NODE";
+						} else if (synonymTable->at(selectSynonym)=="while"){
+							str = "WHILE_NODE";
+						} else if (synonymTable->at(selectSynonym)=="if"){
+							str = "IF_NODE";
+						}
+						answer = statementTable->getStmtNumUsingNodeType(str);
 					}					
 			} else if (synonymTable->at(selectSynonym)=="variable"){
 				for (int i=0; i<varTable->getSize(); i++){
@@ -1886,14 +1894,14 @@ vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* syno
 						} else if (synonymTable->at(selectSynonym)=="assign"){
 							vector<int> temp = uses->getUsersStmt(varIndex);
 							for (size_t i=0; i<temp.size(); i++){
-								if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+								if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 									answer.push_back(temp.at(i));
 								}
 							}
 						} else if (synonymTable->at(selectSynonym)=="while"){
 							vector<int> temp = uses->getUsersStmt(varIndex);
 							for (size_t i=0; i<temp.size(); i++){
-								if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+								if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 									answer.push_back(temp.at(i));
 								}
 							}
@@ -1927,7 +1935,7 @@ vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* syno
 							vector<pair<int, int>> result = uses->getUsesStmt();
 							set<int> temp;
 							for (size_t i=0; i<result.size(); i++){
-								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="assign"){
+								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="ASSIGN_NODE"){
 									temp.insert(result.at(i).first);
 								}
 							}
@@ -1937,7 +1945,7 @@ vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* syno
 							vector<pair<int, int>> result = uses->getUsesStmt();
 							set<int> temp;
 							for (size_t i=0; i<result.size(); i++){
-								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="while"){
+								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="WHILE_NODE"){
 									temp.insert(result.at(i).first);
 								}
 							}
@@ -1987,7 +1995,7 @@ vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* syno
 							vector<pair<int, int>> result = uses->getUsesStmt();
 							set<int> temp;
 							for (size_t i=0; i<result.size(); i++){
-								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="assign"){
+								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="ASSIGN_NODE"){
 									temp.insert(result.at(i).second);
 								}
 							}
@@ -1997,7 +2005,7 @@ vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* syno
 							vector<pair<int, int>> result = uses->getUsesStmt();
 							set<int> temp;
 							for (size_t i=0; i<result.size(); i++){
-								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="while"){
+								if (statementTable->getTNode(result.at(i).first)->getNodeType()=="WHILE_NODE"){
 									temp.insert(result.at(i).second);
 								}
 							}
@@ -2062,14 +2070,14 @@ vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* syno
 								}
 							} else if (synonymTable->at(leftSynonym)=="assign"){
 								for (int i=1; i<=statementTable->getSize(); i++){
-									if (statementTable->getTNode(i)->getNodeType()=="assign"&&uses->isUsesStmt(i, varIndex)){
+									if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&uses->isUsesStmt(i, varIndex)){
 										isSuchThatTrue = true;
 										break;
 									}
 								}
 							} else if (synonymTable->at(leftSynonym)=="while"){
 								for (int i=1; i<=statementTable->getSize(); i++){
-									if (statementTable->getTNode(i)->getNodeType()=="while"&&uses->isUsesStmt(i, varIndex)){
+									if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&uses->isUsesStmt(i, varIndex)){
 										isSuchThatTrue = true;
 										break;
 									}
@@ -2134,7 +2142,7 @@ vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* syno
 								}
 							} else if (synonymTable->at(leftSynonym)=="assign"){
 								for (int i=1; i<=statementTable->getSize(); i++){
-									if (statementTable->getTNode(i)->getNodeType()=="assign"){
+									if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 										for (int j=0; j<varTable->getSize(); j++){
 											if (uses->isUsesStmt(i, j)){
 												isSuchThatTrue = true;
@@ -2147,7 +2155,7 @@ vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* syno
 								}
 							} else if (synonymTable->at(leftSynonym)=="while"){
 								for (int i=1; i<=statementTable->getSize(); i++){
-									if (statementTable->getTNode(i)->getNodeType()=="while"){
+									if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 										for (int j=0; j<varTable->getSize(); j++){
 											if (uses->isUsesStmt(i, j)){
 												isSuchThatTrue = true;
@@ -2181,7 +2189,15 @@ vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* syno
 							answer.push_back(i);
 						}
 					} else {
-						answer = statementTable->getStmtNumUsingNodeType(synonymTable->at(selectSynonym));
+						string str;
+						if (synonymTable->at(selectSynonym)=="assign"){
+							str = "ASSIGN_NODE";
+						} else if (synonymTable->at(selectSynonym)=="while"){
+							str = "WHILE_NODE";
+						} else if (synonymTable->at(selectSynonym)=="if"){
+							str = "IF_NODE";
+						}
+						answer = statementTable->getStmtNumUsingNodeType(str);
 					}					
 			} else if (synonymTable->at(selectSynonym)=="variable"){
 				for (int i=0; i<varTable->getSize(); i++){
@@ -2220,14 +2236,14 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = follows->getFollowees(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = follows->getFollowees(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -2270,14 +2286,14 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -2302,14 +2318,14 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = follows->getFollowers(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = follows->getFollowers(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -2352,14 +2368,14 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -2396,14 +2412,14 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 				}
 			} else if (synonymTable->at(rightSynonym)=="assign"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="assign"&&follows->isFollowsTrue(leftStmtIndex, i)){
+					if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsTrue(leftStmtIndex, i)){
 						isSuchThatTrue = true;
 						break;
 					}
 				}
 			} else if (synonymTable->at(rightSynonym)=="while"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="while"&&follows->isFollowsTrue(leftStmtIndex, i)){
+					if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&follows->isFollowsTrue(leftStmtIndex, i)){
 						isSuchThatTrue = true;
 						break;
 					}
@@ -2424,14 +2440,14 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 				}
 			} else if (synonymTable->at(leftSynonym)=="assign"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="assign"&&follows->isFollowsTrue(i, rightStmtIndex)){
+					if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsTrue(i, rightStmtIndex)){
 						isSuchThatTrue = true;
 						break;
 					}
 				}
 			} else if (synonymTable->at(leftSynonym)=="while"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="while"&&follows->isFollowsTrue(i, rightStmtIndex)){
+					if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&follows->isFollowsTrue(i, rightStmtIndex)){
 						isSuchThatTrue = true;
 						break;
 					}
@@ -2458,7 +2474,7 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Follows(s1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&follows->isFollowsTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -2468,7 +2484,7 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Follows(s1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&follows->isFollowsTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&follows->isFollowsTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -2483,7 +2499,7 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 			} else if (synonymTable->at(leftSynonym)=="assign"){ // Follows(a1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Follows(a1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<statementTable->getSize(); j++){
 								if (follows->isFollowsTrue(i, j)){
 									isSuchThatTrue = true;
@@ -2496,9 +2512,9 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Follows(a1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&follows->isFollowsTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -2509,9 +2525,9 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Follows(a1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&follows->isFollowsTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&follows->isFollowsTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -2527,7 +2543,7 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 			} else if (synonymTable->at(leftSynonym)=="while"){ // Follows(w1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Follows(w1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
 								if (follows->isFollowsTrue(i, j)){
 									isSuchThatTrue = true;
@@ -2539,9 +2555,9 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Follows(w1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&follows->isFollowsTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -2551,9 +2567,9 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Follows(w1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&follows->isFollowsTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&follows->isFollowsTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -2584,7 +2600,15 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 							answer.push_back(i);
 						}
 					} else {
-						answer = statementTable->getStmtNumUsingNodeType(synonymTable->at(selectSynonym));
+						string str;
+						if (synonymTable->at(selectSynonym)=="assign"){
+							str = "ASSIGN_NODE";
+						} else if (synonymTable->at(selectSynonym)=="while"){
+							str = "WHILE_NODE";
+						} else if (synonymTable->at(selectSynonym)=="if"){
+							str = "IF_NODE";
+						}
+						answer = statementTable->getStmtNumUsingNodeType(str);
 					}					
 			} else if (synonymTable->at(selectSynonym)=="variable"){
 				for (int i=1; i<=varTable->getSize(); i++){
@@ -2623,14 +2647,14 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = follows->getFolloweesStar(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = follows->getFolloweesStar(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -2673,14 +2697,14 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -2705,14 +2729,14 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = follows->getFollowersStar(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = follows->getFollowersStar(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -2755,14 +2779,14 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -2799,14 +2823,14 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 				}
 			} else if (synonymTable->at(rightSynonym)=="assign"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="assign"&&follows->isFollowsStarTrue(leftStmtIndex, i)){
+					if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsStarTrue(leftStmtIndex, i)){
 						isSuchThatTrue = true;
 						break;
 					}
 				}
 			} else if (synonymTable->at(rightSynonym)=="while"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="while"&&follows->isFollowsStarTrue(leftStmtIndex, i)){
+					if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&follows->isFollowsStarTrue(leftStmtIndex, i)){
 						isSuchThatTrue = true;
 						break;
 					}
@@ -2827,14 +2851,14 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 				}
 			} else if (synonymTable->at(leftSynonym)=="assign"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="assign"&&follows->isFollowsStarTrue(i, rightStmtIndex)){
+					if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsStarTrue(i, rightStmtIndex)){
 						isSuchThatTrue = true;
 						break;
 					}
 				}
 			} else if (synonymTable->at(leftSynonym)=="while"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="while"&&follows->isFollowsStarTrue(i, rightStmtIndex)){
+					if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&follows->isFollowsStarTrue(i, rightStmtIndex)){
 						isSuchThatTrue = true;
 						break;
 					}
@@ -2861,7 +2885,7 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Follows*(s1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&follows->isFollowsStarTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsStarTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -2871,7 +2895,7 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Follows*(s1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&follows->isFollowsStarTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&follows->isFollowsStarTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -2886,7 +2910,7 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 			} else if (synonymTable->at(leftSynonym)=="assign"){ // Follows*(a1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Follows*(a1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<statementTable->getSize(); j++){
 								if (follows->isFollowsStarTrue(i, j)){
 									isSuchThatTrue = true;
@@ -2899,9 +2923,9 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Follows*(a1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&follows->isFollowsStarTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsStarTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -2912,9 +2936,9 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Follows*(a1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&follows->isFollowsStarTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&follows->isFollowsStarTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -2930,7 +2954,7 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 			} else if (synonymTable->at(leftSynonym)=="while"){ // Follows*(w1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Follows*(w1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
 								if (follows->isFollowsStarTrue(i, j)){
 									isSuchThatTrue = true;
@@ -2942,9 +2966,9 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Follows*(w1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&follows->isFollowsStarTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsStarTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -2954,9 +2978,9 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Follows*(w1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&follows->isFollowsStarTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&follows->isFollowsStarTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -2987,7 +3011,15 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 							answer.push_back(i);
 						}
 					} else {
-						answer = statementTable->getStmtNumUsingNodeType(synonymTable->at(selectSynonym));
+						string str;
+						if (synonymTable->at(selectSynonym)=="assign"){
+							str = "ASSIGN_NODE";
+						} else if (synonymTable->at(selectSynonym)=="while"){
+							str = "WHILE_NODE";
+						} else if (synonymTable->at(selectSynonym)=="if"){
+							str = "IF_NODE";
+						}
+						answer = statementTable->getStmtNumUsingNodeType(str);
 					}					
 			} else if (synonymTable->at(selectSynonym)=="variable"){
 				for (int i=1; i<=varTable->getSize(); i++){
@@ -3026,14 +3058,14 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = parent->getParents(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = parent->getParents(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -3076,14 +3108,14 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -3108,14 +3140,14 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = parent->getChildren(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = parent->getChildren(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -3158,14 +3190,14 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -3202,14 +3234,14 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 				}
 			} else if (synonymTable->at(rightSynonym)=="assign"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="assign"&&parent->isParentTrue(leftStmtIndex, i)){
+					if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&parent->isParentTrue(leftStmtIndex, i)){
 						isSuchThatTrue = true;
 						break;
 					}
 				}
 			} else if (synonymTable->at(rightSynonym)=="while"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="while"&&parent->isParentTrue(leftStmtIndex, i)){
+					if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&parent->isParentTrue(leftStmtIndex, i)){
 						isSuchThatTrue = true;
 						break;
 					}
@@ -3230,14 +3262,14 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 				}
 			} else if (synonymTable->at(leftSynonym)=="assign"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="assign"&&parent->isParentTrue(i, rightStmtIndex)){
+					if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&parent->isParentTrue(i, rightStmtIndex)){
 						isSuchThatTrue = true;
 						break;
 					}
 				}
 			} else if (synonymTable->at(leftSynonym)=="while"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="while"&&parent->isParentTrue(i, rightStmtIndex)){
+					if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&parent->isParentTrue(i, rightStmtIndex)){
 						isSuchThatTrue = true;
 						break;
 					}
@@ -3264,7 +3296,7 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Parent(s1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&parent->isParentTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&parent->isParentTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -3274,7 +3306,7 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Parent(s1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&parent->isParentTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&parent->isParentTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -3289,7 +3321,7 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 			} else if (synonymTable->at(leftSynonym)=="assign"){ // Parent(a1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Parent(a1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<statementTable->getSize(); j++){
 								if (parent->isParentTrue(i, j)){
 									isSuchThatTrue = true;
@@ -3302,9 +3334,9 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Parent(a1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&parent->isParentTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&parent->isParentTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -3315,9 +3347,9 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Parent(a1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&parent->isParentTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&parent->isParentTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -3333,7 +3365,7 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 			} else if (synonymTable->at(leftSynonym)=="while"){ // Parent(w1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Parent(w1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
 								if (parent->isParentTrue(i, j)){
 									isSuchThatTrue = true;
@@ -3345,9 +3377,9 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Parent(w1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&parent->isParentTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&parent->isParentTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -3357,9 +3389,9 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Parent(w1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&parent->isParentTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&parent->isParentTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -3390,7 +3422,15 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 							answer.push_back(i);
 						}
 					} else {
-						answer = statementTable->getStmtNumUsingNodeType(synonymTable->at(selectSynonym));
+						string str;
+						if (synonymTable->at(selectSynonym)=="assign"){
+							str = "ASSIGN_NODE";
+						} else if (synonymTable->at(selectSynonym)=="while"){
+							str = "WHILE_NODE";
+						} else if (synonymTable->at(selectSynonym)=="if"){
+							str = "IF_NODE";
+						}
+						answer = statementTable->getStmtNumUsingNodeType(str);
 					}					
 			} else if (synonymTable->at(selectSynonym)=="variable"){
 				for (int i=1; i<=varTable->getSize(); i++){
@@ -3406,6 +3446,10 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 		} else {
 			// nothing in answer
 		}
+	}
+	cout << "here" << endl;
+	for (int i=0; i<answer.size(); i++){
+		cout << answer[i] << endl;
 	}
 	return answer;
 }
@@ -3429,14 +3473,14 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = parent->getParentStar(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = parent->getParentStar(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -3479,14 +3523,14 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -3511,14 +3555,14 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = parent->getChildrenStar(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = parent->getChildrenStar(stmtIndex);
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -3561,14 +3605,14 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 					} else if (synonymTable->at(selectSynonym)=="assign"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="assign"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
 					} else if (synonymTable->at(selectSynonym)=="while"){
 						vector<int> temp = dataFromStmtSynonym;
 						for (size_t i=0; i<temp.size(); i++){
-							if (statementTable->getTNode(temp.at(i))->getNodeType()=="while"){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
 								answer.push_back(temp.at(i));
 							}
 						}
@@ -3605,14 +3649,14 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 				}
 			} else if (synonymTable->at(rightSynonym)=="assign"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="assign"&&parent->isParentStarTrue(leftStmtIndex, i)){
+					if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&parent->isParentStarTrue(leftStmtIndex, i)){
 						isSuchThatTrue = true;
 						break;
 					}
 				}
 			} else if (synonymTable->at(rightSynonym)=="while"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="while"&&parent->isParentStarTrue(leftStmtIndex, i)){
+					if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&parent->isParentStarTrue(leftStmtIndex, i)){
 						isSuchThatTrue = true;
 						break;
 					}
@@ -3633,14 +3677,14 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 				}
 			} else if (synonymTable->at(leftSynonym)=="assign"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="assign"&&parent->isParentStarTrue(i, rightStmtIndex)){
+					if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&parent->isParentStarTrue(i, rightStmtIndex)){
 						isSuchThatTrue = true;
 						break;
 					}
 				}
 			} else if (synonymTable->at(leftSynonym)=="while"){
 				for (int i=1; i<=statementTable->getSize(); i++){
-					if (statementTable->getTNode(i)->getNodeType()=="while"&&parent->isParentStarTrue(i, rightStmtIndex)){
+					if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&parent->isParentStarTrue(i, rightStmtIndex)){
 						isSuchThatTrue = true;
 						break;
 					}
@@ -3667,7 +3711,7 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Parent*(s1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&parent->isParentStarTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&parent->isParentStarTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -3677,7 +3721,7 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Parent*(s1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&parent->isParentStarTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&parent->isParentStarTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -3692,7 +3736,7 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 			} else if (synonymTable->at(leftSynonym)=="assign"){ // Parent*(a1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Parent*(a1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<statementTable->getSize(); j++){
 								if (parent->isParentStarTrue(i, j)){
 									isSuchThatTrue = true;
@@ -3705,9 +3749,9 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Parent*(a1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&parent->isParentStarTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&parent->isParentStarTrue(i, j)){
 									isSuchThatTrue = true;
 									break;
 								}			
@@ -3718,9 +3762,9 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Parent*(a1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="assign"){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&parent->isParentStarTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&parent->isParentStarTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -3736,7 +3780,7 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 			} else if (synonymTable->at(leftSynonym)=="while"){ // Parent*(w1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Parent*(w1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
 								if (parent->isParentStarTrue(i, j)){
 									isSuchThatTrue = true;
@@ -3748,9 +3792,9 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){ // Parent*(w1, a2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="assign"&&parent->isParentStarTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&parent->isParentStarTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -3760,9 +3804,9 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){ // Parent*(w1, w2)
 					for (int i=1; i<=statementTable->getSize(); i++){
-						if (statementTable->getTNode(i)->getNodeType()=="while"){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
-								if (statementTable->getTNode(j)->getNodeType()=="while"&&parent->isParentStarTrue(i, j)){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&parent->isParentStarTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}
@@ -3793,7 +3837,15 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 							answer.push_back(i);
 						}
 					} else {
-						answer = statementTable->getStmtNumUsingNodeType(synonymTable->at(selectSynonym));
+						string str;
+						if (synonymTable->at(selectSynonym)=="assign"){
+							str = "ASSIGN_NODE";
+						} else if (synonymTable->at(selectSynonym)=="while"){
+							str = "WHILE_NODE";
+						} else if (synonymTable->at(selectSynonym)=="if"){
+							str = "IF_NODE";
+						}
+						answer = statementTable->getStmtNumUsingNodeType(str);
 					}					
 			} else if (synonymTable->at(selectSynonym)=="variable"){
 				for (int i=1; i<=varTable->getSize(); i++){

@@ -20,13 +20,14 @@ TestWrapper::TestWrapper() {
 }
 
 PKBController* controller;
+Parser* parser;
 
 // method for parsing the SIMPLE source
 void TestWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
   // ...rest of your code...
-	 Parser parser(filename);
-	 controller = &(parser.controller);
+	 parser = new Parser(filename);
+	 controller = &(parser->controller);
 }
 
 // method to evaluating a query
@@ -40,9 +41,10 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
 
 	string t;
 	QueryParser* qp = new QueryParser(query);
+	/*cout << endl;*/
 	QueryEvaluator* qe = new QueryEvaluator(controller);
 	string result = qe->evaluate(&(qp->getSynonyms()), qp->getQueryTree());
-	cout << "RESULT" << endl;
-	cout << result << endl;
+	/*cout << "RESULT" << endl;
+	cout << result << endl;*/
 	results.push_back(result);
 }

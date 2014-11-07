@@ -3881,22 +3881,22 @@ STRING QueryEvaluator::evaluate(map<STRING, STRING>* synonymTable, QueryTree* tr
 			for (size_t i=0; i<answer.size(); i++){
 				temp = temp + ("" + pkb->varTable.getVarName(answer.at(i)));
 				if (i!=answer.size()-1){
-					temp = temp+", ";
+					temp = temp+" ";
 				}
 			}
 		} else {
 			for (size_t i=0; i<answer.size(); i++){
 				temp = temp + ("" + pkb->procTable.getProcName(answer.at(i)));
 				if (i!=answer.size()-1){
-					temp = temp+", ";
+					temp = temp+" ";
 				}
 			}
 		}
 	} else {
 		for (size_t i=0; i<answer.size(); i++){
-			temp = temp + (""+answer.at(i));
+			temp = temp + to_string((long long)answer[i]);
 			if (i!=answer.size()-1){
-				temp = temp+", ";
+				temp = temp+" ";
 			}
 		}
 	}

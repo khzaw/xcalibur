@@ -25,8 +25,8 @@ QueryParser::QueryParser(string s) {
 	QueryTree* temp = new QueryTree();
 	this->qt = temp;
 	parse();
-	qt->printTree();
-	printMap();
+	//qt->printTree();
+	//printMap();
 }
 
 QueryParser::~QueryParser() {

@@ -1,12 +1,24 @@
 <?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
 <test_results>
 <info>
-<name>AutoTester</name><parsing_time_taken>19.000000</parsing_time_taken>
+<name>AutoTester</name><parsing_time_taken>10.000000</parsing_time_taken>
 </info>
 <queries>
 <query>
 <id ReturnTuple="1" Follows="1" SuchThat="1" CondNum="3" RelNum="1" comment="comment">1</id><querystr><![CDATA[stmt s;  Select s such that Follows(1, 2)]]></querystr>
-<exception/>
+<stuans>1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20</stuans>
+<correct>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20</correct>
+<time_taken>14.000000</time_taken>
+<failed>
+<missing>1,10,11,12,13,14,15,16,17,18,19,2,20,3,4,5,6,7,8,9</missing>
+<additional>1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20</additional>
+<summary>
+<expected>20</expected>
+<matched>0</matched>
+<missing>20</missing>
+<additional>1</additional>
+</summary>
+</failed>
 </query>
 </queries>
 </test_results>

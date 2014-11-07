@@ -3163,3 +3163,877 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	CPPUNIT_ASSERT_EQUAL(7,actualResult38[2]);
 	CPPUNIT_ASSERT_EQUAL(9,actualResult38[3]);
 }
+
+void QueryEvaluatorTest::testSolveForSuchThatParent(){
+	/** SIMPLE source code
+	procedure Proc1{
+	a = x;
+	b = y;
+	 while c{
+	 z = a;
+	 b =y;
+	 while x{
+	  while y{
+	   z=a;
+	   while b{
+		while c;
+		 }}}}
+	}
+	**/
+
+	StatementTable st;
+	TNode stmt1("ASSIGN_NODE","a = x", 1,0);
+	TNode stmt2("ASSIGN_NODE","b = y", 2,0);
+	TNode stmt3("WHILE_NODE","c", 3,0);
+	TNode stmt4("ASSIGN_NODE","z = a", 4,0);
+	TNode stmt5("ASSIGN_NODE","b = y", 5,0);
+	TNode stmt6("WHILE_NODE","x", 6,0);
+	TNode stmt7("WHILE_NODE","y", 7,0);
+	TNode stmt8("ASSIGN_NODE","z=a", 8,0);
+	TNode stmt9("WHILE_NODE","b", 9,0);
+	TNode stmt10("WHILE_NODE","c", 10,0);
+	st.insertStatement(&stmt1);
+	st.insertStatement(&stmt2);
+	st.insertStatement(&stmt3);
+	st.insertStatement(&stmt4);
+	st.insertStatement(&stmt5);
+	st.insertStatement(&stmt6);
+	st.insertStatement(&stmt7);
+	st.insertStatement(&stmt8);
+	st.insertStatement(&stmt9);
+	st.insertStatement(&stmt10);
+
+	Parent f1;
+	f1.insertParent(3, 4);
+	f1.insertParent(3, 5);
+	f1.insertParent(3, 6);
+	f1.insertParent(6, 7);
+	f1.insertParent(7, 8);
+	f1.insertParent(7, 9);
+	f1.insertParent(9, 10);
+	
+
+	ProcTable pt;
+	pt.insertProc("Proc1");
+
+	VarTable vt;
+	vt.insertVar("x");
+	vt.insertVar("y");
+	vt.insertVar("z");
+	vt.insertVar("a");
+	vt.insertVar("b");
+	vt.insertVar("c");
+
+	QueryEvaluator* qe = new QueryEvaluator();
+
+	map<string, string> table1;
+	table1["s1"]="stmt";
+	table1["s2"]="stmt";
+	table1["a2"]="assign";
+	table1["a3"]="assign";
+	table1["w3"]="while";
+	table1["w4"]="while";
+	table1["v4"]="variable";
+	table1["v5"]="variable";
+	table1["proc5"]="procedure";
+
+	CPPUNIT_ASSERT_EQUAL(true, "stmt"==table1.at("s1")); // test 1 for synonym table
+	
+	QTNode* parent1 = new QTNode("Parent");
+	QTNode* first1 = new QTNode("s1");
+	QTNode* second1 = new QTNode(2);
+	first1->setParent(parent1);
+	parent1->addChild(first1);
+	second1->setParent(parent1);
+	parent1->addChild(second1);
+	QueryTree* query1 = new QueryTree(parent1);
+
+	vector<int> actualResult1 = qe->solveForSuchThatParent("s1", &table1, query1, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Parent(s1, 2) | Expected <1>
+	
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResult1.size());
+
+	QTNode* parent2 = new QTNode("Parent");
+	QTNode* first2 = new QTNode("w3");
+	QTNode* second2 = new QTNode(4);
+	first2->setParent(parent2);
+	parent2->addChild(first2);
+	second2->setParent(parent2);
+	parent2->addChild(second2);
+	QueryTree* query2 = new QueryTree(parent2);
+
+	vector<int> actualResult2 = qe->solveForSuchThatParent("w3", &table1, query2, &st, &f1, &pt, &vt); // while w3; Select w3 such that Parent(w3, 4) | Expected <3>
+
+	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult2.size());
+	CPPUNIT_ASSERT_EQUAL(3,actualResult2.at(0));
+
+	QTNode* parent3 = new QTNode("Parent");
+	QTNode* first3 = new QTNode("a2");
+	QTNode* second3 = new QTNode(4);
+	first3->setParent(parent3);
+	parent3->addChild(first3);
+	second3->setParent(parent3);
+	parent3->addChild(second3);
+	QueryTree* query3 = new QueryTree(parent3);
+
+	vector<int> actualResult3 = qe->solveForSuchThatParent("a2", &table1, query3, &st, &f1, &pt, &vt); // assign a2; Select a2 such that Parent(a2, 4) | Expected <> (none)
+
+	CPPUNIT_ASSERT(actualResult3.empty());
+
+	QTNode* parent4 = new QTNode("Parent");
+	QTNode* first4 = new QTNode("w3");
+	QTNode* second4 = new QTNode(3);
+	first4->setParent(parent4);
+	parent4->addChild(first4);
+	second4->setParent(parent4);
+	parent4->addChild(second4);
+	QueryTree* query4 = new QueryTree(parent4);
+
+	vector<int> actualResult4 = qe->solveForSuchThatParent("w3", &table1, query4, &st, &f1, &pt, &vt); // while w3; Select w3 such that Parent(w3, 3) | Expected <> (none)
+
+	CPPUNIT_ASSERT(actualResult4.empty());
+
+	QTNode* parent5 = new QTNode("Parent");
+	QTNode* first5 = new QTNode("w3");
+	QTNode* second5 = new QTNode(7);
+	first5->setParent(parent5);
+	parent5->addChild(first5);
+	second5->setParent(parent5);
+	parent5->addChild(second5);
+	QueryTree* query5 = new QueryTree(parent5);
+
+	vector<int> actualResult5 = qe->solveForSuchThatParent("w3", &table1, query5, &st, &f1, &pt, &vt); // while w3; Select w3 such that Parent(w3, 7) | Expected <3>
+
+	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult5.size());
+	CPPUNIT_ASSERT_EQUAL(6, actualResult5.at(0));
+
+	QTNode* parent6 = new QTNode("Parent");
+	QTNode* first6 = new QTNode("v4");
+	QTNode* second6 = new QTNode(4);
+	first6->setParent(parent6);
+	parent6->addChild(first6);
+	second6->setParent(parent6);
+	parent6->addChild(second6);
+	QueryTree* query6 = new QueryTree(parent6);
+
+	vector<int> actualResult6 = qe->solveForSuchThatParent("v4", &table1, query6, &st, &f1, &pt, &vt); // variable v4; Select v4 such that Parent(v4, 4) | Expected <> (none)
+
+	CPPUNIT_ASSERT(actualResult6.empty());
+
+	QTNode* parent7 = new QTNode("Parent");
+	QTNode* first7 = new QTNode("lol");
+	QTNode* second7 = new QTNode(3);
+	first7->setParent(parent7);
+	parent7->addChild(first7);
+	second7->setParent(parent7);
+	parent7->addChild(second7);
+	QueryTree* query7 = new QueryTree(parent7);
+
+	vector<int> actualResult7 = qe->solveForSuchThatParent("lol", &table1, query7, &st, &f1, &pt, &vt); // undefined lol; Select lol such that Parent(lol, 3) | Expected <> (none)
+
+	CPPUNIT_ASSERT(actualResult7.empty());
+
+	QTNode* parent8 = new QTNode("Parent");
+	QTNode* first8 = new QTNode("s1");
+	QTNode* second8 = new QTNode("s2");
+	first8->setParent(parent8);
+	parent8->addChild(first8);
+	second8->setParent(parent8);
+	parent8->addChild(second8);
+	QueryTree* query8 = new QueryTree(parent8);
+
+	vector<int> actualResult8 = qe->solveForSuchThatParent("s1", &table1, query8, &st, &f1, &pt, &vt); // stmt s1, s2; Select s1 such that Parent(s1, s2) | Expected <3,6,7,9>
+
+	CPPUNIT_ASSERT_EQUAL((size_t)4, actualResult8.size());
+	CPPUNIT_ASSERT_EQUAL(3, actualResult8.at(0));
+	CPPUNIT_ASSERT_EQUAL(6, actualResult8.at(1));
+	CPPUNIT_ASSERT_EQUAL(7, actualResult8.at(2));
+	CPPUNIT_ASSERT_EQUAL(9, actualResult8.at(3));
+	
+
+	QTNode* parent9 = new QTNode("Parent");
+	QTNode* first9 = new QTNode("w3");
+	QTNode* second9 = new QTNode("s2");
+	first9->setParent(parent9);
+	parent9->addChild(first9);
+	second9->setParent(parent9);
+	parent9->addChild(second9);
+	QueryTree* query9 = new QueryTree(parent9);
+
+	vector<int> actualResult9 = qe->solveForSuchThatParent("w3", &table1, query9, &st, &f1, &pt, &vt); // while w3; stmt s2; Select w3 such that Parent(w3, s2) | Expected <3,6,7,9>
+
+	CPPUNIT_ASSERT_EQUAL((size_t)4, actualResult9.size());
+	CPPUNIT_ASSERT_EQUAL(3, actualResult9.at(0));
+	CPPUNIT_ASSERT_EQUAL(6, actualResult9.at(1));
+	CPPUNIT_ASSERT_EQUAL(7, actualResult9.at(2));
+	CPPUNIT_ASSERT_EQUAL(9, actualResult9.at(3));
+
+	QTNode* parent10 = new QTNode("Parent");
+	QTNode* first10 = new QTNode("a1");
+	QTNode* second10 = new QTNode("s2");
+	first10->setParent(parent10);
+	parent10->addChild(first10);
+	second10->setParent(parent10);
+	parent10->addChild(second10);
+	QueryTree* query10 = new QueryTree(parent10);
+
+	vector<int> actualResult10 = qe->solveForSuchThatParent("a1", &table1, query10, &st, &f1, &pt, &vt); // stmt s2; Select a1 such that Parent(a1, s2) | Expected <> (none because a1 is not in synonym table)
+
+	CPPUNIT_ASSERT(actualResult10.empty());
+
+	QTNode* parent11 = new QTNode("Parent");
+	QTNode* first11 = new QTNode("w3");
+	QTNode* second11 = new QTNode("s2");
+	first11->setParent(parent11);
+	parent11->addChild(first11);
+	second11->setParent(parent11);
+	parent11->addChild(second11);
+	QueryTree* query11 = new QueryTree(parent11);
+
+	vector<int> actualResult11 = qe->solveForSuchThatParent("w3", &table1, query11, &st, &f1, &pt, &vt); // while w3; stmt s2; Select w3 such that Parent(w3, s2) | Expected <3, 6, 7, 9>
+
+	CPPUNIT_ASSERT_EQUAL((size_t)4, actualResult11.size());
+	CPPUNIT_ASSERT_EQUAL(3, actualResult11.at(0));
+	CPPUNIT_ASSERT_EQUAL(6, actualResult11.at(1));
+	CPPUNIT_ASSERT_EQUAL(7, actualResult11.at(2));
+	CPPUNIT_ASSERT_EQUAL(9, actualResult11.at(3));
+
+	QTNode* parent12 = new QTNode("Parent");
+	QTNode* first12 = new QTNode("s1");
+	QTNode* second12 = new QTNode("a1");
+	first12->setParent(parent12);
+	parent12->addChild(first12);
+	second12->setParent(parent12);
+	parent12->addChild(second12);
+	QueryTree* query12 = new QueryTree(parent12);
+
+	vector<int> actualResult12 = qe->solveForSuchThatParent("s1", &table1, query12, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Parent(s1, a1) | Expected <> (none because a1  is not in synonym table)
+
+	CPPUNIT_ASSERT(actualResult12.empty());
+
+	QTNode* parent13 = new QTNode("Parent");
+	QTNode* first13 = new QTNode("s1");
+	QTNode* second13 = new QTNode("a2");
+	first13->setParent(parent13);
+	parent13->addChild(first13);
+	second13->setParent(parent13);
+	parent13->addChild(second13);
+	QueryTree* query13 = new QueryTree(parent13);
+
+	vector<int> actualResult13 = qe->solveForSuchThatParent("s1", &table1, query13, &st, &f1, &pt, &vt); // stmt s1; assign a2; Select s1 such that Parent(s1, a2) | Expected <3, 3, 6>
+
+	CPPUNIT_ASSERT_EQUAL((size_t)3, actualResult13.size());
+	CPPUNIT_ASSERT_EQUAL(3, actualResult13.at(0));
+	CPPUNIT_ASSERT_EQUAL(3, actualResult13.at(1));
+	CPPUNIT_ASSERT_EQUAL(7, actualResult13.at(2));
+
+	QTNode* parent14 = new QTNode("Parent");
+	QTNode* first14 = new QTNode("s1");
+	QTNode* second14 = new QTNode("w3");
+	first14->setParent(parent14);
+	parent14->addChild(first14);
+	second14->setParent(parent14);
+	parent14->addChild(second14);
+	QueryTree* query14 = new QueryTree(parent14);
+
+	vector<int> actualResult14 = qe->solveForSuchThatParent("s1", &table1, query14, &st, &f1, &pt, &vt); // stmt s1; while w3; Select s1 such that Parent(s1, w3) | Expected <3,6,7,9>
+
+	CPPUNIT_ASSERT_EQUAL((size_t)4, actualResult14.size());
+	CPPUNIT_ASSERT_EQUAL(3, actualResult14.at(0));
+	CPPUNIT_ASSERT_EQUAL(6, actualResult14.at(1));
+	CPPUNIT_ASSERT_EQUAL(7, actualResult14.at(2));
+	CPPUNIT_ASSERT_EQUAL(9, actualResult14.at(3));
+
+
+	QTNode* parent15 = new QTNode("Parent");
+	QTNode* first15 = new QTNode("a2");
+	QTNode* second15 = new QTNode("a3");
+	first15->setParent(parent15);
+	parent15->addChild(first15);
+	second15->setParent(parent15);
+	parent15->addChild(second15);
+	QueryTree* query15 = new QueryTree(parent15);
+
+	vector<int> actualResult15 = qe->solveForSuchThatParent("a2", &table1, query15, &st, &f1, &pt, &vt); // assign a2; assign a3; Select a2 such that Parent(a2, a3) | Expected <>
+
+	CPPUNIT_ASSERT(actualResult15.empty());
+
+	QTNode* parent16 = new QTNode("Parent");
+	QTNode* first16 = new QTNode("a2");
+	QTNode* second16 = new QTNode("w3");
+	first16->setParent(parent16);
+	parent16->addChild(first16);
+	second16->setParent(parent16);
+	parent16->addChild(second16);
+	QueryTree* query16 = new QueryTree(parent16);
+
+	vector<int> actualResult16 = qe->solveForSuchThatParent("a2", &table1, query16, &st, &f1, &pt, &vt); // assign a2; while w3; Select a2 such that Parent(a2, w3) | Expected <>
+
+	CPPUNIT_ASSERT(actualResult16.empty());
+
+	QTNode* parent17 = new QTNode("Parent");
+	QTNode* first17 = new QTNode("w3");
+	QTNode* second17 = new QTNode("a2");
+	first17->setParent(parent17);
+	parent17->addChild(first17);
+	second17->setParent(parent17);
+	parent17->addChild(second17);
+	QueryTree* query17 = new QueryTree(parent17);
+
+	vector<int> actualResult17 = qe->solveForSuchThatParent("w3", &table1, query17, &st, &f1, &pt, &vt); // while w3; assign a2; Select w3 such that Parent(w3, a2) | Expected <3, 3, 7>
+
+	CPPUNIT_ASSERT_EQUAL((size_t)3, actualResult17.size());
+	CPPUNIT_ASSERT_EQUAL(3, actualResult17.at(0));
+	CPPUNIT_ASSERT_EQUAL(3, actualResult17.at(1));
+	CPPUNIT_ASSERT_EQUAL(7, actualResult17.at(2));
+
+	QTNode* parent18 = new QTNode("Parent");
+	QTNode* first18 = new QTNode("w3");
+	QTNode* second18 = new QTNode("w4");
+	first18->setParent(parent18);
+	parent18->addChild(first18);
+	second18->setParent(parent18);
+	parent18->addChild(second18);
+	QueryTree* query18 = new QueryTree(parent18);
+
+	vector<int> actualResult18 = qe->solveForSuchThatParent("w3", &table1, query18, &st, &f1, &pt, &vt); // while w3; while w4; Select w3 such that Parent(w3, w4) | Expected <3, 6, 7, 9>
+
+	CPPUNIT_ASSERT_EQUAL((size_t)4, actualResult18.size());
+	CPPUNIT_ASSERT_EQUAL(3, actualResult18.at(0));
+	CPPUNIT_ASSERT_EQUAL(6, actualResult18.at(1));
+	CPPUNIT_ASSERT_EQUAL(7, actualResult18.at(2));
+	CPPUNIT_ASSERT_EQUAL(9, actualResult18.at(3));
+
+	QTNode* parent19 = new QTNode("Parent");
+	QTNode* first19 = new QTNode(1);
+	QTNode* second19 = new QTNode("s1");
+	first19->setParent(parent19);
+	parent19->addChild(first19);
+	second19->setParent(parent19);
+	parent19->addChild(second19);
+	QueryTree* query19 = new QueryTree(parent19);
+
+	vector<int> actualResult19 = qe->solveForSuchThatParent("s1", &table1, query19, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Parent(1, s1) | Expected <>
+	
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResult19.size());
+
+	QTNode* parent20 = new QTNode("Parent");
+	QTNode* first20 = new QTNode(3);
+	QTNode* second20 = new QTNode("a2");
+	first20->setParent(parent20);
+	parent20->addChild(first20);
+	second20->setParent(parent20);
+	parent20->addChild(second20);
+	QueryTree* query20 = new QueryTree(parent20);
+
+	vector<int> actualResult20 = qe->solveForSuchThatParent("a2", &table1, query20, &st, &f1, &pt, &vt); // assign a2; Select a2 such that Parent(3, a2) | Expected <4,5>
+
+	CPPUNIT_ASSERT_EQUAL((size_t)2, actualResult20.size());
+	CPPUNIT_ASSERT_EQUAL(4, actualResult20.at(0));
+	CPPUNIT_ASSERT_EQUAL(5, actualResult20.at(1));
+
+	QTNode* parent21 = new QTNode("Parent");
+	QTNode* first21 = new QTNode(2);
+	QTNode* second21 = new QTNode("a2");
+	first21->setParent(parent21);
+	parent21->addChild(first21);
+	second21->setParent(parent21);
+	parent21->addChild(second21);
+	QueryTree* query21 = new QueryTree(parent21);
+
+	vector<int> actualResult21 = qe->solveForSuchThatParent("a2", &table1, query21, &st, &f1, &pt, &vt); // assign a2; Select a2 such that Parent(2, a2) | Expected <> (none)
+
+	CPPUNIT_ASSERT(actualResult21.empty());
+
+	QTNode* parent22 = new QTNode("Parent");
+	QTNode* first22 = new QTNode(3);
+	QTNode* second22 = new QTNode("w3");
+	first22->setParent(parent22);
+	parent22->addChild(first22);
+	second22->setParent(parent22);
+	parent22->addChild(second22);
+	QueryTree* query22 = new QueryTree(parent22);
+
+	vector<int> actualResult22 = qe->solveForSuchThatParent("w3", &table1, query22, &st, &f1, &pt, &vt); // while w3; Select w3 such that Parent(3, w3) | Expected <> (none)
+
+	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult22.size());
+	CPPUNIT_ASSERT_EQUAL(6, actualResult22[0]);
+
+	QTNode* parent23 = new QTNode("Parent");
+	QTNode* first23 = new QTNode(2);
+	QTNode* second23 = new QTNode("w3");
+	first23->setParent(parent23);
+	parent23->addChild(first23);
+	second23->setParent(parent23);
+	parent23->addChild(second23);
+	QueryTree* query23 = new QueryTree(parent23);
+
+	vector<int> actualResult23 = qe->solveForSuchThatParent("w3", &table1, query23, &st, &f1, &pt, &vt); // while w3; Select w3 such that Parent(2, w3) | Expected <>
+
+	CPPUNIT_ASSERT(actualResult23.empty());
+
+	QTNode* parent24 = new QTNode("Parent");
+	QTNode* first24 = new QTNode(4);
+	QTNode* second24 = new QTNode("v4");
+	first24->setParent(parent24);
+	parent24->addChild(first24);
+	second24->setParent(parent24);
+	parent24->addChild(second24);
+	QueryTree* query24 = new QueryTree(parent24);
+
+	vector<int> actualResult24 = qe->solveForSuchThatParent("v4", &table1, query24, &st, &f1, &pt, &vt); // variable v4; Select v4 such that Parent(4, v4) | Expected <> (none)
+
+	CPPUNIT_ASSERT(actualResult24.empty());
+
+	QTNode* parent25 = new QTNode("Parent");
+	QTNode* first25 = new QTNode(3);
+	QTNode* second25 = new QTNode("lol");
+	first25->setParent(parent25);
+	parent25->addChild(first25);
+	second25->setParent(parent25);
+	parent25->addChild(second25);
+	QueryTree* query25 = new QueryTree(parent25);
+
+	vector<int> actualResult25 = qe->solveForSuchThatParent("lol", &table1, query25, &st, &f1, &pt, &vt); // undefined lol; Select lol such that Parent(3, lol) | Expected <> (none)
+
+	CPPUNIT_ASSERT(actualResult25.empty());
+
+	QTNode* parent26 = new QTNode("Parent");
+	QTNode* first26 = new QTNode("s1");
+	QTNode* second26 = new QTNode("s2");
+	first26->setParent(parent26);
+	parent26->addChild(first26);
+	second26->setParent(parent26);
+	parent26->addChild(second26);
+	QueryTree* query26 = new QueryTree(parent26);
+
+	vector<int> actualResult26 = qe->solveForSuchThatParent("s2", &table1, query26, &st, &f1, &pt, &vt); // stmt s1, s2; Select s2 such that Parent(s1, s2) | Expected <4,5,6,7,8,9,10>
+
+	CPPUNIT_ASSERT_EQUAL((size_t)7, actualResult26.size());
+	CPPUNIT_ASSERT_EQUAL(4, actualResult26.at(0));
+	CPPUNIT_ASSERT_EQUAL(5, actualResult26.at(1));
+	CPPUNIT_ASSERT_EQUAL(6, actualResult26.at(2));
+	CPPUNIT_ASSERT_EQUAL(7, actualResult26.at(3));
+	CPPUNIT_ASSERT_EQUAL(8, actualResult26.at(4));
+	CPPUNIT_ASSERT_EQUAL(9, actualResult26.at(5));
+	CPPUNIT_ASSERT_EQUAL(10, actualResult26.at(6));
+	
+
+	QTNode* parent27 = new QTNode("Parent");
+	QTNode* first27 = new QTNode("s2");
+	QTNode* second27 = new QTNode("a2");
+	first27->setParent(parent27);
+	parent27->addChild(first27);
+	second27->setParent(parent27);
+	parent27->addChild(second27);
+	QueryTree* query27 = new QueryTree(parent27);
+
+	vector<int> actualResult27 = qe->solveForSuchThatParent("a2", &table1, query27, &st, &f1, &pt, &vt); // assign a2; stmt s2; Select a2 such that Parent(s2, a2) | Expected <4, 5, 8>
+
+	CPPUNIT_ASSERT_EQUAL((size_t)3, actualResult27.size());
+	CPPUNIT_ASSERT_EQUAL(4, actualResult27.at(0));
+	CPPUNIT_ASSERT_EQUAL(5, actualResult27.at(1));
+	CPPUNIT_ASSERT_EQUAL(8, actualResult27.at(2));
+
+	QTNode* parent28 = new QTNode("Parent");
+	QTNode* first28 = new QTNode("s2");
+	QTNode* second28 = new QTNode("a1");
+	first28->setParent(parent28);
+	parent28->addChild(first28);
+	second28->setParent(parent28);
+	parent28->addChild(second28);
+	QueryTree* query28 = new QueryTree(parent28);
+
+	vector<int> actualResult28 = qe->solveForSuchThatParent("a1", &table1, query28, &st, &f1, &pt, &vt); // stmt s2; Select a1 such that Parent(s2, a1) | Expected <> (none because a1 is not in synonym table)
+
+	CPPUNIT_ASSERT(actualResult28.empty());
+
+	QTNode* parent29 = new QTNode("Parent");
+	QTNode* first29 = new QTNode("s2");
+	QTNode* second29 = new QTNode("w3");
+	first29->setParent(parent29);
+	parent29->addChild(first29);
+	second29->setParent(parent29);
+	parent29->addChild(second29);
+	QueryTree* query29 = new QueryTree(parent29);
+
+	vector<int> actualResult29 = qe->solveForSuchThatParent("w3", &table1, query29, &st, &f1, &pt, &vt); // while w3; stmt s2; Select w3 such that Parent(s2, w3) | Expected <6, 7, 9,10>
+
+	CPPUNIT_ASSERT_EQUAL((size_t)4, actualResult29.size());
+	CPPUNIT_ASSERT_EQUAL(6, actualResult29.at(0));
+	CPPUNIT_ASSERT_EQUAL(7, actualResult29.at(1));
+	CPPUNIT_ASSERT_EQUAL(9, actualResult29.at(2));
+	CPPUNIT_ASSERT_EQUAL(10, actualResult29.at(3));
+
+
+	QTNode* parent30 = new QTNode("Parent");
+	QTNode* first30 = new QTNode("a1");
+	QTNode* second30 = new QTNode("s1");
+	first30->setParent(parent30);
+	parent30->addChild(first30);
+	second30->setParent(parent30);
+	parent30->addChild(second30);
+	QueryTree* query30 = new QueryTree(parent30);
+
+	vector<int> actualResult30 = qe->solveForSuchThatParent("s1", &table1, query30, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Parent(a1, s1) | Expected <> (none because a1  is not in synonym table)
+
+	CPPUNIT_ASSERT(actualResult30.empty());
+
+	QTNode* parent31 = new QTNode("Parent");
+	QTNode* first31 = new QTNode("a2");
+	QTNode* second31 = new QTNode("s1");
+	first31->setParent(parent31);
+	parent31->addChild(first31);
+	second31->setParent(parent31);
+	parent31->addChild(second31);
+	QueryTree* query31 = new QueryTree(parent31);
+
+	vector<int> actualResult31 = qe->solveForSuchThatParent("s1", &table1, query31, &st, &f1, &pt, &vt); // stmt s1; assign a2; Select s1 such that Parent(a2, s1) | Expected <>
+
+	CPPUNIT_ASSERT(actualResult30.empty());
+
+	QTNode* parent32 = new QTNode("Parent");
+	QTNode* first32 = new QTNode("w3");
+	QTNode* second32 = new QTNode("s1");
+	first32->setParent(parent32);
+	parent32->addChild(first32);
+	second32->setParent(parent32);
+	parent32->addChild(second32);
+	QueryTree* query32 = new QueryTree(parent32);
+
+	vector<int> expectedResult32;
+	expectedResult32.push_back(4);
+	expectedResult32.push_back(7);
+	expectedResult32.push_back(8);
+	expectedResult32.push_back(10);
+
+	vector<int> actualResult32 = qe->solveForSuchThatParent("s1", &table1, query32, &st, &f1, &pt, &vt); // stmt s1; while w3; Select s1 such that Parent(w3, s1) | Expected <4,5,6,7, 8,9, 10>
+
+	CPPUNIT_ASSERT_EQUAL((size_t)7, actualResult32.size());
+	CPPUNIT_ASSERT_EQUAL(4, actualResult32.at(0));
+	CPPUNIT_ASSERT_EQUAL(5, actualResult32.at(1));
+	CPPUNIT_ASSERT_EQUAL(6, actualResult32.at(2));
+	CPPUNIT_ASSERT_EQUAL(7, actualResult32.at(3));
+	CPPUNIT_ASSERT_EQUAL(8, actualResult32.at(4));
+	CPPUNIT_ASSERT_EQUAL(9, actualResult32.at(5));
+	CPPUNIT_ASSERT_EQUAL(10, actualResult32.at(6));
+
+	QTNode* parent33 = new QTNode("Parent");
+	QTNode* first33 = new QTNode("a2");
+	QTNode* second33 = new QTNode("a3");
+	first33->setParent(parent33);
+	parent33->addChild(first33);
+	second33->setParent(parent33);
+	parent33->addChild(second33);
+	QueryTree* query33 = new QueryTree(parent33);
+
+	vector<int> actualResult33 = qe->solveForSuchThatParent("a3", &table1, query33, &st, &f1, &pt, &vt); // assign a2; assign a3; Select a3 such that Parent(a2, a3) | Expected <>
+
+	CPPUNIT_ASSERT(actualResult33.empty());
+
+	QTNode* parent34 = new QTNode("Parent");
+	QTNode* first34 = new QTNode("w3");
+	QTNode* second34 = new QTNode("a2");
+	first34->setParent(parent34);
+	parent34->addChild(first34);
+	second34->setParent(parent34);
+	parent34->addChild(second34);
+	QueryTree* query34 = new QueryTree(parent34);
+
+	vector<int> actualResult34 = qe->solveForSuchThatParent("a2", &table1, query34, &st, &f1, &pt, &vt); // assign a2; while w3; Select a2 such that Parent(w3, a2) | Expected <4,5,8>
+
+	CPPUNIT_ASSERT_EQUAL((size_t)3, actualResult34.size());
+	CPPUNIT_ASSERT_EQUAL(4, actualResult34.at(0));
+	CPPUNIT_ASSERT_EQUAL(5, actualResult34.at(1));
+	CPPUNIT_ASSERT_EQUAL(8, actualResult34.at(2));
+
+	QTNode* parent35 = new QTNode("Parent");
+	QTNode* first35 = new QTNode("a2");
+	QTNode* second35 = new QTNode("w3");
+	first35->setParent(parent35);
+	parent35->addChild(first35);
+	second35->setParent(parent35);
+	parent35->addChild(second35);
+	QueryTree* query35 = new QueryTree(parent35);
+
+	vector<int> actualResult35 = qe->solveForSuchThatParent("w3", &table1, query35, &st, &f1, &pt, &vt); // while w3; assign a2; Select w3 such that Parent(a2, w3) | Expected <>
+
+	CPPUNIT_ASSERT(actualResult35.empty());
+
+	
+	QTNode* parent36 = new QTNode("Parent");
+	QTNode* first36 = new QTNode(3);
+	QTNode* second36 = new QTNode(4);
+	first36->setParent(parent36);
+	parent36->addChild(first36);
+	second36->setParent(parent36);
+	parent36->addChild(second36);
+	QueryTree* query36 = new QueryTree(parent36);
+
+	vector<int> actualResult36 = qe->solveForSuchThatParent("s1", &table1, query36, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Parent(3, 4) | Expected <1, 2, 3, 4, 5, 6, 7, 8, 9, 10>
+	
+	CPPUNIT_ASSERT_EQUAL((size_t)10, actualResult36.size());
+	CPPUNIT_ASSERT_EQUAL(1, actualResult36.at(0));
+	CPPUNIT_ASSERT_EQUAL(2, actualResult36.at(1));
+	CPPUNIT_ASSERT_EQUAL(3, actualResult36.at(2));
+	CPPUNIT_ASSERT_EQUAL(4, actualResult36.at(3));
+	CPPUNIT_ASSERT_EQUAL(5, actualResult36.at(4));
+	CPPUNIT_ASSERT_EQUAL(6, actualResult36.at(5));
+	CPPUNIT_ASSERT_EQUAL(7, actualResult36.at(6));
+	CPPUNIT_ASSERT_EQUAL(8, actualResult36.at(7));
+	CPPUNIT_ASSERT_EQUAL(9, actualResult36.at(8));
+	CPPUNIT_ASSERT_EQUAL(10, actualResult36.at(9));
+
+	QTNode* parent37 = new QTNode("Parent");
+	QTNode* first37 = new QTNode(1);
+	QTNode* second37 = new QTNode(3);
+	first37->setParent(parent37);
+	parent37->addChild(first37);
+	second37->setParent(parent37);
+	parent37->addChild(second37);
+	QueryTree* query37 = new QueryTree(parent37);
+
+	vector<int> actualResult37 = qe->solveForSuchThatParent("s1", &table1, query37, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Parent(1, 3) | Expected <> (none)
+	
+	CPPUNIT_ASSERT(actualResult37.empty());
+
+	QTNode* parent38 = new QTNode("Parent");
+	QTNode* first38 = new QTNode(9);
+	QTNode* second38 = new QTNode(10);
+	first38->setParent(parent38);
+	parent38->addChild(first38);
+	second38->setParent(parent38);
+	parent38->addChild(second38);
+	QueryTree* query38 = new QueryTree(parent38);
+
+	vector<int> actualResult38 = qe->solveForSuchThatParent("a2", &table1, query38, &st, &f1, &pt, &vt); // assign a2; Select a2 such that Parent(9, 10) | Expected <1, 2, 4, 5, 8>
+
+	CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult38.size());
+	CPPUNIT_ASSERT_EQUAL(1, actualResult38.at(0));
+	CPPUNIT_ASSERT_EQUAL(2, actualResult38.at(1));
+	CPPUNIT_ASSERT_EQUAL(4, actualResult38.at(2));
+	CPPUNIT_ASSERT_EQUAL(5, actualResult38.at(3));
+	CPPUNIT_ASSERT_EQUAL(8, actualResult38.at(4));
+
+	QTNode* parent39 = new QTNode("Parent");
+	QTNode* first39 = new QTNode(6);
+	QTNode* second39 = new QTNode(7);
+	first39->setParent(parent39);
+	parent39->addChild(first39);
+	second39->setParent(parent39);
+	parent39->addChild(second39);
+	QueryTree* query39 = new QueryTree(parent39);
+
+	vector<int> actualResult39 = qe->solveForSuchThatParent("w3", &table1, query39, &st, &f1, &pt, &vt); // while w3; Select w3 such that Parent(6, 7) | Expected <3, 6, 7, 9, 10>
+	
+	CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult39.size());
+	CPPUNIT_ASSERT_EQUAL(3, actualResult39.at(0));
+	CPPUNIT_ASSERT_EQUAL(6, actualResult39.at(1));
+	CPPUNIT_ASSERT_EQUAL(7, actualResult39.at(2));
+	CPPUNIT_ASSERT_EQUAL(9, actualResult39.at(3));
+	CPPUNIT_ASSERT_EQUAL(10, actualResult39.at(4));
+
+	QTNode* parent40 = new QTNode("Parent");
+	QTNode* first40 = new QTNode(3);
+	QTNode* second40 = new QTNode(6);
+	first40->setParent(parent40);
+	parent40->addChild(first40);
+	second40->setParent(parent40);
+	parent40->addChild(second40);
+	QueryTree* query40 = new QueryTree(parent40);
+
+	vector<int> actualResult40 = qe->solveForSuchThatParent("v4", &table1, query40, &st, &f1, &pt, &vt); // variable v4; Select v4 such that Parent(3, 6) | Expected <1, 2, 3, 4, 5, 6>
+	
+	CPPUNIT_ASSERT_EQUAL((size_t)6, actualResult40.size());
+	CPPUNIT_ASSERT_EQUAL(0, actualResult40.at(0));
+	CPPUNIT_ASSERT_EQUAL(1, actualResult40.at(1));
+	CPPUNIT_ASSERT_EQUAL(2, actualResult40.at(2));
+	CPPUNIT_ASSERT_EQUAL(3, actualResult40.at(3));
+	CPPUNIT_ASSERT_EQUAL(4, actualResult40.at(4));
+	CPPUNIT_ASSERT_EQUAL(5, actualResult40.at(5));
+
+	QTNode* parent41 = new QTNode("Parent");
+	QTNode* first41 = new QTNode(7);
+	QTNode* second41 = new QTNode(9);
+	first41->setParent(parent41);
+	parent41->addChild(first41);
+	second41->setParent(parent41);
+	parent41->addChild(second41);
+	QueryTree* query41 = new QueryTree(parent41);
+
+	vector<int> actualResult41 = qe->solveForSuchThatParent("proc5", &table1, query41, &st, &f1, &pt, &vt); // procedure proc5; Select proc5 such that Parent(7, 9) | Expected <1>
+	
+	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult41.size());
+	CPPUNIT_ASSERT_EQUAL(0, actualResult41.at(0));
+
+	QTNode* parent42 = new QTNode("Parent");
+	QTNode* first42 = new QTNode(3);
+	QTNode* second42 = new QTNode("s2");
+	first42->setParent(parent42);
+	parent42->addChild(first42);
+	second42->setParent(parent42);
+	parent42->addChild(second42);
+	QueryTree* query42 = new QueryTree(parent42);
+
+	vector<int> actualResult42 = qe->solveForSuchThatParent("s1", &table1, query42, &st, &f1, &pt, &vt); // stmt s1, s2; Select s1 such that Parent(3, s2) | Expected <1, 2, 3, 4, 5, 6, 7, 8, 9, 10>
+	
+	CPPUNIT_ASSERT_EQUAL((size_t)10, actualResult42.size());
+	CPPUNIT_ASSERT_EQUAL(1, actualResult42.at(0));
+	CPPUNIT_ASSERT_EQUAL(2, actualResult42.at(1));
+	CPPUNIT_ASSERT_EQUAL(3, actualResult42.at(2));
+	CPPUNIT_ASSERT_EQUAL(4, actualResult42.at(3));
+	CPPUNIT_ASSERT_EQUAL(5, actualResult42.at(4));
+	CPPUNIT_ASSERT_EQUAL(6, actualResult42.at(5));
+	CPPUNIT_ASSERT_EQUAL(7, actualResult42.at(6));
+	CPPUNIT_ASSERT_EQUAL(8, actualResult42.at(7));
+	CPPUNIT_ASSERT_EQUAL(9, actualResult42.at(8));
+	CPPUNIT_ASSERT_EQUAL(10, actualResult42.at(9));
+
+	QTNode* parent43 = new QTNode("Parent");
+	QTNode* first43 = new QTNode(10);
+	QTNode* second43 = new QTNode("s2");
+	first43->setParent(parent43);
+	parent43->addChild(first43);
+	second43->setParent(parent43);
+	parent43->addChild(second43);
+	QueryTree* query43 = new QueryTree(parent43);
+
+	vector<int> actualResult43 = qe->solveForSuchThatParent("s1", &table1, query43, &st, &f1, &pt, &vt); // stmt s1, s2; Select s1 such that Parent(10, s2) | Expected <> (none)
+	
+	CPPUNIT_ASSERT(actualResult43.empty());
+
+	QTNode* parent44 = new QTNode("Parent");
+	QTNode* first44 = new QTNode(3);
+	QTNode* second44 = new QTNode("a3");
+	first44->setParent(parent44);
+	parent44->addChild(first44);
+	second44->setParent(parent44);
+	parent44->addChild(second44);
+	QueryTree* query44 = new QueryTree(parent44);
+
+	vector<int> actualResult44 = qe->solveForSuchThatParent("a2", &table1, query44, &st, &f1, &pt, &vt); // assign a2, a3; Select a2 such that Parent(3, a3) | Expected <1, 2, 4, 5, 8>
+	
+	CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult44.size());
+	CPPUNIT_ASSERT_EQUAL(1, actualResult44.at(0));
+	CPPUNIT_ASSERT_EQUAL(2, actualResult44.at(1));
+	CPPUNIT_ASSERT_EQUAL(4, actualResult44.at(2));
+	CPPUNIT_ASSERT_EQUAL(5, actualResult44.at(3));
+	CPPUNIT_ASSERT_EQUAL(8, actualResult44.at(4));
+
+	QTNode* parent45 = new QTNode("Parent");
+	QTNode* first45 = new QTNode("a2");
+	QTNode* second45 = new QTNode("a3");
+	first45->setParent(parent45);
+	parent45->addChild(first45);
+	second45->setParent(parent45);
+	parent45->addChild(second45);
+	QueryTree* query45 = new QueryTree(parent45);
+
+	vector<int> actualResult45 = qe->solveForSuchThatParent("s1", &table1, query45, &st, &f1, &pt, &vt); // stmt s1; assign a2, a3; Select s1 such that Parent(a2, a3) | Expected <> (none)
+	
+	CPPUNIT_ASSERT(actualResult45.empty());
+
+	QTNode* parent46 = new QTNode("Parent");
+	QTNode* first46 = new QTNode("w3");
+	QTNode* second46 = new QTNode("w4");
+	first46->setParent(parent46);
+	parent46->addChild(first46);
+	second46->setParent(parent46);
+	parent46->addChild(second46);
+	QueryTree* query46 = new QueryTree(parent46);
+
+	vector<int> actualResult46 = qe->solveForSuchThatParent("s1", &table1, query46, &st, &f1, &pt, &vt); // stmt s1; while w3, w4; Select s1 such that Parent(w3, w4) | Expected <1,2,3,4,5,6,7,8,9,10>
+	
+	CPPUNIT_ASSERT_EQUAL((size_t)10, actualResult46.size());
+	CPPUNIT_ASSERT_EQUAL(1, actualResult46.at(0));
+	CPPUNIT_ASSERT_EQUAL(2, actualResult46.at(1));
+	CPPUNIT_ASSERT_EQUAL(3, actualResult46.at(2));
+	CPPUNIT_ASSERT_EQUAL(4, actualResult46.at(3));
+	CPPUNIT_ASSERT_EQUAL(5, actualResult46.at(4));
+	CPPUNIT_ASSERT_EQUAL(6, actualResult46.at(5));
+	CPPUNIT_ASSERT_EQUAL(7, actualResult46.at(6));
+	CPPUNIT_ASSERT_EQUAL(8, actualResult46.at(7));
+	CPPUNIT_ASSERT_EQUAL(9, actualResult46.at(8));
+	CPPUNIT_ASSERT_EQUAL(10, actualResult46.at(9));
+
+	QTNode* parent47 = new QTNode("Parent*");
+	QTNode* first47 = new QTNode(3);
+	QTNode* second47 = new QTNode("s1");
+	first47->setParent(parent47);
+	parent47->addChild(first47);
+	second47->setParent(parent47);
+	parent47->addChild(second47);
+	QueryTree* query47 = new QueryTree(parent47);
+
+	vector<int> actualResult47 = qe->solveForSuchThatParentStar("s1", &table1, query47, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that ParentStar(3, s1) | Expected <4,5,6,7,8,9,10> 
+	
+	CPPUNIT_ASSERT_EQUAL((size_t)7, actualResult47.size());
+	CPPUNIT_ASSERT_EQUAL(4,actualResult47[0]);
+	CPPUNIT_ASSERT_EQUAL(5,actualResult47[1]);
+	CPPUNIT_ASSERT_EQUAL(6,actualResult47[2]);
+	CPPUNIT_ASSERT_EQUAL(7,actualResult47[3]);
+	CPPUNIT_ASSERT_EQUAL(8,actualResult47[4]);
+	CPPUNIT_ASSERT_EQUAL(9,actualResult47[5]);
+	CPPUNIT_ASSERT_EQUAL(10,actualResult47[6]);
+
+	QTNode* parent48 = new QTNode("Parent*");
+	QTNode* first48 = new QTNode("s1");
+	QTNode* second48 = new QTNode(9);
+	first48->setParent(parent48);
+	parent48->addChild(first48);
+	second48->setParent(parent48);
+	parent48->addChild(second48);
+	QueryTree* query48 = new QueryTree(parent48);
+
+	vector<int> actualResult48 = qe->solveForSuchThatParentStar("s1", &table1, query48, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that ParentStar(s1, 9) | Expected <3,6,7>
+	
+	CPPUNIT_ASSERT_EQUAL(7,actualResult48[0]);
+	CPPUNIT_ASSERT_EQUAL(6,actualResult48[1]);
+	CPPUNIT_ASSERT_EQUAL(3,actualResult48[2]);
+
+	QTNode* parent49 = new QTNode("Parent*");
+	QTNode* first49 = new QTNode(3);
+	QTNode* second49 = new QTNode(9);
+	first49->setParent(parent49);
+	parent49->addChild(first49);
+	second49->setParent(parent49);
+	parent49->addChild(second49);
+	QueryTree* query49 = new QueryTree(parent49);
+
+	vector<int> actualResult49 = qe->solveForSuchThatParentStar("w3", &table1, query49, &st, &f1, &pt, &vt); // while w1; Select w1 such that ParentStar(3, 9) | Expected <3,6,7,9,10>
+	
+	CPPUNIT_ASSERT_EQUAL(3,actualResult49[0]);
+	CPPUNIT_ASSERT_EQUAL(6,actualResult49[1]);
+	CPPUNIT_ASSERT_EQUAL(7,actualResult49[2]);
+	CPPUNIT_ASSERT_EQUAL(9,actualResult49[3]);
+	CPPUNIT_ASSERT_EQUAL(10,actualResult49[4]);
+
+	QTNode* parent50 = new QTNode("ParentStar");
+	QTNode* first50 = new QTNode(6);
+	QTNode* second50 = new QTNode(8);
+	first50->setParent(parent50);
+	parent50->addChild(first50);
+	second50->setParent(parent50);
+	parent50->addChild(second50);
+	QueryTree* query50 = new QueryTree(parent50);
+
+	vector<int> actualResult50 = qe->solveForSuchThatParentStar("a2", &table1, query50, &st, &f1, &pt, &vt); // assign a2; Select a2 such that ParentStar(6, 8) | Expected <1,2,4,5,8>
+	
+	CPPUNIT_ASSERT_EQUAL(1,actualResult50[0]);
+	CPPUNIT_ASSERT_EQUAL(2,actualResult50[1]);
+	CPPUNIT_ASSERT_EQUAL(4,actualResult50[2]);
+	CPPUNIT_ASSERT_EQUAL(5,actualResult50[3]);
+	CPPUNIT_ASSERT_EQUAL(8,actualResult50[4]);
+
+	QTNode* parent51 = new QTNode("Parent*");
+	QTNode* first51 = new QTNode(3);
+	QTNode* second51 = new QTNode(9);
+	first51->setParent(parent51);
+	parent51->addChild(first51);
+	second51->setParent(parent51);
+	parent51->addChild(second51);
+	QueryTree* query51 = new QueryTree(parent51);
+
+	vector<int> actualResult51 = qe->solveForSuchThatParentStar("proc5", &table1, query51, &st, &f1, &pt, &vt); // procedure proc5; Select proc5 such that ParentStar(3, 9) | Expected <Proc1>
+	
+	CPPUNIT_ASSERT(actualResult51[0]==0);
+}

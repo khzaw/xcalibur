@@ -453,6 +453,417 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 	return answer;
 }
 
+vector<int> QueryEvaluator::solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Follows* follows, ProcTable* procTable, VarTable* varTable){
+	vector<int> answer;
+	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
+		return answer;
+	}
+	bool isSynonymInSuchThat = checkSynonymInSuchThat(selectSynonym, suchThatTree);
+	if (isSynonymInSuchThat){ // Select synonym such that Follows*(synonym, *) (Follows*(*, synonym))
+		if (selectSynonym == suchThatTree->getRootNode()->getChild(0)->getKey()){ // Select synonym such that Follows*(synonym, *)
+			string stmtSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
+			if (stmtSynonym.empty()){ // Select synonym such that Follows*(synonym, 1)
+				int stmtIndex = suchThatTree->getRootNode()->getChild(1)->getValue();
+				if(stmtIndex<=statementTable->getSize()){
+					if (synonymTable->at(selectSynonym)=="stmt"){
+						answer = follows->getFolloweesStar(stmtIndex);
+					} else if (synonymTable->at(selectSynonym)=="prog_line"){
+						answer = follows->getFolloweesStar(stmtIndex);
+					} else if (synonymTable->at(selectSynonym)=="assign"){
+						vector<int> temp = follows->getFolloweesStar(stmtIndex);
+						for (size_t i=0; i<temp.size(); i++){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
+								answer.push_back(temp.at(i));
+							}
+						}
+					} else if (synonymTable->at(selectSynonym)=="while"){
+						vector<int> temp = follows->getFolloweesStar(stmtIndex);
+						for (size_t i=0; i<temp.size(); i++){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
+								answer.push_back(temp.at(i));
+							}
+						}
+					} else if (synonymTable->at(selectSynonym)=="if"){
+						// not implemented
+					} else {
+						// throw exception or return empty
+					}
+				} else {
+					// throw exception or return empty
+				}
+			} else { // Select synonym such that Follows*(synonym, another Synonym)
+				if (synonymTable->find(stmtSynonym) != synonymTable->end()){
+					vector<int> dataFromStmtSynonym;
+					if(synonymTable->at(stmtSynonym)=="stmt"){
+						dataFromStmtSynonym = follows->getAllFolloweeStmt();
+					} else if (synonymTable->at(stmtSynonym)=="prog_line"){
+						dataFromStmtSynonym = follows->getAllFolloweeStmt();
+					} else if (synonymTable->at(stmtSynonym)=="assign"){
+						vector<int> assignList = statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
+						for (size_t i=0; i<assignList.size(); i++){
+							vector<int> result = follows->getFolloweesStar(assignList.at(i));
+							dataFromStmtSynonym.insert(dataFromStmtSynonym.end(), result.begin(), result.end());
+						}
+					} else if (synonymTable->at(stmtSynonym)=="while"){
+						vector<int> whileList = statementTable->getStmtNumUsingNodeType("WHILE_NODE");
+						for (size_t i=0; i<whileList.size(); i++){
+							vector<int> result = follows->getFolloweesStar(whileList.at(i));
+							dataFromStmtSynonym.insert(dataFromStmtSynonym.end(), result.begin(), result.end());
+						}
+					} else if (synonymTable->at(stmtSynonym)=="if"){
+						// not implemented	
+					} else {
+						// throw exception
+					}
+					if (synonymTable->at(selectSynonym)=="stmt"){
+						answer = dataFromStmtSynonym;
+					} else if (synonymTable->at(selectSynonym)=="prog_line"){
+						answer = dataFromStmtSynonym;
+					} else if (synonymTable->at(selectSynonym)=="assign"){
+						vector<int> temp = dataFromStmtSynonym;
+						for (size_t i=0; i<temp.size(); i++){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
+								answer.push_back(temp.at(i));
+							}
+						}
+					} else if (synonymTable->at(selectSynonym)=="while"){
+						vector<int> temp = dataFromStmtSynonym;
+						for (size_t i=0; i<temp.size(); i++){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
+								answer.push_back(temp.at(i));
+							}
+						}
+					} else if (synonymTable->at(selectSynonym)=="if"){
+						// not implemented
+					} else {
+						// throw exception or return empty
+					}
+				} else {
+					// throw exception
+				}
+			}
+		} else { // Select synonym such that Follows*(*, synonym)
+			string stmtSynonym = suchThatTree->getRootNode()->getChild(0)->getKey();
+			if (stmtSynonym.empty()){ // Select synonym such that Follows*(1, synonym)
+				int stmtIndex = suchThatTree->getRootNode()->getChild(0)->getValue();
+				if(stmtIndex<=statementTable->getSize()){
+					if (synonymTable->at(selectSynonym)=="stmt"){
+						answer = follows->getFollowersStar(stmtIndex);
+					} else if (synonymTable->at(selectSynonym)=="prog_line"){
+						answer = follows->getFollowersStar(stmtIndex);
+					} else if (synonymTable->at(selectSynonym)=="assign"){
+						vector<int> temp = follows->getFollowersStar(stmtIndex);
+						for (size_t i=0; i<temp.size(); i++){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
+								answer.push_back(temp.at(i));
+							}
+						}
+					} else if (synonymTable->at(selectSynonym)=="while"){
+						vector<int> temp = follows->getFollowersStar(stmtIndex);
+						for (size_t i=0; i<temp.size(); i++){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
+								answer.push_back(temp.at(i));
+							}
+						}
+					} else if (synonymTable->at(selectSynonym)=="if"){
+						// not implemented
+					} else {
+						// throw exception or return empty
+					}
+				} else {
+					// throw exception or return empty
+				}
+			} else { // Select synonym such that Follows*(another Synonym, synonym)
+				if (synonymTable->find(stmtSynonym) != synonymTable->end()){
+					vector<int> dataFromStmtSynonym;
+					if(synonymTable->at(stmtSynonym)=="stmt"){
+						dataFromStmtSynonym = follows->getAllFollowerStmt();
+					} else if (synonymTable->at(stmtSynonym)=="prog_line"){
+						dataFromStmtSynonym = follows->getAllFollowerStmt();
+					} else if (synonymTable->at(stmtSynonym)=="assign"){
+						vector<int> assignList = statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
+						for (size_t i=0; i<assignList.size(); i++){
+							vector<int> result = follows->getFollowersStar(assignList.at(i));
+							dataFromStmtSynonym.insert(dataFromStmtSynonym.end(), result.begin(), result.end());
+						}
+					} else if (synonymTable->at(stmtSynonym)=="while"){
+						vector<int> whileList = statementTable->getStmtNumUsingNodeType("WHILE_NODE");
+						for (size_t i=0; i<whileList.size(); i++){
+							vector<int> result = follows->getFollowersStar(whileList.at(i));
+							dataFromStmtSynonym.insert(dataFromStmtSynonym.end(), result.begin(), result.end());
+						}
+					} else if (synonymTable->at(stmtSynonym)=="if"){
+						// not implemented	
+					} else {
+						// throw exception
+					}
+					if (synonymTable->at(selectSynonym)=="stmt"){
+						answer = dataFromStmtSynonym;
+					} else if (synonymTable->at(selectSynonym)=="prog_line"){
+						answer = dataFromStmtSynonym;
+					} else if (synonymTable->at(selectSynonym)=="assign"){
+						vector<int> temp = dataFromStmtSynonym;
+						for (size_t i=0; i<temp.size(); i++){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
+								answer.push_back(temp.at(i));
+							}
+						}
+					} else if (synonymTable->at(selectSynonym)=="while"){
+						vector<int> temp = dataFromStmtSynonym;
+						for (size_t i=0; i<temp.size(); i++){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
+								answer.push_back(temp.at(i));
+							}
+						}
+					} else if (synonymTable->at(selectSynonym)=="if"){
+						// not implemented
+					} else {
+						// throw exception or return empty
+					}
+				} else {
+					// throw exception
+				}
+			}
+		}
+	} else { // synonym is not in Follows*(*, *)
+		bool isSuchThatTrue = false;
+		string leftSynonym = suchThatTree->getRootNode()->getChild(0)->getKey();
+		string rightSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
+		if (leftSynonym.empty()&&rightSynonym.empty()){ // Follows*(1, 2);
+			int leftStmtIndex = suchThatTree->getRootNode()->getChild(0)->getValue();
+			int rightStmtIndex = suchThatTree->getRootNode()->getChild(1)->getValue();
+			if (leftStmtIndex>statementTable->getSize()||rightStmtIndex>statementTable->getSize()){
+				// throw exception
+			} else {
+				isSuchThatTrue = follows->isFollowsStarTrue(leftStmtIndex, rightStmtIndex);
+			}
+		} else if (leftSynonym.empty()){ // Follows*(1, synonym)
+			int leftStmtIndex = suchThatTree->getRootNode()->getChild(0)->getValue();
+			if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
+				for (int i=1; i<=statementTable->getSize(); i++){
+					if (follows->isFollowsStarTrue(leftStmtIndex, i)){
+						isSuchThatTrue = true;
+						break;
+					}
+				}
+			} else if (synonymTable->at(rightSynonym)=="assign"){
+				for (int i=1; i<=statementTable->getSize(); i++){
+					if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsStarTrue(leftStmtIndex, i)){
+						isSuchThatTrue = true;
+						break;
+					}
+				}
+			} else if (synonymTable->at(rightSynonym)=="while"){
+				for (int i=1; i<=statementTable->getSize(); i++){
+					if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&follows->isFollowsStarTrue(leftStmtIndex, i)){
+						isSuchThatTrue = true;
+						break;
+					}
+				}		
+			} else if (synonymTable->at(rightSynonym)=="if"){
+				// not implemented
+			} else {
+				// throw exception
+			}
+		} else if (rightSynonym.empty()){ // Follows*(synonym, 2)
+			int rightStmtIndex = suchThatTree->getRootNode()->getChild(1)->getValue();
+			if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){
+				for (int i=1; i<=statementTable->getSize(); i++){
+					if (follows->isFollowsStarTrue(i, rightStmtIndex)){
+						isSuchThatTrue = true;
+						break;
+					}
+				}
+			} else if (synonymTable->at(leftSynonym)=="assign"){
+				for (int i=1; i<=statementTable->getSize(); i++){
+					if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsStarTrue(i, rightStmtIndex)){
+						isSuchThatTrue = true;
+						break;
+					}
+				}
+			} else if (synonymTable->at(leftSynonym)=="while"){
+				for (int i=1; i<=statementTable->getSize(); i++){
+					if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&follows->isFollowsStarTrue(i, rightStmtIndex)){
+						isSuchThatTrue = true;
+						break;
+					}
+				}
+			} else if (synonymTable->at(leftSynonym)=="if"){
+				// not implemented
+			} else {
+				// throw exception
+			}
+		} else { // Follows*(synonym1, synonym2)
+			if(synonymTable->at(leftSynonym).empty()||synonymTable->at(rightSynonym).empty()){
+				// throw exception
+			} else if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){ // Follows*(s1, synonym2)
+				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Follows*(s1, s2) 
+					for (int i=1; i<=statementTable->getSize(); i++){
+						for (int j=1; j<=statementTable->getSize(); j++){
+							if (follows->isFollowsStarTrue(i, j)){
+								isSuchThatTrue = true;
+								break;
+							}		
+						}
+						if (isSuchThatTrue) break;
+					}
+				} else if (synonymTable->at(rightSynonym)=="assign"){ // Follows*(s1, a2)
+					for (int i=1; i<=statementTable->getSize(); i++){
+							for (int j=1; j<=statementTable->getSize(); j++){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsStarTrue(i, j)){
+									isSuchThatTrue = true;
+									break;
+								}			
+							}
+							if (isSuchThatTrue) break;
+					}
+				} else if (synonymTable->at(rightSynonym)=="while"){ // Follows*(s1, w2)
+					for (int i=1; i<=statementTable->getSize(); i++){
+							for (int j=1; j<=statementTable->getSize(); j++){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&follows->isFollowsStarTrue(i, j)){
+									isSuchThatTrue = true;
+									break;
+								}			
+							}
+							if (isSuchThatTrue) break;
+					}			
+				} else if (synonymTable->at(rightSynonym)=="if"){
+					// not implemented
+				} else {
+					// throw exception
+				}
+			} else if (synonymTable->at(leftSynonym)=="assign"){ // Follows*(a1, synonym2)
+				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Follows*(a1, s2) 
+					for (int i=1; i<=statementTable->getSize(); i++){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
+							for (int j=1; j<statementTable->getSize(); j++){
+								if (follows->isFollowsStarTrue(i, j)){
+									isSuchThatTrue = true;
+									break;
+								}			
+							}
+							if (isSuchThatTrue) break;
+						}
+						if (isSuchThatTrue) break;
+					}
+				} else if (synonymTable->at(rightSynonym)=="assign"){ // Follows*(a1, a2)
+					for (int i=1; i<=statementTable->getSize(); i++){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
+							for (int j=1; j<=statementTable->getSize(); j++){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsStarTrue(i, j)){
+									isSuchThatTrue = true;
+									break;
+								}			
+							}
+							if (isSuchThatTrue) break;
+						}
+						if (isSuchThatTrue) break;
+					}
+				} else if (synonymTable->at(rightSynonym)=="while"){ // Follows*(a1, w2)
+					for (int i=1; i<=statementTable->getSize(); i++){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
+							for (int j=1; j<=statementTable->getSize(); j++){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&follows->isFollowsStarTrue(i, j)){
+									isSuchThatTrue = true;
+								}			
+							}
+							if (isSuchThatTrue) break;
+						}
+						if (isSuchThatTrue) break;
+					}
+				} else if (synonymTable->at(rightSynonym)=="if"){
+					// not implemented
+				} else {
+					// throw exception
+				}
+			} else if (synonymTable->at(leftSynonym)=="while"){ // Follows*(w1, synonym2)
+				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Follows*(w1, s2) 
+					for (int i=1; i<=statementTable->getSize(); i++){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
+							for (int j=1; j<=statementTable->getSize(); j++){
+								if (follows->isFollowsStarTrue(i, j)){
+									isSuchThatTrue = true;
+								}			
+							}
+							if (isSuchThatTrue) break;
+						}
+						if (isSuchThatTrue) break;
+					}
+				} else if (synonymTable->at(rightSynonym)=="assign"){ // Follows*(w1, a2)
+					for (int i=1; i<=statementTable->getSize(); i++){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
+							for (int j=1; j<=statementTable->getSize(); j++){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&follows->isFollowsStarTrue(i, j)){
+									isSuchThatTrue = true;
+								}			
+							}
+							if (isSuchThatTrue) break;
+						}
+						if (isSuchThatTrue) break;
+					}
+				} else if (synonymTable->at(rightSynonym)=="while"){ // Follows*(w1, w2)
+					for (int i=1; i<=statementTable->getSize(); i++){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
+							for (int j=1; j<=statementTable->getSize(); j++){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&follows->isFollowsStarTrue(i, j)){
+									isSuchThatTrue = true;
+								}			
+							}
+							if (isSuchThatTrue) break;
+						}
+						if (isSuchThatTrue) break;
+					}
+				} else if (synonymTable->at(rightSynonym)=="if"){
+					// not implemented
+				} else {
+					// throw exception
+				}
+			} else if (synonymTable->at(leftSynonym)=="if"){
+				// not implemented
+			} else {
+				// throw exception
+			}
+		}
+		if (isSuchThatTrue){
+			// fill answer for different type of selectSynonym such as procedure, statement, while, assign, variable, prog_line
+			if (synonymTable->at(selectSynonym)=="stmt"||
+				synonymTable->at(selectSynonym)=="assign"||
+				synonymTable->at(selectSynonym)=="while"||
+				synonymTable->at(selectSynonym)=="if"||
+				synonymTable->at(selectSynonym)=="prog_line"){
+					if (synonymTable->at(selectSynonym)=="stmt"||synonymTable->at(selectSynonym)=="prog_line"){
+						for (int i=1; i<=statementTable->getSize(); i++){
+							answer.push_back(i);
+						}
+					} else {
+						string str;
+						if (synonymTable->at(selectSynonym)=="assign"){
+							str = "ASSIGN_NODE";
+						} else if (synonymTable->at(selectSynonym)=="while"){
+							str = "WHILE_NODE";
+						} else if (synonymTable->at(selectSynonym)=="if"){
+							str = "IF_NODE";
+						}
+						answer = statementTable->getStmtNumUsingNodeType(str);
+					}					
+			} else if (synonymTable->at(selectSynonym)=="variable"){
+				for (int i=0; i<varTable->getSize(); i++){
+					answer.push_back(i);
+				}
+			} else if (synonymTable->at(selectSynonym)=="procedure"){
+				for (int i=0; i<procTable->getSize(); i++){
+					answer.push_back(i);
+				}
+			} else {
+				// throw exception
+			}
+		} else {
+			// nothing in answer
+		}
+	}
+	return answer;
+}
+
 vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Parent* parent, ProcTable* procTable, VarTable* varTable){
 	vector<int> answer;
 	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
@@ -806,6 +1217,417 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
 							for (int j=1; j<=statementTable->getSize(); j++){
 								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&parent->isParentTrue(i, j)){
+									isSuchThatTrue = true;
+								}			
+							}
+							if (isSuchThatTrue) break;
+						}
+						if (isSuchThatTrue) break;
+					}
+				} else if (synonymTable->at(rightSynonym)=="if"){
+					// not implemented
+				} else {
+					// throw exception
+				}
+			} else if (synonymTable->at(leftSynonym)=="if"){
+				// not implemented
+			} else {
+				// throw exception
+			}
+		}
+		if (isSuchThatTrue){
+			// fill answer for different type of selectSynonym such as procedure, statement, while, assign, variable, prog_line
+			if (synonymTable->at(selectSynonym)=="stmt"||
+				synonymTable->at(selectSynonym)=="assign"||
+				synonymTable->at(selectSynonym)=="while"||
+				synonymTable->at(selectSynonym)=="if"||
+				synonymTable->at(selectSynonym)=="prog_line"){
+					if (synonymTable->at(selectSynonym)=="stmt"||synonymTable->at(selectSynonym)=="prog_line"){
+						for (int i=1; i<=statementTable->getSize(); i++){
+							answer.push_back(i);
+						}
+					} else {
+						string str;
+						if (synonymTable->at(selectSynonym)=="assign"){
+							str = "ASSIGN_NODE";
+						} else if (synonymTable->at(selectSynonym)=="while"){
+							str = "WHILE_NODE";
+						} else if (synonymTable->at(selectSynonym)=="if"){
+							str = "IF_NODE";
+						}
+						answer = statementTable->getStmtNumUsingNodeType(str);
+					}					
+			} else if (synonymTable->at(selectSynonym)=="variable"){
+				for (int i=0; i<varTable->getSize(); i++){
+					answer.push_back(i);
+				}
+			} else if (synonymTable->at(selectSynonym)=="procedure"){
+				for (int i=0; i<procTable->getSize(); i++){
+					answer.push_back(i);
+				}
+			} else {
+				// throw exception
+			}
+		} else {
+			// nothing in answer
+		}
+	}
+	return answer;
+}
+
+vector<int> QueryEvaluator::solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Parent* parent, ProcTable* procTable, VarTable* varTable){
+	vector<int> answer;
+	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
+		return answer;
+	}
+	bool isSynonymInSuchThat = checkSynonymInSuchThat(selectSynonym, suchThatTree);
+	if (isSynonymInSuchThat){ // Select synonym such that Parent*(synonym, *) (Parent*(*, synonym))
+		if (selectSynonym == suchThatTree->getRootNode()->getChild(0)->getKey()){ // Select synonym such that Parent*(synonym, *)
+			string stmtSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
+			if (stmtSynonym.empty()){ // Select synonym such that Parent*(synonym, 1)
+				int stmtIndex = suchThatTree->getRootNode()->getChild(1)->getValue();
+				if(stmtIndex<=statementTable->getSize()){
+					if (synonymTable->at(selectSynonym)=="stmt"){
+						answer = parent->getParentStar(stmtIndex);
+					} else if (synonymTable->at(selectSynonym)=="prog_line"){
+						answer = parent->getParentStar(stmtIndex);
+					} else if (synonymTable->at(selectSynonym)=="assign"){
+						vector<int> temp = parent->getParentStar(stmtIndex);
+						for (size_t i=0; i<temp.size(); i++){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
+								answer.push_back(temp.at(i));
+							}
+						}
+					} else if (synonymTable->at(selectSynonym)=="while"){
+						vector<int> temp = parent->getParentStar(stmtIndex);
+						for (size_t i=0; i<temp.size(); i++){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
+								answer.push_back(temp.at(i));
+							}
+						}
+					} else if (synonymTable->at(selectSynonym)=="if"){
+						// not implemented
+					} else {
+						// throw exception or return empty
+					}
+				} else {
+					// throw exception or return empty
+				}
+			} else { // Select synonym such that Parent*(synonym, another Synonym)
+				if (synonymTable->find(stmtSynonym) != synonymTable->end()){
+					vector<int> dataFromStmtSynonym;
+					if(synonymTable->at(stmtSynonym)=="stmt"){
+						dataFromStmtSynonym = parent->getAllParentStmt();
+					} else if (synonymTable->at(stmtSynonym)=="prog_line"){
+						dataFromStmtSynonym = parent->getAllParentStmt();
+					} else if (synonymTable->at(stmtSynonym)=="assign"){
+						vector<int> assignList = statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
+						for (size_t i=0; i<assignList.size(); i++){
+							vector<int> result = parent->getParentStar(assignList.at(i));
+							dataFromStmtSynonym.insert(dataFromStmtSynonym.end(), result.begin(), result.end());
+						}
+					} else if (synonymTable->at(stmtSynonym)=="while"){
+						vector<int> whileList = statementTable->getStmtNumUsingNodeType("WHILE_NODE");
+						for (size_t i=0; i<whileList.size(); i++){
+							vector<int> result = parent->getParentStar(whileList.at(i));
+							dataFromStmtSynonym.insert(dataFromStmtSynonym.end(), result.begin(), result.end());
+						}
+					} else if (synonymTable->at(stmtSynonym)=="if"){
+						// not implemented	
+					} else {
+						// throw exception
+					}
+					if (synonymTable->at(selectSynonym)=="stmt"){
+						answer = dataFromStmtSynonym;
+					} else if (synonymTable->at(selectSynonym)=="prog_line"){
+						answer = dataFromStmtSynonym;
+					} else if (synonymTable->at(selectSynonym)=="assign"){
+						vector<int> temp = dataFromStmtSynonym;
+						for (size_t i=0; i<temp.size(); i++){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
+								answer.push_back(temp.at(i));
+							}
+						}
+					} else if (synonymTable->at(selectSynonym)=="while"){
+						vector<int> temp = dataFromStmtSynonym;
+						for (size_t i=0; i<temp.size(); i++){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
+								answer.push_back(temp.at(i));
+							}
+						}
+					} else if (synonymTable->at(selectSynonym)=="if"){
+						// not implemented
+					} else {
+						// throw exception or return empty
+					}
+				} else {
+					// throw exception
+				}
+			}
+		} else { // Select synonym such that Parent*(*, synonym)
+			string stmtSynonym = suchThatTree->getRootNode()->getChild(0)->getKey();
+			if (stmtSynonym.empty()){ // Select synonym such that Parent*(1, synonym)
+				int stmtIndex = suchThatTree->getRootNode()->getChild(0)->getValue();
+				if(stmtIndex<=statementTable->getSize()){
+					if (synonymTable->at(selectSynonym)=="stmt"){
+						answer = parent->getChildrenStar(stmtIndex);
+					} else if (synonymTable->at(selectSynonym)=="prog_line"){
+						answer = parent->getChildrenStar(stmtIndex);
+					} else if (synonymTable->at(selectSynonym)=="assign"){
+						vector<int> temp = parent->getChildrenStar(stmtIndex);
+						for (size_t i=0; i<temp.size(); i++){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
+								answer.push_back(temp.at(i));
+							}
+						}
+					} else if (synonymTable->at(selectSynonym)=="while"){
+						vector<int> temp = parent->getChildrenStar(stmtIndex);
+						for (size_t i=0; i<temp.size(); i++){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
+								answer.push_back(temp.at(i));
+							}
+						}
+					} else if (synonymTable->at(selectSynonym)=="if"){
+						// not implemented
+					} else {
+						// throw exception or return empty
+					}
+				} else {
+					// throw exception or return empty
+				}
+			} else { // Select synonym such that Parent*(another Synonym, synonym)
+				if (synonymTable->find(stmtSynonym) != synonymTable->end()){
+					vector<int> dataFromStmtSynonym;
+					if(synonymTable->at(stmtSynonym)=="stmt"){
+						dataFromStmtSynonym = parent->getAllChildrenStmt();
+					} else if (synonymTable->at(stmtSynonym)=="prog_line"){
+						dataFromStmtSynonym = parent->getAllChildrenStmt();
+					} else if (synonymTable->at(stmtSynonym)=="assign"){
+						vector<int> assignList = statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
+						for (size_t i=0; i<assignList.size(); i++){
+							vector<int> result = parent->getChildrenStar(assignList.at(i));
+							dataFromStmtSynonym.insert(dataFromStmtSynonym.end(), result.begin(), result.end());
+						}
+					} else if (synonymTable->at(stmtSynonym)=="while"){
+						vector<int> whileList = statementTable->getStmtNumUsingNodeType("WHILE_NODE");
+						for (size_t i=0; i<whileList.size(); i++){
+							vector<int> result = parent->getChildrenStar(whileList.at(i));
+							dataFromStmtSynonym.insert(dataFromStmtSynonym.end(), result.begin(), result.end());
+						}
+					} else if (synonymTable->at(stmtSynonym)=="if"){
+						// not implemented	
+					} else {
+						// throw exception
+					}
+					if (synonymTable->at(selectSynonym)=="stmt"){
+						answer = dataFromStmtSynonym;
+					} else if (synonymTable->at(selectSynonym)=="prog_line"){
+						answer = dataFromStmtSynonym;
+					} else if (synonymTable->at(selectSynonym)=="assign"){
+						vector<int> temp = dataFromStmtSynonym;
+						for (size_t i=0; i<temp.size(); i++){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="ASSIGN_NODE"){
+								answer.push_back(temp.at(i));
+							}
+						}
+					} else if (synonymTable->at(selectSynonym)=="while"){
+						vector<int> temp = dataFromStmtSynonym;
+						for (size_t i=0; i<temp.size(); i++){
+							if (statementTable->getTNode(temp.at(i))->getNodeType()=="WHILE_NODE"){
+								answer.push_back(temp.at(i));
+							}
+						}
+					} else if (synonymTable->at(selectSynonym)=="if"){
+						// not implemented
+					} else {
+						// throw exception or return empty
+					}
+				} else {
+					// throw exception
+				}
+			}
+		}
+	} else { // synonym is not in Parent*(*, *)
+		bool isSuchThatTrue = false;
+		string leftSynonym = suchThatTree->getRootNode()->getChild(0)->getKey();
+		string rightSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
+		if (leftSynonym.empty()&&rightSynonym.empty()){ // Parent*(1, 2);
+			int leftStmtIndex = suchThatTree->getRootNode()->getChild(0)->getValue();
+			int rightStmtIndex = suchThatTree->getRootNode()->getChild(1)->getValue();
+			if (leftStmtIndex>statementTable->getSize()||rightStmtIndex>statementTable->getSize()){
+				// throw exception
+			} else {
+				isSuchThatTrue = parent->isParentStarTrue(leftStmtIndex, rightStmtIndex);
+			}
+		} else if (leftSynonym.empty()){ // Parent*(1, synonym)
+			int leftStmtIndex = suchThatTree->getRootNode()->getChild(0)->getValue();
+			if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
+				for (int i=1; i<=statementTable->getSize(); i++){
+					if (parent->isParentStarTrue(leftStmtIndex, i)){
+						isSuchThatTrue = true;
+						break;
+					}
+				}
+			} else if (synonymTable->at(rightSynonym)=="assign"){
+				for (int i=1; i<=statementTable->getSize(); i++){
+					if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&parent->isParentStarTrue(leftStmtIndex, i)){
+						isSuchThatTrue = true;
+						break;
+					}
+				}
+			} else if (synonymTable->at(rightSynonym)=="while"){
+				for (int i=1; i<=statementTable->getSize(); i++){
+					if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&parent->isParentStarTrue(leftStmtIndex, i)){
+						isSuchThatTrue = true;
+						break;
+					}
+				}		
+			} else if (synonymTable->at(rightSynonym)=="if"){
+				// not implemented
+			} else {
+				// throw exception
+			}
+		} else if (rightSynonym.empty()){ // Parent*(synonym, 2)
+			int rightStmtIndex = suchThatTree->getRootNode()->getChild(1)->getValue();
+			if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){
+				for (int i=1; i<=statementTable->getSize(); i++){
+					if (parent->isParentStarTrue(i, rightStmtIndex)){
+						isSuchThatTrue = true;
+						break;
+					}
+				}
+			} else if (synonymTable->at(leftSynonym)=="assign"){
+				for (int i=1; i<=statementTable->getSize(); i++){
+					if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"&&parent->isParentStarTrue(i, rightStmtIndex)){
+						isSuchThatTrue = true;
+						break;
+					}
+				}
+			} else if (synonymTable->at(leftSynonym)=="while"){
+				for (int i=1; i<=statementTable->getSize(); i++){
+					if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"&&parent->isParentStarTrue(i, rightStmtIndex)){
+						isSuchThatTrue = true;
+						break;
+					}
+				}
+			} else if (synonymTable->at(leftSynonym)=="if"){
+				// not implemented
+			} else {
+				// throw exception
+			}
+		} else { // Parent*(synonym1, synonym2)
+			if(synonymTable->at(leftSynonym).empty()||synonymTable->at(rightSynonym).empty()){
+				// throw exception
+			} else if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){ // Parent*(s1, synonym2)
+				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Parent*(s1, s2) 
+					for (int i=1; i<=statementTable->getSize(); i++){
+						for (int j=1; j<=statementTable->getSize(); j++){
+							if (parent->isParentStarTrue(i, j)){
+								isSuchThatTrue = true;
+								break;
+							}		
+						}
+						if (isSuchThatTrue) break;
+					}
+				} else if (synonymTable->at(rightSynonym)=="assign"){ // Parent*(s1, a2)
+					for (int i=1; i<=statementTable->getSize(); i++){
+							for (int j=1; j<=statementTable->getSize(); j++){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&parent->isParentStarTrue(i, j)){
+									isSuchThatTrue = true;
+									break;
+								}			
+							}
+							if (isSuchThatTrue) break;
+					}
+				} else if (synonymTable->at(rightSynonym)=="while"){ // Parent*(s1, w2)
+					for (int i=1; i<=statementTable->getSize(); i++){
+							for (int j=1; j<=statementTable->getSize(); j++){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&parent->isParentStarTrue(i, j)){
+									isSuchThatTrue = true;
+									break;
+								}			
+							}
+							if (isSuchThatTrue) break;
+					}			
+				} else if (synonymTable->at(rightSynonym)=="if"){
+					// not implemented
+				} else {
+					// throw exception
+				}
+			} else if (synonymTable->at(leftSynonym)=="assign"){ // Parent*(a1, synonym2)
+				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Parent*(a1, s2) 
+					for (int i=1; i<=statementTable->getSize(); i++){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
+							for (int j=1; j<statementTable->getSize(); j++){
+								if (parent->isParentStarTrue(i, j)){
+									isSuchThatTrue = true;
+									break;
+								}			
+							}
+							if (isSuchThatTrue) break;
+						}
+						if (isSuchThatTrue) break;
+					}
+				} else if (synonymTable->at(rightSynonym)=="assign"){ // Parent*(a1, a2)
+					for (int i=1; i<=statementTable->getSize(); i++){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
+							for (int j=1; j<=statementTable->getSize(); j++){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&parent->isParentStarTrue(i, j)){
+									isSuchThatTrue = true;
+									break;
+								}			
+							}
+							if (isSuchThatTrue) break;
+						}
+						if (isSuchThatTrue) break;
+					}
+				} else if (synonymTable->at(rightSynonym)=="while"){ // Parent*(a1, w2)
+					for (int i=1; i<=statementTable->getSize(); i++){
+						if (statementTable->getTNode(i)->getNodeType()=="ASSIGN_NODE"){
+							for (int j=1; j<=statementTable->getSize(); j++){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&parent->isParentStarTrue(i, j)){
+									isSuchThatTrue = true;
+								}			
+							}
+							if (isSuchThatTrue) break;
+						}
+						if (isSuchThatTrue) break;
+					}
+				} else if (synonymTable->at(rightSynonym)=="if"){
+					// not implemented
+				} else {
+					// throw exception
+				}
+			} else if (synonymTable->at(leftSynonym)=="while"){ // Parent*(w1, synonym2)
+				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Parent*(w1, s2) 
+					for (int i=1; i<=statementTable->getSize(); i++){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
+							for (int j=1; j<=statementTable->getSize(); j++){
+								if (parent->isParentStarTrue(i, j)){
+									isSuchThatTrue = true;
+								}			
+							}
+							if (isSuchThatTrue) break;
+						}
+						if (isSuchThatTrue) break;
+					}
+				} else if (synonymTable->at(rightSynonym)=="assign"){ // Parent*(w1, a2)
+					for (int i=1; i<=statementTable->getSize(); i++){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
+							for (int j=1; j<=statementTable->getSize(); j++){
+								if (statementTable->getTNode(j)->getNodeType()=="ASSIGN_NODE"&&parent->isParentStarTrue(i, j)){
+									isSuchThatTrue = true;
+								}			
+							}
+							if (isSuchThatTrue) break;
+						}
+						if (isSuchThatTrue) break;
+					}
+				} else if (synonymTable->at(rightSynonym)=="while"){ // Parent*(w1, w2)
+					for (int i=1; i<=statementTable->getSize(); i++){
+						if (statementTable->getTNode(i)->getNodeType()=="WHILE_NODE"){
+							for (int j=1; j<=statementTable->getSize(); j++){
+								if (statementTable->getTNode(j)->getNodeType()=="WHILE_NODE"&&parent->isParentStarTrue(i, j)){
 									isSuchThatTrue = true;
 								}			
 							}

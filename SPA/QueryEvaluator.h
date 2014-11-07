@@ -35,6 +35,8 @@ class QueryEvaluator{
 		bool checkSynonymInSuchThat(string, QueryTree*);
 		vector<int> solveForSuchThatFollows(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Follows*, ProcTable*, VarTable*);
 		vector<int> solveForSuchThatParent(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Parent*, ProcTable*, VarTable*);
+		vector<int> solveForSuchThatFollowsStar(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Follows*, ProcTable*, VarTable*);
+		vector<int> solveForSuchThatParentStar(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Parent*, ProcTable*, VarTable*);
 		vector<int> solveForSuchThatModifies(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Modifies*, ProcTable*, VarTable*);
 		vector<int> solveForSuchThatUses(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Uses*, ProcTable*, VarTable*);
 	

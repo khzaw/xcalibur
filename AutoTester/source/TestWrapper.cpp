@@ -43,8 +43,7 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
 	QueryParser* qp = new QueryParser(query);
 	/*cout << endl;*/
 	QueryEvaluator* qe = new QueryEvaluator(controller);
-	string result = qe->evaluate(&(qp->getSynonyms()), qp->getQueryTree());
+	results = qe->evaluate(&(qp->getSynonyms()), qp->getQueryTree());
 	/*cout << "RESULT" << endl;
 	cout << result << endl;*/
-	results.push_back(result);
 }

@@ -3866,9 +3866,10 @@ vector<int> solve(string selectSynonym, map<STRING, STRING>* synonymTable, Query
 
 /******* Methods *******/
 // Method to get and printout final result
-STRING QueryEvaluator::evaluate(map<STRING, STRING>* synonymTable, QueryTree* tree){
+list<string> QueryEvaluator::evaluate(map<STRING, STRING>* synonymTable, QueryTree* tree){
 
 	string output = "Hello World!";
+	list<string> outputlist;
 	PKBController* pkb = this->pkb;
 	string selectSynonym = tree->getRootNode()->getChild(0)->getChild(0)->getKey();
 	// Need to check if selectSynonym is inside synonymTable
@@ -3880,26 +3881,29 @@ STRING QueryEvaluator::evaluate(map<STRING, STRING>* synonymTable, QueryTree* tr
 		if (synonymTable->at(selectSynonym)=="variable"){
 			for (size_t i=0; i<answer.size(); i++){
 				temp = temp + ("" + pkb->varTable.getVarName(answer.at(i)));
+				outputlist.push_back(pkb->varTable.getVarName(answer.at(i)));
 				if (i!=answer.size()-1){
-					temp = temp+" ";
+					temp = temp+",";
 				}
 			}
 		} else {
 			for (size_t i=0; i<answer.size(); i++){
 				temp = temp + ("" + pkb->procTable.getProcName(answer.at(i)));
 				if (i!=answer.size()-1){
-					temp = temp+" ";
+					temp = temp+",";
 				}
+				outputlist.push_back(pkb->procTable.getProcName(answer.at(i)));
 			}
 		}
 	} else {
 		for (size_t i=0; i<answer.size(); i++){
 			temp = temp + to_string((long long)answer[i]);
 			if (i!=answer.size()-1){
-				temp = temp+" ";
+				temp = temp+",";
 			}
-		}
+			outputlist.push_back(to_string((long long)answer[i]));
 	}
 	output = temp;
-	return output;
+	return outputlist;
+	}
 };

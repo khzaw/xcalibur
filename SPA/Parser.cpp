@@ -148,8 +148,10 @@ void Parser::stmt(TNode* parent) {
 		//cout << nextToken.name << "\t" << loc << endl;
 		variableName(); 
 		populateModifies(loc);
+		cout << parent->getNodeType() << endl;
 		if(parent->getNodeType() == TNODE_NAMES[WHILE_NODE] || parent->getNodeType() == TNODE_NAMES[IF_NODE])
 			controller.parentTable.insertParent(parent->getStmtNum(), loc);
+
 		if(temp > 0) {
 			controller.followsTable.insertFollows(temp, loc);
 		}

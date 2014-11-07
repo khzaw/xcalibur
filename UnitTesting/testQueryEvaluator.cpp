@@ -42,16 +42,16 @@ void QueryEvaluatorTest::testCheckSynonymInSuchThat(){
 
 void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	StatementTable st;
-	TNode stmt1("assign","a = x", 1,0);
-	TNode stmt2("assign","b = y", 2,0);
-	TNode stmt3("while","c", 3,0);
-	TNode stmt4("assign","d = t", 4,0);
-	TNode stmt5("assign","e = v", 5,0);
-	TNode stmt6("while","f", 6,0);
-	TNode stmt7("while","g", 7,0);
-	TNode stmt8("assign","h=u", 8,0);
-	TNode stmt9("while","i", 9,0);
-	TNode stmt10("while","j", 10,0);
+	TNode stmt1("ASSIGN_NODE","a = x", 1,0);
+	TNode stmt2("ASSIGN_NODE","b = y", 2,0);
+	TNode stmt3("WHILE_NODE","c", 3,0);
+	TNode stmt4("ASSIGN_NODE","d = t", 4,0);
+	TNode stmt5("ASSIGN_NODE","e = v", 5,0);
+	TNode stmt6("WHILE_NODE","f", 6,0);
+	TNode stmt7("WHILE_NODE","g", 7,0);
+	TNode stmt8("ASSIGN_NODE","h=u", 8,0);
+	TNode stmt9("WHILE_NODE","i", 9,0);
+	TNode stmt10("WHILE_NODE","j", 10,0);
 	st.insertStatement(&stmt1);
 	st.insertStatement(&stmt2);
 	st.insertStatement(&stmt3);
@@ -1196,8 +1196,8 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
     CPPUNIT_ASSERT_EQUAL(8, actualResult69.at(4));
 
 	StatementTable st2;
-	TNode stmt2_1("assign","a = x", 1,0);
-	TNode stmt2_2("while","c", 2,0);
+	TNode stmt2_1("ASSIGN_NODE","a = x", 1,0);
+	TNode stmt2_2("WHILE_NODE","c", 2,0);
 	st2.insertStatement(&stmt2_1);
 	st2.insertStatement(&stmt2_2);
 
@@ -1267,16 +1267,16 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	}
 	**/
 	StatementTable st;
-	TNode stmt1("assign","a = x", 1,0);
-	TNode stmt2("assign","b = y", 2,0);
-	TNode stmt3("while","c", 3,0);
-	TNode stmt4("assign","d = t", 4,0);
-	TNode stmt5("assign","e = v", 5,0);
-	TNode stmt6("while","f", 6,0);
-	TNode stmt7("while","g", 7,0);
-	TNode stmt8("assign","h = u", 8,0);
-	TNode stmt9("while","i", 9,0);
-	TNode stmt10("assign","a = b", 10,0);
+	TNode stmt1("ASSIGN_NODE","a = x", 1,0);
+	TNode stmt2("ASSIGN_NODE","b = y", 2,0);
+	TNode stmt3("WHILE_NODE","c", 3,0);
+	TNode stmt4("ASSIGN_NODE","d = t", 4,0);
+	TNode stmt5("ASSIGN_NODE","e = v", 5,0);
+	TNode stmt6("WHILE_NODE","f", 6,0);
+	TNode stmt7("WHILE_NODE","g", 7,0);
+	TNode stmt8("ASSIGN_NODE","h = u", 8,0);
+	TNode stmt9("WHILE_NODE","i", 9,0);
+	TNode stmt10("ASSIGN_NODE","a = b", 10,0);
 
 	st.insertStatement(&stmt1);
 	st.insertStatement(&stmt2);
@@ -2189,16 +2189,16 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	**/
 
 	StatementTable st;
-	TNode stmt1("assign","a = x", 1,0);
-	TNode stmt2("assign","b = y", 2,0);
-	TNode stmt3("while","c", 3,0);
-	TNode stmt4("assign","d = t", 4,0);
-	TNode stmt5("assign","e = v", 5,0);
-	TNode stmt6("while","f", 6,0);
-	TNode stmt7("while","g", 7,0);
-	TNode stmt8("assign","h = u", 8,0);
-	TNode stmt9("while","i", 9,0);
-	TNode stmt10("assign","a = b", 10,0);
+	TNode stmt1("ASSIGN_NODE","a = x", 1,0);
+	TNode stmt2("ASSIGN_NODE","b = y", 2,0);
+	TNode stmt3("WHILE_NODE","c", 3,0);
+	TNode stmt4("ASSIGN_NODE","d = t", 4,0);
+	TNode stmt5("ASSIGN_NODE","e = v", 5,0);
+	TNode stmt6("WHILE_NODE","f", 6,0);
+	TNode stmt7("WHILE_NODE","g", 7,0);
+	TNode stmt8("ASSIGN_NODE","h = u", 8,0);
+	TNode stmt9("WHILE_NODE","i", 9,0);
+	TNode stmt10("ASSIGN_NODE","a = b", 10,0);
 
 	st.insertStatement(&stmt1);
 	st.insertStatement(&stmt2);

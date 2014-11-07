@@ -172,7 +172,7 @@ void QueryParser::matchConditions() {
 
 void QueryParser::matchSuchThat() {
 	matchSuchThatConditions();
-	if (_stricmp(nextToken.name.c_str(), "and") == 0) {
+	while (_stricmp(nextToken.name.c_str(), "and") == 0) {
 		match("and");
 		matchSuchThatConditions();
 	}

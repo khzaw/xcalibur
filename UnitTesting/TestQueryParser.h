@@ -10,6 +10,9 @@ class QueryParserTest : public CPPUNIT_NS::TestFixture // Note 2
 	CPPUNIT_TEST(testSynonym);
 	CPPUNIT_TEST(testSuchThat);
 	CPPUNIT_TEST(testModifies);
+	CPPUNIT_TEST(testUses);
+	CPPUNIT_TEST(testCalls);
+	CPPUNIT_TEST(testParent);
 	CPPUNIT_TEST(testFollows);
 	CPPUNIT_TEST_SUITE_END();
 
@@ -20,6 +23,9 @@ public:
 	void testSynonym();
 	void testSuchThat();
 	void testModifies();
+	void testUses();
+	void testCalls();
+	void testParent();
 	void testFollows();
 
 };

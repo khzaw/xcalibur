@@ -23,3 +23,18 @@ variable v;stmt s;
 Select v such that Follows(1,2)
 i,b,c,a,oSCar,beta,tmp,I,k,j1k,l,chArlie,x,left,right,Romeo,delta,width,w
 5000
+6-
+stmt s;
+Select s such that Modifies(s, "i")
+1
+5000
+7-
+stmt s;
+Select s such that Uses(s, "c")
+4, 5, 9, 11, 16, 17
+5000
+8-
+stmt s;
+Select s such that Modifies(s, "oSCar")
+4, 5, 6, 7, 8
+5000

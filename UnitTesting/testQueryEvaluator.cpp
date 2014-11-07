@@ -816,12 +816,12 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	vector<int> actualResult47 = qe->solveForSuchThatFollows("v4", &table1, query47, &st, &f1, &pt, &vt); // variable v4; Select v4 such that Follows(1, 2) | Expected <1, 2, 3, 4, 5, 6>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)6, actualResult47.size());
-	CPPUNIT_ASSERT_EQUAL(1, actualResult47.at(0));
-	CPPUNIT_ASSERT_EQUAL(2, actualResult47.at(1));
-	CPPUNIT_ASSERT_EQUAL(3, actualResult47.at(2));
-	CPPUNIT_ASSERT_EQUAL(4, actualResult47.at(3));
-	CPPUNIT_ASSERT_EQUAL(5, actualResult47.at(4));
-	CPPUNIT_ASSERT_EQUAL(6, actualResult47.at(5));
+	CPPUNIT_ASSERT_EQUAL(0, actualResult47.at(0));
+	CPPUNIT_ASSERT_EQUAL(1, actualResult47.at(1));
+	CPPUNIT_ASSERT_EQUAL(2, actualResult47.at(2));
+	CPPUNIT_ASSERT_EQUAL(3, actualResult47.at(3));
+	CPPUNIT_ASSERT_EQUAL(4, actualResult47.at(4));
+	CPPUNIT_ASSERT_EQUAL(5, actualResult47.at(5));
 
 	QTNode* follows48 = new QTNode("Follows");
 	QTNode* first48 = new QTNode(1);
@@ -835,7 +835,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	vector<int> actualResult48 = qe->solveForSuchThatFollows("proc5", &table1, query48, &st, &f1, &pt, &vt); // procedure proc5; Select proc5 such that Follows(1, 2) | Expected <1>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult48.size());
-	CPPUNIT_ASSERT_EQUAL(1, actualResult48.at(0));
+	CPPUNIT_ASSERT_EQUAL(0, actualResult48.at(0));
 
 	QTNode* follows49 = new QTNode("Follows");
 	QTNode* first49 = new QTNode(1);

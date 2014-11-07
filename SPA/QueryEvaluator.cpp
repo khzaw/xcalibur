@@ -875,6 +875,9 @@ vector<int> QueryEvaluator::solveForSuchThatModifies(string selectSynonym, map<S
 			string rightSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
 			if(!rightSynonym.empty()){ // Select synonym such that Modifies(synonym, *);
 				if (synonymTable->find(rightSynonym) == synonymTable->end()){ // Select synonym such that Modifies(synonym, aString);
+					if (rightSynonym.length()>=2){
+						rightSynonym = rightSynonym.substr(1, rightSynonym.length()-2);
+					}
 					if (varTable->containsVar(rightSynonym)){ // if another synonym is a variable
 						int varIndex = varTable->getVarIndex(rightSynonym);
 						if (synonymTable->at(selectSynonym)=="procedure"){
@@ -958,6 +961,9 @@ vector<int> QueryEvaluator::solveForSuchThatModifies(string selectSynonym, map<S
 				string leftSynonym = suchThatTree->getRootNode()->getChild(0)->getKey();
 				if (!leftSynonym.empty()){ // Select synonym such that Modifies(anotherSynonym, synonym)
 					if (synonymTable->find(leftSynonym) == synonymTable->end()){ // another synonym not in synonym table
+						if (leftSynonym.length()>=2){
+							leftSynonym = leftSynonym.substr(1, leftSynonym.length()-2);
+						}
 						if (procTable->containsProc(leftSynonym)){ // if another synonym is a procedure
 							int procIndex = procTable->getProcIndex(leftSynonym);
 							answer = modifies->getModifiedVarProc(procIndex);
@@ -1025,6 +1031,9 @@ vector<int> QueryEvaluator::solveForSuchThatModifies(string selectSynonym, map<S
 		string varSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
 		if (!varSynonym.empty()){
 			if (synonymTable->find(varSynonym) == synonymTable->end()){ // varSynonym is a variable name, Modifies(*, "x")
+				if (varSynonym.length()>=2){
+					varSynonym = varSynonym.substr(1, varSynonym.length()-2);
+				}
 				if (varTable->containsVar(varSynonym)){
 					int varIndex = varTable->getVarIndex(varSynonym);
 					string leftSynonym = suchThatTree->getRootNode()->getChild(0)->getKey();
@@ -1037,6 +1046,9 @@ vector<int> QueryEvaluator::solveForSuchThatModifies(string selectSynonym, map<S
 						}
 					} else { // Modifies(leftSynonym, "x")
 						if (synonymTable->find(leftSynonym) == synonymTable->end()){ // Modifies("Procedure First", "x")
+							if (leftSynonym.length()>=2){
+								leftSynonym = leftSynonym.substr(1, leftSynonym.length()-2);
+							}
 							if (procTable->containsProc(leftSynonym)){
 								int procIndex = procTable->getProcIndex(leftSynonym);
 								isSuchThatTrue = modifies->isModifiesProc(procIndex, varIndex);
@@ -1098,6 +1110,9 @@ vector<int> QueryEvaluator::solveForSuchThatModifies(string selectSynonym, map<S
 						}
 					} else { // Modifies(leftSynonym, var)
 						if (synonymTable->find(leftSynonym) == synonymTable->end()){ // Modifies("Procedure First", var)
+							if (leftSynonym.length()>=2){
+								leftSynonym = leftSynonym.substr(1, leftSynonym.length()-2);
+							}
 							if (procTable->containsProc(leftSynonym)){
 								int procIndex = procTable->getProcIndex(leftSynonym);
 								for (int i=0; i<varTable->getSize(); i++){
@@ -1218,6 +1233,9 @@ vector<int> QueryEvaluator::solveForSuchThatUses(string selectSynonym, map<STRIN
 			string rightSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
 			if(!rightSynonym.empty()){ // Select synonym such that Uses(synonym, *);
 				if (synonymTable->find(rightSynonym) == synonymTable->end()){ // Select synonym such that Uses(synonym, aString);
+					if (rightSynonym.length()>=2){
+						rightSynonym = rightSynonym.substr(1, rightSynonym.length()-2);
+					}
 					if (varTable->containsVar(rightSynonym)){ // if another synonym is a variable
 						int varIndex = varTable->getVarIndex(rightSynonym);
 						if (synonymTable->at(selectSynonym)=="procedure"){
@@ -1301,6 +1319,9 @@ vector<int> QueryEvaluator::solveForSuchThatUses(string selectSynonym, map<STRIN
 				string leftSynonym = suchThatTree->getRootNode()->getChild(0)->getKey();
 				if (!leftSynonym.empty()){ // Select synonym such that Uses(anotherSynonym, synonym)
 					if (synonymTable->find(leftSynonym) == synonymTable->end()){ // another synonym not in synonym table
+						if (leftSynonym.length()>=2){
+							leftSynonym = leftSynonym.substr(1, leftSynonym.length()-2);
+						}
 						if (procTable->containsProc(leftSynonym)){ // if another synonym is a procedure
 							int procIndex = procTable->getProcIndex(leftSynonym);
 							answer = uses->getUsedVarProc(procIndex);
@@ -1368,6 +1389,9 @@ vector<int> QueryEvaluator::solveForSuchThatUses(string selectSynonym, map<STRIN
 		string varSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
 		if (!varSynonym.empty()){
 			if (synonymTable->find(varSynonym) == synonymTable->end()){ // varSynonym is a variable name, Uses(*, "x")
+				if (varSynonym.length()>=2){
+					varSynonym = varSynonym.substr(1, varSynonym.length()-2);
+				}
 				if (varTable->containsVar(varSynonym)){
 					int varIndex = varTable->getVarIndex(varSynonym);
 					string leftSynonym = suchThatTree->getRootNode()->getChild(0)->getKey();
@@ -1380,6 +1404,9 @@ vector<int> QueryEvaluator::solveForSuchThatUses(string selectSynonym, map<STRIN
 						}
 					} else { // Uses(leftSynonym, "x")
 						if (synonymTable->find(leftSynonym) == synonymTable->end()){ // Uses("Procedure First", "x")
+							if (leftSynonym.length()>=2){
+								leftSynonym = leftSynonym.substr(1, leftSynonym.length()-2);
+							}
 							if (procTable->containsProc(leftSynonym)){
 								int procIndex = procTable->getProcIndex(leftSynonym);
 								isSuchThatTrue = uses->isUsesProc(procIndex, varIndex);
@@ -1441,6 +1468,9 @@ vector<int> QueryEvaluator::solveForSuchThatUses(string selectSynonym, map<STRIN
 						}
 					} else { // Uses(leftSynonym, var)
 						if (synonymTable->find(leftSynonym) == synonymTable->end()){ // Uses("Procedure First", var)
+							if (leftSynonym.length()>=2){
+								leftSynonym = leftSynonym.substr(1, leftSynonym.length()-2);
+							}
 							if (procTable->containsProc(leftSynonym)){
 								int procIndex = procTable->getProcIndex(leftSynonym);
 								for (int i=0; i<varTable->getSize(); i++){
@@ -1574,6 +1604,9 @@ vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* 
 			string rightSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
 			if(!rightSynonym.empty()){ // Select synonym such that Modifies(synonym, *);
 				if (synonymTable->find(rightSynonym) == synonymTable->end()){ // Select synonym such that Modifies(synonym, aString);
+					if (rightSynonym.length()>=2){
+						rightSynonym = rightSynonym.substr(1, rightSynonym.length()-2);
+					}
 					if (varTable->containsVar(rightSynonym)){ // if another synonym is a variable
 						int varIndex = varTable->getVarIndex(rightSynonym);
 						if (synonymTable->at(selectSynonym)=="procedure"){
@@ -1657,6 +1690,9 @@ vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* 
 				string leftSynonym = suchThatTree->getRootNode()->getChild(0)->getKey();
 				if (!leftSynonym.empty()){ // Select synonym such that Modifies(anotherSynonym, synonym)
 					if (synonymTable->find(leftSynonym) == synonymTable->end()){ // another synonym not in synonym table
+						if (leftSynonym.length()>=2){
+							leftSynonym = leftSynonym.substr(1, leftSynonym.length()-2);
+						}
 						if (procTable->containsProc(leftSynonym)){ // if another synonym is a procedure
 							int procIndex = procTable->getProcIndex(leftSynonym);
 							answer = modifies->getModifiedVarProc(procIndex);
@@ -1724,6 +1760,9 @@ vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* 
 		string varSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
 		if (!varSynonym.empty()){
 			if (synonymTable->find(varSynonym) == synonymTable->end()){ // varSynonym is a variable name, Modifies(*, "x")
+				if (varSynonym.length()>=2){
+					varSynonym = varSynonym.substr(1, varSynonym.length()-2);
+				}
 				if (varTable->containsVar(varSynonym)){
 					int varIndex = varTable->getVarIndex(varSynonym);
 					string leftSynonym = suchThatTree->getRootNode()->getChild(0)->getKey();
@@ -1736,6 +1775,9 @@ vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* 
 						}
 					} else { // Modifies(leftSynonym, "x")
 						if (synonymTable->find(leftSynonym) == synonymTable->end()){ // Modifies("Procedure First", "x")
+							if (leftSynonym.length()>=2){
+								leftSynonym = leftSynonym.substr(1, leftSynonym.length()-2);
+							}
 							if (procTable->containsProc(leftSynonym)){
 								int procIndex = procTable->getProcIndex(leftSynonym);
 								isSuchThatTrue = modifies->isModifiesProc(procIndex, varIndex);
@@ -1797,6 +1839,9 @@ vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* 
 						}
 					} else { // Modifies(leftSynonym, var)
 						if (synonymTable->find(leftSynonym) == synonymTable->end()){ // Modifies("Procedure First", var)
+							if (leftSynonym.length()>=2){
+								leftSynonym = leftSynonym.substr(1, leftSynonym.length()-2);
+							}
 							if (procTable->containsProc(leftSynonym)){
 								int procIndex = procTable->getProcIndex(leftSynonym);
 								for (int i=0; i<varTable->getSize(); i++){
@@ -1917,6 +1962,9 @@ vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* syno
 			string rightSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
 			if(!rightSynonym.empty()){ // Select synonym such that Uses(synonym, *);
 				if (synonymTable->find(rightSynonym) == synonymTable->end()){ // Select synonym such that Uses(synonym, aString);
+					if (rightSynonym.length()>=2){
+						rightSynonym = rightSynonym.substr(1, rightSynonym.length()-2);
+					}
 					if (varTable->containsVar(rightSynonym)){ // if another synonym is a variable
 						int varIndex = varTable->getVarIndex(rightSynonym);
 						if (synonymTable->at(selectSynonym)=="procedure"){
@@ -2000,6 +2048,9 @@ vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* syno
 				string leftSynonym = suchThatTree->getRootNode()->getChild(0)->getKey();
 				if (!leftSynonym.empty()){ // Select synonym such that Uses(anotherSynonym, synonym)
 					if (synonymTable->find(leftSynonym) == synonymTable->end()){ // another synonym not in synonym table
+						if (leftSynonym.length()>=2){
+							leftSynonym = leftSynonym.substr(1, leftSynonym.length()-2);
+						}
 						if (procTable->containsProc(leftSynonym)){ // if another synonym is a procedure
 							int procIndex = procTable->getProcIndex(leftSynonym);
 							answer = uses->getUsedVarProc(procIndex);
@@ -2067,6 +2118,9 @@ vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* syno
 		string varSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
 		if (!varSynonym.empty()){
 			if (synonymTable->find(varSynonym) == synonymTable->end()){ // varSynonym is a variable name, Uses(*, "x")
+				if (varSynonym.length()>=2){
+					varSynonym = varSynonym.substr(1, varSynonym.length()-2);
+				}
 				if (varTable->containsVar(varSynonym)){
 					int varIndex = varTable->getVarIndex(varSynonym);
 					string leftSynonym = suchThatTree->getRootNode()->getChild(0)->getKey();
@@ -2079,6 +2133,9 @@ vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* syno
 						}
 					} else { // Uses(leftSynonym, "x")
 						if (synonymTable->find(leftSynonym) == synonymTable->end()){ // Uses("Procedure First", "x")
+							if (leftSynonym.length()>=2){
+								leftSynonym = leftSynonym.substr(1, leftSynonym.length()-2);
+							}
 							if (procTable->containsProc(leftSynonym)){
 								int procIndex = procTable->getProcIndex(leftSynonym);
 								isSuchThatTrue = uses->isUsesProc(procIndex, varIndex);
@@ -2140,6 +2197,9 @@ vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* syno
 						}
 					} else { // Uses(leftSynonym, var)
 						if (synonymTable->find(leftSynonym) == synonymTable->end()){ // Uses("Procedure First", var)
+							if (leftSynonym.length()>=2){
+								leftSynonym = leftSynonym.substr(1, leftSynonym.length()-2);
+							}
 							if (procTable->containsProc(leftSynonym)){
 								int procIndex = procTable->getProcIndex(leftSynonym);
 								for (int i=0; i<varTable->getSize(); i++){
@@ -3954,7 +4014,7 @@ list<string> QueryEvaluator::evaluate(map<STRING, STRING>* synonymTable, QueryTr
 	string selectSynonym = tree->getRootNode()->getChild(0)->getChild(0)->getKey();
 	// Need to check if selectSynonym is inside synonymTable
 	// TODO: throws exception
-	tree->printTree();
+	// tree->printTree();
 	vector<int> answer = solve(selectSynonym, synonymTable, tree, pkb);
 	string temp = "";
 	if (synonymTable->at(selectSynonym)=="variable"||

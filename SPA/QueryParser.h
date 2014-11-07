@@ -54,6 +54,8 @@ public:
 	~QueryParser();
 	void parse();
 	void printMap();
+	map<string, string> getSynonyms();
+	QueryTree * getQueryTree();
 
 private:
 	Lexeme getToken();

@@ -50,6 +50,14 @@ void QueryParser::parse() {
 	}
 }
 
+map<string, string> QueryParser::getSynonyms() {
+	return synonyms;
+}
+
+QueryTree* QueryParser::getQueryTree() {
+	return qt;
+}
+
 void QueryParser::match(string s) {
 	if (_stricmp(s.c_str(), nextToken.name.c_str()) == 0) {
 		nextToken = getToken();

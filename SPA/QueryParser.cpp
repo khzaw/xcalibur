@@ -146,6 +146,7 @@ void QueryParser::matchTupleElements(int times) {
 }
 
 void QueryParser::matchConditions() {
+	//cout << nextToken.name <<endl;
 	if (_stricmp(nextToken.name.c_str(), "such") == 0) {
 		match("such");
 		match("that");
@@ -157,7 +158,7 @@ void QueryParser::matchConditions() {
 		match("with");
 		matchWith();
 	} else if (nextToken.token == EOL) {
-		cout << "End of query" << endl;
+		//cout << "End of query" << endl;
 		return;
 	} else {
 		cout << "SYNTAX ERROR" << endl;
@@ -220,6 +221,7 @@ void QueryParser::matchUses() {
 	QTNode* usesNode = new QTNode("Uses");
 
 	match("(");
+	//cout << "Matched ( successfully, mathching entRef _ ..." << endl;
 	usesNode->addChild(matchEntRef());
 	match(",");
 	usesNode->addChild(matchVarRef());
@@ -286,7 +288,7 @@ QTNode* QueryParser::matchVarRef() {
 	QTNode* qtpi;
 	if (nextToken.name.compare("_") == 0) {
 		qtpi = new QTNode("_");
-		match("_");
+		match(UNDERSCORE);
 	} else if (nextToken.token == IDENT || nextToken.token == SIMPLE_IDENT) {
 		qtpi = new QTNode(nextToken.name);
 		match(IDENT);
@@ -302,9 +304,10 @@ QTNode* QueryParser::matchVarRef() {
 
 QTNode* QueryParser::matchEntRef() {
 	QTNode* qtpi;
+	//cout << "EntRef: " << nextToken.name << "," << nextToken.name.length() << endl;
 	if (nextToken.name.compare("_") == 0) {
 		qtpi = new QTNode("_");
-		match("_");
+		match(UNDERSCORE);
 	} else if (nextToken.token == INT_LIT) {
 		qtpi = new QTNode(stoi(nextToken.name));
 		match(INT_LIT);
@@ -325,7 +328,7 @@ QTNode* QueryParser::matchStmtRef() {
 	QTNode* qtpi;
 	if (nextToken.name.compare("_") == 0) {
 		qtpi = new QTNode("_");
-		match("_");
+		match(UNDERSCORE);
 	} else if (nextToken.token == INT_LIT) {
 		qtpi = new QTNode(stoi(nextToken.name));
 		match(INT_LIT);
@@ -373,7 +376,7 @@ void QueryParser::matchPatternAssign(string s) {
 	string expression = "";
 	if (nextToken.name.compare("_") == 0) {
 		expression += nextToken.name;
-		match("_");
+		match(UNDERSCORE);
 	}
 	
 	expression = matchExpression(expression);
@@ -383,7 +386,7 @@ void QueryParser::matchPatternAssign(string s) {
 			throw(QueryException("EXPRESSION ERROR: SIMPLE Expressions of the form __ is invalid"));
 		} else {
 			expression += nextToken.name;
-			match("_");
+			match(UNDERSCORE);
 		}
 	}
 
@@ -446,9 +449,9 @@ void QueryParser::matchPatternIf (string s) {
 	match("(");
 	ifNode->addChild(matchVarRef());
 	match(",");
-	match("_");
+	match(UNDERSCORE);
 	match(",");
-	match("_");
+	match(UNDERSCORE);
 	match(")");
 
 	qt->getRootNode()->getChild(2)->addChild(ifNode);
@@ -460,7 +463,7 @@ void QueryParser::matchPatternWhile(string s) {
 	match("(");
 	whileNode->addChild(matchVarRef());
 	match(",");
-	match("_");
+	match(UNDERSCORE);
 	match(")");
 
 	qt->getRootNode()->getChild(2)->addChild(whileNode);

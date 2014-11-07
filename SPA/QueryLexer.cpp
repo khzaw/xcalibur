@@ -142,6 +142,11 @@ Lexeme QueryLexer::lex() {
 			return Lexeme(APOSTROPHE, lexeme);
 			break;
 
+		case UNDERSCORE:
+			addChar(); getChar();
+			return Lexeme(UNDERSCORE, lexeme);
+			break;
+
 		default:
 			return Lexeme(ERROR, lexeme);
 	}

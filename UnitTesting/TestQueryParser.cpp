@@ -95,7 +95,7 @@ void QueryParserTest::testModifies() {
 	string q;
 	QueryParser* qp;
 	QTNode* qt;
-	//ent, var
+	//Modifies (ent, var)
 	q = "while a; variable b; select a such that Modifies(a, b)";
 	qp = new QueryParser(q);
 	qt = qp->getQueryTree()->getRootNode()->getChild(1);
@@ -110,11 +110,67 @@ void QueryParserTest::testModifies() {
 	CPPUNIT_ASSERT(qt->getNumChild() == 1);
 	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Modifies");
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getValue() == 1);
-	cout << "Child:" << qt->getChild(0)->getChild(1)->getKey() << endl;
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "\"x\"");
-	
 
-	//stmt, var
+	q = "while a; variable b; select a such that Modifies(_,_)";
+	qp = new QueryParser(q);
+	qt = qp->getQueryTree()->getRootNode()->getChild(1);
+	CPPUNIT_ASSERT(qt->getNumChild() == 1);
+	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Modifies");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "_");
+
+	// Multiple Modifies
+	q = "while a; variable b; select a such that Modifies(_,_) such that Modifies(a, b)";
+	qp = new QueryParser(q);
+	qt = qp->getQueryTree()->getRootNode()->getChild(1);
+	CPPUNIT_ASSERT(qt->getNumChild() == 2);
+	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Modifies");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(1)->getKey() == "Modifies");
+	CPPUNIT_ASSERT(qt->getChild(1)->getChild(0)->getKey() == "a");
+	CPPUNIT_ASSERT(qt->getChild(1)->getChild(1)->getKey() == "b");
+
+	q = "while a; variable b; select a such that Modifies(_,_) and Modifies(a, b)";
+	qp = new QueryParser(q);
+	qt = qp->getQueryTree()->getRootNode()->getChild(1);
+	CPPUNIT_ASSERT(qt->getNumChild() == 2);
+	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Modifies");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(1)->getKey() == "Modifies");
+	CPPUNIT_ASSERT(qt->getChild(1)->getChild(0)->getKey() == "a");
+	CPPUNIT_ASSERT(qt->getChild(1)->getChild(1)->getKey() == "b");
+	/*
+	q = "while a; variable b; select a such that Modifies(b,a) such that Modifies(a, b) and Modifies(1, 2)";
+	qp = new QueryParser(q);
+	qt = qp->getQueryTree()->getRootNode()->getChild(1);
+	//CPPUNIT_ASSERT_EQUAL(qt->getNumChild(), 3);
+	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Modifies");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "b");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "a");
+	CPPUNIT_ASSERT(qt->getChild(1)->getKey() == "Modifies");
+	CPPUNIT_ASSERT(qt->getChild(1)->getChild(0)->getKey() == "a");
+	CPPUNIT_ASSERT(qt->getChild(1)->getChild(1)->getKey() == "b");
+	CPPUNIT_ASSERT(qt->getChild(2)->getKey() == "Modifies");
+	CPPUNIT_ASSERT(qt->getChild(2)->getChild(0)->getValue() == 1);
+	CPPUNIT_ASSERT(qt->getChild(2)->getChild(1)->getValue() == 2);
+
+	q = "while a; variable b; select a such that Modifies(_,_) and Modifies(a, b) and Modifies(1, 2)";
+	qp = new QueryParser(q);
+	qt = qp->getQueryTree()->getRootNode()->getChild(1);
+	CPPUNIT_ASSERT(qt->getNumChild() == 3);
+	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Modifies");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(1)->getKey() == "Modifies");
+	CPPUNIT_ASSERT(qt->getChild(1)->getChild(0)->getKey() == "a");
+	CPPUNIT_ASSERT(qt->getChild(1)->getChild(1)->getKey() == "b");
+	CPPUNIT_ASSERT(qt->getChild(2)->getKey() == "Modifies");
+	CPPUNIT_ASSERT(qt->getChild(2)->getChild(0)->getValue() == 1);
+	CPPUNIT_ASSERT(qt->getChild(2)->getChild(1)->getValue() == 2);
+	*/
 }
 
 void QueryParserTest::testFollows() {

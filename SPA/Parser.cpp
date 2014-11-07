@@ -319,6 +319,7 @@ int Parser::getTotalStatementNumber() {
 
 void Parser::populateModifies(int loc) {
 
+		//cout << loc << ", " << lastVarIndex << endl;
 	// assignment statement
 	controller.modifiesTable.insertModifiesStmt(loc, lastVarIndex);
 	controller.modifiesTable.insertModifiesProc(loc, procCount);
@@ -328,6 +329,7 @@ void Parser::populateModifies(int loc) {
 	while(containerStack.size() > 0) {
 		int top = containerStack.top();
 		temp.push(top);
+		//cout << top << ", " << lastVarIndex << endl;
 		controller.modifiesTable.insertModifiesStmt(top, lastVarIndex);
 		controller.modifiesTable.insertModifiesStmt(top, procCount);
 		containerStack.pop();
@@ -350,6 +352,7 @@ void Parser::populateUses(int loc) {
 	while(containerStack.size() > 0) {
 		int top = containerStack.top();
 		temp.push(top);
+	//	cout << top << ", " << lastVarIndex << endl;
 		controller.usesTable.insertUsesStmt(top, lastVarIndex);
 		controller.usesTable.insertUsesProc(top, procCount);
 		containerStack.pop();

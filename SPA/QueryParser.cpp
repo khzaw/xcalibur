@@ -82,7 +82,7 @@ Lexeme QueryParser::getToken() {
 
 void QueryParser::matchDeclaration() {
 	nextToken = getToken();
-
+	//cout << "SYNSIZE:" << DESIGN_ENTITIES.size() << endl;
 	for(size_t i = 0; i < DESIGN_ENTITIES.size(); i++) {
 		if (_stricmp(nextToken.name.c_str(), DESIGN_ENTITIES[i].c_str()) == 0) {
 			match(DESIGN_ENTITIES[i]);
@@ -291,8 +291,8 @@ QTNode* QueryParser::matchVarRef() {
 		qtpi = new QTNode(nextToken.name);
 		match(IDENT);
 	} else if (nextToken.name.compare("\"") == 0) {
-		qtpi = new QTNode("\"" + nextToken.name + "\"") ;
 		match("\"");
+		qtpi = new QTNode("\"" + nextToken.name + "\"") ;
 		match(IDENT);
 		match ("\"");
 	}
@@ -312,8 +312,8 @@ QTNode* QueryParser::matchEntRef() {
 		qtpi = new QTNode(nextToken.name);
 		match(IDENT);
 	} else if (nextToken.name.compare("\"") == 0) {
-		qtpi = new QTNode("\"" + nextToken.name + "\"") ;
 		match("\"");
+		qtpi = new QTNode("\"" + nextToken.name + "\"") ;
 		match(IDENT);
 		match ("\"");
 	}

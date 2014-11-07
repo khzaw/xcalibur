@@ -44,6 +44,7 @@ void QueryLexer::getChar() {
 	if(nextChar == ')') charClass = CLOSE_PARENTHESES;
 	if(nextChar == ',') charClass = COMMA;
 	if(nextChar == '\"') charClass = APOSTROPHE;
+	if(nextChar == '_') charClass = UNDERSCORE;
 }
 
 void QueryLexer::addChar() {
@@ -59,16 +60,28 @@ Lexeme QueryLexer::lex() {
 	if(charClass == EOL) { return Lexeme(EOL, lexeme); }
 
 	bool isSimple = true;
+	bool isUnderscore = false;
 	switch(charClass) {
 		case LETTER:
 			addChar(); getChar();
-			while(charClass == LETTER || charClass == DIGIT || charClass == HEX) {
+			while(charClass == LETTER || charClass == DIGIT || charClass == HEX || charClass == UNDERSCORE) {
 				if (charClass == HEX) {
 					isSimple = false;
 				}
+				if (charClass == UNDERSCORE) {
+					isUnderscore = true;	
+				}
 				addChar(); getChar();
 			}
-			
+		
+			if(isUnderscore) {
+				if(lexeme.compare("prog_line") != 0) {
+					return Lexeme(ERROR, lexeme);
+				} else {
+					return Lexeme(PROG_LINE, lexeme);
+				}
+			}
+
 			if(isSimple) {
 				return Lexeme(SIMPLE_IDENT, lexeme);
 			} else {

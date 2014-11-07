@@ -42,7 +42,9 @@ using namespace std;
 		COMMA,
 		APOSTROPHE,
 		SIMPLE_IDENT,
-		MINUS
+		MINUS,
+		UNDERSCORE,
+		PROG_LINE
 	};
 
 	static string TOKEN_TYPE_STRINGS[] = {
@@ -67,7 +69,9 @@ using namespace std;
 		"COMMA",
 		"APOSTROPHE",
 		"SIMPLE_IDENT",
-		"MINUS"
+		"MINUS",
+		"UNDERSCORE",
+		"PROG_LINE"
 	};
 
 class Lexer {

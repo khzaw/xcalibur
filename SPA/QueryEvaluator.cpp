@@ -14,6 +14,7 @@
 #include "Uses.h"
 #include "ProcTable.h"
 #include "VarTable.h"
+#include "ConstantTable.h"
 
 #include "QueryEvaluator.h"
 #include <set>
@@ -42,7 +43,7 @@ bool QueryEvaluator::checkSynonymInSuchThat(string selectSynonym, QueryTree* suc
 	return isSynonymInSuchThat;
 }
 
-vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Follows* follows, ProcTable* procTable, VarTable* varTable){
+vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Follows* follows, ProcTable* procTable, VarTable* varTable, ConstantTable* constantTable){
 	vector<int> answer;
 	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
 		return answer;
@@ -443,6 +444,10 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 				for (int i=0; i<procTable->getSize(); i++){
 					answer.push_back(i);
 				}
+			} else if (synonymTable->at(selectSynonym)=="constant"){
+				for (int i=0; i<constantTable->getSize(); i++){
+					answer.push_back(i);
+				}
 			} else {
 				// throw exception
 			}
@@ -453,7 +458,7 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 	return answer;
 }
 
-vector<int> QueryEvaluator::solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Follows* follows, ProcTable* procTable, VarTable* varTable){
+vector<int> QueryEvaluator::solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Follows* follows, ProcTable* procTable, VarTable* varTable, ConstantTable* constantTable){
 	vector<int> answer;
 	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
 		return answer;
@@ -854,6 +859,10 @@ vector<int> QueryEvaluator::solveForSuchThatFollowsStar(string selectSynonym, ma
 				for (int i=0; i<procTable->getSize(); i++){
 					answer.push_back(i);
 				}
+			} else if (synonymTable->at(selectSynonym)=="constant"){
+				for (int i=0; i<constantTable->getSize(); i++){
+					answer.push_back(i);
+				}
 			} else {
 				// throw exception
 			}
@@ -864,7 +873,7 @@ vector<int> QueryEvaluator::solveForSuchThatFollowsStar(string selectSynonym, ma
 	return answer;
 }
 
-vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Parent* parent, ProcTable* procTable, VarTable* varTable){
+vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Parent* parent, ProcTable* procTable, VarTable* varTable, ConstantTable* constantTable){
 	vector<int> answer;
 	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
 		return answer;
@@ -1265,6 +1274,10 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 				for (int i=0; i<procTable->getSize(); i++){
 					answer.push_back(i);
 				}
+			} else if (synonymTable->at(selectSynonym)=="constant"){
+				for (int i=0; i<constantTable->getSize(); i++){
+					answer.push_back(i);
+				}
 			} else {
 				// throw exception
 			}
@@ -1275,7 +1288,7 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 	return answer;
 }
 
-vector<int> QueryEvaluator::solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Parent* parent, ProcTable* procTable, VarTable* varTable){
+vector<int> QueryEvaluator::solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Parent* parent, ProcTable* procTable, VarTable* varTable, ConstantTable* constantTable){
 	vector<int> answer;
 	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
 		return answer;
@@ -1676,6 +1689,10 @@ vector<int> QueryEvaluator::solveForSuchThatParentStar(string selectSynonym, map
 				for (int i=0; i<procTable->getSize(); i++){
 					answer.push_back(i);
 				}
+			} else if (synonymTable->at(selectSynonym)=="constant"){
+				for (int i=0; i<constantTable->getSize(); i++){
+					answer.push_back(i);
+				}
 			} else {
 				// throw exception
 			}
@@ -1686,7 +1703,7 @@ vector<int> QueryEvaluator::solveForSuchThatParentStar(string selectSynonym, map
 	return answer;
 }
 
-vector<int> QueryEvaluator::solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Modifies* modifies, ProcTable* procTable, VarTable* varTable){
+vector<int> QueryEvaluator::solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Modifies* modifies, ProcTable* procTable, VarTable* varTable, ConstantTable* constantTable){
 	vector<int> answer;
 	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
 		return answer;
@@ -2034,6 +2051,10 @@ vector<int> QueryEvaluator::solveForSuchThatModifies(string selectSynonym, map<S
 				for (int i=0; i<procTable->getSize(); i++){
 					answer.push_back(i);
 				}
+			} else if (synonymTable->at(selectSynonym)=="constant"){
+				for (int i=0; i<constantTable->getSize(); i++){
+					answer.push_back(i);
+				}
 			} else {
 				// throw exception
 			}
@@ -2044,7 +2065,7 @@ vector<int> QueryEvaluator::solveForSuchThatModifies(string selectSynonym, map<S
 	return answer;
 }
 
-vector<int> QueryEvaluator::solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Uses* uses, ProcTable* procTable, VarTable* varTable){
+vector<int> QueryEvaluator::solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Uses* uses, ProcTable* procTable, VarTable* varTable, ConstantTable* constantTable){
 	vector<int> answer;
 	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
 		return answer;
@@ -2390,6 +2411,10 @@ vector<int> QueryEvaluator::solveForSuchThatUses(string selectSynonym, map<STRIN
 				}
 			} else if (synonymTable->at(selectSynonym)=="procedure"){
 				for (int i=0; i<procTable->getSize(); i++){
+					answer.push_back(i);
+				}
+			} else if (synonymTable->at(selectSynonym)=="constant"){
+				for (int i=0; i<constantTable->getSize(); i++){
 					answer.push_back(i);
 				}
 			} else {
@@ -2415,7 +2440,7 @@ bool checkSynonymInSuchThat(string selectSynonym, QueryTree* suchThatTree){
 }
 
 /******* Helper Level 3 *******/
-vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Modifies* modifies, ProcTable* procTable, VarTable* varTable){
+vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Modifies* modifies, ProcTable* procTable, VarTable* varTable, ConstantTable* constantTable){
 	vector<int> answer;
 	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
 		return answer;
@@ -2763,6 +2788,10 @@ vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* 
 				for (int i=0; i<procTable->getSize(); i++){
 					answer.push_back(i);
 				}
+			} else if (synonymTable->at(selectSynonym)=="constant"){
+				for (int i=0; i<constantTable->getSize(); i++){
+					answer.push_back(i);
+				}
 			} else {
 				// throw exception
 			}
@@ -2773,7 +2802,7 @@ vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* 
 	return answer;
 }
 
-vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Uses* uses, ProcTable* procTable, VarTable* varTable){
+vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Uses* uses, ProcTable* procTable, VarTable* varTable, ConstantTable* constantTable){
 	vector<int> answer;
 	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
 		return answer;
@@ -3121,6 +3150,10 @@ vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* syno
 				for (int i=0; i<procTable->getSize(); i++){
 					answer.push_back(i);
 				}
+			} else if (synonymTable->at(selectSynonym)=="constant"){
+				for (int i=0; i<constantTable->getSize(); i++){
+					answer.push_back(i);
+				}
 			} else {
 				// throw exception
 			}
@@ -3131,7 +3164,7 @@ vector<int> solveForSuchThatUses(string selectSynonym, map<STRING, STRING>* syno
 	return answer;
 }
 
-vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Follows* follows, ProcTable* procTable, VarTable* varTable){
+vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Follows* follows, ProcTable* procTable, VarTable* varTable, ConstantTable* constantTable){
 	vector<int> answer;
 	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
 		return answer;
@@ -3532,6 +3565,10 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 				for (int i=0; i<procTable->getSize(); i++){
 					answer.push_back(i);
 				}
+			} else if (synonymTable->at(selectSynonym)=="constant"){
+				for (int i=0; i<constantTable->getSize(); i++){
+					answer.push_back(i);
+				}
 			} else {
 				// throw exception
 			}
@@ -3542,7 +3579,7 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 	return answer;
 }
 
-vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Follows* follows, ProcTable* procTable, VarTable* varTable){
+vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Follows* follows, ProcTable* procTable, VarTable* varTable, ConstantTable* constantTable){
 	vector<int> answer;
 	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
 		return answer;
@@ -3943,6 +3980,10 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 				for (int i=0; i<procTable->getSize(); i++){
 					answer.push_back(i);
 				}
+			} else if (synonymTable->at(selectSynonym)=="constant"){
+				for (int i=0; i<constantTable->getSize(); i++){
+					answer.push_back(i);
+				}
 			} else {
 				// throw exception
 			}
@@ -3953,7 +3994,7 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 	return answer;
 }
 
-vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Parent* parent, ProcTable* procTable, VarTable* varTable){
+vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Parent* parent, ProcTable* procTable, VarTable* varTable, ConstantTable* constantTable){
 	vector<int> answer;
 	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
 		return answer;
@@ -4354,6 +4395,10 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 				for (int i=0; i<procTable->getSize(); i++){
 					answer.push_back(i);
 				}
+			} else if (synonymTable->at(selectSynonym)=="constant"){
+				for (int i=0; i<constantTable->getSize(); i++){
+					answer.push_back(i);
+				}
 			} else {
 				// throw exception
 			}
@@ -4364,7 +4409,7 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 	return answer;
 }
 
-vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Parent* parent, ProcTable* procTable, VarTable* varTable){
+vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Parent* parent, ProcTable* procTable, VarTable* varTable, ConstantTable* constantTable){
 	vector<int> answer;
 	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
 		return answer;
@@ -4765,6 +4810,10 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 				for (int i=0; i<procTable->getSize(); i++){
 					answer.push_back(i);
 				}
+			} else if (synonymTable->at(selectSynonym)=="constant"){
+				for (int i=0; i<constantTable->getSize(); i++){
+					answer.push_back(i);
+				}
 			} else {
 				// throw exception
 			}
@@ -4785,6 +4834,7 @@ vector<int> solveForSuchThat(string selectSynonym, map<STRING, STRING>* synonymT
 	// we need to evaluate such that from right to left to find w
 	ProcTable* procTable = &(pkb->procTable);
 	VarTable* varTable = &(pkb->varTable);
+	ConstantTable* constantTable = &(pkb->constantTable);
 	StatementTable* statementTable = &(pkb->statementTable);
 	Modifies* modifies = &(pkb->modifiesTable);
 	Uses* uses = &(pkb->usesTable);
@@ -4793,17 +4843,17 @@ vector<int> solveForSuchThat(string selectSynonym, map<STRING, STRING>* synonymT
 	QueryTree* suchThatSubtree = tree->getSubtreeFromNode(tree->getRootNode()->getChild(1)->getChild(0));
 	string suchThatType = suchThatSubtree->getRootNode()->getKey();
 	if (suchThatType == "Modifies"){
-		answer = solveForSuchThatModifies(selectSynonym, synonymTable, suchThatSubtree, statementTable, modifies, procTable, varTable);
+		answer = solveForSuchThatModifies(selectSynonym, synonymTable, suchThatSubtree, statementTable, modifies, procTable, varTable, constantTable);
 	} else if (suchThatType == "Uses"){
-		answer = solveForSuchThatUses(selectSynonym, synonymTable, suchThatSubtree, statementTable, uses, procTable, varTable);
+		answer = solveForSuchThatUses(selectSynonym, synonymTable, suchThatSubtree, statementTable, uses, procTable, varTable, constantTable);
 	} else if (suchThatType == "Follows"){
-		answer = solveForSuchThatFollows(selectSynonym, synonymTable, suchThatSubtree, statementTable, follows, procTable, varTable);
+		answer = solveForSuchThatFollows(selectSynonym, synonymTable, suchThatSubtree, statementTable, follows, procTable, varTable, constantTable);
 	} else if (suchThatType == "Follows*"){
-		answer = solveForSuchThatFollowsStar(selectSynonym, synonymTable, suchThatSubtree, statementTable, follows, procTable, varTable);
+		answer = solveForSuchThatFollowsStar(selectSynonym, synonymTable, suchThatSubtree, statementTable, follows, procTable, varTable, constantTable);
 	} else if (suchThatType == "Parent"){
-		answer = solveForSuchThatParent(selectSynonym, synonymTable, suchThatSubtree, statementTable, parent, procTable, varTable);
+		answer = solveForSuchThatParent(selectSynonym, synonymTable, suchThatSubtree, statementTable, parent, procTable, varTable, constantTable);
 	} else if (suchThatType == "Parent*"){
-		answer = solveForSuchThatParentStar(selectSynonym, synonymTable, suchThatSubtree, statementTable, parent, procTable, varTable);
+		answer = solveForSuchThatParentStar(selectSynonym, synonymTable, suchThatSubtree, statementTable, parent, procTable, varTable, constantTable);
 	}
 
 	return answer;
@@ -4840,7 +4890,8 @@ list<string> QueryEvaluator::evaluate(map<STRING, STRING>* synonymTable, QueryTr
 	vector<int> answer = solve(selectSynonym, synonymTable, tree, pkb);
 	string temp = "";
 	if (synonymTable->at(selectSynonym)=="variable"||
-		synonymTable->at(selectSynonym)=="procedure"){
+		synonymTable->at(selectSynonym)=="procedure" ||
+		synonymTable->at(selectSynonym)=="constant"){
 		if (synonymTable->at(selectSynonym)=="variable"){
 			for (size_t i=0; i<answer.size(); i++){
 				temp = temp + ("" + pkb->varTable.getVarName(answer.at(i)));
@@ -4849,13 +4900,21 @@ list<string> QueryEvaluator::evaluate(map<STRING, STRING>* synonymTable, QueryTr
 					temp = temp+",";
 				}
 			}
-		} else {
+		} else if (synonymTable->at(selectSynonym)=="procedure"){
 			for (size_t i=0; i<answer.size(); i++){
 				temp = temp + ("" + pkb->procTable.getProcName(answer.at(i)));
 				if (i!=answer.size()-1){
 					temp = temp+",";
 				}
 				outputlist.push_back(pkb->procTable.getProcName(answer.at(i)));
+			}
+		} else {
+			for (size_t i=0; i<answer.size(); i++){
+				temp = temp + ("" + pkb->constantTable.getConstant(answer.at(i)));
+				if (i!=answer.size()-1){
+					temp = temp+",";
+				}
+				outputlist.push_back(to_string((long long)pkb->constantTable.getConstant(answer.at(i))));
 			}
 		}
 	} else {

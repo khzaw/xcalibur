@@ -85,6 +85,8 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	vt.insertVar("b");
 	vt.insertVar("c");
 
+	ConstantTable ct;
+
 	QueryEvaluator* qe = new QueryEvaluator();
 
 	map<string, string> table1;
@@ -109,7 +111,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows1->addChild(second1);
 	QueryTree* query1 = new QueryTree(follows1);
 
-	vector<int> actualResult1 = qe->solveForSuchThatFollows("s1", &table1, query1, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Follows(s1, 2) | Expected <1>
+	vector<int> actualResult1 = qe->solveForSuchThatFollows("s1", &table1, query1, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Follows(s1, 2) | Expected <1>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult1.size());
 	CPPUNIT_ASSERT_EQUAL(1, actualResult1.at(0));
@@ -123,7 +125,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows2->addChild(second2);
 	QueryTree* query2 = new QueryTree(follows2);
 
-	vector<int> actualResult2 = qe->solveForSuchThatFollows("a2", &table1, query2, &st, &f1, &pt, &vt); // assign a2; Select a2 such that Follows(a2, 3) | Expected <2>
+	vector<int> actualResult2 = qe->solveForSuchThatFollows("a2", &table1, query2, &st, &f1, &pt, &vt, &ct); // assign a2; Select a2 such that Follows(a2, 3) | Expected <2>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult2.size());
 	CPPUNIT_ASSERT_EQUAL(2, actualResult2.at(0));
@@ -137,7 +139,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows3->addChild(second3);
 	QueryTree* query3 = new QueryTree(follows3);
 
-	vector<int> actualResult3 = qe->solveForSuchThatFollows("a2", &table1, query3, &st, &f1, &pt, &vt); // assign a2; Select a2 such that Follows(a2, 4) | Expected <> (none)
+	vector<int> actualResult3 = qe->solveForSuchThatFollows("a2", &table1, query3, &st, &f1, &pt, &vt, &ct); // assign a2; Select a2 such that Follows(a2, 4) | Expected <> (none)
 
 	CPPUNIT_ASSERT(actualResult3.empty());
 
@@ -150,7 +152,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows4->addChild(second4);
 	QueryTree* query4 = new QueryTree(follows4);
 
-	vector<int> actualResult4 = qe->solveForSuchThatFollows("w3", &table1, query4, &st, &f1, &pt, &vt); // while w3; Select w3 such that Follows(w3, 3) | Expected <> (none)
+	vector<int> actualResult4 = qe->solveForSuchThatFollows("w3", &table1, query4, &st, &f1, &pt, &vt, &ct); // while w3; Select w3 such that Follows(w3, 3) | Expected <> (none)
 
 	CPPUNIT_ASSERT(actualResult4.empty());
 
@@ -163,7 +165,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows5->addChild(second5);
 	QueryTree* query5 = new QueryTree(follows5);
 
-	vector<int> actualResult5 = qe->solveForSuchThatFollows("w3", &table1, query5, &st, &f1, &pt, &vt); // while w3; Select w3 such that Follows(w3, 4) | Expected <3>
+	vector<int> actualResult5 = qe->solveForSuchThatFollows("w3", &table1, query5, &st, &f1, &pt, &vt, &ct); // while w3; Select w3 such that Follows(w3, 4) | Expected <3>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult5.size());
 	CPPUNIT_ASSERT_EQUAL(3, actualResult5.at(0));
@@ -177,7 +179,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows6->addChild(second6);
 	QueryTree* query6 = new QueryTree(follows6);
 
-	vector<int> actualResult6 = qe->solveForSuchThatFollows("v4", &table1, query6, &st, &f1, &pt, &vt); // variable v4; Select v4 such that Follows(v4, 4) | Expected <> (none)
+	vector<int> actualResult6 = qe->solveForSuchThatFollows("v4", &table1, query6, &st, &f1, &pt, &vt, &ct); // variable v4; Select v4 such that Follows(v4, 4) | Expected <> (none)
 
 	CPPUNIT_ASSERT(actualResult6.empty());
 
@@ -190,7 +192,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows7->addChild(second7);
 	QueryTree* query7 = new QueryTree(follows7);
 
-	vector<int> actualResult7 = qe->solveForSuchThatFollows("lol", &table1, query7, &st, &f1, &pt, &vt); // undefined lol; Select lol such that Follows(lol, 3) | Expected <> (none)
+	vector<int> actualResult7 = qe->solveForSuchThatFollows("lol", &table1, query7, &st, &f1, &pt, &vt, &ct); // undefined lol; Select lol such that Follows(lol, 3) | Expected <> (none)
 
 	CPPUNIT_ASSERT(actualResult7.empty());
 
@@ -203,7 +205,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows8->addChild(second8);
 	QueryTree* query8 = new QueryTree(follows8);
 
-	vector<int> actualResult8 = qe->solveForSuchThatFollows("s1", &table1, query8, &st, &f1, &pt, &vt); // stmt s1, s2; Select s1 such that Follows(s1, s2) | Expected <1, 2 ,3 , 4, 5, 6, 7, 8, 9>
+	vector<int> actualResult8 = qe->solveForSuchThatFollows("s1", &table1, query8, &st, &f1, &pt, &vt, &ct); // stmt s1, s2; Select s1 such that Follows(s1, s2) | Expected <1, 2 ,3 , 4, 5, 6, 7, 8, 9>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)9, actualResult8.size());
 	CPPUNIT_ASSERT_EQUAL(1, actualResult8.at(0));
@@ -225,7 +227,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows9->addChild(second9);
 	QueryTree* query9 = new QueryTree(follows9);
 
-	vector<int> actualResult9 = qe->solveForSuchThatFollows("a2", &table1, query9, &st, &f1, &pt, &vt); // assign a2; stmt s2; Select a2 such that Follows(a2, s2) | Expected <1, 2, 4, 5, 8>
+	vector<int> actualResult9 = qe->solveForSuchThatFollows("a2", &table1, query9, &st, &f1, &pt, &vt, &ct); // assign a2; stmt s2; Select a2 such that Follows(a2, s2) | Expected <1, 2, 4, 5, 8>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult9.size());
 	CPPUNIT_ASSERT_EQUAL(1, actualResult9.at(0));
@@ -243,7 +245,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows10->addChild(second10);
 	QueryTree* query10 = new QueryTree(follows10);
 
-	vector<int> actualResult10 = qe->solveForSuchThatFollows("a1", &table1, query10, &st, &f1, &pt, &vt); // stmt s2; Select a1 such that Follows(a1, s2) | Expected <> (none because a1 is not in synonym table)
+	vector<int> actualResult10 = qe->solveForSuchThatFollows("a1", &table1, query10, &st, &f1, &pt, &vt, &ct); // stmt s2; Select a1 such that Follows(a1, s2) | Expected <> (none because a1 is not in synonym table)
 
 	CPPUNIT_ASSERT(actualResult10.empty());
 
@@ -256,7 +258,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows11->addChild(second11);
 	QueryTree* query11 = new QueryTree(follows11);
 
-	vector<int> actualResult11 = qe->solveForSuchThatFollows("w3", &table1, query11, &st, &f1, &pt, &vt); // while w3; stmt s2; Select w3 such that Follows(w3, s2) | Expected <3, 6, 7, 9>
+	vector<int> actualResult11 = qe->solveForSuchThatFollows("w3", &table1, query11, &st, &f1, &pt, &vt, &ct); // while w3; stmt s2; Select w3 such that Follows(w3, s2) | Expected <3, 6, 7, 9>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)4, actualResult11.size());
 	CPPUNIT_ASSERT_EQUAL(3, actualResult11.at(0));
@@ -273,7 +275,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows12->addChild(second12);
 	QueryTree* query12 = new QueryTree(follows12);
 
-	vector<int> actualResult12 = qe->solveForSuchThatFollows("s1", &table1, query12, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Follows(s1, a1) | Expected <> (none because a1  is not in synonym table)
+	vector<int> actualResult12 = qe->solveForSuchThatFollows("s1", &table1, query12, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Follows(s1, a1) | Expected <> (none because a1  is not in synonym table)
 
 	CPPUNIT_ASSERT(actualResult12.empty());
 
@@ -286,7 +288,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows13->addChild(second13);
 	QueryTree* query13 = new QueryTree(follows13);
 
-	vector<int> actualResult13 = qe->solveForSuchThatFollows("s1", &table1, query13, &st, &f1, &pt, &vt); // stmt s1; assign a2; Select s1 such that Follows(s1, a2) | Expected <1, 3, 4, 7>
+	vector<int> actualResult13 = qe->solveForSuchThatFollows("s1", &table1, query13, &st, &f1, &pt, &vt, &ct); // stmt s1; assign a2; Select s1 such that Follows(s1, a2) | Expected <1, 3, 4, 7>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)4, actualResult13.size());
 	CPPUNIT_ASSERT_EQUAL(1, actualResult13.at(0));
@@ -303,7 +305,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows14->addChild(second14);
 	QueryTree* query14 = new QueryTree(follows14);
 
-	vector<int> actualResult14 = qe->solveForSuchThatFollows("s1", &table1, query14, &st, &f1, &pt, &vt); // stmt s1; while w3; Select s1 such that Follows(s1, w3) | Expected <2, 5, 6, 8, 9>
+	vector<int> actualResult14 = qe->solveForSuchThatFollows("s1", &table1, query14, &st, &f1, &pt, &vt, &ct); // stmt s1; while w3; Select s1 such that Follows(s1, w3) | Expected <2, 5, 6, 8, 9>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult14.size());
 	CPPUNIT_ASSERT_EQUAL(2, actualResult14.at(0));
@@ -321,7 +323,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows15->addChild(second15);
 	QueryTree* query15 = new QueryTree(follows15);
 
-	vector<int> actualResult15 = qe->solveForSuchThatFollows("a2", &table1, query15, &st, &f1, &pt, &vt); // assign a2; assign a3; Select a2 such that Follows(a2, a3) | Expected <1, 4>
+	vector<int> actualResult15 = qe->solveForSuchThatFollows("a2", &table1, query15, &st, &f1, &pt, &vt, &ct); // assign a2; assign a3; Select a2 such that Follows(a2, a3) | Expected <1, 4>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)2, actualResult15.size());
 	CPPUNIT_ASSERT_EQUAL(1, actualResult15.at(0));
@@ -336,7 +338,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows16->addChild(second16);
 	QueryTree* query16 = new QueryTree(follows16);
 
-	vector<int> actualResult16 = qe->solveForSuchThatFollows("a2", &table1, query16, &st, &f1, &pt, &vt); // assign a2; while w3; Select a2 such that Follows(a2, w3) | Expected <2, 5, 8>
+	vector<int> actualResult16 = qe->solveForSuchThatFollows("a2", &table1, query16, &st, &f1, &pt, &vt, &ct); // assign a2; while w3; Select a2 such that Follows(a2, w3) | Expected <2, 5, 8>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)3, actualResult16.size());
 	CPPUNIT_ASSERT_EQUAL(2, actualResult16.at(0));
@@ -352,7 +354,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows17->addChild(second17);
 	QueryTree* query17 = new QueryTree(follows17);
 
-	vector<int> actualResult17 = qe->solveForSuchThatFollows("w3", &table1, query17, &st, &f1, &pt, &vt); // while w3; assign a2; Select w3 such that Follows(w3, a2) | Expected <3, 7>
+	vector<int> actualResult17 = qe->solveForSuchThatFollows("w3", &table1, query17, &st, &f1, &pt, &vt, &ct); // while w3; assign a2; Select w3 such that Follows(w3, a2) | Expected <3, 7>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)2, actualResult17.size());
 	CPPUNIT_ASSERT_EQUAL(3, actualResult17.at(0));
@@ -367,7 +369,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows18->addChild(second18);
 	QueryTree* query18 = new QueryTree(follows18);
 
-	vector<int> actualResult18 = qe->solveForSuchThatFollows("w3", &table1, query18, &st, &f1, &pt, &vt); // while w3; while w4; Select w3 such that Follows(w3, w4) | Expected <6, 9>
+	vector<int> actualResult18 = qe->solveForSuchThatFollows("w3", &table1, query18, &st, &f1, &pt, &vt, &ct); // while w3; while w4; Select w3 such that Follows(w3, w4) | Expected <6, 9>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)2, actualResult18.size());
 	CPPUNIT_ASSERT_EQUAL(6, actualResult18.at(0));
@@ -382,7 +384,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows19->addChild(second19);
 	QueryTree* query19 = new QueryTree(follows19);
 
-	vector<int> actualResult19 = qe->solveForSuchThatFollows("s1", &table1, query19, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Follows(1, s1) | Expected <2>
+	vector<int> actualResult19 = qe->solveForSuchThatFollows("s1", &table1, query19, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Follows(1, s1) | Expected <2>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult19.size());
 	CPPUNIT_ASSERT_EQUAL(2, actualResult19.at(0));
@@ -396,7 +398,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows20->addChild(second20);
 	QueryTree* query20 = new QueryTree(follows20);
 
-	vector<int> actualResult20 = qe->solveForSuchThatFollows("a2", &table1, query20, &st, &f1, &pt, &vt); // assign a2; Select a2 such that Follows(3, a2) | Expected <4>
+	vector<int> actualResult20 = qe->solveForSuchThatFollows("a2", &table1, query20, &st, &f1, &pt, &vt, &ct); // assign a2; Select a2 such that Follows(3, a2) | Expected <4>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult20.size());
 	CPPUNIT_ASSERT_EQUAL(4, actualResult20.at(0));
@@ -410,7 +412,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows21->addChild(second21);
 	QueryTree* query21 = new QueryTree(follows21);
 
-	vector<int> actualResult21 = qe->solveForSuchThatFollows("a2", &table1, query21, &st, &f1, &pt, &vt); // assign a2; Select a2 such that Follows(2, a2) | Expected <> (none)
+	vector<int> actualResult21 = qe->solveForSuchThatFollows("a2", &table1, query21, &st, &f1, &pt, &vt, &ct); // assign a2; Select a2 such that Follows(2, a2) | Expected <> (none)
 
 	CPPUNIT_ASSERT(actualResult21.empty());
 
@@ -423,7 +425,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows22->addChild(second22);
 	QueryTree* query22 = new QueryTree(follows22);
 
-	vector<int> actualResult22 = qe->solveForSuchThatFollows("w3", &table1, query22, &st, &f1, &pt, &vt); // while w3; Select w3 such that Follows(3, w3) | Expected <> (none)
+	vector<int> actualResult22 = qe->solveForSuchThatFollows("w3", &table1, query22, &st, &f1, &pt, &vt, &ct); // while w3; Select w3 such that Follows(3, w3) | Expected <> (none)
 
 	CPPUNIT_ASSERT(actualResult22.empty());
 
@@ -436,7 +438,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows23->addChild(second23);
 	QueryTree* query23 = new QueryTree(follows23);
 
-	vector<int> actualResult23 = qe->solveForSuchThatFollows("w3", &table1, query23, &st, &f1, &pt, &vt); // while w3; Select w3 such that Follows(2, w3) | Expected <3>
+	vector<int> actualResult23 = qe->solveForSuchThatFollows("w3", &table1, query23, &st, &f1, &pt, &vt, &ct); // while w3; Select w3 such that Follows(2, w3) | Expected <3>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult23.size());
 	CPPUNIT_ASSERT_EQUAL(3, actualResult23.at(0));
@@ -450,7 +452,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows24->addChild(second24);
 	QueryTree* query24 = new QueryTree(follows24);
 
-	vector<int> actualResult24 = qe->solveForSuchThatFollows("v4", &table1, query24, &st, &f1, &pt, &vt); // variable v4; Select v4 such that Follows(4, v4) | Expected <> (none)
+	vector<int> actualResult24 = qe->solveForSuchThatFollows("v4", &table1, query24, &st, &f1, &pt, &vt, &ct); // variable v4; Select v4 such that Follows(4, v4) | Expected <> (none)
 
 	CPPUNIT_ASSERT(actualResult24.empty());
 
@@ -463,7 +465,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows25->addChild(second25);
 	QueryTree* query25 = new QueryTree(follows25);
 
-	vector<int> actualResult25 = qe->solveForSuchThatFollows("lol", &table1, query25, &st, &f1, &pt, &vt); // undefined lol; Select lol such that Follows(3, lol) | Expected <> (none)
+	vector<int> actualResult25 = qe->solveForSuchThatFollows("lol", &table1, query25, &st, &f1, &pt, &vt, &ct); // undefined lol; Select lol such that Follows(3, lol) | Expected <> (none)
 
 	CPPUNIT_ASSERT(actualResult25.empty());
 
@@ -476,7 +478,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows26->addChild(second26);
 	QueryTree* query26 = new QueryTree(follows26);
 
-	vector<int> actualResult26 = qe->solveForSuchThatFollows("s2", &table1, query26, &st, &f1, &pt, &vt); // stmt s1, s2; Select s2 such that Follows(s1, s2) | Expected <2 ,3 , 4, 5, 6, 7, 8, 9, 10>
+	vector<int> actualResult26 = qe->solveForSuchThatFollows("s2", &table1, query26, &st, &f1, &pt, &vt, &ct); // stmt s1, s2; Select s2 such that Follows(s1, s2) | Expected <2 ,3 , 4, 5, 6, 7, 8, 9, 10>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)9, actualResult26.size());
 	CPPUNIT_ASSERT_EQUAL(2, actualResult26.at(0));
@@ -498,7 +500,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows27->addChild(second27);
 	QueryTree* query27 = new QueryTree(follows27);
 
-	vector<int> actualResult27 = qe->solveForSuchThatFollows("a2", &table1, query27, &st, &f1, &pt, &vt); // assign a2; stmt s2; Select a2 such that Follows(s2, a2) | Expected <2, 4, 5, 8>
+	vector<int> actualResult27 = qe->solveForSuchThatFollows("a2", &table1, query27, &st, &f1, &pt, &vt, &ct); // assign a2; stmt s2; Select a2 such that Follows(s2, a2) | Expected <2, 4, 5, 8>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)4, actualResult27.size());
 	CPPUNIT_ASSERT_EQUAL(2, actualResult27.at(0));
@@ -515,7 +517,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows28->addChild(second28);
 	QueryTree* query28 = new QueryTree(follows28);
 
-	vector<int> actualResult28 = qe->solveForSuchThatFollows("a1", &table1, query28, &st, &f1, &pt, &vt); // stmt s2; Select a1 such that Follows(s2, a1) | Expected <> (none because a1 is not in synonym table)
+	vector<int> actualResult28 = qe->solveForSuchThatFollows("a1", &table1, query28, &st, &f1, &pt, &vt, &ct); // stmt s2; Select a1 such that Follows(s2, a1) | Expected <> (none because a1 is not in synonym table)
 
 	CPPUNIT_ASSERT(actualResult28.empty());
 
@@ -528,7 +530,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows29->addChild(second29);
 	QueryTree* query29 = new QueryTree(follows29);
 
-	vector<int> actualResult29 = qe->solveForSuchThatFollows("w3", &table1, query29, &st, &f1, &pt, &vt); // while w3; stmt s2; Select w3 such that Follows(s2, w3) | Expected <3, 6, 7, 9, 10>
+	vector<int> actualResult29 = qe->solveForSuchThatFollows("w3", &table1, query29, &st, &f1, &pt, &vt, &ct); // while w3; stmt s2; Select w3 such that Follows(s2, w3) | Expected <3, 6, 7, 9, 10>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult29.size());
 	CPPUNIT_ASSERT_EQUAL(3, actualResult29.at(0));
@@ -546,7 +548,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows30->addChild(second30);
 	QueryTree* query30 = new QueryTree(follows30);
 
-	vector<int> actualResult30 = qe->solveForSuchThatFollows("s1", &table1, query30, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Follows(a1, s1) | Expected <> (none because a1  is not in synonym table)
+	vector<int> actualResult30 = qe->solveForSuchThatFollows("s1", &table1, query30, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Follows(a1, s1) | Expected <> (none because a1  is not in synonym table)
 
 	CPPUNIT_ASSERT(actualResult30.empty());
 
@@ -559,7 +561,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows31->addChild(second31);
 	QueryTree* query31 = new QueryTree(follows31);
 
-	vector<int> actualResult31 = qe->solveForSuchThatFollows("s1", &table1, query31, &st, &f1, &pt, &vt); // stmt s1; assign a2; Select s1 such that Follows(a2, s1) | Expected <2, 3, 5, 6, 9>
+	vector<int> actualResult31 = qe->solveForSuchThatFollows("s1", &table1, query31, &st, &f1, &pt, &vt, &ct); // stmt s1; assign a2; Select s1 such that Follows(a2, s1) | Expected <2, 3, 5, 6, 9>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult31.size());
 	CPPUNIT_ASSERT_EQUAL(2, actualResult31.at(0));
@@ -583,7 +585,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	expectedResult32.push_back(8);
 	expectedResult32.push_back(10);
 
-	vector<int> actualResult32 = qe->solveForSuchThatFollows("s1", &table1, query32, &st, &f1, &pt, &vt); // stmt s1; while w3; Select s1 such that Follows(w3, s1) | Expected <4, 7, 8, 10>
+	vector<int> actualResult32 = qe->solveForSuchThatFollows("s1", &table1, query32, &st, &f1, &pt, &vt, &ct); // stmt s1; while w3; Select s1 such that Follows(w3, s1) | Expected <4, 7, 8, 10>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)4, actualResult32.size());
 	CPPUNIT_ASSERT_EQUAL(4, actualResult32.at(0));
@@ -600,7 +602,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows33->addChild(second33);
 	QueryTree* query33 = new QueryTree(follows33);
 
-	vector<int> actualResult33 = qe->solveForSuchThatFollows("a3", &table1, query33, &st, &f1, &pt, &vt); // assign a2; assign a3; Select a3 such that Follows(a2, a3) | Expected <2, 5>
+	vector<int> actualResult33 = qe->solveForSuchThatFollows("a3", &table1, query33, &st, &f1, &pt, &vt, &ct); // assign a2; assign a3; Select a3 such that Follows(a2, a3) | Expected <2, 5>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)2, actualResult33.size());
 	CPPUNIT_ASSERT_EQUAL(2, actualResult33.at(0));
@@ -615,7 +617,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows34->addChild(second34);
 	QueryTree* query34 = new QueryTree(follows34);
 
-	vector<int> actualResult34 = qe->solveForSuchThatFollows("a2", &table1, query34, &st, &f1, &pt, &vt); // assign a2; while w3; Select a2 such that Follows(w3, a2) | Expected <4, 8>
+	vector<int> actualResult34 = qe->solveForSuchThatFollows("a2", &table1, query34, &st, &f1, &pt, &vt, &ct); // assign a2; while w3; Select a2 such that Follows(w3, a2) | Expected <4, 8>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)2, actualResult34.size());
 	CPPUNIT_ASSERT_EQUAL(4, actualResult34.at(0));
@@ -630,7 +632,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows35->addChild(second35);
 	QueryTree* query35 = new QueryTree(follows35);
 
-	vector<int> actualResult35 = qe->solveForSuchThatFollows("w3", &table1, query35, &st, &f1, &pt, &vt); // while w3; assign a2; Select w3 such that Follows(a2, w3) | Expected <3, 6, 9>
+	vector<int> actualResult35 = qe->solveForSuchThatFollows("w3", &table1, query35, &st, &f1, &pt, &vt, &ct); // while w3; assign a2; Select w3 such that Follows(a2, w3) | Expected <3, 6, 9>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)3, actualResult35.size());
 	CPPUNIT_ASSERT_EQUAL(3, actualResult35.at(0));
@@ -646,7 +648,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows36->addChild(second36);
 	QueryTree* query36 = new QueryTree(follows36);
 
-	vector<int> actualResult36 = qe->solveForSuchThatFollows("w4", &table1, query36, &st, &f1, &pt, &vt); // while w3; while w4; Select w4 such that Follows(w3, w4) | Expected <7, 10>
+	vector<int> actualResult36 = qe->solveForSuchThatFollows("w4", &table1, query36, &st, &f1, &pt, &vt, &ct); // while w3; while w4; Select w4 such that Follows(w3, w4) | Expected <7, 10>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)2, actualResult36.size());
 	CPPUNIT_ASSERT_EQUAL(7, actualResult36.at(0));
@@ -661,7 +663,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows37->addChild(second37);
 	QueryTree* query37 = new QueryTree(follows37);
 
-	vector<int> actualResult37 = qe->solveForSuchThatFollows("s1", &table1, query37, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Follows(s1, 1) | Expected <> (none)
+	vector<int> actualResult37 = qe->solveForSuchThatFollows("s1", &table1, query37, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Follows(s1, 1) | Expected <> (none)
 	
 	CPPUNIT_ASSERT(actualResult37.empty());
 
@@ -674,7 +676,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows38->addChild(second38);
 	QueryTree* query38 = new QueryTree(follows38);
 
-	vector<int> actualResult38 = qe->solveForSuchThatFollows("s1", &table1, query38, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Follows(s1, 10) | Expected <9>
+	vector<int> actualResult38 = qe->solveForSuchThatFollows("s1", &table1, query38, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Follows(s1, 10) | Expected <9>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult38.size());
 	CPPUNIT_ASSERT_EQUAL(9, actualResult38.at(0));
@@ -688,7 +690,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows39->addChild(second39);
 	QueryTree* query39 = new QueryTree(follows39);
 
-	vector<int> actualResult39 = qe->solveForSuchThatFollows("s1", &table1, query39, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Follows(s1, 11) | Expected <> (none)
+	vector<int> actualResult39 = qe->solveForSuchThatFollows("s1", &table1, query39, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Follows(s1, 11) | Expected <> (none)
 	
 	CPPUNIT_ASSERT(actualResult39.empty());
 
@@ -701,7 +703,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows40->addChild(second40);
 	QueryTree* query40 = new QueryTree(follows40);
 
-	vector<int> actualResult40 = qe->solveForSuchThatFollows("s1", &table1, query40, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Follows(0, s1) | Expected <> (none)
+	vector<int> actualResult40 = qe->solveForSuchThatFollows("s1", &table1, query40, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Follows(0, s1) | Expected <> (none)
 	
 	CPPUNIT_ASSERT(actualResult40.empty());
 
@@ -714,7 +716,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows41->addChild(second41);
 	QueryTree* query41 = new QueryTree(follows41);
 
-	vector<int> actualResult41 = qe->solveForSuchThatFollows("s1", &table1, query41, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Follows(9, s1) | Expected <10>
+	vector<int> actualResult41 = qe->solveForSuchThatFollows("s1", &table1, query41, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Follows(9, s1) | Expected <10>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult41.size());
 	CPPUNIT_ASSERT_EQUAL(10, actualResult41.at(0));
@@ -728,7 +730,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows42->addChild(second42);
 	QueryTree* query42 = new QueryTree(follows42);
 
-	vector<int> actualResult42 = qe->solveForSuchThatFollows("s1", &table1, query42, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Follows(10, s1) | Expected <> (none)
+	vector<int> actualResult42 = qe->solveForSuchThatFollows("s1", &table1, query42, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Follows(10, s1) | Expected <> (none)
 	
 	CPPUNIT_ASSERT(actualResult42.empty());
 
@@ -741,7 +743,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows43->addChild(second43);
 	QueryTree* query43 = new QueryTree(follows43);
 
-	vector<int> actualResult43 = qe->solveForSuchThatFollows("s1", &table1, query43, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Follows(1, 2) | Expected <1, 2, 3, 4, 5, 6, 7, 8, 9, 10>
+	vector<int> actualResult43 = qe->solveForSuchThatFollows("s1", &table1, query43, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Follows(1, 2) | Expected <1, 2, 3, 4, 5, 6, 7, 8, 9, 10>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)10, actualResult43.size());
 	CPPUNIT_ASSERT_EQUAL(1, actualResult43.at(0));
@@ -764,7 +766,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows44->addChild(second44);
 	QueryTree* query44 = new QueryTree(follows44);
 
-	vector<int> actualResult44 = qe->solveForSuchThatFollows("s1", &table1, query44, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Follows(1, 3) | Expected <> (none)
+	vector<int> actualResult44 = qe->solveForSuchThatFollows("s1", &table1, query44, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Follows(1, 3) | Expected <> (none)
 	
 	CPPUNIT_ASSERT(actualResult44.empty());
 
@@ -777,7 +779,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows45->addChild(second45);
 	QueryTree* query45 = new QueryTree(follows45);
 
-	vector<int> actualResult45 = qe->solveForSuchThatFollows("a2", &table1, query45, &st, &f1, &pt, &vt); // assign a2; Select a2 such that Follows(1, 2) | Expected <1, 2, 4, 5, 8>
+	vector<int> actualResult45 = qe->solveForSuchThatFollows("a2", &table1, query45, &st, &f1, &pt, &vt, &ct); // assign a2; Select a2 such that Follows(1, 2) | Expected <1, 2, 4, 5, 8>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult45.size());
 	CPPUNIT_ASSERT_EQUAL(1, actualResult45.at(0));
@@ -795,7 +797,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows46->addChild(second46);
 	QueryTree* query46 = new QueryTree(follows46);
 
-	vector<int> actualResult46 = qe->solveForSuchThatFollows("w3", &table1, query46, &st, &f1, &pt, &vt); // while w3; Select w3 such that Follows(1, 2) | Expected <3, 6, 7, 9, 10>
+	vector<int> actualResult46 = qe->solveForSuchThatFollows("w3", &table1, query46, &st, &f1, &pt, &vt, &ct); // while w3; Select w3 such that Follows(1, 2) | Expected <3, 6, 7, 9, 10>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult46.size());
 	CPPUNIT_ASSERT_EQUAL(3, actualResult46.at(0));
@@ -813,7 +815,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows47->addChild(second47);
 	QueryTree* query47 = new QueryTree(follows47);
 
-	vector<int> actualResult47 = qe->solveForSuchThatFollows("v4", &table1, query47, &st, &f1, &pt, &vt); // variable v4; Select v4 such that Follows(1, 2) | Expected <1, 2, 3, 4, 5, 6>
+	vector<int> actualResult47 = qe->solveForSuchThatFollows("v4", &table1, query47, &st, &f1, &pt, &vt, &ct); // variable v4; Select v4 such that Follows(1, 2) | Expected <1, 2, 3, 4, 5, 6>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)6, actualResult47.size());
 	CPPUNIT_ASSERT_EQUAL(0, actualResult47.at(0));
@@ -832,7 +834,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows48->addChild(second48);
 	QueryTree* query48 = new QueryTree(follows48);
 
-	vector<int> actualResult48 = qe->solveForSuchThatFollows("proc5", &table1, query48, &st, &f1, &pt, &vt); // procedure proc5; Select proc5 such that Follows(1, 2) | Expected <1>
+	vector<int> actualResult48 = qe->solveForSuchThatFollows("proc5", &table1, query48, &st, &f1, &pt, &vt, &ct); // procedure proc5; Select proc5 such that Follows(1, 2) | Expected <1>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult48.size());
 	CPPUNIT_ASSERT_EQUAL(0, actualResult48.at(0));
@@ -846,7 +848,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows49->addChild(second49);
 	QueryTree* query49 = new QueryTree(follows49);
 
-	vector<int> actualResult49 = qe->solveForSuchThatFollows("s1", &table1, query49, &st, &f1, &pt, &vt); // stmt s1, s2; Select s1 such that Follows(1, s2) | Expected <1, 2, 3, 4, 5, 6, 7, 8, 9, 10>
+	vector<int> actualResult49 = qe->solveForSuchThatFollows("s1", &table1, query49, &st, &f1, &pt, &vt, &ct); // stmt s1, s2; Select s1 such that Follows(1, s2) | Expected <1, 2, 3, 4, 5, 6, 7, 8, 9, 10>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)10, actualResult49.size());
 	CPPUNIT_ASSERT_EQUAL(1, actualResult49.at(0));
@@ -869,7 +871,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows50->addChild(second50);
 	QueryTree* query50 = new QueryTree(follows50);
 
-	vector<int> actualResult50 = qe->solveForSuchThatFollows("s1", &table1, query50, &st, &f1, &pt, &vt); // stmt s1, s2; Select s1 such that Follows(10, s2) | Expected <> (none)
+	vector<int> actualResult50 = qe->solveForSuchThatFollows("s1", &table1, query50, &st, &f1, &pt, &vt, &ct); // stmt s1, s2; Select s1 such that Follows(10, s2) | Expected <> (none)
 	
 	CPPUNIT_ASSERT(actualResult50.empty());
 
@@ -882,7 +884,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows51->addChild(second51);
 	QueryTree* query51 = new QueryTree(follows51);
 
-	vector<int> actualResult51 = qe->solveForSuchThatFollows("a2", &table1, query51, &st, &f1, &pt, &vt); // assign a2, a3; Select a2 such that Follows(1, a3) | Expected <1, 2, 4, 5, 8>
+	vector<int> actualResult51 = qe->solveForSuchThatFollows("a2", &table1, query51, &st, &f1, &pt, &vt, &ct); // assign a2, a3; Select a2 such that Follows(1, a3) | Expected <1, 2, 4, 5, 8>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult51.size());
 	CPPUNIT_ASSERT_EQUAL(1, actualResult51.at(0));
@@ -900,7 +902,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows52->addChild(second52);
 	QueryTree* query52 = new QueryTree(follows52);
 
-	vector<int> actualResult52 = qe->solveForSuchThatFollows("a2", &table1, query52, &st, &f1, &pt, &vt); // assign a2, a3; Select a2 such that Follows(2, a3) | Expected <> (none)
+	vector<int> actualResult52 = qe->solveForSuchThatFollows("a2", &table1, query52, &st, &f1, &pt, &vt, &ct); // assign a2, a3; Select a2 such that Follows(2, a3) | Expected <> (none)
 	
 	CPPUNIT_ASSERT(actualResult52.empty());
 
@@ -913,7 +915,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows53->addChild(second53);
 	QueryTree* query53 = new QueryTree(follows53);
 
-	vector<int> actualResult53 = qe->solveForSuchThatFollows("w3", &table1, query53, &st, &f1, &pt, &vt); // while w3, w4; Select w3 such that Follows(2, w4) | Expected <3, 6, 7, 9, 10>
+	vector<int> actualResult53 = qe->solveForSuchThatFollows("w3", &table1, query53, &st, &f1, &pt, &vt, &ct); // while w3, w4; Select w3 such that Follows(2, w4) | Expected <3, 6, 7, 9, 10>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult53.size());
 	CPPUNIT_ASSERT_EQUAL(3, actualResult53.at(0));
@@ -931,7 +933,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows54->addChild(second54);
 	QueryTree* query54 = new QueryTree(follows54);
 
-	vector<int> actualResult54 = qe->solveForSuchThatFollows("w3", &table1, query54, &st, &f1, &pt, &vt); // while w3, w4; Select w3 such that Follows(1, w4) | Expected <> (none)
+	vector<int> actualResult54 = qe->solveForSuchThatFollows("w3", &table1, query54, &st, &f1, &pt, &vt, &ct); // while w3, w4; Select w3 such that Follows(1, w4) | Expected <> (none)
 	
 	CPPUNIT_ASSERT(actualResult54.empty());
 
@@ -944,7 +946,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows55->addChild(second55);
 	QueryTree* query55 = new QueryTree(follows55);
 
-	vector<int> actualResult55 = qe->solveForSuchThatFollows("s1", &table1, query55, &st, &f1, &pt, &vt); // stmt s1, s2; Select s1 such that Follows(s2, 2) | Expected <1, 2, 3, 4, 5, 6, 7, 8, 9, 10>
+	vector<int> actualResult55 = qe->solveForSuchThatFollows("s1", &table1, query55, &st, &f1, &pt, &vt, &ct); // stmt s1, s2; Select s1 such that Follows(s2, 2) | Expected <1, 2, 3, 4, 5, 6, 7, 8, 9, 10>
 	
     CPPUNIT_ASSERT_EQUAL((size_t)10, actualResult55.size());
     CPPUNIT_ASSERT_EQUAL(1, actualResult55.at(0));
@@ -967,7 +969,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows56->addChild(second56);
 	QueryTree* query56 = new QueryTree(follows56);
 
-	vector<int> actualResult56 = qe->solveForSuchThatFollows("s1", &table1, query56, &st, &f1, &pt, &vt); // stmt s1, s2; Select s1 such that Follows(s2, 1) | Expected <> (none)
+	vector<int> actualResult56 = qe->solveForSuchThatFollows("s1", &table1, query56, &st, &f1, &pt, &vt, &ct); // stmt s1, s2; Select s1 such that Follows(s2, 1) | Expected <> (none)
 	
 	CPPUNIT_ASSERT(actualResult56.empty());
 
@@ -980,7 +982,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows57->addChild(second57);
 	QueryTree* query57 = new QueryTree(follows57);
 
-	vector<int> actualResult57 = qe->solveForSuchThatFollows("a2", &table1, query57, &st, &f1, &pt, &vt); // assign a2, a3; Select a2 such that Follows(a3, 3) | Expected <1, 2, 4, 5, 8>
+	vector<int> actualResult57 = qe->solveForSuchThatFollows("a2", &table1, query57, &st, &f1, &pt, &vt, &ct); // assign a2, a3; Select a2 such that Follows(a3, 3) | Expected <1, 2, 4, 5, 8>
 	
     CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult57.size());
     CPPUNIT_ASSERT_EQUAL(1, actualResult57.at(0));
@@ -998,7 +1000,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows58->addChild(second58);
 	QueryTree* query58 = new QueryTree(follows58);
 
-	vector<int> actualResult58 = qe->solveForSuchThatFollows("a2", &table1, query58, &st, &f1, &pt, &vt); // assign a2, a3; Select a2 such that Follows(a3, 4) | Expected <> (none)
+	vector<int> actualResult58 = qe->solveForSuchThatFollows("a2", &table1, query58, &st, &f1, &pt, &vt, &ct); // assign a2, a3; Select a2 such that Follows(a3, 4) | Expected <> (none)
 	
 	CPPUNIT_ASSERT(actualResult58.empty());
 
@@ -1011,7 +1013,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows59->addChild(second59);
 	QueryTree* query59 = new QueryTree(follows59);
 
-	vector<int> actualResult59 = qe->solveForSuchThatFollows("w3", &table1, query59, &st, &f1, &pt, &vt); // while w3, w4; Select w3 such that Follows(w4, 4) | Expected <3, 6, 7, 9, 10>
+	vector<int> actualResult59 = qe->solveForSuchThatFollows("w3", &table1, query59, &st, &f1, &pt, &vt, &ct); // while w3, w4; Select w3 such that Follows(w4, 4) | Expected <3, 6, 7, 9, 10>
 	
     CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult59.size());
     CPPUNIT_ASSERT_EQUAL(3, actualResult59.at(0));
@@ -1029,7 +1031,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows60->addChild(second60);
 	QueryTree* query60 = new QueryTree(follows60);
 
-	vector<int> actualResult60 = qe->solveForSuchThatFollows("w3", &table1, query60, &st, &f1, &pt, &vt); // while w3, w4; Select w3 such that Follows(w4, 3) | Expected <> (none)
+	vector<int> actualResult60 = qe->solveForSuchThatFollows("w3", &table1, query60, &st, &f1, &pt, &vt, &ct); // while w3, w4; Select w3 such that Follows(w4, 3) | Expected <> (none)
 	
 	CPPUNIT_ASSERT(actualResult60.empty());
 
@@ -1042,7 +1044,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows61->addChild(second61);
 	QueryTree* query61 = new QueryTree(follows61);
 
-	vector<int> actualResult61 = qe->solveForSuchThatFollows("a2", &table1, query61, &st, &f1, &pt, &vt); // stmt s1, s2; assign a2; Select a2 such that Follows(s1, s2) | Expected <1, 2, 4, 5, 8>
+	vector<int> actualResult61 = qe->solveForSuchThatFollows("a2", &table1, query61, &st, &f1, &pt, &vt, &ct); // stmt s1, s2; assign a2; Select a2 such that Follows(s1, s2) | Expected <1, 2, 4, 5, 8>
 	
     CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult61.size());
     CPPUNIT_ASSERT_EQUAL(1, actualResult61.at(0));
@@ -1060,7 +1062,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows62->addChild(second62);
 	QueryTree* query62 = new QueryTree(follows62);
 
-	vector<int> actualResult62 = qe->solveForSuchThatFollows("a2", &table1, query62, &st, &f1, &pt, &vt); // stmt s1; assign a2, a3; Select a2 such that Follows(s1, a3) | Expected <1, 2, 4, 5, 8>
+	vector<int> actualResult62 = qe->solveForSuchThatFollows("a2", &table1, query62, &st, &f1, &pt, &vt, &ct); // stmt s1; assign a2, a3; Select a2 such that Follows(s1, a3) | Expected <1, 2, 4, 5, 8>
 	
     CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult62.size());
     CPPUNIT_ASSERT_EQUAL(1, actualResult62.at(0));
@@ -1078,7 +1080,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows63->addChild(second63);
 	QueryTree* query63 = new QueryTree(follows63);
 
-	vector<int> actualResult63 = qe->solveForSuchThatFollows("a2", &table1, query63, &st, &f1, &pt, &vt); // stmt s1; assign a2; while w3; Select a2 such that Follows(s1, w3) | Expected <1, 2, 4, 5, 8>
+	vector<int> actualResult63 = qe->solveForSuchThatFollows("a2", &table1, query63, &st, &f1, &pt, &vt, &ct); // stmt s1; assign a2; while w3; Select a2 such that Follows(s1, w3) | Expected <1, 2, 4, 5, 8>
 	
     CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult63.size());
     CPPUNIT_ASSERT_EQUAL(1, actualResult63.at(0));
@@ -1096,7 +1098,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows64->addChild(second64);
 	QueryTree* query64 = new QueryTree(follows64);
 
-	vector<int> actualResult64 = qe->solveForSuchThatFollows("w3", &table1, query64, &st, &f1, &pt, &vt); // stmt s1; assign a2; while w3; Select w3 such that Follows(a2, s1) | Expected <3, 6, 7, 9, 10>
+	vector<int> actualResult64 = qe->solveForSuchThatFollows("w3", &table1, query64, &st, &f1, &pt, &vt, &ct); // stmt s1; assign a2; while w3; Select w3 such that Follows(a2, s1) | Expected <3, 6, 7, 9, 10>
 	
     CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult64.size());
     CPPUNIT_ASSERT_EQUAL(3, actualResult64.at(0));
@@ -1114,7 +1116,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows65->addChild(second65);
 	QueryTree* query65 = new QueryTree(follows65);
 
-	vector<int> actualResult65 = qe->solveForSuchThatFollows("w3", &table1, query65, &st, &f1, &pt, &vt); // assign a2, a3; while w3; Select w3 such that Follows(a2, a3) | Expected <3, 6, 7, 9, 10>
+	vector<int> actualResult65 = qe->solveForSuchThatFollows("w3", &table1, query65, &st, &f1, &pt, &vt, &ct); // assign a2, a3; while w3; Select w3 such that Follows(a2, a3) | Expected <3, 6, 7, 9, 10>
 	
     CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult65.size());
     CPPUNIT_ASSERT_EQUAL(3, actualResult65.at(0));
@@ -1132,7 +1134,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows66->addChild(second66);
 	QueryTree* query66 = new QueryTree(follows66);
 
-	vector<int> actualResult66 = qe->solveForSuchThatFollows("w3", &table1, query66, &st, &f1, &pt, &vt); // assign a2; while w3, w4; Select w3 such that Follows(a2, w4) | Expected <3, 6, 7, 9, 10>
+	vector<int> actualResult66 = qe->solveForSuchThatFollows("w3", &table1, query66, &st, &f1, &pt, &vt, &ct); // assign a2; while w3, w4; Select w3 such that Follows(a2, w4) | Expected <3, 6, 7, 9, 10>
 	
     CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult66.size());
     CPPUNIT_ASSERT_EQUAL(3, actualResult66.at(0));
@@ -1150,7 +1152,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows67->addChild(second67);
 	QueryTree* query67 = new QueryTree(follows67);
 
-	vector<int> actualResult67 = qe->solveForSuchThatFollows("w3", &table1, query67, &st, &f1, &pt, &vt); // stmt s1; while w3, w4; Select w3 such that Follows(w4, s1) | Expected <3, 6, 7, 9, 10>
+	vector<int> actualResult67 = qe->solveForSuchThatFollows("w3", &table1, query67, &st, &f1, &pt, &vt, &ct); // stmt s1; while w3, w4; Select w3 such that Follows(w4, s1) | Expected <3, 6, 7, 9, 10>
 	
     CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult67.size());
     CPPUNIT_ASSERT_EQUAL(3, actualResult67.at(0));
@@ -1168,7 +1170,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows68->addChild(second68);
 	QueryTree* query68 = new QueryTree(follows68);
 
-	vector<int> actualResult68 = qe->solveForSuchThatFollows("w3", &table1, query68, &st, &f1, &pt, &vt); // assign a2; while w3, w4; Select w3 such that Follows(w4, a2) | Expected <3, 6, 7, 9, 10>
+	vector<int> actualResult68 = qe->solveForSuchThatFollows("w3", &table1, query68, &st, &f1, &pt, &vt, &ct); // assign a2; while w3, w4; Select w3 such that Follows(w4, a2) | Expected <3, 6, 7, 9, 10>
 	
     CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult68.size());
     CPPUNIT_ASSERT_EQUAL(3, actualResult68.at(0));
@@ -1186,7 +1188,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows69->addChild(second69);
 	QueryTree* query69 = new QueryTree(follows69);
 
-	vector<int> actualResult69 = qe->solveForSuchThatFollows("a2", &table1, query69, &st, &f1, &pt, &vt); // assign a2; while w3, w4; Select a2 such that Follows(w3, w4) | Expected <1, 2, 4, 5, 8>
+	vector<int> actualResult69 = qe->solveForSuchThatFollows("a2", &table1, query69, &st, &f1, &pt, &vt, &ct); // assign a2; while w3, w4; Select a2 such that Follows(w3, w4) | Expected <1, 2, 4, 5, 8>
 	
     CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult69.size());
     CPPUNIT_ASSERT_EQUAL(1, actualResult69.at(0));
@@ -1217,7 +1219,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	expectedResult70.push_back(1);
 	expectedResult70.push_back(2);
 
-	vector<int> actualResult70 = qe->solveForSuchThatFollows("s1", &table1, query70, &st2, &f2, &pt, &vt); // stmt s1; assign a2; while w3; Select s1 such that Follows(a2, w3) | Expected <1, 2>
+	vector<int> actualResult70 = qe->solveForSuchThatFollows("s1", &table1, query70, &st2, &f2, &pt, &vt, &ct); // stmt s1; assign a2; while w3; Select s1 such that Follows(a2, w3) | Expected <1, 2>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)2, actualResult70.size());
 	CPPUNIT_ASSERT_EQUAL(1, actualResult70.at(0));
@@ -1232,7 +1234,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows71->addChild(second71);
 	QueryTree* query71 = new QueryTree(follows71);
 
-	vector<int> actualResult71 = qe->solveForSuchThatFollows("s1", &table1, query71, &st2, &f2, &pt, &vt); // stmt s1; assign a2, a3; Select s1 such that Follows(a2, a3) | Expected <> (none)
+	vector<int> actualResult71 = qe->solveForSuchThatFollows("s1", &table1, query71, &st2, &f2, &pt, &vt, &ct); // stmt s1; assign a2, a3; Select s1 such that Follows(a2, a3) | Expected <> (none)
 	
 	CPPUNIT_ASSERT(actualResult71.empty());
 
@@ -1245,7 +1247,7 @@ void QueryEvaluatorTest::testSolveForSuchThatFollows(){
 	follows72->addChild(second72);
 	QueryTree* query72 = new QueryTree(follows72);
 
-	vector<int> actualResult72 = qe->solveForSuchThatFollows("s1", &table1, query72, &st2, &f2, &pt, &vt); // stmt s1; while w3, w4; Select s1 such that Follows(w3, w4) | Expected <> (none)
+	vector<int> actualResult72 = qe->solveForSuchThatFollows("s1", &table1, query72, &st2, &f2, &pt, &vt, &ct); // stmt s1; while w3, w4; Select s1 such that Follows(w3, w4) | Expected <> (none)
 	
 	CPPUNIT_ASSERT(actualResult72.empty());
 }
@@ -1338,6 +1340,8 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	varTable1.insertVar("i"); // index 13
 	varTable1.insertVar("j"); // index 14
 
+	ConstantTable ct;
+
 	QueryEvaluator* qe = new QueryEvaluator();
 
 	// synonym table, add more if needed
@@ -1368,7 +1372,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies1->addChild(second1);
 	QueryTree* query1 = new QueryTree(modifies1);
 
-	vector<int> actualResult1 = qe->solveForSuchThatModifies("s1", &table1, query1, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult1 = qe->solveForSuchThatModifies("s1", &table1, query1, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult1.empty());
 	
@@ -1388,7 +1392,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	QueryTree* query2 = new QueryTree(modifies2);
 
 	// store procedure name in vector
-	vector<int> actualResult2 = qe->solveForSuchThatModifies("p1", &table1, query2, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult2 = qe->solveForSuchThatModifies("p1", &table1, query2, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult2.empty());
 
@@ -1407,7 +1411,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies3->addChild(second3);
 	QueryTree* query3 = new QueryTree(modifies3);
 
-	vector<int> actualResult3 = qe->solveForSuchThatModifies("a1", &table1, query3, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult3 = qe->solveForSuchThatModifies("a1", &table1, query3, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1, actualResult3[0]);
 	CPPUNIT_ASSERT_EQUAL(10, actualResult3[1]);
@@ -1427,7 +1431,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies4->addChild(second4);
 	QueryTree* query4 = new QueryTree(modifies4);
 
-	vector<int> actualResult4 = qe->solveForSuchThatModifies("w1", &table1, query4, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult4 = qe->solveForSuchThatModifies("w1", &table1, query4, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult4.empty());
 
@@ -1446,7 +1450,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies5->addChild(second5);
 	QueryTree* query5 = new QueryTree(modifies5);
 
-	vector<int> actualResult5 = qe->solveForSuchThatModifies("v1", &table1, query5, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult5 = qe->solveForSuchThatModifies("v1", &table1, query5, &st, &m1, &procTable1, &varTable1, &ct); 
 
 	CPPUNIT_ASSERT(actualResult5[0] == 0);
 	CPPUNIT_ASSERT(actualResult5[1] == 11);
@@ -1466,7 +1470,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies6->addChild(second6);
 	QueryTree* query6 = new QueryTree(modifies6);
 
-	vector<int> actualResult6 = qe->solveForSuchThatModifies("a1", &table1, query6, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult6 = qe->solveForSuchThatModifies("a1", &table1, query6, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult6.empty());
 	
@@ -1485,7 +1489,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies7->addChild(second7);
 	QueryTree* query7 = new QueryTree(modifies7);
 
-	vector<int> actualResult7 = qe->solveForSuchThatModifies("p1", &table1, query7, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult7 = qe->solveForSuchThatModifies("p1", &table1, query7, &st, &m1, &procTable1, &varTable1, &ct); 
 
 	CPPUNIT_ASSERT(actualResult7[0] == 0 );
 
@@ -1504,7 +1508,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies8->addChild(second8);
 	QueryTree* query8 = new QueryTree(modifies8);
 
-	vector<int> actualResult8 = qe->solveForSuchThatModifies("s1", &table1, query8, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult8 = qe->solveForSuchThatModifies("s1", &table1, query8, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult8[0]);
 	CPPUNIT_ASSERT_EQUAL(2,actualResult8[1]);
@@ -1532,7 +1536,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies9->addChild(second9);
 	QueryTree* query9 = new QueryTree(modifies9);
 
-	vector<int> actualResult9 = qe->solveForSuchThatModifies("w1", &table1, query9, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult9 = qe->solveForSuchThatModifies("w1", &table1, query9, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(3,actualResult9[0]);
 	CPPUNIT_ASSERT_EQUAL(6,actualResult9[1]);
@@ -1554,7 +1558,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies10->addChild(second10);
 	QueryTree* query10 = new QueryTree(modifies10);
 
-	vector<int> actualResult10 = qe->solveForSuchThatModifies("s1", &table1, query10, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult10 = qe->solveForSuchThatModifies("s1", &table1, query10, &st, &m1, &procTable1, &varTable1, &ct); 
 
 	CPPUNIT_ASSERT(actualResult10.empty());
 
@@ -1573,7 +1577,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies11->addChild(second11);
 	QueryTree* query11 = new QueryTree(modifies11);
 
-	vector<int> actualResult11 = qe->solveForSuchThatModifies("s1", &table1, query11, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult11 = qe->solveForSuchThatModifies("s1", &table1, query11, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult11.empty());
 
@@ -1592,7 +1596,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies12->addChild(second12);
 	QueryTree* query12 = new QueryTree(modifies12);
 
-	vector<int> actualResult12 = qe->solveForSuchThatModifies("a1", &table1, query12, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult12 = qe->solveForSuchThatModifies("a1", &table1, query12, &st, &m1, &procTable1, &varTable1, &ct); 
 
 	CPPUNIT_ASSERT_EQUAL(1, actualResult12[0]);
 	CPPUNIT_ASSERT_EQUAL(2, actualResult12[1]);
@@ -1616,7 +1620,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies13->addChild(second13);
 	QueryTree* query13 = new QueryTree(modifies13);
 
-	vector<int> actualResult13 = qe->solveForSuchThatModifies("w1", &table1, query13, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult13 = qe->solveForSuchThatModifies("w1", &table1, query13, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(3, actualResult13[0]);
 	CPPUNIT_ASSERT_EQUAL(6, actualResult13[1]);
@@ -1638,7 +1642,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies14->addChild(second14);
 	QueryTree* query14 = new QueryTree(modifies14);
 
-	vector<int> actualResult14 = qe->solveForSuchThatModifies("v1", &table1, query14, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult14 = qe->solveForSuchThatModifies("v1", &table1, query14, &st, &m1, &procTable1, &varTable1, &ct); 
 
 	CPPUNIT_ASSERT(actualResult14[0]== 0);
 	CPPUNIT_ASSERT(actualResult14[1]== 1);
@@ -1664,7 +1668,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies15->addChild(second15);
 	QueryTree* query15 = new QueryTree(modifies15);
 
-	vector<int> actualResult15 = qe->solveForSuchThatModifies("p1", &table1, query15, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult15 = qe->solveForSuchThatModifies("p1", &table1, query15, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult14[0]== 0);
 	
@@ -1683,7 +1687,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies16->addChild(second16);
 	QueryTree* query16 = new QueryTree(modifies16);
 
-	vector<int> actualResult16 = qe->solveForSuchThatModifies("p1", &table1, query16, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult16 = qe->solveForSuchThatModifies("p1", &table1, query16, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult16[0] == 0);
 
@@ -1702,7 +1706,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies17->addChild(second17);
 	QueryTree* query17 = new QueryTree(modifies17);
 
-	vector<int> actualResult17 = qe->solveForSuchThatModifies("s1", &table1, query17, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult17 = qe->solveForSuchThatModifies("s1", &table1, query17, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult17[0]);
 	CPPUNIT_ASSERT_EQUAL(5,actualResult17[4]);
@@ -1725,7 +1729,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies18->addChild(second18);
 	QueryTree* query18 = new QueryTree(modifies18);
 
-	vector<int> actualResult18 = qe->solveForSuchThatModifies("s1", &table1, query18, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult18 = qe->solveForSuchThatModifies("s1", &table1, query18, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult18[0]);
 	CPPUNIT_ASSERT_EQUAL(5,actualResult18[4]);
@@ -1748,7 +1752,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies19->addChild(second19);
 	QueryTree* query19 = new QueryTree(modifies19);
 
-	vector<int> actualResult19 = qe->solveForSuchThatModifies("p1", &table1, query19, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult19 = qe->solveForSuchThatModifies("p1", &table1, query19, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult19[0] == 0);
 
@@ -1768,7 +1772,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies20->addChild(second20);
 	QueryTree* query20 = new QueryTree(modifies20);
 
-	vector<int> actualResult20 = qe->solveForSuchThatModifies("a1", &table1, query20, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult20 = qe->solveForSuchThatModifies("a1", &table1, query20, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult20[0]);
 	CPPUNIT_ASSERT_EQUAL(2,actualResult20[1]);
@@ -1791,7 +1795,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies21->addChild(second21);
 	QueryTree* query21 = new QueryTree(modifies21);
 
-	vector<int> actualResult21 = qe->solveForSuchThatModifies("s1", &table1, query21, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult21 = qe->solveForSuchThatModifies("s1", &table1, query21, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult21[0]);
 	CPPUNIT_ASSERT_EQUAL(5,actualResult21[4]);
@@ -1814,7 +1818,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies22->addChild(second22);
 	QueryTree* query22 = new QueryTree(modifies22);
 
-	vector<int> actualResult22 = qe->solveForSuchThatModifies("a1", &table1, query22, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult22 = qe->solveForSuchThatModifies("a1", &table1, query22, &st, &m1, &procTable1, &varTable1, &ct); 
 
 	CPPUNIT_ASSERT(actualResult22.empty());
 
@@ -1833,7 +1837,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies23->addChild(second23);
 	QueryTree* query23 = new QueryTree(modifies23);
 
-	vector<int> actualResult23 = qe->solveForSuchThatModifies("v1", &table1, query23, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult23 = qe->solveForSuchThatModifies("v1", &table1, query23, &st, &m1, &procTable1, &varTable1, &ct); 
 		
 	CPPUNIT_ASSERT(actualResult23.empty());
 
@@ -1852,7 +1856,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies24->addChild(second24);
 	QueryTree* query24 = new QueryTree(modifies24);
 
-	vector<int> actualResult24 = qe->solveForSuchThatModifies("w1", &table1, query24, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult24 = qe->solveForSuchThatModifies("w1", &table1, query24, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(3,actualResult24[0]);
 	CPPUNIT_ASSERT_EQUAL(6,actualResult24[1]);
@@ -1874,7 +1878,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies25->addChild(second25);
 	QueryTree* query25 = new QueryTree(modifies25);
 
-	vector<int> actualResult25 = qe->solveForSuchThatModifies("s1", &table1, query25, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult25 = qe->solveForSuchThatModifies("s1", &table1, query25, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult25[0]);
 	CPPUNIT_ASSERT_EQUAL(5,actualResult25[4]);
@@ -1897,7 +1901,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies26->addChild(second26);
 	QueryTree* query26 = new QueryTree(modifies26);
 
-	vector<int> actualResult26 = qe->solveForSuchThatModifies("a1", &table1, query26, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult26 = qe->solveForSuchThatModifies("a1", &table1, query26, &st, &m1, &procTable1, &varTable1, &ct); 
 	
     CPPUNIT_ASSERT_EQUAL(1,actualResult26[0]);
 	CPPUNIT_ASSERT_EQUAL(2,actualResult26[1]);
@@ -1920,7 +1924,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies27->addChild(second27);
 	QueryTree* query27 = new QueryTree(modifies27);
 
-	vector<int> actualResult27 = qe->solveForSuchThatModifies("w1", &table1, query27, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult27 = qe->solveForSuchThatModifies("w1", &table1, query27, &st, &m1, &procTable1, &varTable1, &ct); 
 	
     CPPUNIT_ASSERT_EQUAL(3,actualResult27[0]);
 	CPPUNIT_ASSERT_EQUAL(6,actualResult27[1]);
@@ -1942,7 +1946,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies28->addChild(second28);
 	QueryTree* query28 = new QueryTree(modifies28);
 
-	vector<int> actualResult28 = qe->solveForSuchThatModifies("w1", &table1, query28, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult28 = qe->solveForSuchThatModifies("w1", &table1, query28, &st, &m1, &procTable1, &varTable1, &ct); 
 	
     CPPUNIT_ASSERT_EQUAL(3,actualResult28[0]);
 	CPPUNIT_ASSERT_EQUAL(6,actualResult28[1]);
@@ -1964,7 +1968,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies29->addChild(second29);
 	QueryTree* query29 = new QueryTree(modifies29);
 
-	vector<int> actualResult29 = qe->solveForSuchThatModifies("v1", &table1, query29, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult29 = qe->solveForSuchThatModifies("v1", &table1, query29, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult29[0]== 0);
 	CPPUNIT_ASSERT(actualResult29[1]== 1);
@@ -1990,7 +1994,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies30->addChild(second30);
 	QueryTree* query30 = new QueryTree(modifies30);
 
-	vector<int> actualResult30 = qe->solveForSuchThatModifies("p1", &table1, query30, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult30 = qe->solveForSuchThatModifies("p1", &table1, query30, &st, &m1, &procTable1, &varTable1, &ct); 
 	
     CPPUNIT_ASSERT(actualResult30[0]== 0);
 	
@@ -2009,7 +2013,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies31->addChild(second31);
 	QueryTree* query31 = new QueryTree(modifies31);
 
-	vector<int> actualResult31 = qe->solveForSuchThatModifies("p1", &table1, query31, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult31 = qe->solveForSuchThatModifies("p1", &table1, query31, &st, &m1, &procTable1, &varTable1, &ct); 
 	
     CPPUNIT_ASSERT(actualResult31[0]== 0);
 
@@ -2028,7 +2032,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies32->addChild(second32);
 	QueryTree* query32 = new QueryTree(modifies32);
 
-	vector<int> actualResult32 = qe->solveForSuchThatModifies("p1", &table1, query32, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult32 = qe->solveForSuchThatModifies("p1", &table1, query32, &st, &m1, &procTable1, &varTable1, &ct); 
 	
     CPPUNIT_ASSERT(actualResult32[0]== 0);
 	
@@ -2047,7 +2051,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies33->addChild(second33);
 	QueryTree* query33 = new QueryTree(modifies33);
 
-	vector<int> actualResult33 = qe->solveForSuchThatModifies("s1", &table1, query33, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult33 = qe->solveForSuchThatModifies("s1", &table1, query33, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult33[0]);
 	CPPUNIT_ASSERT_EQUAL(5,actualResult33[4]);
@@ -2070,7 +2074,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies34->addChild(second34);
 	QueryTree* query34 = new QueryTree(modifies34);
 
-	vector<int> actualResult34 = qe->solveForSuchThatModifies("a1", &table1, query34, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult34 = qe->solveForSuchThatModifies("a1", &table1, query34, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult34[0]);
 	CPPUNIT_ASSERT_EQUAL(2,actualResult34[1]);
@@ -2093,7 +2097,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies35->addChild(second35);
 	QueryTree* query35 = new QueryTree(modifies35);
 
-	vector<int> actualResult35 = qe->solveForSuchThatModifies("a1", &table1, query35, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult35 = qe->solveForSuchThatModifies("a1", &table1, query35, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult35[0]);
 	CPPUNIT_ASSERT_EQUAL(2,actualResult35[1]);
@@ -2116,7 +2120,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies36->addChild(second36);
 	QueryTree* query36 = new QueryTree(modifies36);
 
-	vector<int> actualResult36 = qe->solveForSuchThatModifies("s1", &table1, query36, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult36 = qe->solveForSuchThatModifies("s1", &table1, query36, &st, &m1, &procTable1, &varTable1, &ct); 
 	CPPUNIT_ASSERT_EQUAL(1,actualResult36[0]);
 	CPPUNIT_ASSERT_EQUAL(5,actualResult36[4]);
 	CPPUNIT_ASSERT_EQUAL(8,actualResult36[7]);
@@ -2138,7 +2142,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies37->addChild(second37);
 	QueryTree* query37 = new QueryTree(modifies37);
 
-	vector<int> actualResult37 = qe->solveForSuchThatModifies("v1", &table1, query37, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult37 = qe->solveForSuchThatModifies("v1", &table1, query37, &st, &m1, &procTable1, &varTable1, &ct); 
 	CPPUNIT_ASSERT(actualResult37[0]== 0);
 	CPPUNIT_ASSERT(actualResult37[1]== 1);
 	CPPUNIT_ASSERT(actualResult37[2]== 2);
@@ -2163,7 +2167,7 @@ void QueryEvaluatorTest::testSolveForSuchThatModifies(){
 	modifies38->addChild(second38);
 	QueryTree* query38 = new QueryTree(modifies38);
 
-	vector<int> actualResult38 = qe->solveForSuchThatModifies("w1", &table1, query38, &st, &m1, &procTable1, &varTable1); 
+	vector<int> actualResult38 = qe->solveForSuchThatModifies("w1", &table1, query38, &st, &m1, &procTable1, &varTable1, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(3,actualResult38[0]);
 	CPPUNIT_ASSERT_EQUAL(6,actualResult38[1]);
@@ -2273,6 +2277,8 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	v.insertVar("i"); // index 13
 	v.insertVar("j"); // index 14
 
+	ConstantTable ct;
+
 	QueryEvaluator* qe = new QueryEvaluator();
 
 	// synonym table, add more if needed
@@ -2303,7 +2309,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses1->addChild(second1);
 	QueryTree* query1 = new QueryTree(uses1);
 
-	vector<int> actualResult1 = qe->solveForSuchThatUses("s1", &table1, query1, &st, &m, &p, &v); 
+	vector<int> actualResult1 = qe->solveForSuchThatUses("s1", &table1, query1, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult1[0]==1);
 
@@ -2323,7 +2329,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	QueryTree* query2 = new QueryTree(uses2);
 
 	// store procedure name in vector
-	vector<int> actualResult2 = qe->solveForSuchThatUses("p1", &table1, query2, &st, &m, &p, &v); 
+	vector<int> actualResult2 = qe->solveForSuchThatUses("p1", &table1, query2, &st, &m, &p, &v, &ct); 
 
 	CPPUNIT_ASSERT(actualResult2[0] == 0 );
 
@@ -2342,7 +2348,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses3->addChild(second3);
 	QueryTree* query3 = new QueryTree(uses3);
 
-	vector<int> actualResult3 = qe->solveForSuchThatUses("a1", &table1, query3, &st, &m, &p, &v); 
+	vector<int> actualResult3 = qe->solveForSuchThatUses("a1", &table1, query3, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(10, actualResult3[0]);
 
@@ -2361,7 +2367,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses4->addChild(second4);
 	QueryTree* query4 = new QueryTree(uses4);
 
-	vector<int> actualResult4 = qe->solveForSuchThatUses("w1", &table1, query4, &st, &m, &p, &v); 
+	vector<int> actualResult4 = qe->solveForSuchThatUses("w1", &table1, query4, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(3,actualResult4[0]);
 	CPPUNIT_ASSERT_EQUAL(6,actualResult4[1]);
@@ -2382,7 +2388,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses5->addChild(second5);
 	QueryTree* query5 = new QueryTree(uses5);
 
-	vector<int> actualResult5ns = qe->solveForSuchThatUses("v1", &table1, query5, &st, &m, &p, &v); 
+	vector<int> actualResult5ns = qe->solveForSuchThatUses("v1", &table1, query5, &st, &m, &p, &v, &ct); 
 
 	set<int> temp;
 	temp.insert(actualResult5ns.begin(), actualResult5ns.end());
@@ -2411,7 +2417,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses6->addChild(second6);
 	QueryTree* query6 = new QueryTree(uses6);
 
-	vector<int> actualResult6 = qe->solveForSuchThatUses("a1", &table1, query6, &st, &m, &p, &v); 
+	vector<int> actualResult6 = qe->solveForSuchThatUses("a1", &table1, query6, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult6.empty());
 	
@@ -2430,7 +2436,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses7->addChild(second7);
 	QueryTree* query7 = new QueryTree(uses7);
 
-	vector<int> actualResult7 = qe->solveForSuchThatUses("p1", &table1, query7, &st, &m, &p, &v); 
+	vector<int> actualResult7 = qe->solveForSuchThatUses("p1", &table1, query7, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult7[0] == 0 );
 
@@ -2449,7 +2455,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses8->addChild(second8);
 	QueryTree* query8 = new QueryTree(uses8);
 
-	vector<int> actualResult8 = qe->solveForSuchThatUses("s1", &table1, query8, &st, &m, &p, &v); 
+	vector<int> actualResult8 = qe->solveForSuchThatUses("s1", &table1, query8, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult8[0]);
 	CPPUNIT_ASSERT_EQUAL(2,actualResult8[1]);
@@ -2477,7 +2483,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses9->addChild(second9);
 	QueryTree* query9 = new QueryTree(uses9);
 
-	vector<int> actualResult9 = qe->solveForSuchThatUses("w1", &table1, query9, &st, &m, &p, &v); 
+	vector<int> actualResult9 = qe->solveForSuchThatUses("w1", &table1, query9, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(3,actualResult9[0]);
 	CPPUNIT_ASSERT_EQUAL(6,actualResult9[1]);
@@ -2500,7 +2506,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses10->addChild(second10);
 	QueryTree* query10 = new QueryTree(uses10);
 
-	vector<int> actualResult10 = qe->solveForSuchThatUses("s1", &table1, query10, &st, &m, &p, &v); 
+	vector<int> actualResult10 = qe->solveForSuchThatUses("s1", &table1, query10, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult10.empty());
 
@@ -2520,7 +2526,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses11->addChild(second11);
 	QueryTree* query11 = new QueryTree(uses11);
 
-	vector<int> actualResult11 = qe->solveForSuchThatUses("s1", &table1, query11, &st, &m, &p, &v); 
+	vector<int> actualResult11 = qe->solveForSuchThatUses("s1", &table1, query11, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult11[0]);
 	CPPUNIT_ASSERT_EQUAL(2,actualResult11[1]);
@@ -2549,7 +2555,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses12->addChild(second12);
 	QueryTree* query12 = new QueryTree(uses12);
 
-	vector<int> actualResult12 = qe->solveForSuchThatUses("a1", &table1, query12, &st, &m, &p, &v); 
+	vector<int> actualResult12 = qe->solveForSuchThatUses("a1", &table1, query12, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1, actualResult12[0]);
 	CPPUNIT_ASSERT_EQUAL(2, actualResult12[1]);
@@ -2573,7 +2579,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses13->addChild(second13);
 	QueryTree* query13 = new QueryTree(uses13);
 
-	vector<int> actualResult13 = qe->solveForSuchThatUses("w1", &table1, query13, &st, &m, &p, &v); 
+	vector<int> actualResult13 = qe->solveForSuchThatUses("w1", &table1, query13, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(3, actualResult13[0]);
 	CPPUNIT_ASSERT_EQUAL(6, actualResult13[1]);
@@ -2595,7 +2601,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses14->addChild(second14);
 	QueryTree* query14 = new QueryTree(uses14);
 
-	vector<int> actualResult14 = qe->solveForSuchThatUses("v1", &table1, query14, &st, &m, &p, &v); 
+	vector<int> actualResult14 = qe->solveForSuchThatUses("v1", &table1, query14, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult14[0]== 0);
 	CPPUNIT_ASSERT(actualResult14[1]== 1);
@@ -2621,7 +2627,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses14_5->addChild(second14_5);
 	QueryTree* query14_5 = new QueryTree(uses14_5);
 
-	vector<int> actualResult14_5 = qe->solveForSuchThatUses("v1", &table1, query14_5, &st, &m, &p, &v); 
+	vector<int> actualResult14_5 = qe->solveForSuchThatUses("v1", &table1, query14_5, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult14_5[0]== 0);
 	CPPUNIT_ASSERT(actualResult14_5[1]== 1);
@@ -2647,7 +2653,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses15->addChild(second15);
 	QueryTree* query15 = new QueryTree(uses15);
 
-	vector<int> actualResult15 = qe->solveForSuchThatUses("p1", &table1, query15, &st, &m, &p, &v); 
+	vector<int> actualResult15 = qe->solveForSuchThatUses("p1", &table1, query15, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult14[0]== 0);
 	
@@ -2666,7 +2672,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses16->addChild(second16);
 	QueryTree* query16 = new QueryTree(uses16);
 
-	vector<int> actualResult16 = qe->solveForSuchThatUses("p1", &table1, query16, &st, &m, &p, &v); 
+	vector<int> actualResult16 = qe->solveForSuchThatUses("p1", &table1, query16, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult16.empty());
 
@@ -2685,7 +2691,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses17->addChild(second17);
 	QueryTree* query17 = new QueryTree(uses17);
 
-	vector<int> actualResult17 = qe->solveForSuchThatUses("s1", &table1, query17, &st, &m, &p, &v); 
+	vector<int> actualResult17 = qe->solveForSuchThatUses("s1", &table1, query17, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult17[0]);
 	CPPUNIT_ASSERT_EQUAL(5,actualResult17[4]);
@@ -2708,7 +2714,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses18->addChild(second18);
 	QueryTree* query18 = new QueryTree(uses18);
 
-	vector<int> actualResult18 = qe->solveForSuchThatUses("s1", &table1, query18, &st, &m, &p, &v); 
+	vector<int> actualResult18 = qe->solveForSuchThatUses("s1", &table1, query18, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult18[0]);
 	CPPUNIT_ASSERT_EQUAL(5,actualResult18[4]);
@@ -2731,7 +2737,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses19->addChild(second19);
 	QueryTree* query19 = new QueryTree(uses19);
 
-	vector<int> actualResult19 = qe->solveForSuchThatUses("p1", &table1, query19, &st, &m, &p, &v); 
+	vector<int> actualResult19 = qe->solveForSuchThatUses("p1", &table1, query19, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult19[0] == 0);
 
@@ -2750,7 +2756,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses20->addChild(second20);
 	QueryTree* query20 = new QueryTree(uses20);
 
-	vector<int> actualResult20 = qe->solveForSuchThatUses("a1", &table1, query20, &st, &m, &p, &v); 
+	vector<int> actualResult20 = qe->solveForSuchThatUses("a1", &table1, query20, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult20[0]);
 	CPPUNIT_ASSERT_EQUAL(2,actualResult20[1]);
@@ -2773,7 +2779,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses21->addChild(second21);
 	QueryTree* query21 = new QueryTree(uses21);
 
-	vector<int> actualResult21 = qe->solveForSuchThatUses("s1", &table1, query21, &st, &m, &p, &v); 
+	vector<int> actualResult21 = qe->solveForSuchThatUses("s1", &table1, query21, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult21[0]);
 	CPPUNIT_ASSERT_EQUAL(5,actualResult21[4]);
@@ -2796,7 +2802,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses22->addChild(second22);
 	QueryTree* query22 = new QueryTree(uses22);
 
-	vector<int> actualResult22 = qe->solveForSuchThatUses("a1", &table1, query22, &st, &m, &p, &v); 
+	vector<int> actualResult22 = qe->solveForSuchThatUses("a1", &table1, query22, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult22[0]);
 	CPPUNIT_ASSERT_EQUAL(2,actualResult22[1]);
@@ -2819,7 +2825,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses23->addChild(second23);
 	QueryTree* query23 = new QueryTree(uses23);
 
-	vector<int> actualResult23 = qe->solveForSuchThatUses("v1", &table1, query23, &st, &m, &p, &v); 
+	vector<int> actualResult23 = qe->solveForSuchThatUses("v1", &table1, query23, &st, &m, &p, &v, &ct); 
 		
 	CPPUNIT_ASSERT(actualResult23[0]== 0);
 	CPPUNIT_ASSERT(actualResult23[1]== 1);
@@ -2845,7 +2851,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses24->addChild(second24);
 	QueryTree* query24 = new QueryTree(uses24);
 
-	vector<int> actualResult24 = qe->solveForSuchThatUses("w1", &table1, query24, &st, &m, &p, &v); 
+	vector<int> actualResult24 = qe->solveForSuchThatUses("w1", &table1, query24, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult24.empty());
 
@@ -2865,7 +2871,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses25->addChild(second25);
 	QueryTree* query25 = new QueryTree(uses25);
 
-	vector<int> actualResult25 = qe->solveForSuchThatUses("s1", &table1, query25, &st, &m, &p, &v); 
+	vector<int> actualResult25 = qe->solveForSuchThatUses("s1", &table1, query25, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult25[0]);
 	CPPUNIT_ASSERT_EQUAL(5,actualResult25[4]);
@@ -2889,7 +2895,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses26->addChild(second26);
 	QueryTree* query26 = new QueryTree(uses26);
 
-	vector<int> actualResult26 = qe->solveForSuchThatUses("a1", &table1, query26, &st, &m, &p, &v); 
+	vector<int> actualResult26 = qe->solveForSuchThatUses("a1", &table1, query26, &st, &m, &p, &v, &ct); 
 	
     CPPUNIT_ASSERT_EQUAL(1,actualResult26[0]);
 	CPPUNIT_ASSERT_EQUAL(2,actualResult26[1]);
@@ -2912,7 +2918,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses27->addChild(second27);
 	QueryTree* query27 = new QueryTree(uses27);
 
-	vector<int> actualResult27 = qe->solveForSuchThatUses("w1", &table1, query27, &st, &m, &p, &v); 
+	vector<int> actualResult27 = qe->solveForSuchThatUses("w1", &table1, query27, &st, &m, &p, &v, &ct); 
 	
     CPPUNIT_ASSERT_EQUAL(3,actualResult27[0]);
 	CPPUNIT_ASSERT_EQUAL(6,actualResult27[1]);
@@ -2935,7 +2941,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses28->addChild(second28);
 	QueryTree* query28 = new QueryTree(uses28);
 
-	vector<int> actualResult28 = qe->solveForSuchThatUses("w1", &table1, query28, &st, &m, &p, &v); 
+	vector<int> actualResult28 = qe->solveForSuchThatUses("w1", &table1, query28, &st, &m, &p, &v, &ct); 
 	
     CPPUNIT_ASSERT_EQUAL(3,actualResult28[0]);
 	CPPUNIT_ASSERT_EQUAL(6,actualResult28[1]);
@@ -2957,7 +2963,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses29->addChild(second29);
 	QueryTree* query29 = new QueryTree(uses29);
 
-	vector<int> actualResult29 = qe->solveForSuchThatUses("v1", &table1, query29, &st, &m, &p, &v); 
+	vector<int> actualResult29 = qe->solveForSuchThatUses("v1", &table1, query29, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT(actualResult29[0]== 0);
 	CPPUNIT_ASSERT(actualResult29[1]== 1);
@@ -2983,7 +2989,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses30->addChild(second30);
 	QueryTree* query30 = new QueryTree(uses30);
 
-	vector<int> actualResult30 = qe->solveForSuchThatUses("p1", &table1, query30, &st, &m, &p, &v); 
+	vector<int> actualResult30 = qe->solveForSuchThatUses("p1", &table1, query30, &st, &m, &p, &v, &ct); 
 	
     CPPUNIT_ASSERT(actualResult30[0]== 0);
 	
@@ -3002,7 +3008,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses31->addChild(second31);
 	QueryTree* query31 = new QueryTree(uses31);
 
-	vector<int> actualResult31 = qe->solveForSuchThatUses("p1", &table1, query31, &st, &m, &p, &v); 
+	vector<int> actualResult31 = qe->solveForSuchThatUses("p1", &table1, query31, &st, &m, &p, &v, &ct); 
 	
     CPPUNIT_ASSERT(actualResult31[0]== 0);
 
@@ -3021,7 +3027,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses32->addChild(second32);
 	QueryTree* query32 = new QueryTree(uses32);
 
-	vector<int> actualResult32 = qe->solveForSuchThatUses("p1", &table1, query32, &st, &m, &p, &v); 
+	vector<int> actualResult32 = qe->solveForSuchThatUses("p1", &table1, query32, &st, &m, &p, &v, &ct); 
 	
     CPPUNIT_ASSERT(actualResult32[0]== 0);
 	
@@ -3040,7 +3046,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses33->addChild(second33);
 	QueryTree* query33 = new QueryTree(uses33);
 
-	vector<int> actualResult33 = qe->solveForSuchThatUses("s1", &table1, query33, &st, &m, &p, &v); 
+	vector<int> actualResult33 = qe->solveForSuchThatUses("s1", &table1, query33, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult33[0]);
 	CPPUNIT_ASSERT_EQUAL(5,actualResult33[4]);
@@ -3063,7 +3069,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses34->addChild(second34);
 	QueryTree* query34 = new QueryTree(uses34);
 
-	vector<int> actualResult34 = qe->solveForSuchThatUses("a1", &table1, query34, &st, &m, &p, &v); 
+	vector<int> actualResult34 = qe->solveForSuchThatUses("a1", &table1, query34, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult34[0]);
 	CPPUNIT_ASSERT_EQUAL(2,actualResult34[1]);
@@ -3086,7 +3092,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses35->addChild(second35);
 	QueryTree* query35 = new QueryTree(uses35);
 
-	vector<int> actualResult35 = qe->solveForSuchThatUses("a1", &table1, query35, &st, &m, &p, &v); 
+	vector<int> actualResult35 = qe->solveForSuchThatUses("a1", &table1, query35, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult35[0]);
 	CPPUNIT_ASSERT_EQUAL(2,actualResult35[1]);
@@ -3109,7 +3115,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses36->addChild(second36);
 	QueryTree* query36 = new QueryTree(uses36);
 
-	vector<int> actualResult36 = qe->solveForSuchThatUses("s1", &table1, query36, &st, &m, &p, &v); 
+	vector<int> actualResult36 = qe->solveForSuchThatUses("s1", &table1, query36, &st, &m, &p, &v, &ct); 
 	CPPUNIT_ASSERT_EQUAL(1,actualResult36[0]);
 	CPPUNIT_ASSERT_EQUAL(5,actualResult36[4]);
 	CPPUNIT_ASSERT_EQUAL(8,actualResult36[7]);
@@ -3131,7 +3137,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses37->addChild(second37);
 	QueryTree* query37 = new QueryTree(uses37);
 
-	vector<int> actualResult37 = qe->solveForSuchThatUses("v1", &table1, query37, &st, &m, &p, &v); 
+	vector<int> actualResult37 = qe->solveForSuchThatUses("v1", &table1, query37, &st, &m, &p, &v, &ct); 
 	CPPUNIT_ASSERT(actualResult37[0]== 0);
 	CPPUNIT_ASSERT(actualResult37[1]== 1);
 	CPPUNIT_ASSERT(actualResult37[2]== 2);
@@ -3156,7 +3162,7 @@ void QueryEvaluatorTest::testSolveForSuchThatUses(){
 	uses38->addChild(second38);
 	QueryTree* query38 = new QueryTree(uses38);
 
-	vector<int> actualResult38 = qe->solveForSuchThatUses("w1", &table1, query38, &st, &m, &p, &v); 
+	vector<int> actualResult38 = qe->solveForSuchThatUses("w1", &table1, query38, &st, &m, &p, &v, &ct); 
 	
 	CPPUNIT_ASSERT_EQUAL(3,actualResult38[0]);
 	CPPUNIT_ASSERT_EQUAL(6,actualResult38[1]);
@@ -3224,6 +3230,8 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	vt.insertVar("b");
 	vt.insertVar("c");
 
+	ConstantTable ct;
+
 	QueryEvaluator* qe = new QueryEvaluator();
 
 	map<string, string> table1;
@@ -3248,7 +3256,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent1->addChild(second1);
 	QueryTree* query1 = new QueryTree(parent1);
 
-	vector<int> actualResult1 = qe->solveForSuchThatParent("s1", &table1, query1, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Parent(s1, 2) | Expected <1>
+	vector<int> actualResult1 = qe->solveForSuchThatParent("s1", &table1, query1, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Parent(s1, 2) | Expected <1>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResult1.size());
 
@@ -3261,7 +3269,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent2->addChild(second2);
 	QueryTree* query2 = new QueryTree(parent2);
 
-	vector<int> actualResult2 = qe->solveForSuchThatParent("w3", &table1, query2, &st, &f1, &pt, &vt); // while w3; Select w3 such that Parent(w3, 4) | Expected <3>
+	vector<int> actualResult2 = qe->solveForSuchThatParent("w3", &table1, query2, &st, &f1, &pt, &vt, &ct); // while w3; Select w3 such that Parent(w3, 4) | Expected <3>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult2.size());
 	CPPUNIT_ASSERT_EQUAL(3,actualResult2.at(0));
@@ -3275,7 +3283,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent3->addChild(second3);
 	QueryTree* query3 = new QueryTree(parent3);
 
-	vector<int> actualResult3 = qe->solveForSuchThatParent("a2", &table1, query3, &st, &f1, &pt, &vt); // assign a2; Select a2 such that Parent(a2, 4) | Expected <> (none)
+	vector<int> actualResult3 = qe->solveForSuchThatParent("a2", &table1, query3, &st, &f1, &pt, &vt, &ct); // assign a2; Select a2 such that Parent(a2, 4) | Expected <> (none)
 
 	CPPUNIT_ASSERT(actualResult3.empty());
 
@@ -3288,7 +3296,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent4->addChild(second4);
 	QueryTree* query4 = new QueryTree(parent4);
 
-	vector<int> actualResult4 = qe->solveForSuchThatParent("w3", &table1, query4, &st, &f1, &pt, &vt); // while w3; Select w3 such that Parent(w3, 3) | Expected <> (none)
+	vector<int> actualResult4 = qe->solveForSuchThatParent("w3", &table1, query4, &st, &f1, &pt, &vt, &ct); // while w3; Select w3 such that Parent(w3, 3) | Expected <> (none)
 
 	CPPUNIT_ASSERT(actualResult4.empty());
 
@@ -3301,7 +3309,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent5->addChild(second5);
 	QueryTree* query5 = new QueryTree(parent5);
 
-	vector<int> actualResult5 = qe->solveForSuchThatParent("w3", &table1, query5, &st, &f1, &pt, &vt); // while w3; Select w3 such that Parent(w3, 7) | Expected <3>
+	vector<int> actualResult5 = qe->solveForSuchThatParent("w3", &table1, query5, &st, &f1, &pt, &vt, &ct); // while w3; Select w3 such that Parent(w3, 7) | Expected <3>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult5.size());
 	CPPUNIT_ASSERT_EQUAL(6, actualResult5.at(0));
@@ -3315,7 +3323,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent6->addChild(second6);
 	QueryTree* query6 = new QueryTree(parent6);
 
-	vector<int> actualResult6 = qe->solveForSuchThatParent("v4", &table1, query6, &st, &f1, &pt, &vt); // variable v4; Select v4 such that Parent(v4, 4) | Expected <> (none)
+	vector<int> actualResult6 = qe->solveForSuchThatParent("v4", &table1, query6, &st, &f1, &pt, &vt, &ct); // variable v4; Select v4 such that Parent(v4, 4) | Expected <> (none)
 
 	CPPUNIT_ASSERT(actualResult6.empty());
 
@@ -3328,7 +3336,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent7->addChild(second7);
 	QueryTree* query7 = new QueryTree(parent7);
 
-	vector<int> actualResult7 = qe->solveForSuchThatParent("lol", &table1, query7, &st, &f1, &pt, &vt); // undefined lol; Select lol such that Parent(lol, 3) | Expected <> (none)
+	vector<int> actualResult7 = qe->solveForSuchThatParent("lol", &table1, query7, &st, &f1, &pt, &vt, &ct); // undefined lol; Select lol such that Parent(lol, 3) | Expected <> (none)
 
 	CPPUNIT_ASSERT(actualResult7.empty());
 
@@ -3341,7 +3349,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent8->addChild(second8);
 	QueryTree* query8 = new QueryTree(parent8);
 
-	vector<int> actualResult8 = qe->solveForSuchThatParent("s1", &table1, query8, &st, &f1, &pt, &vt); // stmt s1, s2; Select s1 such that Parent(s1, s2) | Expected <3,6,7,9>
+	vector<int> actualResult8 = qe->solveForSuchThatParent("s1", &table1, query8, &st, &f1, &pt, &vt, &ct); // stmt s1, s2; Select s1 such that Parent(s1, s2) | Expected <3,6,7,9>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)4, actualResult8.size());
 	CPPUNIT_ASSERT_EQUAL(3, actualResult8.at(0));
@@ -3359,7 +3367,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent9->addChild(second9);
 	QueryTree* query9 = new QueryTree(parent9);
 
-	vector<int> actualResult9 = qe->solveForSuchThatParent("w3", &table1, query9, &st, &f1, &pt, &vt); // while w3; stmt s2; Select w3 such that Parent(w3, s2) | Expected <3,6,7,9>
+	vector<int> actualResult9 = qe->solveForSuchThatParent("w3", &table1, query9, &st, &f1, &pt, &vt, &ct); // while w3; stmt s2; Select w3 such that Parent(w3, s2) | Expected <3,6,7,9>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)4, actualResult9.size());
 	CPPUNIT_ASSERT_EQUAL(3, actualResult9.at(0));
@@ -3376,7 +3384,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent10->addChild(second10);
 	QueryTree* query10 = new QueryTree(parent10);
 
-	vector<int> actualResult10 = qe->solveForSuchThatParent("a1", &table1, query10, &st, &f1, &pt, &vt); // stmt s2; Select a1 such that Parent(a1, s2) | Expected <> (none because a1 is not in synonym table)
+	vector<int> actualResult10 = qe->solveForSuchThatParent("a1", &table1, query10, &st, &f1, &pt, &vt, &ct); // stmt s2; Select a1 such that Parent(a1, s2) | Expected <> (none because a1 is not in synonym table)
 
 	CPPUNIT_ASSERT(actualResult10.empty());
 
@@ -3389,7 +3397,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent11->addChild(second11);
 	QueryTree* query11 = new QueryTree(parent11);
 
-	vector<int> actualResult11 = qe->solveForSuchThatParent("w3", &table1, query11, &st, &f1, &pt, &vt); // while w3; stmt s2; Select w3 such that Parent(w3, s2) | Expected <3, 6, 7, 9>
+	vector<int> actualResult11 = qe->solveForSuchThatParent("w3", &table1, query11, &st, &f1, &pt, &vt, &ct); // while w3; stmt s2; Select w3 such that Parent(w3, s2) | Expected <3, 6, 7, 9>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)4, actualResult11.size());
 	CPPUNIT_ASSERT_EQUAL(3, actualResult11.at(0));
@@ -3406,7 +3414,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent12->addChild(second12);
 	QueryTree* query12 = new QueryTree(parent12);
 
-	vector<int> actualResult12 = qe->solveForSuchThatParent("s1", &table1, query12, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Parent(s1, a1) | Expected <> (none because a1  is not in synonym table)
+	vector<int> actualResult12 = qe->solveForSuchThatParent("s1", &table1, query12, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Parent(s1, a1) | Expected <> (none because a1  is not in synonym table)
 
 	CPPUNIT_ASSERT(actualResult12.empty());
 
@@ -3419,7 +3427,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent13->addChild(second13);
 	QueryTree* query13 = new QueryTree(parent13);
 
-	vector<int> actualResult13 = qe->solveForSuchThatParent("s1", &table1, query13, &st, &f1, &pt, &vt); // stmt s1; assign a2; Select s1 such that Parent(s1, a2) | Expected <3, 3, 6>
+	vector<int> actualResult13 = qe->solveForSuchThatParent("s1", &table1, query13, &st, &f1, &pt, &vt, &ct); // stmt s1; assign a2; Select s1 such that Parent(s1, a2) | Expected <3, 3, 6>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)3, actualResult13.size());
 	CPPUNIT_ASSERT_EQUAL(3, actualResult13.at(0));
@@ -3435,7 +3443,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent14->addChild(second14);
 	QueryTree* query14 = new QueryTree(parent14);
 
-	vector<int> actualResult14 = qe->solveForSuchThatParent("s1", &table1, query14, &st, &f1, &pt, &vt); // stmt s1; while w3; Select s1 such that Parent(s1, w3) | Expected <3,6,7,9>
+	vector<int> actualResult14 = qe->solveForSuchThatParent("s1", &table1, query14, &st, &f1, &pt, &vt, &ct); // stmt s1; while w3; Select s1 such that Parent(s1, w3) | Expected <3,6,7,9>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)4, actualResult14.size());
 	CPPUNIT_ASSERT_EQUAL(3, actualResult14.at(0));
@@ -3453,7 +3461,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent15->addChild(second15);
 	QueryTree* query15 = new QueryTree(parent15);
 
-	vector<int> actualResult15 = qe->solveForSuchThatParent("a2", &table1, query15, &st, &f1, &pt, &vt); // assign a2; assign a3; Select a2 such that Parent(a2, a3) | Expected <>
+	vector<int> actualResult15 = qe->solveForSuchThatParent("a2", &table1, query15, &st, &f1, &pt, &vt, &ct); // assign a2; assign a3; Select a2 such that Parent(a2, a3) | Expected <>
 
 	CPPUNIT_ASSERT(actualResult15.empty());
 
@@ -3466,7 +3474,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent16->addChild(second16);
 	QueryTree* query16 = new QueryTree(parent16);
 
-	vector<int> actualResult16 = qe->solveForSuchThatParent("a2", &table1, query16, &st, &f1, &pt, &vt); // assign a2; while w3; Select a2 such that Parent(a2, w3) | Expected <>
+	vector<int> actualResult16 = qe->solveForSuchThatParent("a2", &table1, query16, &st, &f1, &pt, &vt, &ct); // assign a2; while w3; Select a2 such that Parent(a2, w3) | Expected <>
 
 	CPPUNIT_ASSERT(actualResult16.empty());
 
@@ -3479,7 +3487,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent17->addChild(second17);
 	QueryTree* query17 = new QueryTree(parent17);
 
-	vector<int> actualResult17 = qe->solveForSuchThatParent("w3", &table1, query17, &st, &f1, &pt, &vt); // while w3; assign a2; Select w3 such that Parent(w3, a2) | Expected <3, 3, 7>
+	vector<int> actualResult17 = qe->solveForSuchThatParent("w3", &table1, query17, &st, &f1, &pt, &vt, &ct); // while w3; assign a2; Select w3 such that Parent(w3, a2) | Expected <3, 3, 7>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)3, actualResult17.size());
 	CPPUNIT_ASSERT_EQUAL(3, actualResult17.at(0));
@@ -3495,7 +3503,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent18->addChild(second18);
 	QueryTree* query18 = new QueryTree(parent18);
 
-	vector<int> actualResult18 = qe->solveForSuchThatParent("w3", &table1, query18, &st, &f1, &pt, &vt); // while w3; while w4; Select w3 such that Parent(w3, w4) | Expected <3, 6, 7, 9>
+	vector<int> actualResult18 = qe->solveForSuchThatParent("w3", &table1, query18, &st, &f1, &pt, &vt, &ct); // while w3; while w4; Select w3 such that Parent(w3, w4) | Expected <3, 6, 7, 9>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)4, actualResult18.size());
 	CPPUNIT_ASSERT_EQUAL(3, actualResult18.at(0));
@@ -3512,7 +3520,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent19->addChild(second19);
 	QueryTree* query19 = new QueryTree(parent19);
 
-	vector<int> actualResult19 = qe->solveForSuchThatParent("s1", &table1, query19, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Parent(1, s1) | Expected <>
+	vector<int> actualResult19 = qe->solveForSuchThatParent("s1", &table1, query19, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Parent(1, s1) | Expected <>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResult19.size());
 
@@ -3525,7 +3533,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent20->addChild(second20);
 	QueryTree* query20 = new QueryTree(parent20);
 
-	vector<int> actualResult20 = qe->solveForSuchThatParent("a2", &table1, query20, &st, &f1, &pt, &vt); // assign a2; Select a2 such that Parent(3, a2) | Expected <4,5>
+	vector<int> actualResult20 = qe->solveForSuchThatParent("a2", &table1, query20, &st, &f1, &pt, &vt, &ct); // assign a2; Select a2 such that Parent(3, a2) | Expected <4,5>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)2, actualResult20.size());
 	CPPUNIT_ASSERT_EQUAL(4, actualResult20.at(0));
@@ -3540,7 +3548,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent21->addChild(second21);
 	QueryTree* query21 = new QueryTree(parent21);
 
-	vector<int> actualResult21 = qe->solveForSuchThatParent("a2", &table1, query21, &st, &f1, &pt, &vt); // assign a2; Select a2 such that Parent(2, a2) | Expected <> (none)
+	vector<int> actualResult21 = qe->solveForSuchThatParent("a2", &table1, query21, &st, &f1, &pt, &vt, &ct); // assign a2; Select a2 such that Parent(2, a2) | Expected <> (none)
 
 	CPPUNIT_ASSERT(actualResult21.empty());
 
@@ -3553,7 +3561,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent22->addChild(second22);
 	QueryTree* query22 = new QueryTree(parent22);
 
-	vector<int> actualResult22 = qe->solveForSuchThatParent("w3", &table1, query22, &st, &f1, &pt, &vt); // while w3; Select w3 such that Parent(3, w3) | Expected <> (none)
+	vector<int> actualResult22 = qe->solveForSuchThatParent("w3", &table1, query22, &st, &f1, &pt, &vt, &ct); // while w3; Select w3 such that Parent(3, w3) | Expected <> (none)
 
 	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult22.size());
 	CPPUNIT_ASSERT_EQUAL(6, actualResult22[0]);
@@ -3567,7 +3575,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent23->addChild(second23);
 	QueryTree* query23 = new QueryTree(parent23);
 
-	vector<int> actualResult23 = qe->solveForSuchThatParent("w3", &table1, query23, &st, &f1, &pt, &vt); // while w3; Select w3 such that Parent(2, w3) | Expected <>
+	vector<int> actualResult23 = qe->solveForSuchThatParent("w3", &table1, query23, &st, &f1, &pt, &vt, &ct); // while w3; Select w3 such that Parent(2, w3) | Expected <>
 
 	CPPUNIT_ASSERT(actualResult23.empty());
 
@@ -3580,7 +3588,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent24->addChild(second24);
 	QueryTree* query24 = new QueryTree(parent24);
 
-	vector<int> actualResult24 = qe->solveForSuchThatParent("v4", &table1, query24, &st, &f1, &pt, &vt); // variable v4; Select v4 such that Parent(4, v4) | Expected <> (none)
+	vector<int> actualResult24 = qe->solveForSuchThatParent("v4", &table1, query24, &st, &f1, &pt, &vt, &ct); // variable v4; Select v4 such that Parent(4, v4) | Expected <> (none)
 
 	CPPUNIT_ASSERT(actualResult24.empty());
 
@@ -3593,7 +3601,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent25->addChild(second25);
 	QueryTree* query25 = new QueryTree(parent25);
 
-	vector<int> actualResult25 = qe->solveForSuchThatParent("lol", &table1, query25, &st, &f1, &pt, &vt); // undefined lol; Select lol such that Parent(3, lol) | Expected <> (none)
+	vector<int> actualResult25 = qe->solveForSuchThatParent("lol", &table1, query25, &st, &f1, &pt, &vt, &ct); // undefined lol; Select lol such that Parent(3, lol) | Expected <> (none)
 
 	CPPUNIT_ASSERT(actualResult25.empty());
 
@@ -3606,7 +3614,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent26->addChild(second26);
 	QueryTree* query26 = new QueryTree(parent26);
 
-	vector<int> actualResult26 = qe->solveForSuchThatParent("s2", &table1, query26, &st, &f1, &pt, &vt); // stmt s1, s2; Select s2 such that Parent(s1, s2) | Expected <4,5,6,7,8,9,10>
+	vector<int> actualResult26 = qe->solveForSuchThatParent("s2", &table1, query26, &st, &f1, &pt, &vt, &ct); // stmt s1, s2; Select s2 such that Parent(s1, s2) | Expected <4,5,6,7,8,9,10>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)7, actualResult26.size());
 	CPPUNIT_ASSERT_EQUAL(4, actualResult26.at(0));
@@ -3627,7 +3635,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent27->addChild(second27);
 	QueryTree* query27 = new QueryTree(parent27);
 
-	vector<int> actualResult27 = qe->solveForSuchThatParent("a2", &table1, query27, &st, &f1, &pt, &vt); // assign a2; stmt s2; Select a2 such that Parent(s2, a2) | Expected <4, 5, 8>
+	vector<int> actualResult27 = qe->solveForSuchThatParent("a2", &table1, query27, &st, &f1, &pt, &vt, &ct); // assign a2; stmt s2; Select a2 such that Parent(s2, a2) | Expected <4, 5, 8>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)3, actualResult27.size());
 	CPPUNIT_ASSERT_EQUAL(4, actualResult27.at(0));
@@ -3643,7 +3651,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent28->addChild(second28);
 	QueryTree* query28 = new QueryTree(parent28);
 
-	vector<int> actualResult28 = qe->solveForSuchThatParent("a1", &table1, query28, &st, &f1, &pt, &vt); // stmt s2; Select a1 such that Parent(s2, a1) | Expected <> (none because a1 is not in synonym table)
+	vector<int> actualResult28 = qe->solveForSuchThatParent("a1", &table1, query28, &st, &f1, &pt, &vt, &ct); // stmt s2; Select a1 such that Parent(s2, a1) | Expected <> (none because a1 is not in synonym table)
 
 	CPPUNIT_ASSERT(actualResult28.empty());
 
@@ -3656,7 +3664,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent29->addChild(second29);
 	QueryTree* query29 = new QueryTree(parent29);
 
-	vector<int> actualResult29 = qe->solveForSuchThatParent("w3", &table1, query29, &st, &f1, &pt, &vt); // while w3; stmt s2; Select w3 such that Parent(s2, w3) | Expected <6, 7, 9,10>
+	vector<int> actualResult29 = qe->solveForSuchThatParent("w3", &table1, query29, &st, &f1, &pt, &vt, &ct); // while w3; stmt s2; Select w3 such that Parent(s2, w3) | Expected <6, 7, 9,10>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)4, actualResult29.size());
 	CPPUNIT_ASSERT_EQUAL(6, actualResult29.at(0));
@@ -3674,7 +3682,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent30->addChild(second30);
 	QueryTree* query30 = new QueryTree(parent30);
 
-	vector<int> actualResult30 = qe->solveForSuchThatParent("s1", &table1, query30, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Parent(a1, s1) | Expected <> (none because a1  is not in synonym table)
+	vector<int> actualResult30 = qe->solveForSuchThatParent("s1", &table1, query30, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Parent(a1, s1) | Expected <> (none because a1  is not in synonym table)
 
 	CPPUNIT_ASSERT(actualResult30.empty());
 
@@ -3687,7 +3695,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent31->addChild(second31);
 	QueryTree* query31 = new QueryTree(parent31);
 
-	vector<int> actualResult31 = qe->solveForSuchThatParent("s1", &table1, query31, &st, &f1, &pt, &vt); // stmt s1; assign a2; Select s1 such that Parent(a2, s1) | Expected <>
+	vector<int> actualResult31 = qe->solveForSuchThatParent("s1", &table1, query31, &st, &f1, &pt, &vt, &ct); // stmt s1; assign a2; Select s1 such that Parent(a2, s1) | Expected <>
 
 	CPPUNIT_ASSERT(actualResult30.empty());
 
@@ -3706,7 +3714,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	expectedResult32.push_back(8);
 	expectedResult32.push_back(10);
 
-	vector<int> actualResult32 = qe->solveForSuchThatParent("s1", &table1, query32, &st, &f1, &pt, &vt); // stmt s1; while w3; Select s1 such that Parent(w3, s1) | Expected <4,5,6,7, 8,9, 10>
+	vector<int> actualResult32 = qe->solveForSuchThatParent("s1", &table1, query32, &st, &f1, &pt, &vt, &ct); // stmt s1; while w3; Select s1 such that Parent(w3, s1) | Expected <4,5,6,7, 8,9, 10>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)7, actualResult32.size());
 	CPPUNIT_ASSERT_EQUAL(4, actualResult32.at(0));
@@ -3726,7 +3734,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent33->addChild(second33);
 	QueryTree* query33 = new QueryTree(parent33);
 
-	vector<int> actualResult33 = qe->solveForSuchThatParent("a3", &table1, query33, &st, &f1, &pt, &vt); // assign a2; assign a3; Select a3 such that Parent(a2, a3) | Expected <>
+	vector<int> actualResult33 = qe->solveForSuchThatParent("a3", &table1, query33, &st, &f1, &pt, &vt, &ct); // assign a2; assign a3; Select a3 such that Parent(a2, a3) | Expected <>
 
 	CPPUNIT_ASSERT(actualResult33.empty());
 
@@ -3739,7 +3747,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent34->addChild(second34);
 	QueryTree* query34 = new QueryTree(parent34);
 
-	vector<int> actualResult34 = qe->solveForSuchThatParent("a2", &table1, query34, &st, &f1, &pt, &vt); // assign a2; while w3; Select a2 such that Parent(w3, a2) | Expected <4,5,8>
+	vector<int> actualResult34 = qe->solveForSuchThatParent("a2", &table1, query34, &st, &f1, &pt, &vt, &ct); // assign a2; while w3; Select a2 such that Parent(w3, a2) | Expected <4,5,8>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)3, actualResult34.size());
 	CPPUNIT_ASSERT_EQUAL(4, actualResult34.at(0));
@@ -3755,7 +3763,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent35->addChild(second35);
 	QueryTree* query35 = new QueryTree(parent35);
 
-	vector<int> actualResult35 = qe->solveForSuchThatParent("w3", &table1, query35, &st, &f1, &pt, &vt); // while w3; assign a2; Select w3 such that Parent(a2, w3) | Expected <>
+	vector<int> actualResult35 = qe->solveForSuchThatParent("w3", &table1, query35, &st, &f1, &pt, &vt, &ct); // while w3; assign a2; Select w3 such that Parent(a2, w3) | Expected <>
 
 	CPPUNIT_ASSERT(actualResult35.empty());
 
@@ -3769,7 +3777,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent36->addChild(second36);
 	QueryTree* query36 = new QueryTree(parent36);
 
-	vector<int> actualResult36 = qe->solveForSuchThatParent("s1", &table1, query36, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Parent(3, 4) | Expected <1, 2, 3, 4, 5, 6, 7, 8, 9, 10>
+	vector<int> actualResult36 = qe->solveForSuchThatParent("s1", &table1, query36, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Parent(3, 4) | Expected <1, 2, 3, 4, 5, 6, 7, 8, 9, 10>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)10, actualResult36.size());
 	CPPUNIT_ASSERT_EQUAL(1, actualResult36.at(0));
@@ -3792,7 +3800,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent37->addChild(second37);
 	QueryTree* query37 = new QueryTree(parent37);
 
-	vector<int> actualResult37 = qe->solveForSuchThatParent("s1", &table1, query37, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that Parent(1, 3) | Expected <> (none)
+	vector<int> actualResult37 = qe->solveForSuchThatParent("s1", &table1, query37, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that Parent(1, 3) | Expected <> (none)
 	
 	CPPUNIT_ASSERT(actualResult37.empty());
 
@@ -3805,7 +3813,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent38->addChild(second38);
 	QueryTree* query38 = new QueryTree(parent38);
 
-	vector<int> actualResult38 = qe->solveForSuchThatParent("a2", &table1, query38, &st, &f1, &pt, &vt); // assign a2; Select a2 such that Parent(9, 10) | Expected <1, 2, 4, 5, 8>
+	vector<int> actualResult38 = qe->solveForSuchThatParent("a2", &table1, query38, &st, &f1, &pt, &vt, &ct); // assign a2; Select a2 such that Parent(9, 10) | Expected <1, 2, 4, 5, 8>
 
 	CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult38.size());
 	CPPUNIT_ASSERT_EQUAL(1, actualResult38.at(0));
@@ -3823,7 +3831,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent39->addChild(second39);
 	QueryTree* query39 = new QueryTree(parent39);
 
-	vector<int> actualResult39 = qe->solveForSuchThatParent("w3", &table1, query39, &st, &f1, &pt, &vt); // while w3; Select w3 such that Parent(6, 7) | Expected <3, 6, 7, 9, 10>
+	vector<int> actualResult39 = qe->solveForSuchThatParent("w3", &table1, query39, &st, &f1, &pt, &vt, &ct); // while w3; Select w3 such that Parent(6, 7) | Expected <3, 6, 7, 9, 10>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult39.size());
 	CPPUNIT_ASSERT_EQUAL(3, actualResult39.at(0));
@@ -3841,7 +3849,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent40->addChild(second40);
 	QueryTree* query40 = new QueryTree(parent40);
 
-	vector<int> actualResult40 = qe->solveForSuchThatParent("v4", &table1, query40, &st, &f1, &pt, &vt); // variable v4; Select v4 such that Parent(3, 6) | Expected <1, 2, 3, 4, 5, 6>
+	vector<int> actualResult40 = qe->solveForSuchThatParent("v4", &table1, query40, &st, &f1, &pt, &vt, &ct); // variable v4; Select v4 such that Parent(3, 6) | Expected <1, 2, 3, 4, 5, 6>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)6, actualResult40.size());
 	CPPUNIT_ASSERT_EQUAL(0, actualResult40.at(0));
@@ -3860,7 +3868,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent41->addChild(second41);
 	QueryTree* query41 = new QueryTree(parent41);
 
-	vector<int> actualResult41 = qe->solveForSuchThatParent("proc5", &table1, query41, &st, &f1, &pt, &vt); // procedure proc5; Select proc5 such that Parent(7, 9) | Expected <1>
+	vector<int> actualResult41 = qe->solveForSuchThatParent("proc5", &table1, query41, &st, &f1, &pt, &vt, &ct); // procedure proc5; Select proc5 such that Parent(7, 9) | Expected <1>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResult41.size());
 	CPPUNIT_ASSERT_EQUAL(0, actualResult41.at(0));
@@ -3874,7 +3882,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent42->addChild(second42);
 	QueryTree* query42 = new QueryTree(parent42);
 
-	vector<int> actualResult42 = qe->solveForSuchThatParent("s1", &table1, query42, &st, &f1, &pt, &vt); // stmt s1, s2; Select s1 such that Parent(3, s2) | Expected <1, 2, 3, 4, 5, 6, 7, 8, 9, 10>
+	vector<int> actualResult42 = qe->solveForSuchThatParent("s1", &table1, query42, &st, &f1, &pt, &vt, &ct); // stmt s1, s2; Select s1 such that Parent(3, s2) | Expected <1, 2, 3, 4, 5, 6, 7, 8, 9, 10>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)10, actualResult42.size());
 	CPPUNIT_ASSERT_EQUAL(1, actualResult42.at(0));
@@ -3897,7 +3905,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent43->addChild(second43);
 	QueryTree* query43 = new QueryTree(parent43);
 
-	vector<int> actualResult43 = qe->solveForSuchThatParent("s1", &table1, query43, &st, &f1, &pt, &vt); // stmt s1, s2; Select s1 such that Parent(10, s2) | Expected <> (none)
+	vector<int> actualResult43 = qe->solveForSuchThatParent("s1", &table1, query43, &st, &f1, &pt, &vt, &ct); // stmt s1, s2; Select s1 such that Parent(10, s2) | Expected <> (none)
 	
 	CPPUNIT_ASSERT(actualResult43.empty());
 
@@ -3910,7 +3918,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent44->addChild(second44);
 	QueryTree* query44 = new QueryTree(parent44);
 
-	vector<int> actualResult44 = qe->solveForSuchThatParent("a2", &table1, query44, &st, &f1, &pt, &vt); // assign a2, a3; Select a2 such that Parent(3, a3) | Expected <1, 2, 4, 5, 8>
+	vector<int> actualResult44 = qe->solveForSuchThatParent("a2", &table1, query44, &st, &f1, &pt, &vt, &ct); // assign a2, a3; Select a2 such that Parent(3, a3) | Expected <1, 2, 4, 5, 8>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)5, actualResult44.size());
 	CPPUNIT_ASSERT_EQUAL(1, actualResult44.at(0));
@@ -3928,7 +3936,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent45->addChild(second45);
 	QueryTree* query45 = new QueryTree(parent45);
 
-	vector<int> actualResult45 = qe->solveForSuchThatParent("s1", &table1, query45, &st, &f1, &pt, &vt); // stmt s1; assign a2, a3; Select s1 such that Parent(a2, a3) | Expected <> (none)
+	vector<int> actualResult45 = qe->solveForSuchThatParent("s1", &table1, query45, &st, &f1, &pt, &vt, &ct); // stmt s1; assign a2, a3; Select s1 such that Parent(a2, a3) | Expected <> (none)
 	
 	CPPUNIT_ASSERT(actualResult45.empty());
 
@@ -3941,7 +3949,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent46->addChild(second46);
 	QueryTree* query46 = new QueryTree(parent46);
 
-	vector<int> actualResult46 = qe->solveForSuchThatParent("s1", &table1, query46, &st, &f1, &pt, &vt); // stmt s1; while w3, w4; Select s1 such that Parent(w3, w4) | Expected <1,2,3,4,5,6,7,8,9,10>
+	vector<int> actualResult46 = qe->solveForSuchThatParent("s1", &table1, query46, &st, &f1, &pt, &vt, &ct); // stmt s1; while w3, w4; Select s1 such that Parent(w3, w4) | Expected <1,2,3,4,5,6,7,8,9,10>
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)10, actualResult46.size());
 	CPPUNIT_ASSERT_EQUAL(1, actualResult46.at(0));
@@ -3964,7 +3972,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent47->addChild(second47);
 	QueryTree* query47 = new QueryTree(parent47);
 
-	vector<int> actualResult47 = qe->solveForSuchThatParentStar("s1", &table1, query47, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that ParentStar(3, s1) | Expected <4,5,6,7,8,9,10> 
+	vector<int> actualResult47 = qe->solveForSuchThatParentStar("s1", &table1, query47, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that ParentStar(3, s1) | Expected <4,5,6,7,8,9,10> 
 	
 	CPPUNIT_ASSERT_EQUAL((size_t)7, actualResult47.size());
 	CPPUNIT_ASSERT_EQUAL(4,actualResult47[0]);
@@ -3984,7 +3992,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent48->addChild(second48);
 	QueryTree* query48 = new QueryTree(parent48);
 
-	vector<int> actualResult48 = qe->solveForSuchThatParentStar("s1", &table1, query48, &st, &f1, &pt, &vt); // stmt s1; Select s1 such that ParentStar(s1, 9) | Expected <3,6,7>
+	vector<int> actualResult48 = qe->solveForSuchThatParentStar("s1", &table1, query48, &st, &f1, &pt, &vt, &ct); // stmt s1; Select s1 such that ParentStar(s1, 9) | Expected <3,6,7>
 	
 	CPPUNIT_ASSERT_EQUAL(7,actualResult48[0]);
 	CPPUNIT_ASSERT_EQUAL(6,actualResult48[1]);
@@ -3999,7 +4007,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent49->addChild(second49);
 	QueryTree* query49 = new QueryTree(parent49);
 
-	vector<int> actualResult49 = qe->solveForSuchThatParentStar("w3", &table1, query49, &st, &f1, &pt, &vt); // while w1; Select w1 such that ParentStar(3, 9) | Expected <3,6,7,9,10>
+	vector<int> actualResult49 = qe->solveForSuchThatParentStar("w3", &table1, query49, &st, &f1, &pt, &vt, &ct); // while w1; Select w1 such that ParentStar(3, 9) | Expected <3,6,7,9,10>
 	
 	CPPUNIT_ASSERT_EQUAL(3,actualResult49[0]);
 	CPPUNIT_ASSERT_EQUAL(6,actualResult49[1]);
@@ -4016,7 +4024,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent50->addChild(second50);
 	QueryTree* query50 = new QueryTree(parent50);
 
-	vector<int> actualResult50 = qe->solveForSuchThatParentStar("a2", &table1, query50, &st, &f1, &pt, &vt); // assign a2; Select a2 such that ParentStar(6, 8) | Expected <1,2,4,5,8>
+	vector<int> actualResult50 = qe->solveForSuchThatParentStar("a2", &table1, query50, &st, &f1, &pt, &vt, &ct); // assign a2; Select a2 such that ParentStar(6, 8) | Expected <1,2,4,5,8>
 	
 	CPPUNIT_ASSERT_EQUAL(1,actualResult50[0]);
 	CPPUNIT_ASSERT_EQUAL(2,actualResult50[1]);
@@ -4033,7 +4041,7 @@ void QueryEvaluatorTest::testSolveForSuchThatParent(){
 	parent51->addChild(second51);
 	QueryTree* query51 = new QueryTree(parent51);
 
-	vector<int> actualResult51 = qe->solveForSuchThatParentStar("proc5", &table1, query51, &st, &f1, &pt, &vt); // procedure proc5; Select proc5 such that ParentStar(3, 9) | Expected <Proc1>
+	vector<int> actualResult51 = qe->solveForSuchThatParentStar("proc5", &table1, query51, &st, &f1, &pt, &vt, &ct); // procedure proc5; Select proc5 such that ParentStar(3, 9) | Expected <Proc1>
 	
 	CPPUNIT_ASSERT(actualResult51[0]==0);
 }

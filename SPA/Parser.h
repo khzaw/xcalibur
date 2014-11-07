@@ -32,7 +32,7 @@ class Parser {
 	string procName;
 	Lexer lexer;
 	stack<Operator> operatorStack;
-	stack<TNode> operandStack;
+	stack<TNode*> operandStack;
 	stack<int> containerStack;
 
 public:
@@ -49,9 +49,9 @@ private:
 	void match(string s);
 	void program();
 	void procedure();
-	void stmtLst(TNode parent);
-	void stmt(TNode parent);
-	void expr(TNode assignNode);
+	void stmtLst(TNode* parent);
+	void stmt(TNode* parent);
+	void expr(TNode* assignNode);
 	void exprPrime();
 	void variableName();
 	void procedureName();
@@ -60,7 +60,7 @@ private:
 	void error();
 	bool checkFileExists();
 	// node creation
-	TNode createASTNode(int nodeType, string name, TNode *parentNode, int lineNo=0, int parentProc=0);
+	TNode* createASTNode(int nodeType, string name, TNode *parentNode, int lineNo=0, int parentProc=0);
 
 	// for operator precedence
 	void popOperator(Operator op);

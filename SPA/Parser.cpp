@@ -92,27 +92,27 @@ void Parser::procedure() {
 	match(KEYWORDS[0]); nextToken = getToken();
 
 	procedureName();
-	TNode procNode = TNode(TNODE_NAMES[PROC_NODE], procName, loc, procCount);
+	TNode* procNode = new TNode(TNODE_NAMES[PROC_NODE], procName, loc, procCount);
 
 	match("{"); nextToken = getToken();
 
-	TNode procStmtLstNode = createASTNode(STMTLST_NODE, "", &procNode);
+	TNode* procStmtLstNode = createASTNode(STMTLST_NODE, "", procNode);
 	stmtLst(procStmtLstNode);
 
 	match("}"); nextToken = getToken();
 }
 
-void Parser::stmtLst(TNode parent) {
+void Parser::stmtLst(TNode* parent) {
 	stmt(parent);
 	if(nextToken.token == CLOSE_BLOCK) return;
 	else stmtLst(parent);
 }
 
 
-void Parser::stmt(TNode parent) {
+void Parser::stmt(TNode* parent) {
 	if(nextToken.token == IDENT && nextToken.name == "while") {			// while statement
 		loc++; 
-		TNode whileNode = createASTNode(WHILE_NODE, nextToken.name, &parent, loc);
+		TNode* whileNode = createASTNode(WHILE_NODE, nextToken.name, parent, loc);
 
 		// for a container stmt, set back to zero
 		if(temp > 0) {
@@ -121,19 +121,19 @@ void Parser::stmt(TNode parent) {
 		temp = 0;
 		containerStack.push(loc);
 
-		controller.statementTable.insertStatement(&whileNode);
+		controller.statementTable.insertStatement(whileNode);
 
 
 		match(KEYWORDS[1]); nextToken = getToken();
 
-		TNode whileVarNode = createASTNode(VAR_NODE, nextToken.name, &whileNode, loc);	// whileVar
+		TNode* whileVarNode = createASTNode(VAR_NODE, nextToken.name, whileNode, loc);	// whileVar
 		variableName(); 
 		populateUses(loc);
 		nextToken = getToken();
 
 		match("{"); nextToken = getToken();
 
-		TNode whileStmtLstNode = createASTNode(STMTLST_NODE, "", &whileNode, loc);
+		TNode* whileStmtLstNode = createASTNode(STMTLST_NODE, "", whileNode, loc);
 		stmtLst(whileStmtLstNode);
 
 		match("}"); 
@@ -142,15 +142,14 @@ void Parser::stmt(TNode parent) {
 	} else if(nextToken.token == IDENT) {
 
 		loc++;
-		TNode assignNode = createASTNode(ASSIGN_NODE, "", &parent, loc); 
-		TNode varNode = createASTNode(VAR_NODE, nextToken.name, &assignNode, loc);
-		controller.statementTable.insertStatement(&assignNode);
+		TNode* assignNode = createASTNode(ASSIGN_NODE, "", parent, loc); 
+		TNode* varNode = createASTNode(VAR_NODE, nextToken.name, assignNode, loc);
+		controller.statementTable.insertStatement(assignNode);
 		//cout << nextToken.name << "\t" << loc << endl;
 		variableName(); 
 		populateModifies(loc);
-		if(parent.getNodeType() == TNODE_NAMES[WHILE_NODE] || parent.getNodeType() == TNODE_NAMES[IF_NODE])
-			controller.parentTable.insertParent(parent.getStmtNum(), loc);
-
+		if(parent->getNodeType() == TNODE_NAMES[WHILE_NODE] || parent->getNodeType() == TNODE_NAMES[IF_NODE])
+			controller.parentTable.insertParent(parent->getStmtNum(), loc);
 		if(temp > 0) {
 			controller.followsTable.insertFollows(temp, loc);
 		}
@@ -168,7 +167,7 @@ void Parser::stmt(TNode parent) {
 
 }
 
-void Parser::expr(TNode assignNode) {
+void Parser::expr(TNode* assignNode) {
 	// expr: expr '+' factor | factor
 	/*
 	* this is a left-recursive grammar, top down parsing can't handle this
@@ -187,7 +186,7 @@ void Parser::expr(TNode assignNode) {
 		popOperator(operatorStack.top());
 	}
 
-	controller.ast.assignChild(&assignNode, &(operandStack.top()));
+	controller.ast.assignChild(assignNode, (operandStack.top()));
 	// cout << "PARENT : " <<  assignNode.getNodeType() << "\t" << "CHILD: " << operandStack.top().getNodeType() << "," << operandStack.top().getData() << endl;
 	operatorStack.pop();		// remove the sentinel
 }
@@ -201,8 +200,8 @@ void Parser::printOperatorStack() {
 
 void Parser::printOperandStack() {
 	cout << "Operand Stack" << endl;
-	 for (std::stack<TNode> dump = operandStack; !dump.empty(); dump.pop())
-		std::cout << dump.top().getData() << '\n';
+	 for (std::stack<TNode*> dump = operandStack; !dump.empty(); dump.pop())
+		std::cout << dump.top()->getData() << '\n';
 }
 
 void Parser::factor(bool rightSide) {
@@ -211,12 +210,12 @@ void Parser::factor(bool rightSide) {
 		//node = createASTNode(VAR_NODE, nextToken.name, &assignNode);
 		variableName();
 		if(rightSide) populateUses(loc);
-		operandStack.push(TNode(TNODE_NAMES[VAR_NODE], nextToken.name, loc, 0));
+		operandStack.push(&TNode(TNODE_NAMES[VAR_NODE], nextToken.name, loc, 0));
 	} else {
 		// INT_LIT;
 		//node = createASTNode(CONSTANT_NODE, nextToken.name, &assignNode);
 		constantValue();
-		operandStack.push(TNode(TNODE_NAMES[CONSTANT_NODE], nextToken.name, loc, 0));
+		operandStack.push(&TNode(TNODE_NAMES[CONSTANT_NODE], nextToken.name, loc, 0));
 	}
 }
 
@@ -249,24 +248,24 @@ void Parser::exprPrime() {
 void Parser::popOperator(Operator op) {
 	TNode operatorNode = TNode(TNODE_NAMES[PLUS_NODE], "+", loc, 0);
 
-	TNode rightOperand = operandStack.top(); operandStack.pop();
-	TNode leftOperand = operandStack.top(); operandStack.pop();
+	TNode* rightOperand = operandStack.top(); operandStack.pop();
+	TNode* leftOperand = operandStack.top(); operandStack.pop();
 
-	operatorNode.addChild(&leftOperand);
-	operatorNode.addChild(&rightOperand);
+	operatorNode.addChild(leftOperand);
+	operatorNode.addChild(rightOperand);
 
 	operatorStack.pop();
-	operandStack.push(operatorNode);
+	operandStack.push(&operatorNode);
 }
 
 
-TNode Parser::createASTNode(int nodeType, string name, TNode *parentNode, int lineNo, int parentProc) {
-	TNode node = TNode(TNODE_NAMES[nodeType], name, lineNo, parentProc);
+TNode* Parser::createASTNode(int nodeType, string name, TNode *parentNode, int lineNo, int parentProc) {
+	TNode* node = new TNode(TNODE_NAMES[nodeType], name, lineNo, parentProc);
 	if(nodeType == PROC_NODE) {
 		controller.procTable.insertProc(name);
-		controller.ast.insertRoot(&node);
+		controller.ast.insertRoot(node);
 	}
-	controller.ast.assignChild(parentNode, &node);
+	controller.ast.assignChild(parentNode, node);
 	 //cout << "PARENT : " <<  parentNode->getNodeType() << "\t" << "CHILD: " << TNODE_NAMES[nodeType] << "," << node.getData() << endl;
 	return node;
 }

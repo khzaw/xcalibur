@@ -436,11 +436,11 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 						answer = statementTable->getStmtNumUsingNodeType(str);
 					}					
 			} else if (synonymTable->at(selectSynonym)=="variable"){
-				for (int i=1; i<=varTable->getSize(); i++){
+				for (int i=0; i<varTable->getSize(); i++){
 					answer.push_back(i);
 				}
 			} else if (synonymTable->at(selectSynonym)=="procedure"){
-				for (int i=1; i<=procTable->getSize(); i++){
+				for (int i=0; i<procTable->getSize(); i++){
 					answer.push_back(i);
 				}
 			} else {
@@ -847,11 +847,11 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 						answer = statementTable->getStmtNumUsingNodeType(str);
 					}					
 			} else if (synonymTable->at(selectSynonym)=="variable"){
-				for (int i=1; i<=varTable->getSize(); i++){
+				for (int i=0; i<varTable->getSize(); i++){
 					answer.push_back(i);
 				}
 			} else if (synonymTable->at(selectSynonym)=="procedure"){
-				for (int i=1; i<=procTable->getSize(); i++){
+				for (int i=0; i<procTable->getSize(); i++){
 					answer.push_back(i);
 				}
 			} else {
@@ -2643,11 +2643,11 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 						answer = statementTable->getStmtNumUsingNodeType(str);
 					}					
 			} else if (synonymTable->at(selectSynonym)=="variable"){
-				for (int i=1; i<=varTable->getSize(); i++){
+				for (int i=0; i<varTable->getSize(); i++){
 					answer.push_back(i);
 				}
 			} else if (synonymTable->at(selectSynonym)=="procedure"){
-				for (int i=1; i<=procTable->getSize(); i++){
+				for (int i=0; i<procTable->getSize(); i++){
 					answer.push_back(i);
 				}
 			} else {
@@ -3054,11 +3054,11 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 						answer = statementTable->getStmtNumUsingNodeType(str);
 					}					
 			} else if (synonymTable->at(selectSynonym)=="variable"){
-				for (int i=1; i<=varTable->getSize(); i++){
+				for (int i=0; i<varTable->getSize(); i++){
 					answer.push_back(i);
 				}
 			} else if (synonymTable->at(selectSynonym)=="procedure"){
-				for (int i=1; i<=procTable->getSize(); i++){
+				for (int i=0; i<procTable->getSize(); i++){
 					answer.push_back(i);
 				}
 			} else {
@@ -3465,11 +3465,11 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 						answer = statementTable->getStmtNumUsingNodeType(str);
 					}					
 			} else if (synonymTable->at(selectSynonym)=="variable"){
-				for (int i=1; i<=varTable->getSize(); i++){
+				for (int i=0; i<varTable->getSize(); i++){
 					answer.push_back(i);
 				}
 			} else if (synonymTable->at(selectSynonym)=="procedure"){
-				for (int i=1; i<=procTable->getSize(); i++){
+				for (int i=0; i<procTable->getSize(); i++){
 					answer.push_back(i);
 				}
 			} else {
@@ -3876,11 +3876,11 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 						answer = statementTable->getStmtNumUsingNodeType(str);
 					}					
 			} else if (synonymTable->at(selectSynonym)=="variable"){
-				for (int i=1; i<=varTable->getSize(); i++){
+				for (int i=0; i<varTable->getSize(); i++){
 					answer.push_back(i);
 				}
 			} else if (synonymTable->at(selectSynonym)=="procedure"){
-				for (int i=1; i<=procTable->getSize(); i++){
+				for (int i=0; i<procTable->getSize(); i++){
 					answer.push_back(i);
 				}
 			} else {
@@ -3954,6 +3954,7 @@ list<string> QueryEvaluator::evaluate(map<STRING, STRING>* synonymTable, QueryTr
 	string selectSynonym = tree->getRootNode()->getChild(0)->getChild(0)->getKey();
 	// Need to check if selectSynonym is inside synonymTable
 	// TODO: throws exception
+	tree->printTree();
 	vector<int> answer = solve(selectSynonym, synonymTable, tree, pkb);
 	string temp = "";
 	if (synonymTable->at(selectSynonym)=="variable"||
@@ -3982,8 +3983,8 @@ list<string> QueryEvaluator::evaluate(map<STRING, STRING>* synonymTable, QueryTr
 				temp = temp+",";
 			}
 			outputlist.push_back(to_string((long long)answer[i]));
+		}
 	}
 	output = temp;
 	return outputlist;
-	}
 };

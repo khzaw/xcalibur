@@ -1,5 +1,25 @@
-1 - comment
-stmt s; 
-Select s such that Follows(s, 3)
-2
+1-
+stmt s;
+Select s such that Follows(s,2)
+1
+5000
+2-
+stmt s;
+Select s such that Follows*(s,16)
+12
+5000
+3-
+while w;stmt s;
+Select w such that Follows*(s,2)
+4,5,7,9,11,12,16
+5000
+4-
+assign a;stmt s;
+Select a such that Follows*(s,3)
+1,2,3,6,8,10,13,14,15,17,18,19,20
+5000
+5-
+variable v;stmt s;
+Select v such that Follows(1,2)
+i,b,c,a,oSCar,beta,tmp,I,k,j1k,l,chArlie,x,left,right,Romeo,delta,width,w
 5000

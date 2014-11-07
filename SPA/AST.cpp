@@ -25,7 +25,6 @@ TNode*  AST::getRootNode(){
 
  TNode* AST::assignChild(TNode *n, TNode *c){
 	 n->addChild(c);
-	 c->addParent(n);
 	 return n;
 }
 

@@ -78,12 +78,6 @@
     <ClCompile Include="Uses.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FollowsRecord.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ParentRecord.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="QueryLexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -149,13 +143,10 @@
     <ClInclude Include="Uses.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FollowsRecord.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ParentRecord.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="QueryLexer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

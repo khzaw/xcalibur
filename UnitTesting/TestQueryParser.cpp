@@ -14,6 +14,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(QueryParserTest);
 
 // Test synonym declarations
 void QueryParserTest::testSynonym() {
+<<<<<<< HEAD
 	string q1;
 	QueryParser* a;
 	map<string, string> synonyms;
@@ -186,4 +187,7 @@ void QueryParserTest::testFollows() {
 	CPPUNIT_ASSERT(qt->getChild(2)->getKey() == "Follows*");
 	CPPUNIT_ASSERT(qt->getChild(2)->getChild(0)->getKey() == "d");
 	CPPUNIT_ASSERT(qt->getChild(2)->getChild(1)->getKey() == "e");
+=======
+	map<string, string> syn4 = a->getSynonyms();
+>>>>>>> origin/master
 }

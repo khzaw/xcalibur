@@ -29,7 +29,7 @@ class QueryEvaluator{
 		QueryEvaluator(PKBController*);
 
 		//Method
-		STRING evaluate(map<STRING, STRING>*, QueryTree*);
+		list<string> evaluate(map<STRING, STRING>*, QueryTree*);
 
 		//For Testing
 		bool checkSynonymInSuchThat(string, QueryTree*);

@@ -25,7 +25,7 @@ QueryParser::QueryParser(string s) {
 	QueryTree* temp = new QueryTree();
 	this->qt = temp;
 	parse();
-	qt->printTree();
+	//qt->printTree();
 	printMap();
 }
 
@@ -292,6 +292,7 @@ QTNode* QueryParser::matchVarRef() {
 		match(IDENT);
 	} else if (nextToken.name.compare("\"") == 0) {
 		qtpi = new QTNode("\"" + nextToken.name + "\"") ;
+		match("\"");
 		match(IDENT);
 		match ("\"");
 	}
@@ -312,6 +313,7 @@ QTNode* QueryParser::matchEntRef() {
 		match(IDENT);
 	} else if (nextToken.name.compare("\"") == 0) {
 		qtpi = new QTNode("\"" + nextToken.name + "\"") ;
+		match("\"");
 		match(IDENT);
 		match ("\"");
 	}

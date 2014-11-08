@@ -45,7 +45,7 @@ void TNode::setData(string value) {
 
 
 void  TNode::addParent(TNode *p) {
-	parent.push_back(p);
+	parent=p;
 }
 
 
@@ -62,7 +62,7 @@ TNode* TNode::getChild(int indx) {
 }
 
 TNode* TNode::getParent(){
-    return parent[0];
+    return parent;
 }
 
 int TNode::getNumChildren() {

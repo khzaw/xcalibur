@@ -40,7 +40,7 @@ private:
 	string nodeType;
 	int procIndex;
 	int stmtNum;
-	vector<TNode*> parent;
+	TNode* parent;
     vector<TNode*> children;
 	
 

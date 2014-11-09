@@ -14,6 +14,7 @@ class QueryParserTest : public CPPUNIT_NS::TestFixture // Note 2
 	CPPUNIT_TEST(testCalls);
 	CPPUNIT_TEST(testParent);
 	CPPUNIT_TEST(testFollows);
+	CPPUNIT_TEST(testAssignPattern);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -27,6 +28,7 @@ public:
 	void testCalls();
 	void testParent();
 	void testFollows();
+	void testAssignPattern();
 
 };
 #endif

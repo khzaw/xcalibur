@@ -27,7 +27,7 @@ void TestParser::testTotalParents() {
 }
 
 void TestParser::testTotalModifies() {
-	CPPUNIT_ASSERT_EQUAL(46, sample.controller.modifiesTable.getSizeStmtModifies());
+	CPPUNIT_ASSERT_EQUAL(39, sample.controller.modifiesTable.getSizeStmtModifies());
 	CPPUNIT_ASSERT_EQUAL(13, sample.controller.modifiesTable.getSizeProcModifies());
 }
 

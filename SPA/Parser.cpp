@@ -150,6 +150,7 @@ void Parser::stmt(TNode* parent) {
 		populateModifies(loc);
 		if(parent->getNodeType() == TNODE_NAMES[WHILE_NODE] || parent->getNodeType() == TNODE_NAMES[IF_NODE])
 			controller.parentTable.insertParent(parent->getStmtNum(), loc);
+
 		if(temp > 0) {
 			controller.followsTable.insertFollows(temp, loc);
 		}
@@ -318,7 +319,6 @@ int Parser::getTotalStatementNumber() {
 
 void Parser::populateModifies(int loc) {
 
-		//cout << loc << ", " << lastVarIndex << endl;
 	// assignment statement
 	controller.modifiesTable.insertModifiesStmt(loc, lastVarIndex);
 	controller.modifiesTable.insertModifiesProc(loc, procCount);
@@ -330,7 +330,7 @@ void Parser::populateModifies(int loc) {
 		temp.push(top);
 		//cout << top << ", " << lastVarIndex << endl;
 		controller.modifiesTable.insertModifiesStmt(top, lastVarIndex);
-		controller.modifiesTable.insertModifiesStmt(top, procCount);
+		controller.modifiesTable.insertModifiesProc(top, procCount);
 		containerStack.pop();
 	}
 

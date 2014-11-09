@@ -50,6 +50,7 @@ void  TNode::addParent(TNode *p) {
 
 
 void TNode::addChild(TNode *c) {
+	c->addParent(this);
     children.push_back(c);
 }
 

@@ -47,6 +47,7 @@ class QueryParser {
 	string query;
 	map<string, string> synonyms;
 	QueryTree* qt;
+	string result;		// postfix expression
 
 public:
 	QueryParser();

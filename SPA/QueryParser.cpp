@@ -415,6 +415,7 @@ void QueryParser::matchPatternAssign(string s) {
 }
 
 QTNode* QueryParser::matchExpression() {
+	string result = "";
 	stack<string> operatorStack;
 	stack<QTNode*> operandStack;
 	QTNode* left;
@@ -465,6 +466,7 @@ QTNode* QueryParser::matchExpression() {
 						current->addChild(left);
 						current->addChild(right);
 						operandStack.push(current);
+						result += op2;
 					} else {
 						break;
 					}
@@ -477,6 +479,7 @@ QTNode* QueryParser::matchExpression() {
 				} else {
 					match(SIMPLE_IDENT);
 				}
+				result += factor;
 				operandStack.push(new QTNode(factor));
 			}
 		}	
@@ -492,6 +495,7 @@ QTNode* QueryParser::matchExpression() {
 		current->addChild(left);
 		current->addChild(right);
 		operandStack.push(current);
+		result += op;
 	}
 
 	return operandStack.top();

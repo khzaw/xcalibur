@@ -123,6 +123,9 @@ void Parser::stmt(TNode* parent) {
 
 		controller.statementTable.insertStatement(whileNode);
 
+		if(parent->getParent()->getNodeType() == TNODE_NAMES[WHILE_NODE] || parent->getParent()->getNodeType() == TNODE_NAMES[IF_NODE])
+			controller.parentTable.insertParent(parent->getStmtNum(), loc);
+
 
 		match(KEYWORDS[1]); nextToken = getToken();
 

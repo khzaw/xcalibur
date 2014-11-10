@@ -23,12 +23,12 @@ void TestParser::testTotalFollows() {
 }
 
 void TestParser::testTotalParents() {
-	CPPUNIT_ASSERT_EQUAL(13, sample.controller.parentTable.getSize());
+	CPPUNIT_ASSERT_EQUAL(20, sample.controller.parentTable.getSize());
 }
 
 void TestParser::testTotalModifies() {
 	CPPUNIT_ASSERT_EQUAL(39, sample.controller.modifiesTable.getSizeStmtModifies());
-	CPPUNIT_ASSERT_EQUAL(13, sample.controller.modifiesTable.getSizeProcModifies());
+	CPPUNIT_ASSERT_EQUAL(20, sample.controller.modifiesTable.getSizeProcModifies());
 }
 
 void TestParser::testTotalUses() {

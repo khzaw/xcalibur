@@ -61,6 +61,11 @@ void QueryParserTest::testSynonym() {
 	CPPUNIT_ASSERT(synonyms.at("f") == "variable");
 	CPPUNIT_ASSERT(synonyms.at("g") == "variable");
 	CPPUNIT_ASSERT(synonyms.at("h") == "prog_line");
+
+	q1 = "stmt s; Select s";
+	a = new QueryParser(q1);
+	synonyms = a->getSynonyms();
+	CPPUNIT_ASSERT(synonyms.at("s") == "stmt");
 }
 
 void QueryParserTest::testSuchThat() {

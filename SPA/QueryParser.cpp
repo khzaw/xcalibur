@@ -144,6 +144,7 @@ void QueryParser::matchTupleElements(int times) {
 		match(",");
 		matchTupleElements(1);
 	}
+
 }
 
 void QueryParser::matchConditions() {
@@ -162,7 +163,7 @@ void QueryParser::matchConditions() {
 		//cout << "End of query" << endl;
 		return;
 	} else {
-		cout << "SYNTAX ERROR" << endl;
+		cout << "SYNTAX ERROR" << nextToken.name << endl;
 		return;
 	}
 
@@ -410,6 +411,7 @@ void QueryParser::matchPatternAssign(string s) {
 	}
 
 	qt->getRootNode()->getChild(2)->addChild(assignNode);
+	match(")");
 }
 
 QTNode* QueryParser::matchExpression() {

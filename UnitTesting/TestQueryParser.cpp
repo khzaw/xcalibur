@@ -150,7 +150,7 @@ void QueryParserTest::testModifies() {
 	
 	q = "while a; variable b; select a such that Modifies(_,a) such that Modifies(a, b) and Modifies(1, _)";
 	qp = new QueryParser(q);
-	qp->printMap();
+	//qp->printMap();
 	qt = qp->getQueryTree()->getRootNode()->getChild(1);
 	CPPUNIT_ASSERT_EQUAL(qt->getNumChild(), 3);
 	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Modifies");
@@ -232,7 +232,7 @@ void QueryParserTest::testUses() {
 	
 	q = "while a; variable b; select a such that Uses(_,a) such that Uses(a, b) and Uses(1, _)";
 	qp = new QueryParser(q);
-	qp->printMap();
+	//qp->printMap();
 	qt = qp->getQueryTree()->getRootNode()->getChild(1);
 	CPPUNIT_ASSERT_EQUAL(qt->getNumChild(), 3);
 	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Uses");

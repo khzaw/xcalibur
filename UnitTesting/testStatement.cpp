@@ -55,6 +55,11 @@ StatementTest::testGetNodesMatchingNodeType (){
 	CPPUNIT_ASSERT(nodes[1]->getData() == "b = z");
 	CPPUNIT_ASSERT_EQUAL(3,nodes[1]->getStmtNum());
 	CPPUNIT_ASSERT(nodes[1]->getNodeType() == "assign");
+	vector<int> v;
+	v.push_back(1);
+	v.push_back(2);
+	v.push_back(3);
+	CPPUNIT_ASSERT(v.size() == s.getAllStmtNum().size());
 	return;
 }
 

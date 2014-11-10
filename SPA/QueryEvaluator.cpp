@@ -17,6 +17,7 @@
 
 #include "QueryEvaluator.h"
 #include <set>
+#include <iostream>
 
 using namespace std;
 
@@ -40,6 +41,21 @@ bool QueryEvaluator::checkSynonymInSuchThat(string selectSynonym, QueryTree* suc
 		}
 	}
 	return isSynonymInSuchThat;
+}
+
+vector<int> QueryEvaluator::solveForSelect(string selectSynonym, map<STRING, STRING>* synonymTable, StatementTable* statementTable, ProcTable* procTable, VarTable* varTable) {
+	vector<int> answer;
+	string sym = synonymTable->at(selectSynonym);
+	if(sym == "stmt" || sym == "prog_line") {			     // all the statements
+		answer = statementTable->getAllStmtNum();
+	} else if(sym == "assign") {	// all the assignment statements
+		answer = statementTable->getStmtNumUsingNodeType(TNODE_NAMES[ASSIGN_NODE]);
+	} else if(sym == "while") {		// all the while statements
+		answer = statementTable->getStmtNumUsingNodeType(TNODE_NAMES[WHILE_NODE]);
+	} else if(sym == "variable") {
+	} else if(sym == "constant") {
+	}
+	return answer;
 }
 
 vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Follows* follows, ProcTable* procTable, VarTable* varTable){
@@ -2415,6 +2431,20 @@ bool checkSynonymInSuchThat(string selectSynonym, QueryTree* suchThatTree){
 }
 
 /******* Helper Level 3 *******/
+vector<int> solveForSelect(string selectSynonym, map<STRING, STRING>* synonymTable, StatementTable* statementTable) {
+	vector<int> answer;
+	string sym = synonymTable->at(selectSynonym);
+	if(sym == "stmt" || sym == "prog_line") {			     // all the statements
+		answer = statementTable->getAllStmtNum();
+	} else if(sym == "assign") {	// all the assignment statements
+		answer = statementTable->getStmtNumUsingNodeType(TNODE_NAMES[ASSIGN_NODE]);
+	} else if(sym == "while") {		// all the while statements
+		answer = statementTable->getStmtNumUsingNodeType(TNODE_NAMES[WHILE_NODE]);
+	} else if(sym == "variable") {
+	} else if(sym == "constant") {
+	}
+	return answer;
+}
 vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Modifies* modifies, ProcTable* procTable, VarTable* varTable){
 	vector<int> answer;
 	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
@@ -4804,6 +4834,8 @@ vector<int> solveForSuchThat(string selectSynonym, map<STRING, STRING>* synonymT
 		answer = solveForSuchThatParent(selectSynonym, synonymTable, suchThatSubtree, statementTable, parent, procTable, varTable);
 	} else if (suchThatType == "Parent*"){
 		answer = solveForSuchThatParentStar(selectSynonym, synonymTable, suchThatSubtree, statementTable, parent, procTable, varTable);
+	} else {
+		answer = solveForSelect(selectSynonym, synonymTable, statementTable);
 	}
 
 	return answer;
@@ -4838,6 +4870,7 @@ list<string> QueryEvaluator::evaluate(map<STRING, STRING>* synonymTable, QueryTr
 	// TODO: throws exception
 	// tree->printTree();
 	vector<int> answer = solve(selectSynonym, synonymTable, tree, pkb);
+	cout << "result :: " << answer.size() << endl;
 	string temp = "";
 	if (synonymTable->at(selectSynonym)=="variable"||
 		synonymTable->at(selectSynonym)=="procedure"){

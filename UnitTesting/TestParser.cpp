@@ -32,7 +32,7 @@ void TestParser::testTotalModifies() {
 }
 
 void TestParser::testTotalUses() {
-	CPPUNIT_ASSERT_EQUAL(46, sample.controller.usesTable.getSizeStmtUses());
+	CPPUNIT_ASSERT_EQUAL(47, sample.controller.usesTable.getSizeStmtUses());
 	CPPUNIT_ASSERT_EQUAL(15, sample.controller.usesTable.getSizeProcUses());
 }
 

@@ -24,6 +24,7 @@ enum NAME {
 
 class Parser {
 	string filename;
+	string expressionPostfix;
 	Lexeme nextToken;
 	int loc;
 	int temp;

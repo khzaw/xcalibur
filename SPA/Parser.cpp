@@ -180,6 +180,7 @@ void Parser::expr(TNode* assignNode) {
 	* E' : +TE' | epsilon
 	*/
 
+	expressionPostfix = "";
 	
 	operatorStack.push(Operator(OPERATOR_NULL, "NULL"));		// sentinel
 
@@ -192,7 +193,10 @@ void Parser::expr(TNode* assignNode) {
 
 	controller.ast.assignChild(assignNode, (operandStack.top()));
 	// cout << "PARENT : " <<  assignNode.getNodeType() << "\t" << "CHILD: " << operandStack.top().getNodeType() << "," << operandStack.top().getData() << endl;
+	assignNode->setData(expressionPostfix);
 	operatorStack.pop();		// remove the sentinel
+	
+	//cout << "expressionPostfix:\t" << expressionPostfix << endl; 
 }
 
 
@@ -215,11 +219,13 @@ void Parser::factor(bool rightSide) {
 		variableName();
 		if(rightSide) populateUses(loc);
 		operandStack.push(&TNode(TNODE_NAMES[VAR_NODE], nextToken.name, loc, 0));
+		expressionPostfix += nextToken.name;
 	} else {
 		// INT_LIT;
 		//node = createASTNode(CONSTANT_NODE, nextToken.name, &assignNode);
 		constantValue();
 		operandStack.push(&TNode(TNODE_NAMES[CONSTANT_NODE], nextToken.name, loc, 0));
+		expressionPostfix += nextToken.name;
 	}
 }
 
@@ -230,7 +236,7 @@ void Parser::exprPrime() {
 		match("+"); 
 		Operator plusOp(OPERATOR_ADDITION, "+");
 
-		while(operatorStack.top().op > plusOp.op) {
+		while(plusOp.op <= operatorStack.top().op) {
 
 
 			if(operatorStack.top().isNull()) { // sentinel value reached;
@@ -260,6 +266,8 @@ void Parser::popOperator(Operator op) {
 
 	operatorStack.pop();
 	operandStack.push(&operatorNode);
+
+	expressionPostfix += "+";
 }
 
 

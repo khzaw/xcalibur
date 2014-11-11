@@ -47,6 +47,7 @@ class QueryParser {
 	string query;
 	map<string, string> synonyms;
 	QueryTree* qt;
+	string result;		// postfix expression
 
 public:
 	QueryParser();
@@ -87,4 +88,5 @@ private:
 	QTNode* matchVarRef();
 	QTNode* matchEntRef();
 	QTNode* matchStmtRef();
+	string getPostFixExpressionString();
 };

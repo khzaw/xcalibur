@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <sstream>
 #include <iostream>
+#include <numeric>
 #include <typeinfo>
 #include "StatementTable.h"
 using namespace std;
@@ -33,6 +34,12 @@ vector<TNode*> StatementTable::getNodesMatchingNodeType(string nodeType){
 	return nodes;
 }
 
+// return a vector of all statement numbers
+vector<int> StatementTable::getAllStmtNum() {
+	vector<int> stmts(getSize());
+	iota(stmts.begin(), stmts.end(), 1);
+	return stmts;
+}
 // return a vector of indexes of nodes matching specified node type
 vector<int> StatementTable::getStmtNumUsingNodeType(string nodeType){
 

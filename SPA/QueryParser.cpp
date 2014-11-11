@@ -144,6 +144,7 @@ void QueryParser::matchTupleElements(int times) {
 		match(",");
 		matchTupleElements(1);
 	}
+
 }
 
 void QueryParser::matchConditions() {
@@ -162,7 +163,7 @@ void QueryParser::matchConditions() {
 		//cout << "End of query" << endl;
 		return;
 	} else {
-		cout << "SYNTAX ERROR" << endl;
+		cout << "SYNTAX ERROR" << nextToken.name << endl;
 		return;
 	}
 
@@ -399,20 +400,27 @@ void QueryParser::matchPatternAssign(string s) {
 
 	if(nextToken.name.compare("_") == 0) {
 		match(UNDERSCORE);
+		result += "_";
 		assignNode->addChild(new QTNode("_"));
 	}
-	match("\"");
-	assignNode->addChild(matchExpression());
-	match("\"");
+	if(nextToken.name.compare("\"") == 0) {
+		match("\"");
+		assignNode->addChild(matchExpression());
+		match("\"");
+	}
 	if(nextToken.name.compare("_") == 0) {
 		match(UNDERSCORE);
+		result += "_";
 		assignNode->addChild(new QTNode("_"));
 	}
 
 	qt->getRootNode()->getChild(2)->addChild(assignNode);
+	match(")");
+	//qt->getRootNode()->getChild(2)->setKey(result);
 }
 
 QTNode* QueryParser::matchExpression() {
+	result = "";
 	stack<string> operatorStack;
 	stack<QTNode*> operandStack;
 	QTNode* left;
@@ -463,6 +471,7 @@ QTNode* QueryParser::matchExpression() {
 						current->addChild(left);
 						current->addChild(right);
 						operandStack.push(current);
+						result += op2;
 					} else {
 						break;
 					}
@@ -475,6 +484,7 @@ QTNode* QueryParser::matchExpression() {
 				} else {
 					match(SIMPLE_IDENT);
 				}
+				result += factor;
 				operandStack.push(new QTNode(factor));
 			}
 		}	
@@ -490,7 +500,10 @@ QTNode* QueryParser::matchExpression() {
 		current->addChild(left);
 		current->addChild(right);
 		operandStack.push(current);
+		result += op;
 	}
+
+	//cout << "postfix : " << result << endl;
 
 	return operandStack.top();
 }
@@ -589,4 +602,8 @@ void QueryParser::matchPatternWhile(string s) {
 }
 
 void QueryParser::matchWith() {
+}
+
+string QueryParser::getPostFixExpressionString() {
+	return result;
 }

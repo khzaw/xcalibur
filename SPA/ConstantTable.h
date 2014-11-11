@@ -19,6 +19,7 @@ public:
 	int getConstant(int);	// get constant name using its index
 	int getConstIndex(int);	// get constant index using its value
 	vector<int> getAllConstant(); // get all constants
+	vector<int> getAllConstNum(); // get all index constant
 	bool containsConst(int); // checks if constant is in the constant vec
 
 	//Mutator

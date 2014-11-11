@@ -18,6 +18,7 @@
 
 #include "QueryEvaluator.h"
 #include <set>
+#include <iostream>
 
 using namespace std;
 
@@ -43,6 +44,21 @@ bool QueryEvaluator::checkSynonymInSuchThat(string selectSynonym, QueryTree* suc
 	return isSynonymInSuchThat;
 }
 
+vector<int> QueryEvaluator::solveForSelect(string selectSynonym, map<STRING, STRING>* synonymTable, StatementTable* statementTable, ProcTable* procTable, VarTable* varTable) {
+	vector<int> answer;
+	string sym = synonymTable->at(selectSynonym);
+	if(sym == "stmt" || sym == "prog_line") {			     // all the statements
+		answer = statementTable->getAllStmtNum();
+	} else if(sym == "assign") {	// all the assignment statements
+		answer = statementTable->getStmtNumUsingNodeType(TNODE_NAMES[ASSIGN_NODE]);
+	} else if(sym == "while") {		// all the while statements
+		answer = statementTable->getStmtNumUsingNodeType(TNODE_NAMES[WHILE_NODE]);
+	} else if(sym == "variable") {
+	} else if(sym == "constant") {
+	}
+	return answer;
+}
+
 vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Follows* follows, ProcTable* procTable, VarTable* varTable, ConstantTable* constantTable){
 	vector<int> answer;
 	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
@@ -50,6 +66,9 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 	}
 	bool isSynonymInSuchThat = checkSynonymInSuchThat(selectSynonym, suchThatTree);
 	if (isSynonymInSuchThat){ // Select synonym such that Follows(synonym, *) (Follows(*, synonym))
+		if (suchThatTree->getRootNode()->getChild(0)->getKey() == suchThatTree->getRootNode()->getChild(1)->getKey()){
+			return answer; // answer is none for Select _ such that Follows(s1, s1)
+		}
 		if (selectSynonym == suchThatTree->getRootNode()->getChild(0)->getKey()){ // Select synonym such that Follows(synonym, *)
 			string stmtSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
 			if (stmtSynonym.empty()){ // Select synonym such that Follows(synonym, 1)
@@ -286,6 +305,8 @@ vector<int> QueryEvaluator::solveForSuchThatFollows(string selectSynonym, map<ST
 		} else { // Follows(synonym1, synonym2)
 			if(synonymTable->at(leftSynonym).empty()||synonymTable->at(rightSynonym).empty()){
 				// throw exception
+			} else if (leftSynonym==rightSynonym){
+				isSuchThatTrue = false; // answer is none for Select _ such that Follows(s1, s1)
 			} else if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){ // Follows(s1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Follows(s1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
@@ -465,6 +486,9 @@ vector<int> QueryEvaluator::solveForSuchThatFollowsStar(string selectSynonym, ma
 	}
 	bool isSynonymInSuchThat = checkSynonymInSuchThat(selectSynonym, suchThatTree);
 	if (isSynonymInSuchThat){ // Select synonym such that Follows*(synonym, *) (Follows*(*, synonym))
+		if (suchThatTree->getRootNode()->getChild(0)->getKey() == suchThatTree->getRootNode()->getChild(1)->getKey()){
+			return answer; // answer is none for Select _ such that Follows*(s1, s1)
+		}
 		if (selectSynonym == suchThatTree->getRootNode()->getChild(0)->getKey()){ // Select synonym such that Follows*(synonym, *)
 			string stmtSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
 			if (stmtSynonym.empty()){ // Select synonym such that Follows*(synonym, 1)
@@ -701,6 +725,8 @@ vector<int> QueryEvaluator::solveForSuchThatFollowsStar(string selectSynonym, ma
 		} else { // Follows*(synonym1, synonym2)
 			if(synonymTable->at(leftSynonym).empty()||synonymTable->at(rightSynonym).empty()){
 				// throw exception
+			} else if (leftSynonym==rightSynonym){
+				isSuchThatTrue = false; // answer is none for Select _ such that Follows*(s1, s1)
 			} else if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){ // Follows*(s1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Follows*(s1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
@@ -880,6 +906,9 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 	}
 	bool isSynonymInSuchThat = checkSynonymInSuchThat(selectSynonym, suchThatTree);
 	if (isSynonymInSuchThat){ // Select synonym such that Parent(synonym, *) (Parent(*, synonym))
+		if (suchThatTree->getRootNode()->getChild(0)->getKey() == suchThatTree->getRootNode()->getChild(1)->getKey()){
+			return answer; // answer is none for Select _ such that Parent(s1, s1)
+		}
 		if (selectSynonym == suchThatTree->getRootNode()->getChild(0)->getKey()){ // Select synonym such that Parent(synonym, *)
 			string stmtSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
 			if (stmtSynonym.empty()){ // Select synonym such that Parent(synonym, 1)
@@ -1116,6 +1145,8 @@ vector<int> QueryEvaluator::solveForSuchThatParent(string selectSynonym, map<STR
 		} else { // Parent(synonym1, synonym2)
 			if(synonymTable->at(leftSynonym).empty()||synonymTable->at(rightSynonym).empty()){
 				// throw exception
+			} else if (leftSynonym==rightSynonym){
+				isSuchThatTrue = false; // answer is none for Select _ such that Parent(s1, s1)
 			} else if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){ // Parent(s1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Parent(s1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
@@ -1295,6 +1326,9 @@ vector<int> QueryEvaluator::solveForSuchThatParentStar(string selectSynonym, map
 	}
 	bool isSynonymInSuchThat = checkSynonymInSuchThat(selectSynonym, suchThatTree);
 	if (isSynonymInSuchThat){ // Select synonym such that Parent*(synonym, *) (Parent*(*, synonym))
+		if (suchThatTree->getRootNode()->getChild(0)->getKey() == suchThatTree->getRootNode()->getChild(1)->getKey()){
+			return answer; // answer is none for Select _ such that Parent*(s1, s1)
+		}
 		if (selectSynonym == suchThatTree->getRootNode()->getChild(0)->getKey()){ // Select synonym such that Parent*(synonym, *)
 			string stmtSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
 			if (stmtSynonym.empty()){ // Select synonym such that Parent*(synonym, 1)
@@ -1531,6 +1565,8 @@ vector<int> QueryEvaluator::solveForSuchThatParentStar(string selectSynonym, map
 		} else { // Parent*(synonym1, synonym2)
 			if(synonymTable->at(leftSynonym).empty()||synonymTable->at(rightSynonym).empty()){
 				// throw exception
+			} else if (leftSynonym==rightSynonym){
+				isSuchThatTrue = false; // answer is none for Select _ such that Parent*(s1, s1)
 			} else if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){ // Parent*(s1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Parent*(s1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
@@ -2440,6 +2476,26 @@ bool checkSynonymInSuchThat(string selectSynonym, QueryTree* suchThatTree){
 }
 
 /******* Helper Level 3 *******/
+vector<int> solveForSelect(string selectSynonym, map<STRING, STRING>* synonymTable, StatementTable* statementTable, ProcTable* procTable, VarTable* varTable, ConstantTable* constantTable) {
+	vector<int> answer;
+	string sym = synonymTable->at(selectSynonym);
+	if (sym.empty()){
+		return answer;
+	}
+	if(sym == "stmt" || sym == "prog_line") {			     // all the statements
+		answer = statementTable->getAllStmtNum();
+	} else if(sym == "assign") {	// all the assignment statements
+		answer = statementTable->getStmtNumUsingNodeType(TNODE_NAMES[ASSIGN_NODE]);
+	} else if(sym == "while") {		// all the while statements
+		answer = statementTable->getStmtNumUsingNodeType(TNODE_NAMES[WHILE_NODE]);
+	} else if(sym == "variable") {
+		answer = varTable->getAllVarNum();
+	} else if(sym == "constant") {
+		answer = constantTable->getAllConstNum();
+	}	
+	return answer;
+}
+
 vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Modifies* modifies, ProcTable* procTable, VarTable* varTable, ConstantTable* constantTable){
 	vector<int> answer;
 	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
@@ -3172,6 +3228,9 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 	bool isSynonymInSuchThat = checkSynonymInSuchThat(selectSynonym, suchThatTree);
 	if (isSynonymInSuchThat){ // Select synonym such that Follows(synonym, *) (Follows(*, synonym))
 		if (selectSynonym == suchThatTree->getRootNode()->getChild(0)->getKey()){ // Select synonym such that Follows(synonym, *)
+			if (suchThatTree->getRootNode()->getChild(0)->getKey() == suchThatTree->getRootNode()->getChild(1)->getKey()){
+				return answer; // answer is none for Select _ such that Follows(s1, s1)
+			}
 			string stmtSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
 			if (stmtSynonym.empty()){ // Select synonym such that Follows(synonym, 1)
 				int stmtIndex = suchThatTree->getRootNode()->getChild(1)->getValue();
@@ -3407,6 +3466,8 @@ vector<int> solveForSuchThatFollows(string selectSynonym, map<STRING, STRING>* s
 		} else { // Follows(synonym1, synonym2)
 			if(synonymTable->at(leftSynonym).empty()||synonymTable->at(rightSynonym).empty()){
 				// throw exception
+			} else if (leftSynonym==rightSynonym){
+				isSuchThatTrue = false; // answer is none for Select _ such that Follows(s1, s1)
 			} else if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){ // Follows(s1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Follows(s1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
@@ -3586,6 +3647,9 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 	}
 	bool isSynonymInSuchThat = checkSynonymInSuchThat(selectSynonym, suchThatTree);
 	if (isSynonymInSuchThat){ // Select synonym such that Follows*(synonym, *) (Follows*(*, synonym))
+		if (suchThatTree->getRootNode()->getChild(0)->getKey() == suchThatTree->getRootNode()->getChild(1)->getKey()){
+			return answer; // answer is none for Select _ such that Follows*(s1, s1)
+		}
 		if (selectSynonym == suchThatTree->getRootNode()->getChild(0)->getKey()){ // Select synonym such that Follows*(synonym, *)
 			string stmtSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
 			if (stmtSynonym.empty()){ // Select synonym such that Follows*(synonym, 1)
@@ -3822,6 +3886,8 @@ vector<int> solveForSuchThatFollowsStar(string selectSynonym, map<STRING, STRING
 		} else { // Follows*(synonym1, synonym2)
 			if(synonymTable->at(leftSynonym).empty()||synonymTable->at(rightSynonym).empty()){
 				// throw exception
+			} else if (leftSynonym==rightSynonym){
+				isSuchThatTrue = false; // answer is none for Select _ such that Follows*(s1, s1)
 			} else if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){ // Follows*(s1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Follows*(s1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
@@ -4001,6 +4067,9 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 	}
 	bool isSynonymInSuchThat = checkSynonymInSuchThat(selectSynonym, suchThatTree);
 	if (isSynonymInSuchThat){ // Select synonym such that Parent(synonym, *) (Parent(*, synonym))
+		if (suchThatTree->getRootNode()->getChild(0)->getKey() == suchThatTree->getRootNode()->getChild(1)->getKey()){
+			return answer; // answer is none for Select _ such that Parent(s1, s1)
+		}
 		if (selectSynonym == suchThatTree->getRootNode()->getChild(0)->getKey()){ // Select synonym such that Parent(synonym, *)
 			string stmtSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
 			if (stmtSynonym.empty()){ // Select synonym such that Parent(synonym, 1)
@@ -4237,6 +4306,8 @@ vector<int> solveForSuchThatParent(string selectSynonym, map<STRING, STRING>* sy
 		} else { // Parent(synonym1, synonym2)
 			if(synonymTable->at(leftSynonym).empty()||synonymTable->at(rightSynonym).empty()){
 				// throw exception
+			} else if (leftSynonym==rightSynonym){
+				isSuchThatTrue = false; // answer is none for Select _ such that Parent(s1, s1)
 			} else if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){ // Parent(s1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Parent(s1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
@@ -4416,6 +4487,9 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 	}
 	bool isSynonymInSuchThat = checkSynonymInSuchThat(selectSynonym, suchThatTree);
 	if (isSynonymInSuchThat){ // Select synonym such that Parent*(synonym, *) (Parent*(*, synonym))
+		if (suchThatTree->getRootNode()->getChild(0)->getKey() == suchThatTree->getRootNode()->getChild(1)->getKey()){
+			return answer; // answer is none for Select _ such that Parent*(s1, s1)
+		}
 		if (selectSynonym == suchThatTree->getRootNode()->getChild(0)->getKey()){ // Select synonym such that Parent*(synonym, *)
 			string stmtSynonym = suchThatTree->getRootNode()->getChild(1)->getKey();
 			if (stmtSynonym.empty()){ // Select synonym such that Parent*(synonym, 1)
@@ -4652,6 +4726,8 @@ vector<int> solveForSuchThatParentStar(string selectSynonym, map<STRING, STRING>
 		} else { // Parent*(synonym1, synonym2)
 			if(synonymTable->at(leftSynonym).empty()||synonymTable->at(rightSynonym).empty()){
 				// throw exception
+			} else if (leftSynonym==rightSynonym){
+				isSuchThatTrue = false; // answer is none for Select _ such that Parent*(s1, s1)
 			} else if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){ // Parent*(s1, synonym2)
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){ // Parent*(s1, s2) 
 					for (int i=1; i<=statementTable->getSize(); i++){
@@ -4854,26 +4930,40 @@ vector<int> solveForSuchThat(string selectSynonym, map<STRING, STRING>* synonymT
 		answer = solveForSuchThatParent(selectSynonym, synonymTable, suchThatSubtree, statementTable, parent, procTable, varTable, constantTable);
 	} else if (suchThatType == "Parent*"){
 		answer = solveForSuchThatParentStar(selectSynonym, synonymTable, suchThatSubtree, statementTable, parent, procTable, varTable, constantTable);
+	} else {
+		// not implemented yet
 	}
 
 	return answer;
 }
 
-vector<int> solveForPattern(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* tree){
+vector<int> solveForPattern(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* tree, PKBController* pkb){
 	vector<int> answer;
+	AST* ast = &(pkb->ast);
+	StatementTable* statementTable = &(pkb->statementTable);
+	string pattern = tree->getRootNode()->getChild(2)->getKey();
+
+	cout << pattern << endl;
+
 	return answer;
 }
 
 /******* Helper Level 1 *******/
 // Method to collect solution from different conditional clauses (such that, with, pattern, etc.) and combine
 vector<int> solve(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* tree, PKBController* pkb){
-	vector<int> resultFromSuchThat = solveForSuchThat(selectSynonym, synonymTable, tree, pkb);
-	vector<int> resultFromPattern = solveForPattern(selectSynonym, synonymTable, tree);
-	set<int> temp;
-	temp.insert(resultFromSuchThat.begin(), resultFromSuchThat.end());
-	temp.insert(resultFromPattern.begin(), resultFromPattern.end());
-	vector<int> answer(temp.begin(), temp.end());
-	return answer;
+	if (tree->getRootNode()->getChild(1)->getNumChild()==0&&tree->getRootNode()->getChild(2)->getNumChild()==0){
+		vector<int> answer;
+		answer = solveForSelect(selectSynonym, synonymTable, &(pkb->statementTable), &(pkb->procTable), &(pkb->varTable), &(pkb->constantTable));
+		return answer;
+	} else {
+		vector<int> resultFromSuchThat = solveForSuchThat(selectSynonym, synonymTable, tree, pkb);
+		vector<int> resultFromPattern = solveForPattern(selectSynonym, synonymTable, tree, pkb);
+		set<int> temp;
+		temp.insert(resultFromSuchThat.begin(), resultFromSuchThat.end());
+		temp.insert(resultFromPattern.begin(), resultFromPattern.end());
+		vector<int> answer(temp.begin(), temp.end());
+		return answer;
+	}
 }
 
 /******* Methods *******/
@@ -4888,6 +4978,7 @@ list<string> QueryEvaluator::evaluate(map<STRING, STRING>* synonymTable, QueryTr
 	// TODO: throws exception
 	// tree->printTree();
 	vector<int> answer = solve(selectSynonym, synonymTable, tree, pkb);
+	cout << "result :: " << answer.size() << endl;
 	string temp = "";
 	if (synonymTable->at(selectSynonym)=="variable"||
 		synonymTable->at(selectSynonym)=="procedure" ||
@@ -4910,10 +5001,10 @@ list<string> QueryEvaluator::evaluate(map<STRING, STRING>* synonymTable, QueryTr
 			}
 		} else {
 			for (size_t i=0; i<answer.size(); i++){
-				temp = temp + ("" + pkb->constantTable.getConstant(answer.at(i)));
+				/*temp = temp + ("" + pkb->constantTable.getConstant(answer.at(i)));
 				if (i!=answer.size()-1){
 					temp = temp+",";
-				}
+				}*/
 				outputlist.push_back(to_string((long long)pkb->constantTable.getConstant(answer.at(i))));
 			}
 		}

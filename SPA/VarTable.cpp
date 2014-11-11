@@ -5,7 +5,9 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <numeric>
 #include "VarTable.h"
+
 
 using namespace std;
 
@@ -61,6 +63,13 @@ void VarTable::printTable(){
 int VarTable::getSize(){
 return varVec.size();
 } 
+
+// return a vector of all statement numbers
+vector<int> VarTable::getAllVarNum() {
+	vector<int> vars(getSize());
+	iota(vars.begin(), vars.end(), 0);
+	return vars;
+}
 
 
 bool VarTable::containsVar(string s){

@@ -61,6 +61,11 @@ void QueryParserTest::testSynonym() {
 	CPPUNIT_ASSERT(synonyms.at("f") == "variable");
 	CPPUNIT_ASSERT(synonyms.at("g") == "variable");
 	CPPUNIT_ASSERT(synonyms.at("h") == "prog_line");
+
+	q1 = "stmt s; Select s";
+	a = new QueryParser(q1);
+	synonyms = a->getSynonyms();
+	CPPUNIT_ASSERT(synonyms.at("s") == "stmt");
 }
 
 void QueryParserTest::testSuchThat() {
@@ -145,7 +150,7 @@ void QueryParserTest::testModifies() {
 	
 	q = "while a; variable b; select a such that Modifies(_,a) such that Modifies(a, b) and Modifies(1, _)";
 	qp = new QueryParser(q);
-	qp->printMap();
+	//qp->printMap();
 	qt = qp->getQueryTree()->getRootNode()->getChild(1);
 	CPPUNIT_ASSERT_EQUAL(qt->getNumChild(), 3);
 	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Modifies");
@@ -227,7 +232,7 @@ void QueryParserTest::testUses() {
 	
 	q = "while a; variable b; select a such that Uses(_,a) such that Uses(a, b) and Uses(1, _)";
 	qp = new QueryParser(q);
-	qp->printMap();
+	//qp->printMap();
 	qt = qp->getQueryTree()->getRootNode()->getChild(1);
 	CPPUNIT_ASSERT_EQUAL(qt->getNumChild(), 3);
 	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Uses");
@@ -722,4 +727,23 @@ void QueryParserTest::testAssignPattern() {
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(4)->getKey() == "_");
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(3)->getChild(0)->getKey() == "x");
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(3)->getChild(1)->getKey() == "y");
+}
+
+void QueryParserTest::testMoreAssignPatterns() {
+	string q;
+	QueryParser* qp;
+	QTNode* qt;
+	q = "assign a; Select a pattern a(\"oSCar\", _)";
+	qp = new QueryParser(q);
+	qt = qp->getQueryTree()->getRootNode()->getChild(2);
+
+	cout << qt->getChild(0)->getKey();
+	cout << qt->getChild(0)->getChild(0)->getKey();
+	cout << qt->getChild(0)->getChild(1)->getKey();
+	cout << qt->getChild(0)->getChild(2)->getKey();
+
+	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "assign");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "a");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "\"oSCar\"");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getKey() == "_");
 }

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <numeric>
 #include "ConstantTable.h"
 
 using namespace std;
@@ -49,6 +50,13 @@ vector<int> ConstantTable::getAllConstant(){
 int ConstantTable::getSize(){
 	return constVec.size();
 } 
+
+// return a vector of all constant index numbers
+vector<int> ConstantTable::getAllConstNum() {
+	vector<int> consts(getSize());
+	iota(consts.begin(), consts.end(), 0);
+	return consts;
+}
 
 
 bool ConstantTable::containsConst(int n){

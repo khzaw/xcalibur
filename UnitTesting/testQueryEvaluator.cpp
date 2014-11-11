@@ -25,6 +25,57 @@ QueryEvaluatorTest::tearDown()
 
 CPPUNIT_TEST_SUITE_REGISTRATION( QueryEvaluatorTest );
 
+void QueryEvaluatorTest::testBasicSelect() {
+	StatementTable st;
+	TNode stmt1("ASSIGN_NODE","a = x", 1,0);
+	TNode stmt2("ASSIGN_NODE","b = y", 2,0);
+	TNode stmt3("WHILE_NODE","c", 3,0);
+	TNode stmt4("ASSIGN_NODE","d = t", 4,0);
+	TNode stmt5("ASSIGN_NODE","e = v", 5,0);
+	TNode stmt6("WHILE_NODE","f", 6,0);
+	TNode stmt7("WHILE_NODE","g", 7,0);
+	TNode stmt8("ASSIGN_NODE","h=u", 8,0);
+	TNode stmt9("WHILE_NODE","i", 9,0);
+	TNode stmt10("WHILE_NODE","j", 10,0);
+	st.insertStatement(&stmt1);
+	st.insertStatement(&stmt2);
+	st.insertStatement(&stmt3);
+	st.insertStatement(&stmt4);
+	st.insertStatement(&stmt5);
+	st.insertStatement(&stmt6);
+	st.insertStatement(&stmt7);
+	st.insertStatement(&stmt8);
+	st.insertStatement(&stmt9);
+	st.insertStatement(&stmt10);
+
+	Follows f1;
+	f1.insertFollows(1, 2);
+	f1.insertFollows(2, 3);
+	f1.insertFollows(3, 4);
+	f1.insertFollows(4, 5);
+	f1.insertFollows(5, 6);
+	f1.insertFollows(6, 7);
+	f1.insertFollows(7, 8);
+	f1.insertFollows(8, 9);
+	f1.insertFollows(9, 10);
+
+	ProcTable pt;
+	pt.insertProc("Proc1");
+
+	VarTable vt;
+	vt.insertVar("x");
+	vt.insertVar("y");
+	vt.insertVar("z");
+	vt.insertVar("a");
+	vt.insertVar("b");
+	vt.insertVar("c");
+
+	QueryEvaluator* qe = new QueryEvaluator();
+	map<string, string> table1;
+	table1["s"]="stmt";
+	vector<int> actualResult1 = qe->solveForSelect("s", &table1, &st, &pt, &vt); // stmt s1; Select s1 such that Follows(s1, 2) | Expected <1>
+	CPPUNIT_ASSERT_EQUAL((size_t)10, actualResult1.size());
+}
 void QueryEvaluatorTest::testCheckSynonymInSuchThat(){
 	QTNode* modifies = new QTNode("Modifies");
 	QTNode* synonym1 = new QTNode("synonym1");

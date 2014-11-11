@@ -72,6 +72,8 @@ bool AST::isNodeValue(TNode *n,string v){
 
 bool AST::matchPattern(string nodeP,string queryP ){
 	
+   if(queryP.empty()) return true;
+	
    istringstream stream( nodeP ); 
    istringstream stream2(queryP);
    // make a vector with each word of the text

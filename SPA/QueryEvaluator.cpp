@@ -4944,22 +4944,32 @@ vector<int> solveForPattern(string selectSynonym, map<STRING, STRING>* synonymTa
 	StatementTable* statementTable = &(pkb->statementTable);
 	if(tree->getRootNode()->getChild(2)->getNumChild() > 0) {
 		string queryPattern = tree->getRootNode()->getChild(2)->getChild(0)->getData();
-		vector<TNode*> assignmentNodes = statementTable->getNodesMatchingNodeType(TNODE_NAMES[ASSIGN_NODE]);
-		for(size_t i = 0; i < assignmentNodes.size(); ++i) {
-			string nodePattern = assignmentNodes.at(i)->getData();
-			if(!queryPattern.length()) {
-				// "_"
-			} else if(queryPattern.length() == 1) {
-				// "_x_"
-				if(AST::matchPattern(nodePattern, queryPattern, 1) {
+		string leftHandSide = tree->getRootNode()->getChild(2)->getChild(0)->getChild(1)->getKey();
+		if(leftHandSide == "_" && queryPattern.empty()) {
+			// return all the assignment nodes
+			answer = statementTable->getStmtNumUsingNodeType(TNODE_NAMES[ASSIGN_NODE]);
+		} else if(leftHandSide == "_" && !queryPattern.empty()) {
+			// (_, "_x+y_")
+			answer = statementTable->getAssignmentNodesNum(leftHandSide, queryPattern);
+		} else if(leftHandSide != "_" && queryPattern.empty()) {
+			// ("oSCar", _)
+			answer = statementTable->getAssignmentNodesNum(leftHandSide, queryPattern);
+		} else if(leftHandSide != "_" && !queryPattern.empty()) {
+			if(leftHandSide.substr(0, 1) != "\"") {
+				if (synonymTable->find(leftHandSide)==synonymTable->end()) { // if leftHandSide is not defined
+					return answer;
+				}
 
+				if(leftHandSide != "v") return answer;
+				else {
+					answer = statementTable->getStmtNumUsingNodeType(TNODE_NAMES[ASSIGN_NODE]);
 				}
+
 			} else {
-				// "_x+y_"
-				if(AST::matchPattern(nodePattern, queryPattern, 2) {
-				}
+				answer = statementTable->getAssignmentNodesNum(leftHandSide, queryPattern);
 			}
 		}
+
 	}
 	return answer;
 }
@@ -4972,8 +4982,16 @@ vector<int> solve(string selectSynonym, map<STRING, STRING>* synonymTable, Query
 		answer = solveForSelect(selectSynonym, synonymTable, &(pkb->statementTable), &(pkb->procTable), &(pkb->varTable), &(pkb->constantTable));
 		return answer;
 	} else {
-		vector<int> resultFromSuchThat = solveForSuchThat(selectSynonym, synonymTable, tree, pkb);
-		vector<int> resultFromPattern = solveForPattern(selectSynonym, synonymTable, tree, pkb);
+		vector<int> resultFromSuchThat;
+		vector<int> resultFromPattern;
+		if(tree->getRootNode()->getChild(1)->getNumChild() > 0) {
+			resultFromSuchThat = solveForSuchThat(selectSynonym, synonymTable, tree, pkb);
+		}
+
+		if(tree->getRootNode()->getChild(2)->getNumChild() > 0) {
+			resultFromPattern = solveForPattern(selectSynonym, synonymTable, tree, pkb);
+		}
+
 		set<int> temp;
 		temp.insert(resultFromSuchThat.begin(), resultFromSuchThat.end());
 		temp.insert(resultFromPattern.begin(), resultFromPattern.end());

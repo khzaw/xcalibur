@@ -29,6 +29,10 @@ void TestAST::testMatchPattern() {
 	queryPattern = "bravo";
 	CPPUNIT_ASSERT_EQUAL(true, AST::matchPattern(nodePattern, queryPattern));
 
+	nodePattern = "1";
+	queryPattern = "";
+	CPPUNIT_ASSERT_EQUAL(false, AST::matchPattern(nodePattern, queryPattern));
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestAST);

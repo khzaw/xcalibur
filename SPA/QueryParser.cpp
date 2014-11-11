@@ -403,9 +403,11 @@ void QueryParser::matchPatternAssign(string s) {
 		result += "_";
 		assignNode->addChild(new QTNode("_"));
 	}
-	match("\"");
-	assignNode->addChild(matchExpression());
-	match("\"");
+	if(nextToken.name.compare("\"") == 0) {
+		match("\"");
+		assignNode->addChild(matchExpression());
+		match("\"");
+	}
 	if(nextToken.name.compare("_") == 0) {
 		match(UNDERSCORE);
 		result += "_";
@@ -414,7 +416,7 @@ void QueryParser::matchPatternAssign(string s) {
 
 	qt->getRootNode()->getChild(2)->addChild(assignNode);
 	match(")");
-	qt->getRootNode()->getChild(2)->setKey(result);
+	//qt->getRootNode()->getChild(2)->setKey(result);
 }
 
 QTNode* QueryParser::matchExpression() {

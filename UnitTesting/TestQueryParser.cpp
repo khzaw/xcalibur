@@ -733,11 +733,17 @@ void QueryParserTest::testMoreAssignPatterns() {
 	string q;
 	QueryParser* qp;
 	QTNode* qt;
-	q = "assign a; Select a pattern a(\"oSCar\", \"_\")";
+	q = "assign a; Select a pattern a(\"oSCar\", _)";
 	qp = new QueryParser(q);
 	qt = qp->getQueryTree()->getRootNode()->getChild(2);
+
+	cout << qt->getChild(0)->getKey();
+	cout << qt->getChild(0)->getChild(0)->getKey();
+	cout << qt->getChild(0)->getChild(1)->getKey();
+	cout << qt->getChild(0)->getChild(2)->getKey();
+
 	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "assign");
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "a");
-	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "oSCar");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "\"oSCar\"");
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(2)->getKey() == "_");
 }

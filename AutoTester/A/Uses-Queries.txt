@@ -1,0 +1,50 @@
+1-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Uses(13,"Romeo")
+i,b,c,a,oSCar,beta,tmp,I,k,j1k,l,chArlie,x,left,right,Romeo,delta,width,w
+5000
+2-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select a3 such that Uses(a3,"x")
+10,18
+5000
+3-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Uses(12,v)
+right, Romeo, delta, width, l
+5000
+4-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Uses(11,v)
+right, Romeo, delta, width, l, left, c, x
+5000
+5-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Uses(4,"k")
+i,b,c,a,oSCar,beta,tmp,I,k,j1k,l,chArlie,x,left,right,Romeo,delta,width,w
+5000
+6-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select s2 such that Uses(s2,"oSCar")
+none
+5000
+7-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select a3 such that Uses(a3,"c")
+17
+5000
+8-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Uses(s1,"x")
+i,b,c,a,oSCar,beta,tmp,I,k,j1k,l,chArlie,x,left,right,Romeo,delta,width,w
+5000
+9-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select w1 such that Uses(w1,"i")
+none
+5000
+10-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Uses(9,v)
+x, left, right, Romeo, delta, l, width, c
+5000

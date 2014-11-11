@@ -1,0 +1,114 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>AutoTester</name><parsing_time_taken>2.000000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="">1</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select v such that Uses(13,"Romeo")]]></querystr>
+<stuans>i,b,c,a,beta,oSCar,tmp,I,k,j1k,chArlie,x,left,right,Romeo,delta,l,width,w</stuans>
+<correct>i,b,c,a,oSCar,beta,tmp,I,k,j1k,l,chArlie,x,left,right,Romeo,delta,width,w</correct>
+<time_taken>15.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="">2</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select a3 such that Uses(a3,"x")]]></querystr>
+<stuans>10,18</stuans>
+<correct>10,18</correct>
+<time_taken>15.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="">3</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select v such that Uses(12,v)]]></querystr>
+<stuans>right,Romeo,delta</stuans>
+<correct>right,Romeo,delta,width,l</correct>
+<time_taken>16.000000</time_taken>
+<failed>
+<missing>l,width</missing>
+<additional></additional>
+<summary>
+<expected>5</expected>
+<matched>3</matched>
+<missing>2</missing>
+<additional>0</additional>
+</summary>
+</failed>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="">4</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select v such that Uses(11,v)]]></querystr>
+<stuans>left,right,Romeo,delta,c,x</stuans>
+<correct>right,Romeo,delta,width,l,left,c,x</correct>
+<time_taken>16.000000</time_taken>
+<failed>
+<missing>l,width</missing>
+<additional></additional>
+<summary>
+<expected>8</expected>
+<matched>6</matched>
+<missing>2</missing>
+<additional>0</additional>
+</summary>
+</failed>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="">5</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select v such that Uses(4,"k")]]></querystr>
+<stuans></stuans>
+<correct>i,b,c,a,oSCar,beta,tmp,I,k,j1k,l,chArlie,x,left,right,Romeo,delta,width,w</correct>
+<time_taken>31.000000</time_taken>
+<failed>
+<missing>I,Romeo,a,b,beta,c,chArlie,delta,i,j1k,k,l,left,oSCar,right,tmp,w,width,x</missing>
+<additional></additional>
+<summary>
+<expected>19</expected>
+<matched>0</matched>
+<missing>19</missing>
+<additional>0</additional>
+</summary>
+</failed>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="">6</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select s2 such that Uses(s2,"oSCar")]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>16.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="">7</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select a3 such that Uses(a3,"c")]]></querystr>
+<stuans>17</stuans>
+<correct>17</correct>
+<time_taken>16.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="">8</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select v such that Uses(s1,"x")]]></querystr>
+<stuans>i,b,c,a,beta,oSCar,tmp,I,k,j1k,chArlie,x,left,right,Romeo,delta,l,width,w</stuans>
+<correct>i,b,c,a,oSCar,beta,tmp,I,k,j1k,l,chArlie,x,left,right,Romeo,delta,width,w</correct>
+<time_taken>16.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="">9</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select w1 such that Uses(w1,"i")]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>15.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="">10</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select v such that Uses(9,v)]]></querystr>
+<stuans>x,left,right,Romeo,delta,c</stuans>
+<correct>x,left,right,Romeo,delta,l,width,c</correct>
+<time_taken>16.000000</time_taken>
+<failed>
+<missing>l,width</missing>
+<additional></additional>
+<summary>
+<expected>8</expected>
+<matched>6</matched>
+<missing>2</missing>
+<additional>0</additional>
+</summary>
+</failed>
+</query>
+</queries>
+</test_results>

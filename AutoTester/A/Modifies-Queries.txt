@@ -31,7 +31,7 @@ Select s2 such that Modifies(s2,"oSCar")
 7-
 variable v;stmt s1,s2; assign a3;while w1,w2;
 Select a3 such that Modifies(a3,"c")
-15,17
+3,15,17
 5000
 8-
 variable v;stmt s1,s2; assign a3;while w1,w2;

@@ -1,50 +1,50 @@
+5-
+variable v;stmt s1,s2; assign a;while w1,w2;
+Select a pattern a("oSCar",_)
+6,8
+5000
 1-
-variable v;stmt s1,s2; assign a3;while w1,w2;
+variable v;stmt s1,s2; assign a;while w1,w2;
 Select a pattern a(_,_)
 1,2,3,6,8,10,13,14,15,17,18,19,20
 5000
 2-
-variable v;stmt s1,s2; assign a3;while w1,w2;
+variable v;stmt s1,s2; assign a;while w1,w2;
 Select a pattern a(_,_"I+k"_)
 8
 5000
 3-
-variable v;stmt s1,s2; assign a3;while w1,w2;
+variable v;stmt s1,s2; assign a;while w1,w2;
 Select a pattern a(_,_"k+j1k"_)
 none
 5000
 4-
-variable v;stmt s1,s2; assign a3;while w1,w2;
+variable v;stmt s1,s2; assign a;while w1,w2;
 Select a pattern a(_,_"Romeo+1"_)
 13
 5000
-5-
-variable v;stmt s1,s2; assign a3;while w1,w2;
-Select a pattern a("oSCar",_)
-6,8
-5000
 6-
-variable v;stmt s1,s2; assign a3;while w1,w2;
+variable v;stmt s1,s2; assign a;while w1,w2;
 Select a pattern a("oSCar",_"1+beta"_)
 6
 5000
 7-
-variable v;stmt s1,s2; assign a3;while w1,w2;
+variable v;stmt s1,s2; assign a;while w1,w2;
 Select a pattern a("c",_)
 3,15,17
 5000
 8-
-variable v;stmt s1,s2; assign a3;while w1,w2;
+variable v;stmt s1,s2; assign a;while w1,w2;
 Select a pattern a(_,_"delta+l"_)
 15
 5000
 9-
-variable v;stmt s1,s2; assign a3;while w1,w2;
+variable v;stmt s1,s2; assign a;while w1,w2;
 Select a pattern a(_,_"l+width"_)
 none
 5000
 10-
-variable v;stmt s1,s2; assign a3;while w1,w2;
+variable v;stmt s1,s2; assign a;while w1,w2;
 Select a pattern a(_,_"Romeo"_)
 13,15
 5000

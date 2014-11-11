@@ -1240,42 +1240,77 @@ vector<vector<int>> QueryEvaluator::solveForSuchThat(map<STRING, STRING>* synony
 }
 
 vector<int> QueryEvaluator::solveForPattern(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* tree){
+	/*
+	 * type 1 = _x_
+	 * type 2 = _x+y_
+	 */
 	vector<int> answer;
 	AST* ast = &(pkb->ast);
 	StatementTable* statementTable = &(pkb->statementTable);
-	string pattern = tree->getRootNode()->getChild(2)->getKey();
+	if(tree->getRootNode()->getChild(2)->getNumChild() > 0) {
+		string queryPattern = tree->getRootNode()->getChild(2)->getChild(0)->getData();
+		string leftHandSide = tree->getRootNode()->getChild(2)->getChild(0)->getChild(1)->getKey();
+		if(leftHandSide == "_" && queryPattern.empty()) {
+			// return all the assignment nodes
+			answer = statementTable->getStmtNumUsingNodeType(TNODE_NAMES[ASSIGN_NODE]);
+		} else if(leftHandSide == "_" && !queryPattern.empty()) {
+			// (_, "_x+y_")
+			answer = statementTable->getAssignmentNodesNum(leftHandSide, queryPattern);
+		} else if(leftHandSide != "_" && queryPattern.empty()) {
+			// ("oSCar", _)
+			answer = statementTable->getAssignmentNodesNum(leftHandSide, queryPattern);
+		} else if(leftHandSide != "_" && !queryPattern.empty()) {
+			if(leftHandSide.substr(0, 1) != "\"") {
+				if (synonymTable->find(leftHandSide)==synonymTable->end()) { // if leftHandSide is not defined
+					return answer;
+				}
 
-	cout << pattern << endl;
+				if(leftHandSide != "v") return answer;
+				else {
+					answer = statementTable->getStmtNumUsingNodeType(TNODE_NAMES[ASSIGN_NODE]);
+				}
 
+			} else {
+				answer = statementTable->getAssignmentNodesNum(leftHandSide, queryPattern);
+			}
+		}
+
+	}
 	return answer;
 }
 
 /******* Helper Level 1 *******/
 // Method to collect solution from different conditional clauses (such that, with, pattern, etc.) and combine
 vector<int> QueryEvaluator::solve(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* tree){
+	vector<int> answer;
 	if (tree->getRootNode()->getChild(1)->getNumChild()==0&&tree->getRootNode()->getChild(2)->getNumChild()==0){
-		vector<int> answer;
 		answer = solveForSelect(selectSynonym, synonymTable, &(pkb->statementTable), &(pkb->procTable), &(pkb->varTable), &(pkb->constantTable));
 		return answer;
 	} else {
 		QueryTree* suchThatSubtree = tree->getSubtreeFromNode(tree->getRootNode()->getChild(1)->getChild(0));
-		vector<vector<int>> resultFromSuchThat = solveForSuchThat(synonymTable, suchThatSubtree);
+		
+		vector<vector<int>> resultFromSuchThat;
+		if(tree->getRootNode()->getChild(1)->getNumChild() > 0) {
+			resultFromSuchThat = solveForSuchThat(synonymTable, suchThatSubtree);
+		}		
+		vector<int> resultFromPattern;
+		if(tree->getRootNode()->getChild(2)->getNumChild() > 0) {
+			resultFromPattern = solveForPattern(selectSynonym, synonymTable, tree);
+		}
+		
 		string leftSynonym = suchThatSubtree->getRootNode()->getChild(0)->getKey();
 		string rightSynonym = suchThatSubtree->getRootNode()->getChild(1)->getKey();
 		if (selectSynonym == leftSynonym){
-			vector<int> answer;
 			for (int i=0; i<resultFromSuchThat[0].size(); i++){
 				answer.push_back(resultFromSuchThat[0][i]);
 			}
 			return answer;
 		} else if (selectSynonym==rightSynonym){
-			vector<int> answer;
 			for (int i=0; i<resultFromSuchThat[1].size(); i++){
 				answer.push_back(resultFromSuchThat[1][i]);
 			}
 			return answer;
 		} else if (resultFromSuchThat[0].size()>0){
-			vector<int> answer;
 			if (synonymTable->at(selectSynonym)=="stmt"||synonymTable->at(selectSynonym)=="prog_line"){
 				for (int i=1; i<=pkb->statementTable.getSize(); i++){
 					answer.push_back(i);
@@ -1306,9 +1341,7 @@ vector<int> QueryEvaluator::solve(string selectSynonym, map<STRING, STRING>* syn
 				}
 				return answer;
 			}
-		}
-		vector<int> resultFromPattern = solveForPattern(selectSynonym, synonymTable, tree);
-		vector<int> answer;
+		}		
 		return answer;
 	}
 }

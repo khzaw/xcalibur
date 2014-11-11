@@ -5,6 +5,7 @@
 #include <numeric>
 #include <typeinfo>
 #include "StatementTable.h"
+#include "AST.h"
 using namespace std;
 
 
@@ -24,11 +25,32 @@ TNode* StatementTable::getTNode(int n){
 // returns a vector of node pointers of nodes matching specified node type
 vector<TNode*> StatementTable::getNodesMatchingNodeType(string nodeType){
 	vector<TNode*> nodes;
-	for(int i =0;i<statement.size();i++){
+	for(size_t i =0;i<statement.size();i++){
 	
 		if(statement[i].second == nodeType){
 			
 			nodes.push_back(statement[i].first);
+		}
+	}
+	return nodes;
+}
+
+
+vector<int> StatementTable::getAssignmentNodesNum(string lhs, string queryPattern) {			// lhs = _
+	vector<int> nodes;
+	// strip out quotes
+	if(lhs.length() >= 2) lhs = lhs.substr(1, lhs.length()-2);
+	for(size_t i = 0; i < statement.size(); ++i) {
+		if(statement[i].second == TNODE_NAMES[ASSIGN_NODE]) {
+			if(AST::matchPattern(statement[i].first->getData(), queryPattern)) {
+				if(lhs == "_") {
+					nodes.push_back(statement[i].first->getStmtNum());
+				} else {
+					if(statement[i].first->getChild(0)->getData() == lhs) {
+						nodes.push_back(statement[i].first->getStmtNum());
+					}
+				}
+			}
 		}
 	}
 	return nodes;
@@ -44,7 +66,7 @@ vector<int> StatementTable::getAllStmtNum() {
 vector<int> StatementTable::getStmtNumUsingNodeType(string nodeType){
 
 vector<int> stmtList;
-for(int i=0;i<statement.size();i++){
+for(size_t i=0;i<statement.size();i++){
 	if(statement[i].second == nodeType){
 		stmtList.push_back(i+1);
 	}
@@ -61,7 +83,7 @@ int StatementTable::getSize(){
 	
 // checks if program contains statement of a particular type
 bool StatementTable::containsStatement(string nodeType){
-	for(int i=0;i<statement.size();i++){
+	for(size_t i=0;i<statement.size();i++){
 		if(statement[i].second == nodeType){
 			return true;
 		}
@@ -70,7 +92,7 @@ bool StatementTable::containsStatement(string nodeType){
 }
 
 bool StatementTable::containsNodeOfStmtAndNodeType(string nodeType, int stmt){
-	for(int i=0;i<statement.size();i++){
+	for(size_t i=0;i<statement.size();i++){
 		if(statement[i].second == nodeType && ((i+1)==stmt)){
 			return true;
 		}

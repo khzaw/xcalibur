@@ -1,14 +1,14 @@
 <?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
 <test_results>
 <info>
-<name>AutoTester</name><parsing_time_taken>5.000000</parsing_time_taken>
+<name>AutoTester</name><parsing_time_taken>6.000000</parsing_time_taken>
 </info>
 <queries>
 <query>
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="">1</id><querystr><![CDATA[stmt s; Select s]]></querystr>
 <stuans>1</stuans>
 <correct>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20</correct>
-<time_taken>22.000000</time_taken>
+<time_taken>33.000000</time_taken>
 <failed>
 <missing>10,11,12,13,14,15,16,17,18,19,2,20,3,4,5,6,7,8,9</missing>
 <additional></additional>
@@ -24,7 +24,7 @@
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="">2</id><querystr><![CDATA[variable v; Select v]]></querystr>
 <stuans>a,b,c</stuans>
 <correct>I,Romeo,a,b,beta,c,chArlie,delta,i,j1k,k,l,left,oSCar,right,tmp,w,width,x</correct>
-<time_taken>38.000000</time_taken>
+<time_taken>30.000000</time_taken>
 <failed>
 <missing>I,Romeo,beta,chArlie,delta,i,j1k,k,l,left,oSCar,right,tmp,w,width,x</missing>
 <additional></additional>
@@ -40,7 +40,7 @@
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="">3</id><querystr><![CDATA[constant c; Select c]]></querystr>
 <stuans></stuans>
 <correct>1,2,0,200</correct>
-<time_taken>27.000000</time_taken>
+<time_taken>26.000000</time_taken>
 <failed>
 <missing>0,1,2,200</missing>
 <additional></additional>
@@ -56,7 +56,7 @@
 <id ReturnTuple="1" UnnamedVar="1" CondNum="2" RelNum="0" >4</id><querystr><![CDATA[prog_line c; Select c]]></querystr>
 <stuans>1</stuans>
 <correct>1,2,10,11,12,13,14,15,16,17,18,19,20,3,4,5,6,7,8,9</correct>
-<time_taken>32.000000</time_taken>
+<time_taken>31.000000</time_taken>
 <failed>
 <missing>10,11,12,13,14,15,16,17,18,19,2,20,3,4,5,6,7,8,9</missing>
 <additional></additional>
@@ -72,7 +72,7 @@
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="">5</id><querystr><![CDATA[while c; Select c]]></querystr>
 <stuans></stuans>
 <correct>11,12,16,4,5,7,9</correct>
-<time_taken>33.000000</time_taken>
+<time_taken>36.000000</time_taken>
 <failed>
 <missing>11,12,16,4,5,7,9</missing>
 <additional></additional>
@@ -88,7 +88,7 @@
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="">6</id><querystr><![CDATA[assign c; Select c]]></querystr>
 <stuans>1</stuans>
 <correct>1,2,10,13,14,15,17,18,19,20,3,6,8</correct>
-<time_taken>42.000000</time_taken>
+<time_taken>43.000000</time_taken>
 <failed>
 <missing>10,13,14,15,17,18,19,2,20,3,6,8</missing>
 <additional></additional>
@@ -104,7 +104,7 @@
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="">7</id><querystr><![CDATA[ Select c]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>26.000000</time_taken>
+<time_taken>20.000000</time_taken>
 <passed/>
 </query>
 </queries>

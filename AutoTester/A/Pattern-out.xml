@@ -1,0 +1,48 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>AutoTester</name><parsing_time_taken>12.000000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="">5</id><querystr><![CDATA[variable v;stmt s1,s2; assign a;while w1,w2; Select a pattern a("oSCar",_)]]></querystr>
+<exception/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="">1</id><querystr><![CDATA[variable v;stmt s1,s2; assign a;while w1,w2; Select a pattern a(_,_)]]></querystr>
+<exception/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="">2</id><querystr><![CDATA[variable v;stmt s1,s2; assign a;while w1,w2; Select a pattern a(_,_"I+k"_)]]></querystr>
+<exception/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="">3</id><querystr><![CDATA[variable v;stmt s1,s2; assign a;while w1,w2; Select a pattern a(_,_"k+j1k"_)]]></querystr>
+<exception/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="">4</id><querystr><![CDATA[variable v;stmt s1,s2; assign a;while w1,w2; Select a pattern a(_,_"Romeo+1"_)]]></querystr>
+<exception/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="">6</id><querystr><![CDATA[variable v;stmt s1,s2; assign a;while w1,w2; Select a pattern a("oSCar",_"1+beta"_)]]></querystr>
+<exception/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="">7</id><querystr><![CDATA[variable v;stmt s1,s2; assign a;while w1,w2; Select a pattern a("c",_)]]></querystr>
+<exception/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="">8</id><querystr><![CDATA[variable v;stmt s1,s2; assign a;while w1,w2; Select a pattern a(_,_"delta+l"_)]]></querystr>
+<exception/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="">9</id><querystr><![CDATA[variable v;stmt s1,s2; assign a;while w1,w2; Select a pattern a(_,_"l+width"_)]]></querystr>
+<exception/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="">10</id><querystr><![CDATA[variable v;stmt s1,s2; assign a;while w1,w2; Select a pattern a(_,_"Romeo"_)]]></querystr>
+<exception/>
+</query>
+</queries>
+</test_results>

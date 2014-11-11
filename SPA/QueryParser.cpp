@@ -83,6 +83,8 @@ Lexeme QueryParser::getToken() {
 
 void QueryParser::matchDeclaration() {
 	nextToken = getToken();
+
+	if(_stricmp(nextToken.name.c_str(), "select") != 0) {
 	//cout << "SYNSIZE:" << DESIGN_ENTITIES.size() << endl;
 	for(size_t i = 0; i < DESIGN_ENTITIES.size(); i++) {
 		if (_stricmp(nextToken.name.c_str(), DESIGN_ENTITIES[i].c_str()) == 0) {
@@ -90,6 +92,7 @@ void QueryParser::matchDeclaration() {
 			matchDeclarationVariables(DESIGN_ENTITIES[i]);
 			i = 0;
 		}
+	}
 	}
 }
 

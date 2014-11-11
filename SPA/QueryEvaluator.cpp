@@ -4935,20 +4935,39 @@ vector<int> solveForSuchThat(string selectSynonym, map<STRING, STRING>* synonymT
 }
 
 vector<int> solveForPattern(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* tree, PKBController* pkb){
+	/*
+	 * type 1 = _x_
+	 * type 2 = _x+y_
+	 */
 	vector<int> answer;
 	AST* ast = &(pkb->ast);
 	StatementTable* statementTable = &(pkb->statementTable);
-	string pattern = tree->getRootNode()->getChild(2)->getKey();
+	if(tree->getRootNode()->getChild(2)->getNumChild() > 0) {
+		string queryPattern = tree->getRootNode()->getChild(2)->getChild(0)->getData();
+		vector<TNode*> assignmentNodes = statementTable->getNodesMatchingNodeType(TNODE_NAMES[ASSIGN_NODE]);
+		for(size_t i = 0; i < assignmentNodes.size(); ++i) {
+			string nodePattern = assignmentNodes.at(i)->getData();
+			if(!queryPattern.length()) {
+				// "_"
+			} else if(queryPattern.length() == 1) {
+				// "_x_"
+				if(AST::matchPattern(nodePattern, queryPattern, 1) {
 
-	cout << pattern << endl;
-
+				}
+			} else {
+				// "_x+y_"
+				if(AST::matchPattern(nodePattern, queryPattern, 2) {
+				}
+			}
+		}
+	}
 	return answer;
 }
 
 /******* Helper Level 1 *******/
 // Method to collect solution from different conditional clauses (such that, with, pattern, etc.) and combine
 vector<int> solve(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* tree, PKBController* pkb){
-	if (tree->getRootNode()->getChild(1)->getNumChild()==0&&tree->getRootNode()->getChild(2)->getNumChild()==0){
+	if (tree->getRootNode()->getChild(1)->getNumChild()==0 && tree->getRootNode()->getChild(2)->getNumChild()==0){
 		vector<int> answer;
 		answer = solveForSelect(selectSynonym, synonymTable, &(pkb->statementTable), &(pkb->procTable), &(pkb->varTable), &(pkb->constantTable));
 		return answer;

@@ -66,6 +66,11 @@ void QueryParserTest::testSynonym() {
 	a = new QueryParser(q1);
 	synonyms = a->getSynonyms();
 	CPPUNIT_ASSERT(synonyms.at("s") == "stmt");
+
+	q1 ="select s";
+	a = new QueryParser(q1);
+	synonyms = a->getSynonyms();
+	CPPUNIT_ASSERT(synonyms.empty());
 }
 
 void QueryParserTest::testSuchThat() {

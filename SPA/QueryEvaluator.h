@@ -36,14 +36,14 @@ class QueryEvaluator{
 		bool checkSynonymInSuchThat(string, QueryTree*);
 		vector<int> solveForSelect(string, map<STRING, STRING>*, StatementTable*, ProcTable*, VarTable*, ConstantTable*);
 		vector<vector<int>> solveForSuchThatFollows(map<STRING, STRING>*, QueryTree*);
-		vector<int> solveForSuchThatParent(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Parent*, ProcTable*, VarTable*, ConstantTable*);
-		vector<int> solveForSuchThatFollowsStar(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Follows*, ProcTable*, VarTable*, ConstantTable*);
-		vector<int> solveForSuchThatParentStar(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Parent*, ProcTable*, VarTable*, ConstantTable*);
-		vector<int> solveForSuchThatModifies(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Modifies*, ProcTable*, VarTable*, ConstantTable*);
-		vector<int> solveForSuchThatUses(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Uses*, ProcTable*, VarTable*, ConstantTable*);
+		vector<vector<int>> solveForSuchThatParent(map<STRING, STRING>*, QueryTree*);
+		vector<vector<int>> solveForSuchThatFollowsStar(map<STRING, STRING>*, QueryTree*);
+		vector<vector<int>> solveForSuchThatParentStar(map<STRING, STRING>*, QueryTree*);
+		vector<vector<int>> solveForSuchThatModifies(map<STRING, STRING>*, QueryTree*);
+		vector<vector<int>> solveForSuchThatUses(map<STRING, STRING>*, QueryTree*);
 		
 		vector<int> solve(string, map<STRING, STRING>*, QueryTree*);
-		vector<int> solveForSuchThat(string, map<STRING, STRING>*, QueryTree*);
+		vector<vector<int>> solveForSuchThat(map<STRING, STRING>*, QueryTree*);
 		vector<int>	solveForPattern(string, map<STRING, STRING>*, QueryTree*);
 	private:
 		PKBController* pkb;

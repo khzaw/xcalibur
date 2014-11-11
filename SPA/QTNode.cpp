@@ -16,10 +16,17 @@ QTNode::QTNode(){
 
 QTNode::QTNode(STRING newKey){
 	key=newKey;
+	data="";
+}
+
+QTNode::QTNode(STRING newKey, STRING newData) {
+	key = newKey;
+	data = data;
 }
 
 QTNode::QTNode(STRING newKey, QTNode* newParent){
 	key = newKey;
+	data = "";
 	parent = newParent;
 }
 
@@ -32,6 +39,7 @@ QTNode::QTNode(int newKey, QTNode* newParent){
 	parent = newParent;
 }
 
+
 /******* Accessors *******/
 INDEX QTNode::getNumChild(){
 	return children.size();
@@ -43,6 +51,10 @@ QTNode* QTNode::getChild(INDEX index){
 
 STRING QTNode::getKey(){
 	return key;
+}
+
+STRING QTNode::getData() {
+	return data;
 }
 
 int QTNode::getValue(){
@@ -60,4 +72,8 @@ VOID QTNode::setParent(QTNode* newParent){
 
 VOID QTNode::setKey(STRING newKey){
 	key = newKey;
+}
+
+VOID QTNode::setData(STRING newData){
+	data = newData;
 }

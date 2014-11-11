@@ -70,7 +70,7 @@ bool AST::isNodeValue(TNode *n,string v){
 	return (n->getData() == v);
 }
 
-bool AST::matchPattern(string nodeP,string queryP, int type ){
+bool AST::matchPattern(string nodeP,string queryP ){
 	
    istringstream stream( nodeP ); 
    istringstream stream2(queryP);
@@ -78,8 +78,10 @@ bool AST::matchPattern(string nodeP,string queryP, int type ){
    vector< string > nodePattern( (istream_iterator<string>( stream )),istream_iterator<string>() ); 
    vector< string > queryPattern( (istream_iterator<string>( stream2 )),istream_iterator<string>() ); 
    // type 1  (_"var"_)
-   if(type == 1){
-	   for(int i =0;i<nodePattern.size();i++){
+
+
+   if(queryPattern.size() == 1){
+	   for(size_t i =0;i<nodePattern.size();i++){
 		   if(nodePattern[i] ==queryPattern[0]){
 			   return true;
 		   }
@@ -87,7 +89,7 @@ bool AST::matchPattern(string nodeP,string queryP, int type ){
 	   return false;
    }// type 2 (_"var1 + var2"_)
    else{
-	   for(int k=0;k<nodePattern.size();k++){
+	   for(size_t k=0;k<nodePattern.size();k++){
 		   if(nodePattern[k] == queryPattern[0]){
 			   //base case
 			   if((k+2)>nodePattern.size()){

@@ -67,6 +67,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="TestAST.cpp" />
     <ClCompile Include="testConstant.cpp" />
     <ClCompile Include="testFollows.cpp" />
     <ClCompile Include="TestModifies.cpp" />
@@ -81,6 +82,7 @@
     <ClCompile Include="UnitTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TestAST.h" />
     <ClInclude Include="testConstant.h" />
     <ClInclude Include="testFollows.h" />
     <ClInclude Include="TestModifies.h" />

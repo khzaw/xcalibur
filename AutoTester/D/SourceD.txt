@@ -1,0 +1,4 @@
+procedure dforDemocracy {
+	a = b + // trung holy shit
+c;
+}

@@ -219,12 +219,14 @@ void Parser::factor(bool rightSide) {
 		variableName();
 		if(rightSide) populateUses(loc);
 		operandStack.push(&TNode(TNODE_NAMES[VAR_NODE], nextToken.name, loc, 0));
-		expressionPostfix += nextToken.name;
+		if(expressionPostfix.length() > 0) expressionPostfix += " ";
+		expressionPostfix += " " + nextToken.name;
 	} else {
 		// INT_LIT;
 		//node = createASTNode(CONSTANT_NODE, nextToken.name, &assignNode);
 		constantValue();
 		operandStack.push(&TNode(TNODE_NAMES[CONSTANT_NODE], nextToken.name, loc, 0));
+		if(expressionPostfix.length() > 0) expressionPostfix += " ";
 		expressionPostfix += nextToken.name;
 	}
 }
@@ -267,7 +269,7 @@ void Parser::popOperator(Operator op) {
 	operatorStack.pop();
 	operandStack.push(&operatorNode);
 
-	expressionPostfix += "+";
+	expressionPostfix += " +";
 }
 
 

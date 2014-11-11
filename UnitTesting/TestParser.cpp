@@ -4,7 +4,7 @@
 
 //Parser empty("../Debug/empty.txt");
 Parser sample("../Debug/Sample-Source.txt");
-//Parser two("../Debug/Source2.txt");
+//Parser sample("../Debug/Source2.txt");
 
 void TestParser::setUp() {
 }

@@ -88,4 +88,5 @@ private:
 	QTNode* matchVarRef();
 	QTNode* matchEntRef();
 	QTNode* matchStmtRef();
+	string getPostFixExpressionString();
 };

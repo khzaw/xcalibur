@@ -400,6 +400,7 @@ void QueryParser::matchPatternAssign(string s) {
 
 	if(nextToken.name.compare("_") == 0) {
 		match(UNDERSCORE);
+		result += "_";
 		assignNode->addChild(new QTNode("_"));
 	}
 	match("\"");
@@ -407,15 +408,17 @@ void QueryParser::matchPatternAssign(string s) {
 	match("\"");
 	if(nextToken.name.compare("_") == 0) {
 		match(UNDERSCORE);
+		result += "_";
 		assignNode->addChild(new QTNode("_"));
 	}
 
 	qt->getRootNode()->getChild(2)->addChild(assignNode);
 	match(")");
+	qt->getRootNode()->getChild(2)->setKey(result);
 }
 
 QTNode* QueryParser::matchExpression() {
-	string result = "";
+	result = "";
 	stack<string> operatorStack;
 	stack<QTNode*> operandStack;
 	QTNode* left;
@@ -497,6 +500,8 @@ QTNode* QueryParser::matchExpression() {
 		operandStack.push(current);
 		result += op;
 	}
+
+	//cout << "postfix : " << result << endl;
 
 	return operandStack.top();
 }
@@ -595,4 +600,8 @@ void QueryParser::matchPatternWhile(string s) {
 }
 
 void QueryParser::matchWith() {
+}
+
+string QueryParser::getPostFixExpressionString() {
+	return result;
 }

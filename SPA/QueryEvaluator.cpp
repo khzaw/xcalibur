@@ -2479,9 +2479,6 @@ bool checkSynonymInSuchThat(string selectSynonym, QueryTree* suchThatTree){
 vector<int> solveForSelect(string selectSynonym, map<STRING, STRING>* synonymTable, StatementTable* statementTable, ProcTable* procTable, VarTable* varTable, ConstantTable* constantTable) {
 	vector<int> answer;
 	string sym = synonymTable->at(selectSynonym);
-	if (sym.empty()){
-		return answer;
-	}
 	if(sym == "stmt" || sym == "prog_line") {			     // all the statements
 		answer = statementTable->getAllStmtNum();
 	} else if(sym == "assign") {	// all the assignment statements
@@ -4977,6 +4974,9 @@ list<string> QueryEvaluator::evaluate(map<STRING, STRING>* synonymTable, QueryTr
 	// Need to check if selectSynonym is inside synonymTable
 	// TODO: throws exception
 	// tree->printTree();
+	if (synonymTable->find(selectSynonym) == synonymTable->end()){
+		return outputlist;
+	}
 	vector<int> answer = solve(selectSynonym, synonymTable, tree, pkb);
 	cout << "result :: " << answer.size() << endl;
 	string temp = "";

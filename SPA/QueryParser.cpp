@@ -377,6 +377,7 @@ void QueryParser::matchPatternConditions(){
 
 void QueryParser::matchPatternAssign(string s) {
 	QTNode* assignNode = new QTNode("assign");
+	result = "";
 	assignNode->addChild(new QTNode(s));
 	match("(");
 	assignNode->addChild(matchVarRef());
@@ -407,7 +408,6 @@ void QueryParser::matchPatternAssign(string s) {
 
 	if(nextToken.name.compare("_") == 0) {
 		match(UNDERSCORE);
-		result += "_";
 		assignNode->addChild(new QTNode("_"));
 	}
 	if(nextToken.name.compare("\"") == 0) {
@@ -417,17 +417,15 @@ void QueryParser::matchPatternAssign(string s) {
 	}
 	if(nextToken.name.compare("_") == 0) {
 		match(UNDERSCORE);
-		result += "_";
 		assignNode->addChild(new QTNode("_"));
 	}
 
-	qt->getRootNode()->getChild(2)->addChild(assignNode);
 	match(")");
-	//qt->getRootNode()->getChild(2)->setKey(result);
+	assignNode->setData(result);
+	qt->getRootNode()->getChild(2)->addChild(assignNode);
 }
 
 QTNode* QueryParser::matchExpression() {
-	result = "";
 	stack<string> operatorStack;
 	stack<QTNode*> operandStack;
 	QTNode* left;
@@ -478,6 +476,7 @@ QTNode* QueryParser::matchExpression() {
 						current->addChild(left);
 						current->addChild(right);
 						operandStack.push(current);
+						if(result.length() > 0) result += " ";
 						result += op2;
 					} else {
 						break;
@@ -491,6 +490,7 @@ QTNode* QueryParser::matchExpression() {
 				} else {
 					match(SIMPLE_IDENT);
 				}
+				if(result.length() > 0) result += " ";
 				result += factor;
 				operandStack.push(new QTNode(factor));
 			}
@@ -507,7 +507,7 @@ QTNode* QueryParser::matchExpression() {
 		current->addChild(left);
 		current->addChild(right);
 		operandStack.push(current);
-		result += op;
+		result += " " + op;
 	}
 
 	//cout << "postfix : " << result << endl;

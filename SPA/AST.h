@@ -26,7 +26,7 @@ public:
      void insertRoot(TNode *n);
      TNode* getRootNode();
 	 //pattern matching
-	 bool matchPattern(string,string, int );
+	 static bool matchPattern(string,string, int );
 private:
 vector<TNode * > root;
 };

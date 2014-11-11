@@ -17,6 +17,7 @@ class QTNode {
       // Constructor
 	  QTNode();
 	  QTNode(STRING);
+	  QTNode(STRING, STRING);
 	  QTNode(int);
 	  QTNode(STRING, QTNode*); 
 	  QTNode(int, QTNode*);
@@ -25,15 +26,17 @@ class QTNode {
 	  INDEX getNumChild();
       QTNode* getChild(INDEX);
 	  STRING getKey();
+	  STRING getData();
 	  int getValue();
 	  
 	  // Mutator
 	  VOID addChild(QTNode*);
 	  VOID setParent(QTNode*);
 	  VOID setKey(STRING);
+	  VOID setData(STRING);
    
 	private:
-      STRING key;
+      STRING key, data;
 	  int value;
 	  QTNode* parent;
 	  vector<QTNode*> children;

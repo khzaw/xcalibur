@@ -63,7 +63,7 @@ void QueryEvaluatorTest::testMerge() {
 
 	// TEST 2: {a, b} and {a, b}
 	const char *arr10[] = {"a", "b"};
-	vector<string> a0(arr1, end(arr1));
+	vector<string> a0(arr10, end(arr10));
 	const char *arr20[] = {"a", "b"};
 	vector<string> b0(arr20, end(arr20));
 	static const int arr30[] = {1,2,3,4,5};
@@ -93,9 +93,37 @@ void QueryEvaluatorTest::testMerge() {
 	CPPUNIT_ASSERT(set.second[0] == expSol10);
 	CPPUNIT_ASSERT(set.second[1] == expSol20);
 
-	// TEST 2: {a, b} and {c, d}
+	// TEST 2: {a, b} and {a, b}, no similar values
+	const char *arr101[] = {"a", "b"};
+	vector<string> a01(arr101, end(arr101));
+	const char *arr201[] = {"a", "b"};
+	vector<string> b01(arr201, end(arr201));
+	static const int arr301[] = {1,2,3,4,5};
+	vector<int> a201(arr301, arr301 + sizeof(arr301) / sizeof(arr301[0]));
+	static const int arr401[] = {5,4,3,2,1};
+	vector<int> a301(arr401, arr401 + sizeof(arr401) / sizeof(arr401[0]));
+	static const int arr501[] = {1,1,2,2,4};
+	vector<int> b201(arr501, arr501 + sizeof(arr501) / sizeof(arr501[0]));
+	static const int arr601[] = {1,2,3,0,5};
+	vector<int> b301(arr601, arr601 + sizeof(arr601) / sizeof(arr601[0]));
+	vector<vector<int>> valC1, valD1;
+	valC1.push_back(a201);
+	valC1.push_back(a301);
+	valD1.push_back(b201);
+	valD1.push_back(b301);
+	qe = new QueryEvaluator();
+	set = qe->mergeSolutions(make_pair(a01,valC1), make_pair(b01, valD1));
+	const char *ans01[] = {"a", "b"};
+	vector<string> expSyn01(ans01, end(ans01));
+	CPPUNIT_ASSERT(set.first.size() == 2);
+	CPPUNIT_ASSERT(set.second.size() == 2);
+	CPPUNIT_ASSERT(set.first == expSyn01);
+	CPPUNIT_ASSERT(set.second[0].empty());
+	CPPUNIT_ASSERT(set.second[1].empty());
+
+	// TEST 4: {a, b} and {c, d}
 	const char *arr100[] = {"a", "b"};
-	vector<string> a00(arr1, end(arr1));
+	vector<string> a00(arr100, end(arr100));
 	const char *arr200[] = {"c", "d"};
 	vector<string> b00(arr200, end(arr200));
 	static const int arr300[] = {1,2,3};

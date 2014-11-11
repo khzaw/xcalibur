@@ -2431,7 +2431,7 @@ bool checkSynonymInSuchThat(string selectSynonym, QueryTree* suchThatTree){
 }
 
 /******* Helper Level 3 *******/
-vector<int> solveForSelect(string selectSynonym, map<STRING, STRING>* synonymTable, StatementTable* statementTable) {
+vector<int> solveForSelect(string selectSynonym, map<STRING, STRING>* synonymTable, StatementTable* statementTable, ProcTable* procTable, VarTable* varTable, ConstantTable* constantTable) {
 	vector<int> answer;
 	string sym = synonymTable->at(selectSynonym);
 	if(sym == "stmt" || sym == "prog_line") {			     // all the statements
@@ -2445,6 +2445,7 @@ vector<int> solveForSelect(string selectSynonym, map<STRING, STRING>* synonymTab
 	}
 	return answer;
 }
+
 vector<int> solveForSuchThatModifies(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* suchThatTree, StatementTable* statementTable, Modifies* modifies, ProcTable* procTable, VarTable* varTable){
 	vector<int> answer;
 	if (synonymTable->find(selectSynonym)==synonymTable->end()){ // if selectSynonym is not defined
@@ -4815,6 +4816,7 @@ vector<int> solveForSuchThat(string selectSynonym, map<STRING, STRING>* synonymT
 	// we need to evaluate such that from right to left to find w
 	ProcTable* procTable = &(pkb->procTable);
 	VarTable* varTable = &(pkb->varTable);
+	ConstantTable* constantTable = &(pkb->constantTable);
 	StatementTable* statementTable = &(pkb->statementTable);
 	Modifies* modifies = &(pkb->modifiesTable);
 	Uses* uses = &(pkb->usesTable);
@@ -4835,14 +4837,20 @@ vector<int> solveForSuchThat(string selectSynonym, map<STRING, STRING>* synonymT
 	} else if (suchThatType == "Parent*"){
 		answer = solveForSuchThatParentStar(selectSynonym, synonymTable, suchThatSubtree, statementTable, parent, procTable, varTable);
 	} else {
-		answer = solveForSelect(selectSynonym, synonymTable, statementTable);
+		answer = solveForSelect(selectSynonym, synonymTable, statementTable, procTable, varTable, constantTable);
 	}
 
 	return answer;
 }
 
-vector<int> solveForPattern(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* tree){
+vector<int> solveForPattern(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* tree, PKBController* pkb){
 	vector<int> answer;
+	AST* ast = &(pkb->ast);
+	StatementTable* statementTable = &(pkb->statementTable);
+	string pattern = tree->getRootNode()->getChild(2)->getKey();
+
+	cout << pattern << endl;
+
 	return answer;
 }
 
@@ -4850,7 +4858,7 @@ vector<int> solveForPattern(string selectSynonym, map<STRING, STRING>* synonymTa
 // Method to collect solution from different conditional clauses (such that, with, pattern, etc.) and combine
 vector<int> solve(string selectSynonym, map<STRING, STRING>* synonymTable, QueryTree* tree, PKBController* pkb){
 	vector<int> resultFromSuchThat = solveForSuchThat(selectSynonym, synonymTable, tree, pkb);
-	vector<int> resultFromPattern = solveForPattern(selectSynonym, synonymTable, tree);
+	vector<int> resultFromPattern = solveForPattern(selectSynonym, synonymTable, tree, pkb);
 	set<int> temp;
 	temp.insert(resultFromSuchThat.begin(), resultFromSuchThat.end());
 	temp.insert(resultFromPattern.begin(), resultFromPattern.end());

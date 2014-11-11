@@ -117,44 +117,44 @@ void QueryParserTest::testModifies() {
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getValue() == 1);
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "\"x\"");
 
-	q = "while a; variable b; select a such that Modifies(_,_)";
+	q = "while a; variable b; select a such that Modifies(a,_)";
 	qp = new QueryParser(q);
 	qt = qp->getQueryTree()->getRootNode()->getChild(1);
 	CPPUNIT_ASSERT(qt->getNumChild() == 1);
 	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Modifies");
-	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "a");
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "_");
 
 	// Multiple Modifies
-	q = "while a; variable b; select a such that Modifies(_,_) such that Modifies(a, b)";
+	q = "while a; variable b; select a such that Modifies(b,_) such that Modifies(a, b)";
 	qp = new QueryParser(q);
 	qt = qp->getQueryTree()->getRootNode()->getChild(1);
 	CPPUNIT_ASSERT(qt->getNumChild() == 2);
 	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Modifies");
-	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "b");
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "_");
 	CPPUNIT_ASSERT(qt->getChild(1)->getKey() == "Modifies");
 	CPPUNIT_ASSERT(qt->getChild(1)->getChild(0)->getKey() == "a");
 	CPPUNIT_ASSERT(qt->getChild(1)->getChild(1)->getKey() == "b");
 
-	q = "while a; variable b; select a such that Modifies(_,_) and Modifies(a, b)";
+	q = "while a; variable b; select a such that Modifies(b,_) and Modifies(a, b)";
 	qp = new QueryParser(q);
 	qt = qp->getQueryTree()->getRootNode()->getChild(1);
 	CPPUNIT_ASSERT(qt->getNumChild() == 2);
 	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Modifies");
-	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "b");
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "_");
 	CPPUNIT_ASSERT(qt->getChild(1)->getKey() == "Modifies");
 	CPPUNIT_ASSERT(qt->getChild(1)->getChild(0)->getKey() == "a");
 	CPPUNIT_ASSERT(qt->getChild(1)->getChild(1)->getKey() == "b");
 	
-	q = "while a; variable b; select a such that Modifies(_,a) such that Modifies(a, b) and Modifies(1, _)";
+	q = "while a; variable b; select a such that Modifies(3,a) such that Modifies(a, b) and Modifies(1, _)";
 	qp = new QueryParser(q);
 	//qp->printMap();
 	qt = qp->getQueryTree()->getRootNode()->getChild(1);
 	CPPUNIT_ASSERT_EQUAL(qt->getNumChild(), 3);
 	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Modifies");
-	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getValue() == 3);
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "a");
 	CPPUNIT_ASSERT(qt->getChild(1)->getKey() == "Modifies");
 	CPPUNIT_ASSERT(qt->getChild(1)->getChild(0)->getKey() == "a");
@@ -163,12 +163,12 @@ void QueryParserTest::testModifies() {
 	CPPUNIT_ASSERT(qt->getChild(2)->getChild(0)->getValue() == 1);
 	CPPUNIT_ASSERT(qt->getChild(2)->getChild(1)->getKey() == "_");
 	
-	q = "while a; variable b; select a such that Modifies(_,_) and Modifies(a, b) and Modifies(1, \"abc\")";
+	q = "while a; variable b; select a such that Modifies(d,_) and Modifies(a, b) and Modifies(1, \"abc\")";
 	qp = new QueryParser(q);
 	qt = qp->getQueryTree()->getRootNode()->getChild(1);
 	CPPUNIT_ASSERT_EQUAL(qt->getNumChild(), 3);
 	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Modifies");
-	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "d");
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "_");
 	CPPUNIT_ASSERT(qt->getChild(1)->getKey() == "Modifies");
 	CPPUNIT_ASSERT(qt->getChild(1)->getChild(0)->getKey() == "a");
@@ -199,44 +199,44 @@ void QueryParserTest::testUses() {
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getValue() == 1);
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "\"x\"");
 
-	q = "while a; variable b; select a such that Uses(_,_)";
+	q = "while a; variable b; select a such that Uses(a,_)";
 	qp = new QueryParser(q);
 	qt = qp->getQueryTree()->getRootNode()->getChild(1);
 	CPPUNIT_ASSERT(qt->getNumChild() == 1);
 	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Uses");
-	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "a");
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "_");
 
 	// Multiple Modifies
-	q = "while a; variable b; select a such that Uses(_,_) such that Uses(a, b)";
+	q = "while a; variable b; select a such that Uses(b,_) such that Uses(a, b)";
 	qp = new QueryParser(q);
 	qt = qp->getQueryTree()->getRootNode()->getChild(1);
 	CPPUNIT_ASSERT(qt->getNumChild() == 2);
 	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Uses");
-	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "b");
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "_");
 	CPPUNIT_ASSERT(qt->getChild(1)->getKey() == "Uses");
 	CPPUNIT_ASSERT(qt->getChild(1)->getChild(0)->getKey() == "a");
 	CPPUNIT_ASSERT(qt->getChild(1)->getChild(1)->getKey() == "b");
 
-	q = "while a; variable b; select a such that Uses(_,_) and Uses(a, b)";
+	q = "while a; variable b; select a such that Uses(b,_) and Uses(a, b)";
 	qp = new QueryParser(q);
 	qt = qp->getQueryTree()->getRootNode()->getChild(1);
 	CPPUNIT_ASSERT(qt->getNumChild() == 2);
 	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Uses");
-	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "b");
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "_");
 	CPPUNIT_ASSERT(qt->getChild(1)->getKey() == "Uses");
 	CPPUNIT_ASSERT(qt->getChild(1)->getChild(0)->getKey() == "a");
 	CPPUNIT_ASSERT(qt->getChild(1)->getChild(1)->getKey() == "b");
 	
-	q = "while a; variable b; select a such that Uses(_,a) such that Uses(a, b) and Uses(1, _)";
+	q = "while a; variable b; select a such that Uses(3,a) such that Uses(a, b) and Uses(1, _)";
 	qp = new QueryParser(q);
 	//qp->printMap();
 	qt = qp->getQueryTree()->getRootNode()->getChild(1);
 	CPPUNIT_ASSERT_EQUAL(qt->getNumChild(), 3);
 	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Uses");
-	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getValue() == 3);
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "a");
 	CPPUNIT_ASSERT(qt->getChild(1)->getKey() == "Uses");
 	CPPUNIT_ASSERT(qt->getChild(1)->getChild(0)->getKey() == "a");
@@ -245,12 +245,12 @@ void QueryParserTest::testUses() {
 	CPPUNIT_ASSERT(qt->getChild(2)->getChild(0)->getValue() == 1);
 	CPPUNIT_ASSERT(qt->getChild(2)->getChild(1)->getKey() == "_");
 	
-	q = "while a; variable b; select a such that Uses(_,_) and Uses(a, b) and Uses(1, \"abc\")";
+	q = "while a; variable b; select a such that Uses(3,_) and Uses(a, b) and Uses(1, \"abc\")";
 	qp = new QueryParser(q);
 	qt = qp->getQueryTree()->getRootNode()->getChild(1);
 	CPPUNIT_ASSERT_EQUAL(qt->getNumChild(), 3);
 	CPPUNIT_ASSERT(qt->getChild(0)->getKey() == "Uses");
-	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getKey() == "_");
+	CPPUNIT_ASSERT(qt->getChild(0)->getChild(0)->getValue() == 3);
 	CPPUNIT_ASSERT(qt->getChild(0)->getChild(1)->getKey() == "_");
 	CPPUNIT_ASSERT(qt->getChild(1)->getKey() == "Uses");
 	CPPUNIT_ASSERT(qt->getChild(1)->getChild(0)->getKey() == "a");

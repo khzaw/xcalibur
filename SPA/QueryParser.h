@@ -86,7 +86,7 @@ private:
 	void matchWith();
 	void matchWithConditions();
 	QTNode* matchVarRef();
-	QTNode* matchEntRef();
+	QTNode* matchEntRef(bool);
 	QTNode* matchStmtRef();
 	string getPostFixExpressionString();
 };

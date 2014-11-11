@@ -1,0 +1,50 @@
+1-
+stmt s1,s2; assign a3;while w;
+Select s1 such that Parent(s1,2)
+none
+5000
+2-
+stmt s1,s2; assign a3;while w;
+Select w such that Parent(w,5)
+4
+5000
+3-
+stmt s1,s2; assign a3;while w1,w2;
+Select w1 such that Parent(w1,w2)
+4,5,9,11
+5000
+4-
+stmt s1,s2; assign a3;while w1,w2;
+Select a3 such that Parent(w1,a3)
+6,8,10,13,14,15,17,18,19,20
+5000
+5-
+stmt s1,s2; assign a3;while w1,w2;
+Select s1 such that Parent*(s1,7)
+4,5
+5000
+6-
+stmt s1,s2; assign a3;while w1,w2;
+Select s1 such that Parent*(11,s1)
+12,13,14,15,16,17,18
+5000
+7-
+stmt s1,s2,s3; assign a3;while w1,w2;
+Select s3 such that Parent*(s1,s2)
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
+5000
+8-
+stmt s1,s2; assign a3;while w1,w2;
+Select s1 such that Parent*(s1,s2)
+4,5,7,9,11,12,16
+5000
+9-
+stmt s1,s2; assign a3;while w1,w2;
+Select s2 such that Parent*(16,s2)
+17
+5000
+10-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select s1 such that Parent*(s1,19)
+4,5
+5000

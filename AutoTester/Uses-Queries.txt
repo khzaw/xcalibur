@@ -1,0 +1,55 @@
+1-
+stmt s;
+Select s such that Uses(s, "c")
+4, 5, 9, 11, 16, 17
+5000
+2-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select a3 such that Uses(s1,"c")
+15,17
+5000
+3-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select s1 such that Uses(s1,"x")
+9,10,11,18
+5000
+4-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select s1 such that Uses(s1,"tmp")
+4,5,6,7
+5000
+5-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Uses(12,v)
+Romeo, delta, width
+5000
+6-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Uses(7,v)
+I, k, j1k, chArlie
+5000
+7-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Uses(w1,"tmp")
+I, k, j1k, chArlie
+5000
+8-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Uses(14,v)
+none
+5000
+9-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Uses(12,v)
+right, Romeo, deleta, l, width
+5000
+10-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select w1 such that Uses(w1,"width")
+4, 5, 9, 11, 12
+5000
+11-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select w1 such that Uses(w1,"tmp")
+4,5,7
+5000

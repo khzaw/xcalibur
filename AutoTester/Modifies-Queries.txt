@@ -1,0 +1,50 @@
+1-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Modifies(13,"Romeo")
+i,b,c,a,oSCar,beta,tmp,I,k,j1k,l,chArlie,x,left,right,Romeo,delta,width,w
+5000
+2-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select a3 such that Modifies(a3,"x")
+10,18
+5000
+3-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Modifies(12,v)
+Romeo,b,c
+5000
+4-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Modifies(11,v)
+Romeo,b,c,x
+5000
+5-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Modifies(4,"k")
+none
+5000
+6-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select s2 such that Modifies(s2,"oSCar")
+4,5,6,7,8
+5000
+7-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select a3 such that Modifies(a3,"c")
+15,17
+5000
+8-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Modifies(s1,"x")
+i,b,c,a,oSCar,beta,tmp,I,k,j1k,l,chArlie,x,left,right,Romeo,delta,width,w
+5000
+9-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select w1 such that Modifies(w1,"i")
+none
+5000
+10-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Modifies(9,v)
+x, Romeo, b, c
+5000

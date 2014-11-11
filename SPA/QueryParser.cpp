@@ -211,7 +211,7 @@ void QueryParser::matchModifies() {
 	QTNode* modifiesNode = new QTNode("Modifies");
 
 	match("(");
-	modifiesNode->addChild(matchEntRef());
+	modifiesNode->addChild(matchEntRef(true));
 	match(",");
 	modifiesNode->addChild(matchVarRef());
 	match(")");
@@ -224,7 +224,7 @@ void QueryParser::matchUses() {
 
 	match("(");
 	//cout << "Matched ( successfully, mathching entRef _ ..." << endl;
-	usesNode->addChild(matchEntRef());
+	usesNode->addChild(matchEntRef(true));
 	match(",");
 	usesNode->addChild(matchVarRef());
 	match(")");
@@ -242,9 +242,9 @@ void QueryParser::matchCalls(int transitive) {
 	}
 
 	match("(");
-	callNode->addChild(matchEntRef());
+	callNode->addChild(matchEntRef(false));
 	match(",");
-	callNode->addChild(matchEntRef());
+	callNode->addChild(matchEntRef(false));
 	match(")");
 
 	qt->getRootNode()->getChild(1)->addChild(callNode);
@@ -304,12 +304,16 @@ QTNode* QueryParser::matchVarRef() {
 	return qtpi;	
 }
 
-QTNode* QueryParser::matchEntRef() {
+QTNode* QueryParser::matchEntRef(bool excludeUnderScore) {
 	QTNode* qtpi;
 	//cout << "EntRef: " << nextToken.name << "," << nextToken.name.length() << endl;
 	if (nextToken.name.compare("_") == 0) {
-		qtpi = new QTNode("_");
-		match(UNDERSCORE);
+		if(!excludeUnderScore) {
+			qtpi = new QTNode("_");
+			match(UNDERSCORE);
+		} else {
+			throw (QueryException("VAGUE QUERY ERROR: The first argument of Uses and Modifies cannot be a \"_\""));
+		}
 	} else if (nextToken.token == INT_LIT) {
 		qtpi = new QTNode(stoi(nextToken.name));
 		match(INT_LIT);

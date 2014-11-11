@@ -19,7 +19,7 @@ void TestAST::testMatchPattern() {
 	CPPUNIT_ASSERT_EQUAL(false, AST::matchPattern(nodePattern, queryPattern, 2));
 
 	queryPattern = "a";
-	CPPUNIT_ASSERT_EQUAL(true, AST::matchPattern(nodePattern, queryPattern, 2));
+	CPPUNIT_ASSERT_EQUAL(true, AST::matchPattern(nodePattern, queryPattern, 1));
 
 
 	nodePattern = "OsCar bravo + mother + father + 134 +";
@@ -27,7 +27,7 @@ void TestAST::testMatchPattern() {
 	CPPUNIT_ASSERT_EQUAL(false, AST::matchPattern(nodePattern, queryPattern, 2));
 
 	queryPattern = "bravo";
-	CPPUNIT_ASSERT_EQUAL(true, AST::matchPattern(nodePattern, queryPattern, 2));
+	CPPUNIT_ASSERT_EQUAL(true, AST::matchPattern(nodePattern, queryPattern, 1));
 
 }
 

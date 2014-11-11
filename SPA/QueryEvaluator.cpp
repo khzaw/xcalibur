@@ -32,6 +32,58 @@ QueryEvaluator::QueryEvaluator(){
 QueryEvaluator::QueryEvaluator(PKBController* newPKB){
 	pkb = newPKB;
 };
+
+pair<vector<string>, vector<vector<int>>> QueryEvaluator::mergeSolutions(pair<vector<string>, vector<vector<int>>> first, pair<vector<string>, vector<vector<int>>> second) {
+	vector<pair<int, int>> equalIndex;	
+	vector<int> uniqueIndexInSecond;
+	vector<string> solutionSynonyms(first.first.begin(), first.first.end());
+	// get the pairs of indexes for the same attributes
+	// get the list of all synonyms in the solution
+	for(int i = 0; i < second.first.size(); i++ ) {
+		bool in = false;
+		for(int j = 0; j < first.first.size(); j++) {
+			//cout<<endl  << second.first.at(i) << " " << first.first.at(j) <<endl;
+			if(second.first.at(i).compare(first.first.at(j)) == 0) {
+				equalIndex.push_back(make_pair(j, i));
+				in = true;
+				break;
+			} 
+		}
+		if(in == false) {
+			uniqueIndexInSecond.push_back(i);
+			solutionSynonyms.push_back(second.first.at(i));
+		}
+	}
+	vector<vector<int>> solutionValues(solutionSynonyms.size());
+	for(int i = 0; i < first.second[0].size(); i ++) {
+		for(int j = 0; j < second.second[0].size(); j++) {
+			bool equal = true;
+			// check if similar attributes have equal values
+			for(int k = 0; k < equalIndex.size(); k++) {
+				if (!(first.second[equalIndex.at(k).first].at(i) == second.second[equalIndex.at(k).second].at(j))) {
+					equal = false;
+					break;
+				}
+			}
+
+			if(equal) {					//all similar attributes have equal values
+				for(int a = 0; a < solutionSynonyms.size(); a++) {
+					if(a < first.first.size()) {
+						// push each attribute of first set
+						solutionValues[a].push_back(first.second[a].at(i));
+					} else {
+						// push each attribute of second set with index in uniqueIndexInSecond
+						solutionValues[a].push_back(second.second[uniqueIndexInSecond[a - first.second.size()]].at(j));
+					}
+				}
+			}
+		}
+	}
+
+	return make_pair(solutionSynonyms, solutionValues);
+	
+}
+
 /******* For Testing *******/
 bool QueryEvaluator::checkSynonymInSuchThat(string selectSynonym, QueryTree* suchThatTree){
 	bool isSynonymInSuchThat = false;

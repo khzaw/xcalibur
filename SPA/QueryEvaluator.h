@@ -33,6 +33,7 @@ class QueryEvaluator{
 		list<string> evaluate(map<STRING, STRING>*, QueryTree*);
 
 		//For Testing
+		pair<vector<string>, vector<vector<int>>> mergeSolutions(pair<vector<string>,vector<vector<int>>>, pair<vector<string>, vector<vector<int>>>);
 		bool checkSynonymInSuchThat(string, QueryTree*);
 		vector<int> solveForSelect(string, map<STRING, STRING>*, StatementTable*, ProcTable*, VarTable*);
 		vector<int> solveForSuchThatFollows(string, map<STRING, STRING>*, QueryTree*, StatementTable*, Follows*, ProcTable*, VarTable*, ConstantTable*);

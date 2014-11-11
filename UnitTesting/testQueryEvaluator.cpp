@@ -25,6 +25,113 @@ QueryEvaluatorTest::tearDown()
 
 CPPUNIT_TEST_SUITE_REGISTRATION( QueryEvaluatorTest );
 
+void QueryEvaluatorTest::testMerge() {
+	// TEST 1: {a, b} and {a, c}
+	const char *arr1[] = {"a", "b"};
+	vector<string> a(arr1, end(arr1));
+	const char *arr2[] = {"a", "c"};
+	vector<string> b(arr2, end(arr2));
+	static const int arr3[] = {1,2,3,4,5};
+	vector<int> a2(arr3, arr3 + sizeof(arr3) / sizeof(arr3[0]));
+	static const int arr4[] = {5,4,3,2,1};
+	vector<int> a3(arr4, arr4 + sizeof(arr4) / sizeof(arr4[0]));
+	static const int arr5[] = {1,1,4,4,5};
+	vector<int> b2(arr5, arr5 + sizeof(arr5) / sizeof(arr5[0]));
+	static const int arr6[] = {11,22,33,44,55};
+	vector<int> b3(arr6, arr6 + sizeof(arr6) / sizeof(arr6[0]));
+	vector<vector<int>> valA, valB;
+	valA.push_back(a2);
+	valA.push_back(a3);
+	valB.push_back(b2);
+	valB.push_back(b3);
+	QueryEvaluator* qe = new QueryEvaluator();
+	pair<vector<string>, vector<vector<int>>> set = qe->mergeSolutions(make_pair(a,valA), make_pair(b, valB));
+	const char *ans[] = {"a", "b", "c"};
+	vector<string> expSyn(ans, end(ans));
+	static const int ans2[] = {1,1,4,4,5};
+	vector<int> expSol1(ans2, ans2 + sizeof(ans2) / sizeof(ans2[0]));
+	static const int ans3[] = {5,5,2,2,1};
+	vector<int> expSol2(ans3, ans3 + sizeof(ans3) / sizeof(ans3[0]));
+	static const int ans4[] = {11,22,33,44,55};
+	vector<int> expSol3(ans4, ans4 + sizeof(ans4) / sizeof(ans4[0]));
+	CPPUNIT_ASSERT(set.first.size() == 3);
+	CPPUNIT_ASSERT(set.second.size() == 3);
+	CPPUNIT_ASSERT(set.first == expSyn);
+	CPPUNIT_ASSERT(set.second[0] == expSol1);
+	CPPUNIT_ASSERT(set.second[1] == expSol2);
+	CPPUNIT_ASSERT(set.second[2] == expSol3);
+
+	// TEST 2: {a, b} and {a, b}
+	const char *arr10[] = {"a", "b"};
+	vector<string> a0(arr1, end(arr1));
+	const char *arr20[] = {"a", "b"};
+	vector<string> b0(arr20, end(arr20));
+	static const int arr30[] = {1,2,3,4,5};
+	vector<int> a20(arr30, arr30 + sizeof(arr30) / sizeof(arr30[0]));
+	static const int arr40[] = {5,4,3,2,1};
+	vector<int> a30(arr40, arr40 + sizeof(arr40) / sizeof(arr40[0]));
+	static const int arr50[] = {1,1,2,2,4};
+	vector<int> b20(arr50, arr50 + sizeof(arr50) / sizeof(arr50[0]));
+	static const int arr60[] = {5,0,3,0,2};
+	vector<int> b30(arr60, arr60 + sizeof(arr60) / sizeof(arr60[0]));
+	vector<vector<int>> valC, valD;
+	valC.push_back(a20);
+	valC.push_back(a30);
+	valD.push_back(b20);
+	valD.push_back(b30);
+	qe = new QueryEvaluator();
+	set = qe->mergeSolutions(make_pair(a0,valC), make_pair(b0, valD));
+	const char *ans0[] = {"a", "b"};
+	vector<string> expSyn0(ans0, end(ans0));
+	static const int ans20[] = {1,4};
+	vector<int> expSol10(ans20, ans20 + sizeof(ans20) / sizeof(ans20[0]));
+	static const int ans30[] = {5,2};
+	vector<int> expSol20(ans30, ans30 + sizeof(ans30) / sizeof(ans30[0]));
+	CPPUNIT_ASSERT(set.first.size() == 2);
+	CPPUNIT_ASSERT(set.second.size() == 2);
+	CPPUNIT_ASSERT(set.first == expSyn0);
+	CPPUNIT_ASSERT(set.second[0] == expSol10);
+	CPPUNIT_ASSERT(set.second[1] == expSol20);
+
+	// TEST 2: {a, b} and {c, d}
+	const char *arr100[] = {"a", "b"};
+	vector<string> a00(arr1, end(arr1));
+	const char *arr200[] = {"c", "d"};
+	vector<string> b00(arr200, end(arr200));
+	static const int arr300[] = {1,2,3};
+	vector<int> a200(arr300, arr300 + sizeof(arr300) / sizeof(arr300[0]));
+	static const int arr400[] = {5,4,3};
+	vector<int> a300(arr400, arr400 + sizeof(arr400) / sizeof(arr400[0]));
+	static const int arr500[] = {1,1,4};
+	vector<int> b200(arr500, arr500 + sizeof(arr500) / sizeof(arr500[0]));
+	static const int arr600[] = {5,0,2};
+	vector<int> b300(arr600, arr600 + sizeof(arr600) / sizeof(arr600[0]));
+	vector<vector<int>> valC0, valD0;
+	valC0.push_back(a200);
+	valC0.push_back(a300);
+	valD0.push_back(b200);
+	valD0.push_back(b300);
+	qe = new QueryEvaluator();
+	set = qe->mergeSolutions(make_pair(a00,valC0), make_pair(b00, valD0));
+	const char *ans00[] = {"a", "b", "c", "d"};
+	vector<string> expSyn00(ans00, end(ans00));
+	static const int ans200[] = {1,1,1,2,2,2,3,3,3};
+	vector<int> expSol100(ans200, ans200 + sizeof(ans200) / sizeof(ans200[0]));
+	static const int ans300[] = {5,5,5,4,4,4,3,3,3};
+	vector<int> expSol200(ans300, ans300 + sizeof(ans300) / sizeof(ans300[0]));
+	static const int ans400[] = {1,1,4,1,1,4,1,1,4};
+	vector<int> expSol300(ans400, ans400 + sizeof(ans400) / sizeof(ans400[0]));
+	static const int ans500[] = {5,0,2,5,0,2,5,0,2};
+	vector<int> expSol400(ans500, ans500 + sizeof(ans500) / sizeof(ans500[0]));
+	CPPUNIT_ASSERT(set.first.size() == 4);
+	CPPUNIT_ASSERT(set.second.size() == 4);
+	CPPUNIT_ASSERT(set.first == expSyn00);
+	CPPUNIT_ASSERT(set.second[0] == expSol100);
+	CPPUNIT_ASSERT(set.second[1] == expSol200);
+	CPPUNIT_ASSERT(set.second[2] == expSol300);
+	CPPUNIT_ASSERT(set.second[3] == expSol400);
+}
+
 void QueryEvaluatorTest::testBasicSelect() {
 	StatementTable st;
 	TNode stmt1("ASSIGN_NODE","a = x", 1,0);

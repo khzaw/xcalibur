@@ -8,70 +8,70 @@
 <id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="">1</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select v such that Modifies(13,"Romeo")]]></querystr>
 <stuans>i,b,c,a,beta,oSCar,tmp,I,k,j1k,chArlie,x,left,right,Romeo,delta,l,width,w</stuans>
 <correct>i,b,c,a,oSCar,beta,tmp,I,k,j1k,l,chArlie,x,left,right,Romeo,delta,width,w</correct>
-<time_taken>36.000000</time_taken>
+<time_taken>26.000000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="">2</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select a3 such that Modifies(a3,"x")]]></querystr>
 <stuans>10,18</stuans>
 <correct>10,18</correct>
-<time_taken>22.000000</time_taken>
+<time_taken>18.000000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="">3</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select v such that Modifies(12,v)]]></querystr>
-<stuans>b,c,Romeo</stuans>
+<stuans>Romeo,b,c</stuans>
 <correct>Romeo,b,c</correct>
-<time_taken>25.000000</time_taken>
+<time_taken>14.000000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="">4</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select v such that Modifies(11,v)]]></querystr>
-<stuans>b,c,x,Romeo</stuans>
+<stuans>Romeo,b,c,x</stuans>
 <correct>Romeo,b,c,x</correct>
-<time_taken>26.000000</time_taken>
+<time_taken>15.000000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="">5</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select v such that Modifies(4,"k")]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>57.000000</time_taken>
+<time_taken>14.000000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="">6</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select s2 such that Modifies(s2,"oSCar")]]></querystr>
-<stuans>4,5,6,7,8</stuans>
+<stuans>6,5,4,8,7</stuans>
 <correct>4,5,6,7,8</correct>
-<time_taken>24.000000</time_taken>
+<time_taken>14.000000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="">7</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select a3 such that Modifies(a3,"c")]]></querystr>
 <stuans>3,15,17</stuans>
 <correct>3,15,17</correct>
-<time_taken>25.000000</time_taken>
+<time_taken>14.000000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="">8</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select v such that Modifies(s1,"x")]]></querystr>
 <stuans>i,b,c,a,beta,oSCar,tmp,I,k,j1k,chArlie,x,left,right,Romeo,delta,l,width,w</stuans>
 <correct>i,b,c,a,oSCar,beta,tmp,I,k,j1k,l,chArlie,x,left,right,Romeo,delta,width,w</correct>
-<time_taken>30.000000</time_taken>
+<time_taken>20.000000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="">9</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select w1 such that Modifies(w1,"i")]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>25.000000</time_taken>
+<time_taken>13.000000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="">10</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select v such that Modifies(9,v)]]></querystr>
-<stuans>b,c,x,Romeo</stuans>
+<stuans>x,Romeo,b,c</stuans>
 <correct>x,Romeo,b,c</correct>
-<time_taken>24.000000</time_taken>
+<time_taken>12.000000</time_taken>
 <passed/>
 </query>
 </queries>

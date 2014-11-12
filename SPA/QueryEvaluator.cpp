@@ -6,6 +6,10 @@
 #include "PKB.h"
 #include "PKBController.h"
 
+#include <set>
+#include <iostream>
+#include <algorithm>
+
 //For Testing
 #include "StatementTable.h"
 #include "Follows.h"
@@ -15,10 +19,7 @@
 #include "ProcTable.h"
 #include "VarTable.h"
 #include "ConstantTable.h"
-
 #include "QueryEvaluator.h"
-#include <set>
-#include <iostream>
 
 using namespace std;
 
@@ -1286,31 +1287,110 @@ vector<int> QueryEvaluator::solve(string selectSynonym, map<STRING, STRING>* syn
 	if (tree->getRootNode()->getChild(1)->getNumChild()==0&&tree->getRootNode()->getChild(2)->getNumChild()==0){
 		answer = solveForSelect(selectSynonym, synonymTable, &(pkb->statementTable), &(pkb->procTable), &(pkb->varTable), &(pkb->constantTable));
 		return answer;
-	} else {
-		QueryTree* suchThatSubtree = tree->getSubtreeFromNode(tree->getRootNode()->getChild(1)->getChild(0));
-		
+	} else {		
 		vector<vector<int>> resultFromSuchThat;
+		vector<string> namesSuchThat;
+		vector<vector<int>> forMergeSuchThat;
 		if(tree->getRootNode()->getChild(1)->getNumChild() > 0) {
+			QueryTree* suchThatSubtree = tree->getSubtreeFromNode(tree->getRootNode()->getChild(1)->getChild(0));
 			resultFromSuchThat = solveForSuchThat(synonymTable, suchThatSubtree);
-		}		
+			if (resultFromSuchThat[0].size()==0){
+				return answer;
+			}
+			string leftSynonym = suchThatSubtree->getRootNode()->getChild(0)->getKey();
+			string rightSynonym = suchThatSubtree->getRootNode()->getChild(1)->getKey();
+			if (leftSynonym == "_"){
+				if (synonymTable->find(leftSynonym)!=synonymTable->end()){
+					if (synonymTable->at(leftSynonym)=="stmt"){
+						namesSuchThat.push_back(to_string((long long)&leftSynonym));
+						synonymTable->insert(make_pair(to_string((long long)&leftSynonym), "stmt"));
+						forMergeSuchThat.push_back(resultFromSuchThat[0]);
+					}
+				}
+			} else if (synonymTable->find(leftSynonym)!=synonymTable->end()){
+				namesSuchThat.push_back(leftSynonym);
+				forMergeSuchThat.push_back(resultFromSuchThat[0]);
+			} else {
+				namesSuchThat.push_back(to_string((long long)&leftSynonym));
+				forMergeSuchThat.push_back(resultFromSuchThat[0]);
+			}
+
+			if (rightSynonym == "_"){
+				if (synonymTable->find(rightSynonym)!=synonymTable->end()){
+					if (synonymTable->at(rightSynonym)=="variable"){
+						namesSuchThat.push_back(to_string((long long)&rightSynonym));
+						synonymTable->insert(make_pair(to_string((long long)&leftSynonym), "variable"));
+						forMergeSuchThat.push_back(resultFromSuchThat[1]);
+					} else {
+						namesSuchThat.push_back(to_string((long long)&leftSynonym));
+						synonymTable->insert(make_pair(to_string((long long)&leftSynonym), "stmt"));
+						forMergeSuchThat.push_back(resultFromSuchThat[1]);
+					}
+				}
+			} else if (synonymTable->find(rightSynonym)!=synonymTable->end()){
+				namesSuchThat.push_back(rightSynonym);
+				forMergeSuchThat.push_back(resultFromSuchThat[1]);
+			} else {
+				namesSuchThat.push_back(to_string((long long)&leftSynonym));
+				forMergeSuchThat.push_back(resultFromSuchThat[1]);
+			}
+		}
+
 		vector<int> resultFromPattern;
+		vector<string> namesPattern;
+		vector<vector<int>> forMergePattern;
 		if(tree->getRootNode()->getChild(2)->getNumChild() > 0) {
 			resultFromPattern = solveForPattern(selectSynonym, synonymTable, tree);
+			if (resultFromPattern.size()==0){
+				return answer;
+			}
+			string patternAssignName = tree->getRootNode()->getChild(2)->getChild(0)->getChild(0)->getKey();
+			namesPattern.push_back(patternAssignName);
+			forMergePattern.push_back(resultFromPattern);
+
+			vector<int> patternModifiedVars;
+			for (int i=0; i<resultFromPattern.size(); i++){
+				vector<int> temp = pkb->modifiesTable.getModifiedVarStmt(resultFromPattern[i]);
+				for (int j=0; j<temp.size(); j++){
+					patternModifiedVars.push_back(temp[j]);
+				}
+			}
+
+			string patternModifiedVarsName = tree->getRootNode()->getChild(2)->getChild(0)->getChild(1)->getKey();
+			if (patternModifiedVarsName == "_"){
+				namesPattern.push_back("_varP");
+				synonymTable->insert(make_pair("_varP", "variable"));
+				forMergePattern.push_back(patternModifiedVars);
+			} else if (synonymTable->find(patternModifiedVarsName)!=synonymTable->end()){
+				namesPattern.push_back(patternModifiedVarsName);
+				forMergePattern.push_back(patternModifiedVars);
+			}
+		}		
+
+		vector<string> mergeOutputNames;
+		vector<vector<int>> mergeOutputValues;
+		pair<vector<string>, vector<vector<int>>> resultAfterMerge;
+
+		if(forMergeSuchThat.size()>0&&forMergePattern.size()>0){
+			resultAfterMerge = mergeSolutions(make_pair(namesSuchThat, forMergeSuchThat), make_pair(namesPattern, forMergePattern));
+		} else if (forMergeSuchThat.size()>0){
+			resultAfterMerge = make_pair(namesSuchThat, forMergeSuchThat);
+		} else if (forMergePattern.size()>0){
+			resultAfterMerge = make_pair(namesPattern, forMergePattern);
+		} else {
+			return answer;
 		}
-		
-		string leftSynonym = suchThatSubtree->getRootNode()->getChild(0)->getKey();
-		string rightSynonym = suchThatSubtree->getRootNode()->getChild(1)->getKey();
-		if (selectSynonym == leftSynonym){
-			for (int i=0; i<resultFromSuchThat[0].size(); i++){
-				answer.push_back(resultFromSuchThat[0][i]);
+		mergeOutputNames = resultAfterMerge.first;
+		mergeOutputValues = resultAfterMerge.second;
+
+		if (find(mergeOutputNames.begin(), mergeOutputNames.end(), selectSynonym) != mergeOutputNames.end()){
+			for (int i=0; i<mergeOutputNames.size(); i++){
+				if (mergeOutputNames[i]==selectSynonym){
+					answer = mergeOutputValues[i];
+				}
 			}
 			return answer;
-		} else if (selectSynonym==rightSynonym){
-			for (int i=0; i<resultFromSuchThat[1].size(); i++){
-				answer.push_back(resultFromSuchThat[1][i]);
-			}
-			return answer;
-		} else if (resultFromSuchThat[0].size()>0){
+		} else if (mergeOutputValues.size()>0&&mergeOutputValues[0].size()>0){
 			if (synonymTable->at(selectSynonym)=="stmt"||synonymTable->at(selectSynonym)=="prog_line"){
 				for (int i=1; i<=pkb->statementTable.getSize(); i++){
 					answer.push_back(i);

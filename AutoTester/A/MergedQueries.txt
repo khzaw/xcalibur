@@ -1,0 +1,60 @@
+1-
+stmt s;
+Select s such that Follows(s,2) pattern a(_,_) 
+1
+5000
+2-
+stmt s; assign a;
+Select s such that Follows*(s,15) pattern a("Romeo", _)
+13, 14
+5000
+3-
+while w;stmt s; assign a;
+Select w such that Follows*(s,2) pattern a("x",_"x"_)
+11,12,16,4,5,7,9
+5000
+4-
+assign a;stmt s;
+Select a such that Follows*(s,3) pattern a("c",_)
+3,15,17
+5000
+5-
+variable v;stmt s; assign a;
+Select v such that Follows(1,2) pattern a("w", _"1"_)
+i,b,c,a,oSCar,beta,tmp,I,k,j1k,l,chArlie,x,left,right,Romeo,delta,width,w
+5000
+6-
+while w;stmt s; assign a;
+Select w such that Follows*(s,2) pattern a("x",_"xysaui"_)
+none
+5000
+7-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Modifies(13,"Romeo") pattern a3(v, _)
+i,b,c,a,oSCar,x,Romeo,w
+5000
+8-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select a3 such that Modifies(a3,"x") pattern a3("c", _"x+1"_)
+none
+5000
+9-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Modifies(12,v) pattern a3(v, _"Romeo"_)
+Romeo, c
+5000
+10-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Modifies(11,v) pattern a3(v, _)
+Romeo,b,c,x
+5000
+11-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Modifies(4,"c") pattern a3("c", _"b"_)
+none
+5000
+12-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select a3 such that Modifies(a3,"oSCar") pattern a3("oSCar", _"beta"_)
+6
+5000

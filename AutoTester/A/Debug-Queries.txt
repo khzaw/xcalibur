@@ -1,0 +1,10 @@
+11- synonym v
+variable v;stmt s1,s2; assign a;while w1,w2;
+Select a such that Modifies(12, v) pattern a(v,_"Romeo"_)
+13,15
+5000
+12- synonym v
+variable v;stmt s1,s2; assign a;while w1,w2;
+Select v pattern a(v,_"Romeo"_) such that Modifies(12, v)
+Romeo, c
+5000

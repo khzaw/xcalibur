@@ -1279,7 +1279,8 @@ vector<int> QueryEvaluator::solveForPattern(string selectSynonym, map<STRING, ST
 
 				if(synonymTable->at(leftHandSide) != "variable") return answer;
 				else {
-					answer = statementTable->getStmtNumUsingNodeType(TNODE_NAMES[ASSIGN_NODE]);
+					// (v, _"Romeo"_)
+					answer = statementTable->getAssignmentNodesNum("_", queryPattern);
 				}
 
 			} else {

@@ -1,0 +1,119 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>AutoTester</name><parsing_time_taken>13.000000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnTuple="1" Follows="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="">1</id><querystr><![CDATA[stmt s; Select s such that Follows(s,2) pattern a(_,_) ]]></querystr>
+<stuans>1</stuans>
+<correct>1</correct>
+<time_taken>51.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="">2</id><querystr><![CDATA[stmt s; assign a; Select s such that Follows*(s,15) pattern a("Romeo", _)]]></querystr>
+<stuans>14,13</stuans>
+<correct>13,14</correct>
+<time_taken>79.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="">3</id><querystr><![CDATA[while w;stmt s; assign a; Select w such that Follows*(s,2) pattern a("x",_"x"_)]]></querystr>
+<stuans>4,5,7,9,11,12,16</stuans>
+<correct>11,12,16,4,5,7,9</correct>
+<time_taken>97.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="">4</id><querystr><![CDATA[assign a;stmt s; Select a such that Follows*(s,3) pattern a("c",_)]]></querystr>
+<stuans>3,15,17,3,15,17</stuans>
+<correct>3,15,17</correct>
+<time_taken>92.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="">5</id><querystr><![CDATA[variable v;stmt s; assign a; Select v such that Follows(1,2) pattern a("w", _"1"_)]]></querystr>
+<stuans>i,b,c,a,beta,oSCar,tmp,I,k,j1k,chArlie,x,left,right,Romeo,delta,l,width,w</stuans>
+<correct>i,b,c,a,oSCar,beta,tmp,I,k,j1k,l,chArlie,x,left,right,Romeo,delta,width,w</correct>
+<time_taken>156.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="">6</id><querystr><![CDATA[while w;stmt s; assign a; Select w such that Follows*(s,2) pattern a("x",_"xysaui"_)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>92.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="">7</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select v such that Modifies(13,"Romeo") pattern a3(v, _)]]></querystr>
+<stuans></stuans>
+<correct>i,b,c,a,oSCar,x,Romeo,w</correct>
+<time_taken>78.000000</time_taken>
+<failed>
+<missing>Romeo,a,b,c,i,oSCar,w,x</missing>
+<additional></additional>
+<summary>
+<expected>8</expected>
+<matched>0</matched>
+<missing>8</missing>
+<additional>0</additional>
+</summary>
+</failed>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="">8</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select a3 such that Modifies(a3,"x") pattern a3("c", _"x+1"_)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>91.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="">9</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select v such that Modifies(12,v) pattern a3(v, _"Romeo"_)]]></querystr>
+<stuans>Romeo,b,b,c,c,c</stuans>
+<correct>Romeo,c</correct>
+<time_taken>82.000000</time_taken>
+<failed>
+<missing></missing>
+<additional>b</additional>
+<summary>
+<expected>2</expected>
+<matched>2</matched>
+<missing>0</missing>
+<additional>1</additional>
+</summary>
+</failed>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="">10</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select v such that Modifies(11,v) pattern a3(v, _)]]></querystr>
+<stuans></stuans>
+<correct>Romeo,b,c,x</correct>
+<time_taken>52.000000</time_taken>
+<failed>
+<missing>Romeo,b,c,x</missing>
+<additional></additional>
+<summary>
+<expected>4</expected>
+<matched>0</matched>
+<missing>4</missing>
+<additional>0</additional>
+</summary>
+</failed>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="">11</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select v such that Modifies(4,"c") pattern a3("c", _"b"_)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>30.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="">12</id><querystr><![CDATA[variable v;stmt s1,s2; assign a3;while w1,w2; Select a3 such that Modifies(a3,"oSCar") pattern a3("oSCar", _"beta"_)]]></querystr>
+<stuans>6</stuans>
+<correct>6</correct>
+<time_taken>25.000000</time_taken>
+<passed/>
+</query>
+</queries>
+</test_results>

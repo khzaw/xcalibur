@@ -58,3 +58,38 @@ variable v;stmt s1,s2; assign a3;while w1,w2;
 Select a3 such that Modifies(a3,"oSCar") pattern a3("oSCar", _"beta"_)
 6
 5000
+13-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Modifies(a3,"x") pattern a3("xa", _) 
+i,b,c,a,oSCar,beta,tmp,I,k,j1k,l,chArlie,x,left,right,Romeo,delta,width,none
+5000
+14-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select w1 such that Modifies(w1,"b") pattern a3(_, _"0"_)
+14, 5, 7, 9, 11, 12
+5000
+15-
+variable v;stmt s1,s2; assign a3;while w1,w2;
+Select v such that Modifies(9,v) pattern a3(v, _)
+x, Romeo, b, c
+5000
+16-
+assign a; variable v;
+Select a such that Modifies(a, _) pattern a(_, _"1"_)
+1,6,10,13,17,18,20
+5000
+17-
+assign a,a2; variable v;
+Select v such that Modifies(a, _) pattern a(v, _)
+i,b,c,oSCar,x,Romeo,a,w
+5000
+18-
+assign a; while w;
+Select w2 such that Modifies(a, _) pattern a("w", _)
+none
+5000
+19-
+assign a; while w;
+Select v such that Modifies(w, v) pattern a(v, _)
+osCar, x, Romeo, b, c, x, a, w
+5000

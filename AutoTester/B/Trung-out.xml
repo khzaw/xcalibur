@@ -1,0 +1,15 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>AutoTester</name><parsing_time_taken>0.000000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="">7</id><querystr><![CDATA[variable v; stmt s1, s2; assign a3; while w1, w2; Select v pattern a3(v, _)]]></querystr>
+<stuans>x,x,x,y,x,y,x,x,y,w,finally,m</stuans>
+<correct>x,y,w,finally,m</correct>
+<time_taken>15.000000</time_taken>
+<passed/>
+</query>
+</queries>
+</test_results>

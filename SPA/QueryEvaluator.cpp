@@ -1259,6 +1259,17 @@ vector<int> QueryEvaluator::solveForPattern(string selectSynonym, map<STRING, ST
 			answer = statementTable->getAssignmentNodesNum(leftHandSide, queryPattern);
 		} else if(leftHandSide != "_" && queryPattern.empty()) {
 			// ("oSCar", _)
+			if(leftHandSide.substr(0, 1) != "\"") {
+				if(synonymTable->find(leftHandSide) == synonymTable->end()) {
+					return answer;
+				}
+
+				if(synonymTable->at(leftHandSide) != "variable") return answer;
+				else { // (v, _) case
+					answer = statementTable->getStmtNumUsingNodeType(TNODE_NAMES[ASSIGN_NODE]);
+					return answer;
+				}
+			}
 			answer = statementTable->getAssignmentNodesNum(leftHandSide, queryPattern);
 		} else if(leftHandSide != "_" && !queryPattern.empty()) {
 			if(leftHandSide.substr(0, 1) != "\"") {
@@ -1266,7 +1277,7 @@ vector<int> QueryEvaluator::solveForPattern(string selectSynonym, map<STRING, ST
 					return answer;
 				}
 
-				if(leftHandSide != "v") return answer;
+				if(synonymTable->at(leftHandSide) != "variable") return answer;
 				else {
 					answer = statementTable->getStmtNumUsingNodeType(TNODE_NAMES[ASSIGN_NODE]);
 				}

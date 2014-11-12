@@ -1,16 +1,19 @@
 procedure TRUNG{
-	x = 2;
-	x = x + y + xy + yx;
-	while i {
-		x = y    + x;
-		y    = x + y;
-	    	x = x + x;
-		 y = y + y;
-		while y {
-			x = 1 + xy + 2;		}
-		while z {
-			x = w + u + t;
-			while m {
-				y = n + o + p + r + o + b;			}
-			w = i + 3;
-			finally = enD777;		}	}}
+	x = 2; 														// 1
+	x = x + y + xy + yx;										// 2
+	while i {													// 3
+		x = y    + x;											// 4
+		y    = x + y;											// 5
+	    	x = x + x;											// 6
+		 y = y + y;												// 7
+		while y {												// 8
+			x = 1 + xy + 2;		}								// 9
+		while z {												// 10
+			x = w + u + t;										// 11
+			while m {											// 12
+				y = n + o + p + r + o + b;			}			// 13
+			w = i + 3;											// 14
+			finally = enD777;		}	}						// 15
+			while t{											// 16
+				m = 3;											// 17
+			}}													

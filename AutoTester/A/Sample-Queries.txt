@@ -28,8 +28,13 @@ assign c;
 Select c
 1,2,10,13,14,15,17,18,19,20,3,6,8
 5000
-7-
+7- undeclared stuffs
 
 Select c
 none
+5000
+8 - when the later declaration uses the same variable
+assign c; while c;
+Select c
+11,12,16,4,5,7,9
 5000

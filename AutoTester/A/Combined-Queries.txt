@@ -7,5 +7,56 @@ Select a such that Uses(a,_) pattern a("oSCar", _)
 variable v; stmt s; assign a; while w;
 Select s such that Uses(s,"beta") pattern a(_,_)
 4,5,6
-5000 
+5000
+3 - when someone is using the already declared variable
+variable v; stmt v; assign v;
+Select v such that Uses(v, "width") pattern a(_,_)
+15
+5000
+4 - more crazy stuffs
+constant c; variable v; stmt s, s1; assign a,a1;
+Select a such that Parent*(v, s) pattern a1("oSCar", _)
+
+5000
+5 - more crazy stuffs
+constant c; variable v; stmt s, s1; assign a, a1;
+Select a such that Parent*(s, s1) pattern a1("oSCar", _)
+1,10,13,14,15,17,18,19,2,20,3,6,8
+5000
+6 -
+constant c; variable v; stmt s, s1; assign a, a1; while w, w1;
+Select s such that Parent*(w, w1) pattern a1(_, _"1"_)
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
+5000
+7 - should return all the while statements if any while and statement is in the same stmtlst
+constant c; variable v; stmt s, s1; assign a, a1; while w, w1;
+Select w such that Follows*(w, s) pattern a1("x", _"1"_)
+5,7,9,12,16
+5000
+8 -
+constant c; variable v; stmt s, s1; assign a, a1; while w, w1;
+Select w such that Follows*(w, s) pattern a1("c", _"a"_);
+5,7,9,12,16
+5000
+9 -
+constant c; variable v; stmt s, s1; assign a, a1; while w, w1;
+Select a such that Follows*(w, s) pattern a1("x", _"1"_)
+1,10,13,14,15,17,18,19,2,20,3,6,8
+5000
+10 -
+constant c; variable v; stmt s, s1; assign a, a1; while w, w1;
+Select a such that Follows*(w, s) pattern a1("c", _"a"_);
+1,10,13,14,15,17,18,19,2,20,3,6,8
+5000
+11 -
+constant c; variable v; stmt s, s1; assign a, a1; while w, w1;
+Select a2 such that Follows*(w, s) pattern a1("x", _"1"_)
+
+5000
+12 -
+constant c; variable v; stmt s, s1; assign a, a1; while w, w1;
+Select a1 such that Follows*(w, s) pattern a1("c", _"a"_);
+3
+5000
+
 

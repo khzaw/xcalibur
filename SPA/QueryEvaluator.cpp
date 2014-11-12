@@ -220,7 +220,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatModifies(map<STRING, STRING>
 							}
 						}
 					}
-				} else if (synonymTable->at(rightSynonym)=="while"){
+				} else if (synonymTable->at(leftSynonym)=="while"){
 					for (size_t i=0; i<vars.size(); i++){
 						vector<int> temp = modifies->getModifiersStmt(vars[i]);
 						for (size_t j=0; j<temp.size(); j++){
@@ -230,7 +230,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatModifies(map<STRING, STRING>
 							}
 						}
 					}
-				} else if (synonymTable->at(rightSynonym)=="if"){
+				} else if (synonymTable->at(leftSynonym)=="if"){
 					// not implemented
 				} else {
 					// not valid
@@ -347,7 +347,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatUses(map<STRING, STRING>* sy
 							}
 						}
 					}
-				} else if (synonymTable->at(rightSynonym)=="while"){
+				} else if (synonymTable->at(leftSynonym)=="while"){
 					for (size_t i=0; i<vars.size(); i++){
 						vector<int> temp = uses->getUsersStmt(vars[i]);
 						for (size_t j=0; j<temp.size(); j++){
@@ -357,7 +357,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatUses(map<STRING, STRING>* sy
 							}
 						}
 					}
-				} else if (synonymTable->at(rightSynonym)=="if"){
+				} else if (synonymTable->at(leftSynonym)=="if"){
 					// not implemented
 				} else {
 					// not valid

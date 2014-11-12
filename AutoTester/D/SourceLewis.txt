@@ -16,7 +16,7 @@ procedure testset {
 			}
 		} while b {							//13
  			while  e{						//14
- 				a = c + b + e; 					//15
+ 				a = c + b + e; 				//15
  				a = a + b + Abzba + d;}		//16
  		}	
 	}
@@ -58,44 +58,43 @@ procedure testset {
 		}
 	}
 
-	a = 100 + 	 							//42
-	c;										//43
-	hoboken = 2 + b + 3;					//44
+	a = 100 + c;		 					//42									
+	hoboken = 2 + b + 3;					//43
 
-	while mo101om 							//45
+	while mo101om 							//44
 	{
-	while a {								//46
-		while b {							//47
-			while d {						//48
-				while f {					//49
-					c = d	+ a;	 		//50
-					a = 3 +   a;			//51
-					b = 3 + a + d;			//52
+	while a {								//45
+		while b {							//46
+			while d {						//47
+				while f {					//48
+					c = d	+ a;	 		//49
+					a = 3 +   a;			//50
+					b = 3 + a + d;			//51
 				}
 			}
-			c = hoboken + f0 + 1231;		//53
+			c = hoboken + f0 + 1231;		//52
 		}
-		while c {							//54
-			while e {						//55
-				while g {					//56
-					a = c + b + e; 			//57
-	 				a = a + b + Abzba + d;	//58
+		while c {							//53
+			while e {						//54
+				while g {					//55
+					a = c + b + e; 			//56
+	 				a = a + b + Abzba + d;	//57
 				}
 			}
 		}
 
-		c = hoboken + hObOkEn + f0 + 1231;	//59
-		c = 10 + d;							//60
-		c = c;								//61							
-		while c {							//62
-			while c {						//63
-				while hoboken {				//64
-					mo202om = boom + boom; 	//65
-					o1m0m1o = mo101om + 10;	//66
+		c = hoboken + hObOkEn + f0 + 1231;	//58
+		c = 10 + d;							//59
+		c = c;								//60							
+		while c {							//61
+			while c {						//62
+				while hoboken {				//63
+					mo202om = boom + boom; 	//64
+					o1m0m1o = mo101om + 10;	//65
 				}
 			}
-			while x {						//67
-				x = 1+a+2+b+3+d+4;			//68
+			while x {						//66
+				x = 1+a+2+b+3+d+4;			//67
 			}
 		}
 	}

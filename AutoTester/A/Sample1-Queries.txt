@@ -1,5 +1,0 @@
-1-
-variable v;stmt s1,s2; assign a3;while w1,w2;
-Select w1 such that Uses(w1,_)
-4, 5, 7, 9, 11, 12, 16
-5000

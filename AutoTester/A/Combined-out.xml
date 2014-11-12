@@ -1,0 +1,22 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>AutoTester</name><parsing_time_taken>12.000000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Uses="1" Pattern="1" SuchThat="1" CondNum="6" RelNum="1" comment="All assignments with oscar on the left hand side">1</id><querystr><![CDATA[variable v;stmt s1,s2; assign a;while w1,w2; Select a such that Uses(a,_) pattern a("oSCar", _) ]]></querystr>
+<stuans>6,6,8,8,8,8</stuans>
+<correct>6,8</correct>
+<time_taken>23.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Uses="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="">2</id><querystr><![CDATA[variable v; stmt s; assign a; while w; Select s such that Uses(s,"beta") pattern a(_,_)]]></querystr>
+<stuans>5,5,5,5,5,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,6,6,6,6,6,6,6,6,6,6</stuans>
+<correct>4,5,6</correct>
+<time_taken>36.000000</time_taken>
+<passed/>
+</query>
+</queries>
+</test_results>

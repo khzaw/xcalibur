@@ -40,9 +40,9 @@ pair<vector<string>, vector<vector<int>>> QueryEvaluator::mergeSolutions(pair<ve
 	vector<string> solutionSynonyms(first.first.begin(), first.first.end());
 	// get the pairs of indexes for the same attributes
 	// get the list of all synonyms in the solution
-	for(int i = 0; i < second.first.size(); i++ ) {
+	for(size_t i = 0; i < second.first.size(); i++ ) {
 		bool in = false;
-		for(int j = 0; j < first.first.size(); j++) {
+		for(size_t j = 0; j < first.first.size(); j++) {
 			//cout<<endl  << second.first.at(i) << " " << first.first.at(j) <<endl;
 			if(second.first.at(i).compare(first.first.at(j)) == 0) {
 				equalIndex.push_back(make_pair(j, i));
@@ -56,11 +56,11 @@ pair<vector<string>, vector<vector<int>>> QueryEvaluator::mergeSolutions(pair<ve
 		}
 	}
 	vector<vector<int>> solutionValues(solutionSynonyms.size());
-	for(int i = 0; i < first.second[0].size(); i ++) {
-		for(int j = 0; j < second.second[0].size(); j++) {
+	for(size_t i = 0; i < first.second[0].size(); i ++) {
+		for(size_t j = 0; j < second.second[0].size(); j++) {
 			bool equal = true;
 			// check if similar attributes have equal values
-			for(int k = 0; k < equalIndex.size(); k++) {
+			for(size_t k = 0; k < equalIndex.size(); k++) {
 				if (!(first.second[equalIndex.at(k).first].at(i) == second.second[equalIndex.at(k).second].at(j))) {
 					equal = false;
 					break;
@@ -68,7 +68,7 @@ pair<vector<string>, vector<vector<int>>> QueryEvaluator::mergeSolutions(pair<ve
 			}
 
 			if(equal) {					//all similar attributes have equal values
-				for(int a = 0; a < solutionSynonyms.size(); a++) {
+				for(size_t a = 0; a < solutionSynonyms.size(); a++) {
 					if(a < first.first.size()) {
 						// push each attribute of first set
 						solutionValues[a].push_back(first.second[a].at(i));
@@ -457,7 +457,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollows(map<STRING, STRING>*
 		}  else {
 			if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						vector<int> temp = follows->getFollowers(i);
 						for (size_t j=0; j<temp.size(); j++){
 							answer[0].push_back(i);
@@ -465,7 +465,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollows(map<STRING, STRING>*
 						}
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						vector<int> temp = follows->getFollowers(i);
 						for (size_t j=0; j<temp.size(); j++){
 							if (statementTable->getTNode(temp[j])->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
@@ -491,7 +491,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollows(map<STRING, STRING>*
 				}
 			} else if (synonymTable->at(leftSynonym)=="assign"){
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
 							vector<int> temp = follows->getFollowers(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -501,7 +501,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollows(map<STRING, STRING>*
 						}						
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
 							vector<int> temp = follows->getFollowers(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -513,7 +513,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollows(map<STRING, STRING>*
 						}						
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
 							vector<int> temp = follows->getFollowers(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -531,7 +531,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollows(map<STRING, STRING>*
 				}
 			} else if (synonymTable->at(leftSynonym)=="while"){
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[WHILE_NODE]){
 							vector<int> temp = follows->getFollowers(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -541,7 +541,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollows(map<STRING, STRING>*
 						}						
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[WHILE_NODE]){
 							vector<int> temp = follows->getFollowers(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -553,7 +553,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollows(map<STRING, STRING>*
 						}						
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[WHILE_NODE]){
 							vector<int> temp = follows->getFollowers(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -669,7 +669,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollowsStar(map<STRING, STRI
 		}  else {
 			if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						vector<int> temp = follows->getFollowersStar(i);
 						for (size_t j=0; j<temp.size(); j++){
 							answer[0].push_back(i);
@@ -677,7 +677,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollowsStar(map<STRING, STRI
 						}
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						vector<int> temp = follows->getFollowersStar(i);
 						for (size_t j=0; j<temp.size(); j++){
 							if (statementTable->getTNode(temp[j])->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
@@ -703,7 +703,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollowsStar(map<STRING, STRI
 				}
 			} else if (synonymTable->at(leftSynonym)=="assign"){
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
 							vector<int> temp = follows->getFollowersStar(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -713,7 +713,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollowsStar(map<STRING, STRI
 						}						
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
 							vector<int> temp = follows->getFollowersStar(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -725,7 +725,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollowsStar(map<STRING, STRI
 						}						
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
 							vector<int> temp = follows->getFollowersStar(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -743,7 +743,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollowsStar(map<STRING, STRI
 				}
 			} else if (synonymTable->at(leftSynonym)=="while"){
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[WHILE_NODE]){
 							vector<int> temp = follows->getFollowersStar(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -753,7 +753,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollowsStar(map<STRING, STRI
 						}						
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[WHILE_NODE]){
 							vector<int> temp = follows->getFollowersStar(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -765,7 +765,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollowsStar(map<STRING, STRI
 						}						
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[WHILE_NODE]){
 							vector<int> temp = follows->getFollowersStar(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -881,7 +881,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParent(map<STRING, STRING>* 
 		}  else {
 			if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						vector<int> temp = parent->getChildren(i);
 						for (size_t j=0; j<temp.size(); j++){
 							answer[0].push_back(i);
@@ -889,7 +889,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParent(map<STRING, STRING>* 
 						}
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						vector<int> temp = parent->getChildren(i);
 						for (size_t j=0; j<temp.size(); j++){
 							if (statementTable->getTNode(temp[j])->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
@@ -915,7 +915,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParent(map<STRING, STRING>* 
 				}
 			} else if (synonymTable->at(leftSynonym)=="assign"){
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
 							vector<int> temp = parent->getChildren(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -925,7 +925,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParent(map<STRING, STRING>* 
 						}						
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
 							vector<int> temp = parent->getChildren(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -937,7 +937,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParent(map<STRING, STRING>* 
 						}						
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
 							vector<int> temp = parent->getChildren(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -955,7 +955,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParent(map<STRING, STRING>* 
 				}
 			} else if (synonymTable->at(leftSynonym)=="while"){
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[WHILE_NODE]){
 							vector<int> temp = parent->getChildren(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -965,7 +965,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParent(map<STRING, STRING>* 
 						}						
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[WHILE_NODE]){
 							vector<int> temp = parent->getChildren(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -977,7 +977,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParent(map<STRING, STRING>* 
 						}						
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[WHILE_NODE]){
 							vector<int> temp = parent->getChildren(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -1093,7 +1093,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParentStar(map<STRING, STRIN
 		}  else {
 			if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						vector<int> temp = parent->getChildrenStar(i);
 						for (size_t j=0; j<temp.size(); j++){
 							answer[0].push_back(i);
@@ -1101,7 +1101,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParentStar(map<STRING, STRIN
 						}
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						vector<int> temp = parent->getChildrenStar(i);
 						for (size_t j=0; j<temp.size(); j++){
 							if (statementTable->getTNode(temp[j])->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
@@ -1127,7 +1127,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParentStar(map<STRING, STRIN
 				}
 			} else if (synonymTable->at(leftSynonym)=="assign"){
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
 							vector<int> temp = parent->getChildrenStar(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -1137,7 +1137,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParentStar(map<STRING, STRIN
 						}						
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
 							vector<int> temp = parent->getChildrenStar(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -1149,7 +1149,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParentStar(map<STRING, STRIN
 						}						
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
 							vector<int> temp = parent->getChildrenStar(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -1167,7 +1167,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParentStar(map<STRING, STRIN
 				}
 			} else if (synonymTable->at(leftSynonym)=="while"){
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[WHILE_NODE]){
 							vector<int> temp = parent->getChildrenStar(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -1177,7 +1177,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParentStar(map<STRING, STRIN
 						}						
 					}
 				} else if (synonymTable->at(rightSynonym)=="assign"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[WHILE_NODE]){
 							vector<int> temp = parent->getChildrenStar(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -1189,7 +1189,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParentStar(map<STRING, STRIN
 						}						
 					}
 				} else if (synonymTable->at(rightSynonym)=="while"){
-					for (size_t i=1; i<=statementTable->getSize(); i++){
+					for (int i=1; i<=statementTable->getSize(); i++){
 						if (statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[WHILE_NODE]){
 							vector<int> temp = parent->getChildrenStar(i);
 							for (size_t j=0; j<temp.size(); j++){
@@ -1361,9 +1361,9 @@ vector<int> QueryEvaluator::solve(string selectSynonym, map<STRING, STRING>* syn
 			forMergePattern.push_back(resultFromPattern);
 
 			vector<int> patternModifiedVars;
-			for (int i=0; i<resultFromPattern.size(); i++){
+			for (size_t i=0; i<resultFromPattern.size(); i++){
 				vector<int> temp = pkb->modifiesTable.getModifiedVarStmt(resultFromPattern[i]);
-				for (int j=0; j<temp.size(); j++){
+				for (size_t j=0; j<temp.size(); j++){
 					patternModifiedVars.push_back(temp[j]);
 				}
 			}
@@ -1396,7 +1396,7 @@ vector<int> QueryEvaluator::solve(string selectSynonym, map<STRING, STRING>* syn
 		mergeOutputValues = resultAfterMerge.second;
 
 		if (find(mergeOutputNames.begin(), mergeOutputNames.end(), selectSynonym) != mergeOutputNames.end()){
-			for (int i=0; i<mergeOutputNames.size(); i++){
+			for (size_t i=0; i<mergeOutputNames.size(); i++){
 				if (mergeOutputNames[i]==selectSynonym){
 					answer = mergeOutputValues[i];
 				}

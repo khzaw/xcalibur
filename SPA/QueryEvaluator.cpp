@@ -452,7 +452,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollows(map<STRING, STRING>*
 	} else { // Follows(string, string)
 		if (synonymTable->find(leftSynonym) == synonymTable->end()||synonymTable->find(rightSynonym) == synonymTable->end()){
 			return answer;
-		} else if (leftSynonym==rightSynonym){
+		} else if (leftSynonym==rightSynonym&&leftSynonym!="_"){
 			return answer;
 		}  else {
 			if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){
@@ -664,7 +664,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatFollowsStar(map<STRING, STRI
 	} else { // Follows*(string, string)
 		if (synonymTable->find(leftSynonym) == synonymTable->end()||synonymTable->find(rightSynonym) == synonymTable->end()){
 			return answer;
-		} else if (leftSynonym==rightSynonym){
+		} else if (leftSynonym==rightSynonym&&leftSynonym!="_"){
 			return answer;
 		}  else {
 			if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){
@@ -876,7 +876,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParent(map<STRING, STRING>* 
 	} else { // Parent(string, string)
 		if (synonymTable->find(leftSynonym) == synonymTable->end()||synonymTable->find(rightSynonym) == synonymTable->end()){
 			return answer;
-		} else if (leftSynonym==rightSynonym){
+		} else if (leftSynonym==rightSynonym&&leftSynonym!="_"){
 			return answer;
 		}  else {
 			if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){
@@ -1088,7 +1088,7 @@ vector<vector<int>> QueryEvaluator::solveForSuchThatParentStar(map<STRING, STRIN
 	} else { // Parent*(string, string)
 		if (synonymTable->find(leftSynonym) == synonymTable->end()||synonymTable->find(rightSynonym) == synonymTable->end()){
 			return answer;
-		} else if (leftSynonym==rightSynonym){
+		} else if (leftSynonym==rightSynonym&&leftSynonym!="_"){
 			return answer;
 		}  else {
 			if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){

@@ -1,0 +1,11 @@
+1- All assignments with oscar on the left hand side
+variable v;stmt s1,s2; assign a;while w1,w2;
+Select a such that Uses(a,_) pattern a("oSCar", _) 
+6,8
+5000
+2-
+variable v; stmt s; assign a; while w;
+Select s such that Uses(s,"beta") pattern a(_,_)
+4,5,6
+5000 
+

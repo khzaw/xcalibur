@@ -48,3 +48,23 @@ variable v;stmt s1,s2; assign a3;while w1,w2;
 Select v such that Modifies(9,v)
 x, Romeo, b, c
 5000
+11-all the assign statement numbers
+assign a; variable v;
+Select a such that Modifies(a, _)
+1,2,3,6,8,10,13,14,15,17,18,19,20
+5000
+12- all the variables in the program
+assign a; variable v;
+Select v such that Modifies(a, _)
+i,b,c,a,oSCar,beta,tmp,I,k,j1k,l,chArlie,x,left,right,Romeo,delta,width,w
+5000
+13- undeclared while synonym
+assign a; while w;
+Select w2 such that Modifies(a, _)
+none
+5000
+14- all the while statements
+assign a; while w;
+Select w such that Modifies(w, _)
+4,5,7,9,11,12,16
+5000

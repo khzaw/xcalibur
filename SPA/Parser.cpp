@@ -250,7 +250,7 @@ void Parser::exprPrime() {
 		operatorStack.push(plusOp);
 		nextToken = getToken();
 
-		factor(); nextToken = getToken();
+		factor(true); nextToken = getToken();
 		exprPrime();
 	} else {
 		return;

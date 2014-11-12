@@ -246,5 +246,15 @@ Select s such that Follows(_,_) pattern a(_,_)
 50 -
 constant c; variable v; prog_line p; assign a, a1; while w, w1; stmt s;
 Select c such that Follows(1,2)
-1,2,200
+0,1,2,200
+5000
+51 -
+constant c; variable v; prog_line p; assign a; while w; stmt s;
+Select c such that Uses(c, "delta")
+
+5000
+52 - super crazy
+prog_line p; assign a;
+Select p such that Uses(p, "delta") pattern a("Romeo", _)
+4,5,9,11,12,15
 5000

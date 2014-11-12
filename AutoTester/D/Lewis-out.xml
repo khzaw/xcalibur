@@ -1,0 +1,40 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>AutoTester</name><parsing_time_taken>140.000000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnTuple="1" Follows="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="">1</id><querystr><![CDATA[assign a1, a2; constant c1, c2; variable v1, v2; while w1, w2; stmt s1, s2; select s1 such that Follows(_,_)]]></querystr>
+<stuans></stuans>
+<correct>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68</correct>
+<time_taken>1741.000000</time_taken>
+<failed>
+<missing>1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,24,25,26,27,28,29,3,30,31,32,33,34,35,36,37,38,39,4,40,41,42,43,44,45,46,47,48,49,5,50,51,52,53,54,55,56,57,58,59,6,60,61,62,63,64,65,66,67,68,7,8,9</missing>
+<additional></additional>
+<summary>
+<expected>68</expected>
+<matched>0</matched>
+<missing>68</missing>
+<additional>0</additional>
+</summary>
+</failed>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="">2</id><querystr><![CDATA[assign a1, a2; constant c1, c2; variable v1, v2; while w1, w2; stmt s1, s2; select s1 such that Follows(s1,_)]]></querystr>
+<stuans>1,2,3,4,5,6,7,8,11,12,16,18,19,21,23,24,26,27,30,32,33,34,35,37,39,43,44,47,48,50,51,54,57,59,60,61,63,65</stuans>
+<correct>1,2,3,4,5,6,7,8,9,11,15,17,18,20,22,23,25,26,29,31,32,33,34,36,38,42,43,44,47,48,50,51,53,54,57,59,60,61,63,65</correct>
+<time_taken>150.000000</time_taken>
+<failed>
+<missing>15,17,20,22,25,29,31,36,38,42,53,9</missing>
+<additional>12,16,19,21,24,27,30,35,37,39</additional>
+<summary>
+<expected>40</expected>
+<matched>28</matched>
+<missing>12</missing>
+<additional>10</additional>
+</summary>
+</failed>
+</query>
+</queries>
+</test_results>

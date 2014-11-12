@@ -23,6 +23,11 @@ void QueryParserTest::testSynonym() {
 	synonyms = a->getSynonyms();	
 	CPPUNIT_ASSERT(synonyms.at("a") == "while");
 
+	q1 = "assign a; while a; Select a";
+	a = new QueryParser(q1);
+	synonyms = a->getSynonyms();	
+	CPPUNIT_ASSERT(synonyms.at("a") == "while");
+
 	q1 = "procedure b, c, d; Select b";
 	a = new QueryParser(q1);
 	synonyms = a->getSynonyms();

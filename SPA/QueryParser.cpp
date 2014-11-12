@@ -99,7 +99,7 @@ void QueryParser::matchDeclaration() {
 void QueryParser::matchDeclarationVariables(string entity) {
 	string var = nextToken.name;
 	match(IDENT);
-	synonyms.insert(pair<string, string>(var, entity));
+	synonyms[var] =  entity;
 
 	if (nextToken.name.compare(";") != 0) {
 		match(",");

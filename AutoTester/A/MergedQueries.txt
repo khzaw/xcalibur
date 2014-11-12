@@ -61,12 +61,12 @@ Select a3 such that Modifies(a3,"oSCar") pattern a3("oSCar", _"beta"_)
 13-
 variable v;stmt s1,s2; assign a3;while w1,w2;
 Select v such that Modifies(a3,"x") pattern a3("xa", _) 
-i,b,c,a,oSCar,beta,tmp,I,k,j1k,l,chArlie,x,left,right,Romeo,delta,width,none
+none
 5000
 14-
 variable v;stmt s1,s2; assign a3;while w1,w2;
 Select w1 such that Modifies(w1,"b") pattern a3(_, _"0"_)
-14, 5, 7, 9, 11, 12
+4, 5, 9, 11, 12
 5000
 15-
 variable v;stmt s1,s2; assign a3;while w1,w2;
@@ -89,7 +89,92 @@ Select w2 such that Modifies(a, _) pattern a("w", _)
 none
 5000
 19-
-assign a; while w;
+assign a; while w; variable v;
 Select v such that Modifies(w, v) pattern a(v, _)
-osCar, x, Romeo, b, c, x, a, w
+oSCar, x, Romeo, b, c, a, w
+5000
+20-
+stmt s1,s2; assign a1, a3;while w; 
+Select a1 such that Parent(a1,s2) pattern a1(_,_)
+none
+5000
+21-
+stmt s1,s2; assign a1, a3;while w; 
+Select a1 such that Parent(w,a1) pattern a1(_,_)
+10,13,14,15,17,18,19,20,6,8
+5000
+22-
+stmt s1,s2; assign a3;while w1,w2; 
+Select w1 such that Parent(w1,a3) pattern a3("a", _)
+5
+5000
+23-
+stmt s1,s2; assign a3;while w1,w2; 
+Select w1 such that Parent*(w1,a3) pattern a3("a", _)
+4,5
+5000
+24-
+stmt s1,s2; assign a3;while w1,w2; 
+Select w1 such that Parent(w1,a3) pattern a3(_, _"1"_)
+11,12,16,4,5,9
+5000
+25-
+stmt s1,s2; assign a3;while w1,w2; 
+Select w1 such that Parent*(w1,a3) pattern a3(_, _"1"_)
+11,12,16,4,5,9
+5000
+26-
+stmt s1,s2; assign a3;while w1,w2; 
+Select a3 such that Parent(w1,w2) pattern a3("x", _)
+10,18
+5000
+27-
+variable v;stmt s1,s2; assign a3;while w1,w2; 
+Select v such that Uses(a3,"Romeo") pattern a3(v, _)
+Romeo,c
+5000
+28-
+variable v;stmt s1,s2; assign a2,a3;while w1,w2; 
+Select a3 such that Uses(a3,"x") pattern a2("sa", _)
+none
+5000
+29-
+variable v;stmt s1,s2; assign a3;while w1,w2; 
+Select v such that Uses(16,v) pattern a3(v, _"delta"_)
+c
+5000
+30-
+variable v;stmt s1,s2; assign a3;while w1,w2; 
+Select v such that Uses(11,v) pattern a3(v, _"l"_)
+c
+5000
+31-
+variable v;stmt s1,s2; assign a3;while w1,w2; 
+Select v such that Uses(11,v) pattern a3(v, _)
+Romeo,c,x
+5000
+32-
+variable v;stmt s1,s2; assign a3;while w1,w2; 
+Select v such that Uses(4,"k") pattern a3("k", _)
+none
+5000
+33-
+variable v;stmt s1,s2; assign a3;while w1,w2; 
+Select s1 such that Uses(s1, v) pattern a3(v, _"width"_)
+11,16,17,4,5,9
+5000
+34-
+assign a; variable v; 
+Select v such that Uses(a, _) pattern a(v,_)
+Romeo,c,oSCar,w,x
+5000
+35-
+assign a; while w; variable v; 
+Select w such that Uses(w, v) pattern a(v, _"x+1"_)
+11,4,5,9
+5000
+36-
+variable v;stmt s1,s2; assign a3;while w1,w2; 
+Select a3 such that Uses(4,"k") pattern a3("x", _)
+10,18
 5000

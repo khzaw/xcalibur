@@ -1428,7 +1428,7 @@ vector<int> QueryEvaluator::solve(string selectSynonym, map<STRING, STRING>* syn
 				}
 				return answer;
 			} else if (synonymTable->at(selectSynonym)=="constant"){
-				for (int i=0; i<pkb->varTable.getSize(); i++){
+				for (int i=0; i<pkb->constantTable.getSize(); i++){
 					answer.push_back(i);
 				}
 				return answer;

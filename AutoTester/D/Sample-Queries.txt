@@ -33,3 +33,8 @@ Select c
 Select c
 none
 5000
+8-
+assign a; variable v;
+Select a such that Modifies(a, v) pattern a(_, _)
+none
+5000

@@ -1444,6 +1444,9 @@ list<string> QueryEvaluator::evaluate(map<STRING, STRING>* synonymTable, QueryTr
 
 	string output = "Hello World!";
 	list<string> outputlist;
+	if(tree->getRootNode()->getKey() == "ERROR") {
+		return outputlist;
+	}
 	string selectSynonym = tree->getRootNode()->getChild(0)->getChild(0)->getKey();
 	// Need to check if selectSynonym is inside synonymTable
 	// TODO: throws exception

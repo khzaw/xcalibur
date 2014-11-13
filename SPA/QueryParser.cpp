@@ -48,6 +48,7 @@ void QueryParser::parse() {
 		matchSelect();
 	} catch (QueryException& e) {
 		cout << e.what() << endl;
+		this->qt->getRootNode()->setKey("ERROR");
 	}
 }
 
@@ -311,11 +312,11 @@ QTNode* QueryParser::matchEntRef(bool excludeUnderScore) {
 	QTNode* qtpi;
 	//cout << "EntRef: " << nextToken.name << "," << nextToken.name.length() << endl;
 	if (nextToken.name.compare("_") == 0) {
-		if(!excludeUnderScore) {
+		if(excludeUnderScore == false) {
 			qtpi = new QTNode("_");
 			match(UNDERSCORE);
 		} else {
-			throw (QueryException("VAGUE QUERY ERROR: The first argument of Uses and Modifies cannot be a \"_\""));
+			throw(QueryException("VAGUE QUERY ERROR: The first argument of Uses and Modifies cannot be a \"_\""));
 		}
 	} else if (nextToken.token == INT_LIT) {
 		qtpi = new QTNode(stoi(nextToken.name));

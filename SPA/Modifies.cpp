@@ -28,7 +28,7 @@ using namespace std;
 	
 	vector<int> Modifies::getModifiersStmt(int varIndex){
 		vector<int> listModifiers;
-		for(int i=0; i<stmtMod.size();i++){
+		for(size_t i=0; i<stmtMod.size();i++){
 			if(stmtMod[i].second ==varIndex){
 				listModifiers.push_back(stmtMod[i].first);
 			}
@@ -38,7 +38,7 @@ using namespace std;
 
 	vector<int> Modifies::getModifiedVarStmt(int stmt){
 		vector<int> listModifiedVar;
-		for(int i=0; i<stmtMod.size();i++){
+		for(size_t i=0; i<stmtMod.size();i++){
 			if(stmtMod[i].first ==stmt){
 				listModifiedVar.push_back(stmtMod[i].second);
 			}
@@ -47,7 +47,7 @@ using namespace std;
 	}
 
    bool Modifies::isModifiesStmt(int stmt, int varIndex){
-	   for(int i=0; i<stmtMod.size();i++){
+	   for(size_t i=0; i<stmtMod.size();i++){
 			if((stmtMod[i].first ==stmt) && (stmtMod[i].second ==varIndex)){
 				return true;
 			}
@@ -68,7 +68,7 @@ using namespace std;
 	
 	vector<int> Modifies::getModifiersProc(int procIndex){
 		vector<int> listModifiers;
-		for(int i=0; i<procMod.size();i++){
+		for(size_t i=0; i<procMod.size();i++){
 			if(procMod[i].second ==procIndex){
 				listModifiers.push_back(procMod[i].first);
 			}
@@ -78,7 +78,7 @@ using namespace std;
 
 	vector<int> Modifies::getModifiedVarProc(int procIndex){
 		vector<int> listModifiedVar;
-		for(int i=0; i<procMod.size();i++){
+		for(size_t i=0; i<procMod.size();i++){
 			if(procMod[i].first ==stmt){
 				listModifiedVar.push_back(procMod[i].second);
 			}
@@ -87,7 +87,7 @@ using namespace std;
 	}
 
    bool Modifies::isModifiesProc(int procIndex, int varIndex){
-	   for(int i=0; i<procMod.size();i++){
+	   for(size_t i=0; i<procMod.size();i++){
 			if((procMod[i].first ==procIndex) && (procMod[i].second ==varIndex)){
 				return true;
 			}

@@ -35,7 +35,7 @@ string VarTable::getVarName(int n){
 
 vector<string> VarTable::getAllVar(){
 	vector<string> var;
-	for(int i=0;i<varVec.size();i++){
+	for(size_t i=0;i<varVec.size();i++){
 		var.push_back(varVec[i]);
 	}
 	return var;
@@ -44,7 +44,7 @@ vector<string> VarTable::getAllVar(){
 // get variable index using its string
 int VarTable::getVarIndex(string s){
 
-for(int i=0; i< varVec.size(); i++){
+for(size_t i=0; i< varVec.size(); i++){
 if(varVec.at(i) == s){
 return i;
 }

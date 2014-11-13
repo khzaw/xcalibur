@@ -16,7 +16,7 @@ void Parent::insertParent(int stmt1, int stmt2){
 
 vector<int> Parent::getChildren(int stmt){
 	vector<int> listChildren;
-	for(int i=0; i<records.size();i++){
+	for(size_t i=0; i<records.size();i++){
 			if(records[i].first==stmt){
 				listChildren.push_back(records[i].second);
 			}
@@ -26,7 +26,7 @@ vector<int> Parent::getChildren(int stmt){
 	
 vector<int> Parent::getParents(int stmt){
 	vector<int> listParents;
-	for(int i=0; i<records.size();i++){
+	for(size_t i=0; i<records.size();i++){
 			if(records[i].second==stmt){
 				listParents.push_back(records[i].first);
 			}
@@ -97,7 +97,7 @@ bool Parent::isParentStarTrue(int stmt1, int stmt2){
 
 vector<int> Parent::getAllChildrenStmt(){
 	vector<int> children ;
-	for (int i=0; i<records.size();i++){
+	for (size_t i=0; i<records.size();i++){
 		if(std::find(children.begin(), children.end(), records[i].second)!=children.end()){
 		}else {
 	    children.push_back(records[i].second);
@@ -109,7 +109,7 @@ vector<int> Parent::getAllChildrenStmt(){
 
 vector<int> Parent::getAllParentStmt(){
 	vector<int> parents ;
-	for (int i=0; i<records.size();i++){
+	for (size_t i=0; i<records.size();i++){
 		if(std::find(parents.begin(), parents.end(), records[i].first)!=parents.end()){
 		}else {
 	    parents.push_back(records[i].first);

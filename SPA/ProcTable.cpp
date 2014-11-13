@@ -40,7 +40,7 @@ string ProcTable::getProcName(int n){
 
 // get variable index using its string
 int ProcTable::getProcIndex(string p){
-	for(int i=0; i< pTable.size(); i++){
+	for(size_t i=0; i< pTable.size(); i++){
 if(pTable.at(i) == p){
 return i;
 }

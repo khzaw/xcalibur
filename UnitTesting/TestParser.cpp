@@ -3,7 +3,7 @@
 #include <cppunit/config/SourcePrefix.h>
 
 //Parser empty("../Debug/empty.txt");
-Parser sample("../Debug/Sample-Source.txt");
+Parser sample("../Debug/A/SourceA.txt");
 //Parser sample("../Debug/Source2.txt");
 
 void TestParser::setUp() {

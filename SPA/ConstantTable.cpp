@@ -29,7 +29,7 @@ int ConstantTable::getConstant(int n){
 
 // get constant index using its value
 int ConstantTable::getConstIndex(int n){
-	for(int i=0; i< constVec.size(); i++){
+	for(size_t i=0; i< constVec.size(); i++){
 		if(constVec[i] == n){
 
 			return i;
@@ -41,7 +41,7 @@ int ConstantTable::getConstIndex(int n){
 
 vector<int> ConstantTable::getAllConstant(){
 	vector<int> constants;
-	for(int i =0; i <constVec.size();i ++){
+	for(size_t i =0; i <constVec.size();i ++){
 		constants.push_back(constVec[i]);
 	}
 	return constants;

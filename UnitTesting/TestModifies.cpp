@@ -1,6 +1,6 @@
 #include <cppunit/config/SourcePrefix.h>
 #include "TestModifies.h"
-#include <Modifies.h>
+#include "PKB\Modifies.h"
 
 #include <utility>
 #include <vector>

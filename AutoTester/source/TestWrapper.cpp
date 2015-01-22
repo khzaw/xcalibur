@@ -1,7 +1,7 @@
 #include "TestWrapper.h"
-#include "Parser.h"
-#include "QueryEvaluator.h"
-#include "QueryParser.h"
+#include "Frontend\Parser.h"
+#include "QueryProcessor\QueryEvaluator.h"
+#include "QueryProcessor\QueryParser.h"
 #include <iostream>
 
 // implementation code of WrapperFactory - do NOT modify the next 5 lines

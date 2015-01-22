@@ -5,7 +5,7 @@
 #include <map>
 
 #include "QueryLexer.h"
-#include "Lexeme.h"
+#include "..\Frontend\Lexeme.h"
 #include "QTNode.h"
 #include "QueryTree.h"
 

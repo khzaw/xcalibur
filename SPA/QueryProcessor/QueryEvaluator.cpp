@@ -3,22 +3,22 @@
 #include <map>
 #include "QueryTree.h"
 #include "QTNode.h"
-#include "PKB.h"
-#include "PKBController.h"
+#include "..\PKB\PKB.h"
+#include "..\PKB\PKBController.h"
 
 #include <set>
 #include <iostream>
 #include <algorithm>
 
 //For Testing
-#include "StatementTable.h"
-#include "Follows.h"
-#include "Parent.h"
-#include "Modifies.h"
-#include "Uses.h"
-#include "ProcTable.h"
-#include "VarTable.h"
-#include "ConstantTable.h"
+#include "..\PKB\StatementTable.h"
+#include "..\PKB\Follows.h"
+#include "..\PKB\Parent.h"
+#include "..\PKB\Modifies.h"
+#include "..\PKB\Uses.h"
+#include "..\PKB\ProcTable.h"
+#include "..\PKB\VarTable.h"
+#include "..\PKB\ConstantTable.h"
 #include "QueryEvaluator.h"
 
 using namespace std;

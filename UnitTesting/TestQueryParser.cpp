@@ -1,8 +1,8 @@
 #include <cppunit/config/SourcePrefix.h>
 #include "TestQueryParser.h"
-#include "QueryParser.h"
-#include "QueryTree.h"
-#include "QTNode.h"
+#include "QueryProcessor\QueryParser.h"
+#include "QueryProcessor\QueryTree.h"
+#include "QueryProcessor\QTNode.h"
 
 #include <iostream>
 #include <string>

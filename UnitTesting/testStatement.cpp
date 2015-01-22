@@ -1,6 +1,6 @@
 #include <cppunit/config/SourcePrefix.h>
 #include "testStatement.h"
-#include "StatementTable.h"
+#include "PKB\StatementTable.h"
 
 #include <iostream>
 #include <string>

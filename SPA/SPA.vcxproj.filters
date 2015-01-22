@@ -16,138 +16,153 @@
     <Filter Include="Source Files\PKB">
       <UniqueIdentifier>{5aeb1fee-b825-4548-ad03-ceba1e767eee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Frontend">
+      <UniqueIdentifier>{545176b3-aaac-4ecc-bc23-2acb85386e20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\QueryProcessor">
+      <UniqueIdentifier>{bd5a115b-77d1-41e9-8179-9fddc3c05295}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Frontend">
+      <UniqueIdentifier>{a246c58b-9a10-45c8-8316-8a14290c9093}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PKB">
+      <UniqueIdentifier>{91a0761a-089e-4a4a-b056-2a351996bfb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\QueryProcessor">
+      <UniqueIdentifier>{1131f91d-9a1f-4ec7-aeb4-7ee93b8d3599}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Frontend\Lexer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Frontend\Parser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Frontend\Lexeme.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\Parent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="PKB\ConstantTable.cpp">
+      <Filter>Source Files\PKB</Filter>
     </ClCompile>
     <ClCompile Include="PKB\AST.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Frontend\TNode.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\PKB</Filter>
     </ClCompile>
     <ClCompile Include="PKB\Follows.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="Frontend\Lexeme.cpp">
+      <Filter>Source Files\Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="Frontend\Lexer.cpp">
+      <Filter>Source Files\Frontend</Filter>
     </ClCompile>
     <ClCompile Include="PKB\Modifies.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\ProcTable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\PKB.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\VarTable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\PKBController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\QTNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\QueryTree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\QueryParser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\QueryEvaluator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\ConstantTable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\StatementTable.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\PKB</Filter>
     </ClCompile>
     <ClCompile Include="Frontend\Operator.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Frontend</Filter>
     </ClCompile>
-    <ClCompile Include="PKB\Uses.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="PKB\Parent.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\PKB.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\PKBController.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="Frontend\Parser.cpp">
+      <Filter>Source Files\Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\ProcTable.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\QTNode.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\QueryEvaluator.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
     <ClCompile Include="QueryProcessor\QueryLexer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\QueryParser.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\QueryTree.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\StatementTable.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="Frontend\TNode.cpp">
+      <Filter>Source Files\Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\Uses.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\VarTable.cpp">
+      <Filter>Source Files\PKB</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Frontend\Lexer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Frontend\Parser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Frontend\Lexeme.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\Parent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Frontend\TNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PKB\AST.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\Follows.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\Modifies.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\ProcTable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\PKB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\VarTable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\PKBController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryProcessor\QTNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryProcessor\QueryTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryProcessor\QueryParser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryProcessor\QueryEvaluator.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\PKB</Filter>
     </ClInclude>
     <ClInclude Include="PKB\ConstantTable.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\PKB</Filter>
     </ClInclude>
-    <ClInclude Include="PKB\StatementTable.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="PKB\Follows.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="Frontend\Lexeme.h">
+      <Filter>Header Files\Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="Frontend\Lexer.h">
+      <Filter>Header Files\Frontend</Filter>
     </ClInclude>
     <ClInclude Include="Frontend\Operator.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Frontend</Filter>
     </ClInclude>
-    <ClInclude Include="PKB\Uses.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Frontend\Parser.h">
+      <Filter>Header Files\Frontend</Filter>
     </ClInclude>
-    <ClInclude Include="QueryProcessor\QueryLexer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="PKB\Modifies.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\Parent.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\PKB.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\PKBController.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\ProcTable.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\QTNode.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\QueryTree.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\QueryEvaluator.h">
+      <Filter>Header Files\QueryProcessor</Filter>
     </ClInclude>
     <ClInclude Include="QueryProcessor\QueryException.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\QueryLexer.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\QueryParser.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="Frontend\TNode.h">
+      <Filter>Header Files\Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\StatementTable.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\Uses.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\VarTable.h">
+      <Filter>Header Files\PKB</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

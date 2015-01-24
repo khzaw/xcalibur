@@ -96,10 +96,10 @@
     <ClCompile Include="PKB\VarTable.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
-    <ClCompile Include="QueryProcessor\SubQuery.cpp">
+    <ClCompile Include="QueryProcessor\Subquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
-    <ClCompile Include="QueryProcessor\ParentsSubquery.cpp">
+    <ClCompile Include="QueryProcessor\ParentSubquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
   </ItemGroup>
@@ -170,7 +170,7 @@
     <ClInclude Include="PKB\VarTable.h">
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
-    <ClInclude Include="QueryProcessor\SubQuery.h">
+    <ClInclude Include="QueryProcessor\Subquery.h">
       <Filter>Header Files\QueryProcessor</Filter>
     </ClInclude>
   </ItemGroup>

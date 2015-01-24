@@ -23,7 +23,7 @@
     <ClCompile Include="PKB\PKB.cpp" />
     <ClCompile Include="PKB\PKBController.cpp" />
     <ClCompile Include="PKB\ProcTable.cpp" />
-    <ClCompile Include="QueryProcessor\ParentsSubquery.cpp" />
+    <ClCompile Include="QueryProcessor\ParentSubquery.cpp" />
     <ClCompile Include="QueryProcessor\QTNode.cpp" />
     <ClCompile Include="QueryProcessor\QueryEvaluator.cpp" />
     <ClCompile Include="QueryProcessor\QueryLexer.cpp" />
@@ -33,7 +33,7 @@
     <ClCompile Include="Frontend\TNode.cpp" />
     <ClCompile Include="PKB\Uses.cpp" />
     <ClCompile Include="PKB\VarTable.cpp" />
-    <ClCompile Include="QueryProcessor\SubQuery.cpp" />
+    <ClCompile Include="QueryProcessor\Subquery.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PKB\AST.h" />
@@ -59,7 +59,7 @@
     <ClInclude Include="Frontend\TNode.h" />
     <ClInclude Include="PKB\Uses.h" />
     <ClInclude Include="PKB\VarTable.h" />
-    <ClInclude Include="QueryProcessor\SubQuery.h" />
+    <ClInclude Include="QueryProcessor\Subquery.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>

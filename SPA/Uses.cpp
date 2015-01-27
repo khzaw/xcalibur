@@ -16,33 +16,34 @@ using namespace std;
 		return stmtUses;
 	}
 	
-	vector<int> Uses::getUsersStmt(int varIndex){
-		vector<int> listUsers;
-		for(size_t i=0; i<stmtUses.size();i++){
-			if(stmtUses[i].second ==varIndex){
-				listUsers.push_back(stmtUses[i].first);
-			}
+	set<int> Uses::getUsersStmt(int varIndex){
+		set<int> result;
+		if(varIndex>=varStmtUses.size()){
+			return result;
 		}
-		return listUsers;
+		else{
+		return varStmtUses[varIndex];
+		}
 	}
 
-	vector<int> Uses::getUsedVarStmt(int stmt){
-		vector<int> listUsedVar;
-		for(size_t i=0; i<stmtUses.size();i++){
-			if(stmtUses[i].first ==stmt){
-				listUsedVar.push_back(stmtUses[i].second);
-			}
+	set<int> Uses::getUsedVarStmt(int stmt){
+	    set<int> result;
+		if(stmt>stmtVarUses.size()){
+			return result;
 		}
-		return listUsedVar;
+		else{
+		return stmtVarUses[stmt-1];
+		}
 	}
 
    bool Uses::isUsesStmt(int stmt, int varIndex){
-	   for(size_t i=0; i<stmtUses.size();i++){
-			if((stmtUses[i].first ==stmt) && (stmtUses[i].second ==varIndex)){
-				return true;
-			}
-		}
-	   return false;
+	   set<int> varSet = stmtVarUses[stmt-1];
+	   std::set<int>::iterator it = varSet.find(varIndex);
+	   if( it == varSet.end()){
+		   return false;
+	   }else{
+		   return true;
+	   }
    }
 
    	
@@ -56,33 +57,34 @@ using namespace std;
 		return procUses;
 	}
 	
-	vector<int> Uses::getUsersProc(int varIndex){
-		vector<int> listUsers;
-		for(size_t i=0; i<procUses.size();i++){
-			if(procUses[i].second ==varIndex){
-				listUsers.push_back(procUses[i].first);
-			}
+	set<int> Uses::getUsersProc(int varIndex){
+		set<int> result;
+		if(varIndex>=varProcUses.size()){
+			return result;
 		}
-		return listUsers;
+		else{
+		return varProcUses[varIndex];
+		}
 	}
 
-	vector<int> Uses::getUsedVarProc(int procIndex){
-		vector<int> listUsedVar;
-		for(size_t i=0; i<procUses.size();i++){
-			if(procUses[i].first ==procIndex){
-				listUsedVar.push_back(procUses[i].second);
-			}
+	set<int> Uses::getUsedVarProc(int procIndex){
+		set<int> result;
+		if(procIndex>=procVarUses.size()){
+			return result;
 		}
-		return listUsedVar;
+		else{
+		return procVarUses[procIndex];
+		}
 	}
 
    bool Uses::isUsesProc(int procIndex, int varIndex){
-	   for(size_t i=0; i<procUses.size();i++){
-			if((procUses[i].first ==procIndex) && (procUses[i].second ==varIndex)){
-				return true;
-			}
-		}
-	   return false;
+	  set<int> procSet = procVarUses[procIndex];
+	   std::set<int>::iterator it = procSet.find(varIndex);
+	   if( it == procSet.end()){
+		   return false;
+	   }else{
+		   return true;
+	   }
    }
 
    int Uses::getSizeProcUses() {

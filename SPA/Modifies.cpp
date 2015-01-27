@@ -1,6 +1,7 @@
 #include "Modifies.h"
 #include <utility>
 #include <vector>
+#include <set>
 
 using namespace std;
 
@@ -26,33 +27,36 @@ using namespace std;
 		return stmtMod;
 	}
 	
-	vector<int> Modifies::getModifiersStmt(int varIndex){
-		vector<int> listModifiers;
-		for(size_t i=0; i<stmtMod.size();i++){
-			if(stmtMod[i].second ==varIndex){
-				listModifiers.push_back(stmtMod[i].first);
-			}
+	//Pre condition: varIndex is positive
+	set<int> Modifies::getModifiersStmt(int varIndex){
+		set<int> result;
+		if(varIndex>=varStmtMod.size()){
+			return result;
 		}
-		return listModifiers;
+		else{
+		return varStmtMod[varIndex];
+		}
 	}
 
-	vector<int> Modifies::getModifiedVarStmt(int stmt){
-		vector<int> listModifiedVar;
-		for(size_t i=0; i<stmtMod.size();i++){
-			if(stmtMod[i].first ==stmt){
-				listModifiedVar.push_back(stmtMod[i].second);
-			}
+	//Pre condition: stmt no. is positive
+	set<int> Modifies::getModifiedVarStmt(int stmt){
+	    set<int> result;
+		if(stmt>stmtVarMod.size()){
+			return result;
 		}
-		return listModifiedVar;
+		else{
+		return stmtVarMod[stmt-1];
+		}
 	}
 
    bool Modifies::isModifiesStmt(int stmt, int varIndex){
-	   for(size_t i=0; i<stmtMod.size();i++){
-			if((stmtMod[i].first ==stmt) && (stmtMod[i].second ==varIndex)){
-				return true;
-			}
-		}
-	   return false;
+	   set<int> varSet = stmtVarMod[stmt-1];
+	   std::set<int>::iterator it = varSet.find(varIndex);
+	   if( it == varSet.end()){
+		   return false;
+	   }else{
+		   return true;
+	   }
    }
 
    	
@@ -66,33 +70,34 @@ using namespace std;
 		return procMod;
 	}
 	
-	vector<int> Modifies::getModifiersProc(int procIndex){
-		vector<int> listModifiers;
-		for(size_t i=0; i<procMod.size();i++){
-			if(procMod[i].second ==procIndex){
-				listModifiers.push_back(procMod[i].first);
-			}
+	set<int> Modifies::getModifiersProc(int varIndex){
+		set<int> result;
+		if(varIndex>=varProcMod.size()){
+			return result;
 		}
-		return listModifiers;
+		else{
+		return varProcMod[varIndex];
+		}
 	}
 
-	vector<int> Modifies::getModifiedVarProc(int procIndex){
-		vector<int> listModifiedVar;
-		for(size_t i=0; i<procMod.size();i++){
-			if(procMod[i].first ==stmt){
-				listModifiedVar.push_back(procMod[i].second);
-			}
+	set<int> Modifies::getModifiedVarProc(int procIndex){
+		set<int> result;
+		if(procIndex>=procVarMod.size()){
+			return result;
 		}
-		return listModifiedVar;
+		else{
+		return procVarMod[procIndex];
+		}
 	}
 
    bool Modifies::isModifiesProc(int procIndex, int varIndex){
-	   for(size_t i=0; i<procMod.size();i++){
-			if((procMod[i].first ==procIndex) && (procMod[i].second ==varIndex)){
-				return true;
-			}
-		}
-	   return false;
+	  set<int> procSet = procVarMod[procIndex];
+	   std::set<int>::iterator it = procSet.find(varIndex);
+	   if( it == procSet.end()){
+		   return false;
+	   }else{
+		   return true;
+	   }
    }
 
 

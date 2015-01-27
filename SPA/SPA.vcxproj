@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AST.cpp" />
+    <ClCompile Include="Calls.cpp" />
     <ClCompile Include="ConstantTable.cpp" />
     <ClCompile Include="Follows.cpp" />
     <ClCompile Include="Lexeme.cpp" />
@@ -35,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AST.h" />
+    <ClInclude Include="Calls.h" />
     <ClInclude Include="ConstantTable.h" />
     <ClInclude Include="Follows.h" />
     <ClInclude Include="Lexeme.h" />

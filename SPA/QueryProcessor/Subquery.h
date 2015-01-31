@@ -4,6 +4,7 @@
 #include <map>
 #include "QueryTree.h"
 #include "..\PKB\PKBController.h"
+#include "ResultTuple.h"
 
 using namespace std;
 
@@ -15,17 +16,25 @@ private:
 public:
 	PKBController* pkb;
 	map<string, string>* synonymTable;
-	QueryTree* subquery;
+	int leftIndex, rightIndex;
+	string leftSynonym, rightSynonym;
+	map<string, TNODE_TYPE> synToNodeType;
+	int isSyn;	// variable to indicate how many synonyms are there,
+				// 0: both are int, 1: left int, right string
+				// 2: left string, right int, 3: both are string
 
 	// constructor
-	Subquery();
-	void init(map<string, string>*, QueryTree*, PKBController*);
+	Subquery(map<string, string>*, PKBController*);
 
 	// Mutators
 	void setPriority(int);
+	void setSynonyms(string, string);
+	void setSynonyms(string, int);
+	void setSynonyms(int, string);
+	void setSynonyms(int, int);
 
 	// Accessors	
 	int getPriority();
-	virtual map<string, vector<int> >* solve();
-	virtual map<string, vector<int> >* solve(map<string, vector<int> >*);
+	virtual ResultTuple* solve();
+	virtual ResultTuple* solve(ResultTuple*);
 };

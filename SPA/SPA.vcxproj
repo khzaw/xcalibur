@@ -33,6 +33,7 @@
     <ClCompile Include="Frontend\TNode.cpp" />
     <ClCompile Include="PKB\Uses.cpp" />
     <ClCompile Include="PKB\VarTable.cpp" />
+    <ClCompile Include="QueryProcessor\ResultTuple.cpp" />
     <ClCompile Include="QueryProcessor\Subquery.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +60,7 @@
     <ClInclude Include="Frontend\TNode.h" />
     <ClInclude Include="PKB\Uses.h" />
     <ClInclude Include="PKB\VarTable.h" />
+    <ClInclude Include="QueryProcessor\ResultTuple.h" />
     <ClInclude Include="QueryProcessor\Subquery.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

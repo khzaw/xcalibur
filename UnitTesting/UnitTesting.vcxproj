@@ -72,6 +72,7 @@
     <ClCompile Include="testFollows.cpp" />
     <ClCompile Include="TestModifies.cpp" />
     <ClCompile Include="testParent.cpp" />
+    <ClCompile Include="TestParentSubquery.cpp" />
     <ClCompile Include="TestParser.cpp" />
     <ClCompile Include="TestProcTable.cpp" />
     <ClCompile Include="testQueryEvaluator.cpp" />
@@ -87,6 +88,7 @@
     <ClInclude Include="testFollows.h" />
     <ClInclude Include="TestModifies.h" />
     <ClInclude Include="testParent.h" />
+    <ClInclude Include="TestParentSubquery.h" />
     <ClInclude Include="TestParser.h" />
     <ClInclude Include="TestProcTable.h" />
     <ClInclude Include="testQueryEvaluator.h" />

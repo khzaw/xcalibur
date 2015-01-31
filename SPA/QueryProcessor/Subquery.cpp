@@ -52,6 +52,6 @@ ResultTuple* Subquery::solve(){
 	return &ResultTuple();
 }
 
-ResultTuple* solve(ResultTuple*){
+ResultTuple* Subquery::solve(ResultTuple*){
 	return &ResultTuple();
 }

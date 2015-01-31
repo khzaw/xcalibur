@@ -9,6 +9,9 @@ using namespace std;
 
 class ParentSubquery : public Subquery{
 public:
+	ParentSubquery(map<string, string>* m, PKBController* p) : Subquery(m, p){
+	}
+
 	ResultTuple* solve(){
 		ResultTuple* ans;
 		switch (isSyn){
@@ -35,35 +38,32 @@ public:
 		return &ResultTuple();
 	}
 
-	ResultTuple* solveIndexIndex(){
-		ResultTuple answer = ResultTuple();
-		if (pkb->parentTable.isParentTrue(leftIndex, rightIndex)){
-			vector<int> newRow;
-			newRow.push_back(leftIndex);
-			newRow.push_back(rightIndex);
-			answer.addResultRow(newRow);
-		}
-		return &answer;
-	}
-
-	ResultTuple* solveIndexSyn(){
-		ResultTuple answer = ResultTuple();
-		if (synonymTable->find(rightSynonym) != synonymTable->end()){ // string is a synonym
-			vector<int> temp = pkb->parentTable.getChildren(leftIndex);
-			if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
-				populateAnswerIndexSyn(temp, &answer);
-			} else if (synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if"){
-				populateAnswerIndexSyn(synToNodeType.at((synonymTable->at(rightSynonym))), temp, &answer);
-			}
-		}
-		return &answer;
-	}
-
 	void addToResult(int val1, int val2, ResultTuple* answer){
 		vector<int> row;
 		row.push_back(val1);
 		row.push_back(val2);
 		answer->addResultRow(row);
+	}
+
+	ResultTuple* solveIndexIndex(){
+		ResultTuple* answer = new ResultTuple();
+		if (pkb->parentTable.isParentTrue(leftIndex, rightIndex)){
+			addToResult(leftIndex, rightIndex, answer);
+		}
+		return answer;
+	}
+
+	ResultTuple* solveIndexSyn(){
+		ResultTuple* answer = new ResultTuple();
+		if (synonymTable->find(rightSynonym) != synonymTable->end()){ // string is a synonym
+			vector<int> temp = pkb->parentTable.getChildren(leftIndex);
+			if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
+				populateAnswerIndexSyn(temp, answer);
+			} else if (synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if"){
+				populateAnswerIndexSyn(synToNodeType.at((synonymTable->at(rightSynonym))), temp, answer);
+			}
+		}
+		return answer;
 	}
 
 	void populateAnswerIndexSyn(vector<int> temp, ResultTuple* answer){
@@ -81,16 +81,16 @@ public:
 	}
 
 	ResultTuple* solveSynIndex(){
-		ResultTuple answer = ResultTuple();
+		ResultTuple* answer = new ResultTuple();
 		if (synonymTable->find(leftSynonym) != synonymTable->end()) { // string is a synonym
 			vector<int> temp = pkb->parentTable.getParents(rightIndex);
 			if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){
-				populateAnswerSynIndex(temp, &answer);
+				populateAnswerSynIndex(temp, answer);
 			} else if (synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if"){
-				populateAnswerSynIndex(synToNodeType.at((synonymTable->at(rightSynonym))), temp, &answer);
+				populateAnswerSynIndex(synToNodeType.at((synonymTable->at(rightSynonym))), temp, answer);
 			}
 		}		
-		return &answer;
+		return answer;
 	}
 
 	void populateAnswerSynIndex(vector<int> temp, ResultTuple* answer){
@@ -108,7 +108,7 @@ public:
 	}
 
 	ResultTuple* solveSynSyn(){
-		ResultTuple answer = ResultTuple();
+		ResultTuple* answer = new ResultTuple();
 		if (synonymTable->find(leftSynonym) == synonymTable->end()||synonymTable->find(rightSynonym) == synonymTable->end()){
 			// invalid condition
 		} else if (leftSynonym==rightSynonym&&leftSynonym!="_"){
@@ -116,19 +116,19 @@ public:
 		}  else {
 			if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
-					populateAnswerSynSynNoFilter(&answer);
+					populateAnswerSynSynNoFilter(answer);
 				} else if (synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if"){
-					populateAnswerSynSynRightFilter(synToNodeType.at(synonymTable->at(rightSynonym)), &answer);
+					populateAnswerSynSynRightFilter(synToNodeType.at(synonymTable->at(rightSynonym)), answer);
 				} 
 			} else if (synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if"){
 				if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
-					populateAnswerSynSynLeftFilter(synToNodeType.at(synonymTable->at(leftSynonym)), &answer);
+					populateAnswerSynSynLeftFilter(synToNodeType.at(synonymTable->at(leftSynonym)), answer);
 				} else if (synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if"){
-					populateAnswerSynSynBothFilter(synToNodeType.at(synonymTable->at(leftSynonym)), synToNodeType.at(synonymTable->at(rightSynonym)),&answer);
+					populateAnswerSynSynBothFilter(synToNodeType.at(synonymTable->at(leftSynonym)), synToNodeType.at(synonymTable->at(rightSynonym)),answer);
 				}
 			}
 		}
-		return &answer;
+		return answer;
 	}
 
 	void populateAnswerSynSynNoFilter(ResultTuple* answer){

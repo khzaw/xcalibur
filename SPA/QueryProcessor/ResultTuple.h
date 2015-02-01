@@ -11,12 +11,13 @@ private:
 	map<string, int> synonymMap;
 	vector<string> synonyms;
 	bool isBoolean;
+	bool isEmp;
 
 public:
 	ResultTuple();
 		
 	//modifiers
-	void addSynonym(string);
+	int addSynonym(string);
 	void addSynonymToMap(string, int);
 	void addResultRow(vector<int>);
 	void addResult(int, int);
@@ -26,11 +27,14 @@ public:
 
 	//accessors
 	bool isBool();
+	bool isEmpty();
+	void setEmpty(bool);
 	void setBool(bool);
 	int getResultAt(int, int);
 	string getSynonym(int);		//might not need
 	vector<string> getSynonyms();
-	string getSynonymIndex(string);
+	map<string, int> getSynonymMap();
+	int getSynonymIndex(string);
 	vector<int> getResultRow(int);
 	vector<vector<int> > getAllResults();
 };

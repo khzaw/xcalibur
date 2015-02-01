@@ -22,6 +22,11 @@ public:
 	int isSyn;	// variable to indicate how many synonyms are there,
 				// 0: both are int, 1: left int, right string
 				// 2: left string, right int, 3: both are string
+				// 4: ("_", syn)
+				// 5: (syn, "_")
+				// 6: ("_", "_")
+				// 7: ("_", dig)
+				// 8: (dig, "_")
 
 	// constructor
 	Subquery(map<string, string>*, PKBController*);

@@ -10,6 +10,7 @@ ResultTuple::ResultTuple() {
 	results = vector<vector<int>>();
 	synonymMap = map<string, int>();
 	isBoolean = false;
+	isEmp = false;
 }
 
 bool ResultTuple::isBool() {
@@ -20,6 +21,14 @@ void ResultTuple::setBool(bool boo) {
 	isBoolean = boo;
 }
 
+bool ResultTuple::isEmpty() {
+	return isEmp;
+}
+
+void ResultTuple::setEmpty(bool boo) {
+	isEmp = boo;
+}
+
 vector<string> ResultTuple::getSynonyms() {
 	return synonyms;
 }
@@ -28,8 +37,17 @@ string ResultTuple::getSynonym(int index){
 	return synonyms[index];
 }
 
-void ResultTuple::addSynonym(string newSyn) {
+int ResultTuple::getSynonymIndex(string syn) {
+	return synonymMap[syn];
+}
+
+map<string, int> ResultTuple::getSynonymMap() {
+	return synonymMap;
+}
+
+int ResultTuple::addSynonym(string newSyn) {
 	synonyms.push_back(newSyn);
+	return synonyms.size() - 1;
 }
 		
 vector<vector<int> > ResultTuple::getAllResults() {

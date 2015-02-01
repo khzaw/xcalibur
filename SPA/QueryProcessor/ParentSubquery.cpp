@@ -48,6 +48,8 @@ public:
 	ResultTuple* solveIndexIndex(){
 		ResultTuple* answer = new ResultTuple();
 		if (pkb->parentTable.isParentTrue(leftIndex, rightIndex)){
+			synonymTable->insert(make_pair(to_string((long long)leftIndex), "number"));
+			synonymTable->insert(make_pair(to_string((long long)rightIndex), "number"));
 			addToResult(leftIndex, rightIndex, answer);
 		}
 		return answer;
@@ -56,6 +58,7 @@ public:
 	ResultTuple* solveIndexSyn(){
 		ResultTuple* answer = new ResultTuple();
 		if (synonymTable->find(rightSynonym) != synonymTable->end()){ // string is a synonym
+			synonymTable->insert(make_pair(to_string((long long)leftIndex), "number"));
 			vector<int> temp = pkb->parentTable.getChildren(leftIndex);
 			if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
 				populateAnswerIndexSyn(temp, answer);
@@ -83,6 +86,7 @@ public:
 	ResultTuple* solveSynIndex(){
 		ResultTuple* answer = new ResultTuple();
 		if (synonymTable->find(leftSynonym) != synonymTable->end()) { // string is a synonym
+			synonymTable->insert(make_pair(to_string((long long)rightIndex), "number"));
 			vector<int> temp = pkb->parentTable.getParents(rightIndex);
 			if (synonymTable->at(leftSynonym)=="stmt"||synonymTable->at(leftSynonym)=="prog_line"){
 				populateAnswerSynIndex(temp, answer);

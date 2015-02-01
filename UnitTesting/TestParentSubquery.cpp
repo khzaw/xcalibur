@@ -21,16 +21,16 @@ CPPUNIT_TEST_SUITE_REGISTRATION( ParentSubqueryTest );
 void ParentSubqueryTest::testSolve(){
 	/** SIMPLE source code
 	procedure Proc1{
-	a = x;
-	b = y;
-	 while c{
-	 z = a;
-	 b =y;
-	 while x{
-	  if y{
-	   z=a;
-	   if b{
-		while c;
+	a = x;			// 1
+	b = y;			// 2
+	 while c{		// 3
+	 z = a;			// 4
+	 b =y;			// 5
+	 while x{		// 6
+	  if y{			// 7
+	   z=a;			// 8
+	   if b{		// 9
+		while c;	// 10
 		 }}}}
 	}
 	**/
@@ -90,5 +90,25 @@ void ParentSubqueryTest::testSolve(){
 	ParentSubquery ps1 = ParentSubquery(&table1, &pk);
 	ps1.setSynonyms(3, "s1");
 	ResultTuple* rt1 = ps1.solve();
-	vector<vector<int> > output = rt1->getAllResults();
+	int expected1[3][2] = {{3, 4}, {3, 5}, {3, 6}};
+	for (int i = 0; i < 3; i++){
+		for (int j = 0; j < 2; j++){
+			CPPUNIT_ASSERT_EQUAL(expected1[i][j], rt1->getAllResults()[i][j]);
+		}
+	}
+
+	ParentSubquery ps2 = ParentSubquery(&table1, &pk);
+	ps2.setSynonyms(9, "s2");
+	ResultTuple* rt2 = ps2.solve();
+	int expected2[1][2] = {{9, 10}};
+	for (int i = 0; i < 1; i++){
+		for (int j = 0; j < 2; j++){
+			CPPUNIT_ASSERT_EQUAL(expected2[i][j], rt2->getAllResults()[i][j]);
+		}
+	}
+
+	ParentSubquery ps3 = ParentSubquery(&table1, &pk);
+	ps3.setSynonyms(2, 3);
+	ResultTuple* rt3 = ps3.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, rt3->getAllResults().size());
 }

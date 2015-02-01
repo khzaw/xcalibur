@@ -105,6 +105,9 @@
     <ClCompile Include="QueryProcessor\ResultTuple.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
+    <ClCompile Include="QE.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PKB\AST.h">
@@ -177,6 +180,9 @@
       <Filter>Header Files\QueryProcessor</Filter>
     </ClInclude>
     <ClInclude Include="QueryProcessor\ResultTuple.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="QE.h">
       <Filter>Header Files\QueryProcessor</Filter>
     </ClInclude>
   </ItemGroup>

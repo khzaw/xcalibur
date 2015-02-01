@@ -23,6 +23,7 @@
     <ClCompile Include="PKB\PKB.cpp" />
     <ClCompile Include="PKB\PKBController.cpp" />
     <ClCompile Include="PKB\ProcTable.cpp" />
+    <ClCompile Include="QE.cpp" />
     <ClCompile Include="QueryProcessor\ParentSubquery.cpp" />
     <ClCompile Include="QueryProcessor\QTNode.cpp" />
     <ClCompile Include="QueryProcessor\QueryEvaluator.cpp" />
@@ -50,6 +51,7 @@
     <ClInclude Include="PKB\PKB.h" />
     <ClInclude Include="PKB\PKBController.h" />
     <ClInclude Include="PKB\ProcTable.h" />
+    <ClInclude Include="QE.h" />
     <ClInclude Include="QueryProcessor\QTNode.h" />
     <ClInclude Include="QueryProcessor\QueryEvaluator.h" />
     <ClInclude Include="QueryProcessor\QueryException.h" />

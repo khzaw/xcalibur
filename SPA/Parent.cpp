@@ -134,66 +134,6 @@ int Parent::getParentIndex(int parent){
 	}
 }
 
-//======= BUILDING Tables / Map =========== // 
-unordered_map<int,int> Parent::buildChildrenIndex(){
-		set<int> childrenSet = Parent::getAllChildrenStmt();
-		for(std::set<int>::iterator it=childrenSet.begin(); it != childrenSet.end(); ++it){
-			int index = childrenMap.size();
-		childrenMap.insert(std::pair<int,int>(*it,index ));
-		}
-		return childrenMap;
-	}
-
-unordered_map<int,int> Parent::buildParentIndex(){
-		set<int> parentSet = Parent::getAllParentStmt();
-		for(std::set<int>::iterator it=parentSet.begin(); it != parentSet.end(); ++it){
-			int index = parentMap.size();
-		parentMap.insert(std::pair<int,int>(*it,index ));
-		}
-		return parentMap;
-	}
-
-// Parent - > children
-vector<set<int>> Parent::buildChildrenTable(){
-	 set<int> parentSet = Parent::getAllParentStmt();
-	
-		for(std::set<int>::iterator it=parentSet.begin(); it != parentSet.end(); ++it){	
-			set<int> children = Parent::getChildren(*it);
-				
-			cTable.push_back(children);
-		}
-		return cTable;
-}
-
-vector<set<int>> Parent::buildParentTable(){
-	 set<int> childrenSet = Parent::getAllChildrenStmt();
-		for(std::set<int>::iterator it=childrenSet.begin(); it != childrenSet.end(); ++it){	
-			set<int> parent = Parent::getParents(*it);
-			
-			pTable.push_back(parent);
-		}
-		return pTable;
-}
-
-vector<set<int>> Parent::buildParentStarTable(){
-		set<int> childrenSet = Parent::getAllChildrenStmt();
-		for(std::set<int>::iterator it=childrenSet.begin(); it != childrenSet.end(); ++it){
-			set<int> parentStar = Parent::getParentStar(*it);
-			
-			parentStarTable.push_back(parentStar);
-		}
-		return parentStarTable;
-}
-
-vector<set<int>> Parent::buildChildrenStarTable(){
-		set<int> parentSet = Parent::getAllParentStmt();
-		for(std::set<int>::iterator it=parentSet.begin(); it != parentSet.end(); ++it){
-			set<int> childrenStar = Parent::getChildrenStar(*it);
-			
-			childrenStarTable.push_back(childrenStar);
-		}
-		return childrenStarTable;
-}
 
 /*
 void Parent::printAll() {

@@ -18,6 +18,7 @@ PKBController::PKBController() {
 	this->callsExtractor= CallsExtractor( &callsTable);
 	this->followsExtractor=FollowsExtractor(&followsTable);
 	this->parentExtractor = ParentExtractor(&parentTable);
+	this->modifiesExtractor= ModifiesExtractor(&modifiesTable);
 }
 
 PKBController::~PKBController() {
@@ -33,4 +34,8 @@ void PKBController::constructParent() {
 
 void PKBController::constructCalls() {
 	callsExtractor.construct();
+}
+
+void PKBController::constructModifies() {
+	modifiesExtractor.construct();
 }

@@ -18,6 +18,8 @@
 #include "CallsExtractor.h"
 #include "ParentExtractor.h"
 #include "FollowsExtractor.h"
+#include "ModifiesExtractor.h"
+
 
 
 using namespace std;
@@ -41,9 +43,11 @@ public:
 	CallsExtractor callsExtractor;
 	FollowsExtractor followsExtractor;
 	ParentExtractor parentExtractor;
+	ModifiesExtractor modifiesExtractor;
 
 	//DE
 	void constructParent();
 	void constructFollows();
 	void constructCalls();
+	void constructModifies();
 };

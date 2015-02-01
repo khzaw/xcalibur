@@ -20,6 +20,7 @@
     <ClCompile Include="Lexeme.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="Modifies.cpp" />
+    <ClCompile Include="ModifiesExtractor.cpp" />
     <ClCompile Include="Operator.cpp" />
     <ClCompile Include="Parent.cpp" />
     <ClCompile Include="ParentExtractor.cpp" />
@@ -47,6 +48,7 @@
     <ClInclude Include="Lexeme.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Modifies.h" />
+    <ClInclude Include="ModifiesExtractor.h" />
     <ClInclude Include="Operator.h" />
     <ClInclude Include="Parent.h" />
     <ClInclude Include="ParentExtractor.h" />

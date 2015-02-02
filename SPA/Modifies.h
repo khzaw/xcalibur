@@ -34,8 +34,7 @@ class Modifies{
 	Modifies();
 	void populateStmtBool();
 	void populateProcBool();
-	bool evaluateIsModifiesStmt(int,int);
-	bool evaluateIsModifiesProc(int,int);
+	
 
 	//getters
 	set<int> getAllModifiersStmt();
@@ -72,17 +71,23 @@ class Modifies{
 	int getVarProcIndexSize();
 
 	//Stmt 
-	set<int> evaluateGetModifiersStmt(int); //O(1) uses VarStmtMod 
-	set<int> evaluateGetModifiedVarStmt(int); //O(1)
+	
 	vector<pair<int,int>> getModifiesStmt(); //O(1)
 	void insertModifiesStmt(int,int); //O(1)
 	bool isModifiesStmt(int,int); //O(1)+O(logn)
 	//Procedure
-	set<int> evaluateGetModifiersProc(int); //O(1)
-	set<int> evaluateGetModifiedVarProc(int); //O(1)
+	
 	vector<pair<int,int>> getModifiesProc();  //O(1)
 	void insertModifiesProc(int,int); //O(1)
 	bool isModifiesProc(int,int); //O(1)+O(logn)
 	int getSizeStmtModifies(); //O(1)
 	int getSizeProcModifies(); //O(1)
+
+	//for query evaluation
+	bool evaluateIsModifiesStmt(int,int);
+	bool evaluateIsModifiesProc(int,int);
+	set<int> evaluateGetModifiersStmt(int); //O(1)
+	set<int> evaluateGetModifiedVarStmt(int); //O(1)
+	set<int> evaluateGetModifiersProc(int); //O(1)
+	set<int> evaluateGetModifiedVarProc(int); //O(1)
 };

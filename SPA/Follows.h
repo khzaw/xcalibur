@@ -46,14 +46,6 @@ class Follows {
 	int getFolloweeIndex(int); // done
 	
 
-	//methods for query evaluation
-	 set<int> evaluateGetFollowers(int);
-	 set<int> evaluateGetFollowees(int);
-	 set<int> evaluateGetFollowerStar(int);
-	 set<int> evaluateGetFolloweeStar(int);
-	 bool evaluateIsFollows(int,int);
-	 bool evaluateIsFollowsStar(int,int);
-
 	void insertToFolloweeTable(set<int>);
 	void insertToFollowerTable(set<int>);
 	void insertToFolloweeStarTable(set<int>);
@@ -62,4 +54,12 @@ class Follows {
 	void insertToFollowerIndexMap(pair<int,int>);
 	int getFolloweeIndexMapSize();
 	int getFollowerIndexMapSize();
+
+	// for query evaluation 
+	bool evaluateIsFollows(int,int);
+	 bool evaluateIsFollowsStar(int,int);
+	 set<int> evaluateGetFollowers(int);
+	 set<int> evaluateGetFollowees(int);
+	 set<int> evaluateGetFollowerStar(int);
+	 set<int> evaluateGetFolloweeStar(int);
 };

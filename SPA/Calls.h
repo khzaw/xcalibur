@@ -21,13 +21,8 @@ public:
 	
 	Calls();
 	int insertCalls(int,int);
-	set<int> getCallees(int); //O(1) for eval 
-	set<int> getCallers(int); // O(1) for eval 
-	set<int> getCallersStar(int); // done for eval
-	set<int> getCalleesStar(int); // done for eval
+
 	vector<pair<int,int>> getCallTable();
-	bool isCalls(int,int);
-	bool isCallsStar(int,int);
 	int getSize();
 	// Helper
 	set<int> getAllCallers(); // done
@@ -55,5 +50,13 @@ public:
 	void insertToCalleeIndexMap(pair<int,int>);
 	int getCalleeIndexMapSize();
 	int getCallerIndexMapSize();
+
+	//for query evaluation
+	bool isCalls(int,int);
+	bool isCallsStar(int,int);
+	set<int> evaluateGetCallees(int); //O(1) for eval 
+	set<int> evaluateGetCallers(int); // O(1) for eval 
+	set<int> evaluateGetCallersStar(int); // done for eval
+	set<int> evaluateGetCalleesStar(int); // done for eval
 	
 };

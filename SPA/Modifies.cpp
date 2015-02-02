@@ -11,9 +11,9 @@ using namespace std;
 	}
 	
    void Modifies::insertModifiesStmt(int stmt,int varIndex){
-	  //if(!( isModifiesStmt(stmt,varIndex))){
+	  if(!( isModifiesStmt(stmt,varIndex))){
 	   stmtMod.push_back(make_pair(stmt,varIndex));
-	//  }
+	  }
    }
 
    int Modifies::getSizeStmtModifies() {
@@ -187,20 +187,20 @@ using namespace std;
 	}
 
    bool Modifies::isModifiesStmt(int stmt, int varIndex){
-	   set<int> varSet = stmtVarMod[stmt-1];
-	   std::set<int>::iterator it = varSet.find(varIndex);
-	   if( it == varSet.end()){
-		   return false;
-	   }else{
-		   return true;
-	   }
+	 for(int i=0;i<stmtMod.size();i++){
+		 if(stmtMod[i].first == stmt && stmtMod[i].second == varIndex){
+			 return true;
+		 }else{
+			 return false;
+		 }
+	 }
    }
 
    	
    void Modifies::insertModifiesProc(int procIndex,int varIndex){
-	 //   if(!( isModifiesProc(procIndex,varIndex))){
+	    if(!( isModifiesProc(procIndex,varIndex))){
 	procMod.push_back(make_pair(procIndex,varIndex));
-	//  }  
+	  }  
    }
 
 	vector<pair<int,int>> Modifies::getModifiesProc(){
@@ -232,13 +232,13 @@ using namespace std;
 	}
 
    bool Modifies::isModifiesProc(int procIndex, int varIndex){
-	  set<int> procSet = procVarMod[procIndex];
-	   std::set<int>::iterator it = procSet.find(varIndex);
-	   if( it == procSet.end()){
-		   return false;
-	   }else{
-		   return true;
-	   }
+	 for(int i=0;i<procMod.size();i++){
+		 if(procMod[i].first == procIndex && procMod[i].second == varIndex){
+			 return true;
+		 }else{
+			 return false;
+		 }
+	 }
    }
 
 

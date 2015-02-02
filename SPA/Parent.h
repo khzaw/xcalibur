@@ -41,15 +41,6 @@ class Parent {
 	int getParentIndex(int); // done
 	int getChildrenIndex(int); // done
 	
-
-	//methods for query evaluation
-	 set<int> evaluateGetChildren(int);
-	 set<int> evaluateGetParent(int);
-	 set<int> evaluateGetChildrenStar(int);
-	 set<int> evaluateGetParentStar(int);
-	 bool evaluateIsParent(int,int);
-	 bool evaluateIsParentStar(int,int);
-
 	 void insertToChildrenTable(set<int>);
 	void insertToParentTable(set<int>);
 	void insertToChildrenStarTable(set<int>);
@@ -58,4 +49,12 @@ class Parent {
 	void insertToParentIndexMap(pair<int,int>);
 	int getChildrenIndexMapSize();
 	int getParentIndexMapSize();
+
+	//methods for query evaluation
+	 set<int> evaluateGetChildren(int);
+	 set<int> evaluateGetParent(int);
+	 set<int> evaluateGetChildrenStar(int);
+	 set<int> evaluateGetParentStar(int);
+	 bool evaluateIsParent(int,int);
+	 bool evaluateIsParentStar(int,int);
 };

@@ -13,12 +13,14 @@
 #include "Calls.h"
 #include "StatementTable.h"
 #include "Modifies.h"
+#include "Uses.h"
 
 //Design Extractor
 #include "CallsExtractor.h"
 #include "ParentExtractor.h"
 #include "FollowsExtractor.h"
 #include "ModifiesExtractor.h"
+#include "UsesExtractor.h"
 
 
 
@@ -44,10 +46,12 @@ public:
 	FollowsExtractor followsExtractor;
 	ParentExtractor parentExtractor;
 	ModifiesExtractor modifiesExtractor;
+	UsesExtractor usesExtractor;
 
 	//DE
 	void constructParent();
 	void constructFollows();
 	void constructCalls();
 	void constructModifies();
+	void constructUses();
 };

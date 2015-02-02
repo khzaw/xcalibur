@@ -24,7 +24,7 @@ using namespace std;
 	}
 
 	
-	set<int> Calls::getCallers(int callee){
+	set<int> Calls::evaluateGetCallers(int callee){
 		 set<int> result;
 		int calleeIndex = Calls::getCalleeIndex(callee);
 		if(calleeIndex>=callerTable.size()){
@@ -35,7 +35,7 @@ using namespace std;
 		}
 	}
 
-	set<int> Calls::getCallees(int caller){
+	set<int> Calls::evaluateGetCallees(int caller){
 		set<int> result;
 		int callerIndex = Calls::getCallerIndex(caller);
 		if(callerIndex>=calleeTable.size()){
@@ -47,7 +47,7 @@ using namespace std;
 	}
 	
 
-    set<int> Calls::getCalleesStar(int caller){
+    set<int> Calls::evaluateGetCalleesStar(int caller){
 		set<int> result;
 		int callerIndex = Calls::getCallerIndex(caller);
 		if(callerIndex>=calleeStarTable.size()){
@@ -59,7 +59,7 @@ using namespace std;
 		}
     }
 
-	set<int> Calls::getCallersStar(int callee){
+	set<int> Calls::evaluateGetCallersStar(int callee){
 	    set<int> result;
 		int calleeIndex = Calls::getCalleeIndex(callee);
 		if(calleeIndex>=callerStarTable.size()){

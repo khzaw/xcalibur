@@ -14,6 +14,13 @@ class FollowsTest : public CPPUNIT_NS::TestFixture // Note 2
 	CPPUNIT_TEST( testGetFolloweesStar );
 	CPPUNIT_TEST( testGetAllFollower );
 	CPPUNIT_TEST( testGetAllFollowee);
+	CPPUNIT_TEST( testEvaluateIsFollowsStar);
+	CPPUNIT_TEST( testEvaluateIsFollows);
+	CPPUNIT_TEST( testEvaluateGetFollowerStar);
+	CPPUNIT_TEST( testEvaluateGetFolloweeStar);
+	CPPUNIT_TEST( testEvaluateGetFollowers);
+	CPPUNIT_TEST( testEvaluateGetFollowees);
+
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -35,6 +42,18 @@ public:
 	// method to test getAllFollower / getAllFollowee
 	void testGetAllFollower();
 	void testGetAllFollowee();
+
+	//method to test evaluateIsFollowStar / evaluate IsFollows
+	void testEvaluateIsFollowsStar();
+	void testEvaluateIsFollows();
+
+	//methods to test EvaluateGetFollowerStar/ EvaluateGetFolloweeStar
+	void testEvaluateGetFollowerStar();
+	void testEvaluateGetFolloweeStar();
+
+	// method to test tEvaluateGetFollowers / EvaluateGetFollowees
+	void testEvaluateGetFollowers();
+	void testEvaluateGetFollowees();
 
 };
 #endif

@@ -260,7 +260,7 @@ FollowsTest::testEvaluateGetFollowees(){
 	return;
 }
 
-//test evaluateGetFollowees
+//test evaluateGetFollowers
 void
 FollowsTest::testEvaluateGetFollowers(){
 	Follows f;

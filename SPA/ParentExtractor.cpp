@@ -2,7 +2,7 @@
 
 #include "Parent.h"
 #include "PKBController.h"
-
+#include "ParentExtractor.h"
 
 
 ParentExtractor::ParentExtractor(Parent* parent){

@@ -14,6 +14,12 @@ class ParentTest : public CPPUNIT_NS::TestFixture // Note 2
 	CPPUNIT_TEST( testGetParentStar );
 	CPPUNIT_TEST( testGetAllChild );
 	CPPUNIT_TEST( testGetAllParent);
+	CPPUNIT_TEST( testEvaluateGetChildren);
+	CPPUNIT_TEST( testEvaluateGetParent);
+	CPPUNIT_TEST( testEvaluateGetParentStar);
+	CPPUNIT_TEST( testEvaluateGetChildrenStar);
+	CPPUNIT_TEST( testEvaluateIsParent);
+	CPPUNIT_TEST( testEvaluateIsParentStar);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -36,6 +42,17 @@ public:
 	void testGetAllChild();
 	void testGetAllParent();
 
+	//method to test evaluateIsParent / evaluateIsParentStar
+	void testEvaluateIsParentStar();
+	void testEvaluateIsParent();
+
+	//method to test evaluateGetParentStar / evaluateGetChildrenStar
+	void testEvaluateGetParentStar();
+	void testEvaluateGetChildrenStar();
+
+	//method to test evaluateGetParent / evaluateGetChildren
+	void testEvaluateGetParent();
+	void testEvaluateGetChildren();
 };
 #endif
     

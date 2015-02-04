@@ -27,10 +27,10 @@ FollowsTest::testInsert(){
 	//inserting non duplicates follows
 	Follows f;
 	FollowsExtractor extractor(&f);
-	extractor.construct();
 	f.insertFollows(1,2);
 	f.insertFollows(2,3);
 	f.insertFollows(3,4);
+	extractor.construct();
 	CPPUNIT_ASSERT(f.isFollowsTrue(1,2));
 	CPPUNIT_ASSERT(f.isFollowsTrue(2,3));
 	CPPUNIT_ASSERT(f.isFollowsTrue(3,4));
@@ -49,10 +49,10 @@ FollowsTest::testGetFollowers(){
 	
 	Follows f;
 	FollowsExtractor extractor(&f);
-	extractor.construct();
 	f.insertFollows(1,2);
 	f.insertFollows(2,3);
 	f.insertFollows(3,4);
+	extractor.construct();
 	set<int> follower = f.getFollowers(1);
 	std::set<int>::iterator itr = follower.begin();
 	CPPUNIT_ASSERT_EQUAL(2, *itr);
@@ -66,10 +66,10 @@ void
 FollowsTest::testGetFollowees(){
 	Follows f;
 	FollowsExtractor extractor(&f);
-	extractor.construct();
 	f.insertFollows(1,2);
 	f.insertFollows(2,3);
 	f.insertFollows(3,4);
+	extractor.construct();
 	set<int> followee = f.getFollowees(3);
 	std::set<int>::iterator itr = followee.begin();
 	CPPUNIT_ASSERT_EQUAL(2, *itr);
@@ -85,11 +85,11 @@ FollowsTest::testGetFollowersStar(){
 	
 	Follows f;
 	FollowsExtractor extractor(&f);
-	extractor.construct();
 	f.insertFollows(1,2);
 	f.insertFollows(2,3);
 	f.insertFollows(3,4);
 	f.insertFollows(4,5);
+	extractor.construct();
 	set<int> followers = f.getFollowersStar(2);
 	std::set<int>::iterator itr = followers.begin();
 	CPPUNIT_ASSERT_EQUAL(3,*itr);
@@ -105,11 +105,11 @@ void
 FollowsTest::testGetFolloweesStar(){
 	Follows f;
 	FollowsExtractor extractor(&f);
-	extractor.construct();
 	f.insertFollows(1,2);
 	f.insertFollows(2,3);
 	f.insertFollows(3,4);
 	f.insertFollows(4,5);
+	extractor.construct();
 	set<int> followees = f.getFolloweesStar(4);
 	std::set<int>::iterator itr = followees.begin();
 	CPPUNIT_ASSERT_EQUAL(3, *itr);
@@ -127,11 +127,11 @@ void
 FollowsTest::testGetAllFollower(){
 	Follows f;
 	FollowsExtractor extractor(&f);
-	extractor.construct();
 	f.insertFollows(1,2);
 	f.insertFollows(2,3);
 	f.insertFollows(3,4);
 	f.insertFollows(1,3);
+	extractor.construct();
 	set<int> followers = f.getAllFollowerStmt();
 	int size = followers.size();
 	CPPUNIT_ASSERT(3, size);
@@ -149,11 +149,11 @@ void
 FollowsTest::testGetAllFollowee(){
 	Follows f;
 	FollowsExtractor extractor(&f);
-	extractor.construct();
 	f.insertFollows(1,2);
 	f.insertFollows(2,3);
 	f.insertFollows(3,4);
 	f.insertFollows(2,5);
+	extractor.construct();
 	set<int> followees = f.getAllFolloweeStmt();
 	std::set<int>::iterator itr = followees.begin();
 	CPPUNIT_ASSERT(followees.size() == 3);
@@ -173,10 +173,10 @@ void
 FollowsTest::testEvaluateIsFollowsStar(){
 	Follows f;
 	FollowsExtractor extractor(&f);
-	extractor.construct();
 	f.insertFollows(1,2);
 	f.insertFollows(2,3);
 	f.insertFollows(3,4);
+	extractor.construct();
 	bool isFollowsStarTrue = false;
 	isFollowsStarTrue = f.isFollowsStarTrue(1,4);
 	CPPUNIT_ASSERT_EQUAL(true,isFollowsStarTrue);
@@ -188,10 +188,10 @@ void
 FollowsTest::testEvaluateIsFollows(){
 	Follows f;
 	FollowsExtractor extractor(&f);
-	extractor.construct();
 	f.insertFollows(1,2);
 	f.insertFollows(2,3);
 	f.insertFollows(3,4);
+	extractor.construct();
 	bool isFollowsTrue = false;
 	isFollowsTrue = f.isFollowsTrue(1,4);
 	CPPUNIT_ASSERT_EQUAL(true,isFollowsTrue);
@@ -203,10 +203,10 @@ void
 FollowsTest::testEvaluateGetFolloweeStar(){
 	Follows f;
 	FollowsExtractor extractor(&f);
-	extractor.construct();
 	f.insertFollows(1,2);
 	f.insertFollows(2,3);
 	f.insertFollows(3,4);
+	extractor.construct();
 	set<int> followeeStar = f.evaluateGetFolloweeStar(4);
 	CPPUNIT_ASSERT(followeeStar.size()==3);
 	std::set<int>::iterator itr = followeeStar.begin();
@@ -225,10 +225,10 @@ void
 FollowsTest::testEvaluateGetFollowerStar(){
 	Follows f;
 	FollowsExtractor extractor(&f);
-	extractor.construct();
 	f.insertFollows(1,2);
 	f.insertFollows(2,3);
 	f.insertFollows(3,4);
+	extractor.construct();
 	set<int> followerStar = f.evaluateGetFollowerStar(1);
 	CPPUNIT_ASSERT(followerStar.size()==3);
 	std::set<int>::iterator itr = followerStar.begin();
@@ -246,10 +246,10 @@ void
 FollowsTest::testEvaluateGetFollowees(){
 	Follows f;
 	FollowsExtractor extractor(&f);
-	extractor.construct();
 	f.insertFollows(1,2);
 	f.insertFollows(2,3);
 	f.insertFollows(3,4);
+	extractor.construct();
 	set<int> followees = f.evaluateGetFollowees(4);
 	CPPUNIT_ASSERT(followees.size()==1);
 	std::set<int>::iterator itr = followees.begin();
@@ -265,10 +265,10 @@ void
 FollowsTest::testEvaluateGetFollowers(){
 	Follows f;
 	FollowsExtractor extractor(&f);
-	extractor.construct();
 	f.insertFollows(1,2);
 	f.insertFollows(2,3);
 	f.insertFollows(3,4);
+	extractor.construct();	
 	set<int> followers = f.evaluateGetFollowers(1);
 	CPPUNIT_ASSERT(followers.size()==1);
 	std::set<int>::iterator itr = followers.begin();

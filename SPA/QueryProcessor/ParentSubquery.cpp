@@ -63,7 +63,7 @@ public:
 			if (synonymTable->at(rightSynonym)=="stmt"||synonymTable->at(rightSynonym)=="prog_line"){
 				populateAnswerIndexSyn(temp, answer);
 			} else if (synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if"){
-				populateAnswerIndexSyn(synToNodeType.at((synonymTable->at(rightSynonym))), temp, answer);
+				populateAnswerIndexSyn(synToNodeType.at(synonymTable->at(rightSynonym)), temp, answer);
 			}
 		}
 		return answer;

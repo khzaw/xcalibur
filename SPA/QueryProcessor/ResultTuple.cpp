@@ -102,8 +102,8 @@ ResultTuple* ResultTuple::cross(ResultTuple* other) {
 		int s2 = other->getAllResults().size();
 		for (int j = 0; j < s2; j++) {	
 			vector<int> temp = vector<int>();
-			temp.insert(temp.end(), results.begin(), results.end());
-			temp.insert(temp.end(), other->getAllResults().begin(), other->getAllResults().end());
+			temp.insert(temp.end(), results[i].begin(), results[i].end());
+			temp.insert(temp.end(), other->getAllResults()[j].begin(), other->getAllResults()[j].end());
 			final->addResultRow(temp);
 		}
 	}

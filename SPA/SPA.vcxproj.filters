@@ -105,7 +105,7 @@
     <ClCompile Include="QueryProcessor\ResultTuple.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
-    <ClCompile Include="QE.cpp">
+    <ClCompile Include="QueryProcessor\FollowsSubquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
   </ItemGroup>

@@ -62,6 +62,10 @@ public:
 		for(int i = 0; i < followees.size(); i++) {
 			vector<int> temp = vector<int>();
 			// synonym type check here
+			if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if")
+				&& pkb->statementTable.getTNode(followees[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
+				continue;
+			}
 			temp.push_back(followees.at(i));
 			tuple->addResultRow(temp);
 		}
@@ -104,6 +108,10 @@ public:
 		for(int i = 0; i < followers.size(); i++) {
 			vector<int> temp = vector<int>();
 			// synonym type check here
+			if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if")
+				&& pkb->statementTable.getTNode(followers[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
+				continue;
+			}
 			temp.push_back(followers.at(i));
 			tuple->addResultRow(temp);
 		}
@@ -140,12 +148,20 @@ public:
 
 		// get all followees statement
 		// for each followee statement, get its followers
-		vector<int> followees = pkb->followsTable.getFollowees();
+		vector<int> followees = pkb->followsTable.getAllFolloweeStmt();
 		for (int i = 0; i < followees.size(); i++) {
 			// synonym type check
-			vector<int> followers = pkb->followsTable.getFollowers();
-			for (int j; j < followers.size(); j++) {
+			if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if")
+				&& pkb->statementTable.getTNode(followees[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
+				continue;
+			}
+			vector<int> followers = pkb->followsTable.getFollowers(followees[i]);
+			for (int j = 0; j < followers.size(); j++) {
 				// synonym type check
+				if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if")
+				&& pkb->statementTable.getTNode(followers[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
+					continue;
+				}
 				vector<int> row = vector<int>();
 				row.push_back(followees.at(i));
 				row.push_back(followers.at(i));
@@ -157,8 +173,10 @@ public:
 
 	ResultTuple* solveBothSyn(ResultTuple* tuple) {
 		//case 1: both are inside
+		
 		//case 2: only left is inside
 		//case 3: only right is inside
+		return new ResultTuple();
 	}
 
 	// BOOLEAN Result

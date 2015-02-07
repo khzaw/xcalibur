@@ -54,7 +54,7 @@
     <ClCompile Include="TestAST.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestParentSubquery.cpp">
+    <ClCompile Include="TestFollowsSubquery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -95,7 +95,7 @@
     <ClInclude Include="TestAST.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TestParentSubquery.h">
+    <ClInclude Include="TestFollowsSubquery.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

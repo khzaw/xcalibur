@@ -1,24 +1,24 @@
 #include <cppunit/config/SourcePrefix.h>
-#include "TestParentSubquery.h"
-#include "QueryProcessor\ParentSubquery.cpp"
+#include "TestFollowsSubquery.h"
+#include "QueryProcessor\FollowsSubquery.cpp"
 
 #include <iostream>
 #include <string>
 
 void 
-ParentSubqueryTest::setUp()
+FollowsSubqueryTest::setUp()
 {
 }
 
 void 
-ParentSubqueryTest::tearDown()
+FollowsSubqueryTest::tearDown()
 {
 }	
 
-CPPUNIT_TEST_SUITE_REGISTRATION( ParentSubqueryTest );
+CPPUNIT_TEST_SUITE_REGISTRATION( FollowsSubqueryTest );
 // method to test insertion of Follows
 
-void ParentSubqueryTest::testSolve(){
+void FollowsSubqueryTest::testSolve(){
 	/** SIMPLE source code
 	procedure Proc1{
 	a = x;			// 1
@@ -57,13 +57,11 @@ void ParentSubqueryTest::testSolve(){
 	pk.statementTable.insertStatement(&stmt9);
 	pk.statementTable.insertStatement(&stmt10);
 
-	pk.parentTable.insertParent(3, 4);
-	pk.parentTable.insertParent(3, 5);
-	pk.parentTable.insertParent(3, 6);
-	pk.parentTable.insertParent(6, 7);
-	pk.parentTable.insertParent(7, 8);
-	pk.parentTable.insertParent(7, 9);
-	pk.parentTable.insertParent(9, 10);
+	pk.followsTable.insertFollows(1, 2);
+	pk.followsTable.insertFollows(2, 3);
+	pk.followsTable.insertFollows(4, 5);
+	pk.followsTable.insertFollows(5, 6);
+	pk.followsTable.insertFollows(8, 9);
 	
 	pk.procTable.insertProc("Proc1");
 
@@ -86,30 +84,12 @@ void ParentSubqueryTest::testSolve(){
 	table1["v1"]="variable";
 	table1["v2"]="variable";
 	table1["proc5"]="procedure";
-	/*
-	ParentSubquery ps1 = ParentSubquery(&table1, &pk);
-	ps1.setSynonyms(3, "s1");
+
+	FollowsSubquery ps1 = FollowsSubquery(&table1, &pk);
+	ps1.setSynonyms(1, "s1");
 	ResultTuple* rt1 = ps1.solve();
-	int expected1[3][2] = {{3, 4}, {3, 5}, {3, 6}};
-	for (int i = 0; i < 3; i++){
-		for (int j = 0; j < 2; j++){
-			CPPUNIT_ASSERT_EQUAL(expected1[i][j], rt1->getAllResults()[i][j]);
-		}
+	int expected1[1] = {2};
+	for (int i = 0; i < rt1->getAllResults().size(); i++){
+		CPPUNIT_ASSERT_EQUAL(2, rt1->getAllResults()[i][0]);
 	}
-
-	ParentSubquery ps2 = ParentSubquery(&table1, &pk);
-	ps2.setSynonyms(9, "s2");
-	ResultTuple* rt2 = ps2.solve();
-	int expected2[1][2] = {{9, 10}};
-	for (int i = 0; i < 1; i++){
-		for (int j = 0; j < 2; j++){
-			CPPUNIT_ASSERT_EQUAL(expected2[i][j], rt2->getAllResults()[i][j]);
-		}
-	}
-
-	ParentSubquery ps3 = ParentSubquery(&table1, &pk);
-	ps3.setSynonyms(2, 3);
-	ResultTuple* rt3 = ps3.solve();
-	CPPUNIT_ASSERT_EQUAL((size_t)0, rt3->getAllResults().size());
-	*/
 }

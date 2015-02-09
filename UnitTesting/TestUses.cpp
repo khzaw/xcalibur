@@ -6,6 +6,8 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <set>
+#include "UsesExtractor.h"
 
 void 
 UsesTest::setUp()
@@ -26,19 +28,24 @@ CPPUNIT_TEST_SUITE_REGISTRATION( UsesTest );
 void 
 UsesTest::testGetUsersStmt(){
    Uses m;
-   vector<int> stmt;
+   set<int> stmt;
    m.insertUsesStmt(1,2);
-   stmt.push_back(1);
+   stmt.insert(1);
    m.insertUsesStmt(2,2);
-   stmt.push_back(2);
+   stmt.insert(2);
    m.insertUsesStmt(4,2);
-   stmt.push_back(4);
+   stmt.insert(4);
    m.insertUsesStmt(3,2);
-   stmt.push_back(3);
-   
-   vector<int> users = m.getUsersStmt(2);
+   UsesExtractor extractor(&m);
+	extractor.construct();
+   stmt.insert(3);
+   set<int> users = m.getUsersStmt(2);
+   std::set<int>::iterator itr1 = users.begin();
+   std::set<int>::iterator itr2 = stmt.begin();
    for(int i=0;i<users.size();i++){
-   CPPUNIT_ASSERT_EQUAL(stmt[i],users[i]);
+   CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+   itr1++;
+   itr2++;
    }
 	return;
 }
@@ -47,19 +54,24 @@ UsesTest::testGetUsersStmt(){
 void 
 UsesTest::testGetUsedVarStmt(){
  Uses m;
-   vector<int> var;
+   set<int> var;
    m.insertUsesStmt(1,2);
-   var.push_back(2);
+   var.insert(2);
    m.insertUsesStmt(1,3);
-   var.push_back(3);
+   var.insert(3);
    m.insertUsesStmt(1,4);
-   var.push_back(4);
+   var.insert(4);
    m.insertUsesStmt(1,5);
-   var.push_back(5);
-   
-   vector<int> usedVar = m.getUsedVarStmt(1);
+   var.insert(5);
+   UsesExtractor extractor(&m);
+	extractor.construct();
+   set<int> usedVar = m.getUsedVarStmt(1);
+   std::set<int>::iterator itr1 = usedVar.begin();
+   std::set<int>::iterator itr2 = var.begin();
    for(int i=0;i<usedVar.size();i++){
-   CPPUNIT_ASSERT_EQUAL(var[i],usedVar[i]);
+   CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+   itr1++;
+   itr2++;
    }
 	return;
 }
@@ -78,7 +90,8 @@ UsesTest::testGetUsesStmt(){
     p.push_back(make_pair(4,4));
    m.insertUsesStmt(3,5);
     p.push_back(make_pair(3,5));
-
+	UsesExtractor extractor(&m);
+	extractor.construct();
    vector<pair<int,int>> usesStmt = m.getUsesStmt();
    for(int i=0;i<usesStmt.size();i++){
 	   CPPUNIT_ASSERT(p[i] == usesStmt[i]);
@@ -90,20 +103,29 @@ UsesTest::testGetUsesStmt(){
 void 
 UsesTest::testInsertUsesStmt(){
     Uses m;
-	vector<int> var;
+	set<int> var;
 	
 	m.insertUsesStmt(1,2);
-	var.push_back(2);
+	var.insert(2);
 	m.insertUsesStmt(1,3);
-	var.push_back(3);
-	vector<int> varGet = m.getUsedVarStmt(1);
+	UsesExtractor extractor(&m);
+	extractor.construct();
+	var.insert(3);
+	set<int> varGet = m.getUsedVarStmt(1);
+	std::set<int>::iterator itr1 = var.begin();
+	std::set<int>::iterator itr2 = varGet.begin();
 	for(int i=0;i<varGet.size();i++){
-	CPPUNIT_ASSERT_EQUAL(var[i],varGet[i]);
+	CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+	itr1++;
+	itr2++;
 	}
 	m.insertUsesStmt(1,4);
-	var.push_back(4);
+	extractor.construct();
+	var.insert(4);
 	for(int i=0;i<varGet.size();i++){
-	CPPUNIT_ASSERT_EQUAL(var[i],varGet[i]);
+	CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+	itr1++;
+	itr2++;
 	}
 	//check for duplicates
 	vector<pair<int,int>> usesTable = m.getUsesStmt();
@@ -121,6 +143,8 @@ void
 UsesTest::testIsUsesStmt(){
 	Uses m;
 	m.insertUsesStmt(1,2);
+	UsesExtractor extractor(&m);
+	extractor.construct();
 	CPPUNIT_ASSERT(m.isUsesStmt(1,2));
 
 	return;
@@ -131,19 +155,24 @@ UsesTest::testIsUsesStmt(){
 void 
 UsesTest::testGetUsersProc(){
    Uses m;
-   vector<int> proc;
+   set<int> proc;
    m.insertUsesProc(1,2);
-   proc.push_back(1);
+   proc.insert(1);
    m.insertUsesProc(2,2);
-   proc.push_back(2);
+   proc.insert(2);
    m.insertUsesProc(4,2);
-   proc.push_back(4);
+   proc.insert(4);
    m.insertUsesProc(3,2);
-   proc.push_back(3);
-   
-   vector<int> users = m.getUsersStmt(2);
+   proc.insert(3);
+   UsesExtractor extractor(&m);
+	extractor.construct();
+   set<int> users = m.getUsersStmt(2);
+   std::set<int>::iterator itr1 = users.begin();
+   std::set<int>::iterator itr2 = proc.begin();
    for(int i=0;i<users.size();i++){
-   CPPUNIT_ASSERT_EQUAL(proc[i],users[i]);
+   CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+   itr1++;
+   itr2++;
    }
 	return;
 }
@@ -151,20 +180,23 @@ UsesTest::testGetUsersProc(){
 //test get modified variables of procedures
 void 
 UsesTest::testGetUsedVarProc(){
- Uses m;
-   vector<int> var;
+   Uses m;
+   set<int> var;
    m.insertUsesProc(1,2);
-   var.push_back(2);
+   var.insert(2);
    m.insertUsesProc(1,3);
-   var.push_back(3);
+   var.insert(3);
    m.insertUsesProc(1,4);
-   var.push_back(4);
+   var.insert(4);
    m.insertUsesProc(1,5);
-   var.push_back(5);
-   
-   vector<int> usedVar = m.getUsedVarProc(1);
+   var.insert(5);
+   UsesExtractor extractor(&m);
+	extractor.construct();
+   set<int> usedVar = m.getUsedVarProc(1);
+   std::set<int>::iterator itr1 = usedVar.begin();
+   std::set<int>::iterator itr2 = var.begin();
    for(int i=0;i<usedVar.size();i++){
-   CPPUNIT_ASSERT_EQUAL(var[i],usedVar[i]);
+   CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
    }
 	return;
 }
@@ -183,7 +215,8 @@ UsesTest::testGetUsesProc(){
     p.push_back(make_pair(4,4));
    m.insertUsesProc(3,5);
     p.push_back(make_pair(3,5));
-
+	UsesExtractor extractor(&m);
+	extractor.construct();
    vector<pair<int,int>> usesProc = m.getUsesProc();
    for(int i=0;i<usesProc.size();i++){
 	   CPPUNIT_ASSERT(p[i] == usesProc[i]);
@@ -194,19 +227,28 @@ UsesTest::testGetUsesProc(){
 void 
 UsesTest::testInsertUsesProc(){
     Uses m;
-	vector<int> var;
+	set<int> var;
 	m.insertUsesProc(1,2);
-	var.push_back(2);
+	var.insert(2);
 	m.insertUsesProc(1,3);
-	var.push_back(3);
-	vector<int> varGet = m.getUsedVarProc(1);
+	var.insert(3);
+	UsesExtractor extractor(&m);
+	extractor.construct();
+	set<int> varGet = m.getUsedVarProc(1);
+	std::set<int>::iterator itr1 = var.begin();
+	std::set<int>::iterator itr2 = varGet.begin();
 	for(int i=0;i<varGet.size();i++){
-	CPPUNIT_ASSERT_EQUAL(var[i],varGet[i]);
+	CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+	itr1++;
+	itr2++;
 	}
 	m.insertUsesProc(1,4);
-	var.push_back(4);
+	extractor.construct();
+	var.insert(4);
 	for(int i=0;i<varGet.size();i++){
-	CPPUNIT_ASSERT_EQUAL(var[i],varGet[i]);
+	CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+	itr1++;
+	itr2++;
 	}
 	//check for duplicates
 	vector<pair<int,int>> usesTable = m.getUsesProc();
@@ -224,7 +266,127 @@ void
 UsesTest::testIsUsesProc(){
 	Uses m;
 	m.insertUsesProc(1,2);
+	UsesExtractor extractor(&m);
+	extractor.construct();
 	CPPUNIT_ASSERT(m.isUsesProc(1,2));
+	return;
+}
+
+//test if uses for statement 
+void
+testEvaluateIsUsesStmt(){
+	Uses m;
+	m.insertUsesStmt(1,2);
+	UsesExtractor extractor(&m);
+	extractor.construct();
+	CPPUNIT_ASSERT(m.evaluateIsUsesStmt(1,2));
 
 	return;
+}
+
+//test get statements that used var
+void testEvaluateGetUsersStmt(){
+   Uses m;
+   set<int> stmt;
+   m.insertUsesStmt(1,2);
+   stmt.insert(1);
+   m.insertUsesStmt(2,2);
+   stmt.insert(2);
+   m.insertUsesStmt(4,2);
+   stmt.insert(4);
+   m.insertUsesStmt(3,2);
+   stmt.insert(3);
+   UsesExtractor extractor(&m);
+   extractor.construct();
+   set<int> users = m.evaluateGetUsersStmt(2);
+   std::set<int>::iterator itr1 = users.begin();
+   std::set<int>::iterator itr2 = stmt.begin();
+   for(int i=0;i<users.size();i++){
+   CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+   itr1++;
+   itr2++;
+   }
+	return;
+}
+
+//test get used variables of statements
+void testEvaluateGetUsedVarStmt(){
+	Uses m;
+   set<int> var;
+   m.insertUsesStmt(1,2);
+   var.insert(2);
+   m.insertUsesStmt(1,3);
+   var.insert(3);
+   m.insertUsesStmt(1,4);
+   var.insert(4);
+   m.insertUsesStmt(1,5);
+   var.insert(5);
+   UsesExtractor extractor(&m);
+	extractor.construct();
+   set<int> usedVar = m.evaluateGetUsedVarStmt(1);
+   std::set<int>::iterator itr1 = usedVar.begin();
+   std::set<int>::iterator itr2 = var.begin();
+   for(int i=0;i<usedVar.size();i++){
+   CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+   itr1++;
+   itr2++;
+   }
+	return;
+}
+
+//test if uses for procedures
+void  testEvaluateIsUsesProc(){
+	Uses m;
+	m.insertUsesProc(1,2);
+	UsesExtractor extractor(&m);
+	extractor.construct();
+	CPPUNIT_ASSERT(m.evaluateIsUsesProc(1,2));
+	return;
+}
+
+//test get procedures that used var
+void testEvaluateGetUsersProc(){
+   Uses m;
+   set<int> proc;
+   m.insertUsesProc(1,2);
+   proc.insert(1);
+   m.insertUsesProc(2,2);
+   proc.insert(2);
+   m.insertUsesProc(4,2);
+   proc.insert(4);
+   m.insertUsesProc(3,2);
+   proc.insert(3);
+   UsesExtractor extractor(&m);
+	extractor.construct();
+   set<int> users = m.evaluateGetUsersStmt(2);
+   std::set<int>::iterator itr1 = users.begin();
+   std::set<int>::iterator itr2 = proc.begin();
+   for(int i=0;i<users.size();i++){
+   CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+   itr1++;
+   itr2++;
+   }
+	return;
+}
+
+//test get used variables of procedures
+void testEvaluateGetUsedVarProc(){
+   Uses m;
+   set<int> var;
+   m.insertUsesProc(1,2);
+   var.insert(2);
+   m.insertUsesProc(1,3);
+   var.insert(3);
+   m.insertUsesProc(1,4);
+   var.insert(4);
+   m.insertUsesProc(1,5);
+   var.insert(5);
+   UsesExtractor extractor(&m);
+   extractor.construct();
+   set<int> usedVar = m.evaluateGetUsedVarProc(1);
+   std::set<int>::iterator itr1 = usedVar.begin();
+   std::set<int>::iterator itr2 = var.begin();
+   for(int i=0;i<usedVar.size();i++){
+   CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+   }
 }

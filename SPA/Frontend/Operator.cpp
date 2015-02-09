@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include "Operator.h"
+#include "SPA/Frontend/Operator.h"
 
 using namespace std;
 

@@ -3,7 +3,7 @@
 #include <string>
 #include <typeinfo>
 #include <sstream>
-#include "TNode.h"
+#include "SPA/Frontend/TNode.h"
 
 
 using namespace std;

@@ -18,12 +18,12 @@ const_value: INTEGER
 #include <iostream>
 #include <stack>
 
-#include "..\PKB\AST.h"
-#include "Parser.h"
-#include "Lexer.h"
-#include "Lexeme.h"
-#include "..\PKB\PKBController.h"
-#include "Operator.h"
+#include "SPA/Frontend/Parser.h"
+#include "SPA/Frontend/Lexer.h"
+#include "SPA/Frontend/Lexeme.h"
+#include "SPA/Frontend/Operator.h"
+#include "SPA/PKB/AST.h"
+#include "SPA/PKB/PKBController.h"
 
 using namespace std;
 

@@ -14,7 +14,7 @@ var_name: NAME
 const_value: INTEGER
 */
 
-#include "Lexer.h"
+#include "SPA/Frontend/Lexer.h"
 #include <iostream>
 
 using namespace std;
@@ -82,44 +82,36 @@ Lexeme Lexer::lex() {
 			addChar(); getChar();
 		}
 		return Lexeme(IDENT, lexeme);
-		break;
-	
+
 	case DIGIT:
 		addChar(); getChar();
 		while(charClass == DIGIT) {
 			addChar(); getChar();
 		}
 		return Lexeme(INT_LIT, lexeme);
-		break;
 
 	case PLUS:
 		addChar(); getChar();
 		return Lexeme(PLUS, lexeme);
-		break;
 
 	case TIMES:
 		addChar(); getChar();
 		return Lexeme(TIMES, lexeme);;
-		break;
 
 	case EQ:
 		addChar(); getChar();
 		return Lexeme(EQ, lexeme);
-		break;
 
 	case SEMICOLON:
 		addChar(); getChar();
 		return Lexeme(SEMICOLON, lexeme);
-		break;
 
 	case OPEN_BLOCK:
 		addChar(); getChar();
 		return Lexeme(OPEN_BLOCK, lexeme);
-		break;
 
 	case CLOSE_BLOCK:
 		addChar(); getChar();
 		return Lexeme(CLOSE_BLOCK, lexeme);
-		break;
 	}
 }

@@ -2,11 +2,11 @@
 #include <iostream>
 #include <set>
 #include <stack>
-#include "Lexer.h"
-#include "Lexeme.h"
-#include "..\PKB\PKBController.h"
-#include "TNode.h"
-#include "Operator.h"
+#include "SPA/Frontend/Lexer.h"
+#include "SPA/Frontend/Lexeme.h"
+#include "SPA/Frontend/TNode.h"
+#include "SPA/Frontend/Operator.h"
+#include "SPA/PKB/PKBController.h"
 
 using namespace std;
 

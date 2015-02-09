@@ -1,8 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "Lexer.h"
-#include "Lexeme.h"
+#include "SPA/Frontend/Lexeme.h"
 
 using namespace std;
 

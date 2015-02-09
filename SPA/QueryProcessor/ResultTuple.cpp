@@ -38,7 +38,11 @@ string ResultTuple::getSynonym(int index){
 }
 
 int ResultTuple::getSynonymIndex(string syn) {
-	return synonymMap[syn];
+	try {
+		return synonymMap.at(syn);
+	} catch (exception e){
+		return -1;
+	}
 }
 
 map<string, int> ResultTuple::getSynonymMap() {

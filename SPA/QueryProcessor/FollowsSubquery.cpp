@@ -172,10 +172,53 @@ public:
 	}
 
 	ResultTuple* solveBothSyn(ResultTuple* tuple) {
-		//case 1: both are inside
-		
-		//case 2: only left is inside
-		//case 3: only right is inside
+		ResultTuple* result = new ResultTuple();
+		result->setSynonym(tuple->getSynonyms());
+		result->setSynonymMap(tuple->getSynonymMap());
+
+		int lIndex = tuple->getSynonymIndex(leftSynonym);
+		int rIndex = tuple->getSynonymIndex(rightSynonym);
+		if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
+			for (int i = 0; i < tuple->getAllResults().size(); i++){
+				if (pkb->followsTable.isFollowsTrue(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
+					result->addResultRow(tuple->getResultRow(i));
+				}
+			}
+		} else if (rIndex == -1) { //case 2: only left is inside
+			int index = result->addSynonym(rightSynonym);
+			result->addSynonymToMap(rightSynonym, index);
+			map<int, vector<int>> prevSolution = map<int, vector<int>>();
+			for (int i = 0; i < tuple->getAllResults().size(); i++) {
+				int leftValue = tuple->getResultAt(i, lIndex);
+				if (prevSolution.find(leftValue) == prevSolution.end()){
+					vector<int> tempValues = pkb->followsTable.getFollowers(leftValue);
+					prevSolution.insert(make_pair(leftValue, tempValues));
+				}
+				vector<int> vals = prevSolution.at(leftValue);
+				for (int j = 0; j < vals.size(); j++){
+					vector<int> newRow(tuple->getResultRow(i).begin(), tuple->getResultRow(i).end());
+					newRow.push_back(vals[j]);
+					result->addResultRow(newRow);
+				}
+			}
+		} else if (lIndex == -1) { //case 3: only right is inside
+			int index = result->addSynonym(leftSynonym);
+			result->addSynonymToMap(leftSynonym, index);
+			map<int, vector<int>> prevSolution = map<int, vector<int>>();
+			for (int i = 0; i < tuple->getAllResults().size(); i++) {
+				int rightValue = tuple->getResultAt(i, rIndex);
+				if (prevSolution.find(rightValue) == prevSolution.end()){
+					vector<int> tempValues = pkb->followsTable.getFollowees(rightValue);
+					prevSolution.insert(make_pair(rightValue, tempValues));
+				}
+				vector<int> vals = prevSolution.at(rightValue);
+				for (int j = 0; j < vals.size(); j++){
+					vector<int> newRow(tuple->getResultRow(i).begin(), tuple->getResultRow(i).end());
+					newRow.push_back(vals[j]);
+					result->addResultRow(newRow);
+				}
+			}
+		}
 		return new ResultTuple();
 	}
 

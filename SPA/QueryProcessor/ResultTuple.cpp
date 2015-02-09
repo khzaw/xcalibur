@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
-#include "ResultTuple.h"
+#include "SPA/QueryProcessor/ResultTuple.h"
 
 using namespace std;
 

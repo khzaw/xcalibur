@@ -1,7 +1,7 @@
 // File name: QueryTree.cpp
 #include <iostream>
-#include "QTNode.h"
-#include "QueryTree.h"
+#include "SPA/QueryProcessor/QTNode.h"
+#include "SPA/QueryProcessor/QueryTree.h"
 
 using namespace std;
 

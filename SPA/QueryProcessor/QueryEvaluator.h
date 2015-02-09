@@ -6,18 +6,18 @@
 #include <map>
 #include "QueryTree.h"
 #include "QTNode.h"
-#include "..\PKB\PKB.h"
-#include "..\PKB\PKBController.h"
+#include "SPA/PKB/PKB.h"
+#include "SPA/PKB/PKBController.h"
 
 //For Testing
-#include "..\PKB\StatementTable.h"
-#include "..\PKB\Follows.h"
-#include "..\PKB\Parent.h"
-#include "..\PKB\Modifies.h"
-#include "..\PKB\Uses.h"
-#include "..\PKB\ProcTable.h"
-#include "..\PKB\VarTable.h"
-#include "..\PKB\ConstantTable.h"
+#include "SPA/PKB/StatementTable.h"
+#include "SPA/PKB/Follows.h"
+#include "SPA/PKB/Parent.h"
+#include "SPA/PKB/Modifies.h"
+#include "SPA/PKB/Uses.h"
+#include "SPA/PKB/ProcTable.h"
+#include "SPA/PKB/VarTable.h"
+#include "SPA/PKB/ConstantTable.h"
 
 using namespace std;
 

@@ -4,15 +4,17 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <string.h>
 #include <map>
 #include <ctype.h>
 #include <stack>
 
-#include "QueryParser.h"
-#include "QueryLexer.h"
-#include "QTNode.h"
-#include "QueryTree.h"
-#include "QueryException.h"
+#include <SPA/Frontend/Lexeme.h>
+#include "SPA/QueryProcessor/QueryParser.h"
+#include "SPA/QueryProcessor/QueryLexer.h"
+#include "SPA/QueryProcessor/QTNode.h"
+#include "SPA/QueryProcessor/QueryTree.h"
+#include "SPA/QueryProcessor/QueryException.h"
 
 using namespace std;
 
@@ -61,7 +63,7 @@ QueryTree* QueryParser::getQueryTree() {
 }
 
 void QueryParser::match(string s) {
-	if (_stricmp(s.c_str(), nextToken.name.c_str()) == 0) {
+	if (strcmp(s.c_str(), nextToken.name.c_str()) == 0) {
 		nextToken = getToken();
 	} else {
 		throw(QueryException("QUERY SYNTAX ERROR: Unexpected token " + nextToken.name + ", Expected token: " + s ));
@@ -88,7 +90,7 @@ void QueryParser::matchDeclaration() {
 	if(nextToken.name.compare("Select") != 0) {
 	//cout << "SYNSIZE:" << DESIGN_ENTITIES.size() << endl;
 	for(size_t i = 0; i < DESIGN_ENTITIES.size(); i++) {
-		if (_stricmp(nextToken.name.c_str(), DESIGN_ENTITIES[i].c_str()) == 0) {
+		if (strcmp(nextToken.name.c_str(), DESIGN_ENTITIES[i].c_str()) == 0) {
 			match(DESIGN_ENTITIES[i]);
 			matchDeclarationVariables(DESIGN_ENTITIES[i]);
 			i = 0;
@@ -112,7 +114,7 @@ void QueryParser::matchDeclarationVariables(string entity) {
 
 void QueryParser::matchSelect() {
 	match("Select");
-	if (_stricmp(nextToken.name.c_str(), "BOOLEAN") == 0) {
+	if (strcmp(nextToken.name.c_str(), "BOOLEAN") == 0) {
 		match("BOOLEAN");
 		QTNode* newNode = new QTNode("BOOLEAN");
 		qt->getRootNode()->getChild(0)->addChild(newNode);
@@ -153,14 +155,14 @@ void QueryParser::matchTupleElements(int times) {
 
 void QueryParser::matchConditions() {
 	//cout << nextToken.name <<endl;
-	if (_stricmp(nextToken.name.c_str(), "such") == 0) {
+	if (strcmp(nextToken.name.c_str(), "such") == 0) {
 		match("such");
 		match("that");
 		matchSuchThat();
-	} else if (_stricmp(nextToken.name.c_str(), "pattern") == 0) {
+	} else if (strcmp(nextToken.name.c_str(), "pattern") == 0) {
 		match("pattern");
 		matchPattern();
-	} else if (_stricmp(nextToken.name.c_str(), "with") == 0) {
+	} else if (strcmp(nextToken.name.c_str(), "with") == 0) {
 		match("with");
 		matchWith();
 	} else if (nextToken.token == EOL) {
@@ -178,7 +180,7 @@ void QueryParser::matchConditions() {
 
 void QueryParser::matchSuchThat() {
 	matchSuchThatConditions();
-	while (_stricmp(nextToken.name.c_str(), "and") == 0) {
+	while (strcmp(nextToken.name.c_str(), "and") == 0) {
 		match("and");
 		matchSuchThatConditions();
 	}
@@ -192,21 +194,21 @@ void QueryParser::matchSuchThatConditions(){
 		nextToken = getToken();
 	}
 
-	if (_stricmp(relation.c_str(), "Modifies") == 0) {
+	if (strcmp(relation.c_str(), "Modifies") == 0) {
 		matchModifies();
-	} else if (_stricmp(relation.c_str(), "Uses") == 0) {
+	} else if (strcmp(relation.c_str(), "Uses") == 0) {
 		matchUses();
-	} else if (_stricmp(relation.c_str(), "Calls") == 0) {
+	} else if (strcmp(relation.c_str(), "Calls") == 0) {
 		matchCalls(0);
-	} else if (_stricmp(relation.c_str(), "Calls*") == 0) {
+	} else if (strcmp(relation.c_str(), "Calls*") == 0) {
 		matchCalls(1);
-	} else if (_stricmp(relation.c_str(), "Parent") == 0) {
+	} else if (strcmp(relation.c_str(), "Parent") == 0) {
 		matchParent(0);
-	} else if (_stricmp(relation.c_str(), "Parent*") == 0) {
+	} else if (strcmp(relation.c_str(), "Parent*") == 0) {
 		matchParent(1);
-	} else if (_stricmp(relation.c_str(), "Follows") == 0) {
+	} else if (strcmp(relation.c_str(), "Follows") == 0) {
 		matchFollows(0);
-	} else if (_stricmp(relation.c_str(), "Follows*") == 0) {
+	} else if (strcmp(relation.c_str(), "Follows*") == 0) {
 		matchFollows(1);
 	} 
 }
@@ -352,7 +354,7 @@ QTNode* QueryParser::matchStmtRef() {
 
 void QueryParser::matchPattern() {
 	matchPatternConditions();
-	if (_stricmp(nextToken.name.c_str(), "and") == 0) {
+	if (strcmp(nextToken.name.c_str(), "and") == 0) {
 		match("and");
 		matchPatternConditions();
 	}
@@ -365,11 +367,11 @@ void QueryParser::matchPatternConditions(){
 	map<string, string>::iterator it = synonyms.find(syn);
 	string synType = (it != synonyms.end()) ? it->second : "";
 	
-	if (_stricmp(synType.c_str(), "assign") == 0) {
+	if (strcmp(synType.c_str(), "assign") == 0) {
 		matchPatternAssign(syn);
-	} else if (_stricmp(synType.c_str(), "while") == 0) {
+	} else if (strcmp(synType.c_str(), "while") == 0) {
 		matchPatternWhile(syn);
-	} else if (_stricmp(synType.c_str(), "if") == 0) {
+	} else if (strcmp(synType.c_str(), "if") == 0) {
 		matchPatternIf (syn);
 	} else {
 		throw(QueryException("INVALID SYNONYM: " + syn + " is not a synonym of the type \"if\", \"while\" or \"assign\"")); 

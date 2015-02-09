@@ -2,7 +2,7 @@
 //header guard at start of header file
 #ifndef QUERYTREE_H
 #define QUERYTREE_H
-#include "QTNode.h"
+#include "SPA/QueryProcessor/QTNode.h"
 
 using namespace std;
 

@@ -5,9 +5,9 @@
 #include <queue>
 #include <algorithm>
 
-#include "QE.h"
-#include "Subquery.h"
-#include "ResultTuple.h"
+#include "SPA/QueryProcessor/QE.h"
+#include "SPA/QueryProcessor/Subquery.h"
+#include "SPA/QueryProcessor/ResultTuple.h"
 
 using namespace std;
 
@@ -145,7 +145,7 @@ void QE::solveQuerySets() {
 }
 
 void QE::joinQuerySolutions() {
-	while (solutions.size > 1) {
+	while (solutions.size() > 1) {
 		solutions[0] = solutions[0]->cross(solutions[1]);
 		solutions.erase(solutions.begin() + 1);
 	}

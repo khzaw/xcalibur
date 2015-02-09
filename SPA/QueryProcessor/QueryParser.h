@@ -4,10 +4,10 @@
 #include <vector>
 #include <map>
 
-#include "QueryLexer.h"
-#include "..\Frontend\Lexeme.h"
-#include "QTNode.h"
-#include "QueryTree.h"
+#include "SPA/Frontend/Lexeme.h"
+#include "SPA/QueryProcessor/QueryLexer.h"
+#include "SPA/QueryProcessor/QTNode.h"
+#include "SPA/QueryProcessor/QueryTree.h"
 
 using namespace std;
 

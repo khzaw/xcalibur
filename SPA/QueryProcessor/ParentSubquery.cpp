@@ -2,8 +2,8 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "Subquery.h"
-#include "Subquery.cpp"
+#include "SPA/QueryProcessor/Subquery.h"
+#include "SPA/PKB/PKBController.h"
 
 using namespace std;
 

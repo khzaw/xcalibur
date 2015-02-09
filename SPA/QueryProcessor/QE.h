@@ -4,8 +4,8 @@
 #include <map>
 #include <queue>
 
-#include "Subquery.h"
-#include "ResultTuple.h"
+#include "SPA/QueryProcessor/Subquery.h"
+#include "SPA/QueryProcessor/ResultTuple.h"
 
 using namespace std;
 

@@ -2,9 +2,9 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "QueryTree.h"
-#include "..\PKB\PKBController.h"
-#include "ResultTuple.h"
+#include "SPA/PKB/PKBController.h"
+#include "SPA/QueryProcessor/QueryTree.h"
+#include "SPA/QueryProcessor/ResultTuple.h"
 
 using namespace std;
 

@@ -6,6 +6,8 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <set>
+#include "ModifiesExtractor.h"
 
 void 
 ModifiesTest::setUp()
@@ -20,45 +22,54 @@ ModifiesTest::tearDown()
 
 CPPUNIT_TEST_SUITE_REGISTRATION( ModifiesTest );
 
-//statements
-//test get statements that modified var
+//test get statements that modify variables
 void 
 ModifiesTest::testGetModifiersStmt(){
    Modifies m;
-   vector<int> stmt;
+   set<int> stmt;
    m.insertModifiesStmt(1,2);
-   stmt.push_back(1);
+   stmt.insert(1);
    m.insertModifiesStmt(2,2);
-   stmt.push_back(2);
+   stmt.insert(2);
    m.insertModifiesStmt(4,2);
-   stmt.push_back(4);
+   stmt.insert(4);
    m.insertModifiesStmt(3,2);
-   stmt.push_back(3);
+   stmt.insert(3);
    
-   vector<int> modifiers = m.getModifiersStmt(2);
+   set<int> modifiers = m.evaluateGetModifiersStmt(2);
+   std::set<int>::iterator itr1 = modifiers.begin();
+   std::set<int>::iterator itr2 = stmt.begin();
    for(int i=0;i<modifiers.size();i++){
-   CPPUNIT_ASSERT_EQUAL(stmt[i],modifiers[i]);
+   CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+   itr1++;
+   itr2++;
    }
 	return;
 }
+
 
 //test get modified variables of statements
 void 
 ModifiesTest::testGetModifiedVarStmt(){
  Modifies m;
-   vector<int> var;
+   set<int> var;
    m.insertModifiesStmt(1,2);
-   var.push_back(2);
+   var.insert(2);
    m.insertModifiesStmt(1,3);
-   var.push_back(3);
+   var.insert(3);
    m.insertModifiesStmt(1,4);
-   var.push_back(4);
+   var.insert(4);
    m.insertModifiesStmt(1,5);
-   var.push_back(5);
+   var.insert(5);
    
-   vector<int> modifiedVar = m.getModifiedVarStmt(1);
+   set<int> modifiedVar = m.getModifiedVarStmt(1);
+   std::set<int>::iterator itr1= modifiedVar.begin();
+   std::set<int>::iterator itr2 = var.begin();
+   CPPUNIT_ASSERT_EQUAL(var.size(), modifiedVar.size());
    for(int i=0;i<modifiedVar.size();i++){
-   CPPUNIT_ASSERT_EQUAL(var[i],modifiedVar[i]);
+   CPPUNIT_ASSERT_EQUAL(*itr1, *itr2);
+   itr1++;
+   itr2++;
    }
 	return;
 }
@@ -89,20 +100,23 @@ ModifiesTest::testGetModifiesStmt(){
 void 
 ModifiesTest::testInsertModifiesStmt(){
     Modifies m;
-	vector<int> var;
-	
+	set<int> var;
 	m.insertModifiesStmt(1,2);
-	var.push_back(2);
+	var.insert(2);
 	m.insertModifiesStmt(1,3);
-	var.push_back(3);
-	vector<int> varGet = m.getModifiedVarStmt(1);
+	var.insert(3);
+	set<int> varGet = m.getModifiedVarStmt(1);
+	std::set<int>::iterator itr1 = varGet.begin();
+	std::set<int>::iterator itr2 = var.begin();
 	for(int i=0;i<varGet.size();i++){
-	CPPUNIT_ASSERT_EQUAL(var[i],varGet[i]);
+	CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+	itr1++;
+	itr2++;
 	}
 	m.insertModifiesStmt(1,4);
-	var.push_back(4);
+	var.insert(4);
 	for(int i=0;i<varGet.size();i++){
-	CPPUNIT_ASSERT_EQUAL(var[i],varGet[i]);
+	CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
 	}
 	//check for duplicates
 	vector<pair<int,int>> modifiesTable = m.getModifiesStmt();
@@ -130,19 +144,23 @@ ModifiesTest::testIsModifiesStmt(){
 void 
 ModifiesTest::testGetModifiersProc(){
    Modifies m;
-   vector<int> proc;
+   set<int> proc;
    m.insertModifiesProc(1,2);
-   proc.push_back(1);
+   proc.insert(1);
    m.insertModifiesProc(2,2);
-   proc.push_back(2);
+   proc.insert(2);
    m.insertModifiesProc(4,2);
-   proc.push_back(4);
+   proc.insert(4);
    m.insertModifiesProc(3,2);
-   proc.push_back(3);
+   proc.insert(3);
    
-   vector<int> modifiers = m.getModifiersProc(2);
+   set<int> modifiers = m.getModifiersProc(2);
+   std::set<int>::iterator itr1 = modifiers.begin();
+   std::set<int>::iterator itr2 = proc.begin();
    for(int i=0;i<modifiers.size();i++){
-   CPPUNIT_ASSERT_EQUAL(proc[i],modifiers[i]);
+   CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+   itr1++;
+   itr2++;
    }
 	return;
 }
@@ -151,19 +169,23 @@ ModifiesTest::testGetModifiersProc(){
 void 
 ModifiesTest::testGetModifiedVarProc(){
  Modifies m;
-   vector<int> var;
+   set<int> var;
    m.insertModifiesProc(1,2);
-   var.push_back(2);
+   var.insert(2);
    m.insertModifiesProc(1,3);
-   var.push_back(3);
+   var.insert(3);
    m.insertModifiesProc(1,4);
-   var.push_back(4);
+   var.insert(4);
    m.insertModifiesProc(1,5);
-   var.push_back(5);
+   var.insert(5);
    
-   vector<int> modifiedVar = m.getModifiedVarProc(1);
+   set<int> modifiedVar = m.getModifiedVarProc(1);
+   std::set<int>::iterator itr1 = modifiedVar.begin();
+   std::set<int>::iterator itr2 = var.begin();
    for(int i=0;i<modifiedVar.size();i++){
-   CPPUNIT_ASSERT_EQUAL(var[i],modifiedVar[i]);
+   CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+   itr1++;
+   itr2++;
    }
 	return;
 }
@@ -194,20 +216,24 @@ ModifiesTest::testGetModifiesProc(){
 void 
 ModifiesTest::testInsertModifiesProc(){
     Modifies m;
-	vector<int> var;
+	set<int> var;
 	
 	m.insertModifiesProc(1,2);
-	var.push_back(2);
+	var.insert(2);
 	m.insertModifiesProc(1,3);
-	var.push_back(3);
-	vector<int> varGet = m.getModifiedVarProc(1);
+	var.insert(3);
+	set<int> varGet = m.getModifiedVarProc(1);
+	std::set<int>::iterator itr1 = varGet.begin();
+	std::set<int>::iterator itr2 = var.begin();
 	for(int i=0;i<varGet.size();i++){
-	CPPUNIT_ASSERT_EQUAL(var[i],varGet[i]);
+	CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+	itr1++;
+	itr2++;
 	}
 	m.insertModifiesProc(1,4);
-	var.push_back(4);
+	var.insert(4);
 	for(int i=0;i<varGet.size();i++){
-	CPPUNIT_ASSERT_EQUAL(var[i],varGet[i]);
+	CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
 	}
 	//check for duplicates
 	vector<pair<int,int>> modifiesTable = m.getModifiesProc();
@@ -227,5 +253,128 @@ ModifiesTest::testIsModifiesProc(){
 	m.insertModifiesProc(1,2);
 	CPPUNIT_ASSERT(m.isModifiesProc(1,2));
 
+	return;
+}
+
+// test if modifies for statements
+void ModifiesTest::testEvaluateIsModifiesStmt(){
+	Modifies m;
+	m.insertModifiesStmt(1,2);
+	ModifiesExtractor extractor(&m);
+	extractor.construct();
+	CPPUNIT_ASSERT(m.evaluateIsModifiesStmt(1,2));
+	return;
+}
+
+// test if modifies for procedures
+void ModifiesTest::testEvaluateIsModifiesProc(){
+	Modifies m;
+	m.insertModifiesProc(1,2);
+	ModifiesExtractor extractor(&m);
+	extractor.construct();
+	CPPUNIT_ASSERT(m.evaluateIsModifiesProc(1,2));
+	return;
+}
+
+// test get statements that modify variables
+void ModifiesTest::testEvaluateGetModifiersStmt(){
+   Modifies m;
+   set<int> stmt;
+   m.insertModifiesStmt(1,2);
+   stmt.insert(1);
+   m.insertModifiesStmt(2,2);
+   stmt.insert(2);
+   m.insertModifiesStmt(4,2);
+   stmt.insert(4);
+   m.insertModifiesStmt(3,2);
+   stmt.insert(3);
+   ModifiesExtractor extractor(&m);
+   extractor.construct();
+   set<int> modifiers = m.evaluateGetModifiersStmt(2);
+   std::set<int>::iterator itr1 = modifiers.begin();
+   std::set<int>::iterator itr2 = stmt.begin();
+   for(int i=0;i<modifiers.size();i++){
+   CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+   ++itr1;
+   ++itr2;
+   }
+	return;
+}
+
+//test get modified var for statement
+void 
+ModifiesTest::testGetModifiedVarStmt(){
+ Modifies m;
+   set<int> var;
+   m.insertModifiesStmt(1,2);
+   var.insert(2);
+   m.insertModifiesStmt(1,3);
+   var.insert(3);
+   m.insertModifiesStmt(1,4);
+   var.insert(4);
+   m.insertModifiesStmt(1,5);
+   var.insert(5);
+   ModifiesExtractor extractor(&m);
+   extractor.construct();
+   set<int> modifiedVar = m.getModifiedVarStmt(1);
+   std::set<int>::iterator itr1= modifiedVar.begin();
+   std::set<int>::iterator itr2 = var.begin();
+   CPPUNIT_ASSERT_EQUAL(var.size(), modifiedVar.size());
+   for(int i=0;i<modifiedVar.size();i++){
+   CPPUNIT_ASSERT_EQUAL(*itr1, *itr2);
+   itr1++;
+   itr2++;
+   }
+	return;
+}
+
+
+//test get procedures that modified var
+void 
+ModifiesTest::testEvaluateGetModifiersProc(){
+   Modifies m;
+   set<int> proc;
+   m.insertModifiesProc(1,2);
+   proc.insert(1);
+   m.insertModifiesProc(2,2);
+   proc.insert(2);
+   m.insertModifiesProc(4,2);
+   proc.insert(4);
+   m.insertModifiesProc(3,2);
+   proc.insert(3);
+   
+   set<int> modifiers = m.evaluateGetModifiersProc(2);
+   std::set<int>::iterator itr1 = modifiers.begin();
+   std::set<int>::iterator itr2 = proc.begin();
+   for(int i=0;i<modifiers.size();i++){
+   CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+   itr1++;
+   itr2++;
+   }
+	return;
+}
+
+//test get modified variables of procedures
+void 
+ModifiesTest::testEvaluateGetModifiedVarProc(){
+ Modifies m;
+   set<int> var;
+   m.insertModifiesProc(1,2);
+   var.insert(2);
+   m.insertModifiesProc(1,3);
+   var.insert(3);
+   m.insertModifiesProc(1,4);
+   var.insert(4);
+   m.insertModifiesProc(1,5);
+   var.insert(5);
+   
+   set<int> modifiedVar = m.evaluateGetModifiedVarProc(1);
+   std::set<int>::iterator itr1 = modifiedVar.begin();
+   std::set<int>::iterator itr2 = var.begin();
+   for(int i=0;i<modifiedVar.size();i++){
+   CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+   itr1++;
+   itr2++;
+   }
 	return;
 }

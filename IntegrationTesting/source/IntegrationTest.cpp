@@ -1,8 +1,8 @@
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/ui/text/TestRunner.h>
 #include <iostream>
-#include "QueryEvaluator.h"
-#include "QueryParser.h"
+#include "../SPA/QueryProcessor/QueryEvaluator.h"
+#include "../SPA/QueryProcessor/QueryParser.h"
 #include "Parser.h"
 
 

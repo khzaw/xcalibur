@@ -17,7 +17,6 @@ include_directories("${PROJECT_SOURCE_DIR}")
 
 
 
-
 file(GLOB SPA_FRONTEND_SOURCES
 	"SPA/Frontend/*.h"
 	"SPA/Frontend/*.cpp"
@@ -50,6 +49,7 @@ target_link_libraries(impl SPA)
 
 
 
+
 file(GLOB UNITTESTING_SOURCES
 	"UnitTesting/*.cpp"
 	"UnitTesting/*.h"
@@ -69,6 +69,7 @@ file(GLOB INTEGRATIONTESTING_SOURCES
 	"IntegrationTesting/source/*.cpp"
 	"IntegrationTesting/source/*.h"
 	)
+include_directories("${PROJECT_SOURCE_DIR}/include")
 source_group("source" FILES ${INTEGRATIONTESTING_SOURCES})
 add_executable(IntegrationTesting ${INTEGRATIONTESTING_SOURCES})
 target_link_libraries(IntegrationTesting SPA)
@@ -81,4 +82,3 @@ file(GLOB AUTOTESTER_SOURCES
 source_group("source" FILES ${AUTOTESTER_SOURCES})
 add_executable(AutoTester ${AUTOTESTER_SOURCES})
 target_link_libraries(AutoTester SPA)
-

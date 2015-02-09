@@ -6,7 +6,7 @@
 #include <list>
 
 // include your other headers here
-#include "AbstractWrapper.h"
+#include "AutoTester/source/AbstractWrapper.h"
 
 class TestWrapper : public AbstractWrapper {
  public:

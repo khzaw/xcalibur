@@ -1,9 +1,9 @@
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/ui/text/TestRunner.h>
 #include <iostream>
-#include "../SPA/QueryProcessor/QueryEvaluator.h"
-#include "../SPA/QueryProcessor/QueryParser.h"
-#include "Parser.h"
+#include "SPA/QueryProcessor/QueryEvaluator.h"
+#include "SPA/QueryProcessor/QueryParser.h"
+#include "SPA/Frontend/Parser.h"
 
 
 using namespace std;

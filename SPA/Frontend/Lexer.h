@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
-#include "Lexeme.h"
+#include "SPA/Frontend/Lexeme.h"
 /*
 NAME: LETTER(LETTER|DIGIT)
 INTERGER: DIGIT+

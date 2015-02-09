@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <set>
-#include "..\Frontend\TNode.h"
+#include <SPA/Frontend/TNode.h>
 using namespace std;
 
 //public functions

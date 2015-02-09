@@ -3,7 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include "ProcTable.h"
-#include <stdexcpt.h>
+#include <stdexcept>
 using namespace std;
 
 /************** Constructors **********************/

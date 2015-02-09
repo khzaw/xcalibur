@@ -1,5 +1,14 @@
 #pragma once
 #include "PKBController.h"
+#include "Parent.h"
+#include "ConstantTable.h"
+#include "VarTable.h"
+#include "ProcTable.h"
+#include "AST.h"
+#include "Follows.h"
+#include "Modifies.h"
+#include "Uses.h"
+#include "StatementTable.h"
 
 using namespace std;
 

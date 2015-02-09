@@ -2,7 +2,7 @@
 
 #include <string>
 #include <vector>
-#include "..\Frontend\TNode.h"
+#include <SPA/Frontend/TNode.h>
 using namespace std;
 
 //public functions

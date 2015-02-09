@@ -1,10 +1,7 @@
 #include <string>
-#include <stdlib.h>
 #include <sstream>
-#include <iostream>
-#include <typeinfo>
-#include <iterator>
-#include "AST.h"
+#include <SPA/Frontend/TNode.h>
+#include <SPA/PKB/AST.h>
 using namespace std;
 
 

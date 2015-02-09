@@ -8,7 +8,7 @@
 using namespace std;
 
 #include "PKB.h"
-#include "..\Frontend\TNode.h"
+#include <SPA/Frontend/TNode.h>
 
 int PKB::setProcToAST(PROC p, TNode* r) {
 	return NULL;

@@ -23,7 +23,9 @@
     <ClCompile Include="PKB\PKB.cpp" />
     <ClCompile Include="PKB\PKBController.cpp" />
     <ClCompile Include="PKB\ProcTable.cpp" />
+    <ClCompile Include="QueryProcessor\FollowsStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\FollowsSubquery.cpp" />
+    <ClCompile Include="QueryProcessor\ParentStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\ParentSubquery.cpp" />
     <ClCompile Include="QueryProcessor\QTNode.cpp" />
     <ClCompile Include="QueryProcessor\QueryEvaluator.cpp" />

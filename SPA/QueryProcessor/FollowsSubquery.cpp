@@ -196,7 +196,11 @@ public:
 				}
 				vector<int> vals = prevSolution.at(leftValue);
 				for (int j = 0; j < vals.size(); j++){
-					vector<int> newRow(tuple->getResultRow(i).begin(), tuple->getResultRow(i).end());
+					if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if")
+						&& pkb->statementTable.getTNode(vals[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
+						continue;
+					}
+					vector<int> newRow(tuple->getResultRow(i));
 					newRow.push_back(vals[j]);
 					result->addResultRow(newRow);
 				}
@@ -213,13 +217,17 @@ public:
 				}
 				vector<int> vals = prevSolution.at(rightValue);
 				for (int j = 0; j < vals.size(); j++){
-					vector<int> newRow(tuple->getResultRow(i).begin(), tuple->getResultRow(i).end());
+					if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if")
+						&& pkb->statementTable.getTNode(vals[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
+						continue;
+					}
+					vector<int> newRow(tuple->getResultRow(i));
 					newRow.push_back(vals[j]);
 					result->addResultRow(newRow);
 				}
 			}
 		}
-		return new ResultTuple();
+		return result;
 	}
 
 	// BOOLEAN Result

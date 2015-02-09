@@ -134,4 +134,28 @@ void FollowsSubqueryTest::testSolve(){
 			CPPUNIT_ASSERT_EQUAL(expected6[i][j], rt6->getResultAt(i, j));
 		}
 	}
+
+	FollowsSubquery ps7 = FollowsSubquery(&table1, &pk);
+	ps7.setSynonyms("s2", "w1");
+	ResultTuple* rt7 = ps7.solve(rt5);
+	int expected7[2][3] = {{1, 2, 3}, {4, 5, 6}};
+	CPPUNIT_ASSERT_EQUAL((size_t)2, rt7->getAllResults().size());
+	CPPUNIT_ASSERT_EQUAL((size_t)3, rt7->getResultRow(0).size());
+	for (int i = 0; i < rt7->getAllResults().size(); i++){
+		for (int j = 0; j < rt7->getResultRow(i).size(); j++){
+			CPPUNIT_ASSERT_EQUAL(expected7[i][j], rt7->getResultAt(i, j));
+		}
+	}
+
+	FollowsSubquery ps8 = FollowsSubquery(&table1, &pk);
+	ps8.setSynonyms("a2", "s1");
+	ResultTuple* rt8 = ps8.solve(rt5);
+	int expected8[2][3] = {{2, 3, 1}, {5, 6, 4}};
+	CPPUNIT_ASSERT_EQUAL((size_t)2, rt8->getAllResults().size());
+	CPPUNIT_ASSERT_EQUAL((size_t)3, rt8->getResultRow(0).size());
+	for (int i = 0; i < rt8->getAllResults().size(); i++){
+		for (int j = 0; j < rt8->getResultRow(i).size(); j++){
+			CPPUNIT_ASSERT_EQUAL(expected8[i][j], rt8->getResultAt(i, j));
+		}
+	}
 }

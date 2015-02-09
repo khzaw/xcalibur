@@ -1,6 +1,6 @@
 #include <cppunit/config/SourcePrefix.h>
 #include "testConstant.h"
-#include "PKB\ConstantTable.h"
+#include "SPA/PKB/ConstantTable.h"
 
 #include <iostream>
 #include <string>

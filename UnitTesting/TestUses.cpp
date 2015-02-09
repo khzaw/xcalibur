@@ -1,6 +1,6 @@
 #include <cppunit/config/SourcePrefix.h>
 #include "TestUses.h"
-#include "PKB\Uses.h"
+#include "SPA/PKB/Uses.h"
 
 #include <utility>
 #include <vector>

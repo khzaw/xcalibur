@@ -1,6 +1,6 @@
 #include <cppunit/config/SourcePrefix.h>
 #include "TestFollowsSubquery.h"
-#include "QueryProcessor\FollowsSubquery.cpp"
+#include "SPA/QueryProcessor/FollowsSubquery.cpp"
 
 #include <iostream>
 #include <string>

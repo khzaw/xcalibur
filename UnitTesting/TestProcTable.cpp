@@ -1,6 +1,6 @@
 #include <cppunit/config/SourcePrefix.h>
 #include "TestProcTable.h"
-#include "PKB\ProcTable.h"
+#include "SPA/PKB/ProcTable.h"
 
 #include <iostream>
 #include <string>

@@ -1,6 +1,6 @@
 #include <cppunit/config/SourcePrefix.h>
 #include "TestParentSubquery.h"
-#include "QueryProcessor\ParentSubquery.cpp"
+#include "SPA/QueryProcessor/ParentSubquery.cpp"
 
 #include <iostream>
 #include <string>

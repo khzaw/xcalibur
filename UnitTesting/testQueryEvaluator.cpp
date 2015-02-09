@@ -1,16 +1,16 @@
 #include <cppunit/config/SourcePrefix.h>
-#include "testQueryEvaluator.h"
-#include "QueryProcessor\QueryEvaluator.h"
+#include "SPA/UnitTesting/testQueryEvaluator.h"
+#include "SPA/QueryProcessor/QueryEvaluator.h"
 
 #include <utility>
 #include <vector>
 #include <iostream>
 #include <string>
 
-#include <QueryProcessor\QueryTree.h>
-#include <QueryProcessor\QTNode.h>
-#include <PKB\Modifies.h>
-#include <PKB\Follows.h>
+#include "SPA/QueryProcessor/QueryTree.h"
+#include "SPA/QueryProcessor/QTNode.h"
+#include "SPA/PKB/Modifies.h"
+#include "SPA/PKB/Follows.h"
 
 void 
 QueryEvaluatorTest::setUp()

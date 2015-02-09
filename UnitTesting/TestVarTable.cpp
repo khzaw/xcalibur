@@ -1,6 +1,6 @@
 #include <cppunit/config/SourcePrefix.h>
 #include "testVarTable.h"
-#include "PKB\VarTable.h"
+#include "SPA/PKB/VarTable.h"
 
 #include <iostream>
 #include <string>

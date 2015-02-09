@@ -1,5 +1,5 @@
 #include "TestParser.h"
-#include "Frontend\Parser.h"
+#include "SPA/Frontend/Parser.h"
 #include <cppunit/config/SourcePrefix.h>
 
 //Parser empty("../Debug/empty.txt");

@@ -1,6 +1,6 @@
 #include <cppunit/config/SourcePrefix.h>
 #include "testFollows.h"
-#include "PKB\Follows.h"
+#include "SPA/PKB/Follows.h"
 
 #include <iostream>
 #include <string>

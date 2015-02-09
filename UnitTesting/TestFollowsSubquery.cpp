@@ -23,14 +23,14 @@ void FollowsSubqueryTest::testSolve(){
 	procedure Proc1{
 	a = x;			// 1
 	b = y;			// 2
-	 while c{		// 3
-	 z = a;			// 4
-	 b =y;			// 5
-	 while x{		// 6
-	  if y{			// 7
-	   z=a;			// 8
-	   if b{		// 9
-		while c;	// 10
+	while c{		// 3
+	   z = a;			// 4
+	   b = y;			// 5
+	   while x{		// 6
+	     if y{			// 7
+	       z=a;			// 8
+	       if b{		// 9
+		     while c;	// 10
 		 }}}}
 	}
 	**/
@@ -90,6 +90,48 @@ void FollowsSubqueryTest::testSolve(){
 	ResultTuple* rt1 = ps1.solve();
 	int expected1[1] = {2};
 	for (int i = 0; i < rt1->getAllResults().size(); i++){
-		CPPUNIT_ASSERT_EQUAL(2, rt1->getAllResults()[i][0]);
+		CPPUNIT_ASSERT_EQUAL(expected1[0], rt1->getAllResults()[i][0]);
+	}
+
+	FollowsSubquery ps2 = FollowsSubquery(&table1, &pk);
+	ps2.setSynonyms(1, 2);
+	ResultTuple* rt2 = ps2.solve();
+	CPPUNIT_ASSERT(rt2->isBool());
+	CPPUNIT_ASSERT(!rt2->isEmpty());
+
+	FollowsSubquery ps3 = FollowsSubquery(&table1, &pk);
+	ps3.setSynonyms(1, 3);
+	ResultTuple* rt3 = ps3.solve();
+	CPPUNIT_ASSERT(rt3->isBool());
+	CPPUNIT_ASSERT(rt3->isEmpty());
+
+	FollowsSubquery ps4 = FollowsSubquery(&table1, &pk);
+	ps4.setSynonyms(1, "_");
+	ResultTuple* rt4 = ps4.solve();
+	CPPUNIT_ASSERT(rt4->isBool());
+	CPPUNIT_ASSERT(!rt4->isEmpty());
+
+	FollowsSubquery ps5 = FollowsSubquery(&table1, &pk);
+	ps5.setSynonyms("s1", "s2");
+	ResultTuple* rt5 = ps5.solve();
+	int expected5[5][2] = {{1, 2}, {2, 3}, {4, 5}, {5, 6}, {8, 9}};
+	CPPUNIT_ASSERT_EQUAL((size_t)5, rt5->getAllResults().size());
+	CPPUNIT_ASSERT_EQUAL((size_t)2, rt5->getResultRow(0).size());
+	for (int i = 0; i < rt5->getAllResults().size(); i++){
+		for (int j = 0; j < rt5->getResultRow(i).size(); j++){
+			CPPUNIT_ASSERT_EQUAL(expected5[i][j], rt5->getResultAt(i, j));
+		}
+	}
+
+	FollowsSubquery ps6 = FollowsSubquery(&table1, &pk);
+	ps6.setSynonyms("a1", "w2");
+	ResultTuple* rt6 = ps6.solve();
+	int expected6[2][2] = {{2, 3}, {5, 6}};
+	CPPUNIT_ASSERT_EQUAL((size_t)2, rt6->getAllResults().size());
+	CPPUNIT_ASSERT_EQUAL((size_t)2, rt6->getResultRow(0).size());
+	for (int i = 0; i < rt6->getAllResults().size(); i++){
+		for (int j = 0; j < rt6->getResultRow(i).size(); j++){
+			CPPUNIT_ASSERT_EQUAL(expected6[i][j], rt6->getResultAt(i, j));
+		}
 	}
 }

@@ -159,12 +159,12 @@ public:
 			for (int j = 0; j < followers.size(); j++) {
 				// synonym type check
 				if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if")
-				&& pkb->statementTable.getTNode(followers[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
+				&& pkb->statementTable.getTNode(followers[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
 					continue;
 				}
 				vector<int> row = vector<int>();
 				row.push_back(followees.at(i));
-				row.push_back(followers.at(i));
+				row.push_back(followers.at(j));
 				tuple->addResultRow(row);
 			}
 		}

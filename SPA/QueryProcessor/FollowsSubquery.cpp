@@ -3,11 +3,10 @@
 #include <vector>
 #include <map>
 #include "Subquery.h"
-#include "Subquery.cpp"
 
 using namespace std;
 
-class FollowsSubquery : public Subquery{
+class FollowsSubquery : public Subquery {
 public:
 	FollowsSubquery(map<string, string>* m, PKBController* p) : Subquery(m, p){
 	

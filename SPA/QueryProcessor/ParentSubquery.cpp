@@ -3,7 +3,6 @@
 #include <vector>
 #include <map>
 #include "Subquery.h"
-#include "Subquery.cpp"
 
 using namespace std;
 

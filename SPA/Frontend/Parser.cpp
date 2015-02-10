@@ -149,6 +149,7 @@ void Parser::stmt(TNode* parent) {
 		temp = containerStack.top();	containerStack.pop();
 		nextToken = getToken();
 	} else if(nextToken.token == IDENT && nextToken.name == "if") {
+
 		match(KEYWORDS[3]);
 		TNode* ifNode = createASTNode(IF_NODE, nextToken.name, parent, loc);
 		variableName();

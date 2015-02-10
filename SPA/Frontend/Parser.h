@@ -13,7 +13,11 @@ using namespace std;
 
 static string KEYWORDS[] = {
 	"procedure",
-	"while"
+	"while",
+	"call",
+	"if",
+	"then",
+	"else"
 };
 
 

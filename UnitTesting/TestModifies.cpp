@@ -115,6 +115,9 @@ ModifiesTest::testInsertModifiesStmt(){
 	}
 	m.insertModifiesStmt(1,4);
 	var.insert(4);
+	varGet = m.getModifiedVarStmt();
+	itr1 = varGet.begin();
+	itr2 = var.begin();
 	for(int i=0;i<varGet.size();i++){
 	CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
 	}
@@ -232,6 +235,9 @@ ModifiesTest::testInsertModifiesProc(){
 	}
 	m.insertModifiesProc(1,4);
 	var.insert(4);
+	varGet = m.getModifiedVarProc(1);
+	itr1 = varGet.begin();
+	itr2 = var.begin();
 	for(int i=0;i<varGet.size();i++){
 	CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
 	}

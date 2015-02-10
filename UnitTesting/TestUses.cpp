@@ -99,7 +99,7 @@ UsesTest::testGetUsesStmt(){
     return;
 }
 
-//test insertion of modifies for statement
+//test insertion of uses for statement
 void 
 UsesTest::testInsertUsesStmt(){
     Uses m;
@@ -122,6 +122,9 @@ UsesTest::testInsertUsesStmt(){
 	m.insertUsesStmt(1,4);
 	extractor.construct();
 	var.insert(4);
+	varGet = m.getUsedVarStmt(1);
+	itr1 = var.begin();
+	itr2 = varGet.begin();
 	for(int i=0;i<varGet.size();i++){
 	CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
 	itr1++;
@@ -166,7 +169,7 @@ UsesTest::testGetUsersProc(){
    proc.insert(3);
    UsesExtractor extractor(&m);
 	extractor.construct();
-   set<int> users = m.getUsersStmt(2);
+   set<int> users = m.getUsersProc(2);
    std::set<int>::iterator itr1 = users.begin();
    std::set<int>::iterator itr2 = proc.begin();
    for(int i=0;i<users.size();i++){
@@ -358,7 +361,7 @@ void testEvaluateGetUsersProc(){
    proc.insert(3);
    UsesExtractor extractor(&m);
 	extractor.construct();
-   set<int> users = m.evaluateGetUsersStmt(2);
+   set<int> users = m.evaluateGetUsersProc(2);
    std::set<int>::iterator itr1 = users.begin();
    std::set<int>::iterator itr2 = proc.begin();
    for(int i=0;i<users.size();i++){
@@ -389,4 +392,5 @@ void testEvaluateGetUsedVarProc(){
    for(int i=0;i<usedVar.size();i++){
    CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
    }
+   return;
 }

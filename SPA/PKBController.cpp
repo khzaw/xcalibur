@@ -39,3 +39,7 @@ void PKBController::constructCalls() {
 void PKBController::constructModifies() {
 	modifiesExtractor.construct();
 }
+
+void PKBController::constructUses() {
+	usesExtractor.construct();
+}

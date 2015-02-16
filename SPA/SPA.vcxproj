@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="PKB\AST.cpp" />
     <ClCompile Include="PKB\ConstantTable.cpp" />
     <ClCompile Include="PKB\Follows.cpp" />

@@ -6,9 +6,9 @@
 
 using namespace std;
 
-class FollowsSubquery : public Subquery {
+class ModifiesSubquery : public Subquery{
 public:
-	FollowsSubquery(map<string, string>* m, PKBController* p) : Subquery(m, p){
+	ModifiesSubquery(map<string, string>* m, PKBController* p) : Subquery(m, p){
 	
 	}
 
@@ -51,21 +51,25 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		int index = tuple->addSynonym(leftSynonym);
 		tuple->addSynonymToMap(leftSynonym, index);
-		vector<int> followees;
-		if (isSyn == 2) {	// Follows(syn, stmt): Get followees of stmt
-			followees = pkb->followsTable.getFollowees(rightIndex);
-		} else {	// Follows(syn, _): Get all followees stmt
-			followees = pkb->followsTable.getAllFolloweeStmt();
+		vector<int> modifiers = vector<int>();
+		if (isSyn == 2) {	// Modifies(syn, varnum): Get syns that modifies varnum
+			modifiers = pkb->modifiesTable.getModifiersStmt(rightIndex);
+		} else {	// Modifies(syn, _): Get all modifiers
+			// not sure if this is correct
+			vector<pair<int, int>> temp = pkb->modifiesTable.getModifiesStmt();
+			for (int i = 0; i < temp.size(); i++) {
+				modifiers.push_back(temp[i].first);
+			}
 		}
 
-		for(int i = 0; i < followees.size(); i++) {
+		for(int i = 0; i < modifiers.size(); i++) {
 			vector<int> temp = vector<int>();
 			// synonym type check here
 			if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if")
-				&& pkb->statementTable.getTNode(followees[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
+				&& pkb->statementTable.getTNode(modifiers[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
 				continue;
 			}
-			temp.push_back(followees.at(i));
+			temp.push_back(modifiers.at(i));
 			tuple->addResultRow(temp);
 		}
 		return tuple;
@@ -79,12 +83,12 @@ public:
 		int index = tuple->getSynonymIndex(leftSynonym);
 		for (int i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
-			if (isSyn == 1) {	// Follows(syn, stmt)
-				if (pkb->followsTable.isFollowsTrue(temp.at(index), rightIndex)) {
+			if (isSyn == 1) {	// Modifies(syn, varnum)
+				if (pkb->modifiesTable.isModifiesStmt(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}
-			} else {	// Follows(syn, _)
-				if (!pkb->followsTable.getFollowers(temp.at(index)).empty()) {
+			} else {	// Modifies(syn, _)
+				if (!pkb->modifiesTable.getModifiedVarStmt(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -97,21 +101,21 @@ public:
 		int index = tuple->addSynonym(rightSynonym);
 		tuple->addSynonymToMap(rightSynonym, index);
 		
-		vector<int> followers;
-		if (isSyn == 1) {	// Follows(stmt, syn): Get followers of stmt
-			followers = pkb->followsTable.getFollowers(leftIndex);
-		} else {	// Follows(_, syn): Get all followers stmt
-			followers = pkb->followsTable.getAllFollowerStmt();
+		vector<int> modified;
+		if (isSyn == 1) {	// Modifies(stmt, varnum): Get Modifiers of varnum
+			modified = pkb->modifiesTable.getModifiersStmt(leftIndex);
+		} else {	// Modifies(_, varnum)
+			//invalid
 		}
 
-		for(int i = 0; i < followers.size(); i++) {
+		for(int i = 0; i < modified.size(); i++) {
 			vector<int> temp = vector<int>();
 			// synonym type check here
 			if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if")
-				&& pkb->statementTable.getTNode(followers[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
+				&& pkb->statementTable.getTNode(modified[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
 				continue;
 			}
-			temp.push_back(followers.at(i));
+			temp.push_back(modified.at(i));
 			tuple->addResultRow(temp);
 		}
 		return tuple;
@@ -125,14 +129,12 @@ public:
 		int index = tuple->getSynonymIndex(rightSynonym);
 		for (int i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
-			if (isSyn == 1) {	// Follows(stmt, syn)
-				if (pkb->followsTable.isFollowsTrue(leftIndex, temp.at(index))) {
+			if (isSyn == 1) {	// Modifies(stmt, syn)
+				if (pkb->modifiesTable.isModifiesStmt(leftIndex, temp.at(index))) {
 					result->addResultRow(temp);
 				}
-			} else {	// Follows(_, syn)
-				if (!pkb->followsTable.getFollowees(temp.at(index)).empty()) {
-					result->addResultRow(temp);
-				}
+			} else {	// Modifies(_, syn)
+				//invalid
 			}
 		}
 		return result;
@@ -145,27 +147,19 @@ public:
 		index = tuple->addSynonym(rightSynonym);
 		tuple->addSynonymToMap(rightSynonym, index);
 
-		// get all followees statement
-		// for each followee statement, get its followers
-		vector<int> followees = pkb->followsTable.getAllFolloweeStmt();
-		for (int i = 0; i < followees.size(); i++) {
+		// get all modifiers statement
+		// for each modifiers statement, get its modified var
+		vector<pair<int, int>> stmts = pkb->modifiesTable.getModifiesStmt();
+		for (int i = 0; i < stmts.size(); i++) {
 			// synonym type check
 			if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if")
-				&& pkb->statementTable.getTNode(followees[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
+				&& pkb->statementTable.getTNode(stmts[i].first)->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
 				continue;
 			}
-			vector<int> followers = pkb->followsTable.getFollowers(followees[i]);
-			for (int j = 0; j < followers.size(); j++) {
-				// synonym type check
-				if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if")
-				&& pkb->statementTable.getTNode(followers[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
-					continue;
-				}
-				vector<int> row = vector<int>();
-				row.push_back(followees.at(i));
-				row.push_back(followers.at(j));
-				tuple->addResultRow(row);
-			}
+			vector<int> row = vector<int>();
+			row.push_back(stmts[i].first);
+			row.push_back(stmts[i].second);
+			tuple->addResultRow(row);
 		}
 		return tuple;
 	}
@@ -179,7 +173,7 @@ public:
 		int rIndex = tuple->getSynonymIndex(rightSynonym);
 		if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
 			for (int i = 0; i < tuple->getAllResults().size(); i++){
-				if (pkb->followsTable.isFollowsTrue(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
+				if (pkb->modifiesTable.isModifiesStmt(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
 					result->addResultRow(tuple->getResultRow(i));
 				}
 			}
@@ -190,7 +184,7 @@ public:
 			for (int i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
-					vector<int> tempValues = pkb->followsTable.getFollowers(leftValue);
+					vector<int> tempValues = pkb->modifiesTable.getModifiedVarStmt(leftValue);
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(leftValue);
@@ -211,7 +205,7 @@ public:
 			for (int i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					vector<int> tempValues = pkb->followsTable.getFollowees(rightValue);
+					vector<int> tempValues = pkb->modifiesTable.getModifiersStmt(rightValue);
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(rightValue);
@@ -234,13 +228,13 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		tuple->setBool(true);
 		if(isSyn == 0) {	//(digit, digit)
-			tuple->setEmpty(!pkb->followsTable.isFollowsTrue(leftIndex, rightIndex));
+			// invalid
 		} else if (isSyn == 7) {	//(_, digit)
-			tuple->setEmpty(pkb->followsTable.getFollowees(rightIndex).empty());
+			// invalid
 		} else if (isSyn == 8) {	//(digit, _)
-			tuple->setEmpty(pkb->followsTable.getFollowers(leftIndex).empty());
+			tuple->setEmpty(pkb->modifiesTable.getModifiedVarStmt(leftIndex).empty());
 		} else {	//(_, _)
-			tuple->setEmpty(pkb->followsTable.getAllFollowerStmt().empty());
+			// invalid
 		}
 		return tuple;
 	}

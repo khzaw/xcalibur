@@ -99,11 +99,11 @@
     <ClCompile Include="QueryProcessor\Subquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
-    <ClCompile Include="QueryProcessor\ParentSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
     <ClCompile Include="QueryProcessor\ResultTuple.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files\Frontend</Filter>
     </ClCompile>
     <ClCompile Include="QueryProcessor\FollowsSubquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
@@ -121,6 +121,9 @@
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
     <ClCompile Include="QueryProcessor\UsesSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\ParentSubquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
   </ItemGroup>

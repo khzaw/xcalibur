@@ -114,6 +114,15 @@
     <ClCompile Include="QueryProcessor\ParentStarSubquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
+    <ClCompile Include="QueryProcessor\QE.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\ModifiesSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\UsesSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PKB\AST.h">
@@ -188,7 +197,7 @@
     <ClInclude Include="QueryProcessor\ResultTuple.h">
       <Filter>Header Files\QueryProcessor</Filter>
     </ClInclude>
-    <ClInclude Include="QE.h">
+    <ClInclude Include="QueryProcessor\QE.h">
       <Filter>Header Files\QueryProcessor</Filter>
     </ClInclude>
   </ItemGroup>

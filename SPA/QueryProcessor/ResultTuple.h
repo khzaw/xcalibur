@@ -15,6 +15,7 @@ private:
 
 public:
 	ResultTuple();
+	ResultTuple(vector<vector<int>>, vector<string>);
 		
 	//modifiers
 	int addSynonym(string);
@@ -24,6 +25,7 @@ public:
 	void setSynonym(vector<string>);
 	void setSynonymMap(map<string, int>);
 	ResultTuple* cross(ResultTuple*);
+	ResultTuple* join(ResultTuple*);
 
 	//accessors
 	bool isBool();

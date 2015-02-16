@@ -13,6 +13,13 @@ ResultTuple::ResultTuple() {
 	isEmp = false;
 }
 
+ResultTuple::ResultTuple(vector<vector<int>> tups, vector<string> syns) {
+	synonyms = syns;
+	results = tups;
+	isBoolean = false;
+	isEmp = false;
+}
+
 bool ResultTuple::isBool() {
 	return isBoolean;
 }
@@ -113,4 +120,55 @@ ResultTuple* ResultTuple::cross(ResultTuple* other) {
 	}
 
 	return final;
+}
+
+ResultTuple* ResultTuple::join(ResultTuple* other) {
+	vector<pair<int, int>> equalIndex;	
+	vector<int> uniqueIndexInSecond;
+	vector<string> solutionSynonyms = getSynonyms();
+	
+	// get the pairs of indexes for the same attributes
+	// get the list of all synonyms in the solution
+	for(size_t i = 0; i < other->getSynonyms().size(); i++ ) {
+		bool in = false;
+		for(size_t j = 0; j < synonyms.size(); j++) {
+			//cout<<endl  << second.first.at(i) << " " << first.first.at(j) <<endl;
+			if(other->getSynonyms().at(i).compare(synonyms.at(j)) == 0) {
+				equalIndex.push_back(make_pair(j, i));
+				in = true;
+				break;
+			} 
+		}
+		if(in == false) {
+			uniqueIndexInSecond.push_back(i);
+			solutionSynonyms.push_back(other->getSynonyms().at(i));
+		}
+	}
+	vector<vector<int>> solutionValues(solutionSynonyms.size());
+	for(size_t i = 0; i < results[0].size(); i ++) {
+		for(size_t j = 0; j < other->getAllResults().at(0).size(); j++) {
+			bool equal = true;
+			// check if similar attributes have equal values
+			for(size_t k = 0; k < equalIndex.size(); k++) {
+				if (!(results[equalIndex.at(k).first].at(i) == other->getResultAt(equalIndex.at(k).second, j))) {
+					equal = false;
+					break;
+				}
+			}
+
+			if(equal) {					//all similar attributes have equal values
+				for(size_t a = 0; a < solutionSynonyms.size(); a++) {
+					if(a < synonyms.size()) {
+						// push each attribute of first set
+						solutionValues[a].push_back(getResultAt(a, i));
+					} else {
+						// push each attribute of second set with index in uniqueIndexInSecond
+						solutionValues[a].push_back(other->getResultAt(uniqueIndexInSecond[a - getAllResults().size()], j));
+					}
+				}
+			}
+		}
+	}
+
+	return new ResultTuple(solutionValues, solutionSynonyms);	
 }

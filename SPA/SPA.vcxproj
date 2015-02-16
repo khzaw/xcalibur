@@ -25,8 +25,10 @@
     <ClCompile Include="PKB\ProcTable.cpp" />
     <ClCompile Include="QueryProcessor\FollowsStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\FollowsSubquery.cpp" />
+    <ClCompile Include="QueryProcessor\ModifiesSubquery.cpp" />
     <ClCompile Include="QueryProcessor\ParentStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\ParentSubquery.cpp" />
+    <ClCompile Include="QueryProcessor\QE.cpp" />
     <ClCompile Include="QueryProcessor\QTNode.cpp" />
     <ClCompile Include="QueryProcessor\QueryEvaluator.cpp" />
     <ClCompile Include="QueryProcessor\QueryLexer.cpp" />
@@ -38,6 +40,7 @@
     <ClCompile Include="PKB\VarTable.cpp" />
     <ClCompile Include="QueryProcessor\ResultTuple.cpp" />
     <ClCompile Include="QueryProcessor\Subquery.cpp" />
+    <ClCompile Include="QueryProcessor\UsesSubquery.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PKB\AST.h" />
@@ -53,7 +56,7 @@
     <ClInclude Include="PKB\PKB.h" />
     <ClInclude Include="PKB\PKBController.h" />
     <ClInclude Include="PKB\ProcTable.h" />
-    <ClInclude Include="QE.h" />
+    <ClInclude Include="QueryProcessor\QE.h" />
     <ClInclude Include="QueryProcessor\QTNode.h" />
     <ClInclude Include="QueryProcessor\QueryEvaluator.h" />
     <ClInclude Include="QueryProcessor\QueryException.h" />
@@ -76,6 +79,7 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>

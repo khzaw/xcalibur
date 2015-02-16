@@ -79,8 +79,8 @@ void QueryEvaluatorTest::testBQE(){
 	vector<string> synonyms = vector<string>();
 	synonyms.push_back("s1");
 	QE query = QE(synonyms);
-	query.addQuery(q1);
-	query.addQuery(q2);
+	query.addQuery(&q1);
+	query.addQuery(&q2);
 	query.solve();
 	CPPUNIT_ASSERT_EQUAL(2, query.solutions[0]->getResultRow(0).at(0));
 }

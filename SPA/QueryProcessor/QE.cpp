@@ -15,14 +15,14 @@ using namespace std;
 QE::QE(vector<string> syn) {
 	synonyms = syn;
 	disjointCheck = map<string, int>();	//string for synonym, int for positions in the vector which hold the synonym
-	queries = vector<vector<Subquery> >();
+	queries = vector<vector<Subquery*> >();
 	unionOrder = vector<pair<int, int> >();
 	solutions = vector<ResultTuple*>();
 }
 
-void QE::addQuery(Subquery q) {
+void QE::addQuery(Subquery* q) {
 	if (queries.size() == 0) {
-		queries.push_back(vector<Subquery>());
+		queries.push_back(vector<Subquery*>());
 	}
 	queries[0].push_back(q);
 }
@@ -106,7 +106,7 @@ void QE::solve() {
 
 void QE::basicSolve() {
 	for (int i = 0; i < queries[0].size(); i++) {
-		ResultTuple* interim = queries[0][i].solve();
+		ResultTuple* interim = queries[0][i]->solve();
 		 if (interim->isBool()) {
 			 if(interim->isEmpty()) {
 				solutions[0] = new ResultTuple();
@@ -165,14 +165,14 @@ void QE::sortQuerySets() {
 void QE::solveQuerySets() {
 	for (int i = 0; i < queries.size(); i++) {
 		map<string, int> synonyms = map<string, int>();
-		vector<Subquery> qList = queries.at(i);
-		ResultTuple* result = qList.front().solve();
-		int syn = qList.front().isSyn;
+		vector<Subquery*> qList = queries.at(i);
+		ResultTuple* result = qList.front()->solve();
+		int syn = qList.front()->isSyn;
 		if (syn == 2 || syn == 3 || syn == 5) { // left is synonym
-			synonyms.insert(map<string, int>::value_type(qList.front().leftSynonym, 1));
+			synonyms.insert(map<string, int>::value_type(qList.front()->leftSynonym, 1));
 		}
 		if (syn == 1 || syn == 3 || syn == 4) { // right is synonym
-			synonyms.insert(map<string, int>::value_type(qList.front().rightSynonym, 1));
+			synonyms.insert(map<string, int>::value_type(qList.front()->rightSynonym, 1));
 		}
 		qList.erase(qList.begin());
 
@@ -181,29 +181,29 @@ void QE::solveQuerySets() {
 			if (index >= qList.size()) {
 				index = 0;
 			}
-			syn = qList.at(index).isSyn;
+			syn = qList.at(index)->isSyn;
 			
 			if (syn == 3) {
-				if (synonyms.count(qList.at(index).leftSynonym) == 1 || synonyms.count(qList.at(index).rightSynonym) == 1) {
-					result = qList.at(index).solve(result);
-					synonyms.insert(map<string, int>::value_type(qList.at(index).leftSynonym, 1));
-					synonyms.insert(map<string, int>::value_type(qList.at(index).rightSynonym, 1));
+				if (synonyms.count(qList.at(index)->leftSynonym) == 1 || synonyms.count(qList.at(index)->rightSynonym) == 1) {
+					result = qList.at(index)->solve(result);
+					synonyms.insert(map<string, int>::value_type(qList.at(index)->leftSynonym, 1));
+					synonyms.insert(map<string, int>::value_type(qList.at(index)->rightSynonym, 1));
 					qList.erase(qList.begin() + index);
 					index = 0;
 				} else {
 					index++;
 				}
 			} else if (syn == 2 || syn == 5) { // left is synonym
-				if (synonyms.count(qList.at(index).leftSynonym) == 1) {
-					result = qList.at(index).solve(result);
+				if (synonyms.count(qList.at(index)->leftSynonym) == 1) {
+					result = qList.at(index)->solve(result);
 					qList.erase(qList.begin() + index);
 					index = 0;
 				} else {
 					index++;
 				}
 			} else if (syn == 1 || syn == 4) { // right is synonym
-				if (synonyms.count(qList.at(index).rightSynonym) == 1) {
-					result = qList.at(index).solve(result);
+				if (synonyms.count(qList.at(index)->rightSynonym) == 1) {
+					result = qList.at(index)->solve(result);
 					qList.erase(qList.begin() + index);
 					index = 0;
 				} else {

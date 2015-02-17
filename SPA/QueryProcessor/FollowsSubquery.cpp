@@ -58,7 +58,7 @@ public:
 			followees = pkb->followsTable.getAllFolloweeStmt();
 		}
 
-		for(int i = 0; i < followees.size(); i++) {
+		for(size_t i = 0; i < followees.size(); i++) {
 			vector<int> temp = vector<int>();
 			// synonym type check here
 			if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if")
@@ -77,7 +77,7 @@ public:
 		result->setSynonymMap(tuple->getSynonymMap());
 
 		int index = tuple->getSynonymIndex(leftSynonym);
-		for (int i = 0; i < tuple->getAllResults().size(); i++) {
+		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 1) {	// Follows(syn, stmt)
 				if (pkb->followsTable.isFollowsTrue(temp.at(index), rightIndex)) {
@@ -104,7 +104,7 @@ public:
 			followers = pkb->followsTable.getAllFollowerStmt();
 		}
 
-		for(int i = 0; i < followers.size(); i++) {
+		for(size_t i = 0; i < followers.size(); i++) {
 			vector<int> temp = vector<int>();
 			// synonym type check here
 			if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if")
@@ -123,7 +123,7 @@ public:
 		result->setSynonymMap(tuple->getSynonymMap());
 
 		int index = tuple->getSynonymIndex(rightSynonym);
-		for (int i = 0; i < tuple->getAllResults().size(); i++) {
+		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 1) {	// Follows(stmt, syn)
 				if (pkb->followsTable.isFollowsTrue(leftIndex, temp.at(index))) {
@@ -148,14 +148,14 @@ public:
 		// get all followees statement
 		// for each followee statement, get its followers
 		vector<int> followees = pkb->followsTable.getAllFolloweeStmt();
-		for (int i = 0; i < followees.size(); i++) {
+		for (size_t i = 0; i < followees.size(); i++) {
 			// synonym type check
 			if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if")
 				&& pkb->statementTable.getTNode(followees[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
 				continue;
 			}
 			vector<int> followers = pkb->followsTable.getFollowers(followees[i]);
-			for (int j = 0; j < followers.size(); j++) {
+			for (size_t j = 0; j < followers.size(); j++) {
 				// synonym type check
 				if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if")
 				&& pkb->statementTable.getTNode(followers[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
@@ -178,7 +178,7 @@ public:
 		int lIndex = tuple->getSynonymIndex(leftSynonym);
 		int rIndex = tuple->getSynonymIndex(rightSynonym);
 		if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
-			for (int i = 0; i < tuple->getAllResults().size(); i++){
+			for (size_t i = 0; i < tuple->getAllResults().size(); i++){
 				if (pkb->followsTable.isFollowsTrue(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
 					result->addResultRow(tuple->getResultRow(i));
 				}
@@ -187,14 +187,14 @@ public:
 			int index = result->addSynonym(rightSynonym);
 			result->addSynonymToMap(rightSynonym, index);
 			map<int, vector<int>> prevSolution = map<int, vector<int>>();
-			for (int i = 0; i < tuple->getAllResults().size(); i++) {
+			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
 					vector<int> tempValues = pkb->followsTable.getFollowers(leftValue);
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(leftValue);
-				for (int j = 0; j < vals.size(); j++){
+				for (size_t j = 0; j < vals.size(); j++){
 					if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if")
 						&& pkb->statementTable.getTNode(vals[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
 						continue;
@@ -208,14 +208,14 @@ public:
 			int index = result->addSynonym(leftSynonym);
 			result->addSynonymToMap(leftSynonym, index);
 			map<int, vector<int>> prevSolution = map<int, vector<int>>();
-			for (int i = 0; i < tuple->getAllResults().size(); i++) {
+			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
 					vector<int> tempValues = pkb->followsTable.getFollowees(rightValue);
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(rightValue);
-				for (int j = 0; j < vals.size(); j++){
+				for (size_t j = 0; j < vals.size(); j++){
 					if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if")
 						&& pkb->statementTable.getTNode(vals[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
 						continue;

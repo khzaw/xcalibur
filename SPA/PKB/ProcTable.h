@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <map>
 using namespace std;
 
 //public functions
@@ -8,7 +9,7 @@ class ProcTable{
 
 private:
 vector<string> pTable; 
-
+map<string,int> pMap; 
 public:
 //Constructor
 ProcTable();
@@ -20,6 +21,6 @@ string getProcName(int);	// get variable name using its index
 int getProcIndex(string);	// get variable index using its string
 
 //Mutator
-void insertProc(string); // insert procedure into the table if it does not exist
+int insertProc(string); // insert procedure into the proc Map if it does not exist
 
 };

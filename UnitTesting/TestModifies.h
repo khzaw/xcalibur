@@ -17,6 +17,11 @@ class ModifiesTest : public CPPUNIT_NS::TestFixture // Note 2
 	CPPUNIT_TEST( testGetModifiesProc );
 	CPPUNIT_TEST( testInsertModifiesProc);
 	CPPUNIT_TEST( testIsModifiesProc);
+	CPPUNIT_TEST(testEvaluateGetModifiersStmt);
+	CPPUNIT_TEST(testEvaluateGetModifiedVarStmt);
+	CPPUNIT_TEST(testEvaluateGetModifiersProc);
+	CPPUNIT_TEST(testEvaluateIsModifiesStmt);
+	CPPUNIT_TEST(testEvaluateIsModifiesProc);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -46,7 +51,18 @@ public:
 	void testInsertModifiesProc();
 	//test if modifies for procedures 
 	void testIsModifiesProc();
-
+	//test if modifies for statements
+	void testEvaluateIsModifiesStmt();
+	//test if modifies for proc
+	void testEvaluateIsModifiesProc();
+	//test get statements that modify variables
+	void testEvaluateGetModifiersStmt();
+	//test get modified var for statement
+	void testEvaluateGetModifiedVarStmt();
+	//test get procedures that modified var
+	void testEvaluateGetModifiersProc();
+	//test get modifies variables of procedures
+	void testEvaluateGetModifiedVarProc();
 };
 #endif
     

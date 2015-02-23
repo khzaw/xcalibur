@@ -12,39 +12,41 @@ ProcTable::ProcTable(){
 
 }
 
-void ProcTable::insertProc(string p){
- if (std::find(pTable.begin(), pTable.end(), p) != pTable.end()){
-}else{
-	pTable.push_back(p);
- }
+int ProcTable::insertProc(string p){
+ if (ProcTable::containsProc(p)){
+		return getProcIndex(p);
+	}else{
+		int size = pMap.size();
+		pMap.insert(std::pair<string,int>(p,size));
+	    pTable.push_back(p);
+		return size;
+	}
 }
 
 int ProcTable::getSize(){
-return pTable.size();
+return pMap.size();
 } 
 
 bool ProcTable::containsProc(string p){
-	if (std::find(pTable.begin(), pTable.end(), p) != pTable.end()){
+	int n = ProcTable::getProcIndex(p);
+	if(n == -1){
+		return false;
+	}else{
 		return true;
 	}
-	return false;
 }
 
 // get procedure name using its index
 string ProcTable::getProcName(int n){
-	if(n>this->getSize())
-		throw out_of_range("Index not in procTable");
-	else
-	return pTable.at(n);
+	return pTable[n];
 }
 
 // get variable index using its string
 int ProcTable::getProcIndex(string p){
-	for(size_t i=0; i< pTable.size(); i++){
-if(pTable.at(i) == p){
-return i;
-}
-}
-throw string ("procedure doesn't exist in ProcTable");
-return -1;
+	std::map<string, int>::iterator it = pMap.find(p);
+	if(it == pMap.end()) {	// var not found, return -1
+		return -1;
+	} else {	// var found, return its index
+		return it->second;
+	}
 }

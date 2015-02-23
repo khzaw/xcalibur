@@ -14,7 +14,32 @@ PKBController::PKBController() {
 	this->usesTable = Uses();
 	this->statementTable = StatementTable();
 	this->modifiesTable = Modifies();
+	this->callsTable = Calls();
+	this->callsExtractor= CallsExtractor( &callsTable);
+	this->followsExtractor=FollowsExtractor(&followsTable);
+	this->parentExtractor = ParentExtractor(&parentTable);
+	this->modifiesExtractor= ModifiesExtractor(&modifiesTable);
 }
 
 PKBController::~PKBController() {
+}
+
+void PKBController::constructFollows() {
+	followsExtractor.construct();
+}
+
+void PKBController::constructParent() {
+	parentExtractor.construct();
+}
+
+void PKBController::constructCalls() {
+	callsExtractor.construct();
+}
+
+void PKBController::constructModifies() {
+	modifiesExtractor.construct();
+}
+
+void PKBController::constructUses() {
+	usesExtractor.construct();
 }

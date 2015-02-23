@@ -68,6 +68,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="TestAST.cpp" />
+    <ClCompile Include="testCalls.cpp" />
     <ClCompile Include="testConstant.cpp" />
     <ClCompile Include="testFollows.cpp" />
     <ClCompile Include="TestFollowsSubquery.cpp" />
@@ -84,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestAST.h" />
+    <ClInclude Include="testCalls.h" />
     <ClInclude Include="testConstant.h" />
     <ClInclude Include="testFollows.h" />
     <ClInclude Include="TestFollowsSubquery.h" />

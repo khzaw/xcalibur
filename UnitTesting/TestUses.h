@@ -17,6 +17,12 @@ class UsesTest : public CPPUNIT_NS::TestFixture // Note 2
 	CPPUNIT_TEST( testGetUsesProc );
 	CPPUNIT_TEST( testInsertUsesProc);
 	CPPUNIT_TEST( testIsUsesProc);
+	CPPUNIT_TEST(testEvaluateIsUsesStmt);
+	CPPUNIT_TEST(testEvaluateIsUsesProc);
+	CPPUNIT_TEST(testEvaluateGetUsersStmt);
+	CPPUNIT_TEST(testEvaluateGetUsedVarStmt);
+	CPPUNIT_TEST(testEvaluateGetUsersProc);
+	CPPUNIT_TEST(testEvaluateGetUsedVarProc);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -24,29 +30,41 @@ public:
 	void tearDown();
 	//statements
 
-	//test get statements that modified var
+	//test get statements that used var
 	void testGetUsersStmt();
-	//test get modified variables of statements
+	//test get used variables of statements
 	void testGetUsedVarStmt();
-	//test get modifies table of statement
+	//test get uses table of statement
     void testGetUsesStmt();
-	//test insertion of modifies for statement
+	//test insertion of uses for statement
 	void testInsertUsesStmt();
-	//test if modifies for statement 
+	//test if uses for statement 
 	void  testIsUsesStmt();
+	//test if uses for statement 
+	void  testEvaluateIsUsesStmt();
+	//test get statements that used var
+	void testEvaluateGetUsersStmt();
+	//test get used variables of statements
+	void testEvaluateGetUsedVarStmt();
+
 	//Procedure
 
-	//test get statements that modified var
+	//test get procedures that used var
 	void testGetUsersProc();
-	//test get modified variables of statements
+	//test get used variables of procedures
 	void testGetUsedVarProc();
-	//test get modifies table of statement
+	//test get uses table of procedures
     void testGetUsesProc();
-	//test insertion of modifies for statement
+	//test insertion of uses for procedures
 	void testInsertUsesProc();
-	//test if modifies for statement 
+	//test if uses for procedures
 	void  testIsUsesProc();
-
+	//test if uses for procedures
+	void  testEvaluateIsUsesProc();
+	//test get procedures that used var
+	void testEvaluateGetUsersProc();
+	//test get used variables of procedures
+	void testEvaluateGetUsedVarProc();
 };
 #endif
     

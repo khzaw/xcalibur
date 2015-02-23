@@ -13,6 +13,15 @@
 #include "..\PKB\StatementTable.h"
 #include "..\PKB\Modifies.h"
 
+//Design Extractor
+#include "CallsExtractor.h"
+#include "ParentExtractor.h"
+#include "FollowsExtractor.h"
+#include "ModifiesExtractor.h"
+#include "UsesExtractor.h"
+
+
+
 using namespace std;
 
 class PKBController {
@@ -26,7 +35,21 @@ public:
 	Modifies modifiesTable;
 	Uses usesTable;
 	StatementTable statementTable;
+	Calls callsTable;
 	PKBController();
 	virtual ~PKBController();
 
+	//Design Extractor
+	CallsExtractor callsExtractor;
+	FollowsExtractor followsExtractor;
+	ParentExtractor parentExtractor;
+	ModifiesExtractor modifiesExtractor;
+	UsesExtractor usesExtractor;
+
+	//DE
+	void constructParent();
+	void constructFollows();
+	void constructCalls();
+	void constructModifies();
+	void constructUses();
 };

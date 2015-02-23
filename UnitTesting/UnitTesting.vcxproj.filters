@@ -57,6 +57,9 @@
     <ClCompile Include="TestQE.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="testCalls.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestModifies.h">
@@ -96,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TestQE.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="testCalls.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

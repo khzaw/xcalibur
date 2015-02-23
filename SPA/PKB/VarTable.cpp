@@ -18,24 +18,24 @@ VarTable::VarTable(){
 
 // insert variable into VarTable
 int VarTable::insertVar(string s){
- if (std::find(varVec.begin(), varVec.end(), s) != varVec.end()){
-	 return VarTable::getVarIndex(s);
-}else{
-	varVec.push_back(s);
-	return (varVec.size() -1);
- }
+	if (VarTable::containsVar(s)){
+		return getVarIndex(s);
+	}else{
+		int size = varMap.size();
+		varMap.insert(std::pair<string,int>(s,size));
+		varVec.push_back(s);
+		return size;
+	}
 }
 
 // get variable name using its index
 string VarTable::getVarName(int n){
-	if(n>this->getSize())
-		throw out_of_range("Index not in varTable");
-	return varVec.at(n);
+	return varVec[n];
 }
 
 vector<string> VarTable::getAllVar(){
 	vector<string> var;
-	for(size_t i=0;i<varVec.size();i++){
+	for(size_t i =0; i <varVec.size();i ++){
 		var.push_back(varVec[i]);
 	}
 	return var;
@@ -43,26 +43,28 @@ vector<string> VarTable::getAllVar(){
 
 // get variable index using its string
 int VarTable::getVarIndex(string s){
-
-for(size_t i=0; i< varVec.size(); i++){
-if(varVec.at(i) == s){
-return i;
-}
-}
-throw string ("variable doesn't exist in VarTable");
-return -1;
+	std::map<string, int>::iterator it = varMap.find(s);
+	if(it == varMap.end()) {	// var not found, return -1
+		return -1;
+	} else {	// var found, return its index
+		return it->second;
+	}
 }
 
 
+int VarTable::getSize(){
+return varMap.size();
+}
+
+/*
 void VarTable::printTable(){
 	for (vector<string>::iterator i = varVec.begin(); i != varVec.end(); i++) {
 		cout<< "here"<<endl;
    cout << *i << endl;
 }
 }
-int VarTable::getSize(){
-return varVec.size();
-} 
+ 
+ */
 
 // return a vector of all statement numbers
 vector<int> VarTable::getAllVarNum() {
@@ -72,9 +74,14 @@ vector<int> VarTable::getAllVarNum() {
 }
 
 
+
+
 bool VarTable::containsVar(string s){
-	if (std::find(varVec.begin(), varVec.end(), s) != varVec.end()){
+	int n = VarTable::getVarIndex(s);
+	if(n == -1){
+		return false;
+	}else{
 		return true;
 	}
-	return false;
 }
+

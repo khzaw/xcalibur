@@ -126,23 +126,8 @@
     <ClCompile Include="QueryProcessor\ParentSubquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
-    <ClCompile Include="Calls.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CallsExtractor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ParentExtractor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FollowsExtractor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ModifiesExtractor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UsesExtractor.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="PKB\Calls.cpp">
+      <Filter>Source Files\PKB</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -221,23 +206,44 @@
     <ClInclude Include="QueryProcessor\QE.h">
       <Filter>Header Files\QueryProcessor</Filter>
     </ClInclude>
-    <ClInclude Include="Calls.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="PKB\ParentExtractor.cpp">
+      <Filter>Source Files\PKB</Filter>
     </ClInclude>
-    <ClInclude Include="CallsExtractor.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="PKB\CallsExtractor.cpp">
+      <Filter>Source Files\PKB</Filter>
     </ClInclude>
-    <ClInclude Include="FollowsExtractor.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="PKB\CfgNode.cpp">
+      <Filter>Source Files\PKB</Filter>
     </ClInclude>
-    <ClInclude Include="ParentExtractor.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="PKB\FollowsExtractor.cpp">
+      <Filter>Source Files\PKB</Filter>
     </ClInclude>
-    <ClInclude Include="ModifiesExtractor.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="PKB\ModifiesExtractor.cpp">
+      <Filter>Source Files\PKB</Filter>
     </ClInclude>
-    <ClInclude Include="UsesExtractor.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="PKB\UsesExtractor.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\Calls.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\UsesExtractor.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\CallsExtractor.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\CfgNode.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\FollowsExtractor.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\ModifiesExtractor.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\ParentExtractor.h">
+      <Filter>Header Files\PKB</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

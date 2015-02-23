@@ -4,7 +4,7 @@
 #include <stack>
 #include "Lexer.h"
 #include "Lexeme.h"
-#include "..\PKB\PKBController.h"
+#include "../PKB/PKBController.h"
 #include "TNode.h"
 #include "Operator.h"
 
@@ -17,7 +17,8 @@ static string KEYWORDS[] = {
 	"call",
 	"if",
 	"then",
-	"else"
+	"else",
+	"call"
 };
 
 

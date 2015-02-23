@@ -23,8 +23,8 @@ int main() {
 	}
 	cout << endl << " ====================" << endl;
 
-	//Parser Pa("not_so_simple_sample.txt");
-	Parser Pa("simple_sample.txt");
+	Parser Pa("not_so_simple_sample.txt");
+	//Parser Pa("simple_sample.txt");
 	
 	string t;
 	cin >> t;

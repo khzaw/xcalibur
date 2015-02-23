@@ -2,16 +2,16 @@
 
 #include <iostream>
 
-#include "..\PKB\AST.h"
-#include "..\PKB\VarTable.h"
-#include "..\PKB\ProcTable.h"
-#include "..\PKB\ConstantTable.h"
-#include "..\PKB\Parent.h"
-#include "..\PKB\Follows.h"
-#include "..\PKB\Modifies.h"
-#include "..\PKB\Uses.h"
-#include "..\PKB\StatementTable.h"
-#include "..\PKB\Modifies.h"
+#include "AST.h"
+#include "VarTable.h"
+#include "ProcTable.h"
+#include "ConstantTable.h"
+#include "Parent.h"
+#include "Follows.h"
+#include "Modifies.h"
+#include "Uses.h"
+#include "StatementTable.h"
+#include "Modifies.h"
 
 //Design Extractor
 #include "CallsExtractor.h"

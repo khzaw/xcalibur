@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="PKB\AST.cpp" />
     <ClCompile Include="PKB\ConstantTable.cpp" />
     <ClCompile Include="PKB\Follows.cpp" />
@@ -23,6 +24,12 @@
     <ClCompile Include="PKB\PKB.cpp" />
     <ClCompile Include="PKB\PKBController.cpp" />
     <ClCompile Include="PKB\ProcTable.cpp" />
+    <ClCompile Include="QueryProcessor\FollowsStarSubquery.cpp" />
+    <ClCompile Include="QueryProcessor\FollowsSubquery.cpp" />
+    <ClCompile Include="QueryProcessor\ModifiesSubquery.cpp" />
+    <ClCompile Include="QueryProcessor\ParentStarSubquery.cpp" />
+    <ClCompile Include="QueryProcessor\ParentSubquery.cpp" />
+    <ClCompile Include="QueryProcessor\QE.cpp" />
     <ClCompile Include="QueryProcessor\QTNode.cpp" />
     <ClCompile Include="QueryProcessor\QueryEvaluator.cpp" />
     <ClCompile Include="QueryProcessor\QueryLexer.cpp" />
@@ -32,6 +39,9 @@
     <ClCompile Include="Frontend\TNode.cpp" />
     <ClCompile Include="PKB\Uses.cpp" />
     <ClCompile Include="PKB\VarTable.cpp" />
+    <ClCompile Include="QueryProcessor\ResultTuple.cpp" />
+    <ClCompile Include="QueryProcessor\Subquery.cpp" />
+    <ClCompile Include="QueryProcessor\UsesSubquery.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PKB\AST.h" />
@@ -47,6 +57,7 @@
     <ClInclude Include="PKB\PKB.h" />
     <ClInclude Include="PKB\PKBController.h" />
     <ClInclude Include="PKB\ProcTable.h" />
+    <ClInclude Include="QueryProcessor\QE.h" />
     <ClInclude Include="QueryProcessor\QTNode.h" />
     <ClInclude Include="QueryProcessor\QueryEvaluator.h" />
     <ClInclude Include="QueryProcessor\QueryException.h" />
@@ -57,6 +68,8 @@
     <ClInclude Include="Frontend\TNode.h" />
     <ClInclude Include="PKB\Uses.h" />
     <ClInclude Include="PKB\VarTable.h" />
+    <ClInclude Include="QueryProcessor\ResultTuple.h" />
+    <ClInclude Include="QueryProcessor\Subquery.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>
@@ -64,9 +77,10 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>

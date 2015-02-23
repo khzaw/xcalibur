@@ -126,7 +126,13 @@ void Parser::stmtLst(TNode* parent) {
 
 
 void Parser::stmt(TNode* parent) {
-	if(nextToken.token == IDENT && nextToken.name == "while") {			// while statement
+	if(nextToken.token == IDENT && nextToken.name == "call") {
+		loc++;
+		match(KEYWORDS[2]);
+		procedureName();
+		match(";");
+	}
+	else if(nextToken.token == IDENT && nextToken.name == "while") {			// while statement
 		loc++; 
 		TNode* whileNode = createASTNode(WHILE_NODE, nextToken.name, parent, loc);
 
@@ -158,6 +164,24 @@ void Parser::stmt(TNode* parent) {
 		match("}"); 
 		temp = containerStack.top();	containerStack.pop();
 		nextToken = getToken();
+	} else if(nextToken.token == IDENT && nextToken.name == "if") {
+
+		match(KEYWORDS[3]);
+		TNode* ifNode = createASTNode(IF_NODE, nextToken.name, parent, loc);
+		variableName();
+		nextToken = getToken();
+
+		match(KEYWORDS[4]);
+		TNode* thenNode = createASTNode(THEN_NODE, nextToken.name, ifNode, loc);
+		match("{");	nextToken = getToken();
+		stmtLst(thenNode);
+		match("}"); nextToken = getToken();
+
+		match(KEYWORDS[5]);
+		TNode* elseNode = createASTNode(ELSE_NODE, nextToken.name, ifNode, loc);
+		match("{"); nextToken = getToken();
+		stmtLst(elseNode);
+		match("}"); nextToken = getToken();
 	} else if(nextToken.token == IDENT) {
 
 		loc++;
@@ -307,7 +331,6 @@ void Parser::variableName() {
 	//nextToken = getToken();
 }
 
-
 void Parser::constantValue() {
 	//cout << "constantValue: " << nextToken.name << endl;
 	//nextToken = getToken();
@@ -318,7 +341,7 @@ void Parser::constantValue() {
 void Parser::procedureName() {
 	// TODO check valid variable name
 	procName = nextToken.name;
-	//cout << "procName: " << nextToken.name << endl;
+	cout << "procName: " << nextToken.name << endl;
 
 
 	nextToken = getToken();

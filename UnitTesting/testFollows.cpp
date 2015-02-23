@@ -110,7 +110,7 @@ FollowsTest::testGetAllFollower(){
 	f.insertFollows(1,3);
 	vector<int> followers = f.getAllFollowerStmt();
 	int size = followers.size();
-	CPPUNIT_ASSERT(3, size);
+	CPPUNIT_ASSERT_EQUAL(3, size);
 	CPPUNIT_ASSERT_EQUAL(2,followers[0]);
 	CPPUNIT_ASSERT_EQUAL(3,followers[1]);
 	CPPUNIT_ASSERT_EQUAL(4,followers[2]);

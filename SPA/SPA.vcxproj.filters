@@ -96,6 +96,36 @@
     <ClCompile Include="PKB\VarTable.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
+    <ClCompile Include="QueryProcessor\Subquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\ResultTuple.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files\Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\FollowsSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\FollowsStarSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\ParentStarSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\QE.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\ModifiesSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\UsesSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\ParentSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PKB\AST.h">
@@ -163,6 +193,15 @@
     </ClInclude>
     <ClInclude Include="PKB\VarTable.h">
       <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\Subquery.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\ResultTuple.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\QE.h">
+      <Filter>Header Files\QueryProcessor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

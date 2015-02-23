@@ -4,7 +4,7 @@
 #include <stack>
 #include "Lexer.h"
 #include "Lexeme.h"
-#include "..\PKB\PKBController.h"
+#include "../PKB/PKBController.h"
 #include "TNode.h"
 #include "Operator.h"
 
@@ -13,7 +13,12 @@ using namespace std;
 
 static string KEYWORDS[] = {
 	"procedure",
-	"while"
+	"while",
+	"call",
+	"if",
+	"then",
+	"else",
+	"call"
 };
 
 

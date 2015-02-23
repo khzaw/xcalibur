@@ -32,8 +32,7 @@ QueryEvaluator::QueryEvaluator(){
 
 QueryEvaluator::QueryEvaluator(PKBController* newPKB){
 	pkb = newPKB;
-};
-
+}
 pair<vector<string>, vector<vector<int>>> QueryEvaluator::mergeSolutions(pair<vector<string>, vector<vector<int>>> first, pair<vector<string>, vector<vector<int>>> second) {
 	vector<pair<int, int>> equalIndex;	
 	vector<int> uniqueIndexInSecond;

@@ -4,10 +4,10 @@
 
 class TestParser : public CPPUNIT_NS::TestFixture {
 	CPPUNIT_TEST_SUITE(TestParser);
-	CPPUNIT_TEST(testTotalStatementNumber);
-	CPPUNIT_TEST(testTotalFollows);
-	CPPUNIT_TEST(testTotalParents);
-	CPPUNIT_TEST(testTotalModifies);
+	//CPPUNIT_TEST(testTotalStatementNumber);
+	//CPPUNIT_TEST(testTotalFollows);
+	//CPPUNIT_TEST(testTotalParents);
+	//CPPUNIT_TEST(testTotalModifies);
 	CPPUNIT_TEST(testTotalUses);
 	CPPUNIT_TEST_SUITE_END();
 public:

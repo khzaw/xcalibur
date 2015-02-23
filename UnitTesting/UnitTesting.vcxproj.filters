@@ -42,9 +42,6 @@
     <ClCompile Include="testStatement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="testQueryEvaluator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TestParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -52,6 +49,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TestAST.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestFollowsSubquery.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestQE.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,9 +83,6 @@
     <ClInclude Include="testStatement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="testQueryEvaluator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TestParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -90,6 +90,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TestAST.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestFollowsSubquery.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestQE.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

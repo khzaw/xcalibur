@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <iterator>
 #include "Subquery.h"
 
 using namespace std;
@@ -53,7 +54,8 @@ public:
 		tuple->addSynonymToMap(leftSynonym, index);
 		vector<int> users = vector<int>();
 		if (isSyn == 2) {	// Uses(syn, varnum): Get syns that uses varnum
-			users = pkb->usesTable.getUsersStmt(rightIndex);
+			set<int> tempUsers = pkb->usesTable.getUsersStmt(rightIndex);
+			copy(tempUsers.begin(), tempUsers.end(), back_inserter(users));
 		} else {	// Uses(syn, _): Get all users
 			// not sure if this is correct
 			vector<pair<int, int>> temp = pkb->usesTable.getUsesStmt();
@@ -103,7 +105,8 @@ public:
 		
 		vector<int> used;
 		if (isSyn == 1) {	// Uses(stmt, varnum): Get Users of varnum
-			used = pkb->usesTable.getUsersStmt(leftIndex);
+			set<int> tempUsed = pkb->usesTable.getUsersStmt(leftIndex);
+			copy(tempUsed.begin(), tempUsed.end(), back_inserter(used));
 		} else {	// Uses(_, varnum)
 			//invalid
 		}
@@ -184,7 +187,8 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
-					vector<int> tempValues = pkb->usesTable.getUsedVarStmt(leftValue);
+					set<int> tV = pkb->usesTable.getUsedVarStmt(leftValue);
+					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(leftValue);
@@ -205,7 +209,8 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					vector<int> tempValues = pkb->usesTable.getUsersStmt(rightValue);
+					set<int> tV = pkb->usesTable.getUsersStmt(rightValue);
+					vector<int> tempValues(tV.begin(), tV.end()); 
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(rightValue);

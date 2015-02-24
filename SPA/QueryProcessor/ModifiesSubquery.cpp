@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <iterator>
 #include "Subquery.h"
 
 using namespace std;
@@ -53,7 +54,8 @@ public:
 		tuple->addSynonymToMap(leftSynonym, index);
 		vector<int> modifiers = vector<int>();
 		if (isSyn == 2) {	// Modifies(syn, varnum): Get syns that modifies varnum
-			modifiers = pkb->modifiesTable.getModifiersStmt(rightIndex);
+			set<int> tempModifiers = pkb->modifiesTable.getModifiersStmt(rightIndex);
+			copy(tempModifiers.begin(), tempModifiers.end(), back_inserter(modifiers)); 
 		} else {	// Modifies(syn, _): Get all modifiers
 			// not sure if this is correct
 			vector<pair<int, int>> temp = pkb->modifiesTable.getModifiesStmt();
@@ -103,7 +105,8 @@ public:
 		
 		vector<int> modified;
 		if (isSyn == 1) {	// Modifies(stmt, varnum): Get Modifiers of varnum
-			modified = pkb->modifiesTable.getModifiersStmt(leftIndex);
+			set<int> tempModified = pkb->modifiesTable.getModifiersStmt(leftIndex);
+			copy(tempModified.begin(), tempModified.end(), back_inserter(modified));
 		} else {	// Modifies(_, varnum)
 			//invalid
 		}
@@ -184,7 +187,8 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
-					vector<int> tempValues = pkb->modifiesTable.getModifiedVarStmt(leftValue);
+					set<int> tV = pkb->modifiesTable.getModifiedVarStmt(leftValue);
+					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(leftValue);
@@ -205,7 +209,8 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					vector<int> tempValues = pkb->modifiesTable.getModifiersStmt(rightValue);
+					set<int> tV = pkb->modifiesTable.getModifiersStmt(rightValue);
+					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(rightValue);

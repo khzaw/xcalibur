@@ -51,13 +51,13 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		int index = tuple->addSynonym(leftSynonym);
 		tuple->addSynonymToMap(leftSynonym, index);
-		vector<int> parents;
+		set<int> tempParents;
 		if (isSyn == 2) {	// Parent(syn, stmt): Get parents of stmt
-			parents = pkb->parentTable.getParentStar(rightIndex);
+			tempParents = pkb->parentTable.getParentStar(rightIndex);
 		} else {	// Parent(syn, _): Get all parents stmt
-			parents = pkb->parentTable.getAllParentStmt();
+			tempParents = pkb->parentTable.getAllParentStmt();
 		}
-
+		vector<int> parents(tempParents.begin(), tempParents.end());
 		for(size_t i = 0; i < parents.size(); i++) {
 			vector<int> temp = vector<int>();
 			// synonym type check here
@@ -97,13 +97,13 @@ public:
 		int index = tuple->addSynonym(rightSynonym);
 		tuple->addSynonymToMap(rightSynonym, index);
 		
-		vector<int> children;
+		set<int> tempChildren;
 		if (isSyn == 1) {	// Parent(stmt, syn): Get children of stmt
-			children = pkb->parentTable.getChildrenStar(leftIndex);
+			tempChildren = pkb->parentTable.getChildrenStar(leftIndex);
 		} else {	// Parent(_, syn): Get all children stmt
-			children = pkb->parentTable.getAllChildrenStmt();
+			tempChildren = pkb->parentTable.getAllChildrenStmt();
 		}
-
+		vector<int> children(tempChildren.begin(), tempChildren.end());
 		for(size_t i = 0; i < children.size(); i++) {
 			vector<int> temp = vector<int>();
 			// synonym type check here
@@ -147,14 +147,16 @@ public:
 
 		// get all parents statement
 		// for each parent statement, get its children
-		vector<int> parents = pkb->parentTable.getAllParentStmt();
+		set<int> tempParents = pkb->parentTable.getAllParentStmt();
+		vector<int> parents(tempParents.begin(), tempParents.end());
 		for (size_t i = 0; i < parents.size(); i++) {
 			// synonym type check
 			if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if")
 				&& pkb->statementTable.getTNode(parents[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
 				continue;
 			}
-			vector<int> children = pkb->parentTable.getChildrenStar(parents[i]);
+			set<int> tempChildren = pkb->parentTable.getChildrenStar(parents[i]);
+			vector<int> children(tempChildren.begin(), tempChildren.end());
 			for (size_t j = 0; j < children.size(); j++) {
 				// synonym type check
 				if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if")
@@ -190,7 +192,8 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
-					vector<int> tempValues = pkb->parentTable.getChildrenStar(leftValue);
+					set<int> tV = pkb->parentTable.getChildrenStar(leftValue);
+					vector<int> tempValues(tV.begin(), tV.end()); 
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(leftValue);
@@ -211,7 +214,8 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					vector<int> tempValues = pkb->parentTable.getParentStar(rightValue);
+					set<int> tV = pkb->parentTable.getParentStar(rightValue);
+					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(rightValue);

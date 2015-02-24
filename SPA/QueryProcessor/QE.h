@@ -22,10 +22,10 @@ private:
 public:
 	QE(vector<string>);
 	vector<ResultTuple*> solutions;
-	void addQuery(Subquery);
+	void addQuery(Subquery*);
 	void solve();
 	void unionQuerySets();
-	vector<vector<Subquery>> queries;
+	vector<vector<Subquery*>> queries;
 	void trimSolution();
 	map<string, int> disjointCheck;
 	void basicSolve();
@@ -38,7 +38,7 @@ struct pairCompare {
 };
 
 struct subqueriesCompare {
-	bool operator()(Subquery& first, Subquery& second) {
-		return first.getPriority() < second.getPriority();
+	bool operator()(Subquery* first, Subquery* second) {
+		return first->getPriority() < second->getPriority();
 	}
 };

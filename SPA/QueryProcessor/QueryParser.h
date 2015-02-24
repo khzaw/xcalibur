@@ -85,6 +85,9 @@ private:
 	void matchPatternIf(string);
 	void matchWith();
 	void matchWithConditions();
+	void matchAttrCond();
+	void matchAttrCompare();
+	void matchRef();
 	QTNode* matchVarRef();
 	QTNode* matchEntRef(bool);
 	QTNode* matchStmtRef();

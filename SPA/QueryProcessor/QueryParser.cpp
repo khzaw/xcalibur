@@ -1,6 +1,6 @@
 #pragma once
 
-#include<stdio.h>
+#include <stdio.h>
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -26,8 +26,8 @@ QueryParser::QueryParser(string s) {
 	QueryTree* temp = new QueryTree();
 	this->qt = temp;
 	parse();
-	//qt->printTree();
-	//printMap();
+	qt->printTree();
+	printMap();
 }
 
 QueryParser::~QueryParser() {
@@ -610,6 +610,32 @@ void QueryParser::matchPatternWhile(string s) {
 }
 
 void QueryParser::matchWith() {
+	matchAttrCond();
+}
+
+void QueryParser::matchAttrCond() {
+	matchAttrCompare();
+	if(_stricmp(nextToken.name.c_str(), "and") == 0) {
+		matchAttrCompare();
+	}
+	
+}
+
+void QueryParser::matchAttrCompare() {
+	QNode* withNode = new QTNode("with");
+	withNode->addChild(matchRef());
+	match("=");
+	withNode->addChild(matchRef());
+	qt->getRootNode()->getChild(1)->addChild(withNode);
+}
+
+QTNode* QueryParser::matchRef() {
+	// ref: attrRef | synony  | '"' IDENT '"' | INTEGER
+	// in the above synonym must be a synonym of prog_line
+	// attRef: synonym '.' attrName
+	// TODO: go through individual details 
+	QTNode* ref new QTNode(nextToken.name);
+	return ref;
 }
 
 string QueryParser::getPostFixExpressionString() {

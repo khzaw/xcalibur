@@ -80,7 +80,8 @@ void Parser::parse() {
 	}
 	inputFile.close();
 	lexer = Lexer(programString);
-	program();
+	printOut();
+	//program();
 }
 
 void Parser::printOut() {
@@ -130,6 +131,7 @@ void Parser::stmt(TNode* parent) {
 		loc++;
 		match(KEYWORDS[2]);
 		procedureName();
+		controller.callsTable.insertCalls(0, this->procCount);
 		match(";");
 	}
 	else if(nextToken.token == IDENT && nextToken.name == "while") {			// while statement
@@ -341,10 +343,11 @@ void Parser::constantValue() {
 void Parser::procedureName() {
 	// TODO check valid variable name
 	procName = nextToken.name;
+	controller.procTable.insertProc(procName);
+	this->procCount+=1;
 	cout << "procName: " << nextToken.name << endl;
-
-
 	nextToken = getToken();
+	
 }
 
 

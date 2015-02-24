@@ -103,7 +103,7 @@ ResultTuple* ResultTuple::cross(ResultTuple* other) {
 	tempSyn.insert(tempSyn.end(), synonyms.begin(), synonyms.end());
 	tempSyn.insert(tempSyn.end(), other->getSynonyms().begin(), other->getSynonyms().end());
 	final->setSynonym(tempSyn);
-	for (int i = 0; i < tempSyn.size(); i++) {
+	for (size_t i = 0; i < tempSyn.size(); i++) {
 		final->addSynonymToMap(tempSyn[i], i);
 	}
 

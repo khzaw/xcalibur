@@ -57,12 +57,12 @@ public:
 		} else {	// Uses(syn, _): Get all users
 			// not sure if this is correct
 			vector<pair<int, int>> temp = pkb->usesTable.getUsesStmt();
-			for (int i = 0; i < temp.size(); i++) {
+			for (size_t i = 0; i < temp.size(); i++) {
 				users.push_back(temp[i].first);
 			}
 		}
 
-		for(int i = 0; i < users.size(); i++) {
+		for(size_t i = 0; i < users.size(); i++) {
 			vector<int> temp = vector<int>();
 			// synonym type check here
 			if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if")
@@ -81,7 +81,7 @@ public:
 		result->setSynonymMap(tuple->getSynonymMap());
 
 		int index = tuple->getSynonymIndex(leftSynonym);
-		for (int i = 0; i < tuple->getAllResults().size(); i++) {
+		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 1) {	// Uses(syn, varnum)
 				if (pkb->usesTable.isUsesStmt(temp.at(index), rightIndex)) {
@@ -108,7 +108,7 @@ public:
 			//invalid
 		}
 
-		for(int i = 0; i < used.size(); i++) {
+		for(size_t i = 0; i < used.size(); i++) {
 			vector<int> temp = vector<int>();
 			// synonym type check here
 			if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if")
@@ -127,7 +127,7 @@ public:
 		result->setSynonymMap(tuple->getSynonymMap());
 
 		int index = tuple->getSynonymIndex(rightSynonym);
-		for (int i = 0; i < tuple->getAllResults().size(); i++) {
+		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 1) {	// Uses(stmt, syn)
 				if (pkb->usesTable.isUsesStmt(leftIndex, temp.at(index))) {
@@ -150,7 +150,7 @@ public:
 		// get all users statement
 		// for each users statement, get its used var
 		vector<pair<int, int>> stmts = pkb->usesTable.getUsesStmt();
-		for (int i = 0; i < stmts.size(); i++) {
+		for (size_t i = 0; i < stmts.size(); i++) {
 			// synonym type check
 			if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if")
 				&& pkb->statementTable.getTNode(stmts[i].first)->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
@@ -172,7 +172,7 @@ public:
 		int lIndex = tuple->getSynonymIndex(leftSynonym);
 		int rIndex = tuple->getSynonymIndex(rightSynonym);
 		if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
-			for (int i = 0; i < tuple->getAllResults().size(); i++){
+			for (size_t i = 0; i < tuple->getAllResults().size(); i++){
 				if (pkb->usesTable.isUsesStmt(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
 					result->addResultRow(tuple->getResultRow(i));
 				}
@@ -181,14 +181,14 @@ public:
 			int index = result->addSynonym(rightSynonym);
 			result->addSynonymToMap(rightSynonym, index);
 			map<int, vector<int>> prevSolution = map<int, vector<int>>();
-			for (int i = 0; i < tuple->getAllResults().size(); i++) {
+			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
 					vector<int> tempValues = pkb->usesTable.getUsedVarStmt(leftValue);
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(leftValue);
-				for (int j = 0; j < vals.size(); j++){
+				for (size_t j = 0; j < vals.size(); j++){
 					if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if")
 						&& pkb->statementTable.getTNode(vals[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
 						continue;
@@ -202,14 +202,14 @@ public:
 			int index = result->addSynonym(leftSynonym);
 			result->addSynonymToMap(leftSynonym, index);
 			map<int, vector<int>> prevSolution = map<int, vector<int>>();
-			for (int i = 0; i < tuple->getAllResults().size(); i++) {
+			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
 					vector<int> tempValues = pkb->usesTable.getUsersStmt(rightValue);
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(rightValue);
-				for (int j = 0; j < vals.size(); j++){
+				for (size_t j = 0; j < vals.size(); j++){
 					if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if")
 						&& pkb->statementTable.getTNode(vals[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
 						continue;

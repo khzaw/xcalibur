@@ -15,7 +15,6 @@ public:
 
 		ModifiesExtractor(Modifies* modifies);
 		ModifiesExtractor();
-		~ModifiesExtractor(void);
 		void construct();
 
 	//build stmt modifies table

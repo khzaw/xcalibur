@@ -25,7 +25,6 @@
     <ClCompile Include="PKB\Follows.cpp" />
     <ClCompile Include="PKB\Modifies.cpp" />
     <ClCompile Include="PKB\Parent.cpp" />
-    <ClCompile Include="PKB\PKB.cpp" />
     <ClCompile Include="PKB\PKBController.cpp" />
     <ClCompile Include="PKB\ProcTable.cpp" />
     <ClCompile Include="PKB\Calls.cpp" />

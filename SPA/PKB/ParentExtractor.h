@@ -15,7 +15,6 @@ public:
 
 		ParentExtractor(Parent* parent);
 		ParentExtractor();
-		~ParentExtractor(void);
 		void construct();
 
 	//build follower/followee table

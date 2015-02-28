@@ -87,7 +87,7 @@ private:
 	void matchWithConditions();
 	void matchAttrCond();
 	void matchAttrCompare();
-	void matchRef();
+	QTNode* matchRef();
 	QTNode* matchVarRef();
 	QTNode* matchEntRef(bool);
 	QTNode* matchStmtRef();

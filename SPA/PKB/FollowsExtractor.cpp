@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Follows.h"
-#include "PKBController.h"
+#include "FollowsExtractor.h"
 
 
 
@@ -10,9 +9,6 @@ FollowsExtractor::FollowsExtractor(Follows* follows){
 }
 FollowsExtractor::FollowsExtractor(){
 
-}
-
-FollowsExtractor::~FollowsExtractor(){
 }
 
 void FollowsExtractor::construct(){

@@ -1,18 +1,12 @@
 #pragma once
 
-#include "Calls.h"
-#include "PKBController.h"
+#include "CallsExtractor.h"
 
+CallsExtractor::CallsExtractor(){
+}
 
 CallsExtractor::CallsExtractor(Calls* calls){
 	this->calls  = calls;
-}
-
-CallsExtractor::CallsExtractor(){
-
-}
-
-CallsExtractor::~CallsExtractor(){
 }
 
 void CallsExtractor::construct(){

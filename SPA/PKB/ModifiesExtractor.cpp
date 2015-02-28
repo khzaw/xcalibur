@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Modifies.h"
-#include "PKBController.h"
+#include "ModifiesExtractor.h"
 
 
 ModifiesExtractor::ModifiesExtractor(Modifies* modifies){
@@ -10,9 +9,6 @@ ModifiesExtractor::ModifiesExtractor(Modifies* modifies){
 
 ModifiesExtractor::ModifiesExtractor(){
 
-}
-
-ModifiesExtractor::~ModifiesExtractor(){
 }
 
 void ModifiesExtractor::construct(){

@@ -2,7 +2,6 @@
 #include <iostream>
 #include "Calls.h"
 
-
 using namespace std;
 
 class CallsExtractor{
@@ -12,11 +11,9 @@ private:
 	Calls* calls;
 
 public:
-
-		CallsExtractor(Calls* call);
-		CallsExtractor();
-		~CallsExtractor(void);
-		void construct();
+	CallsExtractor();
+	CallsExtractor(Calls* call);
+	void construct();
 
 	//build caller/callee table
 	void buildCallerTable();  // done

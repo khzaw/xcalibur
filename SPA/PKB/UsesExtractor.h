@@ -15,7 +15,6 @@ public:
 
 		UsesExtractor(Uses* uses);
 		UsesExtractor();
-		~UsesExtractor(void);
 		void construct();
 
 	//build stmt modifies table

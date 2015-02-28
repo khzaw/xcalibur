@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Parent.h"
-#include "PKBController.h"
 #include "ParentExtractor.h"
 
 
@@ -9,8 +7,6 @@ ParentExtractor::ParentExtractor(Parent* parent){
 	this->parent  = parent;
 }
 ParentExtractor::ParentExtractor(){
-}
-ParentExtractor::~ParentExtractor(){
 }
 
 void ParentExtractor::construct(){

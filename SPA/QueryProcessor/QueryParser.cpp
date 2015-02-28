@@ -622,7 +622,7 @@ void QueryParser::matchAttrCond() {
 }
 
 void QueryParser::matchAttrCompare() {
-	QNode* withNode = new QTNode("with");
+	QTNode* withNode = new QTNode("with");
 	withNode->addChild(matchRef());
 	match("=");
 	withNode->addChild(matchRef());
@@ -634,7 +634,7 @@ QTNode* QueryParser::matchRef() {
 	// in the above synonym must be a synonym of prog_line
 	// attRef: synonym '.' attrName
 	// TODO: go through individual details 
-	QTNode* ref new QTNode(nextToken.name);
+	QTNode* ref = new QTNode(nextToken.name);
 	return ref;
 }
 

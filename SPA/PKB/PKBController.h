@@ -36,15 +36,15 @@ public:
 	Uses usesTable;
 	StatementTable statementTable;
 	Calls callsTable;
-	PKBController();
-	virtual ~PKBController();
-
 	//Design Extractor
 	CallsExtractor callsExtractor;
 	FollowsExtractor followsExtractor;
 	ParentExtractor parentExtractor;
 	ModifiesExtractor modifiesExtractor;
 	UsesExtractor usesExtractor;
+
+	PKBController();
+	~PKBController();
 
 	//DE
 	void constructParent();

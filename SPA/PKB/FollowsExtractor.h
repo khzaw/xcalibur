@@ -14,7 +14,6 @@ public:
 
 		FollowsExtractor(Follows* follows);
 		FollowsExtractor();
-		~FollowsExtractor(void);
 		void construct();
 
 	//build follower/followee table

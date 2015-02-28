@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Uses.h"
-#include "PKBController.h"
+#include "UsesExtractor.h"
 
 
 UsesExtractor::UsesExtractor(Uses* uses){
@@ -10,9 +9,6 @@ UsesExtractor::UsesExtractor(Uses* uses){
 
 UsesExtractor::UsesExtractor(){
 
-}
-
-UsesExtractor::~UsesExtractor(){
 }
 
 void UsesExtractor::construct(){

@@ -1,9 +1,16 @@
 #pragma once
+
+#include "CallsExtractor.cpp"
+#include "ParentExtractor.cpp"
+#include "FollowsExtractor.cpp"
+#include "ModifiesExtractor.cpp"
+#include "UsesExtractor.cpp"
+
 #include "PKBController.h"
 
 using namespace std;
 
-PKBController::PKBController() {
+PKBController::PKBController(){
 	this->ast = AST();
 	this->procTable = ProcTable();
 	this->varTable = VarTable();
@@ -15,10 +22,11 @@ PKBController::PKBController() {
 	this->statementTable = StatementTable();
 	this->modifiesTable = Modifies();
 	this->callsTable = Calls();
-	this->callsExtractor= CallsExtractor( &callsTable);
-	this->followsExtractor=FollowsExtractor(&followsTable);
+	this->callsExtractor = CallsExtractor(&callsTable);
+	this->followsExtractor = FollowsExtractor(&followsTable);
 	this->parentExtractor = ParentExtractor(&parentTable);
-	this->modifiesExtractor= ModifiesExtractor(&modifiesTable);
+	this->modifiesExtractor = ModifiesExtractor(&modifiesTable);
+	this->usesExtractor = UsesExtractor(&usesTable);
 }
 
 PKBController::~PKBController() {

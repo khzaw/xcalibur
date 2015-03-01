@@ -19,7 +19,9 @@ unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ParentTest").makeT
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("FollowsTest").makeTest());	
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ConstantTest").makeTest());	
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("StatementTest").makeTest());	
+unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("CallsTest").makeTest());
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("QueryParserTest").makeTest());
+
 CppUnit::TestFactoryRegistry::getRegistry().addTestToSuite(unitSuite);
 CppUnit::TextUi::TestRunner runner;
 

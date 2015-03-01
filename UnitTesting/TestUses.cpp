@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 #include <set>
-#include "UsesExtractor.h"
+#include "PKB\UsesExtractor.h"
 
 void 
 UsesTest::setUp()
@@ -277,7 +277,7 @@ UsesTest::testIsUsesProc(){
 
 //test if uses for statement 
 void
-testEvaluateIsUsesStmt(){
+UsesTest::testEvaluateIsUsesStmt(){
 	Uses m;
 	m.insertUsesStmt(1,2);
 	UsesExtractor extractor(&m);
@@ -288,7 +288,7 @@ testEvaluateIsUsesStmt(){
 }
 
 //test get statements that used var
-void testEvaluateGetUsersStmt(){
+void UsesTest::testEvaluateGetUsersStmt(){
    Uses m;
    set<int> stmt;
    m.insertUsesStmt(1,2);
@@ -313,7 +313,7 @@ void testEvaluateGetUsersStmt(){
 }
 
 //test get used variables of statements
-void testEvaluateGetUsedVarStmt(){
+void UsesTest::testEvaluateGetUsedVarStmt(){
 	Uses m;
    set<int> var;
    m.insertUsesStmt(1,2);
@@ -338,7 +338,7 @@ void testEvaluateGetUsedVarStmt(){
 }
 
 //test if uses for procedures
-void  testEvaluateIsUsesProc(){
+void  UsesTest::testEvaluateIsUsesProc(){
 	Uses m;
 	m.insertUsesProc(1,2);
 	UsesExtractor extractor(&m);
@@ -348,7 +348,7 @@ void  testEvaluateIsUsesProc(){
 }
 
 //test get procedures that used var
-void testEvaluateGetUsersProc(){
+void  UsesTest::testEvaluateGetUsersProc(){
    Uses m;
    set<int> proc;
    m.insertUsesProc(1,2);
@@ -373,7 +373,7 @@ void testEvaluateGetUsersProc(){
 }
 
 //test get used variables of procedures
-void testEvaluateGetUsedVarProc(){
+void  UsesTest::testEvaluateGetUsedVarProc(){
    Uses m;
    set<int> var;
    m.insertUsesProc(1,2);

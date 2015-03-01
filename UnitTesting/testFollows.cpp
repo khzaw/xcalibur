@@ -1,7 +1,7 @@
 #include <cppunit/config/SourcePrefix.h>
 #include "testFollows.h"
 #include "PKB\Follows.h"
-#include "FollowsExtractor.h"
+#include "PKB\FollowsExtractor.h"
 
 #include <iostream>
 #include <string>

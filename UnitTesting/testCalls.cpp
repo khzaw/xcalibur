@@ -1,7 +1,7 @@
 #include <cppunit/config/SourcePrefix.h>
 #include "testCalls.h"
-#include "Calls.h"
-#include "CallsExtractor.h"
+#include "PKB\Calls.h"
+#include "PKB\CallsExtractor.h"
 
 #include <iostream>
 #include <string>
@@ -116,7 +116,7 @@ CallsTest::testGetAllCallees(){
 }
 
 void
-testEvaluateGetCallees(){
+CallsTest::testEvaluateGetCallees(){
 	Calls c;
 	CallsExtractor extractor(&c);
 	c.insertCalls(1,2);
@@ -137,7 +137,7 @@ testEvaluateGetCallees(){
 }
 
 void
-testEvaluateGetCallers(){
+CallsTest::testEvaluateGetCallers(){
 	Calls c;
 	CallsExtractor extractor(&c);
 	c.insertCalls(1,2);
@@ -156,7 +156,7 @@ testEvaluateGetCallers(){
 }
 
 void
-testEvaluateGetCallersStar(){
+CallsTest::testEvaluateGetCallersStar(){
 	Calls c;
 	CallsExtractor extractor(&c);
 	c.insertCalls(1,2);
@@ -174,7 +174,7 @@ testEvaluateGetCallersStar(){
 }
 
 void
-testEvaluateGetCalleesStar(){
+CallsTest::testEvaluateGetCalleesStar(){
 	Calls c;
 	CallsExtractor extractor(&c);
 	c.insertCalls(1,2);
@@ -208,7 +208,7 @@ CallsTest::testIsCalls(){
 }
 
 void
-testEvaluateIsCallsStar(){
+CallsTest::testIsCallsStar(){
 	Calls c;
 	CallsExtractor extractor(&c);
 	c.insertCalls(1,2);

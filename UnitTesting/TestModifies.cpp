@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 #include <set>
-#include "ModifiesExtractor.h"
+#include "PKB\ModifiesExtractor.h"
 
 void 
 ModifiesTest::setUp()
@@ -47,7 +47,7 @@ ModifiesTest::testGetModifiersStmt(){
 	return;
 }
 
-
+/*
 //test get modified variables of statements
 void 
 ModifiesTest::testGetModifiedVarStmt(){
@@ -73,6 +73,7 @@ ModifiesTest::testGetModifiedVarStmt(){
    }
 	return;
 }
+*/
 
 //test get modifies table of statement
 void
@@ -96,6 +97,7 @@ ModifiesTest::testGetModifiesStmt(){
     return;
 }
 
+/*
 //test insertion of modifies for statement
 void 
 ModifiesTest::testInsertModifiesStmt(){
@@ -131,6 +133,7 @@ ModifiesTest::testInsertModifiesStmt(){
 	CPPUNIT_ASSERT_EQUAL(3,tableSize2);
 	return;
 }
+*/
 
 //test if modifies for statement 
 void 
@@ -309,11 +312,11 @@ void ModifiesTest::testEvaluateGetModifiersStmt(){
 
 //test get modified var for statement
 void 
-ModifiesTest::testGetModifiedVarStmt(){
+ModifiesTest::testEvaluateGetModifiedVarStmt(){
  Modifies m;
    set<int> var;
    m.insertModifiesStmt(1,2);
-   var.insert(2);
+   var.insert(2); 
    m.insertModifiesStmt(1,3);
    var.insert(3);
    m.insertModifiesStmt(1,4);

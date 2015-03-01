@@ -8,9 +8,9 @@ class ModifiesTest : public CPPUNIT_NS::TestFixture // Note 2
 { 
 	CPPUNIT_TEST_SUITE( ModifiesTest ); // Note 3 
 	CPPUNIT_TEST(testGetModifiersStmt);
-	CPPUNIT_TEST( testGetModifiedVarStmt);
+  //CPPUNIT_TEST( testGetModifiedVarStmt);
 	CPPUNIT_TEST( testGetModifiesStmt );
-	CPPUNIT_TEST( testInsertModifiesStmt);
+	//CPPUNIT_TEST( testInsertModifiesStmt);
 	CPPUNIT_TEST( testIsModifiesStmt);
 	CPPUNIT_TEST(testGetModifiersProc);
 	CPPUNIT_TEST( testGetModifiedVarProc);

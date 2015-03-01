@@ -1,7 +1,7 @@
 #include <cppunit/config/SourcePrefix.h>
 #include "testParent.h"
 #include "PKB\Parent.h"
-#include "ParentExtractor.h"
+#include "PKB\ParentExtractor.h"
 
 #include <iostream>
 #include <string>

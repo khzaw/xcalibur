@@ -7,6 +7,11 @@
 using namespace std;
 
 Follows::Follows(){
+
+}
+
+Follows::Follows(StatementTable* s){
+	statementTable = s;
 }
 
 void Follows::insertFollows(int stmt1, int stmt2){
@@ -218,6 +223,62 @@ set<int> Follows::evaluateGetFollowers(int stmt){
 		 }
 	 }
 
+/* Query Evaluator should only touch these methods */
+	  set<int> Follows::evaluateGetFollowersT(int n,string nodeType){
+		  if(nodeType == "all"){
+			  return evaluateGetFollowers(n);
+		  }
+		  set<int> results = evaluateGetFollowers(n);
+		  set<int> finalresults;
+		  for (std::set<int>::iterator it=results.begin(); it != results.end(); ++it){
+		if(statementTable->getTNodeType(*it)== nodeType){
+			finalresults.insert(*it);
+		  }
+		  }
+		  return finalresults;
+	  }
+
+	 set<int> Follows::evaluateGetFolloweesT(int n,string nodeType){
+		  if(nodeType == "all"){
+			  return evaluateGetFollowees(n);
+		  }
+		 set<int> results = evaluateGetFollowees(n);
+		 set<int> finalresults;
+		  for (std::set<int>::iterator it=results.begin(); it != results.end(); ++it){
+			  	if(statementTable->getTNodeType(*it)== nodeType){
+			finalresults.insert(*it);
+		  }
+		  }
+		  return finalresults;
+	 }
+
+	 set<int> Follows::evaluateGetFollowerStarT(int n,string nodeType){
+		  if(nodeType == "all"){
+			  return evaluateGetFollowerStar(n);
+		  }
+		 set<int> results = evaluateGetFollowerStar(n);
+		 set<int> finalresults;
+		  for (std::set<int>::iterator it=results.begin(); it != results.end(); ++it){
+			  if(statementTable->getTNodeType(*it)== nodeType){
+			finalresults.insert(*it);
+		  }
+		  }
+		    return finalresults;
+	 }
+
+	 set<int> Follows::evaluateGetFolloweeStarT(int n ,string nodeType){
+		   if(nodeType == "all"){
+			  return evaluateGetFolloweeStar(n);
+		  }
+		 set<int> results = evaluateGetFolloweeStar(n);
+		 set<int> finalresults;
+		  for (std::set<int>::iterator it=results.begin(); it != results.end(); ++it){
+			  if(statementTable->getTNodeType(*it)== nodeType){
+			finalresults.insert(*it);
+		  }
+		  }
+		  return finalresults;
+	 }
 	 
 	void Follows::insertToFollowerTable(set<int> follower){
 		followerTable.push_back(follower);

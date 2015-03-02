@@ -5,6 +5,7 @@
 #include <list>
 #include <unordered_map>
 #include <set>
+#include "..\PKB\StatementTable.h"
 
 using namespace std;
 
@@ -14,9 +15,19 @@ class Follows {
 	vector<pair<int,int>> followTable;
 	set<int>recursiveFollowerStar(set<int>&,int);
 	set<int>recursiveFolloweesStar(set<int>&,int);
+	StatementTable* statementTable;
 	
 	public :
-	Follows();
+    Follows();
+	Follows(StatementTable* statementTable);
+     /**** for query evaluation ****/
+	 bool evaluateIsFollows(int,int);
+	 bool evaluateIsFollowsStar(int,int);
+	 set<int> evaluateGetFollowersT(int,string);
+	 set<int> evaluateGetFolloweesT(int,string);
+	 set<int> evaluateGetFollowerStarT(int,string);
+	 set<int> evaluateGetFolloweeStarT(int,string);
+	 /*****************************************/
 	void insertFollows(int,int);
 	set<int> getFollowers(int);
 	set<int> getFollowees(int);
@@ -55,11 +66,13 @@ class Follows {
 	int getFolloweeIndexMapSize();
 	int getFollowerIndexMapSize();
 
-	// for query evaluation 
-	bool evaluateIsFollows(int,int);
-	 bool evaluateIsFollowsStar(int,int);
+	
+	
 	 set<int> evaluateGetFollowers(int);
 	 set<int> evaluateGetFollowees(int);
 	 set<int> evaluateGetFollowerStar(int);
 	 set<int> evaluateGetFolloweeStar(int);
+
+
+
 };

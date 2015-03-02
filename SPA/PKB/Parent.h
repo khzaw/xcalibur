@@ -4,6 +4,7 @@
 #include <list>
 #include <set>
 #include <unordered_map>
+#include "..\PKB\StatementTable.h"
 
 using namespace std;
 
@@ -13,9 +14,22 @@ class Parent {
 	vector<pair<int,int>> parentTable;
 	set<int>recursiveChildrenStar(set<int>&,int);
 	set<int>recursiveParentStar(set<int>&,int);
+	StatementTable* statementTable;
 	
 	public :
 	Parent();
+	Parent(StatementTable* statementTable);
+
+	  /**** for query evaluation ****/
+	 bool evaluateIsParent(int,int);
+	 bool evaluateIsParentStar(int,int);
+	 set<int>  evaluateGetChildrenT(int,string);
+	 set<int>  evaluateGetParentT(int,string);
+	 set<int>  evaluateGetChildrenStarT(int,string);
+	 set<int>  evaluateGetParentStarT(int,string);
+	 /*****************************************/
+	
+
 	void insertParent(int,int);
 	set<int> getChildren(int);
 	set<int> getParents(int);
@@ -55,6 +69,4 @@ class Parent {
 	 set<int> evaluateGetParent(int);
 	 set<int> evaluateGetChildrenStar(int);
 	 set<int> evaluateGetParentStar(int);
-	 bool evaluateIsParent(int,int);
-	 bool evaluateIsParentStar(int,int);
 };

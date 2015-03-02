@@ -22,6 +22,12 @@ TNode* StatementTable::getTNode(int n){
 	pair<TNode*,string> stmt = statement[n-1];
 	return stmt.first;
 }
+
+string StatementTable::getTNodeType(int n){
+	pair<TNode*,string> stmt = statement[n-1];
+	return stmt.second;
+}
+
 // returns a vector of node pointers of nodes matching specified node type
 vector<TNode*> StatementTable::getNodesMatchingNodeType(string nodeType){
 	vector<TNode*> nodes;

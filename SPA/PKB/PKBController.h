@@ -2,23 +2,23 @@
 
 #include <iostream>
 
-#include "AST.h"
-#include "VarTable.h"
-#include "ProcTable.h"
-#include "ConstantTable.h"
-#include "Parent.h"
-#include "Follows.h"
-#include "Modifies.h"
-#include "Uses.h"
-#include "StatementTable.h"
-#include "Modifies.h"
+#include "..\PKB\AST.h"
+#include "..\PKB\VarTable.h"
+#include "..\PKB\ProcTable.h"
+#include "..\PKB\ConstantTable.h"
+#include "..\PKB\Parent.h"
+#include "..\PKB\Follows.h"
+#include "..\PKB\Modifies.h"
+#include "..\PKB\Uses.h"
+#include "..\PKB\StatementTable.h"
+#include "..\PKB\Modifies.h"
 
 //Design Extractor
-#include "CallsExtractor.h"
-#include "ParentExtractor.h"
-#include "FollowsExtractor.h"
-#include "ModifiesExtractor.h"
-#include "UsesExtractor.h"
+#include "..\PKB\CallsExtractor.h"
+#include "..\PKB\ParentExtractor.h"
+#include "..\PKB\FollowsExtractor.h"
+#include "..\PKB\ModifiesExtractor.h"
+#include "..\PKB\UsesExtractor.h"
 
 
 

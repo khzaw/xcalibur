@@ -19,6 +19,7 @@ StatementTable();
 //Accessor
 int getSize(); 	// returns the number of statements in program
 TNode* getTNode(int);	// get node pointer using its index
+string getTNodeType(int); // get statement type [ While/If/Call/Assign ]
 vector<TNode*> getNodesMatchingNodeType(string); // returns a vector of node pointers of nodes matching specified node type
 vector<int> getStmtNumUsingNodeType(string);	// return a vector of indexes of nodes matching specified node type
 vector<int> getAllStmtNum();

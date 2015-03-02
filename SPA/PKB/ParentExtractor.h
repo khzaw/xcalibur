@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include "Parent.h"
+#include "..\PKB\Parent.h"
 
 
 using namespace std;

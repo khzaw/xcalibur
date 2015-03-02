@@ -7,6 +7,11 @@
 using namespace std;
 
 Parent::Parent(){
+
+}
+
+Parent::Parent(StatementTable* s){
+	statementTable =s;
 }
 
 void Parent::insertParent(int stmt1, int stmt2){
@@ -215,6 +220,64 @@ set<int> Parent::evaluateGetChildren(int stmt){
 	   }
 		 }
 	 }
+
+	 /* Query Evaluator should only touch these methods */
+	  set<int> Parent::evaluateGetChildrenT(int n,string nodeType){
+		   if(nodeType == "all"){
+			  return evaluateGetChildren(n);
+		  }
+		  set<int> results = evaluateGetChildren(n);
+		  set<int> finalresults;
+		  for (std::set<int>::iterator it=results.begin(); it != results.end(); ++it){
+		if(statementTable->getTNodeType(*it)== nodeType){
+			finalresults.insert(*it);
+		  }
+		  }
+		  return finalresults;
+	  }
+
+	 set<int> Parent::evaluateGetParentT(int n,string nodeType){
+		  if(nodeType == "all"){
+			  return evaluateGetParent(n);
+		  }
+		 set<int> results = evaluateGetParent(n);
+		 set<int> finalresults;
+		  for (std::set<int>::iterator it=results.begin(); it != results.end(); ++it){
+			  	if(statementTable->getTNodeType(*it)== nodeType){
+			finalresults.insert(*it);
+		  }
+		  }
+		  return finalresults;
+	 }
+
+	 set<int> Parent::evaluateGetChildrenStarT(int n,string nodeType){
+		 if(nodeType == "all"){
+			  return evaluateGetChildrenStar(n);
+		  }
+		 set<int> results = evaluateGetChildrenStar(n);
+		 set<int> finalresults;
+		  for (std::set<int>::iterator it=results.begin(); it != results.end(); ++it){
+			  if(statementTable->getTNodeType(*it)== nodeType){
+			finalresults.insert(*it);
+		  }
+		  }
+		    return finalresults;
+	 }
+
+	 set<int> Parent::evaluateGetParentStarT(int n ,string nodeType){
+		   if(nodeType == "all"){
+			  return evaluateGetParentStar(n);
+		  }
+		 set<int> results = evaluateGetParentStar(n);
+		 set<int> finalresults;
+		  for (std::set<int>::iterator it=results.begin(); it != results.end(); ++it){
+			  if(statementTable->getTNodeType(*it)== nodeType){
+			finalresults.insert(*it);
+		  }
+		  }
+		  return finalresults;
+	 }
+
 
 	 void Parent::insertToChildrenTable(set<int> children){
 		cTable.push_back(children);

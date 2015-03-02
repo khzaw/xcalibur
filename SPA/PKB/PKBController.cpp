@@ -15,11 +15,11 @@ PKBController::PKBController(){
 	this->procTable = ProcTable();
 	this->varTable = VarTable();
 	this->constantTable = ConstantTable();
-	this->parentTable = Parent();
-	this->followsTable = Follows();
-	this->modifiesTable = Modifies();
-	this->usesTable = Uses();
 	this->statementTable = StatementTable();
+	this->parentTable = Parent(&statementTable);
+	this->followsTable = Follows(&statementTable);
+	this->modifiesTable = Modifies();
+	this->usesTable = Uses();	
 	this->modifiesTable = Modifies();
 	this->callsTable = Calls();
 	this->callsExtractor = CallsExtractor(&callsTable);

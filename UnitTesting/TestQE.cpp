@@ -82,7 +82,7 @@ void QueryEvaluatorTest::testBQE(){
 	query.addQuery(&q1);
 	query.addQuery(&q2);
 	query.solve();
-	CPPUNIT_ASSERT_EQUAL(2, query.solutions[0]->getResultRow(0).at(0));
+	CPPUNIT_ASSERT_EQUAL(2, query.solution->getResultRow(0).at(0));
 }
 
 /*

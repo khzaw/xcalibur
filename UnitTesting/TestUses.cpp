@@ -226,6 +226,7 @@ UsesTest::testGetUsesProc(){
    }
     return;
 }
+
 //test insertion of modifies for procedures
 void 
 UsesTest::testInsertUsesProc(){
@@ -241,17 +242,21 @@ UsesTest::testInsertUsesProc(){
 	std::set<int>::iterator itr1 = var.begin();
 	std::set<int>::iterator itr2 = varGet.begin();
 	for(int i=0;i<varGet.size();i++){
-	CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
-	itr1++;
-	itr2++;
+		CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+		itr1++;
+		itr2++;
+		if (itr1==var.end() || itr2 == varGet.end()) break;
 	}
 	m.insertUsesProc(1,4);
 	extractor.construct();
 	var.insert(4);
+	itr1 = var.begin();
+	itr2 = varGet.begin();
 	for(int i=0;i<varGet.size();i++){
-	CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
-	itr1++;
-	itr2++;
+		CPPUNIT_ASSERT_EQUAL(*itr1,*itr2);
+		itr1++;
+		itr2++;
+		if (itr1==var.end() || itr2 == varGet.end()) break;
 	}
 	//check for duplicates
 	vector<pair<int,int>> usesTable = m.getUsesProc();

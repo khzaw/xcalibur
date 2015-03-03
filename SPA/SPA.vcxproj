@@ -34,6 +34,8 @@
     <ClInclude Include="PKB\ModifiesExtractor.cpp" />
     <ClInclude Include="PKB\ParentExtractor.cpp" />
     <ClInclude Include="PKB\UsesExtractor.cpp" />
+    <ClCompile Include="QueryProcessor\CallsStarSubquery.cpp" />
+    <ClCompile Include="QueryProcessor\CallsSubquery.cpp" />
     <ClCompile Include="QueryProcessor\OptimizedQE.cpp" />
     <ClCompile Include="QueryProcessor\QE.cpp" />
     <ClCompile Include="QueryProcessor\QTNode.cpp" />

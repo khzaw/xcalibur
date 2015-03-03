@@ -14,11 +14,11 @@ private:
 	map<string, int> disjointCheck;
 	bool useOptimizedSolver;
 	vector<pair<int, int>> unionOrder;
-	
 	void addQuery(Subquery*);
 
 public:
 	vector<ResultTuple*> solutions;
+	ResultTuple* finalSolution;
 	vector<vector<Subquery*>> queries;
 
 	OptimizedQE(vector<Subquery*>);

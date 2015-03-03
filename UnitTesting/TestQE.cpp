@@ -3,6 +3,7 @@
 #include "QueryProcessor\Subquery.h"
 #include "QueryProcessor\QE.cpp"
 #include "QueryProcessor\FollowsSubquery.cpp"
+#include "QueryProcessor\ModifiesSubquery.cpp"
 
 #include <iostream>
 #include <string>
@@ -83,6 +84,18 @@ void QueryEvaluatorTest::testBQE(){
 	query.addQuery(&q2);
 	query.solve();
 	CPPUNIT_ASSERT_EQUAL(2, query.solution->getResultRow(0).at(0));
+
+	ModifiesSubquery q3 = ModifiesSubquery(&table1, &pk);
+	q3.setSynonyms("s1", 0);
+	FollowsSubquery q4 = FollowsSubquery(&table1, &pk);
+	q4.setSynonyms("s1", 1);
+	vector<string> synonyms2 = vector<string>();
+	synonyms2.push_back("s1");
+	QE query2 = QE(synonyms2);
+	query2.addQuery(&q3);
+	query2.addQuery(&q4);
+	query2.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t) 0, query2.solution->getAllResults().size());
 }
 
 /*

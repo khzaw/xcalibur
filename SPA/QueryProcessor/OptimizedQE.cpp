@@ -17,6 +17,7 @@ OptimizedQE::OptimizedQE(vector<Subquery*> syn) {
 	queries = vector<vector<Subquery*> >();
 	unionOrder = vector<pair<int, int> >();
 	solutions = vector<ResultTuple*>();
+	finalSolution = new ResultTuple();
 	splitIntoDisjoint(syn);
 	sortQuerySets();
 }
@@ -87,7 +88,7 @@ void OptimizedQE::unionQuerySets() {
 ResultTuple* OptimizedQE::solve() {
 	solveQuerySets();
 	joinQuerySolutions();
-	return solutions[0];
+	return finalSolution;
 }
 
 void OptimizedQE::sortQuerySets() {
@@ -172,8 +173,10 @@ void OptimizedQE::solveQuerySets() {
 }
 
 void OptimizedQE::joinQuerySolutions() {
-	while (solutions.size() > 1) {
-		solutions[0] = solutions[0]->cross(solutions[1]);
-		solutions.erase(solutions.begin() + 1);
+	if (solutions.size() > 0) {
+		finalSolution = solutions[0];
+	}
+	for (int i = 1; i < solutions.size(); i++) {
+		finalSolution = finalSolution->cross(solutions[i]);
 	}
 }

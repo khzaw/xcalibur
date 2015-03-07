@@ -51,13 +51,13 @@
     <ClCompile Include="TestAST.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestFollowsSubquery.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TestQE.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="testCalls.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestSubquery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -95,13 +95,13 @@
     <ClInclude Include="TestAST.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TestFollowsSubquery.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TestQE.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="testCalls.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestSubquery.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

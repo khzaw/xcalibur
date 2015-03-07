@@ -65,11 +65,11 @@ public:
 			}
 		} else {
 			if (synonymTable->at(syn)=="stmt" || synonymTable->at(syn) == "prog_line"){
-				if (index < pkb->statementTable.getSize()){
+				if (0 < index && index <= pkb->statementTable.getSize()){
 					values.push_back(index);
 				}
 			} else if (synonymTable->at(syn)=="assign" || synonymTable->at(syn) == "while" || synonymTable->at(syn)=="if" || synonymTable->at(syn) == "call"){
-				if (index < pkb->statementTable.getSize() && pkb->statementTable.getTNode(index)->getNodeType()==TNODE_NAMES[synToNodeType.at(synonymTable->at(syn))]){
+				if (0 < index && index <= pkb->statementTable.getSize() && pkb->statementTable.getTNode(index)->getNodeType()==TNODE_NAMES[synToNodeType.at(synonymTable->at(syn))]){
 					values.push_back(index);
 				}
 			}
@@ -187,7 +187,7 @@ public:
 		vector<string> results;
 		string synType = synonymTable->at(syn);
 		if (synType=="procedure"){
-			for (size_t i = 0; i < pkb->procTable.getSize(); i++){
+			for (int i = 0; i < pkb->procTable.getSize(); i++){
 				results.push_back(pkb->procTable.getProcName(i));
 			}
 		} else if (synType=="variable"){
@@ -265,7 +265,7 @@ public:
 			}
 		} else if (syn2Type == "stmt" || syn2Type == "prog_line"){
 			for (size_t i = 0; i < leftNums.size(); i++){
-				if (leftNums[i] >= pkb->statementTable.getSize()){
+				if (leftNums[i] > pkb->statementTable.getSize()){
 					continue;
 				}
 				if (syn1Type == "constant"){
@@ -276,7 +276,7 @@ public:
 			}
 		} else if (syn2Type=="assign" || syn2Type=="while" || syn2Type=="if" || syn2Type=="call"){
 			for (size_t i = 0; i < leftNums.size(); i++){
-				if (leftNums[i] >= pkb->statementTable.getSize() || pkb->statementTable.getTNode(leftNums[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(syn2Type)]){
+				if (leftNums[i] > pkb->statementTable.getSize() || pkb->statementTable.getTNode(leftNums[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(syn2Type)]){
 					continue;
 				}
 				if (syn1Type == "constant"){

@@ -1,0 +1,697 @@
+procedure ProcMongo {
+	call ProcProc;											\\1
+	while a {											\\2
+		if Juliet then {									\\3
+			while life {									\\4
+				if Chocoman then {							\\5
+					if Romeo then {							\\6
+						x12 = 665 + 110 * 482;					\\7
+					}
+					else {								\\8
+						zhao = 909 - 528 * life * 459;				\\9
+						x = 270 + 461 * 261 - 165 - Baldwin;			\\10
+					}
+					zhao = 377 + 663 - y + eggs;					\\11
+					while Machamp {							\\12
+						zhao = 289 - Yeoman * 174;				\\13
+						is = 812 - Blackman * 391;				\\14
+					}
+					Blackman = Yeoman;						\\15
+				}
+				else {									\\16
+					while is {							\\17
+						life = x10 * 286 + 104;					\\18
+						x11 = 473 - 246 * Machamp + 97;				\\19
+						zhao = 316 + love - x11 * c + 445;			\\20
+						a = x10 + 59 + 895 * 15;				\\21
+					}
+					life = eggs + 594 + is + 81;					\\22
+					if y then {							\\23
+						a = x12 - eggs + Machamp - 422 - love;			\\24
+						call ProcProc;						\\25
+					}
+					else {								\\26
+						Juliet = c * Yeoman - Machamp + x;			\\27
+						Hoboman = love - 207;					\\28
+						call ProcProc;						\\29
+						call ProcProc;						\\30
+						zhao = 536 + 166 - y * 975 * y;				\\31
+					}
+					Blackman = 583 - 153;						\\32
+					while x {							\\33
+						zhao = Machamp * love * x11;				\\34
+						call ProcProc;						\\35
+						z = z - 842;						\\36
+						call ProcProc;						\\37
+					}
+				}
+				Blackman = Baldwin * z - Machamp * 179;					\\38
+			}
+			if life then {									\\39
+				while x10 {								\\40
+					x = 955 - 206 - 894 - 186 + Chocoman;				\\41
+					Baldwin = 601 - y * Romeo;					\\42
+					call ProcProc;							\\43
+					call ProcProc;							\\44
+				}
+				x12 = 952 + Machamp;							\\45
+				Blackman = 351 * is;							\\46
+				c = 866 * is;								\\47
+				while b {								\\48
+					if a then {							\\49
+						call ProcProc;						\\50
+					}
+					else {								\\51
+						Machamp = love - y + love * zhao * 38;			\\52
+						z = Romeo;						\\53
+						z = zhao - 640 + 686 - 347;				\\54
+						call ProcProc;						\\55
+						y = Machamp - x;					\\56
+					}
+				}
+			}
+			else {										\\57
+				if Blackman then {							\\58
+					if Yeoman then {						\\59
+						call ProcProc;						\\60
+						love = c + Baldwin * life;				\\61
+						a = jin - 674 + 660;					\\62
+					}
+					else {								\\63
+						Juliet = x + x11;					\\64
+						Romeo = 66 + 372 * 838 - x;				\\65
+						love = zhao * Hoboman;					\\66
+						call ProcProc;						\\67
+					}
+					if b then {							\\68
+						zhao = x * Hoboman + Baldwin + 669;			\\69
+						x12 = y * 142;						\\70
+						call ProcProc;						\\71
+						Juliet = 84;						\\72
+					}
+					else {								\\73
+						a = 15 - 163 + eggs;					\\74
+						y = 657 + Chocoman + b - 107 - 714;			\\75
+					}
+				}
+				else {									\\76
+					while Juliet {							\\77
+						life = 225 + Romeo * love;				\\78
+					}
+					if Hoboman then {						\\79
+						call ProcProc;						\\80
+						Hoboman = c - Baldwin + x * 742 - is;			\\81
+						is = 203 - is - c - 374;				\\82
+					}
+					else {								\\83
+						call ProcProc;						\\84
+						Romeo = x12 + y + 902 * 624;				\\85
+						call ProcProc;						\\86
+						is = b + b * 827 - zhao;				\\87
+						is = Chocoman * 495 + c;				\\88
+					}
+					if x10 then {							\\89
+						life = a * x12 * a * Blackman * 715;			\\90
+					}
+					else {								\\91
+						call ProcProc;						\\92
+						Blackman = Juliet + jin * Hoboman;			\\93
+						call ProcProc;						\\94
+						jin = Romeo - 288 * 551 - z - 902;			\\95
+						call ProcProc;						\\96
+					}
+				}
+			}
+			z = 462 - 315 + 183;								\\97
+			call ProcProc;									\\98
+			Baldwin = 993 * 353 * 457;							\\99
+		}
+		else {											\\100
+			x = 517 - 347 - 157;								\\101
+			x11 = y - Hoboman;								\\102
+		}
+	}
+	Blackman = 146 * z - 27;									\\103
+	call ProcProc;											\\104
+	if Chocoman then {										\\105
+		life = Blackman + z;									\\106
+		while is {										\\107
+			x10 = 362;									\\108
+			call ProcProc;									\\109
+			while eggs {									\\110
+				while Blackman {							\\111
+					if jin then {							\\112
+						call ProcProc;						\\113
+						call ProcProc;						\\114
+					}
+					else {								\\115
+						call ProcProc;						\\116
+						Romeo = b + 548 * x * Hoboman;				\\117
+						call ProcProc;						\\118
+						a = 489;						\\119
+						call ProcProc;						\\120
+					}
+					while Hoboman {							\\121
+						zhao = 95 + 838 + 580;					\\122
+						is = Blackman + is * Hoboman;				\\123
+						love = 461 - 141;					\\124
+					}
+					if x then {							\\125
+						call ProcProc;						\\126
+						x11 = y - love - Yeoman + 522;				\\127
+					}
+					else {								\\128
+						a = Romeo * 422 + 796 + 944;				\\129
+						Baldwin = eggs * 190 - 755;				\\130
+						Chocoman = x + 841 + b * 617;				\\131
+						call ProcProc;						\\132
+						call ProcProc;						\\133
+					}
+					while Hoboman {							\\134
+						call ProcProc;						\\135
+						y = 426 - 734 * 178;					\\136
+						call ProcProc;						\\137
+						x12 = z;						\\138
+						eggs = 158 - 480 - 785 - Baldwin + jin;			\\139
+					}
+					Yeoman = 976 - 648 - 80 + 831 - Yeoman;				\\140
+				}
+				z = x - 310 - z + Yeoman - eggs;					\\141
+			}
+		}
+	}
+	else {												\\142
+		call ProcProc;										\\143
+	}
+}
+procedure ProcProc {
+	if y then {											\\144
+		Baldwin = 122 + 838 - jin;								\\145
+	}
+	else {												\\146
+		if Blackman then {									\\147
+			if eggs then {									\\148
+				while zhao {								\\149
+					while Romeo {							\\150
+						b = 51 + 509 * Chocoman * Chocoman;			\\151
+						zhao = jin - 433 + Romeo + is;				\\152
+						y = Chocoman * Blackman - 492;				\\153
+						life = b * life + Romeo * Machamp - 724;		\\154
+					}
+				}
+				if x11 then {								\\155
+					life = is * Yeoman - a - jin * 345;				\\156
+					call ProcMongo;							\\157
+					while Baldwin {							\\158
+						x = 545 + z * 451 + x11 - 155;				\\159
+						x11 = 128;						\\160
+						call ProcMongo;						\\161
+						Juliet = 828 + 874 * 347 - jin;				\\162
+					}
+					c = z * z;							\\163
+					if life then {							\\164
+						Yeoman = c + 935 * 987 * 695;				\\165
+						jin = x * 697 * Chocoman;				\\166
+					}
+					else {								\\167
+						Baldwin = 261 - x + 685 - 970;				\\168
+						c = 682 * 856;						\\169
+						call ProcMongo;						\\170
+					}
+				}
+				else {									\\171
+					while Baldwin {							\\172
+						jin = 626 - 888 + 449;					\\173
+						call ProcMongo;						\\174
+						Yeoman = 309;						\\175
+						jin = life * x - love + 352;				\\176
+					}
+					zhao = y - 835;							\\177
+				}
+			}
+			else {										\\178
+				if x12 then {								\\179
+					call ProcMongo;							\\180
+					call ProcMongo;							\\181
+					while x10 {							\\182
+						love = Yeoman * 235 + x12 - 599;			\\183
+						call ProcMongo;						\\184
+						Machamp = x + 740 + 569 * Juliet * Machamp;		\\185
+						Juliet = 848 * x10 - Machamp - Romeo * x11;		\\186
+					}
+					x10 = zhao + 806 * Blackman * 810;				\\187
+					while x11 {							\\188
+						Blackman = x11 + y * Chocoman;				\\189
+						z = 650 * is * a + 545 + eggs;				\\190
+					}
+				}
+				else {									\\191
+					if love then {							\\192
+						b = 675 - love - Chocoman * z;				\\193
+						is = y * 863;						\\194
+						y = 946 + Juliet + Machamp;				\\195
+						eggs = 682 + c * 729 + y;				\\196
+						jin = x10 - Hoboman + Machamp * 601;			\\197
+					}
+					else {								\\198
+						life = 28 + y - x11 + 953 * x;				\\199
+						a = z - b + love + 200 * 383;				\\200
+						b = eggs * Baldwin * Machamp;				\\201
+						call ProcMongo;						\\202
+					}
+					while z {							\\203
+						eggs = Chocoman + b + 983 - 726 * 887;			\\204
+						Machamp = 773 + Chocoman * zhao;			\\205
+						x10 = x * life + z;					\\206
+						Baldwin = b;						\\207
+					}
+				}
+				call ProcMongo;								\\208
+				call ProcMongo;								\\209
+			}
+			c = 502;									\\210
+			while jin {									\\211
+				while x {								\\212
+					x11 = zhao + c * a;						\\213
+				}
+				if x then {								\\214
+					while a {							\\215
+						Yeoman = 118;						\\216
+						call ProcMongo;						\\217
+						life = 221 * is + 842 - 976 * life;			\\218
+					}
+					if Juliet then {						\\219
+						call ProcMongo;						\\220
+					}
+					else {								\\221
+						y = Romeo;						\\222
+						a = 49 * 102;						\\223
+						Yeoman = 228 * 411;					\\224
+					}
+					x12 = 497 - b - 753 + 72;					\\225
+					while x {							\\226
+						x10 = is + 808 - x10;					\\227
+						call ProcMongo;						\\228
+						call ProcMongo;						\\229
+						x12 = c * Hoboman * Machamp;				\\230
+						c = 139 + 885 * is + 504 + 926;				\\231
+					}
+					x10 = x10 * 68 - 393 + 760;					\\232
+				}
+				else {									\\233
+					while life {							\\234
+						call ProcMongo;						\\235
+						life = Yeoman - y;					\\236
+						a = Blackman - x - x12 * 796;				\\237
+						call ProcMongo;						\\238
+					}
+					if jin then {							\\239
+						Hoboman = Romeo + 49 + Romeo + 268;			\\240
+						Baldwin = y - Juliet - 881 * 90;			\\241
+					}
+					else {								\\242
+						z = 743 + 277;						\\243
+						b = 917 + 53 - 650 * 746;				\\244
+						zhao = x + 822 - 833 - 823;				\\245
+					}
+					x11 = Blackman;							\\246
+					Yeoman = 858 * zhao + 206;					\\247
+					while x {							\\248
+						call ProcMongo;						\\249
+						Baldwin = Blackman - Blackman * 582 * 804 + Chocoman;		\\250
+					}
+				}
+				if z then {								\\251
+					if Hoboman then {						\\252
+						x10 = love;						\\253
+					}
+					else {								\\254
+						zhao = Machamp - Blackman;				\\255
+						call ProcMongo;						\\256
+					}
+				}
+				else {									\\257
+					while Yeoman {							\\258
+						call ProcMongo;						\\259
+						call ProcMongo;						\\260
+						call ProcMongo;						\\261
+					}
+				}
+				while zhao {								\\262
+					y = x11 + 83;							\\263
+					x10 = Chocoman * eggs - Hoboman + is - 950;			\\264
+				}
+			}
+			Yeoman = Yeoman;								\\265
+		}
+		else {											\\266
+			if x then {									\\267
+				while c {								\\268
+					Machamp = 598 * zhao * 711;					\\269
+					if Machamp then {						\\270
+						Romeo = y - 650 - x11 - x12;				\\271
+						call ProcMongo;						\\272
+						Blackman = 536 + 453 - Chocoman - 32;			\\273
+					}
+					else {								\\274
+						Romeo = Yeoman;						\\275
+					}
+					if b then {							\\276
+						Blackman = 569 + 936 - 492 + jin + love;		\\277
+						x = 972 * Hoboman;					\\278
+						a = x11;						\\279
+						b = 570 - 509 * 145 - a;				\\280
+						Romeo = Juliet * x11 + x11 - 601 * Romeo;		\\281
+					}
+					else {								\\282
+						call ProcMongo;						\\283
+						call ProcMongo;						\\284
+						call ProcMongo;						\\285
+					}
+					if Yeoman then {						\\286
+						call ProcMongo;						\\287
+					}
+					else {								\\288
+						Machamp = 96 - 833 - 764 + eggs - a;			\\289
+						x = b * Yeoman - love + Hoboman;			\\290
+						c = life - zhao * 881;					\\291
+						Romeo = x12 * 872 * z;					\\292
+						is = 387 + 982 - Machamp - Juliet + Baldwin;		\\293
+					}
+				}
+			}
+			else {										\\294
+				while x12 {								\\295
+					while eggs {							\\296
+						Hoboman = 587 * 25;					\\297
+						x10 = Chocoman * zhao;					\\298
+					}
+					x12 = 279 + 536;						\\299
+					Machamp = 788 + 298 * Hoboman * 586 * 645;			\\300
+					if zhao then {							\\301
+						x12 = Romeo;						\\302
+						call ProcMongo;						\\303
+						a = x * 713 + 293 * 940 - jin;				\\304
+						Baldwin = Juliet + 96 + x12 - jin * 932;		\\305
+					}
+					else {								\\306
+						call ProcMongo;						\\307
+						is = 315 + y - x12 + zhao;				\\308
+						call ProcMongo;						\\309
+						life = Blackman + Romeo;				\\310
+						love = x - 439;						\\311
+					}
+					if eggs then {							\\312
+						call ProcMongo;						\\313
+						call ProcMongo;						\\314
+					}
+					else {								\\315
+						a = 264 + 21 - jin + 933 + c;				\\316
+						zhao = 906;						\\317
+						x12 = x10 + zhao * 988 * Chocoman * life;		\\318
+					}
+				}
+				call ProcMongo;								\\319
+				call ProcMongo;								\\320
+				if b then {								\\321
+					if is then {							\\322
+						Yeoman = jin - 174 * 439;				\\323
+						jin = 369 * life - x12 + 172;				\\324
+						c = 780 - 703 - Yeoman;					\\325
+						x10 = Romeo - 538;					\\326
+					}
+					else {								\\327
+						x12 = c - a;						\\328
+						eggs = Machamp + love + 111;				\\329
+						Hoboman = 67 - 917 - 203 - Blackman;			\\330
+						love = b + 301;						\\331
+					}
+					if Blackman then {						\\332
+						call ProcMongo;						\\333
+						love = 539 + 61 - 953 + 553;				\\334
+					}
+					else {								\\335
+						Blackman = 669 + 872 + 383;				\\336
+						b = eggs;						\\337
+						b = 883 - 539 - c;					\\338
+					}
+				}
+				else {									\\339
+					zhao = eggs * y - Baldwin * life - 359;				\\340
+					zhao = 939 * 865 + 958;						\\341
+					a = c * 424;							\\342
+					while Blackman {						\\343
+						x = 756 * 759 * is - 466;				\\344
+						Machamp = 206;						\\345
+					}
+				}
+				while y {								\\346
+					while b {							\\347
+						x12 = x10 + 962 * Juliet * 623;				\\348
+						b = Chocoman + Chocoman - 996 * 120;			\\349
+						is = Baldwin * life + Chocoman - 103 + Machamp;		\\350
+						z = 669 * x10 - 606;					\\351
+						y = 688 - Blackman - 981 - 231;				\\352
+					}
+					if Hoboman then {						\\353
+						x = jin + love * Romeo;					\\354
+						zhao = 791 - 44 * zhao - 661;				\\355
+						x10 = a - 923;						\\356
+						Chocoman = z - 583 + Romeo;				\\357
+						x11 = 417 + Blackman;					\\358
+					}
+					else {								\\359
+						Baldwin = c * 66 * x11 * 803 * Blackman;		\\360
+					}
+				}
+			}
+			Romeo = 617;									\\361
+		}
+	}
+	jin = Machamp + 923 + z * eggs;									\\362
+	if Juliet then {										\\363
+		if x11 then {										\\364
+			call ProcMongo;									\\365
+		}
+		else {											\\366
+			Romeo = 640 + 775 * z - Juliet;							\\367
+			if zhao then {									\\368
+				if c then {								\\369
+					x12 = 375;							\\370
+					while Chocoman {						\\371
+						x11 = Blackman - 396 - Juliet + 440;			\\372
+						Machamp = Chocoman * 63 + x10 + Romeo;			\\373
+						call ProcMongo;						\\374
+					}
+				}
+				else {									\\375
+					if a then {							\\376
+						call ProcMongo;						\\377
+						zhao = Chocoman;					\\378
+					}
+					else {								\\379
+						zhao = 574 * love + 69 * x - x10;			\\380
+						jin = 233 - 104;					\\381
+						Yeoman = 449;						\\382
+						Romeo = 211 - x;					\\383
+						call ProcMongo;						\\384
+					}
+					y = 916 + 326 + 741;						\\385
+					Baldwin = Blackman - Hoboman * 499 - Yeoman;			\\386
+				}
+			}
+			else {										\\387
+				while c {								\\388
+					if Machamp then {						\\389
+						call ProcMongo;						\\390
+						Chocoman = 806;						\\391
+						call ProcMongo;						\\392
+						Machamp = x11;						\\393
+					}
+					else {								\\394
+						x = 51 - 62 * 74;					\\395
+						x10 = 669 * 687 + 516 - 960;				\\396
+						Romeo = 398 + 203 + love - 432;				\\397
+					}
+					eggs = 296 + 973 - 138 + 267;					\\398
+					while Juliet {							\\399
+						b = c - 471 - x10 * jin;				\\400
+						call ProcMongo;						\\401
+						call ProcMongo;						\\402
+						love = 379 * life + Juliet - Juliet;			\\403
+					}
+					if zhao then {							\\404
+						Chocoman = 5 * 775;					\\405
+						jin = Hoboman - jin;					\\406
+						is = 492 - 742 + x12 - zhao - life;			\\407
+						call ProcMongo;						\\408
+					}
+					else {								\\409
+						Yeoman = 922 * 143 + 642 - y - 628;			\\410
+						Chocoman = 98 + 132 + c + 447 - Juliet;			\\411
+						call ProcMongo;						\\412
+					}
+					jin = 448 - 925;						\\413
+				}
+				while x11 {								\\414
+					if jin then {							\\415
+						Chocoman = x * Blackman - zhao * 103 * zhao;		\\416
+						call ProcMongo;						\\417
+						Blackman = zhao * Yeoman - love;			\\418
+						Juliet = x11 * 498 + is - y;				\\419
+						call ProcMongo;						\\420
+					}
+					else {								\\421
+						call ProcMongo;						\\422
+					}
+					call ProcMongo;							\\423
+					call ProcMongo;							\\424
+					if x12 then {							\\425
+						life = 164 * 652 + Chocoman;				\\426
+						call ProcMongo;						\\427
+						z = 251;						\\428
+					}
+					else {								\\429
+						Chocoman = 861 - zhao - is;				\\430
+					}
+					Romeo = z * Chocoman + 901 - 308;				\\431
+				}
+				call ProcMongo;								\\432
+			}
+			Chocoman = 513 * 403 + Romeo * 106;						\\433
+		}
+		Blackman = 619 * 973 + 827;								\\434
+		call ProcMongo;										\\435
+		call ProcMongo;										\\436
+		while Machamp {										\\437
+			while Chocoman {								\\438
+				while c {								\\439
+					while c {							\\440
+						Machamp = Hoboman - a + 38 - c + Machamp;		\\441
+					}
+					z = 408 - 918 - y;						\\442
+					call ProcMongo;							\\443
+				}
+				call ProcMongo;								\\444
+				while x11 {								\\445
+					if Chocoman then {						\\446
+						love = 608 - x10 * 957;					\\447
+						Romeo = Blackman + love + x11 - Romeo - 383;		\\448
+						Juliet = zhao - Baldwin;				\\449
+						Yeoman = x10 + a * 453;					\\450
+						jin = b - Machamp - love * Machamp;			\\451
+					}
+					else {								\\452
+						y = 469 + c;						\\453
+						Baldwin = x11 - c - eggs;				\\454
+						jin = 713;						\\455
+						life = jin * 499 * 344 + 100;				\\456
+						call ProcMongo;						\\457
+					}
+				}
+				if x11 then {								\\458
+					eggs = 683 * c;							\\459
+					x10 = 145 - 857;						\\460
+					Hoboman = Juliet + 595 + 329 * is;				\\461
+				}
+				else {									\\462
+					z = Yeoman - Machamp - 567 + x11;				\\463
+					x = 360 * 634 * 147 * 666 * jin;				\\464
+					x10 = 816 + 831 - Chocoman - Juliet;				\\465
+					if z then {							\\466
+						Blackman = 937 + 959;					\\467
+						y = life * 653 - z + love;				\\468
+						call ProcMongo;						\\469
+						Chocoman = b + 362;					\\470
+						Blackman = love;					\\471
+					}
+					else {								\\472
+						Baldwin = 299 + 702 * zhao - zhao - a;			\\473
+						call ProcMongo;						\\474
+						zhao = 249 - 740 - 308 - 676;				\\475
+						call ProcMongo;						\\476
+						Romeo = Blackman * Romeo - Juliet - life * 494;		\\477
+					}
+					if x12 then {							\\478
+						life = Machamp - 516 * 354 * life + 134;		\\479
+					}
+					else {								\\480
+						call ProcMongo;						\\481
+						Machamp = Juliet - 63;					\\482
+						x11 = 78 * jin + Hoboman;				\\483
+					}
+				}
+			}
+			c = x10 * 8 - 872;								\\484
+			if Baldwin then {								\\485
+				while Yeoman {								\\486
+					if x10 then {							\\487
+						y = Machamp;						\\488
+						jin = Yeoman * Romeo;					\\489
+					}
+					else {								\\490
+						Machamp = 449;						\\491
+						a = 717 - love + 808 + 449;				\\492
+					}
+				}
+				while Blackman {							\\493
+					while z {							\\494
+						x12 = b * 971 + 621;					\\495
+						Yeoman = 246 + Blackman * x10;				\\496
+					}
+					while jin {							\\497
+						call ProcMongo;						\\498
+						Yeoman = Yeoman * Juliet - 726 * Juliet - Blackman;		\\499
+						z = Machamp + 363 - 871 - 810 * 584;			\\500
+					}
+					while x10 {							\\501
+						Baldwin = x10 * 49;					\\502
+						Machamp = 594 + y - 931 + x12;				\\503
+						jin = 870 - 485 * b - 468 + 200;			\\504
+					}
+				}
+			}
+			else {										\\505
+				if a then {								\\506
+					if Chocoman then {						\\507
+						b = 386 - Hoboman - zhao * a + 24;			\\508
+						c = 653 + 946 - 732;					\\509
+					}
+					else {								\\510
+						is = zhao * 935 * 513;					\\511
+						x11 = x11 + eggs;					\\512
+						call ProcMongo;						\\513
+						x = 166 - a + Baldwin + x12;				\\514
+						c = 29 + 472 - eggs;					\\515
+					}
+					c = 848 + Romeo - 851 - y;					\\516
+				}
+				else {									\\517
+					if life then {							\\518
+						Hoboman = 849 * 852 * 823;				\\519
+						call ProcMongo;						\\520
+						love = Juliet * 304 + 556 + 276 + 654;			\\521
+						jin = x11 - x11 - 643 + 555 * 658;			\\522
+						call ProcMongo;						\\523
+					}
+					else {								\\524
+						c = 852 * Chocoman + a - 906 + Blackman;		\\525
+						x10 = z * Machamp;					\\526
+						c = 983 * Chocoman - a - 371;				\\527
+					}
+					zhao = 856 - Hoboman * Baldwin - zhao * y;			\\528
+				}
+				while Chocoman {							\\529
+					c = 297;							\\530
+				}
+			}
+		}
+	}
+	else {												\\531
+		x10 = 551 + 142 + Blackman * b + x12;							\\532
+		z = life - 589 + 759 * 137;								\\533
+	}
+	jin = x11 + 25 - z + Baldwin;									\\534
+	zhao = 782;											\\535
+}
+

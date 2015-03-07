@@ -23,7 +23,7 @@ OptimizedQE::OptimizedQE(vector<Subquery*> syn) {
 }
 
 void OptimizedQE::splitIntoDisjoint(vector<Subquery*> syn) {
-	for (int i = 0; i < syn.size(); i++) {
+	for (size_t i = 0; i < syn.size(); i++) {
 		addQuery(syn[i]);
 	}
 	unionQuerySets();
@@ -176,7 +176,7 @@ void OptimizedQE::joinQuerySolutions() {
 	if (solutions.size() > 0) {
 		finalSolution = solutions[0];
 	}
-	for (int i = 1; i < solutions.size(); i++) {
+	for (size_t i = 1; i < solutions.size(); i++) {
 		finalSolution = finalSolution->cross(solutions[i]);
 	}
 }

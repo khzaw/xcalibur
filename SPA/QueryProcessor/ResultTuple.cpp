@@ -172,3 +172,33 @@ ResultTuple* ResultTuple::join(ResultTuple* other) {
 
 	return new ResultTuple(solutionValues, solutionSynonyms);	
 }
+
+string ResultTuple::toString(){
+	string result = "";
+	int colSize = 12;
+	for (size_t i = 0; i < synonyms.size(); i++){
+		size_t left = (colSize - synonyms[i].length())/2;
+		size_t right = colSize - synonyms[i].length() - left;
+		result.append(left, ' ');
+		result.append(synonyms[i]);
+		result.append(right, ' ');
+		result.append("|");
+		if (i == synonyms.size() - 1){
+			result.append("\n");
+		}
+	}
+	for (size_t i = 0; i < results.size(); i++){
+		for (size_t j = 0; j < results[i].size(); j++){
+			size_t left = (colSize - to_string((long long)results[i][j]).length())/2;
+			size_t right = colSize - to_string((long long)results[i][j]).length() - left;
+			result.append(left, ' ');
+			result.append(to_string((long long)results[i][j]));
+			result.append(right, ' ');
+			result.append("|");
+			if (j == results[i].size() - 1){
+				result.append("\n");
+			}
+		}
+	}
+	return result;
+}

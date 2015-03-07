@@ -38,9 +38,9 @@ public:
 		tuple->addSynonymToMap(leftSynonym, index);
 		vector<int> assign = pkb->statementTable.getStmtNumUsingNodeType("assign");
 		switch(isSyn) {
-			{case 0: case 2: case 7:		//pattern a ("x", ...)
-				for (int i = 0; i < assign.size(); i++) {
-					if (pkb->modifiesTable.evaluateIsModifiesStmt(assign[i], rightIndex)) {	//if modifies(a[i], "x")
+			{case 0: case 2: case 7:		//pattern a (int, ...)
+				for (size_t i = 0; i < assign.size(); i++) {
+					if (pkb->modifiesTable.evaluateIsModifiesStmt(assign[i], rightIndex)) {
 						if(matchPattern(pkb->statementTable.getTNode(assign[i])->getData())) {
 							vector<int> temp = vector<int>();
 							temp.push_back(assign[i]);

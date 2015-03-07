@@ -42,6 +42,7 @@ public:
 	void testCallsT();
 	void testPattern();
 	void testWith();
+	void init();
 
 };
 #endif

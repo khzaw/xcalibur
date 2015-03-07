@@ -170,14 +170,29 @@ void Parser::stmt(TNode* parent) {
 		temp = containerStack.top();	containerStack.pop();
 		nextToken = getToken();
 	} else if(nextToken.token == IDENT && nextToken.name == "if") {
-
-		match(KEYWORDS[3]);
+		loc++;
 		TNode* ifNode = createASTNode(IF_NODE, nextToken.name, parent, loc);
+
+		// for a container stmt, set back to zero
+		if(temp > 0) {
+			controller.followsTable.insertFollows(temp, loc);
+		}
+		temp = 0;
+		containerStack.push(loc);
+		
+		controller.statementTable.insertStatement(ifNode);
+
+		if(parent->getParent()->getNodeType() == TNODE_NAMES[WHILE_NODE] || parent->getParent()->getNodeType() == TNODE_NAMES[IF_NODE])
+			controller.parentTable.insertParent(parent->getStmtNum(), loc);
+
+		match(KEYWORDS[3]); nextToken = getToken();
+
+		TNode* ifVarNode = createASTNode(VAR_NODE, nextToken.name, ifNode, loc);	// ifVar
 		variableName();
 		nextToken = getToken();
 
-		match(KEYWORDS[4]);
 		TNode* thenNode = createASTNode(THEN_NODE, nextToken.name, ifNode, loc);
+		match(KEYWORDS[4]);
 		match("{");	nextToken = getToken();
 		TNode* thenStmtLstNode = createASTNode(STMTLST_NODE, "", thenNode, loc);
 		stmtLst(thenStmtLstNode);

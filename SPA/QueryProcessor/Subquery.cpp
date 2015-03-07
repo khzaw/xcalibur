@@ -61,6 +61,11 @@ void Subquery::setSynonyms(int index1, int index2){
 	isSyn = 0;
 }
 
+void Subquery::setValue(string value, bool b) {
+	specialValue = value;
+	isUnderscore = b;
+}
+
 int Subquery::getPriority(){
 	return priority;
 }

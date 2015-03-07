@@ -27,10 +27,11 @@ static string TNODE_NAMES[] = {
 	"ASSIGN_NODE",
 	"CONSTANT_NODE",
 	"IF_NODE",
+	"CALL_NODE",
 	"THEN_NODE",
-	"ELSE_NODE",
-	"CALL_NODE"
+	"ELSE_NODE"
 };
+
 
 class TNode {
 
@@ -42,7 +43,7 @@ private:
 	int stmtNum;
 	TNode* parent;
     vector<TNode*> children;
-	
+	TNode* rightSibling;
 
 public:
 	//Constructor
@@ -61,4 +62,8 @@ public:
     void setData(string data);
 	void addParent(TNode *p);
     void addChild(TNode *c);
+	//Right sibling
+	void addRightSibling(TNode *);	
+	TNode* getRightSibling();
+
 };

@@ -125,7 +125,6 @@ void Parser::stmtLst(TNode* parent) {
 	else stmtLst(parent);
 }
 
-
 void Parser::stmt(TNode* parent) {
 	if(nextToken.token == IDENT && nextToken.name == "call") {
 		loc++;
@@ -136,6 +135,11 @@ void Parser::stmt(TNode* parent) {
 		procedureName();
 		controller.callsTable.insertCalls(0, this->procCount);
 		match(";");
+
+		if(temp > 0) {
+			controller.followsTable.insertFollows(temp, loc);
+		}
+		temp = loc;
 	}
 	else if(nextToken.token == IDENT && nextToken.name == "while") {			// while statement
 		loc++; 
@@ -189,6 +193,7 @@ void Parser::stmt(TNode* parent) {
 
 		TNode* ifVarNode = createASTNode(VAR_NODE, nextToken.name, ifNode, loc);	// ifVar
 		variableName();
+		populateUses(loc);
 		nextToken = getToken();
 
 		TNode* thenNode = createASTNode(THEN_NODE, nextToken.name, ifNode, loc);
@@ -204,6 +209,8 @@ void Parser::stmt(TNode* parent) {
 		TNode* elseStmtLstNode = createASTNode(STMTLST_NODE, "", elseNode, loc);
 		stmtLst(elseStmtLstNode);
 		match("}"); nextToken = getToken();
+
+		temp = containerStack.top(); containerStack.pop();
 	} else if(nextToken.token == IDENT) {
 
 		loc++;
@@ -238,7 +245,7 @@ void Parser::expr(TNode* assignNode) {
 	/*
 	* this is a left-recursive grammar, top down parsing can't handle this
 	* transform it into
-	* expr: FE'
+	* expr: E'
 	* E' : +TE' | epsilon
 	*/
 
@@ -260,7 +267,6 @@ void Parser::expr(TNode* assignNode) {
 
 	//cout << "expressionPostfix:\t" << expressionPostfix << endl; 
 }
-
 
 void Parser::printOperatorStack() {
 	cout << "Operator Stack" << endl;
@@ -302,7 +308,6 @@ void Parser::exprPrime() {
 
 		while(plusOp.op <= operatorStack.top().op) {
 
-
 			if(operatorStack.top().isNull()) { // sentinel value reached;
 				operatorStack.pop();
 			}
@@ -312,6 +317,22 @@ void Parser::exprPrime() {
 		operatorStack.push(plusOp);
 		nextToken = getToken();
 
+		factor(true); nextToken = getToken();
+		exprPrime();
+	} else if(nextToken.token == MINUS) {
+		match("-");
+		Operator minusOp(OPERATOR_SUBTRACTION, "-");
+
+		while(minusOp.op <= operatorStack.top().op) {
+			if(operatorStack.top().isNull()) { // sentinel value reached;
+				operatorStack.pop();
+			}
+
+			popOperator(minusOp);
+		}
+		operatorStack.push(minusOp);
+		nextToken = getToken();
+		
 		factor(true); nextToken = getToken();
 		exprPrime();
 	} else {
@@ -333,7 +354,6 @@ void Parser::popOperator(Operator op) {
 
 	expressionPostfix += " +";
 }
-
 
 TNode* Parser::createASTNode(int nodeType, string name, TNode *parentNode, int lineNo, int parentProc) {
 	TNode* node = new TNode(TNODE_NAMES[nodeType], name, lineNo, parentProc);
@@ -369,7 +389,6 @@ void Parser::procedureName() {
 	nextToken = getToken();
 
 }
-
 
 void Parser::match(string s) {
 	if(nextToken.name == s) {

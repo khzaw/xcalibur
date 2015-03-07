@@ -176,13 +176,15 @@ void Parser::stmt(TNode* parent) {
 		match(KEYWORDS[4]);
 		TNode* thenNode = createASTNode(THEN_NODE, nextToken.name, ifNode, loc);
 		match("{");	nextToken = getToken();
-		stmtLst(thenNode);
+		TNode* thenStmtLstNode = createASTNode(STMTLST_NODE, "", thenNode, loc);
+		stmtLst(thenStmtLstNode);
 		match("}"); nextToken = getToken();
 
 		match(KEYWORDS[5]);
 		TNode* elseNode = createASTNode(ELSE_NODE, nextToken.name, ifNode, loc);
 		match("{"); nextToken = getToken();
-		stmtLst(elseNode);
+		TNode* elseStmtLstNode = createASTNode(STMTLST_NODE, "", elseNode, loc);
+		stmtLst(elseStmtLstNode);
 		match("}"); nextToken = getToken();
 	} else if(nextToken.token == IDENT) {
 

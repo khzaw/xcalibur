@@ -125,7 +125,6 @@ void Parser::stmtLst(TNode* parent) {
 	else stmtLst(parent);
 }
 
-
 void Parser::stmt(TNode* parent) {
 	if(nextToken.token == IDENT && nextToken.name == "call") {
 		loc++;
@@ -136,6 +135,11 @@ void Parser::stmt(TNode* parent) {
 		procedureName();
 		controller.callsTable.insertCalls(0, this->procCount);
 		match(";");
+
+		if(temp > 0) {
+			controller.followsTable.insertFollows(temp, loc);
+		}
+		temp = loc;
 	}
 	else if(nextToken.token == IDENT && nextToken.name == "while") {			// while statement
 		loc++; 
@@ -189,6 +193,7 @@ void Parser::stmt(TNode* parent) {
 
 		TNode* ifVarNode = createASTNode(VAR_NODE, nextToken.name, ifNode, loc);	// ifVar
 		variableName();
+		populateUses(loc);
 		nextToken = getToken();
 
 		TNode* thenNode = createASTNode(THEN_NODE, nextToken.name, ifNode, loc);
@@ -204,6 +209,8 @@ void Parser::stmt(TNode* parent) {
 		TNode* elseStmtLstNode = createASTNode(STMTLST_NODE, "", elseNode, loc);
 		stmtLst(elseStmtLstNode);
 		match("}"); nextToken = getToken();
+
+		temp = containerStack.top(); containerStack.pop();
 	} else if(nextToken.token == IDENT) {
 
 		loc++;

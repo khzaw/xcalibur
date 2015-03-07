@@ -4,7 +4,7 @@
 #include <iostream>
 #include <typeinfo>
 #include <iterator>
-#include "AST.h"
+#include "..\PKB\AST.h"
 using namespace std;
 
 
@@ -32,6 +32,11 @@ TNode*  AST::getRootNode(){
  TNode* AST::assignParent(TNode *n, TNode *p){
 	 n->addParent(p);
 	 	 return n;
+}
+
+ TNode* AST::assignRightSibling(TNode* leftNode, TNode* rightNode) {
+	leftNode->addRightSibling(rightNode);
+	return leftNode;
 }
 
  string AST::getTNodeType(TNode *n){

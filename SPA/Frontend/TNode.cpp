@@ -17,6 +17,7 @@ TNode::TNode(string nodeT, string value, int s,int p) {
 	nodeType = nodeT;
 	stmtNum = s;
 	procIndex= p;
+	rightSibling = NULL;
 }
 
 string TNode::getData()  {
@@ -68,4 +69,12 @@ TNode* TNode::getParent(){
 
 int TNode::getNumChildren() {
     return children.size();
+}
+
+void TNode::addRightSibling(TNode * sibling){
+	rightSibling = sibling;
+}
+
+TNode* TNode::getRightSibling(){
+	return rightSibling;
 }

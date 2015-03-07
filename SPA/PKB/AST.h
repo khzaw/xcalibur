@@ -17,10 +17,12 @@ public:
 	TNode* getTNodeParent(TNode *n);
 	TNode* getTNodeChild(TNode *n, int);
      vector<TNode*> getTNodeChildren(TNode *n);
+	TNode* getRightSibling(TNode *n);
 	 //Mutator for AST 
 	 TNode createNode(string, string, int,int);
 	 TNode* assignChild(TNode *n, TNode *c);
      TNode* assignParent(TNode *n, TNode *p); 
+	 TNode* assignRightSibling(TNode *n, TNode *r);
      bool isNodeType(TNode *n,string); 
      bool isNodeValue(TNode *n,string ); 
      void insertRoot(TNode *n);

@@ -19,7 +19,7 @@
 #include "..\PKB\FollowsExtractor.h"
 #include "..\PKB\ModifiesExtractor.h"
 #include "..\PKB\UsesExtractor.h"
-
+#include "..\PKB\NextExtractor.h"
 
 
 using namespace std;
@@ -42,6 +42,7 @@ public:
 	ParentExtractor parentExtractor;
 	ModifiesExtractor modifiesExtractor;
 	UsesExtractor usesExtractor;
+	NextExtractor nextExtractor;
 
 	PKBController();
 	~PKBController();
@@ -52,4 +53,5 @@ public:
 	void constructCalls();
 	void constructModifies();
 	void constructUses();
+	void constructNext();
 };

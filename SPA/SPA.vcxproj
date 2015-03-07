@@ -19,6 +19,7 @@
     <ClCompile Include="Frontend\TNode.cpp" />
     <ClCompile Include="PKB\CFG.cpp" />
     <ClCompile Include="PKB\GNode.cpp" />
+    <ClCompile Include="PKB\NextExtractor.cpp" />
     <ClCompile Include="PKB\StatementTable.cpp" />
     <ClCompile Include="PKB\Uses.cpp" />
     <ClCompile Include="PKB\VarTable.cpp" />
@@ -37,6 +38,7 @@
     <ClInclude Include="PKB\FollowsExtractor.cpp" />
     <ClInclude Include="PKB\GNode.h" />
     <ClInclude Include="PKB\ModifiesExtractor.cpp" />
+    <ClInclude Include="PKB\NextExtractor.h" />
     <ClInclude Include="PKB\ParentExtractor.cpp" />
     <ClInclude Include="PKB\UsesExtractor.cpp" />
     <ClCompile Include="QueryProcessor\CallsStarSubquery.cpp" />

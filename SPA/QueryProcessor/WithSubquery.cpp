@@ -187,7 +187,7 @@ public:
 		vector<string> results;
 		string synType = synonymTable->at(syn);
 		if (synType=="procedure"){
-			for (size_t i = 0; i < pkb->procTable.getSize(); i++){
+			for (int i = 0; i < pkb->procTable.getSize(); i++){
 				results.push_back(pkb->procTable.getProcName(i));
 			}
 		} else if (synType=="variable"){

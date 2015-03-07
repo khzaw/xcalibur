@@ -39,7 +39,7 @@ public:
 		vector<int> assign = pkb->statementTable.getStmtNumUsingNodeType("assign");
 		switch(isSyn) {
 			{case 0: case 2: case 7:		//pattern a (int, ...)
-				for (int i = 0; i < assign.size(); i++) {
+				for (size_t i = 0; i < assign.size(); i++) {
 					if (pkb->modifiesTable.evaluateIsModifiesStmt(assign[i], rightIndex)) {
 						if(matchPattern(pkb->statementTable.getTNode(assign[i])->getData())) {
 							// insert
@@ -53,7 +53,7 @@ public:
 				break;
 			}
 			{default:					//pattern a (_, ...)
-				for(int i = 0; i < assign.size(); i++) {
+				for(size_t i = 0; i < assign.size(); i++) {
 					//check if one pattern matches
 					//if match, return all assignment
 				}

@@ -1,11 +1,11 @@
 #include <cppunit/config/SourcePrefix.h>
+#include <iostream>
+#include <string>
+#include <map>
 #include "TestSubquery.h"
 #include "QueryProcessor\Subquery.h"
 #include "QueryProcessor\Subquery.cpp"
 #include "QueryProcessor\FollowsSubquery.cpp"
-
-#include <iostream>
-#include <string>
 
 void 
 SubqueryTest::setUp()
@@ -39,7 +39,8 @@ SubqueryTest::setUp()
 		z = 5;					// 21
 		v = z;}					// 22
 	**/
-
+	pk = PKBController();
+	synonymTable = map<string, string>();
 	TNode stmt1("ASSIGN_NODE", "x = 2", 1, 0);
 	TNode stmt2("ASSIGN_NODE", "z = 3", 2, 0);
 	TNode stmt3("CALL_NODE", "Second", 3, 0);
@@ -129,8 +130,8 @@ SubqueryTest::setUp()
 	pk.parentTable.insertParent(13, 17);
 	pk.parentTable.insertParent(15, 16);
 
-	pk.callsTable.insertCall(0, 1);
-	pk.callsTable.insertCall(1, 2);
+	pk.callsTable.insertCalls(0, 1);
+	pk.callsTable.insertCalls(1, 2);
 
 	pk.modifiesTable.insertModifiesProc(2, 1);
 	pk.modifiesTable.insertModifiesProc(2, 7);
@@ -270,5 +271,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION( SubqueryTest );
 // method to test insertion of Follows
 
 void SubqueryTest::testFollows(){
-	
+	FollowsSubquery followsSubquery1 = FollowsSubquery(&synonymTable, &pk);
+	followsSubquery1.setSynonyms("s1", "s2");
+	ResultTuple* resultsFollowsSubquery1 = followsSubquery1.solve();
+	cout << "Result1: \n" << resultsFollowsSubquery1->toString() << endl;
 }

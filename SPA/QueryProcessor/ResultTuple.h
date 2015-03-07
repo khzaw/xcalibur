@@ -39,4 +39,6 @@ public:
 	int getSynonymIndex(string);
 	vector<int> getResultRow(int);
 	vector<vector<int> > getAllResults();
+
+	string toString();
 };

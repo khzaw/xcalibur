@@ -25,7 +25,7 @@ using namespace std;
    }
    set<int> Modifies::getAllModifiersStmt(){
 	    set<int> result;
-		for(int i =0;i<stmtMod.size();i++){
+		for(size_t i = 0; i<stmtMod.size(); i++){
 			result.insert(stmtMod[i].first);
 		}
 		return result;
@@ -33,7 +33,7 @@ using namespace std;
 
    set<int> Modifies::getAllModifiedVarStmt(){
 	    set<int> result;
-		for(int i =0;i<stmtMod.size();i++){
+		for(size_t i =0; i<stmtMod.size(); i++){
 			result.insert(stmtMod[i].second);
 		}
 		return result;
@@ -41,7 +41,7 @@ using namespace std;
 
      set<int> Modifies::getAllModifiersProc(){
 	    set<int> result;
-		for(int i =0;i<procMod.size();i++){
+		for(size_t i = 0; i<procMod.size(); i++){
 			result.insert(procMod[i].first);
 		}
 		return result;
@@ -49,7 +49,7 @@ using namespace std;
 
 	 set<int> Modifies::getAllModifiedVarProc(){
 	    set<int> result;
-		for(int i =0;i<procMod.size();i++){
+		for(size_t i =0; i<procMod.size(); i++){
 			result.insert(procMod[i].second);
 		}
 		return result;
@@ -58,7 +58,7 @@ using namespace std;
 	 set<int> Modifies::getModifiersStmt(int varIndex){
 		set<int> modifiersSet;
 		//std::set<int>::iterator it = calleeSet.begin();
-		for(int i =0;i<stmtMod.size();i++){
+		for(size_t i =0; i<stmtMod.size(); i++){
 			if (stmtMod[i].second == varIndex){
 				modifiersSet.insert(stmtMod[i].first);
 			}
@@ -71,7 +71,7 @@ using namespace std;
 		set<int> modifiedVarSet;
 		
 		//std::set<int>::iterator it = calleeSet.begin();
-		for(int i =0;i<stmtMod.size();i++){
+		for(size_t i =0; i<stmtMod.size(); i++){
 			if (stmtMod[i].first == stmt){
 			
 				modifiedVarSet.insert(stmtMod[i].second);
@@ -83,7 +83,7 @@ using namespace std;
 	set<int> Modifies::getModifiersProc(int varIndex){
 		set<int> modifiersSet;
 		//std::set<int>::iterator it = calleeSet.begin();
-		for(int i =0;i<procMod.size();i++){
+		for(size_t i = 0; i<procMod.size(); i++){
 			if (procMod[i].second == varIndex){
 				modifiersSet.insert(procMod[i].first);
 			}
@@ -95,7 +95,7 @@ using namespace std;
 	set<int> Modifies::getModifiedVarProc(int stmt){
 		set<int> modifiedVarSet;
 		//std::set<int>::iterator it = calleeSet.begin();
-		for(int i =0;i<procMod.size();i++){
+		for(size_t i =0; i<procMod.size(); i++){
 			if (procMod[i].first == stmt){
 				modifiedVarSet.insert(procMod[i].second);
 			}
@@ -164,7 +164,7 @@ using namespace std;
 	set<int> Modifies::evaluateGetModifiersStmt(int varIndex){
 		set<int> result;
 		int index = getVarStmtIndex(varIndex);
-		if(index>=varStmtMod.size()){
+		if((size_t)index >= varStmtMod.size()){
 			return result;
 		}
 		else{
@@ -178,7 +178,7 @@ using namespace std;
 		
 		int index = Modifies::getStmtVarIndex(stmt);
 		
-		if(index>stmtVarMod.size()){
+		if((size_t)index > stmtVarMod.size()){
 			return result;
 		}
 		else{
@@ -187,7 +187,7 @@ using namespace std;
 	}
 
    bool Modifies::isModifiesStmt(int stmt, int varIndex){
-	 for(int i=0;i<stmtMod.size();i++){
+	 for(size_t i = 0; i<stmtMod.size(); i++){
 		 if(stmtMod[i].first == stmt && stmtMod[i].second == varIndex){
 			 return true;
 		 }else{
@@ -210,7 +210,7 @@ using namespace std;
 	set<int> Modifies::evaluateGetModifiersProc(int varIndex){
 		set<int> result;
 		int index = getVarProcIndex(varIndex);
-		if(index>=varProcMod.size()){
+		if ((size_t)index >= varProcMod.size()){
 			return result;
 		}
 		else{
@@ -223,7 +223,7 @@ using namespace std;
 
 		int index = getProcVarIndex(procIndex);
 	
-		if(index>=procVarMod.size()){
+		if ((size_t)index >= procVarMod.size()){
 			return result;
 		}
 		else{
@@ -232,7 +232,7 @@ using namespace std;
 	}
 
    bool Modifies::isModifiesProc(int procIndex, int varIndex){
-	 for(int i=0;i<procMod.size();i++){
+	 for(size_t i = 0; i < procMod.size(); i++){
 		 if(procMod[i].first == procIndex && procMod[i].second == varIndex){
 			 return true;
 		 }else{
@@ -246,7 +246,7 @@ using namespace std;
    void Modifies::populateStmtBool(){
 	   int cols=0;
 	   int rows=0;
-	   for(int i =0 ; i< stmtMod.size();i++){
+	   for(size_t i = 0 ; i < stmtMod.size(); i++){
 		   if(stmtMod[i].first >= cols){
 			   cols = stmtMod[i].first;
 		   }
@@ -258,7 +258,7 @@ using namespace std;
 	   vector< vector< bool > > verified( (cols+1), vector<bool>( (rows+1), false ) );
 	   stmtBool = verified;
 
-	   for(int i =0 ; i< stmtMod.size();i++){
+	   for (size_t i = 0 ; i < stmtMod.size(); i++){
 		
 		    stmtBool[stmtMod[i].first][stmtMod[i].second] = true;
 		
@@ -268,7 +268,7 @@ using namespace std;
    void Modifies::populateProcBool(){
 	   int cols=0;
 	   int rows=0;
-	   for(int i =0 ; i< procMod.size();i++){
+	   for (size_t i = 0 ; i < procMod.size(); i++){
 		   if(procMod[i].first >= cols){
 			   cols = procMod[i].first;
 		   }
@@ -279,14 +279,14 @@ using namespace std;
 	   vector< vector< bool > > verified( (cols+1), vector<bool>( (rows+1), false ) );
 	   procBool = verified;
 
-	   for(int i =0 ; i< procMod.size();i++){
+	   for (size_t i = 0 ; i < procMod.size(); i++){
 		    procBool[procMod[i].first][procMod[i].second] = true;
 	   }
    }
 
    bool Modifies::evaluateIsModifiesStmt(int stmt, int varIndex){
 	  // cout << "rows size" << vecBool.size() << "column size " << vecBool[0].size(); 
-	   if( stmt > stmtBool.size() || varIndex> stmtBool[0].size()){
+	   if ( (size_t)stmt > stmtBool.size() || (size_t)varIndex > stmtBool[0].size()){
 		   return false;
 	   }else{
 	   if(stmtBool[stmt][varIndex]){
@@ -299,7 +299,7 @@ using namespace std;
 
    bool Modifies::evaluateIsModifiesProc(int proc, int varIndex){
 	  // cout << "rows size" << vecBool.size() << "column size " << vecBool[0].size(); 
-	   if( proc > procBool.size() || varIndex> procBool[0].size()){
+	   if( (size_t)proc > procBool.size() || (size_t)varIndex> procBool[0].size()){
 		   return false;
 	   }else{
 	   if(procBool[proc][varIndex]){

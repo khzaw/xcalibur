@@ -71,7 +71,6 @@
     <ClCompile Include="testCalls.cpp" />
     <ClCompile Include="testConstant.cpp" />
     <ClCompile Include="testFollows.cpp" />
-    <ClCompile Include="TestFollowsSubquery.cpp" />
     <ClCompile Include="TestModifies.cpp" />
     <ClCompile Include="testParent.cpp" />
     <ClCompile Include="TestParser.cpp" />
@@ -79,6 +78,7 @@
     <ClCompile Include="TestQE.cpp" />
     <ClCompile Include="TestQueryParser.cpp" />
     <ClCompile Include="testStatement.cpp" />
+    <ClCompile Include="TestSubquery.cpp" />
     <ClCompile Include="TestUses.cpp" />
     <ClCompile Include="TestVarTable.cpp" />
     <ClCompile Include="UnitTest.cpp" />
@@ -88,7 +88,6 @@
     <ClInclude Include="testCalls.h" />
     <ClInclude Include="testConstant.h" />
     <ClInclude Include="testFollows.h" />
-    <ClInclude Include="TestFollowsSubquery.h" />
     <ClInclude Include="TestModifies.h" />
     <ClInclude Include="testParent.h" />
     <ClInclude Include="TestParser.h" />
@@ -96,6 +95,7 @@
     <ClInclude Include="TestQE.h" />
     <ClInclude Include="TestQueryParser.h" />
     <ClInclude Include="testStatement.h" />
+    <ClInclude Include="TestSubquery.h" />
     <ClInclude Include="TestUses.h" />
     <ClInclude Include="TestVarTable.h" />
   </ItemGroup>

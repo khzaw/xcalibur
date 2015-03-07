@@ -27,7 +27,7 @@ using namespace std;
 	set<int> Calls::evaluateGetCallers(int callee){
 		 set<int> result;
 		int calleeIndex = Calls::getCalleeIndex(callee);
-		if(calleeIndex>=callerTable.size()){
+		if ((size_t)calleeIndex>=callerTable.size()){
 			return result;
 		}
 		else{
@@ -38,7 +38,7 @@ using namespace std;
 	set<int> Calls::evaluateGetCallees(int caller){
 		set<int> result;
 		int callerIndex = Calls::getCallerIndex(caller);
-		if(callerIndex>=calleeTable.size()){
+		if ((size_t)callerIndex>=calleeTable.size()){
 			return result;
 		}
 		else{
@@ -50,7 +50,7 @@ using namespace std;
     set<int> Calls::evaluateGetCalleesStar(int caller){
 		set<int> result;
 		int callerIndex = Calls::getCallerIndex(caller);
-		if(callerIndex>=calleeStarTable.size()){
+		if ((size_t)callerIndex>=calleeStarTable.size()){
 			return result;
 		}
 		else{
@@ -62,7 +62,7 @@ using namespace std;
 	set<int> Calls::evaluateGetCallersStar(int callee){
 	    set<int> result;
 		int calleeIndex = Calls::getCalleeIndex(callee);
-		if(calleeIndex>=callerStarTable.size()){
+		if ((size_t)calleeIndex>=callerStarTable.size()){
 			return result;
 		}
 		else{
@@ -72,7 +72,7 @@ using namespace std;
 
 		set<int> Calls::getAllCallers(){
 	    set<int> result;
-		for(int i =0;i<callTable.size();i++){
+		for(size_t i =0; i<callTable.size(); i++){
 			result.insert(callTable[i].first);
 		}
 		return result;
@@ -80,7 +80,7 @@ using namespace std;
 
 		set<int> Calls::getAllCallees(){
 	    set<int> result;
-		for(int i =0;i<callTable.size();i++){
+		for(size_t i = 0; i<callTable.size(); i++){
 			result.insert(callTable[i].second);
 		}
 		return result;
@@ -111,7 +111,7 @@ using namespace std;
 	set<int> Calls::getCalleesS(int procIndex){
 		set<int> calleeSet;
 		//std::set<int>::iterator it = calleeSet.begin();
-		for(int i =0;i<callTable.size();i++){
+		for(size_t i = 0; i<callTable.size(); i++){
 			if (callTable[i].first == procIndex){
 				calleeSet.insert(callTable[i].second);
 			}
@@ -122,7 +122,7 @@ using namespace std;
 	set<int> Calls::getCallerS(int procIndex){
 		set<int> callerSet;
 		//std::set<int>::iterator it = calleeSet.begin();
-		for(int i =0;i<callTable.size();i++){
+		for(size_t i = 0; i<callTable.size(); i++){
 			if (callTable[i].second == procIndex){
 				callerSet.insert(callTable[i].first);
 			}

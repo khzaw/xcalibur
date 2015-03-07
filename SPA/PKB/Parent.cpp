@@ -105,7 +105,7 @@ bool Parent::isParentStarTrue(int stmt1, int stmt2){
 set<int> Parent::getAllChildrenStmt(){
 	set<int> children;
 		//std::set<int>::iterator it = calleeSet.begin();
-		for(int i =0;i<parentTable.size();i++){		
+		for(size_t i =0;i<parentTable.size();i++){		
 				children.insert(parentTable[i].second);
 		}
 		return children;
@@ -114,7 +114,7 @@ set<int> Parent::getAllChildrenStmt(){
 set<int> Parent::getAllParentStmt(){
 		set<int> parent;
 		//std::set<int>::iterator it = calleeSet.begin();
-		for(int i =0;i<parentTable.size();i++){		
+		for(size_t i =0;i<parentTable.size();i++){		
 				parent.insert(parentTable[i].first);
 		}
 		return parent;
@@ -151,7 +151,7 @@ void Parent::printAll() {
 set<int> Parent::evaluateGetChildren(int stmt){
 	set<int> results;
 	int index = Parent::getParentIndex(stmt);
-	if(index == -1 || index >= cTable.size()){
+	if(index == -1 || (size_t)index >= cTable.size()){
 		return results;
 	}else{
 		results = cTable[index];
@@ -161,7 +161,7 @@ set<int> Parent::evaluateGetChildren(int stmt){
 	 set<int> Parent::evaluateGetParent(int stmt){
 	set<int> results;
 	int index = Parent::getChildrenIndex(stmt);
-	if(index == -1 || index >= pTable.size()){
+	if(index == -1 || (size_t)index >= pTable.size()){
 		return results;
 	}else{
 		results = pTable[index];
@@ -172,7 +172,7 @@ set<int> Parent::evaluateGetChildren(int stmt){
 	 set<int> Parent::evaluateGetChildrenStar(int stmt){
 	set<int> results;
 	int index = Parent::getParentIndex(stmt);
-	if(index == -1 || index >= childrenStarTable.size()){
+	if(index == -1 || (size_t)index >= childrenStarTable.size()){
 		return results;
 	}else{
 		results = childrenStarTable[index];
@@ -183,7 +183,7 @@ set<int> Parent::evaluateGetChildren(int stmt){
 	 set<int> Parent::evaluateGetParentStar(int stmt){
 	 set<int> results;
 	int index = Parent::getChildrenIndex(stmt);
-	if(index == -1 || index >= parentStarTable.size()){
+	if(index == -1 || (size_t)index >= parentStarTable.size()){
 		return results;
 	}else{
 		results = parentStarTable[index];

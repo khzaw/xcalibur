@@ -3,6 +3,9 @@
 
 // Note 1
 #include <cppunit/extensions/HelperMacros.h>
+#include <string>
+#include <map>
+#include "PKB\PKBController.h"
 
 class SubqueryTest : public CPPUNIT_NS::TestFixture // Note 2 
 { 
@@ -21,11 +24,9 @@ class SubqueryTest : public CPPUNIT_NS::TestFixture // Note 2
 	//CPPUNIT_TEST(testWith);
 	CPPUNIT_TEST_SUITE_END();
 
-protected:
+public:
 	PKBController pk;
 	map<string, string> synonymTable;
-
-public:
 	void setUp();
 	void tearDown();
 

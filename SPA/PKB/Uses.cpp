@@ -19,7 +19,7 @@ using namespace std;
 	
 	 set<int> Uses::getAllUsersStmt(){
 	    set<int> result;
-		for(int i =0;i<stmtUses.size();i++){
+		for(size_t i = 0; i < stmtUses.size(); i++){
 			result.insert(stmtUses[i].first);
 		}
 		return result;
@@ -27,7 +27,7 @@ using namespace std;
 
    set<int> Uses::getAllUsedVarStmt(){
 	    set<int> result;
-		for(int i =0;i<stmtUses.size();i++){
+		for(size_t i = 0; i < stmtUses.size(); i++){
 			result.insert(stmtUses[i].second);
 		}
 		return result;
@@ -35,7 +35,7 @@ using namespace std;
 
      set<int> Uses::getAllUsersProc(){
 	    set<int> result;
-		for(int i =0;i<procUses.size();i++){
+		for(size_t i = 0; i < procUses.size(); i++){
 			result.insert(procUses[i].first);
 		}
 		return result;
@@ -43,7 +43,7 @@ using namespace std;
 
 	 set<int> Uses::getAllUsedVarProc(){
 	    set<int> result;
-		for(int i =0;i<procUses.size();i++){
+		for (size_t i = 0; i<procUses.size(); i++){
 			result.insert(procUses[i].second);
 		}
 		return result;
@@ -52,7 +52,7 @@ using namespace std;
 	 set<int> Uses::getUsersStmt(int varIndex){
 		set<int> usersSet;
 		//std::set<int>::iterator it = calleeSet.begin();
-		for(int i =0;i<stmtUses.size();i++){
+		for (size_t i = 0; i < stmtUses.size(); i++){
 			if (stmtUses[i].second == varIndex){
 				usersSet.insert(stmtUses[i].first);
 			}
@@ -65,7 +65,7 @@ using namespace std;
 		set<int> usedVarSet;
 		
 		//std::set<int>::iterator it = calleeSet.begin();
-		for(int i =0;i<stmtUses.size();i++){
+		for(size_t i = 0; i < stmtUses.size(); i++){
 			if (stmtUses[i].first == stmt){
 			
 				usedVarSet.insert(stmtUses[i].second);
@@ -77,7 +77,7 @@ using namespace std;
 	set<int> Uses::getUsersProc(int varIndex){
 		set<int> usersSet;
 		//std::set<int>::iterator it = calleeSet.begin();
-		for(int i =0;i<procUses.size();i++){
+		for(size_t i = 0; i < procUses.size(); i++){
 			if (procUses[i].second == varIndex){
 				usersSet.insert(procUses[i].first);
 			}
@@ -89,7 +89,7 @@ using namespace std;
 	set<int> Uses::getUsedVarProc(int stmt){
 		set<int> usedVarSet;
 		//std::set<int>::iterator it = calleeSet.begin();
-		for(int i =0;i<procUses.size();i++){
+		for (size_t i = 0; i < procUses.size(); i++){
 			if (procUses[i].first == stmt){
 				usedVarSet.insert(procUses[i].second);
 			}
@@ -153,7 +153,7 @@ using namespace std;
 	set<int> Uses::evaluateGetUsersStmt(int varIndex){
 		set<int> result;
 			int index = getVarStmtIndex(varIndex);
-		if(index>=varStmtUses.size()){
+		if ((size_t)index >= varStmtUses.size()){
 			return result;
 		}
 		else{
@@ -164,7 +164,7 @@ using namespace std;
 	set<int> Uses::evaluateGetUsedVarStmt(int stmt){
 	    set<int> result;
 		int index = Uses::getStmtVarIndex(stmt);
-		if(index>stmtVarUses.size()){
+		if ((size_t)index > stmtVarUses.size()){
 			return result;
 		}
 		else{
@@ -173,7 +173,7 @@ using namespace std;
 	}
 
    bool Uses::isUsesStmt(int stmt, int varIndex){
-	 for(int i=0;i<stmtUses.size();i++){
+	 for (size_t i = 0; i < stmtUses.size(); i++){
 		 if(stmtUses[i].first == stmt && stmtUses[i].second == varIndex){
 			 return true;
 		 }else{
@@ -196,7 +196,7 @@ using namespace std;
 	set<int> Uses::evaluateGetUsersProc(int varIndex){
 		set<int> result;
 		int index = getVarProcIndex(varIndex);
-		if(index>=varProcUses.size()){
+		if ((size_t)index >= varProcUses.size()){
 			return result;
 		}
 		else{
@@ -207,7 +207,7 @@ using namespace std;
 	set<int> Uses::evaluateGetUsedVarProc(int procIndex){
 		set<int> result;
 		int index = getProcVarIndex(procIndex);
-		if(index>=procVarUses.size()){
+		if ((size_t)index >= procVarUses.size()){
 			return result;
 		}
 		else{
@@ -216,7 +216,7 @@ using namespace std;
 	}
 
    bool Uses::isUsesProc(int procIndex, int varIndex){
-		 for(int i=0;i<procUses.size();i++){
+		 for (size_t i = 0; i < procUses.size(); i++){
 		 if(procUses[i].first == procIndex && procUses[i].second == varIndex){
 			 return true;
 		 }else{
@@ -238,7 +238,7 @@ using namespace std;
    void Uses::populateStmtBool(){
 	   int cols=0;
 	   int rows=0;
-	   for(int i =0 ; i< stmtUses.size();i++){
+	   for (size_t i = 0 ; i < stmtUses.size(); i++){
 		   if(stmtUses[i].first >= cols){
 			   cols = stmtUses[i].first;
 		   }
@@ -250,7 +250,7 @@ using namespace std;
 	   vector< vector< bool > > verified( (cols+1), vector<bool>( (rows+1), false ) );
 	   stmtBool = verified;
 
-	   for(int i =0 ; i< stmtUses.size();i++){
+	   for (size_t i = 0 ; i < stmtUses.size(); i++){
 		
 		    stmtBool[stmtUses[i].first][stmtUses[i].second] = true;
 		
@@ -260,7 +260,7 @@ using namespace std;
    void Uses::populateProcBool(){
 	   int cols=0;
 	   int rows=0;
-	   for(int i =0 ; i< procUses.size();i++){
+	   for (size_t i = 0 ; i < procUses.size(); i++){
 		   if(procUses[i].first >= cols){
 			   cols = procUses[i].first;
 		   }
@@ -271,14 +271,14 @@ using namespace std;
 	   vector< vector< bool > > verified( (cols+1), vector<bool>( (rows+1), false ) );
 	   procBool = verified;
 
-	   for(int i =0 ; i< procUses.size();i++){
+	   for (size_t i = 0 ; i < procUses.size(); i++){
 		    procBool[procUses[i].first][procUses[i].second] = true;
 	   }
    }
 
    bool Uses::evaluateIsUsesStmt(int stmt, int varIndex){
 	  // cout << "rows size" << vecBool.size() << "column size " << vecBool[0].size(); 
-	   if( stmt > stmtBool.size() || varIndex> stmtBool[0].size()){
+	   if( (size_t)stmt > stmtBool.size() || (size_t)varIndex > stmtBool[0].size()){
 		   return false;
 	   }else{
 	   if(stmtBool[stmt][varIndex]){
@@ -291,7 +291,7 @@ using namespace std;
 
    bool Uses::evaluateIsUsesProc(int proc, int varIndex){
 	  // cout << "rows size" << vecBool.size() << "column size " << vecBool[0].size(); 
-	   if( proc > procBool.size() || varIndex> procBool[0].size()){
+	   if( (size_t)proc > procBool.size() || (size_t)varIndex > procBool[0].size()){
 		   return false;
 	   }else{
 	   if(procBool[proc][varIndex]){

@@ -104,7 +104,7 @@ int Follows::getSize() {
 set<int> Follows::getAllFollowerStmt(){
 	set<int> followers;
 		//std::set<int>::iterator it = followeeSet.begin();
-		for(int i =0;i<followTable.size();i++){		
+		for (size_t i = 0; i < followTable.size(); i++){		
 				followers.insert(followTable[i].second);
 		}
 		return followers;
@@ -113,7 +113,7 @@ set<int> Follows::getAllFollowerStmt(){
 set<int> Follows::getAllFolloweeStmt(){
 	set<int> followees;
 		//std::set<int>::iterator it = followeeSet.begin();
-		for(int i =0;i<followTable.size();i++){		
+		for (size_t i = 0; i < followTable.size(); i++){		
 				followees.insert(followTable[i].first);
 		}
 		return followees;
@@ -147,7 +147,7 @@ void Follows::printAll() {
 set<int> Follows::evaluateGetFollowers(int stmt){
 	set<int> results;
 	int index = Follows::getFolloweeIndex(stmt);
-	if(index == -1 || index >= followerTable.size()){
+	if (index == -1 || (size_t)index >= followerTable.size()){
 		return results;
 	}else{
 		results = followerTable[index];
@@ -158,7 +158,7 @@ set<int> Follows::evaluateGetFollowers(int stmt){
 	set<int> results;
 	int index = Follows::getFollowerIndex(stmt);
 	
-	if(index == -1 || index >= followeeTable.size()){
+	if(index == -1 || (size_t)index >= followeeTable.size()){
 	
 		return results;
 	}else{
@@ -173,7 +173,7 @@ set<int> Follows::evaluateGetFollowers(int stmt){
 	 set<int> Follows::evaluateGetFollowerStar(int stmt){
 	set<int> results;
 	int index = Follows::getFolloweeIndex(stmt);
-	if(index == -1 || index >= followerStarTable.size()){
+	if(index == -1 || (size_t)index >= followerStarTable.size()){
 		return results;
 	}else{
 		results = followerStarTable[index];
@@ -185,7 +185,7 @@ set<int> Follows::evaluateGetFollowers(int stmt){
 	 set<int> Follows::evaluateGetFolloweeStar(int stmt){
 	 set<int> results;
 	int index = Follows::getFollowerIndex(stmt);
-	if(index == -1 || index >= followeeStarTable.size()){
+	if(index == -1 || (size_t)index >= followeeStarTable.size()){
 		return results;
 	}else{
 		results = followeeStarTable[index];

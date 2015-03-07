@@ -17,8 +17,9 @@ public:
 	PKBController* pkb;
 	map<string, string>* synonymTable;
 	int leftIndex, rightIndex;
-	string leftSynonym, rightSynonym;
+	string leftSynonym, rightSynonym, specialValue;
 	map<string, TNODE_TYPE> synToNodeType;
+	bool isUnderscore;
 	int isSyn;	// variable to indicate how many synonyms are there,
 				// 0: both are int, 1: left int, right string
 				// 2: left string, right int, 3: both are string
@@ -29,6 +30,7 @@ public:
 				// 8: (dig, "_")
 
 	// constructor
+	Subquery(map<string, string>*, PKBController*, bool);
 	Subquery(map<string, string>*, PKBController*);
 
 	// Mutators
@@ -37,6 +39,7 @@ public:
 	void setSynonyms(string, int);
 	void setSynonyms(int, string);
 	void setSynonyms(int, int);
+	void setValue(string, bool);
 
 	// Accessors	
 	int getPriority();

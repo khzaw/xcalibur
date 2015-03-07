@@ -17,6 +17,7 @@ Subquery::Subquery(map<string, string>* m, PKBController* p){
 	synToNodeType.insert(make_pair("assign", ASSIGN_NODE));
 	synToNodeType.insert(make_pair("while", WHILE_NODE));
 	synToNodeType.insert(make_pair("if", IF_NODE));
+	//synToNodeType.insert(make_pair("call", CALL_NODE));
 }
 
 void Subquery::setPriority(int p){

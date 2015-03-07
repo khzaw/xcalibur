@@ -270,6 +270,5 @@ CPPUNIT_TEST_SUITE_REGISTRATION( SubqueryTest );
 // method to test insertion of Follows
 
 void SubqueryTest::testFollows(){
-
 	
 }

@@ -18,7 +18,6 @@ static string KEYWORDS[] = {
 	"if",
 	"then",
 	"else",
-	"call"
 };
 
 

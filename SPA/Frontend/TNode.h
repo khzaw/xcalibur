@@ -14,7 +14,8 @@ enum TNODE_TYPE {
 	CONSTANT_NODE,
 	IF_NODE,
 	THEN_NODE,
-	ELSE_NODE
+	ELSE_NODE,
+	CALL_NODE
 };
 
 static string TNODE_NAMES[] = {
@@ -25,14 +26,11 @@ static string TNODE_NAMES[] = {
 	"WHILE_NODE",
 	"ASSIGN_NODE",
 	"CONSTANT_NODE",
-	"IF_NODE"
+	"IF_NODE",
+	"THEN_NODE",
+	"ELSE_NODE",
+	"CALL_NODE"
 };
-
-#include <cstddef>
-#include <vector>
-
-using namespace std;
-
 
 class TNode {
 

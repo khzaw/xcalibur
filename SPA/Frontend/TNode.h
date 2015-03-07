@@ -27,9 +27,9 @@ static string TNODE_NAMES[] = {
 	"ASSIGN_NODE",
 	"CONSTANT_NODE",
 	"IF_NODE",
-	"CALL_NODE",
 	"THEN_NODE",
-	"ELSE_NODE"
+	"ELSE_NODE",
+	"CALL_NODE"
 };
 
 

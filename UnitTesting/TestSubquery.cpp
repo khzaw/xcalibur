@@ -10,6 +10,17 @@
 void 
 SubqueryTest::setUp()
 {
+}
+
+void 
+SubqueryTest::tearDown()
+{
+}	
+
+CPPUNIT_TEST_SUITE_REGISTRATION( SubqueryTest );
+// method to test insertion of Follows
+
+void SubqueryTest::testFollows(){
 	/** SIMPLE source code
 	procedure First{
 		x = 2;					// 1
@@ -260,17 +271,6 @@ SubqueryTest::setUp()
 	synonymTable["l2"]="prog_line";
 	synonymTable["const1"]="constant";
 	synonymTable["const2"]="constant";
-}
-
-void 
-SubqueryTest::tearDown()
-{
-}	
-
-CPPUNIT_TEST_SUITE_REGISTRATION( SubqueryTest );
-// method to test insertion of Follows
-
-void SubqueryTest::testFollows(){
 	// Test 1: Follows(s1, s2)
 	FollowsSubquery followsSubquery1 = FollowsSubquery(&synonymTable, &pk);
 	followsSubquery1.setSynonyms("s1", "s2");
@@ -278,9 +278,52 @@ void SubqueryTest::testFollows(){
 	int expectedResultsFollowsSubquery1[13][2] = {
 		{1, 2}, {2, 3}, {4, 5}, {5, 6}, {6, 13}, {7, 8}, {8, 11}, {11, 12}, {13, 18}, {14, 15}, {18, 19}, {19, 20}, {21, 22}
 	};
-	for (size_t i = 0; i < actualResultsFollowsSubquery1->getAllResults().size(); i++){
-		for (size_t j = 0; j < actualResultsFollowsSubquery1->getResultRow(i).size(); j++){
+	CPPUNIT_ASSERT_EQUAL((size_t)13, actualResultsFollowsSubquery1->getAllResults().size());
+	for (size_t i = 0; i < 13; i++){
+		for (size_t j = 0; j < 2; j++){
 			CPPUNIT_ASSERT_EQUAL(expectedResultsFollowsSubquery1[i][j], actualResultsFollowsSubquery1->getResultAt(i, j));
+		}
+	}
+
+	// Test 2: Follows(s1, 2)
+	FollowsSubquery followsSubquery2 = FollowsSubquery(&synonymTable, &pk);
+	followsSubquery2.setSynonyms("s1", 2);
+	ResultTuple* actualResultsFollowsSubquery2 = followsSubquery2.solve();
+	int expectedResultsFollowsSubquery2[1][1] = {
+		{1}
+	};
+	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResultsFollowsSubquery2->getAllResults().size());
+	for (size_t i = 0; i < 1; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsFollowsSubquery2[i][j], actualResultsFollowsSubquery2->getResultAt(i, j));
+		}
+	}
+
+	// Test 3: Follows(s1, _)
+	FollowsSubquery followsSubquery3 = FollowsSubquery(&synonymTable, &pk);
+	followsSubquery3.setSynonyms("s1", "_");
+	ResultTuple* actualResultsFollowsSubquery3 = followsSubquery3.solve();
+	int expectedResultsFollowsSubquery3[13][1] = {
+		{1}, {2}, {4}, {5}, {6}, {7}, {8}, {11}, {13}, {14}, {18}, {19}, {21}
+	};
+	CPPUNIT_ASSERT_EQUAL((size_t)13, actualResultsFollowsSubquery3->getAllResults().size());
+	for (size_t i = 0; i < 13; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsFollowsSubquery3[i][j], actualResultsFollowsSubquery3->getResultAt(i, j));
+		}
+	}
+
+	// Test 4: Follows(a1, _)
+	FollowsSubquery followsSubquery4 = FollowsSubquery(&synonymTable, &pk);
+	followsSubquery4.setSynonyms("a1", "_");
+	ResultTuple* actualResultsFollowsSubquery4 = followsSubquery4.solve();
+	int expectedResultsFollowsSubquery4[9][1] = {
+		{1}, {2}, {4}, {5}, {7}, {14}, {18}, {19}, {21}
+	};
+	CPPUNIT_ASSERT_EQUAL((size_t)9, actualResultsFollowsSubquery4->getAllResults().size());
+	for (size_t i = 0; i < 1; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsFollowsSubquery4[i][j], actualResultsFollowsSubquery4->getResultAt(i, j));
 		}
 	}
 }

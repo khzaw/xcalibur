@@ -129,7 +129,10 @@ void Parser::stmtLst(TNode* parent) {
 void Parser::stmt(TNode* parent) {
 	if(nextToken.token == IDENT && nextToken.name == "call") {
 		loc++;
-		match(KEYWORDS[2]);
+		TNode* callNode = createASTNode(CALL_NODE, nextToken.name, parent, loc);
+		controller.statementTable.insertStatement(callNode);
+		match(KEYWORDS[2]); nextToken = getToken();		// match call keyword
+
 		procedureName();
 		controller.callsTable.insertCalls(0, this->procCount);
 		match(";");
@@ -225,7 +228,7 @@ void Parser::expr(TNode* assignNode) {
 	*/
 
 	expressionPostfix = "";
-	
+
 	operatorStack.push(Operator(OPERATOR_NULL, "NULL"));		// sentinel
 
 	factor(true);  nextToken = getToken();
@@ -239,20 +242,20 @@ void Parser::expr(TNode* assignNode) {
 	// cout << "PARENT : " <<  assignNode.getNodeType() << "\t" << "CHILD: " << operandStack.top().getNodeType() << "," << operandStack.top().getData() << endl;
 	assignNode->setData(expressionPostfix);
 	operatorStack.pop();		// remove the sentinel
-	
+
 	//cout << "expressionPostfix:\t" << expressionPostfix << endl; 
 }
 
 
 void Parser::printOperatorStack() {
 	cout << "Operator Stack" << endl;
-	 for (std::stack<Operator> dump = operatorStack; !dump.empty(); dump.pop())
+	for (std::stack<Operator> dump = operatorStack; !dump.empty(); dump.pop())
 		std::cout << dump.top().value << '\n';
 }
 
 void Parser::printOperandStack() {
 	cout << "Operand Stack" << endl;
-	 for (std::stack<TNode*> dump = operandStack; !dump.empty(); dump.pop())
+	for (std::stack<TNode*> dump = operandStack; !dump.empty(); dump.pop())
 		std::cout << dump.top()->getData() << '\n';
 }
 
@@ -324,7 +327,7 @@ TNode* Parser::createASTNode(int nodeType, string name, TNode *parentNode, int l
 		controller.ast.insertRoot(node);
 	}
 	controller.ast.assignChild(parentNode, node);
-	 //cout << "PARENT : " <<  parentNode->getNodeType() << "\t" << "CHILD: " << TNODE_NAMES[nodeType] << "," << node.getData() << endl;
+	//cout << "PARENT : " <<  parentNode->getNodeType() << "\t" << "CHILD: " << TNODE_NAMES[nodeType] << "," << node.getData() << endl;
 	return node;
 }
 
@@ -349,7 +352,7 @@ void Parser::procedureName() {
 	this->procCount+=1;
 	cout << "procName: " << nextToken.name << endl;
 	nextToken = getToken();
-	
+
 }
 
 
@@ -408,7 +411,7 @@ void Parser::populateUses(int loc) {
 	while(containerStack.size() > 0) {
 		int top = containerStack.top();
 		temp.push(top);
-	//	cout << top << ", " << lastVarIndex << endl;
+		//	cout << top << ", " << lastVarIndex << endl;
 		controller.usesTable.insertUsesStmt(top, lastVarIndex);
 		controller.usesTable.insertUsesProc(top, procCount);
 		containerStack.pop();

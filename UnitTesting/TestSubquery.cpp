@@ -271,8 +271,16 @@ CPPUNIT_TEST_SUITE_REGISTRATION( SubqueryTest );
 // method to test insertion of Follows
 
 void SubqueryTest::testFollows(){
+	// Test 1: Follows(s1, s2)
 	FollowsSubquery followsSubquery1 = FollowsSubquery(&synonymTable, &pk);
 	followsSubquery1.setSynonyms("s1", "s2");
-	ResultTuple* resultsFollowsSubquery1 = followsSubquery1.solve();
-	cout << "Result1: \n" << resultsFollowsSubquery1->toString() << endl;
+	ResultTuple* actualResultsFollowsSubquery1 = followsSubquery1.solve();
+	int expectedResultsFollowsSubquery1[13][2] = {
+		{1, 2}, {2, 3}, {4, 5}, {5, 6}, {6, 13}, {7, 8}, {8, 11}, {11, 12}, {13, 18}, {14, 15}, {18, 19}, {19, 20}, {21, 22}
+	};
+	for (size_t i = 0; i < actualResultsFollowsSubquery1->getAllResults().size(); i++){
+		for (size_t j = 0; j < actualResultsFollowsSubquery1->getResultRow(i).size(); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsFollowsSubquery1[i][j], actualResultsFollowsSubquery1->getResultAt(i, j));
+		}
+	}
 }

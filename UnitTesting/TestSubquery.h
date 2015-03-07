@@ -11,17 +11,17 @@ class SubqueryTest : public CPPUNIT_NS::TestFixture // Note 2
 { 
 	CPPUNIT_TEST_SUITE( SubqueryTest ); // Note 3 
 	CPPUNIT_TEST(testFollows);
-	//CPPUNIT_TEST(testParent);
-	//CPPUNIT_TEST(testFollowsT);
-	//CPPUNIT_TEST(testParentT);
-	//CPPUNIT_TEST(testModifies);
-	//CPPUNIT_TEST(testUses);
-	//CPPUNIT_TEST(testModifiesProc);
-	//CPPUNIT_TEST(testUsesProc);
-	//CPPUNIT_TEST(testCalls);
-	//CPPUNIT_TEST(testCallsT);
-	//CPPUNIT_TEST(testPattern);
-	//CPPUNIT_TEST(testWith);
+	CPPUNIT_TEST(testParent);
+	CPPUNIT_TEST(testFollowsT);
+	CPPUNIT_TEST(testParentT);
+	CPPUNIT_TEST(testModifies);
+	CPPUNIT_TEST(testUses);
+	CPPUNIT_TEST(testModifiesProc);
+	CPPUNIT_TEST(testUsesProc);
+	CPPUNIT_TEST(testCalls);
+	CPPUNIT_TEST(testCallsT);
+	CPPUNIT_TEST(testPattern);
+	CPPUNIT_TEST(testWith);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -31,6 +31,17 @@ public:
 	void tearDown();
 
 	void testFollows();
+	void testParent();
+	void testFollowsT();
+	void testParentT();
+	void testModifies();
+	void testUses();
+	void testModifiesProc();
+	void testUsesProc();
+	void testCalls();
+	void testCallsT();
+	void testPattern();
+	void testWith();
 
 };
 #endif

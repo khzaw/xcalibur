@@ -284,3 +284,38 @@ void SubqueryTest::testFollows(){
 		}
 	}
 }
+
+void SubqueryTest::testFollowsT(){
+
+}
+
+void SubqueryTest::testParent(){
+}
+
+void SubqueryTest::testParentT(){
+
+}
+
+void SubqueryTest::testModifies(){
+}
+
+void SubqueryTest::testModifiesProc(){
+}
+
+void SubqueryTest::testUses(){
+}
+
+void SubqueryTest::testUsesProc(){
+}
+
+void SubqueryTest::testCalls(){
+}
+
+void SubqueryTest::testCallsT(){
+}
+
+void SubqueryTest::testPattern(){
+}
+
+void SubqueryTest::testWith(){
+}

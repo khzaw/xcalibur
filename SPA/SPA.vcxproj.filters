@@ -147,6 +147,9 @@
     <ClCompile Include="QueryProcessor\PatternSubquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
+    <ClCompile Include="PKB\iterativeCFG.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PKB\AST.h">
@@ -265,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="QueryProcessor\OptimizedQE.h">
       <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\iterativeCFG.h">
+      <Filter>Header Files\PKB</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

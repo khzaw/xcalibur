@@ -257,6 +257,13 @@ void SubqueryTest::testSubqueries() {
 	pk.usesTable.insertUsesStmt(20, 3);
 	pk.usesTable.insertUsesStmt(22, 1);
 
+	pk.constructCalls();
+	pk.constructFollows();
+	pk.constructModifies();
+	pk.constructParent();
+	pk.constructNext();
+	pk.constructUses();
+
 	synonymTable["s1"]="stmt";
 	synonymTable["s2"]="stmt";
 	synonymTable["a1"]="assign";

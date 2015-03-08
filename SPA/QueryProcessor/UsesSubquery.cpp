@@ -57,11 +57,8 @@ public:
 			set<int> tempUsers = pkb->usesTable.getUsersStmt(rightIndex);
 			copy(tempUsers.begin(), tempUsers.end(), back_inserter(users));
 		} else {	// Uses(syn, _): Get all users
-			// not sure if this is correct
-			vector<pair<int, int>> temp = pkb->usesTable.getUsesStmt();
-			for (size_t i = 0; i < temp.size(); i++) {
-				users.push_back(temp[i].first);
-			}
+			set<int> tempUsers = pkb->usesTable.getAllUsersStmt();
+			copy(tempUsers.begin(), tempUsers.end(), back_inserter(users));
 		}
 
 		for(size_t i = 0; i < users.size(); i++) {
@@ -85,8 +82,8 @@ public:
 		int index = tuple->getSynonymIndex(leftSynonym);
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
-			if (isSyn == 1) {	// Uses(syn, varnum)
-				if (pkb->usesTable.isUsesStmt(temp.at(index), rightIndex)) {
+			if (isSyn == 2) {	// Uses(syn, varnum)
+				if (pkb->usesTable.evaluateIsUsesStmt(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}
 			} else {	// Uses(syn, _)
@@ -133,7 +130,7 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 1) {	// Uses(stmt, syn)
-				if (pkb->usesTable.isUsesStmt(leftIndex, temp.at(index))) {
+				if (pkb->usesTable.evaluateIsUsesStmt(leftIndex, temp.at(index))) {
 					result->addResultRow(temp);
 				}
 			} else {	// Uses(_, syn)

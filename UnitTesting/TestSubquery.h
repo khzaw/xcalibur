@@ -38,6 +38,7 @@ public:
 	void testFollowsT();
 	void testParentT();
 	void testModifies();
+	void testModifiesTuple();
 	void testUses();
 	void testModifiesProc();
 	void testUsesProc();

@@ -58,10 +58,8 @@ public:
 			copy(tempModifiers.begin(), tempModifiers.end(), back_inserter(modifiers)); 
 		} else {	// Modifies(syn, _): Get all modifiers
 			// not sure if this is correct
-			vector<pair<int, int>> temp = pkb->modifiesTable.getModifiesStmt();
-			for (size_t i = 0; i < temp.size(); i++) {
-				modifiers.push_back(temp[i].first);
-			}
+			set<int> tempModifiers = pkb->modifiesTable.getAllModifiersStmt();//pkb->modifiesTable.getModifiesStmt();
+			copy(tempModifiers.begin(), tempModifiers.end(), back_inserter(modifiers)); 
 		}
 
 		for(size_t i = 0; i < modifiers.size(); i++) {
@@ -83,10 +81,13 @@ public:
 		result->setSynonymMap(tuple->getSynonymMap());
 
 		int index = tuple->getSynonymIndex(leftSynonym);
+		cout << "INDEX" << index << endl;
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
-			if (isSyn == 1) {	// Modifies(syn, varnum)
-				if (pkb->modifiesTable.isModifiesStmt(temp.at(index), rightIndex)) {
+			if (isSyn == 2) {	// Modifies(syn, varnum)
+				cout << "Modifies(" << temp.at(index) << "," << rightIndex << ")" << endl;
+				if (pkb->modifiesTable.evaluateIsModifiesStmt(temp.at(index), rightIndex)) {
+					cout << "true";
 					result->addResultRow(temp);
 				}
 			} else {	// Modifies(syn, _)
@@ -104,7 +105,7 @@ public:
 		tuple->addSynonymToMap(rightSynonym, index);
 		
 		vector<int> modified;
-		if (isSyn == 1) {	// Modifies(stmt, varnum): Get Modifiers of varnum
+		if (isSyn == 2) {	// Modifies(stmt, varnum): Get Modifiers of varnum
 			set<int> tempModified = pkb->modifiesTable.getModifiersStmt(leftIndex);
 			copy(tempModified.begin(), tempModified.end(), back_inserter(modified));
 		} else {	// Modifies(_, varnum)
@@ -133,7 +134,7 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 1) {	// Modifies(stmt, syn)
-				if (pkb->modifiesTable.isModifiesStmt(leftIndex, temp.at(index))) {
+				if (pkb->modifiesTable.evaluateIsModifiesStmt(leftIndex, temp.at(index))) {
 					result->addResultRow(temp);
 				}
 			} else {	// Modifies(_, syn)

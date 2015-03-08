@@ -292,6 +292,43 @@ public:
 		return results;
 	}
 
+	bool isEqualValues(int row, int index1, int index2, ResultTuple* tuple){
+		vector<int> rowValues = tuple->getResultRow(row);
+		string leftSynType = synonymTable->at(leftSynonym);
+		string rightSynType = synonymTable->at(rightSynonym);
+		if ((leftSynType == "variable" || leftSynType == "procedure") && (rightSynType == "variable" || rightSynType == "procedure")) {
+			string leftString, rightString;
+			if (leftSynType == "variable"){
+				leftString = pkb->varTable.getVarName(tuple->getResultAt(row, index1));
+			}
+			if (leftSynType == "procedure"){
+				leftString = pkb->procTable.getProcName(tuple->getResultAt(row, index1));
+			}
+			if (rightSynType == "variable"){
+				rightString = pkb->varTable.getVarName(tuple->getResultAt(row, index2));
+			}
+			if (rightSynType == "procedure"){
+				rightString = pkb->procTable.getProcName(tuple->getResultAt(row, index2));
+			}
+			return leftString == rightString;
+		} else if ((leftSynType=="stmt" || leftSynType=="assign" || leftSynType=="call" || leftSynType=="while" || leftSynType=="if" || leftSynType=="constant" || leftSynType=="prog_line") &&
+			(rightSynType=="stmt" || rightSynType=="assign" || rightSynType=="call" || rightSynType=="while" || rightSynType=="if" || rightSynType=="constant" || rightSynType=="prog_line")){
+			int leftNum, rightNum;
+			if (leftSynType == "constant"){
+				leftNum = pkb->constantTable.getConstant(tuple->getResultAt(row, index1));	
+			} else {
+				leftNum = tuple->getResultAt(row, index1);
+			}
+			if (rightSynType == "constant"){
+				rightNum = pkb->constantTable.getConstant(tuple->getResultAt(row, index2));
+			} else {
+				rightNum = tuple->getResultAt(row, index2);
+			}
+			return leftNum == rightNum;
+		}
+		return false;
+	}
+
 	ResultTuple* solveBothSyn(ResultTuple* tuple) {
 		ResultTuple* result = new ResultTuple();
 		result->setSynonym(tuple->getSynonyms());
@@ -301,7 +338,7 @@ public:
 		int rIndex = tuple->getSynonymIndex(rightSynonym);
 		if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++){
-				if (lIndex == rIndex){
+				if (isEqualValues(i, lIndex, rIndex, tuple)){
 					result->addResultRow(tuple->getResultRow(i));
 				}
 			}

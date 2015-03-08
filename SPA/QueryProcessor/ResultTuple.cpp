@@ -175,7 +175,7 @@ ResultTuple* ResultTuple::join(ResultTuple* other) {
 
 string ResultTuple::toString(){
 	string result = "";
-	int colSize = 12;
+	int colSize = 8;
 	for (size_t i = 0; i < synonyms.size(); i++){
 		size_t left = (colSize - synonyms[i].length())/2;
 		size_t right = colSize - synonyms[i].length() - left;

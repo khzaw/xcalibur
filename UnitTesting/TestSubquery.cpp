@@ -1893,12 +1893,68 @@ void SubqueryTest::testWith(){
 }
 
 void SubqueryTest::testWithTuple(){
+	// testTuple:
+	//  s1  |  a1  |  w1  |  i2  |  c2  |  l1  |  const1  |  v1  |  proc1  |
+	//  1   |  1   |  6   |  8   |  3   |  1   |  0       |  0   |  0      |
+	//  1   |  2   |  6   |  8   |  3   |  1   |  0       |  0   |  0      |
+	//  1   |  1   |  15  |  8   |  3   |  1   |  0       |  0   |  0      |
+	//  1   |  2   |  6   |  13  |  3   |  1   |  0       |  0   |  0      |
+	//  1   |  1   |  6   |  8   |  11  |  1   |  0       |  0   |  0      |
+	//  8   |  2   |  6   |  8   |  3   |  7   |  0       |  0   |  0      |
+	//  1   |  1   |  6   |  8   |  3   |  1   |  3       |  0   |  0      |
+	//  3   |  2   |  6   |  8   |  3   |  1   |  0       |  2   |  0      |
+	//  1   |  2   |  6   |  8   |  3   |  1   |  0       |  2   |  1      |
+	ResultTuple testTuple = ResultTuple();
+	int index = testTuple.addSynonym("s1");
+	testTuple.addSynonymToMap("s1", index);
+	index = testTuple.addSynonym("a1");
+	testTuple.addSynonymToMap("a1", index);
+	index = testTuple.addSynonym("w1");
+	testTuple.addSynonymToMap("w1", index);
+	index = testTuple.addSynonym("i2");
+	testTuple.addSynonymToMap("i2", index);
+	index = testTuple.addSynonym("c2");
+	testTuple.addSynonymToMap("c2", index);
+	index = testTuple.addSynonym("l1");
+	testTuple.addSynonymToMap("l1", index);
+	index = testTuple.addSynonym("const1");
+	testTuple.addSynonymToMap("const1", index);
+	index = testTuple.addSynonym("v1");
+	testTuple.addSynonymToMap("v1", index);
+	index = testTuple.addSynonym("proc1");
+	testTuple.addSynonymToMap("proc1", index);
+	int data[9][9] = {
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
+		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
+		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  0  },
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  }
+	};
+	for (int i = 0; i < 9; i++){
+		vector<int> tempVector = vector<int>();
+		testTuple.addResultRow(tempVector);
+		for (int j = 0; j < 9; j++){
+			testTuple.addResult(i, data[i][j]);
+		}
+	}
 	// Test 0: with s1.stmt# = s2.stmt#
 	WithSubquery withsubquery0 = WithSubquery(&synonymTable, &pk);
 	withsubquery0.setSynonyms("s1", "s2");
-	ResultTuple* actualResultwithsubquery0 = withsubquery0.solve();
-	int expectedResultwithsubquery0[22][2] = {
-		{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	ResultTuple* actualResultwithsubquery0 = withsubquery0.solve(&testTuple);
+	int expectedResultwithsubquery0[9][10] = {
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  1},
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  1},
+		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
+		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  ,  1},
+		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  ,  1},
+		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  ,  8},
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  ,  1},
+		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  0  ,  3},
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  ,  1}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery0)/sizeof(expectedResultwithsubquery0[0])), actualResultwithsubquery0->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery0)/sizeof(expectedResultwithsubquery0[0])); i++){
@@ -1910,9 +1966,15 @@ void SubqueryTest::testWithTuple(){
 	// Test 1: with s1.stmt# = a2.stmt#
 	WithSubquery withsubquery1 = WithSubquery(&synonymTable, &pk);
 	withsubquery1.setSynonyms("s1", "a2");
-	ResultTuple* actualResultwithsubquery1 = withsubquery1.solve();
-	int expectedResultwithsubquery1[16][2] = {
-		{1, 1}, {2, 2}, {4, 4}, {5, 5}, {7, 7}, {9, 9}, {10, 10}, {12, 12}, {14, 14}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	ResultTuple* actualResultwithsubquery1 = withsubquery1.solve(&testTuple);
+	int expectedResultwithsubquery1[7][10] = {
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  1},
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  1},
+		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
+		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  ,  1},
+		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  ,  1},
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  ,  1},
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  ,  1}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery1)/sizeof(expectedResultwithsubquery1[0])), actualResultwithsubquery1->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery1)/sizeof(expectedResultwithsubquery1[0])); i++){
@@ -1924,23 +1986,15 @@ void SubqueryTest::testWithTuple(){
 	// Test 2: with s1.stmt# = w2.stmt#
 	WithSubquery withsubquery2 = WithSubquery(&synonymTable, &pk);
 	withsubquery2.setSynonyms("s1", "w2");
-	ResultTuple* actualResultwithsubquery2 = withsubquery2.solve();
-	int expectedResultwithsubquery2[2][2] = {
-		{6, 6}, {15, 15}
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery2)/sizeof(expectedResultwithsubquery2[0])), actualResultwithsubquery2->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery2)/sizeof(expectedResultwithsubquery2[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery2[i])/sizeof(expectedResultwithsubquery2[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery2[i][j], actualResultwithsubquery2->getResultAt(i, j));
-		}
-	}
+	ResultTuple* actualResultwithsubquery2 = withsubquery2.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery2->getAllResults().size());
 
 	// Test 3: with s1.stmt# = i2.stmt#
 	WithSubquery withsubquery3 = WithSubquery(&synonymTable, &pk);
 	withsubquery3.setSynonyms("s1", "i2");
-	ResultTuple* actualResultwithsubquery3 = withsubquery3.solve();
-	int expectedResultwithsubquery3[2][2] = {
-		{8, 8}, {13, 13}
+	ResultTuple* actualResultwithsubquery3 = withsubquery3.solve(&testTuple);
+	int expectedResultwithsubquery3[1][9] = {
+		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  }
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery3)/sizeof(expectedResultwithsubquery3[0])), actualResultwithsubquery3->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery3)/sizeof(expectedResultwithsubquery3[0])); i++){
@@ -1952,9 +2006,9 @@ void SubqueryTest::testWithTuple(){
 	// Test 6: with s1.stmt# = c2.stmt#
 	WithSubquery withsubquery6 = WithSubquery(&synonymTable, &pk);
 	withsubquery6.setSynonyms("s1", "c2");
-	ResultTuple* actualResultwithsubquery6 = withsubquery6.solve();
-	int expectedResultwithsubquery6[2][2] = {
-		{3, 3}, {11, 11}
+	ResultTuple* actualResultwithsubquery6 = withsubquery6.solve(&testTuple);
+	int expectedResultwithsubquery6[1][9] = {
+		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  0  }
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery6)/sizeof(expectedResultwithsubquery6[0])), actualResultwithsubquery6->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery6)/sizeof(expectedResultwithsubquery6[0])); i++){
@@ -1963,6 +2017,7 @@ void SubqueryTest::testWithTuple(){
 		}
 	}
 
+	// TODO: continue from this
 	// Test 7: with s1.stmt# = l2
 	WithSubquery withsubquery7 = WithSubquery(&synonymTable, &pk);
 	withsubquery7.setSynonyms("s1", "l2");

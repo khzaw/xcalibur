@@ -105,7 +105,7 @@ public:
 		tuple->addSynonymToMap(rightSynonym, index);
 		
 		vector<int> modified;
-		if (isSyn == 2) {	// Modifies(stmt, varnum): Get Modifiers of varnum
+		if (isSyn == 1) {	// Modifies(stmt, varnum): Get Modifiers of varnum
 			set<int> tempModified = pkb->modifiesTable.getModifiersStmt(leftIndex);
 			copy(tempModified.begin(), tempModified.end(), back_inserter(modified));
 		} else {	// Modifies(_, varnum)

@@ -79,7 +79,7 @@ public:
 		int index = tuple->getSynonymIndex(leftSynonym);
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
-			if (isSyn == 1) {	// Parent(syn, stmt)
+			if (isSyn == 2) {	// Parent(syn, stmt)
 				if (pkb->parentTable.isParentStarTrue(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}

@@ -46,5 +46,6 @@ public:
 	void testCallsT();
 	void testPattern();
 	void testWith();
+	void testWithTuple();
 };
 #endif

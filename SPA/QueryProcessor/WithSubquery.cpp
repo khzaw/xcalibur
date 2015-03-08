@@ -61,7 +61,7 @@ public:
 			}
 		} else if (synonymTable->at(syn)=="constant"){
 			if (pkb->constantTable.containsConst(index)){
-				values.push_back(index);
+				values.push_back(pkb->constantTable.getConstIndex(index));
 			}
 		} else {
 			if (synonymTable->at(syn)=="stmt" || synonymTable->at(syn) == "prog_line"){
@@ -104,7 +104,7 @@ public:
 		int index = tuple->getSynonymIndex(leftSynonym);
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
-			if (isSyn == 1) {	// with syn.attr = num
+			if (isSyn == 2) {	// with syn.attr = num
 				if (temp.at(index) == rightIndex) {
 					result->addResultRow(temp);
 				}
@@ -120,7 +120,7 @@ public:
 		int index = tuple->addSynonym(rightSynonym);
 		tuple->addSynonymToMap(rightSynonym, index);
 		vector<int> values = vector<int>();
-		if (isSyn == 2) {	// with syn.attr = varnum: Get syn that have attr equals to varnum
+		if (isSyn == 1) {	// with syn.attr = varnum: Get syn that have attr equals to varnum
 			values = getValues(rightSynonym, leftIndex);
 		} else {	// Uses(syn, _): Get all users
 			// invalid
@@ -167,8 +167,8 @@ public:
 		if ((leftSynType=="procedure" || leftSynType=="variable") &&
 			(rightSynType=="procedure" || rightSynType=="variable")){
 			joinValues = getJoinStrings(leftSynonym, rightSynonym);
-		} else if ((leftSynType=="stmt" || leftSynType=="assign" || leftSynType=="call" || leftSynType=="while" || leftSynType=="if" || leftSynType=="constant" || leftSynType=="progline") &&
-			(rightSynType=="stmt" || rightSynType=="assign" || rightSynType=="call" || rightSynType=="while" || rightSynType=="if" || rightSynType=="constant" || rightSynType=="progline")){
+		} else if ((leftSynType=="stmt" || leftSynType=="assign" || leftSynType=="call" || leftSynType=="while" || leftSynType=="if" || leftSynType=="constant" || leftSynType=="prog_line") &&
+			(rightSynType=="stmt" || rightSynType=="assign" || rightSynType=="call" || rightSynType=="while" || rightSynType=="if" || rightSynType=="constant" || rightSynType=="prog_line")){
 			joinValues = getJoinNums(leftSynonym, rightSynonym);
 		} else {
 			// invalid
@@ -266,7 +266,7 @@ public:
 			}
 		} else if (syn2Type == "stmt" || syn2Type == "prog_line"){
 			for (size_t i = 0; i < leftNums.size(); i++){
-				if (leftNums[i] > pkb->statementTable.getSize()){
+				if (leftNums[i] > pkb->statementTable.getSize() || leftNums[i] <= 0){
 					continue;
 				}
 				if (syn1Type == "constant"){
@@ -277,7 +277,7 @@ public:
 			}
 		} else if (syn2Type=="assign" || syn2Type=="while" || syn2Type=="if" || syn2Type=="call"){
 			for (size_t i = 0; i < leftNums.size(); i++){
-				if (leftNums[i] > pkb->statementTable.getSize() || pkb->statementTable.getTNode(leftNums[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(syn2Type)]){
+				if (leftNums[i] <= 0 || leftNums[i] > pkb->statementTable.getSize() || pkb->statementTable.getTNode(leftNums[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(syn2Type)]){
 					continue;
 				}
 				if (syn1Type == "constant"){

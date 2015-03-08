@@ -80,7 +80,7 @@ public:
 		int index = tuple->getSynonymIndex(leftSynonym);
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
-			if (isSyn == 1) {	// Modifies(syn, varnum)
+			if (isSyn == 2) {	// Modifies(syn, varnum)
 				if (pkb->modifiesTable.isModifiesProc(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}

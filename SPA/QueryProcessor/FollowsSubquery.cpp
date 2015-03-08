@@ -79,7 +79,7 @@ public:
 		int index = tuple->getSynonymIndex(leftSynonym);
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
-			if (isSyn == 1) {	// Follows(syn, stmt)
+			if (isSyn == 2) {	// Follows(syn, stmt)
 				if (pkb->followsTable.isFollowsTrue(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}

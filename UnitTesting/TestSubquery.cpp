@@ -297,6 +297,7 @@ void SubqueryTest::testSubqueries() {
 	testCallsT();
 	testPattern();
 	testWith();
+	testWithTuple();
 }
 
 void SubqueryTest::testFollows(){
@@ -974,7 +975,7 @@ void SubqueryTest::testPattern(){
 }
 
 void SubqueryTest::testWith(){
-	// Test 0: With(s1, s2)
+	// Test 0: with s1.stmt# = s2.stmt#
 	WithSubquery withsubquery0 = WithSubquery(&synonymTable, &pk);
 	withsubquery0.setSynonyms("s1", "s2");
 	ResultTuple* actualResultwithsubquery0 = withsubquery0.solve();
@@ -987,4 +988,1824 @@ void SubqueryTest::testWith(){
 			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery0[i][j], actualResultwithsubquery0->getResultAt(i, j));
 		}
 	}
+
+	// Test 1: with s1.stmt# = a2.stmt#
+	WithSubquery withsubquery1 = WithSubquery(&synonymTable, &pk);
+	withsubquery1.setSynonyms("s1", "a2");
+	ResultTuple* actualResultwithsubquery1 = withsubquery1.solve();
+	int expectedResultwithsubquery1[16][2] = {
+		{1, 1}, {2, 2}, {4, 4}, {5, 5}, {7, 7}, {9, 9}, {10, 10}, {12, 12}, {14, 14}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery1)/sizeof(expectedResultwithsubquery1[0])), actualResultwithsubquery1->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery1)/sizeof(expectedResultwithsubquery1[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery1[i])/sizeof(expectedResultwithsubquery1[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery1[i][j], actualResultwithsubquery1->getResultAt(i, j));
+		}
+	}
+
+	// Test 2: with s1.stmt# = w2.stmt#
+	WithSubquery withsubquery2 = WithSubquery(&synonymTable, &pk);
+	withsubquery2.setSynonyms("s1", "w2");
+	ResultTuple* actualResultwithsubquery2 = withsubquery2.solve();
+	int expectedResultwithsubquery2[2][2] = {
+		{6, 6}, {15, 15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery2)/sizeof(expectedResultwithsubquery2[0])), actualResultwithsubquery2->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery2)/sizeof(expectedResultwithsubquery2[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery2[i])/sizeof(expectedResultwithsubquery2[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery2[i][j], actualResultwithsubquery2->getResultAt(i, j));
+		}
+	}
+
+	// Test 3: with s1.stmt# = i2.stmt#
+	WithSubquery withsubquery3 = WithSubquery(&synonymTable, &pk);
+	withsubquery3.setSynonyms("s1", "i2");
+	ResultTuple* actualResultwithsubquery3 = withsubquery3.solve();
+	int expectedResultwithsubquery3[2][2] = {
+		{8, 8}, {13, 13}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery3)/sizeof(expectedResultwithsubquery3[0])), actualResultwithsubquery3->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery3)/sizeof(expectedResultwithsubquery3[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery3[i])/sizeof(expectedResultwithsubquery3[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery3[i][j], actualResultwithsubquery3->getResultAt(i, j));
+		}
+	}
+
+	// Test 6: with s1.stmt# = c2.stmt#
+	WithSubquery withsubquery6 = WithSubquery(&synonymTable, &pk);
+	withsubquery6.setSynonyms("s1", "c2");
+	ResultTuple* actualResultwithsubquery6 = withsubquery6.solve();
+	int expectedResultwithsubquery6[2][2] = {
+		{3, 3}, {11, 11}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery6)/sizeof(expectedResultwithsubquery6[0])), actualResultwithsubquery6->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery6)/sizeof(expectedResultwithsubquery6[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery6[i])/sizeof(expectedResultwithsubquery6[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery6[i][j], actualResultwithsubquery6->getResultAt(i, j));
+		}
+	}
+
+	// Test 7: with s1.stmt# = l2
+	WithSubquery withsubquery7 = WithSubquery(&synonymTable, &pk);
+	withsubquery7.setSynonyms("s1", "l2");
+	ResultTuple* actualResultwithsubquery7 = withsubquery7.solve();
+	int expectedResultwithsubquery7[22][2] = {
+		{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery7)/sizeof(expectedResultwithsubquery7[0])), actualResultwithsubquery7->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery7)/sizeof(expectedResultwithsubquery7[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery7[i])/sizeof(expectedResultwithsubquery7[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery7[i][j], actualResultwithsubquery7->getResultAt(i, j));
+		}
+	}
+
+	// Test 8: with s1.stmt# = const2.value
+	WithSubquery withsubquery8 = WithSubquery(&synonymTable, &pk);
+	withsubquery8.setSynonyms("s1", "const2");
+	ResultTuple* actualResultwithsubquery8 = withsubquery8.solve();
+	int expectedResultwithsubquery8[4][2] = {
+		{1, 4}, {2, 0}, {3, 1}, {5, 3}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery8)/sizeof(expectedResultwithsubquery8[0])), actualResultwithsubquery8->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery8)/sizeof(expectedResultwithsubquery8[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery8[i])/sizeof(expectedResultwithsubquery8[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery8[i][j], actualResultwithsubquery8->getResultAt(i, j));
+		}
+	}
+
+	// Test 10: with s1.stmt# = 2
+	WithSubquery withsubquery10 = WithSubquery(&synonymTable, &pk);
+	withsubquery10.setSynonyms("s1", 2);
+	ResultTuple* actualResultwithsubquery10 = withsubquery10.solve();
+	int expectedResultwithsubquery10[1][1] = {
+		{2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery10)/sizeof(expectedResultwithsubquery10[0])), actualResultwithsubquery10->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery10)/sizeof(expectedResultwithsubquery10[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery10[i])/sizeof(expectedResultwithsubquery10[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery10[i][j], actualResultwithsubquery10->getResultAt(i, j));
+		}
+	}
+
+	// Test 11: with s1.stmt# = 6
+	WithSubquery withsubquery11 = WithSubquery(&synonymTable, &pk);
+	withsubquery11.setSynonyms("s1", 6);
+	ResultTuple* actualResultwithsubquery11 = withsubquery11.solve();
+	int expectedResultwithsubquery11[1][1] = {
+		{6}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery11)/sizeof(expectedResultwithsubquery11[0])), actualResultwithsubquery11->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery11)/sizeof(expectedResultwithsubquery11[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery11[i])/sizeof(expectedResultwithsubquery11[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery11[i][j], actualResultwithsubquery11->getResultAt(i, j));
+		}
+	}
+
+	// Test 12: with a1.stmt# = s2.stmt#
+	WithSubquery withsubquery12 = WithSubquery(&synonymTable, &pk);
+	withsubquery12.setSynonyms("a1", "s2");
+	ResultTuple* actualResultwithsubquery12 = withsubquery12.solve();
+	int expectedResultwithsubquery12[16][2] = {
+		{1, 1}, {2, 2}, {4, 4}, {5, 5}, {7, 7}, {9, 9}, {10, 10}, {12, 12}, {14, 14}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery12)/sizeof(expectedResultwithsubquery12[0])), actualResultwithsubquery12->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery12)/sizeof(expectedResultwithsubquery12[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery12[i])/sizeof(expectedResultwithsubquery12[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery12[i][j], actualResultwithsubquery12->getResultAt(i, j));
+		}
+	}
+
+	// Test 13: with a1.stmt# = a2.stmt#
+	WithSubquery withsubquery13 = WithSubquery(&synonymTable, &pk);
+	withsubquery13.setSynonyms("a1", "a2");
+	ResultTuple* actualResultwithsubquery13 = withsubquery13.solve();
+	int expectedResultwithsubquery13[16][2] = {
+		{1, 1}, {2, 2}, {4, 4}, {5, 5}, {7, 7}, {9, 9}, {10, 10}, {12, 12}, {14, 14}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery13)/sizeof(expectedResultwithsubquery13[0])), actualResultwithsubquery13->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery13)/sizeof(expectedResultwithsubquery13[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery13[i])/sizeof(expectedResultwithsubquery13[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery13[i][j], actualResultwithsubquery13->getResultAt(i, j));
+		}
+	}
+
+	// Test 14: with(a1, w2)
+	WithSubquery withsubquery14 = WithSubquery(&synonymTable, &pk);
+	withsubquery14.setSynonyms("a1", "w2");
+	ResultTuple* actualResultwithsubquery14 = withsubquery14.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery14->getAllResults().size());
+
+	// Test 15: with(a1, i2)
+	WithSubquery withsubquery15 = WithSubquery(&synonymTable, &pk);
+	withsubquery15.setSynonyms("a1", "i2");
+	ResultTuple* actualResultwithsubquery15 = withsubquery15.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery15->getAllResults().size());
+
+	// Test 18: with(a1, c2)
+	WithSubquery withsubquery18 = WithSubquery(&synonymTable, &pk);
+	withsubquery18.setSynonyms("a1", "c2");
+	ResultTuple* actualResultwithsubquery18 = withsubquery18.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery18->getAllResults().size());
+
+	// Test 19: with(a1, l2)
+	WithSubquery withsubquery19 = WithSubquery(&synonymTable, &pk);
+	withsubquery19.setSynonyms("a1", "l2");
+	ResultTuple* actualResultwithsubquery19 = withsubquery19.solve();
+	int expectedResultwithsubquery19[16][2] = {
+		{1, 1}, {2, 2}, {4, 4}, {5, 5}, {7, 7}, {9, 9}, {10, 10}, {12, 12}, {14, 14}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery19)/sizeof(expectedResultwithsubquery19[0])), actualResultwithsubquery19->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery19)/sizeof(expectedResultwithsubquery19[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery19[i])/sizeof(expectedResultwithsubquery19[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery19[i][j], actualResultwithsubquery19->getResultAt(i, j));
+		}
+	}
+
+	// Test 20: with(a1, const2)
+	WithSubquery withsubquery20 = WithSubquery(&synonymTable, &pk);
+	withsubquery20.setSynonyms("a1", "const2");
+	ResultTuple* actualResultwithsubquery20 = withsubquery20.solve();
+	int expectedResultwithsubquery20[3][2] = {
+		{1, 4}, {2, 0}, {5, 3}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery20)/sizeof(expectedResultwithsubquery20[0])), actualResultwithsubquery20->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery20)/sizeof(expectedResultwithsubquery20[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery20[i])/sizeof(expectedResultwithsubquery20[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery20[i][j], actualResultwithsubquery20->getResultAt(i, j));
+		}
+	}
+
+	// Test 22: with(a1, 2)
+	WithSubquery withsubquery22 = WithSubquery(&synonymTable, &pk);
+	withsubquery22.setSynonyms("a1", 2);
+	ResultTuple* actualResultwithsubquery22 = withsubquery22.solve();
+	int expectedResultwithsubquery22[1][1] = {
+		{2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery22)/sizeof(expectedResultwithsubquery22[0])), actualResultwithsubquery22->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery22)/sizeof(expectedResultwithsubquery22[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery22[i])/sizeof(expectedResultwithsubquery22[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery22[i][j], actualResultwithsubquery22->getResultAt(i, j));
+		}
+	}
+
+	// Test 23: with(a1, 6)
+	WithSubquery withsubquery23 = WithSubquery(&synonymTable, &pk);
+	withsubquery23.setSynonyms("a1", 6);
+	ResultTuple* actualResultwithsubquery23 = withsubquery23.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery23->getAllResults().size());
+
+	// Test 24: with(w1, s2)
+	WithSubquery withsubquery24 = WithSubquery(&synonymTable, &pk);
+	withsubquery24.setSynonyms("w1", "s2");
+	ResultTuple* actualResultwithsubquery24 = withsubquery24.solve();
+	int expectedResultwithsubquery24[2][2] = {
+		{6, 6}, {15, 15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery24)/sizeof(expectedResultwithsubquery24[0])), actualResultwithsubquery24->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery24)/sizeof(expectedResultwithsubquery24[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery24[i])/sizeof(expectedResultwithsubquery24[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery24[i][j], actualResultwithsubquery24->getResultAt(i, j));
+		}
+	}
+
+	// Test 25: with(w1, a2)
+	WithSubquery withsubquery25 = WithSubquery(&synonymTable, &pk);
+	withsubquery25.setSynonyms("w1", "a2");
+	ResultTuple* actualResultwithsubquery25 = withsubquery25.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery25->getAllResults().size());
+
+	// Test 26: with(w1, w2)
+	WithSubquery withsubquery26 = WithSubquery(&synonymTable, &pk);
+	withsubquery26.setSynonyms("w1", "w2");
+	ResultTuple* actualResultwithsubquery26 = withsubquery26.solve();
+	int expectedResultwithsubquery26[2][2] = {
+		{6, 6}, {15, 15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery26)/sizeof(expectedResultwithsubquery26[0])), actualResultwithsubquery26->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery26)/sizeof(expectedResultwithsubquery26[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery26[i])/sizeof(expectedResultwithsubquery26[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery26[i][j], actualResultwithsubquery26->getResultAt(i, j));
+		}
+	}
+
+	// Test 27: with(w1, i2)
+	WithSubquery withsubquery27 = WithSubquery(&synonymTable, &pk);
+	withsubquery27.setSynonyms("w1", "i2");
+	ResultTuple* actualResultwithsubquery27 = withsubquery27.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery27->getAllResults().size());
+
+	// Test 30: with(w1, c2)
+	WithSubquery withsubquery30 = WithSubquery(&synonymTable, &pk);
+	withsubquery30.setSynonyms("w1", "c2");
+	ResultTuple* actualResultwithsubquery30 = withsubquery30.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery30->getAllResults().size());
+
+	// Test 31: with(w1, l2)
+	WithSubquery withsubquery31 = WithSubquery(&synonymTable, &pk);
+	withsubquery31.setSynonyms("w1", "l2");
+	ResultTuple* actualResultwithsubquery31 = withsubquery31.solve();
+	int expectedResultwithsubquery31[2][2] = {
+		{6, 6}, {15, 15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery31)/sizeof(expectedResultwithsubquery31[0])), actualResultwithsubquery31->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery31)/sizeof(expectedResultwithsubquery31[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery31[i])/sizeof(expectedResultwithsubquery31[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery31[i][j], actualResultwithsubquery31->getResultAt(i, j));
+		}
+	}
+
+	// Test 32: with(w1, const2)
+	WithSubquery withsubquery32 = WithSubquery(&synonymTable, &pk);
+	withsubquery32.setSynonyms("w1", "const2");
+	ResultTuple* actualResultwithsubquery32 = withsubquery32.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery32->getAllResults().size());
+
+	// Test 34: with(w1, 2)
+	WithSubquery withsubquery34 = WithSubquery(&synonymTable, &pk);
+	withsubquery34.setSynonyms("w1", 2);
+	ResultTuple* actualResultwithsubquery34 = withsubquery34.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery34->getAllResults().size());
+
+	// Test 35: with(w1, 6)
+	WithSubquery withsubquery35 = WithSubquery(&synonymTable, &pk);
+	withsubquery35.setSynonyms("w1", 6);
+	ResultTuple* actualResultwithsubquery35 = withsubquery35.solve();
+	int expectedResultwithsubquery35[1][1] = {
+		{6}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery35)/sizeof(expectedResultwithsubquery35[0])), actualResultwithsubquery35->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery35)/sizeof(expectedResultwithsubquery35[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery35[i])/sizeof(expectedResultwithsubquery35[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery35[i][j], actualResultwithsubquery35->getResultAt(i, j));
+		}
+	}
+
+	// Test 36: with(i1, s2)
+	WithSubquery withsubquery36 = WithSubquery(&synonymTable, &pk);
+	withsubquery36.setSynonyms("i1", "s2");
+	ResultTuple* actualResultwithsubquery36 = withsubquery36.solve();
+	int expectedResultwithsubquery36[2][2] = {
+		{8, 8}, {13, 13}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery36)/sizeof(expectedResultwithsubquery36[0])), actualResultwithsubquery36->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery36)/sizeof(expectedResultwithsubquery36[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery36[i])/sizeof(expectedResultwithsubquery36[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery36[i][j], actualResultwithsubquery36->getResultAt(i, j));
+		}
+	}
+
+	// Test 37: with(i1, a2)
+	WithSubquery withsubquery37 = WithSubquery(&synonymTable, &pk);
+	withsubquery37.setSynonyms("i1", "a2");
+	ResultTuple* actualResultwithsubquery37 = withsubquery37.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery37->getAllResults().size());
+
+	// Test 38: with(i1, w2)
+	WithSubquery withsubquery38 = WithSubquery(&synonymTable, &pk);
+	withsubquery38.setSynonyms("i1", "w2");
+	ResultTuple* actualResultwithsubquery38 = withsubquery38.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery38->getAllResults().size());
+
+	// Test 39: with(i1, i2)
+	WithSubquery withsubquery39 = WithSubquery(&synonymTable, &pk);
+	withsubquery39.setSynonyms("i1", "i2");
+	ResultTuple* actualResultwithsubquery39 = withsubquery39.solve();
+	int expectedResultwithsubquery39[2][2] = {
+		{8, 8}, {13, 13}
+	};
+
+	// Test 42: with(i1, c2)
+	WithSubquery withsubquery42 = WithSubquery(&synonymTable, &pk);
+	withsubquery42.setSynonyms("i1", "c2");
+	ResultTuple* actualResultwithsubquery42 = withsubquery42.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery42->getAllResults().size());
+
+	// Test 43: with(i1, l2)
+	WithSubquery withsubquery43 = WithSubquery(&synonymTable, &pk);
+	withsubquery43.setSynonyms("i1", "l2");
+	ResultTuple* actualResultwithsubquery43 = withsubquery43.solve();
+	int expectedResultwithsubquery43[2][2] = {
+		{8, 8}, {13, 13}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery43)/sizeof(expectedResultwithsubquery43[0])), actualResultwithsubquery43->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery43)/sizeof(expectedResultwithsubquery43[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery43[i])/sizeof(expectedResultwithsubquery43[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery43[i][j], actualResultwithsubquery43->getResultAt(i, j));
+		}
+	}
+
+	// Test 44: with(i1, const2)
+	WithSubquery withsubquery44 = WithSubquery(&synonymTable, &pk);
+	withsubquery44.setSynonyms("i1", "const2");
+	ResultTuple* actualResultwithsubquery44 = withsubquery44.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery44->getAllResults().size());
+
+	// Test 46: with(i1, 2)
+	WithSubquery withsubquery46 = WithSubquery(&synonymTable, &pk);
+	withsubquery46.setSynonyms("i1", 2);
+	ResultTuple* actualResultwithsubquery46 = withsubquery46.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery46->getAllResults().size());
+
+	// Test 47: with(i1, 6)
+	WithSubquery withsubquery47 = WithSubquery(&synonymTable, &pk);
+	withsubquery47.setSynonyms("i1", 6);
+	ResultTuple* actualResultwithsubquery47 = withsubquery47.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery47->getAllResults().size());
+
+	// Test 52: with(v1, v2)
+	WithSubquery withsubquery52 = WithSubquery(&synonymTable, &pk);
+	withsubquery52.setSynonyms("v1", "v2");
+	ResultTuple* actualResultwithsubquery52 = withsubquery52.solve();
+	int expectedResultwithsubquery52[8][2] = {
+		{0, 0}, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery52)/sizeof(expectedResultwithsubquery52[0])), actualResultwithsubquery52->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery52)/sizeof(expectedResultwithsubquery52[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery52[i])/sizeof(expectedResultwithsubquery52[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery52[i][j], actualResultwithsubquery52->getResultAt(i, j));
+		}
+	}
+
+	// Test 53: with(v1, proc2)
+	WithSubquery withsubquery53 = WithSubquery(&synonymTable, &pk);
+	withsubquery53.setSynonyms("v1", "proc2");
+	ResultTuple* actualResultwithsubquery53 = withsubquery53.solve();
+	int expectedResultwithsubquery53[1][2] = {
+		{6, 1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery53)/sizeof(expectedResultwithsubquery53[0])), actualResultwithsubquery53->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery53)/sizeof(expectedResultwithsubquery53[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery53[i])/sizeof(expectedResultwithsubquery53[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery53[i][j], actualResultwithsubquery53->getResultAt(i, j));
+		}
+	}
+
+	// Test 64: with(proc1, v2)
+	WithSubquery withsubquery64 = WithSubquery(&synonymTable, &pk);
+	withsubquery64.setSynonyms("proc1", "v2");
+	ResultTuple* actualResultwithsubquery64 = withsubquery64.solve();
+	int expectedResultwithsubquery64[1][2] = {
+		{1, 6}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery64)/sizeof(expectedResultwithsubquery64[0])), actualResultwithsubquery64->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery64)/sizeof(expectedResultwithsubquery64[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery64[i])/sizeof(expectedResultwithsubquery64[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery64[i][j], actualResultwithsubquery64->getResultAt(i, j));
+		}
+	}
+
+	// Test 65: with(proc1, proc2)
+	WithSubquery withsubquery65 = WithSubquery(&synonymTable, &pk);
+	withsubquery65.setSynonyms("proc1", "proc2");
+	ResultTuple* actualResultwithsubquery65 = withsubquery65.solve();
+	int expectedResultwithsubquery65[3][2] = {
+		{0, 0}, {1, 1}, {2, 2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery65)/sizeof(expectedResultwithsubquery65[0])), actualResultwithsubquery65->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery65)/sizeof(expectedResultwithsubquery65[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery65[i])/sizeof(expectedResultwithsubquery65[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery65[i][j], actualResultwithsubquery65->getResultAt(i, j));
+		}
+	}
+
+	// Test 72: with(c1, s2)
+	WithSubquery withsubquery72 = WithSubquery(&synonymTable, &pk);
+	withsubquery72.setSynonyms("c1", "s2");
+	ResultTuple* actualResultwithsubquery72 = withsubquery72.solve();
+	int expectedResultwithsubquery72[2][2] = {
+		{3, 3}, {11, 11}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery72)/sizeof(expectedResultwithsubquery72[0])), actualResultwithsubquery72->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery72)/sizeof(expectedResultwithsubquery72[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery72[i])/sizeof(expectedResultwithsubquery72[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery72[i][j], actualResultwithsubquery72->getResultAt(i, j));
+		}
+	}
+
+	// Test 73: with(c1, a2)
+	WithSubquery withsubquery73 = WithSubquery(&synonymTable, &pk);
+	withsubquery73.setSynonyms("c1", "a2");
+	ResultTuple* actualResultwithsubquery73 = withsubquery73.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery73->getAllResults().size());
+
+	// Test 74: with(c1, w2)
+	WithSubquery withsubquery74 = WithSubquery(&synonymTable, &pk);
+	withsubquery74.setSynonyms("c1", "w2");
+	ResultTuple* actualResultwithsubquery74 = withsubquery74.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery74->getAllResults().size());
+
+	// Test 75: with(c1, i2)
+	WithSubquery withsubquery75 = WithSubquery(&synonymTable, &pk);
+	withsubquery75.setSynonyms("c1", "i2");
+	ResultTuple* actualResultwithsubquery75 = withsubquery75.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery75->getAllResults().size());
+
+	// Test 78: with(c1, c2)
+	WithSubquery withsubquery78 = WithSubquery(&synonymTable, &pk);
+	withsubquery78.setSynonyms("c1", "c2");
+	ResultTuple* actualResultwithsubquery78 = withsubquery78.solve();
+	int expectedResultwithsubquery78[2][2] = {
+		{3, 3}, {11, 11}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery78)/sizeof(expectedResultwithsubquery78[0])), actualResultwithsubquery78->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery78)/sizeof(expectedResultwithsubquery78[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery78[i])/sizeof(expectedResultwithsubquery78[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery78[i][j], actualResultwithsubquery78->getResultAt(i, j));
+		}
+	}
+
+	// Test 79: with(c1, l2)
+	WithSubquery withsubquery79 = WithSubquery(&synonymTable, &pk);
+	withsubquery79.setSynonyms("c1", "l2");
+	ResultTuple* actualResultwithsubquery79 = withsubquery79.solve();
+	int expectedResultwithsubquery79[2][2] = {
+		{3, 3}, {11, 11}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery79)/sizeof(expectedResultwithsubquery79[0])), actualResultwithsubquery79->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery79)/sizeof(expectedResultwithsubquery79[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery79[i])/sizeof(expectedResultwithsubquery79[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery79[i][j], actualResultwithsubquery79->getResultAt(i, j));
+		}
+	}
+
+	// Test 80: with(c1, const2)
+	WithSubquery withsubquery80 = WithSubquery(&synonymTable, &pk);
+	withsubquery80.setSynonyms("c1", "const2");
+	ResultTuple* actualResultwithsubquery80 = withsubquery80.solve();
+	int expectedResultwithsubquery80[1][2] = {
+		{3, 1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery80)/sizeof(expectedResultwithsubquery80[0])), actualResultwithsubquery80->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery80)/sizeof(expectedResultwithsubquery80[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery80[i])/sizeof(expectedResultwithsubquery80[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery80[i][j], actualResultwithsubquery80->getResultAt(i, j));
+		}
+	}
+
+	// Test 82: with(c1, 2)
+	WithSubquery withsubquery82 = WithSubquery(&synonymTable, &pk);
+	withsubquery82.setSynonyms("c1", 2);
+	ResultTuple* actualResultwithsubquery82 = withsubquery82.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery82->getAllResults().size());
+
+	// Test 83: with(c1, 6)
+	WithSubquery withsubquery83 = WithSubquery(&synonymTable, &pk);
+	withsubquery83.setSynonyms("c1", 6);
+	ResultTuple* actualResultwithsubquery83 = withsubquery83.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery83->getAllResults().size());
+
+	// Test 84: with(l1, s2)
+	WithSubquery withsubquery84 = WithSubquery(&synonymTable, &pk);
+	withsubquery84.setSynonyms("l1", "s2");
+	ResultTuple* actualResultwithsubquery84 = withsubquery84.solve();
+	int expectedResultwithsubquery84[22][2] = {
+		{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery84)/sizeof(expectedResultwithsubquery84[0])), actualResultwithsubquery84->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery84)/sizeof(expectedResultwithsubquery84[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery84[i])/sizeof(expectedResultwithsubquery84[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery84[i][j], actualResultwithsubquery84->getResultAt(i, j));
+		}
+	}
+
+	// Test 85: with(l1, a2)
+	WithSubquery withsubquery85 = WithSubquery(&synonymTable, &pk);
+	withsubquery85.setSynonyms("l1", "a2");
+	ResultTuple* actualResultwithsubquery85 = withsubquery85.solve();
+	int expectedResultwithsubquery85[16][2] = {
+		{1, 1}, {2, 2}, {4, 4}, {5, 5}, {7, 7}, {9, 9}, {10, 10}, {12, 12}, {14, 14}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery85)/sizeof(expectedResultwithsubquery85[0])), actualResultwithsubquery85->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery85)/sizeof(expectedResultwithsubquery85[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery85[i])/sizeof(expectedResultwithsubquery85[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery85[i][j], actualResultwithsubquery85->getResultAt(i, j));
+		}
+	}
+
+	// Test 86: with(l1, w2)
+	WithSubquery withsubquery86 = WithSubquery(&synonymTable, &pk);
+	withsubquery86.setSynonyms("l1", "w2");
+	ResultTuple* actualResultwithsubquery86 = withsubquery86.solve();
+	int expectedResultwithsubquery86[2][2] = {
+		{6, 6}, {15, 15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery86)/sizeof(expectedResultwithsubquery86[0])), actualResultwithsubquery86->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery86)/sizeof(expectedResultwithsubquery86[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery86[i])/sizeof(expectedResultwithsubquery86[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery86[i][j], actualResultwithsubquery86->getResultAt(i, j));
+		}
+	}
+
+	// Test 87: with(l1, i2)
+	WithSubquery withsubquery87 = WithSubquery(&synonymTable, &pk);
+	withsubquery87.setSynonyms("l1", "i2");
+	ResultTuple* actualResultwithsubquery87 = withsubquery87.solve();
+	int expectedResultwithsubquery87[2][2] = {
+		{8, 8}, {13, 13}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery87)/sizeof(expectedResultwithsubquery87[0])), actualResultwithsubquery87->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery87)/sizeof(expectedResultwithsubquery87[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery87[i])/sizeof(expectedResultwithsubquery87[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery87[i][j], actualResultwithsubquery87->getResultAt(i, j));
+		}
+	}
+
+	// Test 90: with(l1, c2)
+	WithSubquery withsubquery90 = WithSubquery(&synonymTable, &pk);
+	withsubquery90.setSynonyms("l1", "c2");
+	ResultTuple* actualResultwithsubquery90 = withsubquery90.solve();
+	int expectedResultwithsubquery90[2][2] = {
+		{3, 3}, {11, 11}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery90)/sizeof(expectedResultwithsubquery90[0])), actualResultwithsubquery90->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery90)/sizeof(expectedResultwithsubquery90[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery90[i])/sizeof(expectedResultwithsubquery90[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery90[i][j], actualResultwithsubquery90->getResultAt(i, j));
+		}
+	}
+
+	// Test 91: with(l1, l2)
+	WithSubquery withsubquery91 = WithSubquery(&synonymTable, &pk);
+	withsubquery91.setSynonyms("l1", "l2");
+	ResultTuple* actualResultwithsubquery91 = withsubquery91.solve();
+	int expectedResultwithsubquery91[22][2] = {
+		{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery91)/sizeof(expectedResultwithsubquery91[0])), actualResultwithsubquery91->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery91)/sizeof(expectedResultwithsubquery91[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery91[i])/sizeof(expectedResultwithsubquery91[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery91[i][j], actualResultwithsubquery91->getResultAt(i, j));
+		}
+	}
+
+	// Test 92: with(l1, const2)
+	WithSubquery withsubquery92 = WithSubquery(&synonymTable, &pk);
+	withsubquery92.setSynonyms("l1", "const2");
+	ResultTuple* actualResultwithsubquery92 = withsubquery92.solve();
+	int expectedResultwithsubquery92[4][2] = {
+		{1, 4}, {2, 0}, {3, 1}, {5, 3}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery92)/sizeof(expectedResultwithsubquery92[0])), actualResultwithsubquery92->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery92)/sizeof(expectedResultwithsubquery92[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery92[i])/sizeof(expectedResultwithsubquery92[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery92[i][j], actualResultwithsubquery92->getResultAt(i, j));
+		}
+	}
+
+	// Test 94: with(l1, 2)
+	WithSubquery withsubquery94 = WithSubquery(&synonymTable, &pk);
+	withsubquery94.setSynonyms("l1", 2);
+	ResultTuple* actualResultwithsubquery94 = withsubquery94.solve();
+	int expectedResultwithsubquery94[1][1] = {
+		{2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery94)/sizeof(expectedResultwithsubquery94[0])), actualResultwithsubquery94->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery94)/sizeof(expectedResultwithsubquery94[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery94[i])/sizeof(expectedResultwithsubquery94[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery94[i][j], actualResultwithsubquery94->getResultAt(i, j));
+		}
+	}
+
+	// Test 95: with(l1, 6)
+	WithSubquery withsubquery95 = WithSubquery(&synonymTable, &pk);
+	withsubquery95.setSynonyms("l1", 6);
+	ResultTuple* actualResultwithsubquery95 = withsubquery95.solve();
+	int expectedResultwithsubquery95[1][1] = {
+		{6}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery95)/sizeof(expectedResultwithsubquery95[0])), actualResultwithsubquery95->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery95)/sizeof(expectedResultwithsubquery95[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery95[i])/sizeof(expectedResultwithsubquery95[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery95[i][j], actualResultwithsubquery95->getResultAt(i, j));
+		}
+	}
+
+		// Test 96: with(const1, s2)
+	WithSubquery withsubquery96 = WithSubquery(&synonymTable, &pk);
+	withsubquery96.setSynonyms("const1", "s2");
+	ResultTuple* actualResultwithsubquery96 = withsubquery96.solve();
+	int expectedResultwithsubquery96[4][2] = {
+		{0, 2}, {1, 3}, {3, 5}, {4, 1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery96)/sizeof(expectedResultwithsubquery96[0])), actualResultwithsubquery96->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery96)/sizeof(expectedResultwithsubquery96[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery96[i])/sizeof(expectedResultwithsubquery96[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery96[i][j], actualResultwithsubquery96->getResultAt(i, j));
+		}
+	}
+
+	// Test 97: with(const1, a2)
+	WithSubquery withsubquery97 = WithSubquery(&synonymTable, &pk);
+	withsubquery97.setSynonyms("const1", "a2");
+	ResultTuple* actualResultwithsubquery97 = withsubquery97.solve();
+	int expectedResultwithsubquery97[3][2] = {
+		{0, 2}, {3, 5}, {4, 1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery97)/sizeof(expectedResultwithsubquery97[0])), actualResultwithsubquery97->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery97)/sizeof(expectedResultwithsubquery97[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery97[i])/sizeof(expectedResultwithsubquery97[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery97[i][j], actualResultwithsubquery97->getResultAt(i, j));
+		}
+	}
+
+	// Test 98: with(const1, w2)
+	WithSubquery withsubquery98 = WithSubquery(&synonymTable, &pk);
+	withsubquery98.setSynonyms("const1", "w2");
+	ResultTuple* actualResultwithsubquery98 = withsubquery98.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery98->getAllResults().size());
+
+	// Test 99: with(const1, i2)
+	WithSubquery withsubquery99 = WithSubquery(&synonymTable, &pk);
+	withsubquery99.setSynonyms("const1", "i2");
+	ResultTuple* actualResultwithsubquery99 = withsubquery99.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery99->getAllResults().size());
+
+	// Test 102: with(const1, c2)
+	WithSubquery withsubquery102 = WithSubquery(&synonymTable, &pk);
+	withsubquery102.setSynonyms("const1", "c2");
+	ResultTuple* actualResultwithsubquery102 = withsubquery102.solve();
+	int expectedResultwithsubquery102[1][2] = {
+		{1, 3}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery102)/sizeof(expectedResultwithsubquery102[0])), actualResultwithsubquery102->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery102)/sizeof(expectedResultwithsubquery102[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery102[i])/sizeof(expectedResultwithsubquery102[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery102[i][j], actualResultwithsubquery102->getResultAt(i, j));
+		}
+	}
+
+	// Test 103: with(const1, l2)
+	WithSubquery withsubquery103 = WithSubquery(&synonymTable, &pk);
+	withsubquery103.setSynonyms("const1", "l2");
+	ResultTuple* actualResultwithsubquery103 = withsubquery103.solve();
+	int expectedResultwithsubquery103[4][2] = {
+		{0, 2}, {1, 3}, {3, 5}, {4, 1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery103)/sizeof(expectedResultwithsubquery103[0])), actualResultwithsubquery103->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery103)/sizeof(expectedResultwithsubquery103[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery103[i])/sizeof(expectedResultwithsubquery103[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery103[i][j], actualResultwithsubquery103->getResultAt(i, j));
+		}
+	}
+
+	// Test 104: with(const1, const2)
+	WithSubquery withsubquery104 = WithSubquery(&synonymTable, &pk);
+	withsubquery104.setSynonyms("const1", "const2");
+	ResultTuple* actualResultwithsubquery104 = withsubquery104.solve();
+	int expectedResultwithsubquery104[5][2] = {
+		{0, 0}, {1, 1}, {2, 2}, {3, 3}, {4, 4}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery104)/sizeof(expectedResultwithsubquery104[0])), actualResultwithsubquery104->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery104)/sizeof(expectedResultwithsubquery104[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery104[i])/sizeof(expectedResultwithsubquery104[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery104[i][j], actualResultwithsubquery104->getResultAt(i, j));
+		}
+	}
+
+	// Test 106: with(const1, 2)
+	WithSubquery withsubquery106 = WithSubquery(&synonymTable, &pk);
+	withsubquery106.setSynonyms("const1", 2);
+	ResultTuple* actualResultwithsubquery106 = withsubquery106.solve();
+	int expectedResultwithsubquery106[1][1] = {
+		{0}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery106)/sizeof(expectedResultwithsubquery106[0])), actualResultwithsubquery106->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery106)/sizeof(expectedResultwithsubquery106[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery106[i])/sizeof(expectedResultwithsubquery106[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery106[i][j], actualResultwithsubquery106->getResultAt(i, j));
+		}
+	}
+
+	// Test 107: with(const1, 6)
+	WithSubquery withsubquery107 = WithSubquery(&synonymTable, &pk);
+	withsubquery107.setSynonyms("const1", 6);
+	ResultTuple* actualResultwithsubquery107 = withsubquery107.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery107->getAllResults().size());
+
+	// Test 120: with(1, s2)
+	WithSubquery withsubquery120 = WithSubquery(&synonymTable, &pk);
+	withsubquery120.setSynonyms(1, "s2");
+	ResultTuple* actualResultwithsubquery120 = withsubquery120.solve();
+	int expectedResultwithsubquery120[1][1] = {
+		{1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery120)/sizeof(expectedResultwithsubquery120[0])), actualResultwithsubquery120->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery120)/sizeof(expectedResultwithsubquery120[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery120[i])/sizeof(expectedResultwithsubquery120[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery120[i][j], actualResultwithsubquery120->getResultAt(i, j));
+		}
+	}
+
+	// Test 121: with(1, a2)
+	WithSubquery withsubquery121 = WithSubquery(&synonymTable, &pk);
+	withsubquery121.setSynonyms(1, "a2");
+	ResultTuple* actualResultwithsubquery121 = withsubquery121.solve();
+	int expectedResultwithsubquery121[1][1] = {
+		{1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery121)/sizeof(expectedResultwithsubquery121[0])), actualResultwithsubquery121->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery121)/sizeof(expectedResultwithsubquery121[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery121[i])/sizeof(expectedResultwithsubquery121[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery121[i][j], actualResultwithsubquery121->getResultAt(i, j));
+		}
+	}
+
+	// Test 122: with(1, w2)
+	WithSubquery withsubquery122 = WithSubquery(&synonymTable, &pk);
+	withsubquery122.setSynonyms(1, "w2");
+	ResultTuple* actualResultwithsubquery122 = withsubquery122.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery122->getAllResults().size());
+
+	// Test 123: with(1, i2)
+	WithSubquery withsubquery123 = WithSubquery(&synonymTable, &pk);
+	withsubquery123.setSynonyms(1, "i2");
+	ResultTuple* actualResultwithsubquery123 = withsubquery123.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery123->getAllResults().size());
+
+	// Test 126: with(1, c2)
+	WithSubquery withsubquery126 = WithSubquery(&synonymTable, &pk);
+	withsubquery126.setSynonyms(1, "c2");
+	ResultTuple* actualResultwithsubquery126 = withsubquery126.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery126->getAllResults().size());
+
+	// Test 127: with(1, l2)
+	WithSubquery withsubquery127 = WithSubquery(&synonymTable, &pk);
+	withsubquery127.setSynonyms(1, "l2");
+	ResultTuple* actualResultwithsubquery127 = withsubquery127.solve();
+	int expectedResultwithsubquery127[1][1] = {
+		{1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery127)/sizeof(expectedResultwithsubquery127[0])), actualResultwithsubquery127->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery127)/sizeof(expectedResultwithsubquery127[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery127[i])/sizeof(expectedResultwithsubquery127[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery127[i][j], actualResultwithsubquery127->getResultAt(i, j));
+		}
+	}
+
+	// Test 128: with(1, const2)
+	WithSubquery withsubquery128 = WithSubquery(&synonymTable, &pk);
+	withsubquery128.setSynonyms(1, "const2");
+	ResultTuple* actualResultwithsubquery128 = withsubquery128.solve();
+	int expectedResultwithsubquery128[1][1] = {
+		{4}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery128)/sizeof(expectedResultwithsubquery128[0])), actualResultwithsubquery128->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery128)/sizeof(expectedResultwithsubquery128[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery128[i])/sizeof(expectedResultwithsubquery128[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery128[i][j], actualResultwithsubquery128->getResultAt(i, j));
+		}
+	}
+
+	// Test 130: with(1, 2)
+	WithSubquery withsubquery130 = WithSubquery(&synonymTable, &pk);
+	withsubquery130.setSynonyms(1, 2);
+	ResultTuple* actualResultwithsubquery130 = withsubquery130.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery130->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultwithsubquery130->isBool());
+	CPPUNIT_ASSERT(actualResultwithsubquery130->isEmpty());
+
+	// Test 131: with(1, 6)
+	WithSubquery withsubquery131 = WithSubquery(&synonymTable, &pk);
+	withsubquery131.setSynonyms(1, 6);
+	ResultTuple* actualResultwithsubquery131 = withsubquery131.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery131->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultwithsubquery131->isBool());
+	CPPUNIT_ASSERT(actualResultwithsubquery131->isEmpty());
+
+	// Test 134: with(6, w2)
+	WithSubquery withsubquery134 = WithSubquery(&synonymTable, &pk);
+	withsubquery134.setSynonyms(6, "w2");
+	ResultTuple* actualResultwithsubquery134 = withsubquery134.solve();
+	int expectedResultwithsubquery134[1][1] = {
+		{6}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery134)/sizeof(expectedResultwithsubquery134[0])), actualResultwithsubquery134->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery134)/sizeof(expectedResultwithsubquery134[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery134[i])/sizeof(expectedResultwithsubquery134[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery134[i][j], actualResultwithsubquery134->getResultAt(i, j));
+		}
+	}
+
+	// Test 135: with(8, i2)
+	WithSubquery withsubquery135 = WithSubquery(&synonymTable, &pk);
+	withsubquery135.setSynonyms(8, "i2");
+	ResultTuple* actualResultwithsubquery135 = withsubquery135.solve();
+	int expectedResultwithsubquery135[1][1] = {
+		{8}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery135)/sizeof(expectedResultwithsubquery135[0])), actualResultwithsubquery135->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery135)/sizeof(expectedResultwithsubquery135[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery135[i])/sizeof(expectedResultwithsubquery135[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery135[i][j], actualResultwithsubquery135->getResultAt(i, j));
+		}
+	}
+
+	// Test 138: with(3, c2)
+	WithSubquery withsubquery138 = WithSubquery(&synonymTable, &pk);
+	withsubquery138.setSynonyms(3, "c2");
+	ResultTuple* actualResultwithsubquery138 = withsubquery138.solve();
+	int expectedResultwithsubquery138[1][1] = {
+		{3}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery138)/sizeof(expectedResultwithsubquery138[0])), actualResultwithsubquery138->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery138)/sizeof(expectedResultwithsubquery138[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery138[i])/sizeof(expectedResultwithsubquery138[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery138[i][j], actualResultwithsubquery138->getResultAt(i, j));
+		}
+	}
+
+	// Test 139: with(5, l2)
+	WithSubquery withsubquery139 = WithSubquery(&synonymTable, &pk);
+	withsubquery139.setSynonyms(5, "l2");
+	ResultTuple* actualResultwithsubquery139 = withsubquery139.solve();
+	int expectedResultwithsubquery139[1][1] = {
+		{5}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery139)/sizeof(expectedResultwithsubquery139[0])), actualResultwithsubquery139->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery139)/sizeof(expectedResultwithsubquery139[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery139[i])/sizeof(expectedResultwithsubquery139[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery139[i][j], actualResultwithsubquery139->getResultAt(i, j));
+		}
+	}
+
+	// Test 140: with(5, const2)
+	WithSubquery withsubquery140 = WithSubquery(&synonymTable, &pk);
+	withsubquery140.setSynonyms(5, "const2");
+	ResultTuple* actualResultwithsubquery140 = withsubquery140.solve();
+	int expectedResultwithsubquery140[1][1] = {
+		{3}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery140)/sizeof(expectedResultwithsubquery140[0])), actualResultwithsubquery140->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery140)/sizeof(expectedResultwithsubquery140[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery140[i])/sizeof(expectedResultwithsubquery140[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery140[i][j], actualResultwithsubquery140->getResultAt(i, j));
+		}
+	}
+
+	// Test 143: with(5, 5)
+	WithSubquery withsubquery143 = WithSubquery(&synonymTable, &pk);
+	withsubquery143.setSynonyms(5, 5);
+	ResultTuple* actualResultwithsubquery143 = withsubquery143.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery143->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultwithsubquery143->isBool());
+	CPPUNIT_ASSERT(!actualResultwithsubquery143->isEmpty());
+}
+
+void SubqueryTest::testWithTuple(){
+	// Test 0: with s1.stmt# = s2.stmt#
+	WithSubquery withsubquery0 = WithSubquery(&synonymTable, &pk);
+	withsubquery0.setSynonyms("s1", "s2");
+	ResultTuple* actualResultwithsubquery0 = withsubquery0.solve();
+	int expectedResultwithsubquery0[22][2] = {
+		{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery0)/sizeof(expectedResultwithsubquery0[0])), actualResultwithsubquery0->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery0)/sizeof(expectedResultwithsubquery0[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery0[i])/sizeof(expectedResultwithsubquery0[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery0[i][j], actualResultwithsubquery0->getResultAt(i, j));
+		}
+	}
+
+	// Test 1: with s1.stmt# = a2.stmt#
+	WithSubquery withsubquery1 = WithSubquery(&synonymTable, &pk);
+	withsubquery1.setSynonyms("s1", "a2");
+	ResultTuple* actualResultwithsubquery1 = withsubquery1.solve();
+	int expectedResultwithsubquery1[16][2] = {
+		{1, 1}, {2, 2}, {4, 4}, {5, 5}, {7, 7}, {9, 9}, {10, 10}, {12, 12}, {14, 14}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery1)/sizeof(expectedResultwithsubquery1[0])), actualResultwithsubquery1->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery1)/sizeof(expectedResultwithsubquery1[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery1[i])/sizeof(expectedResultwithsubquery1[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery1[i][j], actualResultwithsubquery1->getResultAt(i, j));
+		}
+	}
+
+	// Test 2: with s1.stmt# = w2.stmt#
+	WithSubquery withsubquery2 = WithSubquery(&synonymTable, &pk);
+	withsubquery2.setSynonyms("s1", "w2");
+	ResultTuple* actualResultwithsubquery2 = withsubquery2.solve();
+	int expectedResultwithsubquery2[2][2] = {
+		{6, 6}, {15, 15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery2)/sizeof(expectedResultwithsubquery2[0])), actualResultwithsubquery2->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery2)/sizeof(expectedResultwithsubquery2[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery2[i])/sizeof(expectedResultwithsubquery2[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery2[i][j], actualResultwithsubquery2->getResultAt(i, j));
+		}
+	}
+
+	// Test 3: with s1.stmt# = i2.stmt#
+	WithSubquery withsubquery3 = WithSubquery(&synonymTable, &pk);
+	withsubquery3.setSynonyms("s1", "i2");
+	ResultTuple* actualResultwithsubquery3 = withsubquery3.solve();
+	int expectedResultwithsubquery3[2][2] = {
+		{8, 8}, {13, 13}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery3)/sizeof(expectedResultwithsubquery3[0])), actualResultwithsubquery3->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery3)/sizeof(expectedResultwithsubquery3[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery3[i])/sizeof(expectedResultwithsubquery3[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery3[i][j], actualResultwithsubquery3->getResultAt(i, j));
+		}
+	}
+
+	// Test 6: with s1.stmt# = c2.stmt#
+	WithSubquery withsubquery6 = WithSubquery(&synonymTable, &pk);
+	withsubquery6.setSynonyms("s1", "c2");
+	ResultTuple* actualResultwithsubquery6 = withsubquery6.solve();
+	int expectedResultwithsubquery6[2][2] = {
+		{3, 3}, {11, 11}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery6)/sizeof(expectedResultwithsubquery6[0])), actualResultwithsubquery6->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery6)/sizeof(expectedResultwithsubquery6[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery6[i])/sizeof(expectedResultwithsubquery6[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery6[i][j], actualResultwithsubquery6->getResultAt(i, j));
+		}
+	}
+
+	// Test 7: with s1.stmt# = l2
+	WithSubquery withsubquery7 = WithSubquery(&synonymTable, &pk);
+	withsubquery7.setSynonyms("s1", "l2");
+	ResultTuple* actualResultwithsubquery7 = withsubquery7.solve();
+	int expectedResultwithsubquery7[22][2] = {
+		{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery7)/sizeof(expectedResultwithsubquery7[0])), actualResultwithsubquery7->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery7)/sizeof(expectedResultwithsubquery7[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery7[i])/sizeof(expectedResultwithsubquery7[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery7[i][j], actualResultwithsubquery7->getResultAt(i, j));
+		}
+	}
+
+	// Test 8: with s1.stmt# = const2.value
+	WithSubquery withsubquery8 = WithSubquery(&synonymTable, &pk);
+	withsubquery8.setSynonyms("s1", "const2");
+	ResultTuple* actualResultwithsubquery8 = withsubquery8.solve();
+	int expectedResultwithsubquery8[4][2] = {
+		{1, 4}, {2, 0}, {3, 1}, {5, 3}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery8)/sizeof(expectedResultwithsubquery8[0])), actualResultwithsubquery8->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery8)/sizeof(expectedResultwithsubquery8[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery8[i])/sizeof(expectedResultwithsubquery8[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery8[i][j], actualResultwithsubquery8->getResultAt(i, j));
+		}
+	}
+
+	// Test 10: with s1.stmt# = 2
+	WithSubquery withsubquery10 = WithSubquery(&synonymTable, &pk);
+	withsubquery10.setSynonyms("s1", 2);
+	ResultTuple* actualResultwithsubquery10 = withsubquery10.solve();
+	int expectedResultwithsubquery10[1][1] = {
+		{2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery10)/sizeof(expectedResultwithsubquery10[0])), actualResultwithsubquery10->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery10)/sizeof(expectedResultwithsubquery10[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery10[i])/sizeof(expectedResultwithsubquery10[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery10[i][j], actualResultwithsubquery10->getResultAt(i, j));
+		}
+	}
+
+	// Test 11: with s1.stmt# = 6
+	WithSubquery withsubquery11 = WithSubquery(&synonymTable, &pk);
+	withsubquery11.setSynonyms("s1", 6);
+	ResultTuple* actualResultwithsubquery11 = withsubquery11.solve();
+	int expectedResultwithsubquery11[1][1] = {
+		{6}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery11)/sizeof(expectedResultwithsubquery11[0])), actualResultwithsubquery11->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery11)/sizeof(expectedResultwithsubquery11[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery11[i])/sizeof(expectedResultwithsubquery11[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery11[i][j], actualResultwithsubquery11->getResultAt(i, j));
+		}
+	}
+
+	// Test 12: with a1.stmt# = s2.stmt#
+	WithSubquery withsubquery12 = WithSubquery(&synonymTable, &pk);
+	withsubquery12.setSynonyms("a1", "s2");
+	ResultTuple* actualResultwithsubquery12 = withsubquery12.solve();
+	int expectedResultwithsubquery12[16][2] = {
+		{1, 1}, {2, 2}, {4, 4}, {5, 5}, {7, 7}, {9, 9}, {10, 10}, {12, 12}, {14, 14}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery12)/sizeof(expectedResultwithsubquery12[0])), actualResultwithsubquery12->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery12)/sizeof(expectedResultwithsubquery12[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery12[i])/sizeof(expectedResultwithsubquery12[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery12[i][j], actualResultwithsubquery12->getResultAt(i, j));
+		}
+	}
+
+	// Test 13: with a1.stmt# = a2.stmt#
+	WithSubquery withsubquery13 = WithSubquery(&synonymTable, &pk);
+	withsubquery13.setSynonyms("a1", "a2");
+	ResultTuple* actualResultwithsubquery13 = withsubquery13.solve();
+	int expectedResultwithsubquery13[16][2] = {
+		{1, 1}, {2, 2}, {4, 4}, {5, 5}, {7, 7}, {9, 9}, {10, 10}, {12, 12}, {14, 14}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery13)/sizeof(expectedResultwithsubquery13[0])), actualResultwithsubquery13->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery13)/sizeof(expectedResultwithsubquery13[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery13[i])/sizeof(expectedResultwithsubquery13[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery13[i][j], actualResultwithsubquery13->getResultAt(i, j));
+		}
+	}
+
+	// Test 14: with(a1, w2)
+	WithSubquery withsubquery14 = WithSubquery(&synonymTable, &pk);
+	withsubquery14.setSynonyms("a1", "w2");
+	ResultTuple* actualResultwithsubquery14 = withsubquery14.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery14->getAllResults().size());
+
+	// Test 15: with(a1, i2)
+	WithSubquery withsubquery15 = WithSubquery(&synonymTable, &pk);
+	withsubquery15.setSynonyms("a1", "i2");
+	ResultTuple* actualResultwithsubquery15 = withsubquery15.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery15->getAllResults().size());
+
+	// Test 18: with(a1, c2)
+	WithSubquery withsubquery18 = WithSubquery(&synonymTable, &pk);
+	withsubquery18.setSynonyms("a1", "c2");
+	ResultTuple* actualResultwithsubquery18 = withsubquery18.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery18->getAllResults().size());
+
+	// Test 19: with(a1, l2)
+	WithSubquery withsubquery19 = WithSubquery(&synonymTable, &pk);
+	withsubquery19.setSynonyms("a1", "l2");
+	ResultTuple* actualResultwithsubquery19 = withsubquery19.solve();
+	int expectedResultwithsubquery19[16][2] = {
+		{1, 1}, {2, 2}, {4, 4}, {5, 5}, {7, 7}, {9, 9}, {10, 10}, {12, 12}, {14, 14}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery19)/sizeof(expectedResultwithsubquery19[0])), actualResultwithsubquery19->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery19)/sizeof(expectedResultwithsubquery19[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery19[i])/sizeof(expectedResultwithsubquery19[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery19[i][j], actualResultwithsubquery19->getResultAt(i, j));
+		}
+	}
+
+	// Test 20: with(a1, const2)
+	WithSubquery withsubquery20 = WithSubquery(&synonymTable, &pk);
+	withsubquery20.setSynonyms("a1", "const2");
+	ResultTuple* actualResultwithsubquery20 = withsubquery20.solve();
+	int expectedResultwithsubquery20[3][2] = {
+		{1, 4}, {2, 0}, {5, 3}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery20)/sizeof(expectedResultwithsubquery20[0])), actualResultwithsubquery20->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery20)/sizeof(expectedResultwithsubquery20[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery20[i])/sizeof(expectedResultwithsubquery20[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery20[i][j], actualResultwithsubquery20->getResultAt(i, j));
+		}
+	}
+
+	// Test 22: with(a1, 2)
+	WithSubquery withsubquery22 = WithSubquery(&synonymTable, &pk);
+	withsubquery22.setSynonyms("a1", 2);
+	ResultTuple* actualResultwithsubquery22 = withsubquery22.solve();
+	int expectedResultwithsubquery22[1][1] = {
+		{2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery22)/sizeof(expectedResultwithsubquery22[0])), actualResultwithsubquery22->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery22)/sizeof(expectedResultwithsubquery22[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery22[i])/sizeof(expectedResultwithsubquery22[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery22[i][j], actualResultwithsubquery22->getResultAt(i, j));
+		}
+	}
+
+	// Test 23: with(a1, 6)
+	WithSubquery withsubquery23 = WithSubquery(&synonymTable, &pk);
+	withsubquery23.setSynonyms("a1", 6);
+	ResultTuple* actualResultwithsubquery23 = withsubquery23.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery23->getAllResults().size());
+
+	// Test 24: with(w1, s2)
+	WithSubquery withsubquery24 = WithSubquery(&synonymTable, &pk);
+	withsubquery24.setSynonyms("w1", "s2");
+	ResultTuple* actualResultwithsubquery24 = withsubquery24.solve();
+	int expectedResultwithsubquery24[2][2] = {
+		{6, 6}, {15, 15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery24)/sizeof(expectedResultwithsubquery24[0])), actualResultwithsubquery24->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery24)/sizeof(expectedResultwithsubquery24[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery24[i])/sizeof(expectedResultwithsubquery24[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery24[i][j], actualResultwithsubquery24->getResultAt(i, j));
+		}
+	}
+
+	// Test 25: with(w1, a2)
+	WithSubquery withsubquery25 = WithSubquery(&synonymTable, &pk);
+	withsubquery25.setSynonyms("w1", "a2");
+	ResultTuple* actualResultwithsubquery25 = withsubquery25.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery25->getAllResults().size());
+
+	// Test 26: with(w1, w2)
+	WithSubquery withsubquery26 = WithSubquery(&synonymTable, &pk);
+	withsubquery26.setSynonyms("w1", "w2");
+	ResultTuple* actualResultwithsubquery26 = withsubquery26.solve();
+	int expectedResultwithsubquery26[2][2] = {
+		{6, 6}, {15, 15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery26)/sizeof(expectedResultwithsubquery26[0])), actualResultwithsubquery26->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery26)/sizeof(expectedResultwithsubquery26[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery26[i])/sizeof(expectedResultwithsubquery26[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery26[i][j], actualResultwithsubquery26->getResultAt(i, j));
+		}
+	}
+
+	// Test 27: with(w1, i2)
+	WithSubquery withsubquery27 = WithSubquery(&synonymTable, &pk);
+	withsubquery27.setSynonyms("w1", "i2");
+	ResultTuple* actualResultwithsubquery27 = withsubquery27.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery27->getAllResults().size());
+
+	// Test 30: with(w1, c2)
+	WithSubquery withsubquery30 = WithSubquery(&synonymTable, &pk);
+	withsubquery30.setSynonyms("w1", "c2");
+	ResultTuple* actualResultwithsubquery30 = withsubquery30.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery30->getAllResults().size());
+
+	// Test 31: with(w1, l2)
+	WithSubquery withsubquery31 = WithSubquery(&synonymTable, &pk);
+	withsubquery31.setSynonyms("w1", "l2");
+	ResultTuple* actualResultwithsubquery31 = withsubquery31.solve();
+	int expectedResultwithsubquery31[2][2] = {
+		{6, 6}, {15, 15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery31)/sizeof(expectedResultwithsubquery31[0])), actualResultwithsubquery31->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery31)/sizeof(expectedResultwithsubquery31[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery31[i])/sizeof(expectedResultwithsubquery31[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery31[i][j], actualResultwithsubquery31->getResultAt(i, j));
+		}
+	}
+
+	// Test 32: with(w1, const2)
+	WithSubquery withsubquery32 = WithSubquery(&synonymTable, &pk);
+	withsubquery32.setSynonyms("w1", "const2");
+	ResultTuple* actualResultwithsubquery32 = withsubquery32.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery32->getAllResults().size());
+
+	// Test 34: with(w1, 2)
+	WithSubquery withsubquery34 = WithSubquery(&synonymTable, &pk);
+	withsubquery34.setSynonyms("w1", 2);
+	ResultTuple* actualResultwithsubquery34 = withsubquery34.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery34->getAllResults().size());
+
+	// Test 35: with(w1, 6)
+	WithSubquery withsubquery35 = WithSubquery(&synonymTable, &pk);
+	withsubquery35.setSynonyms("w1", 6);
+	ResultTuple* actualResultwithsubquery35 = withsubquery35.solve();
+	int expectedResultwithsubquery35[1][1] = {
+		{6}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery35)/sizeof(expectedResultwithsubquery35[0])), actualResultwithsubquery35->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery35)/sizeof(expectedResultwithsubquery35[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery35[i])/sizeof(expectedResultwithsubquery35[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery35[i][j], actualResultwithsubquery35->getResultAt(i, j));
+		}
+	}
+
+	// Test 36: with(i1, s2)
+	WithSubquery withsubquery36 = WithSubquery(&synonymTable, &pk);
+	withsubquery36.setSynonyms("i1", "s2");
+	ResultTuple* actualResultwithsubquery36 = withsubquery36.solve();
+	int expectedResultwithsubquery36[2][2] = {
+		{8, 8}, {13, 13}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery36)/sizeof(expectedResultwithsubquery36[0])), actualResultwithsubquery36->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery36)/sizeof(expectedResultwithsubquery36[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery36[i])/sizeof(expectedResultwithsubquery36[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery36[i][j], actualResultwithsubquery36->getResultAt(i, j));
+		}
+	}
+
+	// Test 37: with(i1, a2)
+	WithSubquery withsubquery37 = WithSubquery(&synonymTable, &pk);
+	withsubquery37.setSynonyms("i1", "a2");
+	ResultTuple* actualResultwithsubquery37 = withsubquery37.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery37->getAllResults().size());
+
+	// Test 38: with(i1, w2)
+	WithSubquery withsubquery38 = WithSubquery(&synonymTable, &pk);
+	withsubquery38.setSynonyms("i1", "w2");
+	ResultTuple* actualResultwithsubquery38 = withsubquery38.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery38->getAllResults().size());
+
+	// Test 39: with(i1, i2)
+	WithSubquery withsubquery39 = WithSubquery(&synonymTable, &pk);
+	withsubquery39.setSynonyms("i1", "i2");
+	ResultTuple* actualResultwithsubquery39 = withsubquery39.solve();
+	int expectedResultwithsubquery39[2][2] = {
+		{8, 8}, {13, 13}
+	};
+
+	// Test 42: with(i1, c2)
+	WithSubquery withsubquery42 = WithSubquery(&synonymTable, &pk);
+	withsubquery42.setSynonyms("i1", "c2");
+	ResultTuple* actualResultwithsubquery42 = withsubquery42.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery42->getAllResults().size());
+
+	// Test 43: with(i1, l2)
+	WithSubquery withsubquery43 = WithSubquery(&synonymTable, &pk);
+	withsubquery43.setSynonyms("i1", "l2");
+	ResultTuple* actualResultwithsubquery43 = withsubquery43.solve();
+	int expectedResultwithsubquery43[2][2] = {
+		{8, 8}, {13, 13}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery43)/sizeof(expectedResultwithsubquery43[0])), actualResultwithsubquery43->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery43)/sizeof(expectedResultwithsubquery43[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery43[i])/sizeof(expectedResultwithsubquery43[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery43[i][j], actualResultwithsubquery43->getResultAt(i, j));
+		}
+	}
+
+	// Test 44: with(i1, const2)
+	WithSubquery withsubquery44 = WithSubquery(&synonymTable, &pk);
+	withsubquery44.setSynonyms("i1", "const2");
+	ResultTuple* actualResultwithsubquery44 = withsubquery44.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery44->getAllResults().size());
+
+	// Test 46: with(i1, 2)
+	WithSubquery withsubquery46 = WithSubquery(&synonymTable, &pk);
+	withsubquery46.setSynonyms("i1", 2);
+	ResultTuple* actualResultwithsubquery46 = withsubquery46.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery46->getAllResults().size());
+
+	// Test 47: with(i1, 6)
+	WithSubquery withsubquery47 = WithSubquery(&synonymTable, &pk);
+	withsubquery47.setSynonyms("i1", 6);
+	ResultTuple* actualResultwithsubquery47 = withsubquery47.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery47->getAllResults().size());
+
+	// Test 52: with(v1, v2)
+	WithSubquery withsubquery52 = WithSubquery(&synonymTable, &pk);
+	withsubquery52.setSynonyms("v1", "v2");
+	ResultTuple* actualResultwithsubquery52 = withsubquery52.solve();
+	int expectedResultwithsubquery52[8][2] = {
+		{0, 0}, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery52)/sizeof(expectedResultwithsubquery52[0])), actualResultwithsubquery52->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery52)/sizeof(expectedResultwithsubquery52[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery52[i])/sizeof(expectedResultwithsubquery52[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery52[i][j], actualResultwithsubquery52->getResultAt(i, j));
+		}
+	}
+
+	// Test 53: with(v1, proc2)
+	WithSubquery withsubquery53 = WithSubquery(&synonymTable, &pk);
+	withsubquery53.setSynonyms("v1", "proc2");
+	ResultTuple* actualResultwithsubquery53 = withsubquery53.solve();
+	int expectedResultwithsubquery53[1][2] = {
+		{6, 1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery53)/sizeof(expectedResultwithsubquery53[0])), actualResultwithsubquery53->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery53)/sizeof(expectedResultwithsubquery53[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery53[i])/sizeof(expectedResultwithsubquery53[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery53[i][j], actualResultwithsubquery53->getResultAt(i, j));
+		}
+	}
+
+	// Test 64: with(proc1, v2)
+	WithSubquery withsubquery64 = WithSubquery(&synonymTable, &pk);
+	withsubquery64.setSynonyms("proc1", "v2");
+	ResultTuple* actualResultwithsubquery64 = withsubquery64.solve();
+	int expectedResultwithsubquery64[1][2] = {
+		{1, 6}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery64)/sizeof(expectedResultwithsubquery64[0])), actualResultwithsubquery64->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery64)/sizeof(expectedResultwithsubquery64[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery64[i])/sizeof(expectedResultwithsubquery64[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery64[i][j], actualResultwithsubquery64->getResultAt(i, j));
+		}
+	}
+
+	// Test 65: with(proc1, proc2)
+	WithSubquery withsubquery65 = WithSubquery(&synonymTable, &pk);
+	withsubquery65.setSynonyms("proc1", "proc2");
+	ResultTuple* actualResultwithsubquery65 = withsubquery65.solve();
+	int expectedResultwithsubquery65[3][2] = {
+		{0, 0}, {1, 1}, {2, 2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery65)/sizeof(expectedResultwithsubquery65[0])), actualResultwithsubquery65->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery65)/sizeof(expectedResultwithsubquery65[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery65[i])/sizeof(expectedResultwithsubquery65[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery65[i][j], actualResultwithsubquery65->getResultAt(i, j));
+		}
+	}
+
+	// Test 72: with(c1, s2)
+	WithSubquery withsubquery72 = WithSubquery(&synonymTable, &pk);
+	withsubquery72.setSynonyms("c1", "s2");
+	ResultTuple* actualResultwithsubquery72 = withsubquery72.solve();
+	int expectedResultwithsubquery72[2][2] = {
+		{3, 3}, {11, 11}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery72)/sizeof(expectedResultwithsubquery72[0])), actualResultwithsubquery72->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery72)/sizeof(expectedResultwithsubquery72[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery72[i])/sizeof(expectedResultwithsubquery72[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery72[i][j], actualResultwithsubquery72->getResultAt(i, j));
+		}
+	}
+
+	// Test 73: with(c1, a2)
+	WithSubquery withsubquery73 = WithSubquery(&synonymTable, &pk);
+	withsubquery73.setSynonyms("c1", "a2");
+	ResultTuple* actualResultwithsubquery73 = withsubquery73.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery73->getAllResults().size());
+
+	// Test 74: with(c1, w2)
+	WithSubquery withsubquery74 = WithSubquery(&synonymTable, &pk);
+	withsubquery74.setSynonyms("c1", "w2");
+	ResultTuple* actualResultwithsubquery74 = withsubquery74.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery74->getAllResults().size());
+
+	// Test 75: with(c1, i2)
+	WithSubquery withsubquery75 = WithSubquery(&synonymTable, &pk);
+	withsubquery75.setSynonyms("c1", "i2");
+	ResultTuple* actualResultwithsubquery75 = withsubquery75.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery75->getAllResults().size());
+
+	// Test 78: with(c1, c2)
+	WithSubquery withsubquery78 = WithSubquery(&synonymTable, &pk);
+	withsubquery78.setSynonyms("c1", "c2");
+	ResultTuple* actualResultwithsubquery78 = withsubquery78.solve();
+	int expectedResultwithsubquery78[2][2] = {
+		{3, 3}, {11, 11}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery78)/sizeof(expectedResultwithsubquery78[0])), actualResultwithsubquery78->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery78)/sizeof(expectedResultwithsubquery78[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery78[i])/sizeof(expectedResultwithsubquery78[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery78[i][j], actualResultwithsubquery78->getResultAt(i, j));
+		}
+	}
+
+	// Test 79: with(c1, l2)
+	WithSubquery withsubquery79 = WithSubquery(&synonymTable, &pk);
+	withsubquery79.setSynonyms("c1", "l2");
+	ResultTuple* actualResultwithsubquery79 = withsubquery79.solve();
+	int expectedResultwithsubquery79[2][2] = {
+		{3, 3}, {11, 11}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery79)/sizeof(expectedResultwithsubquery79[0])), actualResultwithsubquery79->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery79)/sizeof(expectedResultwithsubquery79[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery79[i])/sizeof(expectedResultwithsubquery79[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery79[i][j], actualResultwithsubquery79->getResultAt(i, j));
+		}
+	}
+
+	// Test 80: with(c1, const2)
+	WithSubquery withsubquery80 = WithSubquery(&synonymTable, &pk);
+	withsubquery80.setSynonyms("c1", "const2");
+	ResultTuple* actualResultwithsubquery80 = withsubquery80.solve();
+	int expectedResultwithsubquery80[1][2] = {
+		{3, 1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery80)/sizeof(expectedResultwithsubquery80[0])), actualResultwithsubquery80->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery80)/sizeof(expectedResultwithsubquery80[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery80[i])/sizeof(expectedResultwithsubquery80[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery80[i][j], actualResultwithsubquery80->getResultAt(i, j));
+		}
+	}
+
+	// Test 82: with(c1, 2)
+	WithSubquery withsubquery82 = WithSubquery(&synonymTable, &pk);
+	withsubquery82.setSynonyms("c1", 2);
+	ResultTuple* actualResultwithsubquery82 = withsubquery82.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery82->getAllResults().size());
+
+	// Test 83: with(c1, 6)
+	WithSubquery withsubquery83 = WithSubquery(&synonymTable, &pk);
+	withsubquery83.setSynonyms("c1", 6);
+	ResultTuple* actualResultwithsubquery83 = withsubquery83.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery83->getAllResults().size());
+
+	// Test 84: with(l1, s2)
+	WithSubquery withsubquery84 = WithSubquery(&synonymTable, &pk);
+	withsubquery84.setSynonyms("l1", "s2");
+	ResultTuple* actualResultwithsubquery84 = withsubquery84.solve();
+	int expectedResultwithsubquery84[22][2] = {
+		{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery84)/sizeof(expectedResultwithsubquery84[0])), actualResultwithsubquery84->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery84)/sizeof(expectedResultwithsubquery84[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery84[i])/sizeof(expectedResultwithsubquery84[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery84[i][j], actualResultwithsubquery84->getResultAt(i, j));
+		}
+	}
+
+	// Test 85: with(l1, a2)
+	WithSubquery withsubquery85 = WithSubquery(&synonymTable, &pk);
+	withsubquery85.setSynonyms("l1", "a2");
+	ResultTuple* actualResultwithsubquery85 = withsubquery85.solve();
+	int expectedResultwithsubquery85[16][2] = {
+		{1, 1}, {2, 2}, {4, 4}, {5, 5}, {7, 7}, {9, 9}, {10, 10}, {12, 12}, {14, 14}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery85)/sizeof(expectedResultwithsubquery85[0])), actualResultwithsubquery85->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery85)/sizeof(expectedResultwithsubquery85[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery85[i])/sizeof(expectedResultwithsubquery85[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery85[i][j], actualResultwithsubquery85->getResultAt(i, j));
+		}
+	}
+
+	// Test 86: with(l1, w2)
+	WithSubquery withsubquery86 = WithSubquery(&synonymTable, &pk);
+	withsubquery86.setSynonyms("l1", "w2");
+	ResultTuple* actualResultwithsubquery86 = withsubquery86.solve();
+	int expectedResultwithsubquery86[2][2] = {
+		{6, 6}, {15, 15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery86)/sizeof(expectedResultwithsubquery86[0])), actualResultwithsubquery86->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery86)/sizeof(expectedResultwithsubquery86[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery86[i])/sizeof(expectedResultwithsubquery86[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery86[i][j], actualResultwithsubquery86->getResultAt(i, j));
+		}
+	}
+
+	// Test 87: with(l1, i2)
+	WithSubquery withsubquery87 = WithSubquery(&synonymTable, &pk);
+	withsubquery87.setSynonyms("l1", "i2");
+	ResultTuple* actualResultwithsubquery87 = withsubquery87.solve();
+	int expectedResultwithsubquery87[2][2] = {
+		{8, 8}, {13, 13}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery87)/sizeof(expectedResultwithsubquery87[0])), actualResultwithsubquery87->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery87)/sizeof(expectedResultwithsubquery87[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery87[i])/sizeof(expectedResultwithsubquery87[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery87[i][j], actualResultwithsubquery87->getResultAt(i, j));
+		}
+	}
+
+	// Test 90: with(l1, c2)
+	WithSubquery withsubquery90 = WithSubquery(&synonymTable, &pk);
+	withsubquery90.setSynonyms("l1", "c2");
+	ResultTuple* actualResultwithsubquery90 = withsubquery90.solve();
+	int expectedResultwithsubquery90[2][2] = {
+		{3, 3}, {11, 11}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery90)/sizeof(expectedResultwithsubquery90[0])), actualResultwithsubquery90->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery90)/sizeof(expectedResultwithsubquery90[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery90[i])/sizeof(expectedResultwithsubquery90[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery90[i][j], actualResultwithsubquery90->getResultAt(i, j));
+		}
+	}
+
+	// Test 91: with(l1, l2)
+	WithSubquery withsubquery91 = WithSubquery(&synonymTable, &pk);
+	withsubquery91.setSynonyms("l1", "l2");
+	ResultTuple* actualResultwithsubquery91 = withsubquery91.solve();
+	int expectedResultwithsubquery91[22][2] = {
+		{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery91)/sizeof(expectedResultwithsubquery91[0])), actualResultwithsubquery91->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery91)/sizeof(expectedResultwithsubquery91[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery91[i])/sizeof(expectedResultwithsubquery91[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery91[i][j], actualResultwithsubquery91->getResultAt(i, j));
+		}
+	}
+
+	// Test 92: with(l1, const2)
+	WithSubquery withsubquery92 = WithSubquery(&synonymTable, &pk);
+	withsubquery92.setSynonyms("l1", "const2");
+	ResultTuple* actualResultwithsubquery92 = withsubquery92.solve();
+	int expectedResultwithsubquery92[4][2] = {
+		{1, 4}, {2, 0}, {3, 1}, {5, 3}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery92)/sizeof(expectedResultwithsubquery92[0])), actualResultwithsubquery92->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery92)/sizeof(expectedResultwithsubquery92[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery92[i])/sizeof(expectedResultwithsubquery92[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery92[i][j], actualResultwithsubquery92->getResultAt(i, j));
+		}
+	}
+
+	// Test 94: with(l1, 2)
+	WithSubquery withsubquery94 = WithSubquery(&synonymTable, &pk);
+	withsubquery94.setSynonyms("l1", 2);
+	ResultTuple* actualResultwithsubquery94 = withsubquery94.solve();
+	int expectedResultwithsubquery94[1][1] = {
+		{2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery94)/sizeof(expectedResultwithsubquery94[0])), actualResultwithsubquery94->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery94)/sizeof(expectedResultwithsubquery94[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery94[i])/sizeof(expectedResultwithsubquery94[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery94[i][j], actualResultwithsubquery94->getResultAt(i, j));
+		}
+	}
+
+	// Test 95: with(l1, 6)
+	WithSubquery withsubquery95 = WithSubquery(&synonymTable, &pk);
+	withsubquery95.setSynonyms("l1", 6);
+	ResultTuple* actualResultwithsubquery95 = withsubquery95.solve();
+	int expectedResultwithsubquery95[1][1] = {
+		{6}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery95)/sizeof(expectedResultwithsubquery95[0])), actualResultwithsubquery95->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery95)/sizeof(expectedResultwithsubquery95[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery95[i])/sizeof(expectedResultwithsubquery95[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery95[i][j], actualResultwithsubquery95->getResultAt(i, j));
+		}
+	}
+
+		// Test 96: with(const1, s2)
+	WithSubquery withsubquery96 = WithSubquery(&synonymTable, &pk);
+	withsubquery96.setSynonyms("const1", "s2");
+	ResultTuple* actualResultwithsubquery96 = withsubquery96.solve();
+	int expectedResultwithsubquery96[4][2] = {
+		{0, 2}, {1, 3}, {3, 5}, {4, 1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery96)/sizeof(expectedResultwithsubquery96[0])), actualResultwithsubquery96->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery96)/sizeof(expectedResultwithsubquery96[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery96[i])/sizeof(expectedResultwithsubquery96[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery96[i][j], actualResultwithsubquery96->getResultAt(i, j));
+		}
+	}
+
+	// Test 97: with(const1, a2)
+	WithSubquery withsubquery97 = WithSubquery(&synonymTable, &pk);
+	withsubquery97.setSynonyms("const1", "a2");
+	ResultTuple* actualResultwithsubquery97 = withsubquery97.solve();
+	int expectedResultwithsubquery97[3][2] = {
+		{0, 2}, {3, 5}, {4, 1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery97)/sizeof(expectedResultwithsubquery97[0])), actualResultwithsubquery97->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery97)/sizeof(expectedResultwithsubquery97[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery97[i])/sizeof(expectedResultwithsubquery97[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery97[i][j], actualResultwithsubquery97->getResultAt(i, j));
+		}
+	}
+
+	// Test 98: with(const1, w2)
+	WithSubquery withsubquery98 = WithSubquery(&synonymTable, &pk);
+	withsubquery98.setSynonyms("const1", "w2");
+	ResultTuple* actualResultwithsubquery98 = withsubquery98.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery98->getAllResults().size());
+
+	// Test 99: with(const1, i2)
+	WithSubquery withsubquery99 = WithSubquery(&synonymTable, &pk);
+	withsubquery99.setSynonyms("const1", "i2");
+	ResultTuple* actualResultwithsubquery99 = withsubquery99.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery99->getAllResults().size());
+
+	// Test 102: with(const1, c2)
+	WithSubquery withsubquery102 = WithSubquery(&synonymTable, &pk);
+	withsubquery102.setSynonyms("const1", "c2");
+	ResultTuple* actualResultwithsubquery102 = withsubquery102.solve();
+	int expectedResultwithsubquery102[1][2] = {
+		{1, 3}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery102)/sizeof(expectedResultwithsubquery102[0])), actualResultwithsubquery102->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery102)/sizeof(expectedResultwithsubquery102[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery102[i])/sizeof(expectedResultwithsubquery102[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery102[i][j], actualResultwithsubquery102->getResultAt(i, j));
+		}
+	}
+
+	// Test 103: with(const1, l2)
+	WithSubquery withsubquery103 = WithSubquery(&synonymTable, &pk);
+	withsubquery103.setSynonyms("const1", "l2");
+	ResultTuple* actualResultwithsubquery103 = withsubquery103.solve();
+	int expectedResultwithsubquery103[4][2] = {
+		{0, 2}, {1, 3}, {3, 5}, {4, 1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery103)/sizeof(expectedResultwithsubquery103[0])), actualResultwithsubquery103->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery103)/sizeof(expectedResultwithsubquery103[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery103[i])/sizeof(expectedResultwithsubquery103[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery103[i][j], actualResultwithsubquery103->getResultAt(i, j));
+		}
+	}
+
+	// Test 104: with(const1, const2)
+	WithSubquery withsubquery104 = WithSubquery(&synonymTable, &pk);
+	withsubquery104.setSynonyms("const1", "const2");
+	ResultTuple* actualResultwithsubquery104 = withsubquery104.solve();
+	int expectedResultwithsubquery104[5][2] = {
+		{0, 0}, {1, 1}, {2, 2}, {3, 3}, {4, 4}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery104)/sizeof(expectedResultwithsubquery104[0])), actualResultwithsubquery104->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery104)/sizeof(expectedResultwithsubquery104[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery104[i])/sizeof(expectedResultwithsubquery104[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery104[i][j], actualResultwithsubquery104->getResultAt(i, j));
+		}
+	}
+
+	// Test 106: with(const1, 2)
+	WithSubquery withsubquery106 = WithSubquery(&synonymTable, &pk);
+	withsubquery106.setSynonyms("const1", 2);
+	ResultTuple* actualResultwithsubquery106 = withsubquery106.solve();
+	int expectedResultwithsubquery106[1][1] = {
+		{0}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery106)/sizeof(expectedResultwithsubquery106[0])), actualResultwithsubquery106->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery106)/sizeof(expectedResultwithsubquery106[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery106[i])/sizeof(expectedResultwithsubquery106[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery106[i][j], actualResultwithsubquery106->getResultAt(i, j));
+		}
+	}
+
+	// Test 107: with(const1, 6)
+	WithSubquery withsubquery107 = WithSubquery(&synonymTable, &pk);
+	withsubquery107.setSynonyms("const1", 6);
+	ResultTuple* actualResultwithsubquery107 = withsubquery107.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery107->getAllResults().size());
+
+	// Test 120: with(1, s2)
+	WithSubquery withsubquery120 = WithSubquery(&synonymTable, &pk);
+	withsubquery120.setSynonyms(1, "s2");
+	ResultTuple* actualResultwithsubquery120 = withsubquery120.solve();
+	int expectedResultwithsubquery120[1][1] = {
+		{1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery120)/sizeof(expectedResultwithsubquery120[0])), actualResultwithsubquery120->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery120)/sizeof(expectedResultwithsubquery120[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery120[i])/sizeof(expectedResultwithsubquery120[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery120[i][j], actualResultwithsubquery120->getResultAt(i, j));
+		}
+	}
+
+	// Test 121: with(1, a2)
+	WithSubquery withsubquery121 = WithSubquery(&synonymTable, &pk);
+	withsubquery121.setSynonyms(1, "a2");
+	ResultTuple* actualResultwithsubquery121 = withsubquery121.solve();
+	int expectedResultwithsubquery121[1][1] = {
+		{1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery121)/sizeof(expectedResultwithsubquery121[0])), actualResultwithsubquery121->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery121)/sizeof(expectedResultwithsubquery121[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery121[i])/sizeof(expectedResultwithsubquery121[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery121[i][j], actualResultwithsubquery121->getResultAt(i, j));
+		}
+	}
+
+	// Test 122: with(1, w2)
+	WithSubquery withsubquery122 = WithSubquery(&synonymTable, &pk);
+	withsubquery122.setSynonyms(1, "w2");
+	ResultTuple* actualResultwithsubquery122 = withsubquery122.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery122->getAllResults().size());
+
+	// Test 123: with(1, i2)
+	WithSubquery withsubquery123 = WithSubquery(&synonymTable, &pk);
+	withsubquery123.setSynonyms(1, "i2");
+	ResultTuple* actualResultwithsubquery123 = withsubquery123.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery123->getAllResults().size());
+
+	// Test 126: with(1, c2)
+	WithSubquery withsubquery126 = WithSubquery(&synonymTable, &pk);
+	withsubquery126.setSynonyms(1, "c2");
+	ResultTuple* actualResultwithsubquery126 = withsubquery126.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery126->getAllResults().size());
+
+	// Test 127: with(1, l2)
+	WithSubquery withsubquery127 = WithSubquery(&synonymTable, &pk);
+	withsubquery127.setSynonyms(1, "l2");
+	ResultTuple* actualResultwithsubquery127 = withsubquery127.solve();
+	int expectedResultwithsubquery127[1][1] = {
+		{1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery127)/sizeof(expectedResultwithsubquery127[0])), actualResultwithsubquery127->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery127)/sizeof(expectedResultwithsubquery127[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery127[i])/sizeof(expectedResultwithsubquery127[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery127[i][j], actualResultwithsubquery127->getResultAt(i, j));
+		}
+	}
+
+	// Test 128: with(1, const2)
+	WithSubquery withsubquery128 = WithSubquery(&synonymTable, &pk);
+	withsubquery128.setSynonyms(1, "const2");
+	ResultTuple* actualResultwithsubquery128 = withsubquery128.solve();
+	int expectedResultwithsubquery128[1][1] = {
+		{4}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery128)/sizeof(expectedResultwithsubquery128[0])), actualResultwithsubquery128->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery128)/sizeof(expectedResultwithsubquery128[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery128[i])/sizeof(expectedResultwithsubquery128[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery128[i][j], actualResultwithsubquery128->getResultAt(i, j));
+		}
+	}
+
+	// Test 130: with(1, 2)
+	WithSubquery withsubquery130 = WithSubquery(&synonymTable, &pk);
+	withsubquery130.setSynonyms(1, 2);
+	ResultTuple* actualResultwithsubquery130 = withsubquery130.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery130->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultwithsubquery130->isBool());
+	CPPUNIT_ASSERT(actualResultwithsubquery130->isEmpty());
+
+	// Test 131: with(1, 6)
+	WithSubquery withsubquery131 = WithSubquery(&synonymTable, &pk);
+	withsubquery131.setSynonyms(1, 6);
+	ResultTuple* actualResultwithsubquery131 = withsubquery131.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery131->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultwithsubquery131->isBool());
+	CPPUNIT_ASSERT(actualResultwithsubquery131->isEmpty());
+
+	// Test 134: with(6, w2)
+	WithSubquery withsubquery134 = WithSubquery(&synonymTable, &pk);
+	withsubquery134.setSynonyms(6, "w2");
+	ResultTuple* actualResultwithsubquery134 = withsubquery134.solve();
+	int expectedResultwithsubquery134[1][1] = {
+		{6}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery134)/sizeof(expectedResultwithsubquery134[0])), actualResultwithsubquery134->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery134)/sizeof(expectedResultwithsubquery134[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery134[i])/sizeof(expectedResultwithsubquery134[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery134[i][j], actualResultwithsubquery134->getResultAt(i, j));
+		}
+	}
+
+	// Test 135: with(8, i2)
+	WithSubquery withsubquery135 = WithSubquery(&synonymTable, &pk);
+	withsubquery135.setSynonyms(8, "i2");
+	ResultTuple* actualResultwithsubquery135 = withsubquery135.solve();
+	int expectedResultwithsubquery135[1][1] = {
+		{8}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery135)/sizeof(expectedResultwithsubquery135[0])), actualResultwithsubquery135->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery135)/sizeof(expectedResultwithsubquery135[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery135[i])/sizeof(expectedResultwithsubquery135[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery135[i][j], actualResultwithsubquery135->getResultAt(i, j));
+		}
+	}
+
+	// Test 138: with(3, c2)
+	WithSubquery withsubquery138 = WithSubquery(&synonymTable, &pk);
+	withsubquery138.setSynonyms(3, "c2");
+	ResultTuple* actualResultwithsubquery138 = withsubquery138.solve();
+	int expectedResultwithsubquery138[1][1] = {
+		{3}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery138)/sizeof(expectedResultwithsubquery138[0])), actualResultwithsubquery138->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery138)/sizeof(expectedResultwithsubquery138[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery138[i])/sizeof(expectedResultwithsubquery138[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery138[i][j], actualResultwithsubquery138->getResultAt(i, j));
+		}
+	}
+
+	// Test 139: with(5, l2)
+	WithSubquery withsubquery139 = WithSubquery(&synonymTable, &pk);
+	withsubquery139.setSynonyms(5, "l2");
+	ResultTuple* actualResultwithsubquery139 = withsubquery139.solve();
+	int expectedResultwithsubquery139[1][1] = {
+		{5}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery139)/sizeof(expectedResultwithsubquery139[0])), actualResultwithsubquery139->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery139)/sizeof(expectedResultwithsubquery139[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery139[i])/sizeof(expectedResultwithsubquery139[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery139[i][j], actualResultwithsubquery139->getResultAt(i, j));
+		}
+	}
+
+	// Test 140: with(5, const2)
+	WithSubquery withsubquery140 = WithSubquery(&synonymTable, &pk);
+	withsubquery140.setSynonyms(5, "const2");
+	ResultTuple* actualResultwithsubquery140 = withsubquery140.solve();
+	int expectedResultwithsubquery140[1][1] = {
+		{3}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery140)/sizeof(expectedResultwithsubquery140[0])), actualResultwithsubquery140->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery140)/sizeof(expectedResultwithsubquery140[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery140[i])/sizeof(expectedResultwithsubquery140[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery140[i][j], actualResultwithsubquery140->getResultAt(i, j));
+		}
+	}
+
+	// Test 143: with(5, 5)
+	WithSubquery withsubquery143 = WithSubquery(&synonymTable, &pk);
+	withsubquery143.setSynonyms(5, 5);
+	ResultTuple* actualResultwithsubquery143 = withsubquery143.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery143->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultwithsubquery143->isBool());
+	CPPUNIT_ASSERT(!actualResultwithsubquery143->isEmpty());
 }

@@ -84,7 +84,6 @@
     <ClCompile Include="UnitTest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SubquerySetup.h" />
     <ClInclude Include="TestAST.h" />
     <ClInclude Include="testCalls.h" />
     <ClInclude Include="testConstant.h" />

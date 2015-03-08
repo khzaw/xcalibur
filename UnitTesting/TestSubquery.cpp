@@ -613,18 +613,17 @@ void SubqueryTest::testPattern(){
 }
 
 void SubqueryTest::testWith(){
-	// Test 0: with(s1, s2)
+	// Test 0: With(s1, s2)
 	WithSubquery withsubquery0 = WithSubquery(&synonymTable, &pk);
 	withsubquery0.setSynonyms("s1", "s2");
 	ResultTuple* actualResultwithsubquery0 = withsubquery0.solve();
 	int expectedResultwithsubquery0[22][2] = {
 		{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 22}
 	};
-	CPPUNIT_ASSERT_EQUAL((size_t) 22, actualResultwithsubquery0->getAllResults().size());
-	for (size_t i = 0; i < 22; i++){
-		for (size_t j = 0; j < 2; j++){
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultwithsubquery0)/sizeof(expectedResultwithsubquery0[0])), actualResultwithsubquery0->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery0)/sizeof(expectedResultwithsubquery0[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery0[i])/sizeof(expectedResultwithsubquery0[i][0])); j++){
 			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery0[i][j], actualResultwithsubquery0->getResultAt(i, j));
 		}
 	}
-
 }

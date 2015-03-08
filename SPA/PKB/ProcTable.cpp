@@ -50,3 +50,13 @@ int ProcTable::getProcIndex(string p){
 		return it->second;
 	}
 }
+
+void ProcTable::insertASTRootNode(int procIndex , TNode * tNode)
+{
+	procRootTable.push_back(tNode);	
+}
+
+ TNode* ProcTable::getASTRootNode(int procIndex)
+{
+	return procRootTable[procIndex] ;
+}

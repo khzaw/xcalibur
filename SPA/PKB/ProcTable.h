@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "..\Frontend\TNode.h"
+
 using namespace std;
 
 //public functions
@@ -9,10 +11,15 @@ class ProcTable{
 
 private:
 vector<string> pTable; 
-map<string,int> pMap; 
+map<string,int> pMap;
+std::vector<TNode*> procRootTable;
 public:
 //Constructor
 ProcTable();
+//std::vector<TNode*> procRootTable;
+//CFG
+void insertASTRootNode(int ProcIndex, TNode* procNode);
+TNode * getASTRootNode(int ProcIndex);
 
 //Accessor
 int getSize(); 	// returns size of table

@@ -17,7 +17,13 @@
     <ClCompile Include="Frontend\Parser.cpp" />
     <ClCompile Include="Frontend\Operator.cpp" />
     <ClCompile Include="Frontend\TNode.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="PKB\iterativeCFG.cpp" />
+=======
+    <ClCompile Include="PKB\CFG.cpp" />
+    <ClCompile Include="PKB\GNode.cpp" />
+    <ClCompile Include="PKB\NextExtractor.cpp" />
+>>>>>>> 21a78a58e2e52303ad6a5a5904256d13be789d30
     <ClCompile Include="PKB\StatementTable.cpp" />
     <ClCompile Include="PKB\Uses.cpp" />
     <ClCompile Include="PKB\VarTable.cpp" />
@@ -32,10 +38,16 @@
     <ClCompile Include="QueryProcessor\PatternSubquery.cpp" />
     <ClCompile Include="QueryProcessor\WithSubquery.cpp" />
     <ClInclude Include="PKB\CallsExtractor.cpp" />
+<<<<<<< HEAD
     <ClInclude Include="PKB\iterativeCFG.h" />
     <ClInclude Include="PKB\CfgNode.cpp" />
+=======
+    <ClInclude Include="PKB\CFG.h" />
+>>>>>>> 21a78a58e2e52303ad6a5a5904256d13be789d30
     <ClInclude Include="PKB\FollowsExtractor.cpp" />
+    <ClInclude Include="PKB\GNode.h" />
     <ClInclude Include="PKB\ModifiesExtractor.cpp" />
+    <ClInclude Include="PKB\NextExtractor.h" />
     <ClInclude Include="PKB\ParentExtractor.cpp" />
     <ClInclude Include="PKB\UsesExtractor.cpp" />
     <ClCompile Include="QueryProcessor\CallsStarSubquery.cpp" />
@@ -77,7 +89,6 @@
     <ClInclude Include="PKB\ProcTable.h" />
     <ClInclude Include="PKB\Calls.h" />
     <ClInclude Include="PKB\CallsExtractor.h" />
-    <ClInclude Include="PKB\CfgNode.h" />
     <ClInclude Include="PKB\FollowsExtractor.h" />
     <ClInclude Include="PKB\ModifiesExtractor.h" />
     <ClInclude Include="PKB\ParentExtractor.h" />

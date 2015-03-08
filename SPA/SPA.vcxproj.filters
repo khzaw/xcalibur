@@ -126,26 +126,35 @@
     <ClCompile Include="PKB\Calls.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
-    <ClCompile Include="QueryProcessor\OptimizedQE.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\CallsSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\CallsStarSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\ModifiesProcSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\UsesProcSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
+    <ClCompile Include="QueryProcessor\PatternSubquery.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="QueryProcessor\WithSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QueryProcessor\PatternSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
+    <ClCompile Include="QueryProcessor\CallsStarSubquery.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\CallsSubquery.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\ModifiesProcSubquery.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\OptimizedQE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\UsesProcSubquery.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\CFG.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\GNode.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\NextExtractor.cpp">
+      <Filter>Source Files\PKB</Filter>
     </ClCompile>
     <ClCompile Include="PKB\iterativeCFG.cpp">
       <Filter>Source Files\PKB</Filter>
@@ -233,9 +242,6 @@
     <ClInclude Include="PKB\CallsExtractor.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClInclude>
-    <ClInclude Include="PKB\CfgNode.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClInclude>
     <ClInclude Include="PKB\FollowsExtractor.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClInclude>
@@ -254,9 +260,6 @@
     <ClInclude Include="PKB\CallsExtractor.h">
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
-    <ClInclude Include="PKB\CfgNode.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
     <ClInclude Include="PKB\FollowsExtractor.h">
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
@@ -267,7 +270,16 @@
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
     <ClInclude Include="QueryProcessor\OptimizedQE.h">
-      <Filter>Header Files\QueryProcessor</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\CFG.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\GNode.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\NextExtractor.h">
+      <Filter>Header Files\PKB</Filter>
     </ClInclude>
     <ClInclude Include="PKB\iterativeCFG.h">
       <Filter>Header Files\PKB</Filter>

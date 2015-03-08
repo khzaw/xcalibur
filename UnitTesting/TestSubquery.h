@@ -10,7 +10,8 @@
 class SubqueryTest : public CPPUNIT_NS::TestFixture // Note 2 
 { 
 	CPPUNIT_TEST_SUITE( SubqueryTest ); // Note 3 
-	CPPUNIT_TEST(testFollows);
+	CPPUNIT_TEST(testSubqueries);
+	/*
 	CPPUNIT_TEST(testParent);
 	CPPUNIT_TEST(testFollowsT);
 	CPPUNIT_TEST(testParentT);
@@ -22,6 +23,7 @@ class SubqueryTest : public CPPUNIT_NS::TestFixture // Note 2
 	CPPUNIT_TEST(testCallsT);
 	CPPUNIT_TEST(testPattern);
 	CPPUNIT_TEST(testWith);
+	*/
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -30,6 +32,7 @@ public:
 	void setUp();
 	void tearDown();
 
+	void testSubqueries();
 	void testFollows();
 	void testParent();
 	void testFollowsT();
@@ -42,7 +45,5 @@ public:
 	void testCallsT();
 	void testPattern();
 	void testWith();
-	void init();
-
 };
 #endif

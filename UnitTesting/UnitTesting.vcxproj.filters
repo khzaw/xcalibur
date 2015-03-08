@@ -60,6 +60,9 @@
     <ClCompile Include="TestSubquery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="testIterativeCFG.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestModifies.h">
@@ -104,7 +107,7 @@
     <ClInclude Include="TestSubquery.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SubquerySetup.h">
+    <ClInclude Include="testIterativeCFG.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

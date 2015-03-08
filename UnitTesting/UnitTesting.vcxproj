@@ -48,7 +48,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(SolutionDir)lib\cppunit_debug.lib;$(SolutionDir)$(Configuration)\SPA.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>F:\cs3201\xcalibur\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -69,6 +74,7 @@
   <ItemGroup>
     <ClCompile Include="TestAST.cpp" />
     <ClCompile Include="testCalls.cpp" />
+    <ClCompile Include="testIterativeCFG.cpp" />
     <ClCompile Include="testConstant.cpp" />
     <ClCompile Include="testFollows.cpp" />
     <ClCompile Include="TestModifies.cpp" />
@@ -84,9 +90,9 @@
     <ClCompile Include="UnitTest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SubquerySetup.h" />
     <ClInclude Include="TestAST.h" />
     <ClInclude Include="testCalls.h" />
+    <ClInclude Include="testIterativeCFG.h" />
     <ClInclude Include="testConstant.h" />
     <ClInclude Include="testFollows.h" />
     <ClInclude Include="TestModifies.h" />

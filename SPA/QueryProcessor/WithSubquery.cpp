@@ -245,6 +245,7 @@ public:
 		} else {
 			// invalid
 		}
+		return results;
 	}
 
 	vector<pair<int, int> > getJoinNums(string syn1, string syn2){

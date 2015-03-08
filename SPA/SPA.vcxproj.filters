@@ -156,6 +156,9 @@
     <ClCompile Include="PKB\NextExtractor.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
+    <ClCompile Include="PKB\iterativeCFG.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PKB\AST.h">
@@ -276,6 +279,9 @@
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
     <ClInclude Include="PKB\NextExtractor.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\iterativeCFG.h">
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
   </ItemGroup>

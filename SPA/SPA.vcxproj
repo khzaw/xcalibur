@@ -17,6 +17,7 @@
     <ClCompile Include="Frontend\Parser.cpp" />
     <ClCompile Include="Frontend\Operator.cpp" />
     <ClCompile Include="Frontend\TNode.cpp" />
+    <ClCompile Include="PKB\iterativeCFG.cpp" />
     <ClCompile Include="PKB\CFG.cpp" />
     <ClCompile Include="PKB\GNode.cpp" />
     <ClCompile Include="PKB\NextExtractor.cpp" />
@@ -34,6 +35,8 @@
     <ClCompile Include="QueryProcessor\PatternSubquery.cpp" />
     <ClCompile Include="QueryProcessor\WithSubquery.cpp" />
     <ClInclude Include="PKB\CallsExtractor.cpp" />
+    <ClInclude Include="PKB\iterativeCFG.h" />
+    <ClInclude Include="PKB\CfgNode.cpp" />
     <ClInclude Include="PKB\CFG.h" />
     <ClInclude Include="PKB\FollowsExtractor.cpp" />
     <ClInclude Include="PKB\GNode.h" />
@@ -134,6 +137,14 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>C:\Documents and Settings\Admin\My Documents\cppunit-1.12.1\include;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

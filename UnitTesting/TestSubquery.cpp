@@ -7,7 +7,9 @@
 #include "QueryProcessor\Subquery.cpp"
 #include "QueryProcessor\FollowsSubquery.cpp"
 #include "QueryProcessor\ModifiesSubquery.cpp"
+#include "QueryProcessor\ModifiesProcSubquery.cpp"
 #include "QueryProcessor\UsesSubquery.cpp"
+#include "QueryProcessor\UsesProcSubquery.cpp"
 #include "QueryProcessor\ParentSubquery.cpp"
 #include "QueryProcessor\WithSubquery.cpp"
 #include "QueryProcessor\CallsSubquery.cpp"
@@ -149,15 +151,6 @@ void SubqueryTest::testSubqueries() {
 	pk->callsTable.insertCalls(0, 1);
 	pk->callsTable.insertCalls(1, 2);
 
-	pk->modifiesTable.insertModifiesProc(2, 1);
-	pk->modifiesTable.insertModifiesProc(2, 7);
-	pk->modifiesTable.insertModifiesProc(1, 0);
-	pk->modifiesTable.insertModifiesProc(1, 2);
-	pk->modifiesTable.insertModifiesProc(1, 4);
-	pk->modifiesTable.insertModifiesProc(1, 5);
-	pk->modifiesTable.insertModifiesProc(1, 1);
-	pk->modifiesTable.insertModifiesProc(1, 3);
-	pk->modifiesTable.insertModifiesProc(1, 7);
 	pk->modifiesTable.insertModifiesProc(0, 0);
 	pk->modifiesTable.insertModifiesProc(0, 1);
 	pk->modifiesTable.insertModifiesProc(0, 2);
@@ -165,7 +158,16 @@ void SubqueryTest::testSubqueries() {
 	pk->modifiesTable.insertModifiesProc(0, 4);
 	pk->modifiesTable.insertModifiesProc(0, 5);
 	pk->modifiesTable.insertModifiesProc(0, 7);
-
+	pk->modifiesTable.insertModifiesProc(1, 0);
+	pk->modifiesTable.insertModifiesProc(1, 1);
+	pk->modifiesTable.insertModifiesProc(1, 2);
+	pk->modifiesTable.insertModifiesProc(1, 3);
+	pk->modifiesTable.insertModifiesProc(1, 4);
+	pk->modifiesTable.insertModifiesProc(1, 5);
+	pk->modifiesTable.insertModifiesProc(1, 7);
+	pk->modifiesTable.insertModifiesProc(2, 1);
+	pk->modifiesTable.insertModifiesProc(2, 7);
+	
 	pk->modifiesTable.insertModifiesStmt(1, 0);
 	pk->modifiesTable.insertModifiesStmt(2, 1);
 	pk->modifiesTable.insertModifiesStmt(3, 0);
@@ -204,15 +206,6 @@ void SubqueryTest::testSubqueries() {
 	pk->modifiesTable.insertModifiesStmt(21, 1);
 	pk->modifiesTable.insertModifiesStmt(22, 7);
 
-	pk->usesTable.insertUsesProc(2, 1);
-	pk->usesTable.insertUsesProc(1, 2);
-	pk->usesTable.insertUsesProc(1, 0);
-	pk->usesTable.insertUsesProc(1, 3);
-	pk->usesTable.insertUsesProc(1, 4);
-	pk->usesTable.insertUsesProc(1, 5);
-	pk->usesTable.insertUsesProc(1, 6);
-	pk->usesTable.insertUsesProc(1, 1);
-	pk->usesTable.insertUsesProc(1, 2);
 	pk->usesTable.insertUsesProc(0, 0);
 	pk->usesTable.insertUsesProc(0, 1);
 	pk->usesTable.insertUsesProc(0, 2);
@@ -220,7 +213,15 @@ void SubqueryTest::testSubqueries() {
 	pk->usesTable.insertUsesProc(0, 4);
 	pk->usesTable.insertUsesProc(0, 5);
 	pk->usesTable.insertUsesProc(0, 6);
-
+	pk->usesTable.insertUsesProc(1, 0);
+	pk->usesTable.insertUsesProc(1, 1);
+	pk->usesTable.insertUsesProc(1, 2);
+	pk->usesTable.insertUsesProc(1, 3);
+	pk->usesTable.insertUsesProc(1, 4);
+	pk->usesTable.insertUsesProc(1, 5);
+	pk->usesTable.insertUsesProc(1, 6);
+	pk->usesTable.insertUsesProc(2, 1);
+	
 	pk->usesTable.insertUsesStmt(3, 0);
 	pk->usesTable.insertUsesStmt(3, 1);
 	pk->usesTable.insertUsesStmt(3, 2);
@@ -2639,6 +2640,131 @@ void SubqueryTest::testModifiesTuple() {
 }
 
 void SubqueryTest::testModifiesProc(){
+	// Test 64: Modifies(proc1, v2)
+	ModifiesProcSubquery modifiesprocsubquery64 = ModifiesProcSubquery(&synonymTable, pk);
+	modifiesprocsubquery64.setSynonyms("proc1", "v2");
+	ResultTuple* actualResultmodifiesprocsubquery64 = modifiesprocsubquery64.solve();
+	int expectedResultmodifiesprocsubquery64[16][2] = {
+		{0, 0}, {0, 1}, {0, 2}, {0, 3}, {0, 4}, {0, 5}, {0, 7},
+		{1, 0}, {1, 1}, {1, 2}, {1, 3}, {1, 4}, {1, 5}, {1, 7},
+		{2, 1}, {2, 7}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultmodifiesprocsubquery64)/sizeof(expectedResultmodifiesprocsubquery64[0])), actualResultmodifiesprocsubquery64->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultmodifiesprocsubquery64)/sizeof(expectedResultmodifiesprocsubquery64[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultmodifiesprocsubquery64[i])/sizeof(expectedResultmodifiesprocsubquery64[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultmodifiesprocsubquery64[i][j], actualResultmodifiesprocsubquery64->getResultAt(i, j));
+		}
+	}
+
+	// Test 69: Modifies(proc1, _)
+	ModifiesProcSubquery modifiesprocsubquery69 = ModifiesProcSubquery(&synonymTable, pk);
+	modifiesprocsubquery69.setSynonyms("proc1", "_");
+	ResultTuple* actualResultmodifiesprocsubquery69 = modifiesprocsubquery69.solve();
+	int expectedResultmodifiesprocsubquery69[3][1] = {
+		{0}, {1}, {2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultmodifiesprocsubquery69)/sizeof(expectedResultmodifiesprocsubquery69[0])), actualResultmodifiesprocsubquery69->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultmodifiesprocsubquery69)/sizeof(expectedResultmodifiesprocsubquery69[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultmodifiesprocsubquery69[i])/sizeof(expectedResultmodifiesprocsubquery69[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultmodifiesprocsubquery69[i][j], actualResultmodifiesprocsubquery69->getResultAt(i, j));
+		}
+	}
+	
+	// Test 70: Modifies(proc1, 2)
+	ModifiesProcSubquery modifiesprocsubquery70 = ModifiesProcSubquery(&synonymTable, pk);
+	modifiesprocsubquery70.setSynonyms("proc1", 2);
+	ResultTuple* actualResultmodifiesprocsubquery70 = modifiesprocsubquery70.solve();
+	int expectedResultmodifiesprocsubquery70[2][1] = {
+		{0}, {1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultmodifiesprocsubquery70)/sizeof(expectedResultmodifiesprocsubquery70[0])), actualResultmodifiesprocsubquery70->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultmodifiesprocsubquery70)/sizeof(expectedResultmodifiesprocsubquery70[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultmodifiesprocsubquery70[i])/sizeof(expectedResultmodifiesprocsubquery70[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultmodifiesprocsubquery70[i][j], actualResultmodifiesprocsubquery70->getResultAt(i, j));
+		}
+	}
+
+	// Test 71: Modifies(proc1, 6)
+	ModifiesProcSubquery modifiesprocsubquery71 = ModifiesProcSubquery(&synonymTable, pk);
+	modifiesprocsubquery71.setSynonyms("proc1", 6);
+	ResultTuple* actualResultmodifiesprocsubquery71 = modifiesprocsubquery71.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultmodifiesprocsubquery71->getAllResults().size());
+
+	// Test 124: Modifies(1, v2)
+	ModifiesProcSubquery modifiesprocsubquery124 = ModifiesProcSubquery(&synonymTable, pk);
+	modifiesprocsubquery124.setSynonyms(1, "v2");
+	ResultTuple* actualResultmodifiesprocsubquery124 = modifiesprocsubquery124.solve();
+	int expectedResultmodifiesprocsubquery124[7][1] = {
+		{0}, {1}, {2}, {3}, {4}, {5}, {7}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultmodifiesprocsubquery124)/sizeof(expectedResultmodifiesprocsubquery124[0])), actualResultmodifiesprocsubquery124->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultmodifiesprocsubquery124)/sizeof(expectedResultmodifiesprocsubquery124[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultmodifiesprocsubquery124[i])/sizeof(expectedResultmodifiesprocsubquery124[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultmodifiesprocsubquery124[i][j], actualResultmodifiesprocsubquery124->getResultAt(i, j));
+		}
+	}
+
+	// Test 129: Modifies(1, _)
+	ModifiesProcSubquery modifiesprocsubquery129 = ModifiesProcSubquery(&synonymTable, pk);
+	modifiesprocsubquery129.setSynonyms(1, "_");
+	ResultTuple* actualResultmodifiesprocsubquery129 = modifiesprocsubquery129.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultmodifiesprocsubquery129->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultmodifiesprocsubquery129->isBool());
+	CPPUNIT_ASSERT(!actualResultmodifiesprocsubquery129->isEmpty());
+
+	// Test 130: Modifies(1, 2)
+	ModifiesProcSubquery modifiesprocsubquery130 = ModifiesProcSubquery(&synonymTable, pk);
+	modifiesprocsubquery130.setSynonyms(1, 2);
+	ResultTuple* actualResultmodifiesprocsubquery130 = modifiesprocsubquery130.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultmodifiesprocsubquery130->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultmodifiesprocsubquery130->isBool());
+	CPPUNIT_ASSERT(!actualResultmodifiesprocsubquery130->isEmpty());
+
+	// Test 131: Modifies(1, 6)
+	ModifiesProcSubquery modifiesprocsubquery131 = ModifiesProcSubquery(&synonymTable, pk);
+	modifiesprocsubquery131.setSynonyms(1, 6);
+	ResultTuple* actualResultmodifiesprocsubquery131 = modifiesprocsubquery131.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultmodifiesprocsubquery131->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultmodifiesprocsubquery131->isBool());
+	CPPUNIT_ASSERT(actualResultmodifiesprocsubquery131->isEmpty());
+
+	// Test 136: Modifies(2, v2)
+	ModifiesProcSubquery modifiesprocsubquery136 = ModifiesProcSubquery(&synonymTable, pk);
+	modifiesprocsubquery136.setSynonyms(2, "v2");
+	ResultTuple* actualResultmodifiesprocsubquery136 = modifiesprocsubquery136.solve();
+	int expectedResultmodifiesprocsubquery136[2][1] = {
+		{1}, {7}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultmodifiesprocsubquery136)/sizeof(expectedResultmodifiesprocsubquery136[0])), actualResultmodifiesprocsubquery136->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultmodifiesprocsubquery136)/sizeof(expectedResultmodifiesprocsubquery136[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultmodifiesprocsubquery136[i])/sizeof(expectedResultmodifiesprocsubquery136[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultmodifiesprocsubquery136[i][j], actualResultmodifiesprocsubquery136->getResultAt(i, j));
+		}
+	}
+	
+	// Test 141: Modifies(2, _)
+	ModifiesProcSubquery modifiesprocsubquery141 = ModifiesProcSubquery(&synonymTable, pk);
+	modifiesprocsubquery141.setSynonyms(2, "_");
+	ResultTuple* actualResultmodifiesprocsubquery141 = modifiesprocsubquery141.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultmodifiesprocsubquery141->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultmodifiesprocsubquery141->isBool());
+	CPPUNIT_ASSERT(!actualResultmodifiesprocsubquery141->isEmpty());
+
+	// Test 142: Modifies(2, 2)
+	ModifiesProcSubquery modifiesprocsubquery142 = ModifiesProcSubquery(&synonymTable, pk);
+	modifiesprocsubquery142.setSynonyms(2, 2);
+	ResultTuple* actualResultmodifiesprocsubquery142 = modifiesprocsubquery142.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultmodifiesprocsubquery142->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultmodifiesprocsubquery142->isBool());
+	CPPUNIT_ASSERT(actualResultmodifiesprocsubquery142->isEmpty());
+
+	// Test 143: Modifies(2, 1)
+	ModifiesProcSubquery modifiesprocsubquery143 = ModifiesProcSubquery(&synonymTable, pk);
+	modifiesprocsubquery143.setSynonyms(2, 1);
+	ResultTuple* actualResultmodifiesprocsubquery143 = modifiesprocsubquery143.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultmodifiesprocsubquery143->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultmodifiesprocsubquery143->isBool());
+	CPPUNIT_ASSERT(!actualResultmodifiesprocsubquery143->isEmpty());
 }
 
 void SubqueryTest::testUses(){
@@ -3068,6 +3194,139 @@ void SubqueryTest::testUsesTuple() {
 }
 
 void SubqueryTest::testUsesProc(){
+	// Test 64: Uses(proc1, v2)
+	UsesProcSubquery usesprocsubquery64 = UsesProcSubquery(&synonymTable, pk);
+	usesprocsubquery64.setSynonyms("proc1", "v2");
+	ResultTuple* actualResultusesprocsubquery64 = usesprocsubquery64.solve();
+	int expectedResultusesprocsubquery64[15][2] = {
+		{0, 0}, {0, 1}, {0, 2}, {0, 3}, {0, 4}, {0, 5}, {0, 6},
+		{1, 0}, {1, 1}, {1, 2}, {1, 3}, {1, 4}, {1, 5}, {1, 6},
+		{2, 1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultusesprocsubquery64)/sizeof(expectedResultusesprocsubquery64[0])), actualResultusesprocsubquery64->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultusesprocsubquery64)/sizeof(expectedResultusesprocsubquery64[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultusesprocsubquery64[i])/sizeof(expectedResultusesprocsubquery64[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultusesprocsubquery64[i][j], actualResultusesprocsubquery64->getResultAt(i, j));
+		}
+	}
+
+	// Test 69: Uses(proc1, _)
+	UsesProcSubquery usesprocsubquery69 = UsesProcSubquery(&synonymTable, pk);
+	usesprocsubquery69.setSynonyms("proc1", "_");
+	ResultTuple* actualResultusesprocsubquery69 = usesprocsubquery69.solve();
+	int expectedResultusesprocsubquery69[3][1] = {
+		{0}, {1}, {2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultusesprocsubquery69)/sizeof(expectedResultusesprocsubquery69[0])), actualResultusesprocsubquery69->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultusesprocsubquery69)/sizeof(expectedResultusesprocsubquery69[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultusesprocsubquery69[i])/sizeof(expectedResultusesprocsubquery69[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultusesprocsubquery69[i][j], actualResultusesprocsubquery69->getResultAt(i, j));
+		}
+	}
+	
+	// Test 70: Uses(proc1, 2)
+	UsesProcSubquery usesprocsubquery70 = UsesProcSubquery(&synonymTable, pk);
+	usesprocsubquery70.setSynonyms("proc1", 2);
+	ResultTuple* actualResultusesprocsubquery70 = usesprocsubquery70.solve();
+	int expectedResultusesprocsubquery70[2][1] = {
+		{0}, {1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultusesprocsubquery70)/sizeof(expectedResultusesprocsubquery70[0])), actualResultusesprocsubquery70->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultusesprocsubquery70)/sizeof(expectedResultusesprocsubquery70[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultusesprocsubquery70[i])/sizeof(expectedResultusesprocsubquery70[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultusesprocsubquery70[i][j], actualResultusesprocsubquery70->getResultAt(i, j));
+		}
+	}
+
+	// Test 71: Uses(proc1, 6)
+	UsesProcSubquery usesprocsubquery71 = UsesProcSubquery(&synonymTable, pk);
+	usesprocsubquery71.setSynonyms("proc1", 6);
+	ResultTuple* actualResultusesprocsubquery71 = usesprocsubquery71.solve();
+	int expectedResultusesprocsubquery71[2][1] = {
+		{0}, {1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultusesprocsubquery71)/sizeof(expectedResultusesprocsubquery71[0])), actualResultusesprocsubquery71->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultusesprocsubquery71)/sizeof(expectedResultusesprocsubquery71[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultusesprocsubquery71[i])/sizeof(expectedResultusesprocsubquery71[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultusesprocsubquery71[i][j], actualResultusesprocsubquery71->getResultAt(i, j));
+		}
+	}
+
+	// Test 124: Uses(1, v2)
+	UsesProcSubquery usesprocsubquery124 = UsesProcSubquery(&synonymTable, pk);
+	usesprocsubquery124.setSynonyms(1, "v2");
+	ResultTuple* actualResultusesprocsubquery124 = usesprocsubquery124.solve();
+	int expectedResultusesprocsubquery124[7][1] = {
+		{0}, {1}, {2}, {3}, {4}, {5}, {6}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultusesprocsubquery124)/sizeof(expectedResultusesprocsubquery124[0])), actualResultusesprocsubquery124->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultusesprocsubquery124)/sizeof(expectedResultusesprocsubquery124[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultusesprocsubquery124[i])/sizeof(expectedResultusesprocsubquery124[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultusesprocsubquery124[i][j], actualResultusesprocsubquery124->getResultAt(i, j));
+		}
+	}
+
+	// Test 129: Uses(1, _)
+	UsesProcSubquery usesprocsubquery129 = UsesProcSubquery(&synonymTable, pk);
+	usesprocsubquery129.setSynonyms(1, "_");
+	ResultTuple* actualResultusesprocsubquery129 = usesprocsubquery129.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultusesprocsubquery129->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultusesprocsubquery129->isBool());
+	CPPUNIT_ASSERT(!actualResultusesprocsubquery129->isEmpty());
+
+	// Test 130: Uses(1, 7)
+	UsesProcSubquery usesprocsubquery130 = UsesProcSubquery(&synonymTable, pk);
+	usesprocsubquery130.setSynonyms(1, 7);
+	ResultTuple* actualResultusesprocsubquery130 = usesprocsubquery130.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultusesprocsubquery130->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultusesprocsubquery130->isBool());
+	CPPUNIT_ASSERT(actualResultusesprocsubquery130->isEmpty());
+
+	// Test 131: Uses(1, 6)
+	UsesProcSubquery usesprocsubquery131 = UsesProcSubquery(&synonymTable, pk);
+	usesprocsubquery131.setSynonyms(1, 6);
+	ResultTuple* actualResultusesprocsubquery131 = usesprocsubquery131.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultusesprocsubquery131->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultusesprocsubquery131->isBool());
+	CPPUNIT_ASSERT(!actualResultusesprocsubquery131->isEmpty());
+
+	// Test 136: Uses(2, v2)
+	UsesProcSubquery usesprocsubquery136 = UsesProcSubquery(&synonymTable, pk);
+	usesprocsubquery136.setSynonyms(2, "v2");
+	ResultTuple* actualResultusesprocsubquery136 = usesprocsubquery136.solve();
+	int expectedResultusesprocsubquery136[1][1] = {
+		{1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultusesprocsubquery136)/sizeof(expectedResultusesprocsubquery136[0])), actualResultusesprocsubquery136->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultusesprocsubquery136)/sizeof(expectedResultusesprocsubquery136[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultusesprocsubquery136[i])/sizeof(expectedResultusesprocsubquery136[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultusesprocsubquery136[i][j], actualResultusesprocsubquery136->getResultAt(i, j));
+		}
+	}
+	
+	// Test 141: Uses(2, _)
+	UsesProcSubquery usesprocsubquery141 = UsesProcSubquery(&synonymTable, pk);
+	usesprocsubquery141.setSynonyms(2, "_");
+	ResultTuple* actualResultusesprocsubquery141 = usesprocsubquery141.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultusesprocsubquery141->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultusesprocsubquery141->isBool());
+	CPPUNIT_ASSERT(!actualResultusesprocsubquery141->isEmpty());
+
+	// Test 142: Uses(2, 2)
+	UsesProcSubquery usesprocsubquery142 = UsesProcSubquery(&synonymTable, pk);
+	usesprocsubquery142.setSynonyms(2, 2);
+	ResultTuple* actualResultusesprocsubquery142 = usesprocsubquery142.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultusesprocsubquery142->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultusesprocsubquery142->isBool());
+	CPPUNIT_ASSERT(actualResultusesprocsubquery142->isEmpty());
+
+	// Test 143: Uses(2, 1)
+	UsesProcSubquery usesprocsubquery143 = UsesProcSubquery(&synonymTable, pk);
+	usesprocsubquery143.setSynonyms(2, 1);
+	ResultTuple* actualResultusesprocsubquery143 = usesprocsubquery143.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultusesprocsubquery143->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultusesprocsubquery143->isBool());
+	CPPUNIT_ASSERT(!actualResultusesprocsubquery143->isEmpty());
 }
 
 void SubqueryTest::testCalls(){

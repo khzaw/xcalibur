@@ -54,13 +54,21 @@ public:
 		tuple->addSynonymToMap(leftSynonym, index);
 		vector<int> modifiers = vector<int>();
 		if (isSyn == 2) {	// Modifies(syn, varnum): Get syns that modifies varnum
-			set<int> tempModifiers = pkb->modifiesTable.getModifiersProc(rightIndex);
+			set<int> tempModifiers = pkb->modifiesTable.evaluateGetModifiersProc(rightIndex);
 			copy(tempModifiers.begin(), tempModifiers.end(), back_inserter(modifiers)); 
 		} else {	// Modifies(syn, _): Get all modifiers
-			// not sure if this is correct
+			// not sure if this is correct // it's not!
+			/*
 			vector<pair<int, int>> temp = pkb->modifiesTable.getModifiesProc();
 			for (size_t i = 0; i < temp.size(); i++) {
 				modifiers.push_back(temp[i].first);
+			}
+			*/
+			// traverse through procTable, check for those that modifies a variable
+			for (int i = 0; i < pkb->procTable.getSize(); i++){
+				if (pkb->modifiesTable.evaluateGetModifiedVarProc(i).size() > (size_t)0){
+					modifiers.push_back(i);
+				}
 			}
 		}
 
@@ -81,11 +89,11 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 2) {	// Modifies(syn, varnum)
-				if (pkb->modifiesTable.isModifiesProc(temp.at(index), rightIndex)) {
+				if (pkb->modifiesTable.evaluateIsModifiesProc(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}
 			} else {	// Modifies(syn, _)
-				if (!pkb->modifiesTable.getModifiedVarProc(temp.at(index)).empty()) {
+				if (!pkb->modifiesTable.evaluateGetModifiedVarProc(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -99,8 +107,8 @@ public:
 		tuple->addSynonymToMap(rightSynonym, index);
 		
 		vector<int> modified;
-		if (isSyn == 1) {	// Modifies(proc, varnum): Get Modifiers of varnum
-			set<int> tempModified = pkb->modifiesTable.getModifiersProc(leftIndex);
+		if (isSyn == 1) {	// Modifies(proc, varnum): Get Modified var by proc
+			set<int> tempModified = pkb->modifiesTable.evaluateGetModifiedVarProc(leftIndex);
 			copy(tempModified.begin(), tempModified.end(), back_inserter(modified));
 		} else {	// Modifies(_, varnum)
 			//invalid
@@ -123,7 +131,7 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 1) {	// Modifies(stmt, syn)
-				if (pkb->modifiesTable.isModifiesProc(leftIndex, temp.at(index))) {
+				if (pkb->modifiesTable.evaluateIsModifiesProc(leftIndex, temp.at(index))) {
 					result->addResultRow(temp);
 				}
 			} else {	// Modifies(_, syn)
@@ -161,7 +169,7 @@ public:
 		int rIndex = tuple->getSynonymIndex(rightSynonym);
 		if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++){
-				if (pkb->modifiesTable.isModifiesProc(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
+				if (pkb->modifiesTable.evaluateIsModifiesProc(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
 					result->addResultRow(tuple->getResultRow(i));
 				}
 			}
@@ -172,7 +180,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
-					set<int> tV = pkb->modifiesTable.getModifiedVarProc(leftValue);
+					set<int> tV = pkb->modifiesTable.evaluateGetModifiedVarProc(leftValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
@@ -190,7 +198,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					set<int> tV = pkb->modifiesTable.getModifiersProc(rightValue);
+					set<int> tV = pkb->modifiesTable.evaluateGetModifiersProc(rightValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
@@ -210,11 +218,11 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		tuple->setBool(true);
 		if(isSyn == 0) {	//(digit, digit)
-			// invalid
+			tuple->setEmpty(!pkb->modifiesTable.evaluateIsModifiesProc(leftIndex, rightIndex));
 		} else if (isSyn == 7) {	//(_, digit)
 			// invalid
 		} else if (isSyn == 8) {	//(digit, _)
-			tuple->setEmpty(pkb->modifiesTable.getModifiedVarProc(leftIndex).empty());
+			tuple->setEmpty(pkb->modifiesTable.evaluateGetModifiedVarProc(leftIndex).empty());
 		} else {	//(_, _)
 			// invalid
 		}

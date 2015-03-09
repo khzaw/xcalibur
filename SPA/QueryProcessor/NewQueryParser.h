@@ -94,5 +94,5 @@ private:
 	void matchAffects();
 	void matchAffectsStar();
 
-	void matchVarRef(Subquery*);
+	string matchVarRef();
 };

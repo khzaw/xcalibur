@@ -12,6 +12,8 @@
 #include "QueryLexer.h"
 #include "QTNode.h"
 #include "QueryException.h"
+#include "Subquery.h"
+
 
 using namespace std;
 
@@ -223,21 +225,27 @@ void NewQueryParser::matchModifies() {
 	// ModifiesP: "Modifies" "(" stmtRef "," varRef ")"
 	ModifiesSubuqery modifiesSq = ModifiesSubquery(&synonymTable, &controller);
 	match("(");
+	// matchEnfRef() | matchstmtRef()
 	match(",");
-	matchVarRef(&modifiesSq);
+	string snd = matchVarRef(&modifiesSq);
 	match(")");
 }
-void NewQueryParser::matchVarRef(Subquery* subquery) {
+string NewQueryParser::matchVarRef() {
 	// varRef: synonym | "_" | """ IDENT """
+	string snd = "";
 	if(nextToken.name == "_") {
 		match(UNDERSCORE);
+		snd = "_";
 	} else if(nextToken.token == IDENT || nextToken.token == SIMPLE_IDENT) {
+		snd = nextToken.name;
 		match(nextToken.name); // synonym
 	} else if(nextToken.name == "\"") {
 		match("\"");
+		snd = nextToken.name;
 		match(nextToken.name);
 		match("\"");
 	}
+	return snd;
 }
 void NewQueryParser::matchUses() {
 }

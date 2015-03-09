@@ -4,6 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_map>
+#include <exception>
 #include "Calls.h"
 
 using namespace std;
@@ -170,25 +171,33 @@ using namespace std;
 	bool Calls::isCalls(int caller,int callee){
 		int callerIndex = Calls::getCallerIndex(caller);
 		int calleeIndex = Calls::getCalleeIndex(callee);
-	   set<int> calleeSet = calleeTable[callerIndex];
-	   std::set<int>::iterator it = calleeSet.find(callee);
-	   if( it == calleeSet.end()){
-		   return false;
-	   }else{
-		   return true;
-	   }
+		try {
+		   set<int> calleeSet = calleeTable[callerIndex];
+		   std::set<int>::iterator it = calleeSet.find(callee);
+		   if( it == calleeSet.end()){
+			   return false;
+		   }else{
+			   return true;
+		   }
+		} catch (exception& e) {
+			return false;
+		}
 	}
 
 	bool Calls::isCallsStar(int caller,int callee){
 		int callerIndex = Calls::getCallerIndex(caller);
 		int calleeIndex = Calls::getCalleeIndex(callee);
-		set<int> calleeSet = calleeStarTable[callerIndex];
-	   std::set<int>::iterator it = calleeSet.find(callee);
-	   if( it == calleeSet.end()){
-		   return false;
-	   }else{
-		   return true;
-	   }
+		try {
+			set<int> calleeSet = calleeStarTable[callerIndex];
+			std::set<int>::iterator it = calleeSet.find(callee);
+			if( it == calleeSet.end()) {
+				return false;
+			} else {
+					return true;
+			}
+		} catch (exception& e) {
+			return false;
+		}
 	}
 
 	void Calls::insertToCallerTable(set<int> caller){

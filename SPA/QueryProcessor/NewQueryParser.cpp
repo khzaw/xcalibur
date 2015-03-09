@@ -5,6 +5,8 @@
 #include <string>
 #include <map>
 #include <stack>
+#include <iostream>
+#include <sstream>
 
 #include "NewQueryParser.h"
 #include "QueryLexer.h"
@@ -13,12 +15,33 @@
 
 using namespace std;
 
+template <typename T>
+T lexical_cast(const std::string& s) {
+	std::stringstream ss(s);
+	T result;
+	if((ss >> result).falt() || !(ss >> std::ws).eof()) {
+		throw std::bad_cast();
+	}
+	return result;
+}
+
+template <typename T>
+bool lexical_cast(const std::string& s, T& t) {
+	try {
+		t = lexical_cast<T>(s);
+	} catch(const std::bad_cast& e) {
+		return false;
+	}
+}
+
 NewQueryParser::NewQueryParser() {
 }
 
-NewQueryParser::NewQueryParser(string s) {
+NewQueryParser::NewQueryParser(string s, PKBController* controller) {
 	this->nextToken = Lexeme();
 	this->lexer = QueryLexer(s);
+	this->selectVariables = vector<string>(); 
+	this->synonyms = map<string, string>();
 	parse();
 }
 
@@ -71,8 +94,8 @@ void NewQueryParser::match(int type) {
 
 void NewQueryParser::matchDeclarationVariables(string entity) {
 	string var = nextToken.name;
-	match(IDENT);
 	synonyms[var] = entity;
+	match(var);
 	if(nextToken.name.compare(";") != 0) {
 		match(",");
 		matchDeclarationVariables(entity);
@@ -89,6 +112,7 @@ void NewQueryParser::matchSelect() {
 
 void NewQueryParser::matchResultCL() {
 	if(nextToken.name == "BOOLEAN") {
+		selectVariables.push_back("BOOLEAN");
 		match("BOOLEAN");
 	} else {
 		matchTuple();
@@ -107,10 +131,8 @@ void NewQueryParser::matchTuple() {
 
 void NewQueryParser::matchTupleElements(bool recursive) {
 	string elem = nextToken.name;
-	match(IDENT);
-
-
-	// construct elements in subquery
+	selectVariables.push_back(elem);
+	match(elem);
 
 	if(recursive && nextToken.name == ",") {
 		match(","); 
@@ -199,20 +221,21 @@ void NewQueryParser::matchRelRef() {
 void NewQueryParser::matchModifies() {
 	// ModifiesP: "Modifies" "(" entRef "," varRef ")"
 	// ModifiesP: "Modifies" "(" stmtRef "," varRef ")"
+	ModifiesSubuqery modifiesSq = ModifiesSubquery(&synonymTable, &controller);
 	match("(");
 	match(",");
-	matchVarRef();
+	matchVarRef(&modifiesSq);
 	match(")");
 }
-void NewQueryParser::matchVarRef() {
+void NewQueryParser::matchVarRef(Subquery* subquery) {
 	// varRef: synonym | "_" | """ IDENT """
-	if(nextToken.name = "_") {
+	if(nextToken.name == "_") {
 		match(UNDERSCORE);
 	} else if(nextToken.token == IDENT || nextToken.token == SIMPLE_IDENT) {
-		match(IDENT); // synonym
+		match(nextToken.name); // synonym
 	} else if(nextToken.name == "\"") {
 		match("\"");
-		match(IDENT);
+		match(nextToken.name);
 		match("\"");
 	}
 }

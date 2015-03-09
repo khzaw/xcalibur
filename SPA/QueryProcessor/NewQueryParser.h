@@ -6,7 +6,10 @@
 
 #include "QueryLexer.h"
 #include "..\Frontend\Lexeme.h"
-#include "QTNode.h"
+#include "QTNode.h" 
+#include "QE.h"
+#include "..\PKB\PKBController.h"
+#include "Subquery.h"
 
 using namespace std;
 
@@ -46,10 +49,14 @@ class NewQueryParser {
 	string query;
 	map<string, string> synonyms;
 	string postfix;
+	QE* evaluator;
+	vector<string> selectVariables;
+	PKBController* controller;
+
 
 public:
 	NewQueryParser();
-	NewQueryParser(string s);
+	NewQueryParser(string, PKBController*);
 	~NewQueryParser();
 	void parse();
 	void print();
@@ -87,5 +94,5 @@ private:
 	void matchAffects();
 	void matchAffectsStar();
 
-	void matchVarRef();
+	void matchVarRef(Subquery*);
 };

@@ -171,16 +171,15 @@ using namespace std;
 	bool Calls::isCalls(int caller,int callee){
 		int callerIndex = Calls::getCallerIndex(caller);
 		int calleeIndex = Calls::getCalleeIndex(callee);
-		try {
-		   set<int> calleeSet = calleeTable[callerIndex];
-		   std::set<int>::iterator it = calleeSet.find(callee);
-		   if( it == calleeSet.end()){
-			   return false;
-		   }else{
-			   return true;
-		   }
-		} catch (exception& e) {
+		if (callerIndex == -1 || calleeIndex == -1){
 			return false;
+		}
+		set<int> calleeSet = calleeTable[callerIndex];
+		std::set<int>::iterator it = calleeSet.find(callee);
+		if( it == calleeSet.end()){
+			return false;
+		}else{
+			return true;
 		}
 	}
 

@@ -348,9 +348,9 @@ void NewQueryParser::matchPatternIf(string s) {
 	match("(");
 	string fst = matchVarRef();
 	match(",");
-	match(UNDERSCORE)
+	match(UNDERSCORE);
 	match(",");
-	match(UNDERSCORE)
+	match(UNDERSCORE);
 	match(")");
 }
 
@@ -390,6 +390,7 @@ string NewQueryParser::matchRef() {
 	// ref: attrRef | synonym | '"' IDENT '"' | INTEGER
 	// in the above synonym must be a synonym of prog_line
 	// attRef: synonym '.' attrname
+	return "";
 
 }
 
@@ -513,9 +514,9 @@ void NewQueryParser::matchUses() {
 void NewQueryParser::matchCalls() {
 	// Calls : "Calls" "(" entRef "," varRef ")"
 	match("(");
-	string fst = entRef(false);
+	string fst = matchEntRef(false);
 	match(",");
-	string snd = varRef();
+	string snd = matchVarRef();
 	match(")");
 
 	cout << "Calls: fst -> " << fst << "\tsnd -> " << snd;
@@ -524,9 +525,9 @@ void NewQueryParser::matchCalls() {
 void NewQueryParser::matchCallsStar() {
 	// CallsT : "Calls*" "(" entRef "," varRef ")"
 	match("(");
-	string fst = entRef(false);
+	string fst = matchEntRef(false);
 	match(",");
-	string snd = varRef();
+	string snd = matchVarRef();
 	match(")");
 
 	cout << "Calls*: fst -> " << fst << "\tsnd -> " << snd;

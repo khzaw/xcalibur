@@ -53,6 +53,8 @@ class NewQueryParser {
 	vector<string> selectVariables;
 	PKBController* controller;
 
+	string result;		// postfix expression
+
 
 public:
 	NewQueryParser();
@@ -75,10 +77,20 @@ private:
 	void matchTupleElements(bool);
 	void matchSuchThat();
 	void matchWith();
+	void matchAttrCompare();
+	string matchRef();
+
+	void matchPatternCl();
+	void matchPatternCond();
 	void matchPattern();
+	void matchPatternAssign(string);
+	void matchPatternWhile(string);
+	void matchPatternIf(string);
+	QTNode* matchExpression();
+	int comparePrecedence(string, string);
+
 	void matchRelCond();
 	void matchAttrCond();
-	void matchPatternCond();
 	void matchRelRef();
 	
 	void matchModifies();
@@ -93,6 +105,7 @@ private:
 	void matchNextStar();
 	void matchAffects();
 	void matchAffectsStar();
+
 
 	string matchVarRef();
 	string matchEntRef(bool);

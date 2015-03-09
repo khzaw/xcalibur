@@ -163,7 +163,7 @@ void NewQueryParser::matchConditions() {
 	if(nextToken.name == "such") {
 		matchSuchThat();
 	} else if(nextToken.name == "pattern") {
-		matchPattern();
+		matchPatternCl();
 	} else if(nextToken.name == "with") {
 		matchWith();
 	} else {
@@ -178,14 +178,219 @@ void NewQueryParser::matchSuchThat() {
 	matchRelCond();
 }
 
-void NewQueryParser::matchPattern() {
+void NewQueryParser::matchPatternCl() {
+    // pattern-cl: "pattern" patternCond
 	match("pattern");
 	matchPatternCond();
+}
+
+void NewQueryParser::matchPatternCond() {
+    // patternCond: pattern ("and" pattern)*
+    matchPattern();
+    if(nextToken.name == "and") {
+        match("and");
+        matchPattern();
+	}
+}
+
+void NewQueryParser::matchPattern() {
+    // pattern: assign | while | if
+	string syn = nextToken.name;
+	match(nextToken.name);	// synonym from assign rule
+	map<string, string>::iterator it = synonyms.find(syn);
+	string synType = (it != synonyms.end()) ? it->second : "";
+
+	if(synType == "assign") {
+		matchPatternAssign(syn);
+	} else if(synType == "while") {
+		matchPatternWhile(syn);
+	} else if(synType == "if") {
+		matchPatternIf(syn);
+	} else {
+		throw(QueryException("INVALID SYNONYM: " + syn + " is not a synonym of the type \"if\", \"while\" or \"assign\"")); 
+	}
+}
+
+void NewQueryParser::matchPatternAssign(string s) {
+	// assign : synonym "(" varRef "," expression-spec | "_" ")"
+	// expression-spec : """ expr | "_" """ expr """ "_"
+	result = "";
+	match("(");
+	string fst = matchVarRef();
+	match(",");
+	if(nextToken.name == "_") {
+		match(UNDERSCORE);
+	}
+
+	if(nextToken.name == "\"") {
+		match("\"");
+		matchExpression();
+		match("\"");
+	}
+
+	if(nextToken.name == "_") {
+		match(UNDERSCORE);
+	}
+	match(")");
+	
+	cout << "POSTFIX : " << result << "\n";
+	// result postfix is ready
+}
+
+QTNode* NewQueryParser::matchExpression() {
+	stack<string> operatorStack;
+	stack<QTNode*> operandStack;
+	QTNode* left;
+	QTNode* right;
+	QTNode* current;
+
+	//shunting yard algorithm
+	next:
+	while(nextToken.name.compare("\"") != 0) {
+		string popped;
+		if (nextToken.token == OPEN_PARENTHESES) {
+			match(OPEN_PARENTHESES);
+			operatorStack.push("(");
+		} else if (nextToken.token == CLOSE_PARENTHESES) {
+			match(CLOSE_PARENTHESES);
+			while(!operatorStack.empty()) {
+				popped = operatorStack.top();
+				operatorStack.pop();
+				if (popped.compare("(") == 0) {
+					goto next;
+				} else {
+					//add node(operandStack, popped);
+					right = operandStack.top();
+					operandStack.pop();
+					left = operandStack.top();
+					operandStack.pop();
+					current = new QTNode(popped);
+					current->addChild(left);
+					current->addChild(right);
+					operandStack.push(current);
+				}
+			}
+			//throw unbalance parentheses exception
+		} else {
+			if(nextToken.token == PLUS || nextToken.token == MINUS || nextToken.token == TIMES) {
+				string op1 = nextToken.name;
+				match(op1);
+				string op2;
+				while (!operatorStack.empty() && !(op2 = operatorStack.top()).empty()) {
+					if(comparePrecedence(op1, op2) <= 0) {
+						operatorStack.pop();
+						//addNode(operandStack, o2)
+						right = operandStack.top();
+						operandStack.pop();
+						left = operandStack.top();
+						operandStack.pop();
+						current = new QTNode(op2);
+						current->addChild(left);
+						current->addChild(right);
+						operandStack.push(current);
+						if(result.length() > 0) result += " ";
+						result += op2;
+					} else {
+						break;
+					}
+				}
+				operatorStack.push(op1);
+			} else {
+				string factor = nextToken.name;
+				if(nextToken.token == INT_LIT) {
+					match(INT_LIT);
+				} else {
+					match(SIMPLE_IDENT);
+				}
+				if(result.length() > 0) result += " ";
+				result += factor;
+				operandStack.push(new QTNode(factor));
+			}
+		}	
+	}
+	while(!operatorStack.empty()) {
+		string op = operatorStack.top();
+		operatorStack.pop();
+		right = operandStack.top();
+		operandStack.pop();
+		left = operandStack.top();
+		operandStack.pop();
+		current = new QTNode(op);
+		current->addChild(left);
+		current->addChild(right);
+		operandStack.push(current);
+		result += " " + op;
+	}
+
+	//cout << "postfix : " << result << endl;
+
+	return operandStack.top();
+}
+
+int NewQueryParser::comparePrecedence(string a, string b) {
+	if (a.compare(b) == 0) {
+		return 0;
+	}
+	if (a.compare("-") == 0 && b.compare("+") == 0) {
+		return 0;
+	}
+	if (a.compare("+") == 0 && b.compare("-") == 0) {
+		return 0;
+	}
+	if (a.compare("*") == 0) {
+		return 1;
+	}
+	return -1;
+}
+
+void NewQueryParser::matchPatternIf(string s) {
+	// if : synonym "(" varRef "," "_" "," "_" ")"
+	match("(");
+	string fst = matchVarRef();
+	match(",");
+	match(UNDERSCORE)
+	match(",");
+	match(UNDERSCORE)
+	match(")");
+}
+
+void NewQueryParser::matchPatternWhile(string s) {
+	// while : synonym "(" varRef "," "_" ")"
+	match("(");
+	string fst = matchVarRef();
+	match(",");
+	match(UNDERSCORE);
+	match(")");
 }
 
 void NewQueryParser::matchWith() {
 	match("with");
 	matchAttrCond();
+}
+
+void NewQueryParser::matchAttrCond() {
+	//attrCond:  attrCompare ("and" attCompare )*
+	matchAttrCompare();
+	if(nextToken.name == "and") {
+		match("and");
+		matchAttrCompare();
+	}
+}
+
+void NewQueryParser::matchAttrCompare() {
+	// attrCompare : ref '=' ref
+	// lhs and rhs 'ref' msut be of teh same type (INTEGER or character string)	
+	string fst = matchRef();
+	match("=");
+	string snd = matchRef();
+	cout << "With: fst -> " << fst << "\tsnd -> " << snd;
+}
+
+string NewQueryParser::matchRef() {
+	// ref: attrRef | synonym | '"' IDENT '"' | INTEGER
+	// in the above synonym must be a synonym of prog_line
+	// attRef: synonym '.' attrname
+
 }
 
 void NewQueryParser::matchRelCond() {
@@ -438,9 +643,4 @@ void NewQueryParser::matchAffectsStar() {
     string snd = matchStmtRef();
     match(")");
 	cout << "Affects: fst -> " << fst << "\tsnd -> " << snd;
-}
-void NewQueryParser::matchPatternCond() {
-}
-
-void NewQueryParser::matchAttrCond() {
 }

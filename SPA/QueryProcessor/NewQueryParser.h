@@ -97,6 +97,7 @@ private:
 	string matchVarRef();
 	string matchEntRef(bool);
 	string matchStmtRef();
+	string matchLineRef();
 
 	// debug
 	void printMap();

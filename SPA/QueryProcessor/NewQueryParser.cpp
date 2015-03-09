@@ -329,9 +329,9 @@ void NewQueryParser::matchCallsStar() {
 
 void NewQueryParser::matchParent() {
 	match("(");
-	string fst = stmtRef();
+	string fst = matchStmtRef();
 	match(",");
-	string snd = stmtRef();
+	string snd = matchStmtRef();
 	match(")");
 
 	cout << "Parent: fst -> " << fst << "\tsnd -> " << snd;
@@ -339,9 +339,9 @@ void NewQueryParser::matchParent() {
 
 void NewQueryParser::matchParentStar() {
 	match("(");
-	string fst = stmtRef();
+	string fst = matchStmtRef();
 	match(",");
-	string snd = stmtRef();
+	string snd = matchStmtRef();
 	match(")");
 
 	cout << "Parent*: fst -> " << fst << "\tsnd -> " << snd;
@@ -349,15 +349,79 @@ void NewQueryParser::matchParentStar() {
 
 string NewQueryParser::matchStmtRef() {
 	// stmtRef: synonym | "_" | INTEGER
+	string param;
+	if(nextToken.name == "_") {
+		param = "_";
+		match(UNDERSCORE);
+	} else if(nextToken.token == INT_LIT) {
+		param = nextToken.name;
+		match(INT_LIT);
+	} else if(nextToken.token == IDENT || nextToken.token == SIMPLE_IDENT) {
+		param = nextToken.name;
+		match(IDENT);
+	} else {
+		cout << "SYNTAX ERROR -> " << nextToken.name << "\t" << nextToken.token << endl;
+	}
+	return param;
 }
+
 void NewQueryParser::matchFollows() {
+	// Follows: "Follows" "(" stmtRef "," stmtRef ")";
+	match("(");
+	string fst = matchStmtRef();
+	match(",");
+	string snd = matchStmtRef();
+	match(")");
+	cout << "Follows: fst -> " << fst << "\tsnd -> " << snd;
 }
+
 void NewQueryParser::matchFollowsStar() {
+	match("(");
+	string fst = matchStmtRef();
+	match(",");
+	string snd = matchStmtRef();
+	match(")");
+	cout << "Follows*: fst -> " << fst << "\tsnd -> " << snd;
 }
+
 void NewQueryParser::matchNext() {
+    match("(");
+    string fst = matchLineRef();
+    match(",");
+    string snd = matchLineRef();
+    match(")");
+
+	cout << "Next: fst -> " << fst << "\tsnd -> " << snd;
 }
+
 void NewQueryParser::matchNextStar() {
+    match("(");
+    string fst = matchLineRef();
+    match(",");
+    string snd = matchLineRef();
+    match(")");
+
+	cout << "Next*: fst -> " << fst << "\tsnd -> " << snd;
 }
+
+string NewQueryParser::matchLineRef() {
+    // lineRef:  synonym | "_" | INTEGER
+	string param;
+	if(nextToken.name == "_") {
+		param = "_";
+		match(UNDERSCORE);
+	} else if(nextToken.token == INT_LIT) {
+		param = nextToken.name;
+		match(INT_LIT);
+	} else if(nextToken.token == IDENT || nextToken.token == SIMPLE_IDENT) {
+		param = nextToken.name;
+		match(IDENT);
+	} else {
+		cout << "SYNTAX ERROR -> " << nextToken.name << "\t" << nextToken.token << endl;
+	}
+	return param;
+}
+
 void NewQueryParser::matchAffects() {
 }
 void NewQueryParser::matchAffectsStar() {

@@ -6,6 +6,15 @@
 
 using namespace std;
 
+// CallsSubquery: Subquery for Calls relation
+// To construct CallsSubquery:
+// 1. CallsSubquery(map<string, string>* SynonymMap, PKBController* PKB) csubquery
+// 2. csubquery.setSynonyms(leftSyn/Index, rightSyn/Index)
+// Examples for setSynonyms():
+// Calls(p1, p2)              |    csubquery.setSynonyms("p1", "p2")
+// Calls("_", p2)             |    csubquery.setSynonyms("_", "p2")
+// Calls("First", p2)         |    csubquery.setSynonyms(1, "p2")   // 1 is the index of procedure "First" in procTable
+
 class CallsSubquery : public Subquery {
 public:
 	CallsSubquery(map<string, string>* m, PKBController* p) : Subquery(m, p){
@@ -74,7 +83,7 @@ public:
 		int index = tuple->getSynonymIndex(leftSynonym);
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
-			if (isSyn == 1) {	// Calls(syn, stmt)
+			if (isSyn == 2) {	// Calls(syn, stmt)
 				if (pkb->callsTable.isCalls(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}

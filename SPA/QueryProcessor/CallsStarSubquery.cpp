@@ -74,7 +74,7 @@ public:
 		int index = tuple->getSynonymIndex(leftSynonym);
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
-			if (isSyn == 1) {	// Calls*(syn, stmt)
+			if (isSyn == 2) {	// Calls*(syn, stmt)
 				if (pkb->callsTable.isCallsStar(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}

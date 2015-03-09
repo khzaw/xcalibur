@@ -43,6 +43,7 @@ public:
 	void testModifiesProc();
 	void testUsesProc();
 	void testCalls();
+	void testCallsTuple();
 	void testCallsT();
 	void testPattern();
 	void testWith();

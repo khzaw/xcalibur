@@ -106,7 +106,7 @@ public:
 		
 		vector<int> modified;
 		if (isSyn == 1) {	// Modifies(stmt, varnum): Get Modifiers of varnum
-			set<int> tempModified = pkb->modifiesTable.getModifiersStmt(leftIndex);
+			set<int> tempModified = pkb->modifiesTable.evaluateGetModifiersStmt(leftIndex);
 			copy(tempModified.begin(), tempModified.end(), back_inserter(modified));
 		} else {	// Modifies(_, varnum)
 			//invalid
@@ -235,7 +235,7 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		tuple->setBool(true);
 		if(isSyn == 0) {	//(digit, digit)
-			// invalid
+			tuple->setEmpty(!pkb->modifiesTable.evaluateIsModifiesStmt(leftIndex, rightIndex));
 		} else if (isSyn == 7) {	//(_, digit)
 			// invalid
 		} else if (isSyn == 8) {	//(digit, _)

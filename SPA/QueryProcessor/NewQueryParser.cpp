@@ -423,8 +423,21 @@ string NewQueryParser::matchLineRef() {
 }
 
 void NewQueryParser::matchAffects() {
+    match("(");
+    string fst = matchStmtRef();
+    match(",");
+    string snd = matchStmtRef();
+    match(")");
+	cout << "Affects: fst -> " << fst << "\tsnd -> " << snd;
 }
+
 void NewQueryParser::matchAffectsStar() {
+    match("(");
+    string fst = matchStmtRef();
+    match(",");
+    string snd = matchStmtRef();
+    match(")");
+	cout << "Affects: fst -> " << fst << "\tsnd -> " << snd;
 }
 void NewQueryParser::matchPatternCond() {
 }

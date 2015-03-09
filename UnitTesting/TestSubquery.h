@@ -34,6 +34,7 @@ public:
 
 	void testSubqueries();
 	void testFollows();
+	void testFollowsTuple();
 	void testParent();
 	void testFollowsT();
 	void testParentT();

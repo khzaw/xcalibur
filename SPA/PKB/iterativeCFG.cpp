@@ -13,31 +13,7 @@ CFG::CFG() {
 }
 
 bool CFG::isNext(int line1, int line2) {
-	set<int> next = AdjListFwd[line1];
-	std::stack<int> stack; set<int> visited;
-
-	// end of flow case
-	if (next.empty()) return false;
-
-	else {
-		// handle endSentinel neighbour of line1
-		for (std::set<int>::iterator it=next.begin(); it!=next.end(); it++) {
-			if (*it<0) stack.push(*it);
-		}
-		// by enqueuing all positive neighbours of endSentinels
-		
-		while (!stack.empty()) {
-			int endSentinel = stack.top(); stack.pop(); visited.insert(endSentinel);
-				for (std::set<int>::iterator it=AdjListFwd[endSentinel].begin(); it!=AdjListFwd[endSentinel].end(); it++) {
-					if (*it<0 && visited.find(endSentinel)!=visited.end()) stack.push(*it);
-					else next.insert(*it);
-			}
-		}
-		
-		// return find result
-		return !(next.find(line2)==next.end());
-	}
-
+	return !(AdjListFwd[line1].find(line2)==AdjListFwd[line1].end());
 }
 
 bool CFG::isPrev(int line1, int line2) {
@@ -46,12 +22,141 @@ bool CFG::isPrev(int line1, int line2) {
 	else return true;
 }
 
-set<int> CFG::getNextOf(int line) {
+bool CFG::isNextStar(int line1, int line2) {
+
+	// check for try/catch out_of_range exception
+	try {
+		AdjListFwd.at(line1);
+	}
+	catch (const out_of_range& e) {
+		cerr << "Error. First argument invalid.\n";
+	}
+
+	// DFS at line1
+	// if encounter line 2 along the way, set ans to true
+
+	std::queue<int> pq; 
+	pq.push(line1);
+	std::set<int> visited, temp;
+	int curr; bool ans = false;
+
+	while (!pq.empty()) {
+		curr = pq.front(); pq.pop();
+
+		if (visited.find(curr)==visited.end()) {
+			visited.insert(curr);
+
+			if (curr==line2) { ans = true; break; }
+
+			// try to access linked nodes, check for errors
+			try {
+				temp = AdjListFwd.at(curr);
+			}
+			catch (const out_of_range& e) {
+				// cout << "Nothing after "<< curr <<". ";
+			}
+
+			//cout << "exploring list at position " << curr << " " << temp.size() << " ";
+			// enqueue linked nodes
+			for (std::set<int>::iterator it=temp.begin(); it!=temp.end(); it++) {
+				// only enqueue unvisited nodes
+				if (visited.find(*it)==visited.end()) { 
+					pq.push(*it); //cout << "pushed "<<*it<<" onto pq"<< endl; 
+				}
+			}
+		}
+	}
+
+	// return answer;
+	return ans;
+}
+
+bool CFG::isPrevStar(int line1, int line2) {
+	return isNextStar(line2, line1);
+}
+
+set<int> CFG::getNext(int line) {
 	return AdjListFwd[line];
 }
 
-set<int> CFG::getPrevOf(int line) {
+set<int> CFG::getPrev(int line) {
 	return AdjListBwd[line];
+}
+
+set<int> CFG::getNextStar(int line1) {
+	
+	std::stack<int> pq; 
+	pq.push(line1);
+	std::set<int> visited, temp, ans;
+	int curr;
+
+	while (!pq.empty()) {
+		curr = pq.top(); pq.pop();
+
+		if (visited.find(curr)==visited.end()) {
+			visited.insert(curr);
+
+			// try to access linked nodes, check for errors
+			try {
+				temp = AdjListFwd.at(curr);
+			}
+			catch (const out_of_range& e) {
+				// cout << "Nothing after "<< curr <<". ";
+			}
+
+			// cout << "exploring list at position " << curr << " " << temp.size() << " ";
+			// enqueue linked nodes
+			for (std::set<int>::iterator it=temp.begin(); it!=temp.end(); it++) {
+				// insert item
+				ans.insert(*it);
+				
+				// only enqueue unvisited nodes
+				if (visited.find(*it)==visited.end()) { 
+					pq.push(*it); //cout << "pushed "<<*it<<" onto pq"<< endl; 
+				}
+			}
+		}
+	}
+	
+	return ans;
+}
+
+set<int> CFG::getPrevStar(int line1) {
+
+	std::stack<int> pq; 
+	pq.push(line1);
+	std::set<int> visited, temp, ans;
+	int curr;
+
+	while (!pq.empty()) {
+		curr = pq.top(); pq.pop();
+
+		if (visited.find(curr)==visited.end()) {
+			visited.insert(curr);
+
+			// try to access linked nodes, check for errors
+			try {
+				temp = AdjListBwd.at(curr);
+			}
+			catch (const out_of_range& e) {
+				// cout << "Nothing after "<< curr <<". ";
+			}
+
+			// cout << "exploring list at position " << curr << " " << temp.size() << " ";
+			// enqueue linked nodes
+			for (std::set<int>::iterator it=temp.begin(); it!=temp.end(); it++) {
+				// insert item
+				ans.insert(*it);
+				
+				// only enqueue unvisited nodes
+				if (visited.find(*it)==visited.end()) { 
+					pq.push(*it); //cout << "pushed "<<*it<<" onto pq"<< endl; 
+				}
+			}
+		}
+	}
+	
+	return ans;
 }
 
 // build CFG from AST root
@@ -156,56 +261,33 @@ CFG::CFG(TNode* root) {
 
 		}
 	}
-}
 
-bool CFG::isNextT(int line1, int line2) {
+	// after all nodes have been populated and processed
+	for (std::map<int, set<int>>::iterator it=AdjListFwd.begin(); it!=AdjListFwd.end(); it++) {
+		set<int> list = (*it).second;
+		std::stack<int> stack; set<int> visited;
 
-	// check for try/catch out_of_range exception
-	try {
-		AdjListFwd.at(line1);
-	}
-	catch (const out_of_range& e) {
-		cerr << "Error. First argument invalid.\n";
-	}
+		// end of flow case
+		if (list.empty()) break;
 
-	// DFS at line1
-	// if encounter line 2 along the way, set ans to true
-
-	std::queue<int> pq; 
-	pq.push(line1);
-	std::set<int> visited, temp;
-	int curr; bool ans = false;
-
-	while (!pq.empty()) {
-		curr = pq.front(); pq.pop();
-
-		if (visited.find(curr)==visited.end()) {
-			visited.insert(curr);
-
-			if (curr==line2) { ans = true; break; }
-
-			// try to access linked nodes, check for errors
-			try {
-				temp = AdjListFwd.at(curr);
+		else {
+			// handle endSentinel neighbour of line1
+			for (std::set<int>::iterator it2=list.begin(); it2!=list.end(); it2++) {
+				if (*it2<0) stack.push(*it2);
 			}
-			catch (const out_of_range& e) {
-				cout << "Nothing after "<< curr <<". ";
-			}
-
-			//cout << "exploring list at position " << curr << " " << temp.size() << " ";
-			// enqueue linked nodes
-			for (std::set<int>::iterator it=temp.begin(); it!=temp.end(); it++) {
-				// only enqueue unvisited nodes
-				if (visited.find(*it)==visited.end()) { 
-					pq.push(*it); //cout << "pushed "<<*it<<" onto pq"<< endl; 
+			// by enqueuing all positive neighbours of endSentinels
+		
+			while (!stack.empty()) {
+				int endSentinel = stack.top(); stack.pop(); visited.insert(endSentinel);
+					for (std::set<int>::iterator it3=AdjListFwd[endSentinel].begin(); it3!=AdjListFwd[endSentinel].end(); it3++) {
+						if (*it3<0 && visited.find(endSentinel)!=visited.end()) stack.push(*it3);
+						else (*it).second.insert(*it3);
 				}
 			}
 		}
 	}
-
-	// return answer;
-	return ans;
 }
+
 
 void CFG::addLink(int line1, int line2) {
 	if (line1 != line2) {
@@ -221,13 +303,13 @@ void CFG::linkStmtList(vector<TNode*> stmtList) {
 	for (int i=0; i<stmtList.size()-1; i++) {
 
 		if (stmtList.at(i)->getNodeType()!="IF_NODE") {
-			std::cout << "linking non-if to next neighbour. line " << stmtList.at(i)->getStmtNum() <<" to line " << stmtList.at(i+1)->getStmtNum() <<"\n";
+			// std::cout << "linking non-if to next neighbour. line " << stmtList.at(i)->getStmtNum() <<" to line " << stmtList.at(i+1)->getStmtNum() <<"\n";
 			addLink(stmtList.at(i)->getStmtNum(), stmtList.at(i+1)->getStmtNum());
 		}
 		// if IF_NODE, create an END_IF sentinel (encoded as negative of stmtNum of IF_NODE)
 		// link END_IF sentinel to next neighbour
 		else {
-			std::cout << "linking sentinel of if at line " << stmtList.at(i)->getStmtNum() <<" to next neighbour " << stmtList.at(i+1)->getStmtNum() << ".\n";
+			// std::cout << "linking sentinel of if at line " << stmtList.at(i)->getStmtNum() <<" to next neighbour " << stmtList.at(i+1)->getStmtNum() << ".\n";
 			addLink(0-stmtList.at(i)->getStmtNum(), stmtList.at(i+1)->getStmtNum());
 		}
 	}

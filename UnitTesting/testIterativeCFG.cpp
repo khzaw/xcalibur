@@ -92,8 +92,6 @@ void iterativeCFGTest::testIfElseLoop(){
 	
 	// test basic linking
 	CPPUNIT_ASSERT(newCFG.isNext(2,3));
-		
-
 
 	// testing link from if to child
 	CPPUNIT_ASSERT(newCFG.isNext(3,4));
@@ -104,9 +102,9 @@ void iterativeCFGTest::testIfElseLoop(){
 	CPPUNIT_ASSERT(newCFG.isNext(7,8));
 
 	// test nextT
-	CPPUNIT_ASSERT(newCFG.isNextT(2,4));
-	CPPUNIT_ASSERT(newCFG.isNextT(2,5));
-	CPPUNIT_ASSERT(newCFG.isNextT(2,6));
+	CPPUNIT_ASSERT(newCFG.isNextStar(2,4));
+	CPPUNIT_ASSERT(newCFG.isNextStar(2,5));
+	CPPUNIT_ASSERT(newCFG.isNextStar(2,6));
 
 	// should be false
 	CPPUNIT_ASSERT(!newCFG.isNext(4,3));
@@ -157,10 +155,10 @@ void iterativeCFGTest::testWhileLoop() {
 	CPPUNIT_ASSERT(newCFG.isNext(5,3));
 
 	// test NextT
-	CPPUNIT_ASSERT(newCFG.isNextT(1,4));
-	CPPUNIT_ASSERT(newCFG.isNextT(2,5));
-	CPPUNIT_ASSERT(newCFG.isNextT(4,6));
-	CPPUNIT_ASSERT(newCFG.isNextT(5,6));
+	CPPUNIT_ASSERT(newCFG.isNextStar(1,4));
+	CPPUNIT_ASSERT(newCFG.isNextStar(2,5));
+	CPPUNIT_ASSERT(newCFG.isNextStar(4,6));
+	CPPUNIT_ASSERT(newCFG.isNextStar(5,6));
 
 	// should fail
 	// CPPUNIT_ASSERT(newCFG.isNext(2,5));
@@ -275,7 +273,7 @@ void iterativeCFGTest::testIfIfLoop() {
 	CPPUNIT_ASSERT(newCFG.isNext(17,18));
 
 	// test NextT
-	CPPUNIT_ASSERT(newCFG.isNextT(2,18));
+	CPPUNIT_ASSERT(newCFG.isNextStar(2,18));
 	
 	// should fail
 	// CPPUNIT_ASSERT(!newCFG.isNext(1,2));

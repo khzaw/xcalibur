@@ -16,12 +16,15 @@ class CFG {
     void addLink(int, int);
     bool isNext(int, int);
     bool isPrev(int, int);
-    bool isNextT(int, int);
+    bool isNextStar(int, int);
+	bool isPrevStar(int, int);
 
-    set<int> getNextOf(int);
-    set<int> getPrevOf(int);
+    set<int> getNext(int);
+    set<int> getPrev(int);
+	set<int> getNextStar(int);
+	set<int> getPrevStar(int);
 
-  // private:
+    private:
     std::map<int, std::set<int> > AdjListFwd;
     std::map<int, std::set<int> > AdjListBwd;
     int numLines;

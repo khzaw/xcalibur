@@ -278,7 +278,7 @@ using namespace std;
 
    bool Uses::evaluateIsUsesStmt(int stmt, int varIndex){
 	  // cout << "rows size" << vecBool.size() << "column size " << vecBool[0].size(); 
-	   if( (size_t)stmt > stmtBool.size() || (size_t)varIndex > stmtBool[0].size()){
+	   if( (size_t)stmt >= stmtBool.size() || (size_t)varIndex >= stmtBool[0].size()){
 		   return false;
 	   }else{
 	   if(stmtBool[stmt][varIndex]){
@@ -291,7 +291,7 @@ using namespace std;
 
    bool Uses::evaluateIsUsesProc(int proc, int varIndex){
 	  // cout << "rows size" << vecBool.size() << "column size " << vecBool[0].size(); 
-	   if( (size_t)proc > procBool.size() || (size_t)varIndex > procBool[0].size()){
+	   if( (size_t)proc >= procBool.size() || (size_t)varIndex >= procBool[0].size()){
 		   return false;
 	   }else{
 	   if(procBool[proc][varIndex]){

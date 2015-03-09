@@ -54,6 +54,7 @@
     <ClCompile Include="QueryProcessor\QueryEvaluator.cpp" />
     <ClCompile Include="QueryProcessor\QueryLexer.cpp" />
     <ClCompile Include="QueryProcessor\QueryParser.cpp" />
+    <CICompile Include="QueryProcessor\NewQueryParser.cpp" />
     <ClCompile Include="QueryProcessor\QueryTree.cpp" />
     <ClCompile Include="QueryProcessor\ResultTuple.cpp" />
     <ClCompile Include="QueryProcessor\Subquery.cpp" />
@@ -95,6 +96,7 @@
     <ClInclude Include="QueryProcessor\QueryException.h" />
     <ClInclude Include="QueryProcessor\QueryLexer.h" />
     <ClInclude Include="QueryProcessor\QueryParser.h" />
+    <CIInclude Include="QueryProcessor\NewQueryParser.h" />
     <ClInclude Include="QueryProcessor\QueryTree.h" />
     <ClInclude Include="QueryProcessor\ResultTuple.h" />
     <ClInclude Include="QueryProcessor\Subquery.h" />

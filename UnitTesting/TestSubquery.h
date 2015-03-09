@@ -40,6 +40,7 @@ public:
 	void testModifies();
 	void testModifiesTuple();
 	void testUses();
+	void testUsesTuple();
 	void testModifiesProc();
 	void testUsesProc();
 	void testCalls();

@@ -54,7 +54,7 @@ public:
 		tuple->addSynonymToMap(leftSynonym, index);
 		vector<int> users = vector<int>();
 		if (isSyn == 2) {	// Uses(syn, varnum): Get syns that uses varnum
-			set<int> tempUsers = pkb->usesTable.getUsersStmt(rightIndex);
+			set<int> tempUsers = pkb->usesTable.evaluateGetUsersStmt(rightIndex);
 			copy(tempUsers.begin(), tempUsers.end(), back_inserter(users));
 		} else {	// Uses(syn, _): Get all users
 			set<int> tempUsers = pkb->usesTable.getAllUsersStmt();
@@ -87,7 +87,7 @@ public:
 					result->addResultRow(temp);
 				}
 			} else {	// Uses(syn, _)
-				if (!pkb->usesTable.getUsedVarStmt(temp.at(index)).empty()) {
+				if (!pkb->usesTable.evaluateGetUsedVarStmt(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -102,7 +102,7 @@ public:
 		
 		vector<int> used;
 		if (isSyn == 1) {	// Uses(stmt, varnum): Get Users of varnum
-			set<int> tempUsed = pkb->usesTable.getUsersStmt(leftIndex);
+			set<int> tempUsed = pkb->usesTable.evaluateGetUsersStmt(leftIndex);
 			copy(tempUsed.begin(), tempUsed.end(), back_inserter(used));
 		} else {	// Uses(_, varnum)
 			//invalid
@@ -173,7 +173,7 @@ public:
 		int rIndex = tuple->getSynonymIndex(rightSynonym);
 		if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++){
-				if (pkb->usesTable.isUsesStmt(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
+				if (pkb->usesTable.evaluateIsUsesStmt(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
 					result->addResultRow(tuple->getResultRow(i));
 				}
 			}
@@ -184,7 +184,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
-					set<int> tV = pkb->usesTable.getUsedVarStmt(leftValue);
+					set<int> tV = pkb->usesTable.evaluateGetUsedVarStmt(leftValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
@@ -206,7 +206,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					set<int> tV = pkb->usesTable.getUsersStmt(rightValue);
+					set<int> tV = pkb->usesTable.evaluateGetUsersStmt(rightValue);
 					vector<int> tempValues(tV.begin(), tV.end()); 
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
@@ -234,7 +234,7 @@ public:
 		} else if (isSyn == 7) {	//(_, digit)
 			// invalid
 		} else if (isSyn == 8) {	//(digit, _)
-			tuple->setEmpty(pkb->usesTable.getUsedVarStmt(leftIndex).empty());
+			tuple->setEmpty(pkb->usesTable.evaluateGetUsedVarStmt(leftIndex).empty());
 		} else {	//(_, _)
 			// invalid
 		}

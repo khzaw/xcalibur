@@ -292,6 +292,7 @@ void SubqueryTest::testSubqueries() {
 	testModifies();
 	testModifiesTuple();
 	testUses();
+	testUsesTuple();
 	testModifiesProc();
 	testUsesProc();
 	testCalls();
@@ -679,7 +680,7 @@ void SubqueryTest::testModifies(){
 	int expectedResultsModifiesSubquery4_2[2][1] = {
 		{8}, {13}	
 	};
-	for (size_t i = 0; i < 1; i++){
+	for (size_t i = 0; i < 2; i++){
 		for (size_t j = 0; j < 1; j++){
 			CPPUNIT_ASSERT_EQUAL(expectedResultsModifiesSubquery4_2[i][j], actualResultsModifiesSubquery4_2->getResultAt(i, j));
 		}
@@ -754,14 +755,222 @@ void SubqueryTest::testModifiesTuple() {
 	int expectedResultsModifiesSubquery1[3][1] = {
 		{1}, {3}, {4}
 	};
-	cout << endl << actualResultsModifiesSubquery1->toString() << endl;
-	/*
 	for (size_t i = 0; i < 3; i++){
 		for (size_t j = 0; j < 1; j++){
 			CPPUNIT_ASSERT_EQUAL(expectedResultsModifiesSubquery1[i][j], actualResultsModifiesSubquery1->getResultAt(i, j));
 		}
 	}
-	*/
+	// Test 1.2: Modifies(s1, _)
+	ModifiesSubquery ms1_2 = ModifiesSubquery(&synonymTable, pk);
+	ms1_2.setSynonyms("s1", "_");
+	ResultTuple* actualResultsModifiesSubquery1_2 = ms1_2.solve(rt);
+	int expectedResultsModifiesSubquery1_2[5][1] = {
+		{1}, {2}, {3}, {4}, {5}
+	};
+	for (size_t i = 0; i < 5; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsModifiesSubquery1_2[i][j], actualResultsModifiesSubquery1_2->getResultAt(i, j));
+		}
+	}
+
+	rt = new ResultTuple();
+	rt->addSynonymToMap("s1", rt->addSynonym("s1"));
+	rt->addSynonymToMap("v1", rt->addSynonym("v1"));
+	int arr12[17][2] = {{1, 0}, {2, 1}, {3, 0}, {3, 2}, {3, 4},{3, 5}, {3, 1}, {3, 3}, 
+	{3, 7},{4, 0}, {5, 2}, {6, 0}, {6, 4}, {6, 5}, {6, 1}, {6, 7}, {6, 2}};
+	for (int i = 0; i < 17; i++) {
+		vector<int> temp = vector<int>();
+		temp.push_back(arr12[i][0]);
+		temp.push_back(arr12[i][1]);
+		rt->addResultRow(temp);
+	}
+	// Test 1.3: Modifies(s1, v1)
+	ModifiesSubquery ms1_3 = ModifiesSubquery(&synonymTable, pk);
+	ms1_3.setSynonyms("s1", "v1");
+	ResultTuple* actualResultsModifiesSubquery1_3 = ms1_3.solve(rt);
+	int expectedResultsModifiesSubquery1_3[17][2] = {
+		{1, 0}, {2, 1}, {3, 0}, {3, 2}, {3, 4}, {3, 5}, {3, 1}, {3, 3}, {3, 7},
+		{4, 0}, {5, 2}, {6, 0}, {6, 4}, {6, 5}, {6, 1}, {6, 7}, {6, 2}
+	};
+	for (size_t i = 0; i < 17; i++){
+		for (size_t j = 0; j < 2; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsModifiesSubquery1_3[i][j], actualResultsModifiesSubquery1_3->getResultAt(i, j));
+		}
+	}
+
+	rt = new ResultTuple();
+	rt->addSynonymToMap("s1", rt->addSynonym("s1"));
+	rt->addSynonymToMap("v1", rt->addSynonym("v1"));
+	int arr13[11][2] = {{1, 0}, {2, 1}, {3, 0}, {3, 2}, {3, 4},{3, 5}, {3, 1}, {3, 3}, 
+	{3, 7},{4, 0}, {5, 2}};
+	for (int i = 0; i < 11; i++) {
+		vector<int> temp = vector<int>();
+		temp.push_back(arr13[i][0]);
+		temp.push_back(arr13[i][1]);
+		rt->addResultRow(temp);
+	}
+	// Test 1.3: Modifies(s1, v2)
+	ModifiesSubquery ms1_31 = ModifiesSubquery(&synonymTable, pk);
+	ms1_31.setSynonyms("s1", "v2");
+	ResultTuple* actualResultsModifiesSubquery1_31 = ms1_31.solve(rt);
+	int expectedResultsModifiesSubquery1_31[53][3] = {
+		{1, 0, 0}, {2, 1, 1}, {3, 0, 0}, {3, 0, 1}, {3, 0, 2}, {3, 0, 3}, {3, 0, 4}, {3, 0, 5}, {3, 0, 7}, {3, 2, 0}, {3, 2, 1}, 
+		{3, 2, 2}, {3, 2, 3}, {3, 2, 4}, {3, 2, 5}, {3, 2, 7}, {3, 4, 0}, {3, 4, 1}, {3, 4, 2}, {3, 4, 3}, {3, 4, 4}, {3, 4, 5}, 
+		{3, 4, 7}, {3, 5, 0}, {3, 5, 1}, {3, 5, 2}, {3, 5, 3}, {3, 5, 4}, {3, 5, 5}, {3, 5, 7}, {3, 1, 0}, {3, 1, 1}, {3, 1, 2}, 
+		{3, 1, 3}, {3, 1, 4}, {3, 1, 5}, {3, 1, 7}, {3, 3, 0}, {3, 3, 1}, {3, 3, 2}, {3, 3, 3}, {3, 3, 4}, {3, 3, 5}, {3, 3, 7}, 
+		{3, 7, 0}, {3, 7, 1}, {3, 7, 2}, {3, 7, 3}, {3, 7, 4}, {3, 7, 5}, {3, 7, 7}, {4, 0, 0}, {5, 2, 2}, 
+	};
+	for (size_t i = 0; i < 53; i++){
+		for (size_t j = 0; j < 3; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsModifiesSubquery1_31[i][j], actualResultsModifiesSubquery1_31->getResultAt(i, j));
+		}
+	}
+	
+	rt = new ResultTuple();
+	rt->addSynonymToMap("v1", rt->addSynonym("v1"));
+	int arr123[3] = {0, 1, 2};
+	for (int i = 0; i < 3; i++) {
+		vector<int> temp = vector<int>();
+		temp.push_back(arr123[i]);
+		rt->addResultRow(temp);
+	}
+	// Test 1.3: Modifies(s1, v1)
+	ModifiesSubquery ms1_3x = ModifiesSubquery(&synonymTable, pk);
+	ms1_3x.setSynonyms("s1", "v1");
+	ResultTuple* actualResultsModifiesSubquery1_3x = ms1_3.solve(rt);
+	int expectedResultsModifiesSubquery1_3x[20][2] = {
+		{0, 1}, {0, 3}, {0, 4}, {0, 6}, {0, 7},{0, 13}, {0, 14}, {0, 20},
+		{1, 2}, {1, 3}, {1, 6}, {1, 11}, {1, 13}, {1, 17}, {1, 18}, {1, 21},
+		{2, 3}, {2, 5}, {2, 6}, {2, 12}
+	};
+	cout << actualResultsModifiesSubquery1_3x->toString() << endl;
+	for (size_t i = 0; i < 20; i++){
+		for (size_t j = 0; j < 2; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsModifiesSubquery1_3x[i][j], actualResultsModifiesSubquery1_3x->getResultAt(i, j));
+		}
+	}
+
+	ResultTuple* rt2 = new ResultTuple();
+	rt2->addSynonymToMap("a1", rt2->addSynonym("a1"));
+	int arr2[] = {1, 2, 4, 5};
+	for (int i = 0; i < 4; i++) {
+		vector<int> temp = vector<int>();
+		temp.push_back(arr2[i]);
+		rt2->addResultRow(temp);
+	}
+	// Test 2: Modifies(a1, x)
+	ModifiesSubquery ms2 = ModifiesSubquery(&synonymTable, pk);
+	ms2.setSynonyms("a1", 0);
+	ResultTuple* actualResultsModifiesSubquery2 = ms2.solve(rt2);
+	int expectedResultsModifiesSubquery2[2][1] = {
+		{1}, {4}
+	};
+	for (size_t i = 0; i < 2; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsModifiesSubquery2[i][j], actualResultsModifiesSubquery2->getResultAt(i, j));
+		}
+	}
+	// Test 2.2: Modifies(a1, _)
+	ModifiesSubquery ms2_2 = ModifiesSubquery(&synonymTable, pk);
+	ms2_2.setSynonyms("a1", "_");
+	ResultTuple* actualResultsModifiesSubquery2_2 = ms2_2.solve(rt2);
+	int expectedResultsModifiesSubquery2_2[4][1] = {
+		{1}, {2}, {4}, {5}
+	};
+	for (size_t i = 0; i < 4; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsModifiesSubquery2_2[i][j], actualResultsModifiesSubquery2_2->getResultAt(i, j));
+		}
+	}
+
+	ResultTuple* rt3 = new ResultTuple();
+	rt3->addSynonymToMap("c1", rt3->addSynonym("c1"));
+	int arr3[] = {3};
+	for (int i = 0; i < 2; i++) {
+		vector<int> temp = vector<int>();
+		temp.push_back(arr3[i]);
+		rt3->addResultRow(temp);
+	}
+	// Test 3: Modifies(c1, x)
+	ModifiesSubquery ms3 = ModifiesSubquery(&synonymTable, pk);
+	ms3.setSynonyms("c1", 0);
+	ResultTuple* actualResultsModifiesSubquery3 = ms3.solve(rt3);
+	int expectedResultsModifiesSubquery3[1][1] = {{3}};
+	for (size_t i = 0; i < 1; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsModifiesSubquery3[i][j], actualResultsModifiesSubquery3->getResultAt(i, j));
+		}
+	}
+	// Test 3.2: Modifies(c1, _)
+	ModifiesSubquery ms3_2 = ModifiesSubquery(&synonymTable, pk);
+	ms3_2.setSynonyms("c1", "_");
+	ResultTuple* actualResultsModifiesSubquery3_2 = ms3_2.solve(rt3);
+	int expectedResultsModifiesSubquery3_2[1][1] = {{3}};
+	for (size_t i = 0; i < 1; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsModifiesSubquery3_2[i][j], actualResultsModifiesSubquery3_2->getResultAt(i, j));
+		}
+	}
+
+	ResultTuple* rt4 = new ResultTuple();
+	rt4->addSynonymToMap("i1", rt4->addSynonym("i1"));
+	int arr4[] = {8};
+	for (int i = 0; i < 1; i++) {
+		vector<int> temp = vector<int>();
+		temp.push_back(arr4[i]);
+		rt4->addResultRow(temp);
+	}
+	// Test 4: Modifies(i1, x)
+	ModifiesSubquery ms4 = ModifiesSubquery(&synonymTable, pk);
+	ms4.setSynonyms("i1", 0);
+	ResultTuple* actualResultsModifiesSubquery4 = ms4.solve(rt4);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultsModifiesSubquery4->getAllResults().size());
+	
+	// Test 4.2: Modifies(i1, _)
+	ModifiesSubquery ms4_2 = ModifiesSubquery(&synonymTable, pk);
+	ms4_2.setSynonyms("i1", "_");
+	ResultTuple* actualResultsModifiesSubquery4_2 = ms4_2.solve(rt4);
+	int expectedResultsModifiesSubquery4_2[1][1] = {
+		{8}	
+	};
+	for (size_t i = 0; i < 1; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsModifiesSubquery4_2[i][j], actualResultsModifiesSubquery4_2->getResultAt(i, j));
+		}
+	}
+
+	ResultTuple* rt5 = new ResultTuple();
+	rt5->addSynonymToMap("w1", rt5->addSynonym("w1"));
+	int arr5[] = {6, 15};
+	for (int i = 0; i < 2; i++) {
+		vector<int> temp = vector<int>();
+		temp.push_back(arr5[i]);
+		rt5->addResultRow(temp);
+	}
+	// Test 5: Modifies(w1, x)
+	ModifiesSubquery ms5 = ModifiesSubquery(&synonymTable, pk);
+	ms5.setSynonyms("w1", 0);
+	ResultTuple* actualResultsModifiesSubquery5 = ms5.solve(rt5);
+	int expectedResultsModifiesSubquery5[1][1] = {
+		{6}
+	};
+	for (size_t i = 0; i < 1; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsModifiesSubquery5[i][j], actualResultsModifiesSubquery5->getResultAt(i, j));
+		}
+	}
+	// Test 5.2: Modifies(w1, _)
+	ModifiesSubquery ms5_2 = ModifiesSubquery(&synonymTable, pk);
+	ms5_2.setSynonyms("w1", "_");
+	ResultTuple* actualResultsModifiesSubquery5_2 = ms5_2.solve(rt5);
+	int expectedResultsModifiesSubquery5_2[2][1] = {
+		{6}, {15}	
+	};
+	for (size_t i = 0; i < 1; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsModifiesSubquery5_2[i][j], actualResultsModifiesSubquery5_2->getResultAt(i, j));
+		}
+	}
 }
 
 void SubqueryTest::testModifiesProc(){
@@ -960,6 +1169,235 @@ void SubqueryTest::testUses(){
 	for (size_t i = 0; i < 8; i++){
 		for (size_t j = 0; j < 2; j++){
 			CPPUNIT_ASSERT_EQUAL(expectedResultsUsesSubquery5_3[i][j], actualResultsUsesSubquery5_3->getResultAt(i, j));
+		}
+	}
+}
+
+void SubqueryTest::testUsesTuple() {
+	ResultTuple* rt = new ResultTuple();
+	rt->addSynonymToMap("s1", rt->addSynonym("s1"));
+	int arr[] = {1, 2, 3, 4, 5};
+	for (int i = 0; i < 5; i++) {
+		vector<int> temp = vector<int>();
+		temp.push_back(arr[i]);
+		rt->addResultRow(temp);
+	}
+	
+	// Test 1: Uses(s1, x)
+	UsesSubquery ms1 = UsesSubquery(&synonymTable, pk);
+	ms1.setSynonyms("s1", 0);
+	ResultTuple* actualResultsUsesSubquery1 = ms1.solve(rt);
+	int expectedResultsUsesSubquery1[1][1] = {
+		{3}
+	};
+	for (size_t i = 0; i < 1; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsUsesSubquery1[i][j], actualResultsUsesSubquery1->getResultAt(i, j));
+		}
+	}
+
+	// Test 1.2: Uses(s1, _)
+	UsesSubquery ms1_2 = UsesSubquery(&synonymTable, pk);
+	ms1_2.setSynonyms("s1", "_");
+	ResultTuple* actualResultsUsesSubquery1_2 = ms1_2.solve(rt);
+	int expectedResultsUsesSubquery1_2[1][1] = {
+		{3}
+	};
+	for (size_t i = 0; i < 1; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsUsesSubquery1_2[i][j], actualResultsUsesSubquery1_2->getResultAt(i, j));
+		}
+	}
+
+	rt = new ResultTuple();
+	rt->addSynonymToMap("s1", rt->addSynonym("s1"));
+	rt->addSynonymToMap("v1", rt->addSynonym("v1"));
+	int arr12[15][2] = {
+	{3, 0}, {3, 1}, {3, 2}, {3, 3}, {3, 4}, {3, 5}, {3, 6}, 
+	{6, 2}, {6, 0},{6, 3}, {6, 4}, {6, 5}, {6, 6}, {6, 1}, {10, 10}
+	};
+	for (int i = 0; i < 14; i++) {
+		vector<int> temp = vector<int>();
+		temp.push_back(arr12[i][0]);
+		temp.push_back(arr12[i][1]);
+		rt->addResultRow(temp);
+	}
+	// Test 1.3: Uses(s1, v1)
+	UsesSubquery ms1_3 = UsesSubquery(&synonymTable, pk);
+	ms1_3.setSynonyms("s1", "v1");
+	ResultTuple* actualResultsUsesSubquery1_3 = ms1_3.solve(rt);
+	int expectedResultsUsesSubquery1_3[14][2] = {
+		{3, 0}, {3, 1}, {3, 2}, {3, 3}, {3, 4}, {3, 5}, {3, 6}, 
+	{6, 2}, {6, 0},{6, 3}, {6, 4}, {6, 5}, {6, 6}, {6, 1}
+	};
+	for (size_t i = 0; i < 14; i++){
+		for (size_t j = 0; j < 2; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsUsesSubquery1_3[i][j], actualResultsUsesSubquery1_3->getResultAt(i, j));
+		}
+	}
+
+	rt = new ResultTuple();
+	rt->addSynonymToMap("s1", rt->addSynonym("s1"));
+	rt->addSynonymToMap("v1", rt->addSynonym("v1"));
+	int arr13[7][2] = {
+		{3, 0}, {3, 1}, {3, 2}, {3, 3}, {3, 4}, {3, 5}, {3, 6}
+	};
+	for (int i = 0; i < 7; i++) {
+		vector<int> temp = vector<int>();
+		temp.push_back(arr13[i][0]);
+		temp.push_back(arr13[i][1]);
+		rt->addResultRow(temp);
+	}
+	// Test 1.3: Uses(s1, v2)
+	UsesSubquery ms1_31 = UsesSubquery(&synonymTable, pk);
+	ms1_31.setSynonyms("s1", "v2");
+	ResultTuple* actualResultsUsesSubquery1_31 = ms1_31.solve(rt);
+	//cout << actualResultsUsesSubquery1_31->toString() << endl << actualResultsUsesSubquery1_31->getAllResults().size() << endl;
+	int expectedResultsUsesSubquery1_31[49][3] = {
+		{3, 0, 0}, {3, 0, 1}, {3, 0, 2}, {3, 0, 3}, {3, 0, 4}, {3, 0, 5}, {3, 0, 6}, 
+		{3, 1, 0}, {3, 1, 1}, {3, 1, 2}, {3, 1, 3}, {3, 1, 4}, {3, 1, 5}, {3, 1, 6},
+		{3, 2, 0}, {3, 2, 1}, {3, 2, 2}, {3, 2, 3}, {3, 2, 4}, {3, 2, 5}, {3, 2, 6},
+		{3, 3, 0}, {3, 3, 1}, {3, 3, 2}, {3, 3, 3}, {3, 3, 4}, {3, 3, 5}, {3, 3, 6},
+		{3, 4, 0}, {3, 4, 1}, {3, 4, 2}, {3, 4, 3}, {3, 4, 4}, {3, 4, 5}, {3, 4, 6}, 
+		{3, 5, 0}, {3, 5, 1}, {3, 5, 2}, {3, 5, 3}, {3, 5, 4}, {3, 5, 5}, {3, 5, 6}, 
+		{3, 6, 0}, {3, 6, 1}, {3, 6, 2}, {3, 6, 3}, {3, 6, 4}, {3, 6, 5}, {3, 6, 6}
+	};
+	for (size_t i = 0; i < 49; i++){
+		for (size_t j = 0; j < 3; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsUsesSubquery1_31[i][j], actualResultsUsesSubquery1_31->getResultAt(i, j));
+		}
+	}
+
+	rt = new ResultTuple();
+	rt->addSynonymToMap("v1", rt->addSynonym("v1"));
+	int arr123[3] = {0, 1, 2};
+	for (int i = 0; i < 3; i++) {
+		vector<int> temp = vector<int>();
+		temp.push_back(arr123[i]);
+		rt->addResultRow(temp);
+	}
+	// Test 1.3: Uses(s1, v1)
+	UsesSubquery ms1_3x = UsesSubquery(&synonymTable, pk);
+	ms1_3x.setSynonyms("s1", "v1");
+	ResultTuple* actualResultsUsesSubquery1_3x = ms1_3.solve(rt);
+	int expectedResultsUsesSubquery1_3x[18][2] = {
+		{0, 3}, {0, 6}, {0, 7}, {0, 13}, {0, 14}, {0, 18}, {0, 20}, {1, 3}, {1, 6}, {1, 11}, {1, 18}, {1, 19},
+		{1, 20}, {1, 22}, {2, 3}, {2, 6}, {2, 12}, {2, 18}  
+	};
+	cout << actualResultsUsesSubquery1_3x->toString() << endl;
+	for (size_t i = 0; i < 18; i++){
+		for (size_t j = 0; j < 2; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsUsesSubquery1_3x[i][j], actualResultsUsesSubquery1_3x->getResultAt(i, j));
+		}
+	}
+
+	ResultTuple* rt2 = new ResultTuple();
+	rt2->addSynonymToMap("a1", rt2->addSynonym("a1"));
+	int arr2[] = {1, 2, 4, 5};
+	for (int i = 0; i < 4; i++) {
+		vector<int> temp = vector<int>();
+		temp.push_back(arr2[i]);
+		rt2->addResultRow(temp);
+	}
+	// Test 2: Uses(a1, x)
+	UsesSubquery ms2 = UsesSubquery(&synonymTable, pk);
+	ms2.setSynonyms("a1", 0);
+	ResultTuple* actualResultsUsesSubquery2 = ms2.solve(rt2);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultsUsesSubquery2->getAllResults().size());
+	
+	// Test 2.2: Uses(a1, _)
+	UsesSubquery ms2_2 = UsesSubquery(&synonymTable, pk);
+	ms2_2.setSynonyms("a1", "_");
+	ResultTuple* actualResultsUsesSubquery2_2 = ms2_2.solve(rt2);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultsUsesSubquery2_2->getAllResults().size());
+
+	ResultTuple* rt3 = new ResultTuple();
+	rt3->addSynonymToMap("c1", rt3->addSynonym("c1"));
+	int arr3[] = {3, 11};
+	for (int i = 0; i < 2; i++) {
+		vector<int> temp = vector<int>();
+		temp.push_back(arr3[i]);
+		rt3->addResultRow(temp);
+	}
+	// Test 3: Uses(c1, x)
+	UsesSubquery ms3 = UsesSubquery(&synonymTable, pk);
+	ms3.setSynonyms("c1", 0);
+	ResultTuple* actualResultsUsesSubquery3 = ms3.solve(rt3);
+	int expectedResultsUsesSubquery3[1][1] = {{3}};
+	for (size_t i = 0; i < 1; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsUsesSubquery3[i][j], actualResultsUsesSubquery3->getResultAt(i, j));
+		}
+	}
+	// Test 3.2: Uses(c1, _)
+	UsesSubquery ms3_2 = UsesSubquery(&synonymTable, pk);
+	ms3_2.setSynonyms("c1", "_");
+	ResultTuple* actualResultsUsesSubquery3_2 = ms3_2.solve(rt3);
+	int expectedResultsUsesSubquery3_2[2][1] = {{3}, {11}};
+	for (size_t i = 0; i < 2; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsUsesSubquery3_2[i][j], actualResultsUsesSubquery3_2->getResultAt(i, j));
+		}
+	}
+
+		ResultTuple* rt4 = new ResultTuple();
+	rt4->addSynonymToMap("i1", rt4->addSynonym("i1"));
+	int arr4[] = {8};
+	for (int i = 0; i < 1; i++) {
+		vector<int> temp = vector<int>();
+		temp.push_back(arr4[i]);
+		rt4->addResultRow(temp);
+	}
+
+	// Test 4: Uses(i1, x)
+	UsesSubquery ms4 = UsesSubquery(&synonymTable, pk);
+	ms4.setSynonyms("i1", 0);
+	ResultTuple* actualResultsUsesSubquery4 = ms4.solve(rt4);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultsUsesSubquery4->getAllResults().size());
+
+	// Test 4.2: Uses(i1, _)
+	UsesSubquery ms4_2 = UsesSubquery(&synonymTable, pk);
+	ms4_2.setSynonyms("i1", "_");
+	ResultTuple* actualResultsUsesSubquery4_2 = ms4_2.solve(rt4);
+	int expectedResultsUsesSubquery4_2[1][1] = {
+		{8}	
+	};
+	for (size_t i = 0; i < 1; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsUsesSubquery4_2[i][j], actualResultsUsesSubquery4_2->getResultAt(i, j));
+		}
+	}
+
+	ResultTuple* rt5 = new ResultTuple();
+	rt5->addSynonymToMap("w1", rt5->addSynonym("w1"));
+	int arr5[] = {6, 15};
+	for (int i = 0; i < 2; i++) {
+		vector<int> temp = vector<int>();
+		temp.push_back(arr5[i]);
+		rt5->addResultRow(temp);
+	}
+	// Test 5: Uses(w1, x)
+	UsesSubquery ms5 = UsesSubquery(&synonymTable, pk);
+	ms5.setSynonyms("w1", 0);
+	ResultTuple* actualResultsUsesSubquery5 = ms5.solve(rt5);
+	int expectedResultsUsesSubquery5[1][1] = {
+		{6}
+	};
+	for (size_t i = 0; i < 1; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsUsesSubquery5[i][j], actualResultsUsesSubquery5->getResultAt(i, j));
+		}
+	}
+	// Test 5.2: Uses(w1, _)
+	UsesSubquery ms5_2 = UsesSubquery(&synonymTable, pk);
+	ms5_2.setSynonyms("w1", "_");
+	ResultTuple* actualResultsUsesSubquery5_2 = ms5_2.solve(rt5);
+	int expectedResultsUsesSubquery5_2[2][1] = {
+		{6}, {15}	
+	};
+	for (size_t i = 0; i < 1; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsUsesSubquery5_2[i][j], actualResultsUsesSubquery5_2->getResultAt(i, j));
 		}
 	}
 }
@@ -2763,7 +3201,6 @@ void SubqueryTest::testWithTuple(){
 	WithSubquery withsubquery53 = WithSubquery(&synonymTable, pk);
 	withsubquery53.setSynonyms("v1", "proc2");
 	ResultTuple* actualResultwithsubquery53 = withsubquery53.solve(&testTuple);
-	cout << endl << actualResultwithsubquery53->toString() << endl;
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery53->getAllResults().size());
 
 	// Test 64: with(proc1, v2)

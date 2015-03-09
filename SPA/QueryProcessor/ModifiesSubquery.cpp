@@ -54,7 +54,7 @@ public:
 		tuple->addSynonymToMap(leftSynonym, index);
 		vector<int> modifiers = vector<int>();
 		if (isSyn == 2) {	// Modifies(syn, varnum): Get syns that modifies varnum
-			set<int> tempModifiers = pkb->modifiesTable.getModifiersStmt(rightIndex);
+			set<int> tempModifiers = pkb->modifiesTable.evaluateGetModifiersStmt(rightIndex);
 			copy(tempModifiers.begin(), tempModifiers.end(), back_inserter(modifiers)); 
 		} else {	// Modifies(syn, _): Get all modifiers
 			// not sure if this is correct
@@ -91,7 +91,7 @@ public:
 					result->addResultRow(temp);
 				}
 			} else {	// Modifies(syn, _)
-				if (!pkb->modifiesTable.getModifiedVarStmt(temp.at(index)).empty()) {
+				if (!pkb->modifiesTable.evaluateGetModifiedVarStmt(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -176,8 +176,9 @@ public:
 		int lIndex = tuple->getSynonymIndex(leftSynonym);
 		int rIndex = tuple->getSynonymIndex(rightSynonym);
 		if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
+			cout << "BOTH"<<endl;
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++){
-				if (pkb->modifiesTable.isModifiesStmt(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
+				if (pkb->modifiesTable.evaluateIsModifiesStmt(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
 					result->addResultRow(tuple->getResultRow(i));
 				}
 			}
@@ -188,7 +189,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
-					set<int> tV = pkb->modifiesTable.getModifiedVarStmt(leftValue);
+					set<int> tV = pkb->modifiesTable.evaluateGetModifiedVarStmt(leftValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
@@ -210,7 +211,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					set<int> tV = pkb->modifiesTable.getModifiersStmt(rightValue);
+					set<int> tV = pkb->modifiesTable.evaluateGetModifiersStmt(rightValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
@@ -238,7 +239,7 @@ public:
 		} else if (isSyn == 7) {	//(_, digit)
 			// invalid
 		} else if (isSyn == 8) {	//(digit, _)
-			tuple->setEmpty(pkb->modifiesTable.getModifiedVarStmt(leftIndex).empty());
+			tuple->setEmpty(pkb->modifiesTable.evaluateGetModifiedVarStmt(leftIndex).empty());
 		} else {	//(_, _)
 			// invalid
 		}

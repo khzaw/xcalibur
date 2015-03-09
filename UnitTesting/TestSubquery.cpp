@@ -10,6 +10,7 @@
 #include "QueryProcessor\UsesSubquery.cpp"
 #include "QueryProcessor\ParentSubquery.cpp"
 #include "QueryProcessor\WithSubquery.cpp"
+#include "QueryProcessor\CallsSubquery.cpp"
 
 void 
 SubqueryTest::setUp()
@@ -54,7 +55,7 @@ void SubqueryTest::testSubqueries() {
 		z = 5;					// 21
 		v = z;}					// 22
 	**/
-	pk = PKBController();
+	pk = new PKBController();
 	synonymTable = map<string, string>();
 	TNode stmt1("ASSIGN_NODE", "x = 2", 1, 0);
 	TNode stmt2("ASSIGN_NODE", "z = 3", 2, 0);
@@ -78,191 +79,191 @@ void SubqueryTest::testSubqueries() {
 	TNode stmt20("ASSIGN_NODE", "x = x * y + z", 20, 1);
 	TNode stmt21("ASSIGN_NODE", "z = 5", 21, 2);
 	TNode stmt22("ASSIGN_NODE", "v = z", 22, 2);
-	pk.statementTable.insertStatement(&stmt1);
-	pk.statementTable.insertStatement(&stmt2);
-	pk.statementTable.insertStatement(&stmt3);
-	pk.statementTable.insertStatement(&stmt4);
-	pk.statementTable.insertStatement(&stmt5);
-	pk.statementTable.insertStatement(&stmt6);
-	pk.statementTable.insertStatement(&stmt7);
-	pk.statementTable.insertStatement(&stmt8);
-	pk.statementTable.insertStatement(&stmt9);
-	pk.statementTable.insertStatement(&stmt10);
-	pk.statementTable.insertStatement(&stmt11);
-	pk.statementTable.insertStatement(&stmt12);
-	pk.statementTable.insertStatement(&stmt13);
-	pk.statementTable.insertStatement(&stmt14);
-	pk.statementTable.insertStatement(&stmt15);
-	pk.statementTable.insertStatement(&stmt16);
-	pk.statementTable.insertStatement(&stmt17);
-	pk.statementTable.insertStatement(&stmt18);
-	pk.statementTable.insertStatement(&stmt19);
-	pk.statementTable.insertStatement(&stmt20);
-	pk.statementTable.insertStatement(&stmt21);
-	pk.statementTable.insertStatement(&stmt22);
+	pk->statementTable.insertStatement(&stmt1);
+	pk->statementTable.insertStatement(&stmt2);
+	pk->statementTable.insertStatement(&stmt3);
+	pk->statementTable.insertStatement(&stmt4);
+	pk->statementTable.insertStatement(&stmt5);
+	pk->statementTable.insertStatement(&stmt6);
+	pk->statementTable.insertStatement(&stmt7);
+	pk->statementTable.insertStatement(&stmt8);
+	pk->statementTable.insertStatement(&stmt9);
+	pk->statementTable.insertStatement(&stmt10);
+	pk->statementTable.insertStatement(&stmt11);
+	pk->statementTable.insertStatement(&stmt12);
+	pk->statementTable.insertStatement(&stmt13);
+	pk->statementTable.insertStatement(&stmt14);
+	pk->statementTable.insertStatement(&stmt15);
+	pk->statementTable.insertStatement(&stmt16);
+	pk->statementTable.insertStatement(&stmt17);
+	pk->statementTable.insertStatement(&stmt18);
+	pk->statementTable.insertStatement(&stmt19);
+	pk->statementTable.insertStatement(&stmt20);
+	pk->statementTable.insertStatement(&stmt21);
+	pk->statementTable.insertStatement(&stmt22);
 
-	pk.procTable.insertProc("First");  // 0
-	pk.procTable.insertProc("Second"); // 1
-	pk.procTable.insertProc("Third");  // 2
+	pk->procTable.insertProc("First");  // 0
+	pk->procTable.insertProc("Second"); // 1
+	pk->procTable.insertProc("Third");  // 2
 
-	pk.varTable.insertVar("x");        // 0
-	pk.varTable.insertVar("z");        // 1
-	pk.varTable.insertVar("i");		   // 2
-	pk.varTable.insertVar("y");        // 3
-	pk.varTable.insertVar("m");        // 4
-	pk.varTable.insertVar("n");        // 5
-	pk.varTable.insertVar("Second");   // 6
-	pk.varTable.insertVar("v");        // 7
+	pk->varTable.insertVar("x");        // 0
+	pk->varTable.insertVar("z");        // 1
+	pk->varTable.insertVar("i");		   // 2
+	pk->varTable.insertVar("y");        // 3
+	pk->varTable.insertVar("m");        // 4
+	pk->varTable.insertVar("n");        // 5
+	pk->varTable.insertVar("Second");   // 6
+	pk->varTable.insertVar("v");        // 7
 
-	pk.constantTable.insertConst(2);
-	pk.constantTable.insertConst(3);
-	pk.constantTable.insertConst(0);
-	pk.constantTable.insertConst(5);
-	pk.constantTable.insertConst(1);
+	pk->constantTable.insertConst(2);
+	pk->constantTable.insertConst(3);
+	pk->constantTable.insertConst(0);
+	pk->constantTable.insertConst(5);
+	pk->constantTable.insertConst(1);
 
-	pk.followsTable.insertFollows(1, 2);
-	pk.followsTable.insertFollows(2, 3);
-	pk.followsTable.insertFollows(4, 5);
-	pk.followsTable.insertFollows(5, 6);
-	pk.followsTable.insertFollows(6, 13);
-	pk.followsTable.insertFollows(13, 18);
-	pk.followsTable.insertFollows(18, 19);
-	pk.followsTable.insertFollows(19, 20);
-	pk.followsTable.insertFollows(21, 22);
-	pk.followsTable.insertFollows(7, 8);
-	pk.followsTable.insertFollows(8, 11);
-	pk.followsTable.insertFollows(11, 12);
-	pk.followsTable.insertFollows(14, 15);
+	pk->followsTable.insertFollows(1, 2);
+	pk->followsTable.insertFollows(2, 3);
+	pk->followsTable.insertFollows(4, 5);
+	pk->followsTable.insertFollows(5, 6);
+	pk->followsTable.insertFollows(6, 13);
+	pk->followsTable.insertFollows(13, 18);
+	pk->followsTable.insertFollows(18, 19);
+	pk->followsTable.insertFollows(19, 20);
+	pk->followsTable.insertFollows(21, 22);
+	pk->followsTable.insertFollows(7, 8);
+	pk->followsTable.insertFollows(8, 11);
+	pk->followsTable.insertFollows(11, 12);
+	pk->followsTable.insertFollows(14, 15);
 
-	pk.parentTable.insertParent(6, 7);
-	pk.parentTable.insertParent(6, 8);
-	pk.parentTable.insertParent(6, 11);
-	pk.parentTable.insertParent(6, 12);
-	pk.parentTable.insertParent(8, 9);
-	pk.parentTable.insertParent(8, 10);
-	pk.parentTable.insertParent(13, 14);
-	pk.parentTable.insertParent(13, 15);
-	pk.parentTable.insertParent(13, 17);
-	pk.parentTable.insertParent(15, 16);
+	pk->parentTable.insertParent(6, 7);
+	pk->parentTable.insertParent(6, 8);
+	pk->parentTable.insertParent(6, 11);
+	pk->parentTable.insertParent(6, 12);
+	pk->parentTable.insertParent(8, 9);
+	pk->parentTable.insertParent(8, 10);
+	pk->parentTable.insertParent(13, 14);
+	pk->parentTable.insertParent(13, 15);
+	pk->parentTable.insertParent(13, 17);
+	pk->parentTable.insertParent(15, 16);
 
-	pk.callsTable.insertCalls(0, 1);
-	pk.callsTable.insertCalls(1, 2);
+	pk->callsTable.insertCalls(0, 1);
+	pk->callsTable.insertCalls(1, 2);
 
-	pk.modifiesTable.insertModifiesProc(2, 1);
-	pk.modifiesTable.insertModifiesProc(2, 7);
-	pk.modifiesTable.insertModifiesProc(1, 0);
-	pk.modifiesTable.insertModifiesProc(1, 2);
-	pk.modifiesTable.insertModifiesProc(1, 4);
-	pk.modifiesTable.insertModifiesProc(1, 5);
-	pk.modifiesTable.insertModifiesProc(1, 1);
-	pk.modifiesTable.insertModifiesProc(1, 3);
-	pk.modifiesTable.insertModifiesProc(1, 7);
-	pk.modifiesTable.insertModifiesProc(0, 0);
-	pk.modifiesTable.insertModifiesProc(0, 1);
-	pk.modifiesTable.insertModifiesProc(0, 2);
-	pk.modifiesTable.insertModifiesProc(0, 3);
-	pk.modifiesTable.insertModifiesProc(0, 4);
-	pk.modifiesTable.insertModifiesProc(0, 5);
-	pk.modifiesTable.insertModifiesProc(0, 7);
+	pk->modifiesTable.insertModifiesProc(2, 1);
+	pk->modifiesTable.insertModifiesProc(2, 7);
+	pk->modifiesTable.insertModifiesProc(1, 0);
+	pk->modifiesTable.insertModifiesProc(1, 2);
+	pk->modifiesTable.insertModifiesProc(1, 4);
+	pk->modifiesTable.insertModifiesProc(1, 5);
+	pk->modifiesTable.insertModifiesProc(1, 1);
+	pk->modifiesTable.insertModifiesProc(1, 3);
+	pk->modifiesTable.insertModifiesProc(1, 7);
+	pk->modifiesTable.insertModifiesProc(0, 0);
+	pk->modifiesTable.insertModifiesProc(0, 1);
+	pk->modifiesTable.insertModifiesProc(0, 2);
+	pk->modifiesTable.insertModifiesProc(0, 3);
+	pk->modifiesTable.insertModifiesProc(0, 4);
+	pk->modifiesTable.insertModifiesProc(0, 5);
+	pk->modifiesTable.insertModifiesProc(0, 7);
 
-	pk.modifiesTable.insertModifiesStmt(1, 0);
-	pk.modifiesTable.insertModifiesStmt(2, 1);
-	pk.modifiesTable.insertModifiesStmt(3, 0);
-	pk.modifiesTable.insertModifiesStmt(3, 2);
-	pk.modifiesTable.insertModifiesStmt(3, 4);
-	pk.modifiesTable.insertModifiesStmt(3, 5);
-	pk.modifiesTable.insertModifiesStmt(3, 1);
-	pk.modifiesTable.insertModifiesStmt(3, 3);
-	pk.modifiesTable.insertModifiesStmt(3, 7);
-	pk.modifiesTable.insertModifiesStmt(4, 0);
-	pk.modifiesTable.insertModifiesStmt(5, 2);
-	pk.modifiesTable.insertModifiesStmt(6, 0);
-	pk.modifiesTable.insertModifiesStmt(6, 4);
-	pk.modifiesTable.insertModifiesStmt(6, 5);
-	pk.modifiesTable.insertModifiesStmt(6, 1);
-	pk.modifiesTable.insertModifiesStmt(6, 7);
-	pk.modifiesTable.insertModifiesStmt(6, 2);
-	pk.modifiesTable.insertModifiesStmt(7, 0);
-	pk.modifiesTable.insertModifiesStmt(8, 4);
-	pk.modifiesTable.insertModifiesStmt(8, 5);
-	pk.modifiesTable.insertModifiesStmt(9, 4);
-	pk.modifiesTable.insertModifiesStmt(10, 5);
-	pk.modifiesTable.insertModifiesStmt(11, 1);
-	pk.modifiesTable.insertModifiesStmt(11, 7);
-	pk.modifiesTable.insertModifiesStmt(12, 2);
-	pk.modifiesTable.insertModifiesStmt(13, 0);
-	pk.modifiesTable.insertModifiesStmt(13, 4);
-	pk.modifiesTable.insertModifiesStmt(13, 1);
-	pk.modifiesTable.insertModifiesStmt(14, 0);
-	pk.modifiesTable.insertModifiesStmt(15, 4);
-	pk.modifiesTable.insertModifiesStmt(16, 4);
-	pk.modifiesTable.insertModifiesStmt(17, 1);
-	pk.modifiesTable.insertModifiesStmt(18, 1);
-	pk.modifiesTable.insertModifiesStmt(19, 3);
-	pk.modifiesTable.insertModifiesStmt(20, 0);
-	pk.modifiesTable.insertModifiesStmt(21, 1);
-	pk.modifiesTable.insertModifiesStmt(22, 7);
+	pk->modifiesTable.insertModifiesStmt(1, 0);
+	pk->modifiesTable.insertModifiesStmt(2, 1);
+	pk->modifiesTable.insertModifiesStmt(3, 0);
+	pk->modifiesTable.insertModifiesStmt(3, 2);
+	pk->modifiesTable.insertModifiesStmt(3, 4);
+	pk->modifiesTable.insertModifiesStmt(3, 5);
+	pk->modifiesTable.insertModifiesStmt(3, 1);
+	pk->modifiesTable.insertModifiesStmt(3, 3);
+	pk->modifiesTable.insertModifiesStmt(3, 7);
+	pk->modifiesTable.insertModifiesStmt(4, 0);
+	pk->modifiesTable.insertModifiesStmt(5, 2);
+	pk->modifiesTable.insertModifiesStmt(6, 0);
+	pk->modifiesTable.insertModifiesStmt(6, 4);
+	pk->modifiesTable.insertModifiesStmt(6, 5);
+	pk->modifiesTable.insertModifiesStmt(6, 1);
+	pk->modifiesTable.insertModifiesStmt(6, 7);
+	pk->modifiesTable.insertModifiesStmt(6, 2);
+	pk->modifiesTable.insertModifiesStmt(7, 0);
+	pk->modifiesTable.insertModifiesStmt(8, 4);
+	pk->modifiesTable.insertModifiesStmt(8, 5);
+	pk->modifiesTable.insertModifiesStmt(9, 4);
+	pk->modifiesTable.insertModifiesStmt(10, 5);
+	pk->modifiesTable.insertModifiesStmt(11, 1);
+	pk->modifiesTable.insertModifiesStmt(11, 7);
+	pk->modifiesTable.insertModifiesStmt(12, 2);
+	pk->modifiesTable.insertModifiesStmt(13, 0);
+	pk->modifiesTable.insertModifiesStmt(13, 4);
+	pk->modifiesTable.insertModifiesStmt(13, 1);
+	pk->modifiesTable.insertModifiesStmt(14, 0);
+	pk->modifiesTable.insertModifiesStmt(15, 4);
+	pk->modifiesTable.insertModifiesStmt(16, 4);
+	pk->modifiesTable.insertModifiesStmt(17, 1);
+	pk->modifiesTable.insertModifiesStmt(18, 1);
+	pk->modifiesTable.insertModifiesStmt(19, 3);
+	pk->modifiesTable.insertModifiesStmt(20, 0);
+	pk->modifiesTable.insertModifiesStmt(21, 1);
+	pk->modifiesTable.insertModifiesStmt(22, 7);
 
-	pk.usesTable.insertUsesProc(2, 1);
-	pk.usesTable.insertUsesProc(1, 2);
-	pk.usesTable.insertUsesProc(1, 0);
-	pk.usesTable.insertUsesProc(1, 3);
-	pk.usesTable.insertUsesProc(1, 4);
-	pk.usesTable.insertUsesProc(1, 5);
-	pk.usesTable.insertUsesProc(1, 6);
-	pk.usesTable.insertUsesProc(1, 1);
-	pk.usesTable.insertUsesProc(1, 2);
-	pk.usesTable.insertUsesProc(0, 0);
-	pk.usesTable.insertUsesProc(0, 1);
-	pk.usesTable.insertUsesProc(0, 2);
-	pk.usesTable.insertUsesProc(0, 3);
-	pk.usesTable.insertUsesProc(0, 4);
-	pk.usesTable.insertUsesProc(0, 5);
-	pk.usesTable.insertUsesProc(0, 6);
+	pk->usesTable.insertUsesProc(2, 1);
+	pk->usesTable.insertUsesProc(1, 2);
+	pk->usesTable.insertUsesProc(1, 0);
+	pk->usesTable.insertUsesProc(1, 3);
+	pk->usesTable.insertUsesProc(1, 4);
+	pk->usesTable.insertUsesProc(1, 5);
+	pk->usesTable.insertUsesProc(1, 6);
+	pk->usesTable.insertUsesProc(1, 1);
+	pk->usesTable.insertUsesProc(1, 2);
+	pk->usesTable.insertUsesProc(0, 0);
+	pk->usesTable.insertUsesProc(0, 1);
+	pk->usesTable.insertUsesProc(0, 2);
+	pk->usesTable.insertUsesProc(0, 3);
+	pk->usesTable.insertUsesProc(0, 4);
+	pk->usesTable.insertUsesProc(0, 5);
+	pk->usesTable.insertUsesProc(0, 6);
 
-	pk.usesTable.insertUsesStmt(3, 0);
-	pk.usesTable.insertUsesStmt(3, 1);
-	pk.usesTable.insertUsesStmt(3, 2);
-	pk.usesTable.insertUsesStmt(3, 3);
-	pk.usesTable.insertUsesStmt(3, 4);
-	pk.usesTable.insertUsesStmt(3, 5);
-	pk.usesTable.insertUsesStmt(3, 6);
-	pk.usesTable.insertUsesStmt(6, 2);
-	pk.usesTable.insertUsesStmt(6, 0);
-	pk.usesTable.insertUsesStmt(6, 3);
-	pk.usesTable.insertUsesStmt(6, 4);
-	pk.usesTable.insertUsesStmt(6, 5);
-	pk.usesTable.insertUsesStmt(6, 6);
-	pk.usesTable.insertUsesStmt(6, 1);
-	pk.usesTable.insertUsesStmt(7, 0);
-	pk.usesTable.insertUsesStmt(7, 3);
-	pk.usesTable.insertUsesStmt(8, 4);
-	pk.usesTable.insertUsesStmt(8, 5);
-	pk.usesTable.insertUsesStmt(8, 6);
-	pk.usesTable.insertUsesStmt(9, 5);
-	pk.usesTable.insertUsesStmt(10, 6);
-	pk.usesTable.insertUsesStmt(11, 1);
-	pk.usesTable.insertUsesStmt(12, 2);
-	pk.usesTable.insertUsesStmt(13, 0);
-	pk.usesTable.insertUsesStmt(13, 4);
-	pk.usesTable.insertUsesStmt(14, 0);
-	pk.usesTable.insertUsesStmt(15, 4);
-	pk.usesTable.insertUsesStmt(16, 4);
-	pk.usesTable.insertUsesStmt(18, 1);
-	pk.usesTable.insertUsesStmt(18, 0);
-	pk.usesTable.insertUsesStmt(18, 2);
-	pk.usesTable.insertUsesStmt(19, 1);
-	pk.usesTable.insertUsesStmt(20, 0);
-	pk.usesTable.insertUsesStmt(20, 1);
-	pk.usesTable.insertUsesStmt(20, 3);
-	pk.usesTable.insertUsesStmt(22, 1);
+	pk->usesTable.insertUsesStmt(3, 0);
+	pk->usesTable.insertUsesStmt(3, 1);
+	pk->usesTable.insertUsesStmt(3, 2);
+	pk->usesTable.insertUsesStmt(3, 3);
+	pk->usesTable.insertUsesStmt(3, 4);
+	pk->usesTable.insertUsesStmt(3, 5);
+	pk->usesTable.insertUsesStmt(3, 6);
+	pk->usesTable.insertUsesStmt(6, 2);
+	pk->usesTable.insertUsesStmt(6, 0);
+	pk->usesTable.insertUsesStmt(6, 3);
+	pk->usesTable.insertUsesStmt(6, 4);
+	pk->usesTable.insertUsesStmt(6, 5);
+	pk->usesTable.insertUsesStmt(6, 6);
+	pk->usesTable.insertUsesStmt(6, 1);
+	pk->usesTable.insertUsesStmt(7, 0);
+	pk->usesTable.insertUsesStmt(7, 3);
+	pk->usesTable.insertUsesStmt(8, 4);
+	pk->usesTable.insertUsesStmt(8, 5);
+	pk->usesTable.insertUsesStmt(8, 6);
+	pk->usesTable.insertUsesStmt(9, 5);
+	pk->usesTable.insertUsesStmt(10, 6);
+	pk->usesTable.insertUsesStmt(11, 1);
+	pk->usesTable.insertUsesStmt(12, 2);
+	pk->usesTable.insertUsesStmt(13, 0);
+	pk->usesTable.insertUsesStmt(13, 4);
+	pk->usesTable.insertUsesStmt(14, 0);
+	pk->usesTable.insertUsesStmt(15, 4);
+	pk->usesTable.insertUsesStmt(16, 4);
+	pk->usesTable.insertUsesStmt(18, 1);
+	pk->usesTable.insertUsesStmt(18, 0);
+	pk->usesTable.insertUsesStmt(18, 2);
+	pk->usesTable.insertUsesStmt(19, 1);
+	pk->usesTable.insertUsesStmt(20, 0);
+	pk->usesTable.insertUsesStmt(20, 1);
+	pk->usesTable.insertUsesStmt(20, 3);
+	pk->usesTable.insertUsesStmt(22, 1);
 
-	pk.constructCalls();
-	pk.constructFollows();
-	pk.constructModifies();
-	pk.constructParent();
-	pk.constructNext();
-	pk.constructUses();
+	pk->constructCalls();
+	pk->constructFollows();
+	pk->constructModifies();
+	pk->constructParent();
+//	pk->constructNext();
+	pk->constructUses();
 
 	synonymTable["s1"]="stmt";
 	synonymTable["s2"]="stmt";
@@ -302,7 +303,7 @@ void SubqueryTest::testSubqueries() {
 
 void SubqueryTest::testFollows(){
 	// Test 1: Follows(s1, s2)
-	FollowsSubquery followsSubquery1 = FollowsSubquery(&synonymTable, &pk);
+	FollowsSubquery followsSubquery1 = FollowsSubquery(&synonymTable, pk);
 	followsSubquery1.setSynonyms("s1", "s2");
 	ResultTuple* actualResultsFollowsSubquery1 = followsSubquery1.solve();
 	int expectedResultsFollowsSubquery1[13][2] = {
@@ -316,7 +317,7 @@ void SubqueryTest::testFollows(){
 	}
 
 	// Test 2: Follows(s1, 2)
-	FollowsSubquery followsSubquery2 = FollowsSubquery(&synonymTable, &pk);
+	FollowsSubquery followsSubquery2 = FollowsSubquery(&synonymTable, pk);
 	followsSubquery2.setSynonyms("s1", 2);
 	ResultTuple* actualResultsFollowsSubquery2 = followsSubquery2.solve();
 	int expectedResultsFollowsSubquery2[1][1] = {
@@ -330,7 +331,7 @@ void SubqueryTest::testFollows(){
 	}
 
 	// Test 3: Follows(s1, _)
-	FollowsSubquery followsSubquery3 = FollowsSubquery(&synonymTable, &pk);
+	FollowsSubquery followsSubquery3 = FollowsSubquery(&synonymTable, pk);
 	followsSubquery3.setSynonyms("s1", "_");
 	ResultTuple* actualResultsFollowsSubquery3 = followsSubquery3.solve();
 	int expectedResultsFollowsSubquery3[13][1] = {
@@ -344,7 +345,7 @@ void SubqueryTest::testFollows(){
 	}
 
 	// Test 4: Follows(a1, _)
-	FollowsSubquery followsSubquery4 = FollowsSubquery(&synonymTable, &pk);
+	FollowsSubquery followsSubquery4 = FollowsSubquery(&synonymTable, pk);
 	followsSubquery4.setSynonyms("a1", "_");
 	ResultTuple* actualResultsFollowsSubquery4 = followsSubquery4.solve();
 	int expectedResultsFollowsSubquery4[9][1] = {
@@ -358,7 +359,7 @@ void SubqueryTest::testFollows(){
 	}
 
 	// Test 5: Follows(2,s1)
-	FollowsSubquery followsSubquery5 = FollowsSubquery(&synonymTable, &pk);
+	FollowsSubquery followsSubquery5 = FollowsSubquery(&synonymTable, pk);
 	followsSubquery5.setSynonyms(2, "s1");
 	ResultTuple* actualResultsFollowsSubquery5 = followsSubquery5.solve();
 	int expectedResultsFollowsSubquery5[1][1] = {
@@ -372,7 +373,7 @@ void SubqueryTest::testFollows(){
 	}
 
 	// Test 6: Follows(1,"a1")
-	FollowsSubquery followsSubquery6 = FollowsSubquery(&synonymTable, &pk);
+	FollowsSubquery followsSubquery6 = FollowsSubquery(&synonymTable, pk);
 	followsSubquery6.setSynonyms(1, "a1");
 	ResultTuple* actualResultsFollowsSubquery6 = followsSubquery6.solve();
 	int expectedResultsFollowsSubquery6[1][1] = {
@@ -386,7 +387,7 @@ void SubqueryTest::testFollows(){
 	}
 	
 	// Test 7: Follows(_,s1)
-	FollowsSubquery followsSubquery7 = FollowsSubquery(&synonymTable, &pk);
+	FollowsSubquery followsSubquery7 = FollowsSubquery(&synonymTable, pk);
 	followsSubquery7.setSynonyms("_", "s1");
 	ResultTuple* actualResultsFollowsSubquery7 = followsSubquery7.solve();
 	int expectedResultsFollowsSubquery7[13][1] = {
@@ -400,7 +401,7 @@ void SubqueryTest::testFollows(){
 	}
 
 	//Test 8 : Follows(_,a1)
-	FollowsSubquery followsSubquery8 = FollowsSubquery(&synonymTable, &pk);
+	FollowsSubquery followsSubquery8 = FollowsSubquery(&synonymTable, pk);
 	followsSubquery8.setSynonyms("_", "a1");
 	ResultTuple* actualResultsFollowsSubquery8 = followsSubquery8.solve();
 	int expectedResultsFollowsSubquery8[7][1] = {
@@ -421,7 +422,7 @@ void SubqueryTest::testFollowsT(){
 
 void SubqueryTest::testParent(){
 	// Test 1: Parent(s1, s2)
-	ParentSubquery parentSubquery1 = ParentSubquery(&synonymTable, &pk);
+	ParentSubquery parentSubquery1 = ParentSubquery(&synonymTable, pk);
 	parentSubquery1.setSynonyms("s1", "s2");
 	ResultTuple* actualResultsParentSubquery1 = parentSubquery1.solve();
 	int expectedResultsParentSubquery1[10][2] = {
@@ -435,7 +436,7 @@ void SubqueryTest::testParent(){
 	}
 
 	// Test 2: Parent(s1, 8)
-	ParentSubquery parentSubquery2 = ParentSubquery(&synonymTable, &pk);
+	ParentSubquery parentSubquery2 = ParentSubquery(&synonymTable, pk);
 	parentSubquery2.setSynonyms("s1", 8);
 	ResultTuple* actualResultsParentSubquery2 = parentSubquery2.solve();
 	int expectedResultsParentSubquery2[1][1] = {
@@ -449,7 +450,7 @@ void SubqueryTest::testParent(){
 	}
 
 	// Test 3: Parent(s1, _)
-	ParentSubquery parentSubquery3 = ParentSubquery(&synonymTable, &pk);
+	ParentSubquery parentSubquery3 = ParentSubquery(&synonymTable, pk);
 	parentSubquery3.setSynonyms("s1", "_");
 	ResultTuple* actualResultsParentSubquery3 = parentSubquery3.solve();
 	int expectedResultsParentSubquery3[4][1] = {
@@ -463,7 +464,7 @@ void SubqueryTest::testParent(){
 	}
 
 	// Test 4: Parent(w1, _)
-	ParentSubquery parentSubquery4 = ParentSubquery(&synonymTable, &pk);
+	ParentSubquery parentSubquery4 = ParentSubquery(&synonymTable, pk);
 	parentSubquery4.setSynonyms("w1", "_");
 	ResultTuple* actualResultsParentSubquery4 = parentSubquery4.solve();
 	int expectedResultsParentSubquery4[2][1] = {
@@ -477,7 +478,7 @@ void SubqueryTest::testParent(){
 	}
 
 	// Test 5: Parent(6,s1)
-	ParentSubquery parentSubquery5 = ParentSubquery(&synonymTable, &pk);
+	ParentSubquery parentSubquery5 = ParentSubquery(&synonymTable, pk);
 	parentSubquery5.setSynonyms(6, "s1");
 	ResultTuple* actualResultsParentSubquery5 = parentSubquery5.solve();
 	int expectedResultsParentSubquery5[4][1] = {
@@ -491,7 +492,7 @@ void SubqueryTest::testParent(){
 	}
 
 	/*// Test 6: Follows(1,"a1")
-	FollowsSubquery followsSubquery6 = FollowsSubquery(&synonymTable, &pk);
+	FollowsSubquery followsSubquery6 = FollowsSubquery(&synonymTable, pk);
 	followsSubquery6.setSynonyms(2, "a1");
 	ResultTuple* actualResultsFollowsSubquery6 = followsSubquery6.solve();
 	int expectedResultsFollowsSubquery6[1][1] = {
@@ -505,7 +506,7 @@ void SubqueryTest::testParent(){
 	}
 	
 	// Test 7: Follows(_,s1)
-	FollowsSubquery followsSubquery7 = FollowsSubquery(&synonymTable, &pk);
+	FollowsSubquery followsSubquery7 = FollowsSubquery(&synonymTable, pk);
 	followsSubquery7.setSynonyms("_", "s1");
 	ResultTuple* actualResultsFollowsSubquery7 = followsSubquery7.solve();
 	int expectedResultsFollowsSubquery7[13][1] = {
@@ -519,7 +520,7 @@ void SubqueryTest::testParent(){
 	}
 
 	//Test 8 : Follows(_,a1)
-	FollowsSubquery followsSubquery8 = FollowsSubquery(&synonymTable, &pk);
+	FollowsSubquery followsSubquery8 = FollowsSubquery(&synonymTable, pk);
 	followsSubquery8.setSynonyms("_", "a1");
 	ResultTuple* actualResultsFollowsSubquery8 = followsSubquery8.solve();
 	int expectedResultsFollowsSubquery8[7][1] = {
@@ -540,7 +541,7 @@ void SubqueryTest::testParentT(){
 
 void SubqueryTest::testModifies(){
 	// Test 1: Modifies(s1, x)
-	ModifiesSubquery ms1 = ModifiesSubquery(&synonymTable, &pk);
+	ModifiesSubquery ms1 = ModifiesSubquery(&synonymTable, pk);
 	ms1.setSynonyms("s1", 0);
 	ResultTuple* actualResultsModifiesSubquery1 = ms1.solve();
 	int expectedResultsModifiesSubquery1[8][1] = {
@@ -553,7 +554,7 @@ void SubqueryTest::testModifies(){
 	}
 
 	// Test 1.2: Modifies(s1, _)
-	ModifiesSubquery ms1_2 = ModifiesSubquery(&synonymTable, &pk);
+	ModifiesSubquery ms1_2 = ModifiesSubquery(&synonymTable, pk);
 	ms1_2.setSynonyms("s1", "_");
 	ResultTuple* actualResultsModifiesSubquery1_2 = ms1_2.solve();
 	int expectedResultsModifiesSubquery1_2[22][1] = {
@@ -566,7 +567,7 @@ void SubqueryTest::testModifies(){
 	}
 
 	// Test 1.3: Modifies(s1, v1)
-	ModifiesSubquery ms1_3 = ModifiesSubquery(&synonymTable, &pk);
+	ModifiesSubquery ms1_3 = ModifiesSubquery(&synonymTable, pk);
 	ms1_3.setSynonyms("s1", "v1");
 	ResultTuple* actualResultsModifiesSubquery1_3 = ms1_3.solve();
 	int expectedResultsModifiesSubquery1_3[37][2] = {
@@ -583,7 +584,7 @@ void SubqueryTest::testModifies(){
 	}
 
 	// Test 2: Modifies(a1, x)
-	ModifiesSubquery ms2 = ModifiesSubquery(&synonymTable, &pk);
+	ModifiesSubquery ms2 = ModifiesSubquery(&synonymTable, pk);
 	ms2.setSynonyms("a1", 0);
 	ResultTuple* actualResultsModifiesSubquery2 = ms2.solve();
 	int expectedResultsModifiesSubquery2[5][1] = {
@@ -595,7 +596,7 @@ void SubqueryTest::testModifies(){
 		}
 	}
 	// Test 2.2: Modifies(a1, _)
-	ModifiesSubquery ms2_2 = ModifiesSubquery(&synonymTable, &pk);
+	ModifiesSubquery ms2_2 = ModifiesSubquery(&synonymTable, pk);
 	ms2_2.setSynonyms("a1", "_");
 	ResultTuple* actualResultsModifiesSubquery2_2 = ms2_2.solve();
 	int expectedResultsModifiesSubquery2_2[16][1] = {
@@ -607,7 +608,7 @@ void SubqueryTest::testModifies(){
 		}
 	}
 	// Test 2.3: Modifies(a1, v1)
-	ModifiesSubquery ms2_3 = ModifiesSubquery(&synonymTable, &pk);
+	ModifiesSubquery ms2_3 = ModifiesSubquery(&synonymTable, pk);
 	ms2_3.setSynonyms("a1", "v1");
 	ResultTuple* actualResultsModifiesSubquery2_3 = ms2_3.solve();
 	int expectedResultsModifiesSubquery2_3[16][2] = {
@@ -621,7 +622,7 @@ void SubqueryTest::testModifies(){
 	}
 
 	// Test 3: Modifies(c1, x)
-	ModifiesSubquery ms3 = ModifiesSubquery(&synonymTable, &pk);
+	ModifiesSubquery ms3 = ModifiesSubquery(&synonymTable, pk);
 	ms3.setSynonyms("c1", 0);
 	ResultTuple* actualResultsModifiesSubquery3 = ms3.solve();
 	int expectedResultsModifiesSubquery3[1][1] = {
@@ -633,7 +634,7 @@ void SubqueryTest::testModifies(){
 		}
 	}
 	// Test 3.2: Modifies(c1, _)
-	ModifiesSubquery ms3_2 = ModifiesSubquery(&synonymTable, &pk);
+	ModifiesSubquery ms3_2 = ModifiesSubquery(&synonymTable, pk);
 	ms3_2.setSynonyms("c1", "_");
 	ResultTuple* actualResultsModifiesSubquery3_2 = ms3_2.solve();
 	int expectedResultsModifiesSubquery3_2[2][1] = {
@@ -646,7 +647,7 @@ void SubqueryTest::testModifies(){
 	}
 
 	// Test 3.3: Modifies(c1, v1)
-	ModifiesSubquery ms3_3 = ModifiesSubquery(&synonymTable, &pk);
+	ModifiesSubquery ms3_3 = ModifiesSubquery(&synonymTable, pk);
 	ms3_3.setSynonyms("c1", "v1");
 	ResultTuple* actualResultsModifiesSubquery3_3 = ms3_3.solve();
 	int expectedResultsModifiesSubquery3_3[9][2] = {
@@ -659,7 +660,7 @@ void SubqueryTest::testModifies(){
 	}
 
 	// Test 4: Modifies(i1, x)
-	ModifiesSubquery ms4 = ModifiesSubquery(&synonymTable, &pk);
+	ModifiesSubquery ms4 = ModifiesSubquery(&synonymTable, pk);
 	ms4.setSynonyms("i1", 0);
 	ResultTuple* actualResultsModifiesSubquery4 = ms4.solve();
 	int expectedResultsModifiesSubquery4[1][1] = {
@@ -671,7 +672,7 @@ void SubqueryTest::testModifies(){
 		}
 	}
 	// Test 4.2: Modifies(i1, _)
-	ModifiesSubquery ms4_2 = ModifiesSubquery(&synonymTable, &pk);
+	ModifiesSubquery ms4_2 = ModifiesSubquery(&synonymTable, pk);
 	ms4_2.setSynonyms("i1", "_");
 	ResultTuple* actualResultsModifiesSubquery4_2 = ms4_2.solve();
 	int expectedResultsModifiesSubquery4_2[2][1] = {
@@ -684,7 +685,7 @@ void SubqueryTest::testModifies(){
 	}
 	
 	// Test 4.3: Modifies(i1, v1)
-	ModifiesSubquery ms4_3 = ModifiesSubquery(&synonymTable, &pk);
+	ModifiesSubquery ms4_3 = ModifiesSubquery(&synonymTable, pk);
 	ms4_3.setSynonyms("i1", "v1");
 	ResultTuple* actualResultsModifiesSubquery4_3 = ms4_3.solve();
 	int expectedResultsModifiesSubquery4_3[5][2] = {
@@ -697,7 +698,7 @@ void SubqueryTest::testModifies(){
 	}
 
 	// Test 5: Modifies(w1, x)
-	ModifiesSubquery ms5 = ModifiesSubquery(&synonymTable, &pk);
+	ModifiesSubquery ms5 = ModifiesSubquery(&synonymTable, pk);
 	ms5.setSynonyms("w1", 0);
 	ResultTuple* actualResultsModifiesSubquery5 = ms5.solve();
 	int expectedResultsModifiesSubquery5[1][1] = {
@@ -709,7 +710,7 @@ void SubqueryTest::testModifies(){
 		}
 	}
 	// Test 5.2: Modifies(w1, _)
-	ModifiesSubquery ms5_2 = ModifiesSubquery(&synonymTable, &pk);
+	ModifiesSubquery ms5_2 = ModifiesSubquery(&synonymTable, pk);
 	ms5_2.setSynonyms("w1", "_");
 	ResultTuple* actualResultsModifiesSubquery5_2 = ms5_2.solve();
 	int expectedResultsModifiesSubquery5_2[2][1] = {
@@ -722,7 +723,7 @@ void SubqueryTest::testModifies(){
 	}
 
 	// Test 5.3: Modifies(w1, v1)
-	ModifiesSubquery ms5_3 = ModifiesSubquery(&synonymTable, &pk);
+	ModifiesSubquery ms5_3 = ModifiesSubquery(&synonymTable, pk);
 	ms5_3.setSynonyms("w1", "v1");
 	ResultTuple* actualResultsModifiesSubquery5_3 = ms5_3.solve();
 	int expectedResultsModifiesSubquery5_3[7][2] = {
@@ -746,7 +747,7 @@ void SubqueryTest::testModifiesTuple() {
 	}
 	
 	// Test 1: Modifies(s1, x)
-	ModifiesSubquery ms1 = ModifiesSubquery(&synonymTable, &pk);
+	ModifiesSubquery ms1 = ModifiesSubquery(&synonymTable, pk);
 	ms1.setSynonyms("s1", 0);
 	ResultTuple* actualResultsModifiesSubquery1 = ms1.solve(rt);
 	int expectedResultsModifiesSubquery1[3][1] = {
@@ -767,7 +768,7 @@ void SubqueryTest::testModifiesProc(){
 
 void SubqueryTest::testUses(){
 	// Test 1: Uses(s1, x)
-	UsesSubquery us1 = UsesSubquery(&synonymTable, &pk);
+	UsesSubquery us1 = UsesSubquery(&synonymTable, pk);
 	us1.setSynonyms("s1", 0);
 	ResultTuple* actualResultsUsesSubquery1 = us1.solve();
 	int expectedResultsUsesSubquery1[7][1] = {
@@ -780,7 +781,7 @@ void SubqueryTest::testUses(){
 	}
 
 	// Test 1.2: Uses(s1, _)
-	UsesSubquery us1_2 = UsesSubquery(&synonymTable, &pk);
+	UsesSubquery us1_2 = UsesSubquery(&synonymTable, pk);
 	us1_2.setSynonyms("s1", "_");
 	ResultTuple* actualResultsUsesSubquery1_2 = us1_2.solve();
 	int expectedResultsUsesSubquery1_2[16][1] = {
@@ -794,7 +795,7 @@ void SubqueryTest::testUses(){
 	}
 
 	// Test 1.3: Uses(s1, v1)
-	UsesSubquery us1_3 = UsesSubquery(&synonymTable, &pk);
+	UsesSubquery us1_3 = UsesSubquery(&synonymTable, pk);
 	us1_3.setSynonyms("s1", "v1");
 	ResultTuple* actualResultsUsesSubquery1_3 = us1_3.solve();
 	int expectedResultsUsesSubquery1_3[36][2] = {
@@ -810,7 +811,7 @@ void SubqueryTest::testUses(){
 	}
 
 	// Test 2: Uses(a1, x)
-	UsesSubquery us2 = UsesSubquery(&synonymTable, &pk);
+	UsesSubquery us2 = UsesSubquery(&synonymTable, pk);
 	us2.setSynonyms("a1", 0);
 	ResultTuple* actualResultsUsesSubquery2 = us2.solve();
 	int expectedResultsUsesSubquery2[4][1] = {
@@ -822,7 +823,7 @@ void SubqueryTest::testUses(){
 		}
 	}
 	// Test 2.2: Uses(a1, _)
-	UsesSubquery us2_2 = UsesSubquery(&synonymTable, &pk);
+	UsesSubquery us2_2 = UsesSubquery(&synonymTable, pk);
 	us2_2.setSynonyms("a1", "_");
 	ResultTuple* actualResultsUsesSubquery2_2 = us2_2.solve();
 	int expectedResultsUsesSubquery2_2[10][1] = {
@@ -834,7 +835,7 @@ void SubqueryTest::testUses(){
 		}
 	}
 	// Test 2.3: Uses(a1, v1)
-	UsesSubquery us2_3 = UsesSubquery(&synonymTable, &pk);
+	UsesSubquery us2_3 = UsesSubquery(&synonymTable, pk);
 	us2_3.setSynonyms("a1", "v1");
 	ResultTuple* actualResultsUsesSubquery2_3 = us2_3.solve();
 	int expectedResultsUsesSubquery2_3[15][2] = {
@@ -847,7 +848,7 @@ void SubqueryTest::testUses(){
 	}
 
 	// Test 3: Uses(c1, x)
-	UsesSubquery us3 = UsesSubquery(&synonymTable, &pk);
+	UsesSubquery us3 = UsesSubquery(&synonymTable, pk);
 	us3.setSynonyms("c1", 0);
 	ResultTuple* actualResultsUsesSubquery3 = us3.solve();
 	int expectedResultsUsesSubquery3[1][1] = {
@@ -859,7 +860,7 @@ void SubqueryTest::testUses(){
 		}
 	}
 	// Test 3.2: Uses(c1, _)
-	UsesSubquery us3_2 = UsesSubquery(&synonymTable, &pk);
+	UsesSubquery us3_2 = UsesSubquery(&synonymTable, pk);
 	us3_2.setSynonyms("c1", "_");
 	ResultTuple* actualResultsUsesSubquery3_2 = us3_2.solve();
 	int expectedResultsUsesSubquery3_2[2][1] = {
@@ -872,7 +873,7 @@ void SubqueryTest::testUses(){
 	}
 
 	// Test 3.3: Uses(c1, v1)
-	UsesSubquery us3_3 = UsesSubquery(&synonymTable, &pk);
+	UsesSubquery us3_3 = UsesSubquery(&synonymTable, pk);
 	us3_3.setSynonyms("c1", "v1");
 	ResultTuple* actualResultsUsesSubquery3_3 = us3_3.solve();
 	int expectedResultsUsesSubquery3_3[8][2] = {
@@ -885,7 +886,7 @@ void SubqueryTest::testUses(){
 	}
 
 	// Test 4: Uses(i1, x)
-	UsesSubquery us4 = UsesSubquery(&synonymTable, &pk);
+	UsesSubquery us4 = UsesSubquery(&synonymTable, pk);
 	us4.setSynonyms("i1", 0);
 	ResultTuple* actualResultsUsesSubquery4 = us4.solve();
 	int expectedResultsUsesSubquery4[1][1] = {
@@ -897,7 +898,7 @@ void SubqueryTest::testUses(){
 		}
 	}
 	// Test 4.2: Uses(i1, _)
-	UsesSubquery us4_2 = UsesSubquery(&synonymTable, &pk);
+	UsesSubquery us4_2 = UsesSubquery(&synonymTable, pk);
 	us4_2.setSynonyms("i1", "_");
 	ResultTuple* actualResultsUsesSubquery4_2 = us4_2.solve();
 	int expectedResultsUsesSubquery4_2[2][1] = {
@@ -910,7 +911,7 @@ void SubqueryTest::testUses(){
 	}
 	
 	// Test 4.3: Uses(i1, v1)
-	UsesSubquery us4_3 = UsesSubquery(&synonymTable, &pk);
+	UsesSubquery us4_3 = UsesSubquery(&synonymTable, pk);
 	us4_3.setSynonyms("i1", "v1");
 	ResultTuple* actualResultsUsesSubquery4_3 = us4_3.solve();
 	int expectedResultsUsesSubquery4_3[5][2] = {
@@ -923,7 +924,7 @@ void SubqueryTest::testUses(){
 	}
 
 	// Test 5: Uses(w1, x)
-	UsesSubquery us5 = UsesSubquery(&synonymTable, &pk);
+	UsesSubquery us5 = UsesSubquery(&synonymTable, pk);
 	us5.setSynonyms("w1", 0);
 	ResultTuple* actualResultsUsesSubquery5 = us5.solve();
 	int expectedResultsUsesSubquery5[1][1] = {
@@ -935,7 +936,7 @@ void SubqueryTest::testUses(){
 		}
 	}
 	// Test 5.2: Uses(w1, _)
-	UsesSubquery us5_2 = UsesSubquery(&synonymTable, &pk);
+	UsesSubquery us5_2 = UsesSubquery(&synonymTable, pk);
 	us5_2.setSynonyms("w1", "_");
 	ResultTuple* actualResultsUsesSubquery5_2 = us5_2.solve();
 	int expectedResultsUsesSubquery5_2[2][1] = {
@@ -948,7 +949,7 @@ void SubqueryTest::testUses(){
 	}
 
 	// Test 5.3: Uses(w1, v1)
-	UsesSubquery us5_3 = UsesSubquery(&synonymTable, &pk);
+	UsesSubquery us5_3 = UsesSubquery(&synonymTable, pk);
 	us5_3.setSynonyms("w1", "v1");
 	ResultTuple* actualResultsUsesSubquery5_3 = us5_3.solve();
 	int expectedResultsUsesSubquery5_3[8][2] = {
@@ -966,6 +967,167 @@ void SubqueryTest::testUsesProc(){
 }
 
 void SubqueryTest::testCalls(){
+	// Test 65: Calls(proc1, proc2)
+	CallsSubquery callssubquery65 = CallsSubquery(&synonymTable, pk);
+	callssubquery65.setSynonyms("proc1", "proc2");
+	ResultTuple* actualResultcallssubquery65 = callssubquery65.solve();
+	int expectedResultcallssubquery65[2][2] = {
+		{0, 1}, {1, 2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultcallssubquery65)/sizeof(expectedResultcallssubquery65[0])), actualResultcallssubquery65->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultcallssubquery65)/sizeof(expectedResultcallssubquery65[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultcallssubquery65[i])/sizeof(expectedResultcallssubquery65[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultcallssubquery65[i][j], actualResultcallssubquery65->getResultAt(i, j));
+		}
+	}
+
+	// Test 69: Calls(proc1, _)
+	CallsSubquery callssubquery69 = CallsSubquery(&synonymTable, pk);
+	callssubquery69.setSynonyms("proc1", "_");
+	ResultTuple* actualResultcallssubquery69 = callssubquery69.solve();
+	int expectedResultcallssubquery69[2][1] = {
+		{0}, {1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultcallssubquery69)/sizeof(expectedResultcallssubquery69[0])), actualResultcallssubquery69->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultcallssubquery69)/sizeof(expectedResultcallssubquery69[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultcallssubquery69[i])/sizeof(expectedResultcallssubquery69[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultcallssubquery69[i][j], actualResultcallssubquery69->getResultAt(i, j));
+		}
+	}
+
+	// Test 70: Calls(proc1, 2)
+	CallsSubquery callssubquery70 = CallsSubquery(&synonymTable, pk);
+	callssubquery70.setSynonyms("proc1", 2);
+	ResultTuple* actualResultcallssubquery70 = callssubquery70.solve();
+	int expectedResultcallssubquery70[1][1] = {
+		{1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultcallssubquery70)/sizeof(expectedResultcallssubquery70[0])), actualResultcallssubquery70->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultcallssubquery70)/sizeof(expectedResultcallssubquery70[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultcallssubquery70[i])/sizeof(expectedResultcallssubquery70[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultcallssubquery70[i][j], actualResultcallssubquery70->getResultAt(i, j));
+		}
+	}
+
+	// Test 71: Calls(proc1, 6)
+	CallsSubquery callssubquery71 = CallsSubquery(&synonymTable, pk);
+	callssubquery71.setSynonyms("proc1", 6);
+	ResultTuple* actualResultcallssubquery71 = callssubquery71.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallssubquery71->getAllResults().size());
+
+	// Test 113: Calls(_, proc2)
+	CallsSubquery callssubquery113 = CallsSubquery(&synonymTable, pk);
+	callssubquery113.setSynonyms("_", "proc2");
+	ResultTuple* actualResultcallssubquery113 = callssubquery113.solve();
+	int expectedResultcallssubquery113[2][1] = {
+		{1}, {2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultcallssubquery113)/sizeof(expectedResultcallssubquery113[0])), actualResultcallssubquery113->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultcallssubquery113)/sizeof(expectedResultcallssubquery113[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultcallssubquery113[i])/sizeof(expectedResultcallssubquery113[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultcallssubquery113[i][j], actualResultcallssubquery113->getResultAt(i, j));
+		}
+	}
+
+	// Test 117: Calls(_, _)
+	CallsSubquery callssubquery117 = CallsSubquery(&synonymTable, pk);
+	callssubquery117.setSynonyms("_", "_");
+	ResultTuple* actualResultcallssubquery117 = callssubquery117.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallssubquery117->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallssubquery117->isBool());
+	CPPUNIT_ASSERT(!actualResultcallssubquery117->isEmpty());
+
+	// Test 118: Calls(_, 2)
+	CallsSubquery callssubquery118 = CallsSubquery(&synonymTable, pk);
+	callssubquery118.setSynonyms("_", 2);
+	ResultTuple* actualResultcallssubquery118 = callssubquery118.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallssubquery118->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallssubquery118->isBool());
+	CPPUNIT_ASSERT(!actualResultcallssubquery118->isEmpty());
+
+	// Test 119: Calls(_, 6)
+	CallsSubquery callssubquery119 = CallsSubquery(&synonymTable, pk);
+	callssubquery119.setSynonyms("_", 6);
+	ResultTuple* actualResultcallssubquery119 = callssubquery119.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallssubquery119->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallssubquery119->isBool());
+	CPPUNIT_ASSERT(actualResultcallssubquery119->isEmpty());
+
+	// Test 125: Calls(1, proc2)
+	CallsSubquery callssubquery125 = CallsSubquery(&synonymTable, pk);
+	callssubquery125.setSynonyms(1, "proc2");
+	ResultTuple* actualResultcallssubquery125 = callssubquery125.solve();
+	int expectedResultcallssubquery125[1][1] = {
+		{2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultcallssubquery125)/sizeof(expectedResultcallssubquery125[0])), actualResultcallssubquery125->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultcallssubquery125)/sizeof(expectedResultcallssubquery125[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultcallssubquery125[i])/sizeof(expectedResultcallssubquery125[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultcallssubquery125[i][j], actualResultcallssubquery125->getResultAt(i, j));
+		}
+	}
+
+	// Test 129: Calls(1, _)
+	CallsSubquery callssubquery129 = CallsSubquery(&synonymTable, pk);
+	callssubquery129.setSynonyms(1, "_");
+	ResultTuple* actualResultcallssubquery129 = callssubquery129.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallssubquery129->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallssubquery129->isBool());
+	CPPUNIT_ASSERT(!actualResultcallssubquery129->isEmpty());
+
+	// Test 130: Calls(1, 2)
+	CallsSubquery callssubquery130 = CallsSubquery(&synonymTable, pk);
+	callssubquery130.setSynonyms(1, 2);
+	ResultTuple* actualResultcallssubquery130 = callssubquery130.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallssubquery130->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallssubquery130->isBool());
+	CPPUNIT_ASSERT(!actualResultcallssubquery130->isEmpty());
+
+	// Test 131: Calls(1, 6)
+	CallsSubquery callssubquery131 = CallsSubquery(&synonymTable, pk);
+	callssubquery131.setSynonyms(1, 6);
+	ResultTuple* actualResultcallssubquery131 = callssubquery131.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallssubquery131->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallssubquery131->isBool());
+	CPPUNIT_ASSERT(actualResultcallssubquery131->isEmpty());
+
+	// Test 137: Calls(5, proc2)
+	CallsSubquery callssubquery137 = CallsSubquery(&synonymTable, pk);
+	callssubquery137.setSynonyms(5, "proc2");
+	ResultTuple* actualResultcallssubquery137 = callssubquery137.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallssubquery137->getAllResults().size());
+	
+	// Test 141: Calls(5, _)
+	CallsSubquery callssubquery141 = CallsSubquery(&synonymTable, pk);
+	callssubquery141.setSynonyms(5, "_");
+	ResultTuple* actualResultcallssubquery141 = callssubquery141.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallssubquery141->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallssubquery141->isBool());
+	CPPUNIT_ASSERT(actualResultcallssubquery141->isEmpty());
+
+	// Test 142: Calls(5, 2)
+	CallsSubquery callssubquery142 = CallsSubquery(&synonymTable, pk);
+	callssubquery142.setSynonyms(5, 2);
+	ResultTuple* actualResultcallssubquery142 = callssubquery142.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallssubquery142->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallssubquery142->isBool());
+	CPPUNIT_ASSERT(actualResultcallssubquery142->isEmpty());
+
+	// Test 143: Calls(5, 6)
+	CallsSubquery callssubquery143 = CallsSubquery(&synonymTable, pk);
+	callssubquery143.setSynonyms(5, 6);
+	ResultTuple* actualResultcallssubquery143 = callssubquery143.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallssubquery143->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallssubquery143->isBool());
+	CPPUNIT_ASSERT(actualResultcallssubquery143->isEmpty());
+
+	// Test 144: Calls(0, 2)
+	CallsSubquery callssubquery144 = CallsSubquery(&synonymTable, pk);
+	callssubquery144.setSynonyms(0, 2);
+	ResultTuple* actualResultcallssubquery144 = callssubquery144.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallssubquery144->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallssubquery144->isBool());
+	CPPUNIT_ASSERT(actualResultcallssubquery144->isEmpty());
 }
 
 void SubqueryTest::testCallsT(){
@@ -976,7 +1138,7 @@ void SubqueryTest::testPattern(){
 
 void SubqueryTest::testWith(){
 	// Test 0: with s1.stmt# = s2.stmt#
-	WithSubquery withsubquery0 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery0 = WithSubquery(&synonymTable, pk);
 	withsubquery0.setSynonyms("s1", "s2");
 	ResultTuple* actualResultwithsubquery0 = withsubquery0.solve();
 	int expectedResultwithsubquery0[22][2] = {
@@ -990,7 +1152,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 1: with s1.stmt# = a2.stmt#
-	WithSubquery withsubquery1 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery1 = WithSubquery(&synonymTable, pk);
 	withsubquery1.setSynonyms("s1", "a2");
 	ResultTuple* actualResultwithsubquery1 = withsubquery1.solve();
 	int expectedResultwithsubquery1[16][2] = {
@@ -1004,7 +1166,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 2: with s1.stmt# = w2.stmt#
-	WithSubquery withsubquery2 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery2 = WithSubquery(&synonymTable, pk);
 	withsubquery2.setSynonyms("s1", "w2");
 	ResultTuple* actualResultwithsubquery2 = withsubquery2.solve();
 	int expectedResultwithsubquery2[2][2] = {
@@ -1018,7 +1180,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 3: with s1.stmt# = i2.stmt#
-	WithSubquery withsubquery3 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery3 = WithSubquery(&synonymTable, pk);
 	withsubquery3.setSynonyms("s1", "i2");
 	ResultTuple* actualResultwithsubquery3 = withsubquery3.solve();
 	int expectedResultwithsubquery3[2][2] = {
@@ -1032,7 +1194,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 6: with s1.stmt# = c2.stmt#
-	WithSubquery withsubquery6 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery6 = WithSubquery(&synonymTable, pk);
 	withsubquery6.setSynonyms("s1", "c2");
 	ResultTuple* actualResultwithsubquery6 = withsubquery6.solve();
 	int expectedResultwithsubquery6[2][2] = {
@@ -1046,7 +1208,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 7: with s1.stmt# = l2
-	WithSubquery withsubquery7 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery7 = WithSubquery(&synonymTable, pk);
 	withsubquery7.setSynonyms("s1", "l2");
 	ResultTuple* actualResultwithsubquery7 = withsubquery7.solve();
 	int expectedResultwithsubquery7[22][2] = {
@@ -1060,7 +1222,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 8: with s1.stmt# = const2.value
-	WithSubquery withsubquery8 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery8 = WithSubquery(&synonymTable, pk);
 	withsubquery8.setSynonyms("s1", "const2");
 	ResultTuple* actualResultwithsubquery8 = withsubquery8.solve();
 	int expectedResultwithsubquery8[4][2] = {
@@ -1074,7 +1236,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 10: with s1.stmt# = 2
-	WithSubquery withsubquery10 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery10 = WithSubquery(&synonymTable, pk);
 	withsubquery10.setSynonyms("s1", 2);
 	ResultTuple* actualResultwithsubquery10 = withsubquery10.solve();
 	int expectedResultwithsubquery10[1][1] = {
@@ -1088,7 +1250,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 11: with s1.stmt# = 6
-	WithSubquery withsubquery11 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery11 = WithSubquery(&synonymTable, pk);
 	withsubquery11.setSynonyms("s1", 6);
 	ResultTuple* actualResultwithsubquery11 = withsubquery11.solve();
 	int expectedResultwithsubquery11[1][1] = {
@@ -1102,7 +1264,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 12: with a1.stmt# = s2.stmt#
-	WithSubquery withsubquery12 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery12 = WithSubquery(&synonymTable, pk);
 	withsubquery12.setSynonyms("a1", "s2");
 	ResultTuple* actualResultwithsubquery12 = withsubquery12.solve();
 	int expectedResultwithsubquery12[16][2] = {
@@ -1116,7 +1278,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 13: with a1.stmt# = a2.stmt#
-	WithSubquery withsubquery13 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery13 = WithSubquery(&synonymTable, pk);
 	withsubquery13.setSynonyms("a1", "a2");
 	ResultTuple* actualResultwithsubquery13 = withsubquery13.solve();
 	int expectedResultwithsubquery13[16][2] = {
@@ -1130,25 +1292,25 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 14: with(a1, w2)
-	WithSubquery withsubquery14 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery14 = WithSubquery(&synonymTable, pk);
 	withsubquery14.setSynonyms("a1", "w2");
 	ResultTuple* actualResultwithsubquery14 = withsubquery14.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery14->getAllResults().size());
 
 	// Test 15: with(a1, i2)
-	WithSubquery withsubquery15 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery15 = WithSubquery(&synonymTable, pk);
 	withsubquery15.setSynonyms("a1", "i2");
 	ResultTuple* actualResultwithsubquery15 = withsubquery15.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery15->getAllResults().size());
 
 	// Test 18: with(a1, c2)
-	WithSubquery withsubquery18 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery18 = WithSubquery(&synonymTable, pk);
 	withsubquery18.setSynonyms("a1", "c2");
 	ResultTuple* actualResultwithsubquery18 = withsubquery18.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery18->getAllResults().size());
 
 	// Test 19: with(a1, l2)
-	WithSubquery withsubquery19 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery19 = WithSubquery(&synonymTable, pk);
 	withsubquery19.setSynonyms("a1", "l2");
 	ResultTuple* actualResultwithsubquery19 = withsubquery19.solve();
 	int expectedResultwithsubquery19[16][2] = {
@@ -1162,7 +1324,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 20: with(a1, const2)
-	WithSubquery withsubquery20 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery20 = WithSubquery(&synonymTable, pk);
 	withsubquery20.setSynonyms("a1", "const2");
 	ResultTuple* actualResultwithsubquery20 = withsubquery20.solve();
 	int expectedResultwithsubquery20[3][2] = {
@@ -1176,7 +1338,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 22: with(a1, 2)
-	WithSubquery withsubquery22 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery22 = WithSubquery(&synonymTable, pk);
 	withsubquery22.setSynonyms("a1", 2);
 	ResultTuple* actualResultwithsubquery22 = withsubquery22.solve();
 	int expectedResultwithsubquery22[1][1] = {
@@ -1190,13 +1352,13 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 23: with(a1, 6)
-	WithSubquery withsubquery23 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery23 = WithSubquery(&synonymTable, pk);
 	withsubquery23.setSynonyms("a1", 6);
 	ResultTuple* actualResultwithsubquery23 = withsubquery23.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery23->getAllResults().size());
 
 	// Test 24: with(w1, s2)
-	WithSubquery withsubquery24 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery24 = WithSubquery(&synonymTable, pk);
 	withsubquery24.setSynonyms("w1", "s2");
 	ResultTuple* actualResultwithsubquery24 = withsubquery24.solve();
 	int expectedResultwithsubquery24[2][2] = {
@@ -1210,13 +1372,13 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 25: with(w1, a2)
-	WithSubquery withsubquery25 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery25 = WithSubquery(&synonymTable, pk);
 	withsubquery25.setSynonyms("w1", "a2");
 	ResultTuple* actualResultwithsubquery25 = withsubquery25.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery25->getAllResults().size());
 
 	// Test 26: with(w1, w2)
-	WithSubquery withsubquery26 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery26 = WithSubquery(&synonymTable, pk);
 	withsubquery26.setSynonyms("w1", "w2");
 	ResultTuple* actualResultwithsubquery26 = withsubquery26.solve();
 	int expectedResultwithsubquery26[2][2] = {
@@ -1230,19 +1392,19 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 27: with(w1, i2)
-	WithSubquery withsubquery27 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery27 = WithSubquery(&synonymTable, pk);
 	withsubquery27.setSynonyms("w1", "i2");
 	ResultTuple* actualResultwithsubquery27 = withsubquery27.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery27->getAllResults().size());
 
 	// Test 30: with(w1, c2)
-	WithSubquery withsubquery30 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery30 = WithSubquery(&synonymTable, pk);
 	withsubquery30.setSynonyms("w1", "c2");
 	ResultTuple* actualResultwithsubquery30 = withsubquery30.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery30->getAllResults().size());
 
 	// Test 31: with(w1, l2)
-	WithSubquery withsubquery31 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery31 = WithSubquery(&synonymTable, pk);
 	withsubquery31.setSynonyms("w1", "l2");
 	ResultTuple* actualResultwithsubquery31 = withsubquery31.solve();
 	int expectedResultwithsubquery31[2][2] = {
@@ -1256,19 +1418,19 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 32: with(w1, const2)
-	WithSubquery withsubquery32 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery32 = WithSubquery(&synonymTable, pk);
 	withsubquery32.setSynonyms("w1", "const2");
 	ResultTuple* actualResultwithsubquery32 = withsubquery32.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery32->getAllResults().size());
 
 	// Test 34: with(w1, 2)
-	WithSubquery withsubquery34 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery34 = WithSubquery(&synonymTable, pk);
 	withsubquery34.setSynonyms("w1", 2);
 	ResultTuple* actualResultwithsubquery34 = withsubquery34.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery34->getAllResults().size());
 
 	// Test 35: with(w1, 6)
-	WithSubquery withsubquery35 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery35 = WithSubquery(&synonymTable, pk);
 	withsubquery35.setSynonyms("w1", 6);
 	ResultTuple* actualResultwithsubquery35 = withsubquery35.solve();
 	int expectedResultwithsubquery35[1][1] = {
@@ -1282,7 +1444,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 36: with(i1, s2)
-	WithSubquery withsubquery36 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery36 = WithSubquery(&synonymTable, pk);
 	withsubquery36.setSynonyms("i1", "s2");
 	ResultTuple* actualResultwithsubquery36 = withsubquery36.solve();
 	int expectedResultwithsubquery36[2][2] = {
@@ -1296,19 +1458,19 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 37: with(i1, a2)
-	WithSubquery withsubquery37 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery37 = WithSubquery(&synonymTable, pk);
 	withsubquery37.setSynonyms("i1", "a2");
 	ResultTuple* actualResultwithsubquery37 = withsubquery37.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery37->getAllResults().size());
 
 	// Test 38: with(i1, w2)
-	WithSubquery withsubquery38 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery38 = WithSubquery(&synonymTable, pk);
 	withsubquery38.setSynonyms("i1", "w2");
 	ResultTuple* actualResultwithsubquery38 = withsubquery38.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery38->getAllResults().size());
 
 	// Test 39: with(i1, i2)
-	WithSubquery withsubquery39 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery39 = WithSubquery(&synonymTable, pk);
 	withsubquery39.setSynonyms("i1", "i2");
 	ResultTuple* actualResultwithsubquery39 = withsubquery39.solve();
 	int expectedResultwithsubquery39[2][2] = {
@@ -1316,13 +1478,13 @@ void SubqueryTest::testWith(){
 	};
 
 	// Test 42: with(i1, c2)
-	WithSubquery withsubquery42 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery42 = WithSubquery(&synonymTable, pk);
 	withsubquery42.setSynonyms("i1", "c2");
 	ResultTuple* actualResultwithsubquery42 = withsubquery42.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery42->getAllResults().size());
 
 	// Test 43: with(i1, l2)
-	WithSubquery withsubquery43 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery43 = WithSubquery(&synonymTable, pk);
 	withsubquery43.setSynonyms("i1", "l2");
 	ResultTuple* actualResultwithsubquery43 = withsubquery43.solve();
 	int expectedResultwithsubquery43[2][2] = {
@@ -1336,25 +1498,25 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 44: with(i1, const2)
-	WithSubquery withsubquery44 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery44 = WithSubquery(&synonymTable, pk);
 	withsubquery44.setSynonyms("i1", "const2");
 	ResultTuple* actualResultwithsubquery44 = withsubquery44.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery44->getAllResults().size());
 
 	// Test 46: with(i1, 2)
-	WithSubquery withsubquery46 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery46 = WithSubquery(&synonymTable, pk);
 	withsubquery46.setSynonyms("i1", 2);
 	ResultTuple* actualResultwithsubquery46 = withsubquery46.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery46->getAllResults().size());
 
 	// Test 47: with(i1, 6)
-	WithSubquery withsubquery47 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery47 = WithSubquery(&synonymTable, pk);
 	withsubquery47.setSynonyms("i1", 6);
 	ResultTuple* actualResultwithsubquery47 = withsubquery47.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery47->getAllResults().size());
 
 	// Test 52: with(v1, v2)
-	WithSubquery withsubquery52 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery52 = WithSubquery(&synonymTable, pk);
 	withsubquery52.setSynonyms("v1", "v2");
 	ResultTuple* actualResultwithsubquery52 = withsubquery52.solve();
 	int expectedResultwithsubquery52[8][2] = {
@@ -1368,7 +1530,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 53: with(v1, proc2)
-	WithSubquery withsubquery53 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery53 = WithSubquery(&synonymTable, pk);
 	withsubquery53.setSynonyms("v1", "proc2");
 	ResultTuple* actualResultwithsubquery53 = withsubquery53.solve();
 	int expectedResultwithsubquery53[1][2] = {
@@ -1382,7 +1544,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 64: with(proc1, v2)
-	WithSubquery withsubquery64 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery64 = WithSubquery(&synonymTable, pk);
 	withsubquery64.setSynonyms("proc1", "v2");
 	ResultTuple* actualResultwithsubquery64 = withsubquery64.solve();
 	int expectedResultwithsubquery64[1][2] = {
@@ -1396,7 +1558,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 65: with(proc1, proc2)
-	WithSubquery withsubquery65 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery65 = WithSubquery(&synonymTable, pk);
 	withsubquery65.setSynonyms("proc1", "proc2");
 	ResultTuple* actualResultwithsubquery65 = withsubquery65.solve();
 	int expectedResultwithsubquery65[3][2] = {
@@ -1410,7 +1572,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 72: with(c1, s2)
-	WithSubquery withsubquery72 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery72 = WithSubquery(&synonymTable, pk);
 	withsubquery72.setSynonyms("c1", "s2");
 	ResultTuple* actualResultwithsubquery72 = withsubquery72.solve();
 	int expectedResultwithsubquery72[2][2] = {
@@ -1424,25 +1586,25 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 73: with(c1, a2)
-	WithSubquery withsubquery73 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery73 = WithSubquery(&synonymTable, pk);
 	withsubquery73.setSynonyms("c1", "a2");
 	ResultTuple* actualResultwithsubquery73 = withsubquery73.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery73->getAllResults().size());
 
 	// Test 74: with(c1, w2)
-	WithSubquery withsubquery74 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery74 = WithSubquery(&synonymTable, pk);
 	withsubquery74.setSynonyms("c1", "w2");
 	ResultTuple* actualResultwithsubquery74 = withsubquery74.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery74->getAllResults().size());
 
 	// Test 75: with(c1, i2)
-	WithSubquery withsubquery75 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery75 = WithSubquery(&synonymTable, pk);
 	withsubquery75.setSynonyms("c1", "i2");
 	ResultTuple* actualResultwithsubquery75 = withsubquery75.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery75->getAllResults().size());
 
 	// Test 78: with(c1, c2)
-	WithSubquery withsubquery78 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery78 = WithSubquery(&synonymTable, pk);
 	withsubquery78.setSynonyms("c1", "c2");
 	ResultTuple* actualResultwithsubquery78 = withsubquery78.solve();
 	int expectedResultwithsubquery78[2][2] = {
@@ -1456,7 +1618,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 79: with(c1, l2)
-	WithSubquery withsubquery79 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery79 = WithSubquery(&synonymTable, pk);
 	withsubquery79.setSynonyms("c1", "l2");
 	ResultTuple* actualResultwithsubquery79 = withsubquery79.solve();
 	int expectedResultwithsubquery79[2][2] = {
@@ -1470,7 +1632,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 80: with(c1, const2)
-	WithSubquery withsubquery80 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery80 = WithSubquery(&synonymTable, pk);
 	withsubquery80.setSynonyms("c1", "const2");
 	ResultTuple* actualResultwithsubquery80 = withsubquery80.solve();
 	int expectedResultwithsubquery80[1][2] = {
@@ -1484,19 +1646,19 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 82: with(c1, 2)
-	WithSubquery withsubquery82 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery82 = WithSubquery(&synonymTable, pk);
 	withsubquery82.setSynonyms("c1", 2);
 	ResultTuple* actualResultwithsubquery82 = withsubquery82.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery82->getAllResults().size());
 
 	// Test 83: with(c1, 6)
-	WithSubquery withsubquery83 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery83 = WithSubquery(&synonymTable, pk);
 	withsubquery83.setSynonyms("c1", 6);
 	ResultTuple* actualResultwithsubquery83 = withsubquery83.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery83->getAllResults().size());
 
 	// Test 84: with(l1, s2)
-	WithSubquery withsubquery84 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery84 = WithSubquery(&synonymTable, pk);
 	withsubquery84.setSynonyms("l1", "s2");
 	ResultTuple* actualResultwithsubquery84 = withsubquery84.solve();
 	int expectedResultwithsubquery84[22][2] = {
@@ -1510,7 +1672,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 85: with(l1, a2)
-	WithSubquery withsubquery85 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery85 = WithSubquery(&synonymTable, pk);
 	withsubquery85.setSynonyms("l1", "a2");
 	ResultTuple* actualResultwithsubquery85 = withsubquery85.solve();
 	int expectedResultwithsubquery85[16][2] = {
@@ -1524,7 +1686,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 86: with(l1, w2)
-	WithSubquery withsubquery86 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery86 = WithSubquery(&synonymTable, pk);
 	withsubquery86.setSynonyms("l1", "w2");
 	ResultTuple* actualResultwithsubquery86 = withsubquery86.solve();
 	int expectedResultwithsubquery86[2][2] = {
@@ -1538,7 +1700,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 87: with(l1, i2)
-	WithSubquery withsubquery87 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery87 = WithSubquery(&synonymTable, pk);
 	withsubquery87.setSynonyms("l1", "i2");
 	ResultTuple* actualResultwithsubquery87 = withsubquery87.solve();
 	int expectedResultwithsubquery87[2][2] = {
@@ -1552,7 +1714,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 90: with(l1, c2)
-	WithSubquery withsubquery90 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery90 = WithSubquery(&synonymTable, pk);
 	withsubquery90.setSynonyms("l1", "c2");
 	ResultTuple* actualResultwithsubquery90 = withsubquery90.solve();
 	int expectedResultwithsubquery90[2][2] = {
@@ -1566,7 +1728,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 91: with(l1, l2)
-	WithSubquery withsubquery91 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery91 = WithSubquery(&synonymTable, pk);
 	withsubquery91.setSynonyms("l1", "l2");
 	ResultTuple* actualResultwithsubquery91 = withsubquery91.solve();
 	int expectedResultwithsubquery91[22][2] = {
@@ -1580,7 +1742,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 92: with(l1, const2)
-	WithSubquery withsubquery92 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery92 = WithSubquery(&synonymTable, pk);
 	withsubquery92.setSynonyms("l1", "const2");
 	ResultTuple* actualResultwithsubquery92 = withsubquery92.solve();
 	int expectedResultwithsubquery92[4][2] = {
@@ -1594,7 +1756,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 94: with(l1, 2)
-	WithSubquery withsubquery94 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery94 = WithSubquery(&synonymTable, pk);
 	withsubquery94.setSynonyms("l1", 2);
 	ResultTuple* actualResultwithsubquery94 = withsubquery94.solve();
 	int expectedResultwithsubquery94[1][1] = {
@@ -1608,7 +1770,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 95: with(l1, 6)
-	WithSubquery withsubquery95 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery95 = WithSubquery(&synonymTable, pk);
 	withsubquery95.setSynonyms("l1", 6);
 	ResultTuple* actualResultwithsubquery95 = withsubquery95.solve();
 	int expectedResultwithsubquery95[1][1] = {
@@ -1622,7 +1784,7 @@ void SubqueryTest::testWith(){
 	}
 
 		// Test 96: with(const1, s2)
-	WithSubquery withsubquery96 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery96 = WithSubquery(&synonymTable, pk);
 	withsubquery96.setSynonyms("const1", "s2");
 	ResultTuple* actualResultwithsubquery96 = withsubquery96.solve();
 	int expectedResultwithsubquery96[4][2] = {
@@ -1636,7 +1798,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 97: with(const1, a2)
-	WithSubquery withsubquery97 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery97 = WithSubquery(&synonymTable, pk);
 	withsubquery97.setSynonyms("const1", "a2");
 	ResultTuple* actualResultwithsubquery97 = withsubquery97.solve();
 	int expectedResultwithsubquery97[3][2] = {
@@ -1650,19 +1812,19 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 98: with(const1, w2)
-	WithSubquery withsubquery98 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery98 = WithSubquery(&synonymTable, pk);
 	withsubquery98.setSynonyms("const1", "w2");
 	ResultTuple* actualResultwithsubquery98 = withsubquery98.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery98->getAllResults().size());
 
 	// Test 99: with(const1, i2)
-	WithSubquery withsubquery99 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery99 = WithSubquery(&synonymTable, pk);
 	withsubquery99.setSynonyms("const1", "i2");
 	ResultTuple* actualResultwithsubquery99 = withsubquery99.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery99->getAllResults().size());
 
 	// Test 102: with(const1, c2)
-	WithSubquery withsubquery102 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery102 = WithSubquery(&synonymTable, pk);
 	withsubquery102.setSynonyms("const1", "c2");
 	ResultTuple* actualResultwithsubquery102 = withsubquery102.solve();
 	int expectedResultwithsubquery102[1][2] = {
@@ -1676,7 +1838,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 103: with(const1, l2)
-	WithSubquery withsubquery103 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery103 = WithSubquery(&synonymTable, pk);
 	withsubquery103.setSynonyms("const1", "l2");
 	ResultTuple* actualResultwithsubquery103 = withsubquery103.solve();
 	int expectedResultwithsubquery103[4][2] = {
@@ -1690,7 +1852,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 104: with(const1, const2)
-	WithSubquery withsubquery104 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery104 = WithSubquery(&synonymTable, pk);
 	withsubquery104.setSynonyms("const1", "const2");
 	ResultTuple* actualResultwithsubquery104 = withsubquery104.solve();
 	int expectedResultwithsubquery104[5][2] = {
@@ -1704,7 +1866,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 106: with(const1, 2)
-	WithSubquery withsubquery106 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery106 = WithSubquery(&synonymTable, pk);
 	withsubquery106.setSynonyms("const1", 2);
 	ResultTuple* actualResultwithsubquery106 = withsubquery106.solve();
 	int expectedResultwithsubquery106[1][1] = {
@@ -1718,13 +1880,13 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 107: with(const1, 6)
-	WithSubquery withsubquery107 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery107 = WithSubquery(&synonymTable, pk);
 	withsubquery107.setSynonyms("const1", 6);
 	ResultTuple* actualResultwithsubquery107 = withsubquery107.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery107->getAllResults().size());
 
 	// Test 120: with(1, s2)
-	WithSubquery withsubquery120 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery120 = WithSubquery(&synonymTable, pk);
 	withsubquery120.setSynonyms(1, "s2");
 	ResultTuple* actualResultwithsubquery120 = withsubquery120.solve();
 	int expectedResultwithsubquery120[1][1] = {
@@ -1738,7 +1900,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 121: with(1, a2)
-	WithSubquery withsubquery121 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery121 = WithSubquery(&synonymTable, pk);
 	withsubquery121.setSynonyms(1, "a2");
 	ResultTuple* actualResultwithsubquery121 = withsubquery121.solve();
 	int expectedResultwithsubquery121[1][1] = {
@@ -1752,25 +1914,25 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 122: with(1, w2)
-	WithSubquery withsubquery122 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery122 = WithSubquery(&synonymTable, pk);
 	withsubquery122.setSynonyms(1, "w2");
 	ResultTuple* actualResultwithsubquery122 = withsubquery122.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery122->getAllResults().size());
 
 	// Test 123: with(1, i2)
-	WithSubquery withsubquery123 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery123 = WithSubquery(&synonymTable, pk);
 	withsubquery123.setSynonyms(1, "i2");
 	ResultTuple* actualResultwithsubquery123 = withsubquery123.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery123->getAllResults().size());
 
 	// Test 126: with(1, c2)
-	WithSubquery withsubquery126 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery126 = WithSubquery(&synonymTable, pk);
 	withsubquery126.setSynonyms(1, "c2");
 	ResultTuple* actualResultwithsubquery126 = withsubquery126.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery126->getAllResults().size());
 
 	// Test 127: with(1, l2)
-	WithSubquery withsubquery127 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery127 = WithSubquery(&synonymTable, pk);
 	withsubquery127.setSynonyms(1, "l2");
 	ResultTuple* actualResultwithsubquery127 = withsubquery127.solve();
 	int expectedResultwithsubquery127[1][1] = {
@@ -1784,7 +1946,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 128: with(1, const2)
-	WithSubquery withsubquery128 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery128 = WithSubquery(&synonymTable, pk);
 	withsubquery128.setSynonyms(1, "const2");
 	ResultTuple* actualResultwithsubquery128 = withsubquery128.solve();
 	int expectedResultwithsubquery128[1][1] = {
@@ -1798,7 +1960,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 130: with(1, 2)
-	WithSubquery withsubquery130 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery130 = WithSubquery(&synonymTable, pk);
 	withsubquery130.setSynonyms(1, 2);
 	ResultTuple* actualResultwithsubquery130 = withsubquery130.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery130->getAllResults().size());
@@ -1806,7 +1968,7 @@ void SubqueryTest::testWith(){
 	CPPUNIT_ASSERT(actualResultwithsubquery130->isEmpty());
 
 	// Test 131: with(1, 6)
-	WithSubquery withsubquery131 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery131 = WithSubquery(&synonymTable, pk);
 	withsubquery131.setSynonyms(1, 6);
 	ResultTuple* actualResultwithsubquery131 = withsubquery131.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery131->getAllResults().size());
@@ -1814,7 +1976,7 @@ void SubqueryTest::testWith(){
 	CPPUNIT_ASSERT(actualResultwithsubquery131->isEmpty());
 
 	// Test 134: with(6, w2)
-	WithSubquery withsubquery134 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery134 = WithSubquery(&synonymTable, pk);
 	withsubquery134.setSynonyms(6, "w2");
 	ResultTuple* actualResultwithsubquery134 = withsubquery134.solve();
 	int expectedResultwithsubquery134[1][1] = {
@@ -1828,7 +1990,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 135: with(8, i2)
-	WithSubquery withsubquery135 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery135 = WithSubquery(&synonymTable, pk);
 	withsubquery135.setSynonyms(8, "i2");
 	ResultTuple* actualResultwithsubquery135 = withsubquery135.solve();
 	int expectedResultwithsubquery135[1][1] = {
@@ -1842,7 +2004,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 138: with(3, c2)
-	WithSubquery withsubquery138 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery138 = WithSubquery(&synonymTable, pk);
 	withsubquery138.setSynonyms(3, "c2");
 	ResultTuple* actualResultwithsubquery138 = withsubquery138.solve();
 	int expectedResultwithsubquery138[1][1] = {
@@ -1856,7 +2018,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 139: with(5, l2)
-	WithSubquery withsubquery139 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery139 = WithSubquery(&synonymTable, pk);
 	withsubquery139.setSynonyms(5, "l2");
 	ResultTuple* actualResultwithsubquery139 = withsubquery139.solve();
 	int expectedResultwithsubquery139[1][1] = {
@@ -1870,7 +2032,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 140: with(5, const2)
-	WithSubquery withsubquery140 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery140 = WithSubquery(&synonymTable, pk);
 	withsubquery140.setSynonyms(5, "const2");
 	ResultTuple* actualResultwithsubquery140 = withsubquery140.solve();
 	int expectedResultwithsubquery140[1][1] = {
@@ -1884,7 +2046,7 @@ void SubqueryTest::testWith(){
 	}
 
 	// Test 143: with(5, 5)
-	WithSubquery withsubquery143 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery143 = WithSubquery(&synonymTable, pk);
 	withsubquery143.setSynonyms(5, 5);
 	ResultTuple* actualResultwithsubquery143 = withsubquery143.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery143->getAllResults().size());
@@ -1942,7 +2104,7 @@ void SubqueryTest::testWithTuple(){
 		}
 	}
 	// Test 0: with s1.stmt# = s2.stmt#
-	WithSubquery withsubquery0 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery0 = WithSubquery(&synonymTable, pk);
 	withsubquery0.setSynonyms("s1", "s2");
 	ResultTuple* actualResultwithsubquery0 = withsubquery0.solve(&testTuple);
 	int expectedResultwithsubquery0[9][10] = {
@@ -1964,7 +2126,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 1: with s1.stmt# = a2.stmt#
-	WithSubquery withsubquery1 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery1 = WithSubquery(&synonymTable, pk);
 	withsubquery1.setSynonyms("s1", "a2");
 	ResultTuple* actualResultwithsubquery1 = withsubquery1.solve(&testTuple);
 	int expectedResultwithsubquery1[7][10] = {
@@ -1984,13 +2146,13 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 2: with s1.stmt# = w2.stmt#
-	WithSubquery withsubquery2 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery2 = WithSubquery(&synonymTable, pk);
 	withsubquery2.setSynonyms("s1", "w2");
 	ResultTuple* actualResultwithsubquery2 = withsubquery2.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery2->getAllResults().size());
 
 	// Test 3: with s1.stmt# = i2.stmt#
-	WithSubquery withsubquery3 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery3 = WithSubquery(&synonymTable, pk);
 	withsubquery3.setSynonyms("s1", "i2");
 	ResultTuple* actualResultwithsubquery3 = withsubquery3.solve(&testTuple);
 	int expectedResultwithsubquery3[1][9] = {
@@ -2004,7 +2166,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 6: with s1.stmt# = c2.stmt#
-	WithSubquery withsubquery6 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery6 = WithSubquery(&synonymTable, pk);
 	withsubquery6.setSynonyms("s1", "c2");
 	ResultTuple* actualResultwithsubquery6 = withsubquery6.solve(&testTuple);
 	int expectedResultwithsubquery6[1][9] = {
@@ -2018,7 +2180,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 7: with s1.stmt# = l2
-	WithSubquery withsubquery7 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery7 = WithSubquery(&synonymTable, pk);
 	withsubquery7.setSynonyms("s1", "l2");
 	ResultTuple* actualResultwithsubquery7 = withsubquery7.solve(&testTuple);
 	int expectedResultwithsubquery7[9][10] = {
@@ -2040,7 +2202,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 8: with s1.stmt# = const2.value
-	WithSubquery withsubquery8 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery8 = WithSubquery(&synonymTable, pk);
 	withsubquery8.setSynonyms("s1", "const2");
 	ResultTuple* actualResultwithsubquery8 = withsubquery8.solve(&testTuple);
 	int expectedResultwithsubquery8[8][10] = {
@@ -2061,7 +2223,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 10: with s1.stmt# = 2
-	WithSubquery withsubquery10 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery10 = WithSubquery(&synonymTable, pk);
 	withsubquery10.setSynonyms("s1", 2);
 	ResultTuple* actualResultwithsubquery10 = withsubquery10.solve(&testTuple);
 	int expectedResultwithsubquery10[1][9] = {
@@ -2075,13 +2237,13 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 11: with s1.stmt# = 6
-	WithSubquery withsubquery11 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery11 = WithSubquery(&synonymTable, pk);
 	withsubquery11.setSynonyms("s1", 6);
 	ResultTuple* actualResultwithsubquery11 = withsubquery11.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery11->getAllResults().size());
 
 	// Test 12: with a1.stmt# = s2.stmt#
-	WithSubquery withsubquery12 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery12 = WithSubquery(&synonymTable, pk);
 	withsubquery12.setSynonyms("a1", "s2");
 	ResultTuple* actualResultwithsubquery12 = withsubquery12.solve(&testTuple);
 	int expectedResultwithsubquery12[9][10] = {
@@ -2103,7 +2265,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 13: with a1.stmt# = a2.stmt#
-	WithSubquery withsubquery13 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery13 = WithSubquery(&synonymTable, pk);
 	withsubquery13.setSynonyms("a1", "a2");
 	ResultTuple* actualResultwithsubquery13 = withsubquery13.solve(&testTuple);
 	int expectedResultwithsubquery13[9][10] = {
@@ -2125,25 +2287,25 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 14: with(a1, w2)
-	WithSubquery withsubquery14 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery14 = WithSubquery(&synonymTable, pk);
 	withsubquery14.setSynonyms("a1", "w2");
 	ResultTuple* actualResultwithsubquery14 = withsubquery14.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery14->getAllResults().size());
 
 	// Test 15: with(a1, i2)
-	WithSubquery withsubquery15 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery15 = WithSubquery(&synonymTable, pk);
 	withsubquery15.setSynonyms("a1", "i2");
 	ResultTuple* actualResultwithsubquery15 = withsubquery15.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery15->getAllResults().size());
 
 	// Test 18: with(a1, c2)
-	WithSubquery withsubquery18 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery18 = WithSubquery(&synonymTable, pk);
 	withsubquery18.setSynonyms("a1", "c2");
 	ResultTuple* actualResultwithsubquery18 = withsubquery18.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery18->getAllResults().size());
 
 	// Test 19: with(a1, l2)
-	WithSubquery withsubquery19 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery19 = WithSubquery(&synonymTable, pk);
 	withsubquery19.setSynonyms("a1", "l2");
 	ResultTuple* actualResultwithsubquery19 = withsubquery19.solve(&testTuple);
 	int expectedResultwithsubquery19[9][10] = {
@@ -2165,7 +2327,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 20: with(a1, const2)
-	WithSubquery withsubquery20 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery20 = WithSubquery(&synonymTable, pk);
 	withsubquery20.setSynonyms("a1", "const2");
 	ResultTuple* actualResultwithsubquery20 = withsubquery20.solve(&testTuple);
 	int expectedResultwithsubquery20[9][10] = {
@@ -2187,7 +2349,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 22: with(a1, 2)
-	WithSubquery withsubquery22 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery22 = WithSubquery(&synonymTable, pk);
 	withsubquery22.setSynonyms("a1", 2);
 	ResultTuple* actualResultwithsubquery22 = withsubquery22.solve(&testTuple);
 	int expectedResultwithsubquery22[5][9] = {
@@ -2205,13 +2367,13 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 23: with(a1, 6)
-	WithSubquery withsubquery23 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery23 = WithSubquery(&synonymTable, pk);
 	withsubquery23.setSynonyms("a1", 6);
 	ResultTuple* actualResultwithsubquery23 = withsubquery23.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery23->getAllResults().size());
 
 	// Test 24: with(w1, s2)
-	WithSubquery withsubquery24 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery24 = WithSubquery(&synonymTable, pk);
 	withsubquery24.setSynonyms("w1", "s2");
 	ResultTuple* actualResultwithsubquery24 = withsubquery24.solve(&testTuple);
 	int expectedResultwithsubquery24[9][10] = {
@@ -2233,13 +2395,13 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 25: with(w1, a2)
-	WithSubquery withsubquery25 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery25 = WithSubquery(&synonymTable, pk);
 	withsubquery25.setSynonyms("w1", "a2");
 	ResultTuple* actualResultwithsubquery25 = withsubquery25.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery25->getAllResults().size());
 
 	// Test 26: with(w1, w2)
-	WithSubquery withsubquery26 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery26 = WithSubquery(&synonymTable, pk);
 	withsubquery26.setSynonyms("w1", "w2");
 	ResultTuple* actualResultwithsubquery26 = withsubquery26.solve(&testTuple);
 	int expectedResultwithsubquery26[9][10] = {
@@ -2261,19 +2423,19 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 27: with(w1, i2)
-	WithSubquery withsubquery27 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery27 = WithSubquery(&synonymTable, pk);
 	withsubquery27.setSynonyms("w1", "i2");
 	ResultTuple* actualResultwithsubquery27 = withsubquery27.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery27->getAllResults().size());
 
 	// Test 30: with(w1, c2)
-	WithSubquery withsubquery30 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery30 = WithSubquery(&synonymTable, pk);
 	withsubquery30.setSynonyms("w1", "c2");
 	ResultTuple* actualResultwithsubquery30 = withsubquery30.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery30->getAllResults().size());
 
 	// Test 31: with(w1, l2)
-	WithSubquery withsubquery31 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery31 = WithSubquery(&synonymTable, pk);
 	withsubquery31.setSynonyms("w1", "l2");
 	ResultTuple* actualResultwithsubquery31 = withsubquery31.solve(&testTuple);
 	int expectedResultwithsubquery31[9][10] = {
@@ -2295,19 +2457,19 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 32: with(w1, const2)
-	WithSubquery withsubquery32 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery32 = WithSubquery(&synonymTable, pk);
 	withsubquery32.setSynonyms("w1", "const2");
 	ResultTuple* actualResultwithsubquery32 = withsubquery32.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery32->getAllResults().size());
 
 	// Test 34: with(w1, 2)
-	WithSubquery withsubquery34 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery34 = WithSubquery(&synonymTable, pk);
 	withsubquery34.setSynonyms("w1", 2);
 	ResultTuple* actualResultwithsubquery34 = withsubquery34.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery34->getAllResults().size());
 
 	// Test 35: with(w1, 6)
-	WithSubquery withsubquery35 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery35 = WithSubquery(&synonymTable, pk);
 	withsubquery35.setSynonyms("w1", 6);
 	ResultTuple* actualResultwithsubquery35 = withsubquery35.solve(&testTuple);
 	int expectedResultwithsubquery35[8][9] = {
@@ -2328,7 +2490,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 39: with(i1, i2)
-	WithSubquery withsubquery39 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery39 = WithSubquery(&synonymTable, pk);
 	withsubquery39.setSynonyms("i1", "i2");
 	ResultTuple* actualResultwithsubquery39 = withsubquery39.solve(&testTuple);
 	int expectedResultwithsubquery39[9][10] = {
@@ -2344,13 +2506,13 @@ void SubqueryTest::testWithTuple(){
 	};
 
 	// Test 42: with(i1, c2)
-	WithSubquery withsubquery42 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery42 = WithSubquery(&synonymTable, pk);
 	withsubquery42.setSynonyms("i1", "c2");
 	ResultTuple* actualResultwithsubquery42 = withsubquery42.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery42->getAllResults().size());
 
 	// Test 52: with(v1, v2)
-	WithSubquery withsubquery52 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery52 = WithSubquery(&synonymTable, pk);
 	withsubquery52.setSynonyms("v1", "v2");
 	ResultTuple* actualResultwithsubquery52 = withsubquery52.solve(&testTuple);
 	int expectedResultwithsubquery52[9][10] = {
@@ -2372,14 +2534,14 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 53: with(v1, proc2)
-	WithSubquery withsubquery53 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery53 = WithSubquery(&synonymTable, pk);
 	withsubquery53.setSynonyms("v1", "proc2");
 	ResultTuple* actualResultwithsubquery53 = withsubquery53.solve(&testTuple);
 	cout << endl << actualResultwithsubquery53->toString() << endl;
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery53->getAllResults().size());
 
 	// Test 64: with(proc1, v2)
-	WithSubquery withsubquery64 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery64 = WithSubquery(&synonymTable, pk);
 	withsubquery64.setSynonyms("proc1", "v2");
 	ResultTuple* actualResultwithsubquery64 = withsubquery64.solve(&testTuple);
 	int expectedResultwithsubquery64[1][10] = {
@@ -2393,7 +2555,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 65: with(proc1, proc2)
-	WithSubquery withsubquery65 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery65 = WithSubquery(&synonymTable, pk);
 	withsubquery65.setSynonyms("proc1", "proc2");
 	ResultTuple* actualResultwithsubquery65 = withsubquery65.solve(&testTuple);
 	int expectedResultwithsubquery65[9][10] = {
@@ -2415,13 +2577,13 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 75: with(c1, i2)
-	WithSubquery withsubquery75 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery75 = WithSubquery(&synonymTable, pk);
 	withsubquery75.setSynonyms("c1", "i2");
 	ResultTuple* actualResultwithsubquery75 = withsubquery75.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery75->getAllResults().size());
 
 	// Test 78: with(c1, c2)
-	WithSubquery withsubquery78 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery78 = WithSubquery(&synonymTable, pk);
 	withsubquery78.setSynonyms("c1", "c2");
 	ResultTuple* actualResultwithsubquery78 = withsubquery78.solve(&testTuple);
 	int expectedResultwithsubquery78[9][10] = {
@@ -2443,7 +2605,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 84: with(l1, s2)
-	WithSubquery withsubquery84 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery84 = WithSubquery(&synonymTable, pk);
 	withsubquery84.setSynonyms("l1", "s2");
 	ResultTuple* actualResultwithsubquery84 = withsubquery84.solve(&testTuple);
 	int expectedResultwithsubquery84[9][10] = {
@@ -2465,7 +2627,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 85: with(l1, a2)
-	WithSubquery withsubquery85 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery85 = WithSubquery(&synonymTable, pk);
 	withsubquery85.setSynonyms("l1", "a2");
 	ResultTuple* actualResultwithsubquery85 = withsubquery85.solve(&testTuple);
 	int expectedResultwithsubquery85[9][10] = {
@@ -2487,25 +2649,25 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 86: with(l1, w2)
-	WithSubquery withsubquery86 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery86 = WithSubquery(&synonymTable, pk);
 	withsubquery86.setSynonyms("l1", "w2");
 	ResultTuple* actualResultwithsubquery86 = withsubquery86.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery86->getAllResults().size());
 
 	// Test 87: with(l1, i2)
-	WithSubquery withsubquery87 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery87 = WithSubquery(&synonymTable, pk);
 	withsubquery87.setSynonyms("l1", "i2");
 	ResultTuple* actualResultwithsubquery87 = withsubquery87.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery87->getAllResults().size());
 
 	// Test 90: with(l1, c2)
-	WithSubquery withsubquery90 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery90 = WithSubquery(&synonymTable, pk);
 	withsubquery90.setSynonyms("l1", "c2");
 	ResultTuple* actualResultwithsubquery90 = withsubquery90.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery90->getAllResults().size());
 
 	// Test 91: with(l1, l2)
-	WithSubquery withsubquery91 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery91 = WithSubquery(&synonymTable, pk);
 	withsubquery91.setSynonyms("l1", "l2");
 	ResultTuple* actualResultwithsubquery91 = withsubquery91.solve(&testTuple);
 	int expectedResultwithsubquery91[9][10] = {
@@ -2527,7 +2689,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 92: with(l1, const2)
-	WithSubquery withsubquery92 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery92 = WithSubquery(&synonymTable, pk);
 	withsubquery92.setSynonyms("l1", "const2");
 	ResultTuple* actualResultwithsubquery92 = withsubquery92.solve(&testTuple);
 	int expectedResultwithsubquery92[8][10] = {
@@ -2548,19 +2710,19 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 94: with(l1, 2)
-	WithSubquery withsubquery94 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery94 = WithSubquery(&synonymTable, pk);
 	withsubquery94.setSynonyms("l1", 2);
 	ResultTuple* actualResultwithsubquery94 = withsubquery94.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery94->getAllResults().size());
 
 	// Test 95: with(l1, 6)
-	WithSubquery withsubquery95 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery95 = WithSubquery(&synonymTable, pk);
 	withsubquery95.setSynonyms("l1", 6);
 	ResultTuple* actualResultwithsubquery95 = withsubquery95.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery95->getAllResults().size());
 
 	// Test 96: with(const1, s2)
-	WithSubquery withsubquery96 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery96 = WithSubquery(&synonymTable, pk);
 	withsubquery96.setSynonyms("const1", "s2");
 	ResultTuple* actualResultwithsubquery96 = withsubquery96.solve(&testTuple);
 	int expectedResultwithsubquery96[9][10] = {
@@ -2582,7 +2744,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 97: with(const1, a2)
-	WithSubquery withsubquery97 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery97 = WithSubquery(&synonymTable, pk);
 	withsubquery97.setSynonyms("const1", "a2");
 	ResultTuple* actualResultwithsubquery97 = withsubquery97.solve(&testTuple);
 	int expectedResultwithsubquery97[9][10] = {
@@ -2604,25 +2766,25 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 98: with(const1, w2)
-	WithSubquery withsubquery98 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery98 = WithSubquery(&synonymTable, pk);
 	withsubquery98.setSynonyms("const1", "w2");
 	ResultTuple* actualResultwithsubquery98 = withsubquery98.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery98->getAllResults().size());
 
 	// Test 99: with(const1, i2)
-	WithSubquery withsubquery99 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery99 = WithSubquery(&synonymTable, pk);
 	withsubquery99.setSynonyms("const1", "i2");
 	ResultTuple* actualResultwithsubquery99 = withsubquery99.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery99->getAllResults().size());
 
 	// Test 102: with(const1, c2)
-	WithSubquery withsubquery102 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery102 = WithSubquery(&synonymTable, pk);
 	withsubquery102.setSynonyms("const1", "c2");
 	ResultTuple* actualResultwithsubquery102 = withsubquery102.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery102->getAllResults().size());
 
 	// Test 103: with(const1, l2)
-	WithSubquery withsubquery103 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery103 = WithSubquery(&synonymTable, pk);
 	withsubquery103.setSynonyms("const1", "l2");
 	ResultTuple* actualResultwithsubquery103 = withsubquery103.solve(&testTuple);
 	int expectedResultwithsubquery103[9][10] = {
@@ -2644,7 +2806,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 104: with(const1, const2)
-	WithSubquery withsubquery104 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery104 = WithSubquery(&synonymTable, pk);
 	withsubquery104.setSynonyms("const1", "const2");
 	ResultTuple* actualResultwithsubquery104 = withsubquery104.solve(&testTuple);
 	int expectedResultwithsubquery104[9][10] = {
@@ -2666,7 +2828,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 106: with(const1, 2)
-	WithSubquery withsubquery106 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery106 = WithSubquery(&synonymTable, pk);
 	withsubquery106.setSynonyms("const1", 2);
 	ResultTuple* actualResultwithsubquery106 = withsubquery106.solve(&testTuple);
 	int expectedResultwithsubquery106[8][9] = {
@@ -2687,25 +2849,25 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 107: with(const1, 6)
-	WithSubquery withsubquery107 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery107 = WithSubquery(&synonymTable, pk);
 	withsubquery107.setSynonyms("const1", 6);
 	ResultTuple* actualResultwithsubquery107 = withsubquery107.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery107->getAllResults().size());
 
 	// Test 123: with(1, i2)
-	WithSubquery withsubquery123 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery123 = WithSubquery(&synonymTable, pk);
 	withsubquery123.setSynonyms(1, "i2");
 	ResultTuple* actualResultwithsubquery123 = withsubquery123.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery123->getAllResults().size());
 
 	// Test 126: with(1, c2)
-	WithSubquery withsubquery126 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery126 = WithSubquery(&synonymTable, pk);
 	withsubquery126.setSynonyms(1, "c2");
 	ResultTuple* actualResultwithsubquery126 = withsubquery126.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultwithsubquery126->getAllResults().size());
 
 	// Test 127: with(11, c2)
-	WithSubquery withsubquery127 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery127 = WithSubquery(&synonymTable, pk);
 	withsubquery127.setSynonyms(11, "c2");
 	ResultTuple* actualResultwithsubquery127 = withsubquery127.solve(&testTuple);
 	int expectedResultwithsubquery127[1][9] = {
@@ -2719,7 +2881,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 128: with(1, i2)
-	WithSubquery withsubquery128 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery128 = WithSubquery(&synonymTable, pk);
 	withsubquery128.setSynonyms(8, "i2");
 	ResultTuple* actualResultwithsubquery128 = withsubquery128.solve(&testTuple);
 	int expectedResultwithsubquery128[8][9] = {
@@ -2740,7 +2902,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 134: with(6, w1)
-	WithSubquery withsubquery134 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery134 = WithSubquery(&synonymTable, pk);
 	withsubquery134.setSynonyms(6, "w1");
 	ResultTuple* actualResultwithsubquery134 = withsubquery134.solve(&testTuple);
 	int expectedResultwithsubquery134[8][9] = {
@@ -2761,7 +2923,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 135: with(8, i2)
-	WithSubquery withsubquery135 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery135 = WithSubquery(&synonymTable, pk);
 	withsubquery135.setSynonyms(8, "i2");
 	ResultTuple* actualResultwithsubquery135 = withsubquery135.solve(&testTuple);
 	int expectedResultwithsubquery135[8][9] = {
@@ -2782,7 +2944,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 138: with(3, c2)
-	WithSubquery withsubquery138 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery138 = WithSubquery(&synonymTable, pk);
 	withsubquery138.setSynonyms(3, "c2");
 	ResultTuple* actualResultwithsubquery138 = withsubquery138.solve(&testTuple);
 	int expectedResultwithsubquery138[8][9] = {
@@ -2803,7 +2965,7 @@ void SubqueryTest::testWithTuple(){
 	}
 
 	// Test 139: with(7, l1)
-	WithSubquery withsubquery139 = WithSubquery(&synonymTable, &pk);
+	WithSubquery withsubquery139 = WithSubquery(&synonymTable, pk);
 	withsubquery139.setSynonyms(7, "l1");
 	ResultTuple* actualResultwithsubquery139 = withsubquery139.solve(&testTuple);
 	int expectedResultwithsubquery139[1][9] = {

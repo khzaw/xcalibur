@@ -27,7 +27,7 @@ class SubqueryTest : public CPPUNIT_NS::TestFixture // Note 2
 	CPPUNIT_TEST_SUITE_END();
 
 public:
-	PKBController pk;
+	PKBController* pk;
 	map<string, string> synonymTable;
 	void setUp();
 	void tearDown();

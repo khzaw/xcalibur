@@ -51,16 +51,16 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		int index = tuple->addSynonym(leftSynonym);
 		tuple->addSynonymToMap(leftSynonym, index);
-		set<int> tempCallees;
-		if (isSyn == 2) {	// Calls(syn, stmt): Get callees of stmt
-			tempCallees = pkb->callsTable.evaluateGetCalleesStar(rightIndex);
-		} else {	// Calls(syn, _): Get all callees stmt
-			tempCallees = pkb->callsTable.getAllCallees();
+		set<int> tempCallersStar;
+		if (isSyn == 2) {	// Calls*(syn, stmt): Get callersStar of stmt
+			tempCallersStar = pkb->callsTable.evaluateGetCallersStar(rightIndex);
+		} else {	// Calls*(syn, _): Get all callers stmt
+			tempCallersStar = pkb->callsTable.getAllCallers();
 		}
-		vector<int> callees(tempCallees.begin(), tempCallees.end());
-		for(size_t i = 0; i < callees.size(); i++) {
+		vector<int> callersStar(tempCallersStar.begin(), tempCallersStar.end());
+		for(size_t i = 0; i < callersStar.size(); i++) {
 			vector<int> temp = vector<int>();
-			temp.push_back(callees.at(i));
+			temp.push_back(callersStar.at(i));
 			tuple->addResultRow(temp);
 		}
 		return tuple;
@@ -74,12 +74,12 @@ public:
 		int index = tuple->getSynonymIndex(leftSynonym);
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
-			if (isSyn == 1) {	// Calls(syn, stmt)
+			if (isSyn == 1) {	// Calls*(syn, stmt)
 				if (pkb->callsTable.isCallsStar(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}
-			} else {	// Calls(syn, _)
-				if (!pkb->callsTable.evaluateGetCallersStar(temp.at(index)).empty()) {
+			} else {	// Calls*(syn, _)
+				if (!pkb->callsTable.evaluateGetCalleesStar(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -92,16 +92,16 @@ public:
 		int index = tuple->addSynonym(rightSynonym);
 		tuple->addSynonymToMap(rightSynonym, index);
 		
-		set<int> tempCallers;
-		if (isSyn == 1) {	// Calls(stmt, syn): Get callers of stmt
-			tempCallers = pkb->callsTable.evaluateGetCallersStar(leftIndex);
-		} else {	// Calls(_, syn): Get all callers stmt
-			tempCallers = pkb->callsTable.getAllCallers();
+		set<int> tempCalleesStar;
+		if (isSyn == 1) {	// Calls*(stmt, syn): Get calleesStar of stmt
+			tempCalleesStar = pkb->callsTable.evaluateGetCalleesStar(leftIndex);
+		} else {	// Calls*(_, syn): Get all callees stmt
+			tempCalleesStar = pkb->callsTable.getAllCallees();
 		}
-		vector<int> callers(tempCallers.begin(), tempCallers.end());
-		for(size_t i = 0; i < callers.size(); i++) {
+		vector<int> calleesStar(tempCalleesStar.begin(), tempCalleesStar.end());
+		for(size_t i = 0; i < calleesStar.size(); i++) {
 			vector<int> temp = vector<int>();
-			temp.push_back(callers.at(i));
+			temp.push_back(calleesStar.at(i));
 			tuple->addResultRow(temp);
 		}
 		return tuple;
@@ -115,12 +115,12 @@ public:
 		int index = tuple->getSynonymIndex(rightSynonym);
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
-			if (isSyn == 1) {	// Calls(stmt, syn)
+			if (isSyn == 1) {	// Calls*(stmt, syn)
 				if (pkb->callsTable.isCallsStar(leftIndex, temp.at(index))) {
 					result->addResultRow(temp);
 				}
-			} else {	// Calls(_, syn)
-				if (!pkb->callsTable.evaluateGetCalleesStar(temp.at(index)).empty()) {
+			} else {	// Calls*(_, syn)
+				if (!pkb->callsTable.evaluateGetCallersStar(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -135,17 +135,17 @@ public:
 		index = tuple->addSynonym(rightSynonym);
 		tuple->addSynonymToMap(rightSynonym, index);
 
-		// get all callees statement
-		// for each callee statement, get its callers
-		set<int> tempCallees = pkb->callsTable.getAllCallees();
-		vector<int> callees(tempCallees.begin(), tempCallees.end());
-		for (size_t i = 0; i < callees.size(); i++) {
-			set<int> tempCallers = pkb->callsTable.evaluateGetCallersStar(callees[i]);
-			vector<int> callers(tempCallers.begin(), tempCallers.end());
-			for (size_t j = 0; j < callers.size(); j++) {
+		// get all callersStar statement
+		// for each caller statement, get its callees
+		set<int> tempCallersStar = pkb->callsTable.getAllCallers();
+		vector<int> callersStar(tempCallersStar.begin(), tempCallersStar.end());
+		for (size_t i = 0; i < callersStar.size(); i++) {
+			set<int> tempCalleesStar = pkb->callsTable.evaluateGetCalleesStar(callersStar[i]);
+			vector<int> calleesStar(tempCalleesStar.begin(), tempCalleesStar.end());
+			for (size_t j = 0; j < calleesStar.size(); j++) {
 				vector<int> row = vector<int>();
-				row.push_back(callees.at(i));
-				row.push_back(callers.at(j));
+				row.push_back(callersStar.at(i));
+				row.push_back(calleesStar.at(j));
 				tuple->addResultRow(row);
 			}
 		}
@@ -172,7 +172,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
-					set<int> tV = pkb->callsTable.evaluateGetCallersStar(leftValue);
+					set<int> tV = pkb->callsTable.evaluateGetCalleesStar(leftValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
@@ -190,7 +190,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					set<int> tV = pkb->callsTable.evaluateGetCalleesStar(rightValue);
+					set<int> tV = pkb->callsTable.evaluateGetCallersStar(rightValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
@@ -210,13 +210,17 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		tuple->setBool(true);
 		if(isSyn == 0) {	//(digit, digit)
-			tuple->setEmpty(!pkb->callsTable.isCallsStar(leftIndex, rightIndex));
+			if (0 <= leftIndex && leftIndex < pkb->procTable.getSize() && 0 <= rightIndex && rightIndex < pkb->procTable.getSize()){
+				tuple->setEmpty(!pkb->callsTable.isCallsStar(leftIndex, rightIndex));
+			} else {
+				tuple->setEmpty(true);
+			}
 		} else if (isSyn == 7) {	//(_, digit)
-			tuple->setEmpty(pkb->callsTable.evaluateGetCalleesStar(rightIndex).empty());
+			tuple->setEmpty(pkb->callsTable.evaluateGetCallersStar(rightIndex).empty());
 		} else if (isSyn == 8) {	//(digit, _)
-			tuple->setEmpty(pkb->callsTable.evaluateGetCallersStar(leftIndex).empty());
+			tuple->setEmpty(pkb->callsTable.evaluateGetCalleesStar(leftIndex).empty());
 		} else {	//(_, _)
-			tuple->setEmpty(pkb->callsTable.getAllCallers().empty());
+			tuple->setEmpty(pkb->callsTable.getAllCallees().empty());
 		}
 		return tuple;
 	}

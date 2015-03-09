@@ -95,4 +95,9 @@ private:
 	void matchAffectsStar();
 
 	string matchVarRef();
+	string matchEntRef(bool);
+	string matchStmtRef();
+
+	// debug
+	void printMap();
 };

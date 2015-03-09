@@ -13,6 +13,11 @@
 #include "QTNode.h"
 #include "QueryException.h"
 #include "Subquery.h"
+#include "ModifiesSubquery.cpp"
+#include "UsesSubquery.cpp"
+#include "ParentSubquery.cpp"
+#include "WithSubquery.cpp"
+#include "CallsSubquery.cpp"
 
 
 using namespace std;
@@ -45,6 +50,18 @@ NewQueryParser::NewQueryParser(string s, PKBController* controller) {
 	this->selectVariables = vector<string>(); 
 	this->synonyms = map<string, string>();
 	parse();
+	printMap();
+}
+
+void NewQueryParser::printMap() {
+	cout << "Synonyms: ";
+	for(map<string, string>::iterator it = synonyms.begin(); it != synonyms.end(); ++it) {
+		cout << "(" << it->first << "," << it->second << ") ";
+	}
+	cout << "\nSelect string: ";
+	for(vector<string>::iterator it = selectVariables.begin(); it != selectVariables.end(); ++it) {
+		cout << *it << "\n";
+	}
 }
 
 NewQueryParser::~NewQueryParser() {
@@ -150,7 +167,7 @@ void NewQueryParser::matchConditions() {
 	} else if(nextToken.name == "with") {
 		matchWith();
 	} else {
-		cout << "SYNTAX ERROR" << nextToken.name << endl;
+		cout << "SYNTAX ERROR -> " << nextToken.name << "\t" << nextToken.token << endl;
 		return;
 	}
 }
@@ -222,14 +239,43 @@ void NewQueryParser::matchRelRef() {
 
 void NewQueryParser::matchModifies() {
 	// ModifiesP: "Modifies" "(" entRef "," varRef ")"
-	// ModifiesP: "Modifies" "(" stmtRef "," varRef ")"
-	ModifiesSubuqery modifiesSq = ModifiesSubquery(&synonymTable, &controller);
+	// ModifiesC: "Modifies" "(" stmtRef "," varRef ")"
+	//ModifiesSubuqery modifiesSq = ModifiesSubquery(&synonyms, &controller);
 	match("(");
-	// matchEnfRef() | matchstmtRef()
+	string fst = matchEntRef(true);
 	match(",");
-	string snd = matchVarRef(&modifiesSq);
+	string snd = matchVarRef();
 	match(")");
+	//modifiesSq.setSynonyms(fst, snd);
+	cout << "fst : " << fst;
+	cout << "snd : " << snd;
 }
+
+string NewQueryParser::matchEntRef(bool excludeUnderScore) {
+	// entRef: synonym | "_" | """ IDENT """ | INTEGER
+	string fst = "";
+	if(nextToken.name.compare("_") == 0) {
+		if(!excludeUnderScore) {
+			fst = "_";
+			match(UNDERSCORE);
+		} else {
+			throw(QueryException("VAGUE QUERY ERROR: The first argument of Uses and Modifies cannot be a \"_\""));
+		}
+	} else if(nextToken.token == INT_LIT) {
+		fst = nextToken.name;
+		match(nextToken.name);
+	} else if(nextToken.token == IDENT || nextToken.token == SIMPLE_IDENT) {
+		fst = nextToken.name;
+		match(nextToken.name);
+	} else if(nextToken.name.compare("\"") == 0) {
+		match("\"");
+		fst = nextToken.name;
+		match(nextToken.name);
+		match("\"");
+	}
+	return fst;
+}
+
 string NewQueryParser::matchVarRef() {
 	// varRef: synonym | "_" | """ IDENT """
 	string snd = "";
@@ -247,7 +293,74 @@ string NewQueryParser::matchVarRef() {
 	}
 	return snd;
 }
+
 void NewQueryParser::matchUses() {
+	// UsesP: "Uses" "(" entRef "," varRef ")"
+	// UsesC: "Uses" "(" entRef "," varRef ")"
+	match("(");
+	string fst = matchEntRef(true);
+	match(",");
+	string snd = matchVarRef();
+	match(")");
+	cout << "Uses fst : " << fst << "\tUses snd : " << snd;
+}
+
+void NewQueryParser::matchCalls() {
+	// Calls : "Calls" "(" entRef "," varRef ")"
+	match("(");
+	string fst = entRef(false);
+	match(",");
+	string snd = varRef();
+	match(")");
+
+	cout << "Calls: fst -> " << fst << "\tsnd -> " << snd;
+}
+
+void NewQueryParser::matchCallsStar() {
+	// CallsT : "Calls*" "(" entRef "," varRef ")"
+	match("(");
+	string fst = entRef(false);
+	match(",");
+	string snd = varRef();
+	match(")");
+
+	cout << "Calls*: fst -> " << fst << "\tsnd -> " << snd;
+}
+
+void NewQueryParser::matchParent() {
+	match("(");
+	string fst = stmtRef();
+	match(",");
+	string snd = stmtRef();
+	match(")");
+
+	cout << "Parent: fst -> " << fst << "\tsnd -> " << snd;
+}
+
+void NewQueryParser::matchParentStar() {
+	match("(");
+	string fst = stmtRef();
+	match(",");
+	string snd = stmtRef();
+	match(")");
+
+	cout << "Parent*: fst -> " << fst << "\tsnd -> " << snd;
+}
+
+string NewQueryParser::matchStmtRef() {
+	// stmtRef: synonym | "_" | INTEGER
+}
+void NewQueryParser::matchFollows() {
+}
+void NewQueryParser::matchFollowsStar() {
+}
+void NewQueryParser::matchNext() {
+}
+void NewQueryParser::matchNextStar() {
+}
+void NewQueryParser::matchAffects() {
+}
+void NewQueryParser::matchAffectsStar() {
 }
 void NewQueryParser::matchPatternCond() {
 }

@@ -7,6 +7,20 @@
 
 using namespace std;
 
+// WithSubquery: Subquery for with relation
+// To construct WithSubquery:
+// 1. WithSubquery(map<string, string>* SynonymMap, PKBController* PKB) wsubquery
+// 2. wsubquery.setSynonyms(leftSyn/Index, rightSyn/Index)
+// Examples for setSynonyms():
+// with s1.stmt# = 1              |    wsubquery.setSynonyms("s1", 1)
+// with s1.stmt# = a1.stmt#       |    wsubquery.setSynonyms("s1", "a1")
+// with 3 = w1.stmt#              |    wsubquery.setSynonyms(3, "w1")
+// with 3 = 2                     |    wsubquery.setSynonyms(3, 3)
+// with p1.procName = v1.varName  |    wsubquery.setSynonyms("p1", "v1")
+// with p1.procName = "First"     |    wsubquery.setSynonyms("p1", 1)     // 1 is the index of procedure "First" in procTable
+// with v1.varName = "x"          |    wsubquery.setSynonyms("v1", 1)     // 1 is the index of variable "x" in varTable
+// with const1.value = 5          |    wsubquery.setSynonyms("const1", 5) // DO NOT use constant index of 5 in constantTable, just use 5
+
 class WithSubquery : public Subquery{
 public:
 	WithSubquery(map<string, string>* m, PKBController* p) : Subquery(m, p){
@@ -77,6 +91,53 @@ public:
 		return values;
 	}
 
+	vector<int> getValues(string targetSyn, string sourceSyn, int sourceIndex){
+		vector<int> result = vector<int>();
+		string sourceSynType = synonymTable->at(sourceSyn);
+		string targetSynType = synonymTable->at(targetSyn);
+		if ((sourceSynType == "variable" || sourceSynType == "procedure") && (targetSynType == "variable" || targetSynType == "procedure")) {
+			string sourceString;
+			if (sourceSynType == "variable"){
+				sourceString = pkb->varTable.getVarName(sourceIndex);
+			}
+			if (sourceSynType == "procedure"){
+				sourceString = pkb->procTable.getProcName(sourceIndex);
+			}
+			if (targetSynType == "variable"){
+				if(pkb->varTable.containsVar(sourceString)){
+					result.push_back(pkb->varTable.getVarIndex(sourceString));
+				}
+			}
+			if (targetSynType == "procedure"){
+				if(pkb->procTable.containsProc(sourceString)){
+					result.push_back(pkb->procTable.getProcIndex(sourceString));
+				}
+			}
+		} else if ((sourceSynType=="stmt" || sourceSynType=="assign" || sourceSynType=="call" || sourceSynType=="while" || sourceSynType=="if" || sourceSynType=="constant" || sourceSynType=="prog_line") &&
+			(targetSynType=="stmt" || targetSynType=="assign" || targetSynType=="call" || targetSynType=="while" || targetSynType=="if" || targetSynType=="constant" || targetSynType=="prog_line")){
+			int sourceNum;
+			if (sourceSynType == "constant"){
+				sourceNum = pkb->constantTable.getConstant(sourceIndex);	
+			} else {
+				sourceNum = sourceIndex;
+			}
+			if (targetSynType == "constant"){
+				if (pkb->constantTable.containsConst(sourceNum)){
+					result.push_back(pkb->constantTable.getConstIndex(sourceNum));
+				}
+			} else if (targetSynType == "stmt" || targetSynType == "prog_line"){
+				if (sourceNum > 0 && sourceNum <= pkb->statementTable.getSize()){
+					result.push_back(sourceNum);
+				}
+			} else {
+				if (sourceNum > 0 && sourceNum <= pkb->statementTable.getSize() && pkb->statementTable.getTNode(sourceNum)->getNodeType()==TNODE_NAMES[synToNodeType.at(targetSynType)]){
+					result.push_back(sourceNum);
+				}
+			}
+		}
+		return result;
+	}
+
 	ResultTuple* solveLeftSyn() {
 		ResultTuple* tuple = new ResultTuple();
 		int index = tuple->addSynonym(leftSynonym);
@@ -105,7 +166,9 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 2) {	// with syn.attr = num
-				if (temp.at(index) == rightIndex) {
+				if ((temp.at(index) == rightIndex && synonymTable->at(leftSynonym)!="constant")) {
+					result->addResultRow(temp);
+				} else if (synonymTable->at(leftSynonym)=="constant" && pkb->constantTable.containsConst(rightIndex) && pkb->constantTable.getConstant(temp.at(index)) == rightIndex){
 					result->addResultRow(temp);
 				}
 			} else {	// with syn.attr = _
@@ -143,7 +206,9 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 1) {	// with num = syn.attr
-				if (temp.at(index) == leftIndex) {
+				if ((temp.at(index) == leftIndex && synonymTable->at(rightSynonym)!="constant")) {
+					result->addResultRow(temp);
+				} else if (synonymTable->at(rightSynonym)=="constant" && pkb->constantTable.containsConst(leftIndex) && pkb->constantTable.getConstant(temp.at(index)) == leftIndex){
 					result->addResultRow(temp);
 				}
 			} else {	// with syn.attr = _
@@ -349,7 +414,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
-					vector<int> tempValues = getValues(rightSynonym, leftValue);
+					vector<int> tempValues = getValues(rightSynonym, leftSynonym, leftValue);
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(leftValue);
@@ -366,7 +431,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					vector<int> tempValues = getValues(leftSynonym, rightValue);
+					vector<int> tempValues = getValues(leftSynonym, rightSynonym, rightValue);
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(rightValue);

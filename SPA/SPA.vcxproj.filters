@@ -159,10 +159,7 @@
     <ClCompile Include="QueryProcessor\UsesProcSubquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
-    <ClCompile Include="QueryProcessor\NextSubquery.cpp">
-    	<Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="NewQueryParser.cpp">
+    <ClCompile Include="QueryProcessor\NextStarSubquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
   </ItemGroup>
@@ -291,9 +288,6 @@
       <Filter>Source Files\QueryProcessor</Filter>
     </ClInclude>
     <ClInclude Include="QueryProcessor\OptimizedQE.h">
-      <Filter>Header Files\QueryProcessor</Filter>
-    </ClInclude>
-    <ClInclude Include="NewQueryParser.h">
       <Filter>Header Files\QueryProcessor</Filter>
     </ClInclude>
   </ItemGroup>

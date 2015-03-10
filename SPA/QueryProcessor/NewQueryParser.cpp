@@ -133,7 +133,7 @@ void NewQueryParser::matchDeclarationVariables(string entity) {
 
 void NewQueryParser::matchSelect() {
 	match("Select");
-	evaluator = new QE(selectVariables, controller);
+	this->evaluator = new QE(selectVariables, controller);
 	matchResultCL();
 	matchConditions();
 	if(nextToken.name == "such" || nextToken.name == "pattern" || nextToken.name == "with") {
@@ -616,13 +616,13 @@ void NewQueryParser::matchFollows() {
 }
 
 void NewQueryParser::matchFollowsStar() {
-	FollowsStarSubquery followsStarSq = FollowsStarSubquery(&synonyms, controller);
+	FollowsStarSubquery* followsStarSq = new FollowsStarSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchStmtRef();
 	match(",");
 	string snd = matchStmtRef();
 	match(")");
-	setSynonymsHelper(fst, snd, &followsStarSq);
+	setSynonymsHelper(fst, snd, followsStarSq);
 	//cout << "Follows*: fst -> " << fst << "\tsnd -> " << snd;
 }
 

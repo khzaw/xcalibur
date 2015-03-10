@@ -53,6 +53,7 @@ class NewQueryParser {
 	vector<string> selectVariables;
 	PKBController* controller;
 
+
 	string result;		// postfix expression
 
 

@@ -34,6 +34,7 @@
     <ClCompile Include="PKB\Calls.cpp" />
     <ClCompile Include="QueryProcessor\NextStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\NextSubquery.cpp" />
+    <ClCompile Include="QueryProcessor\NewQueryParser.cpp" />
     <ClCompile Include="QueryProcessor\PatternSubquery.cpp" />
     <ClCompile Include="QueryProcessor\WithSubquery.cpp" />
     <ClInclude Include="PKB\CallsExtractor.cpp" />
@@ -65,7 +66,6 @@
     <ClCompile Include="QueryProcessor\ParentStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\ParentSubquery.cpp" />
     <ClCompile Include="QueryProcessor\UsesProcSubquery.cpp" />
-    <ClCompile Include="QueryProcessor\UsesSubquery.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Frontend\Lexeme.h" />
@@ -90,6 +90,7 @@
     <ClInclude Include="PKB\ModifiesExtractor.h" />
     <ClInclude Include="PKB\ParentExtractor.h" />
     <ClInclude Include="PKB\UsesExtractor.h" />
+    <ClInclude Include="QueryProcessor\NewQueryParser.h" />
     <ClInclude Include="QueryProcessor\OptimizedQE.h" />
     <ClInclude Include="QueryProcessor\QE.h" />
     <ClInclude Include="QueryProcessor\QTNode.h" />

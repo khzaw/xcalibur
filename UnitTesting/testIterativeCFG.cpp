@@ -85,6 +85,7 @@ void iterativeCFGTest::testIfElseLoop(){
 	TNode else2Node = TNode("ASSIGN_NODE", "f", 7, 1); else2Node.addParent(&thenNode); elseNode.addChild(&else2Node);
 	TNode gNode = TNode("ASSIGN_NODE", "g", 8, 1); gNode.addParent(&stmtListNode); stmtListNode.addChild(&gNode);
 
+
 	// create CFG
 	//std::cout << "Creating CFG.\n";	
 	CFG newCFG(&rootNode);

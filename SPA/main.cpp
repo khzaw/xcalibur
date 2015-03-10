@@ -56,7 +56,15 @@ int main() {
 	//query = "assign a; Select a pattern a(_, \"x*y+z-a\")";
 	//parser = new NewQueryParser(query, controller);
 
-	query = "assign a; while w; Select a such that Parent*(w,a) and Next*(60, n) and Modifies(a, \"y\") pattern a(_, \"x+y*z\")";
+	//query = "assign a; while w; Select a such that Parent*(w,a) and Next*(60, n) and Modifies(a, \"y\") pattern a(_, \"x+y*z\")";
+	//parser = new NewQueryParser(query, controller);
+
+	query = "procedure p; Select p such that Calls(p, _)";
+	parser = new NewQueryParser(query, controller);
+
+	query = "procedure p, q; Select p such that Calls(p, q)";
+	parser = new NewQueryParser(query, controller);
+
 	parser = new NewQueryParser(query, controller);
 
 	string t;

@@ -12,9 +12,10 @@ NextExtractor::NextExtractor()
 {
 }
 
-NextExtractor::NextExtractor(ProcTable* procedureTable )
+NextExtractor::NextExtractor(ProcTable* procedureTable, StatementTable* statementTable )
 {
 	this->procTable = procedureTable;
+	this->statementTable = statementTable;
 	//this->calls = Calls;
 	//this->statementTable = StmtTable;
 }
@@ -24,14 +25,14 @@ vector<std::shared_ptr<CFG>> NextExtractor::constructCFG()
 	int numOfProc = procTable->getSize();
 	for(int i =0; i < numOfProc; i++)
 	{
-		//initialization for traverseAST Parameters
-		TNode* curTNode = this->procTable->getASTRootNode(i); //obtain curTNode from astProcTable
+		
+		TNode* curTNode = this->procTable->getASTRootNode(i); 
 		shared_ptr<GNode> curGNodeParent = std::make_shared<GNode>(0, "PROCEDURE"); //create a CFG ROOT node
 
-		nodeMap.insert(pair<int, shared_ptr<GNode>>(curGNodeParent->getStmtNum(), curGNodeParent)); //store all stmtNum--->GNode , start with Procedure node
+		nodeMap.insert(pair<int, shared_ptr<GNode>>(curGNodeParent->getStmtNum(), curGNodeParent)); 
 
 		shared_ptr<CFG> cfg = std::make_shared<CFG>(curGNodeParent); //create a CFG with procedure node as parameters
-		shared_ptr<stack<shared_ptr<GNode>>> level = std::make_shared<stack<shared_ptr<GNode>>>(); //a stack to keep track of nodes for IF-else statement
+		shared_ptr<stack<shared_ptr<GNode>>> level = std::make_shared<stack<shared_ptr<GNode>>>(); 
 
 		shared_ptr<GNode> lastNode = converseAST(cfg,curTNode->getChild(0),curGNodeParent,level); //conversing start with node below procedure
 		
@@ -174,8 +175,7 @@ std::shared_ptr<GNode> NextExtractor::converseAST(shared_ptr<CFG> cfg,TNode* cur
 }
 
 
-// setlink is to connect the curTNodeParent and the gNode node as well as check whether it is the last statement so as to link back to the head node(while or if)
-// level to store while and if info
+
 shared_ptr<GNode> NextExtractor::setlink(shared_ptr<CFG> cfg, TNode* curTNode, shared_ptr<GNode> curGNodeParent, shared_ptr<stack<shared_ptr<GNode>>> level)
 {
 	shared_ptr<GNode> gNode = std::make_shared<GNode> (curTNode->getStmtNum(), curTNode->getNodeType()); 
@@ -190,7 +190,7 @@ shared_ptr<GNode> NextExtractor::setlink(shared_ptr<CFG> cfg, TNode* curTNode, s
 		cfg->setNext(curGNodeParent,gNode);
 	}
 
-	// Below is to link back to the While-GNode or If-GNode after setlink the curTNodeParent and gNode GNode
+	
 	if(level->size() > 0 && isLastStmt(curTNode))
 	{
 		//if it is the only while without any nested if-else or while statement
@@ -206,14 +206,14 @@ shared_ptr<GNode> NextExtractor::setlink(shared_ptr<CFG> cfg, TNode* curTNode, s
 			firstIfNode.insert(pair<shared_ptr<GNode> ,int>(nextG , level->top()->getStmtNum()));//statemnt of end of its node ---> if
 			level->pop();
 			level->push(nextG);
-			cfg->setNext(gNode,level->top()); // curTNode -> empty
+			cfg->setNext(gNode,level->top()); 
 
 		}
-		else if(level->top()->getASTNodeType() == "EMPTY")//else or recurTNodesive if
+		else if(level->top()->getASTNodeType() == "EMPTY")
 		{
 			shared_ptr<GNode> nextG = level->top();
 			//nextG->stmtNum = 0 - nextG->stmtNum;
-			cfg->setNext(gNode, nextG);// curTNode -> empty
+			cfg->setNext(gNode, nextG);
 			if(nextG->getPrevArr()[0] != NULL && nextG->getPrevArr()[1] != NULL)			
 				level->pop();
 
@@ -276,10 +276,23 @@ TNode* NextExtractor::getLastRightSibling(TNode* curTNode){
 	}
 }
 
+void NextExtractor::storeAllNextPrev(){
+	statementTable->getSize();
+	for (int i= 0; i < statementTable->getSize(); i++){
+		set<int> nextResult = getNext(i);
+       allNextStmt.insert(nextResult.begin(), nextResult.end());
+		}
+	for (int i= 0; i < statementTable->getSize(); i++){
+		set<int> prevResult = getPrev(i);
+       allNextStmt.insert(prevResult.begin(), prevResult.end());
+		}
+}
+
 
 void NextExtractor::construct()
 {
 	CFGTable = constructCFG();
+	storeAllNextPrev();
 }
 
 
@@ -289,9 +302,9 @@ bool NextExtractor::isNext(int progLine1, int progLine2)
 	set<int> resultSet ;
 	it = nodeMap.find(progLine1);
 
-	if(it == nodeMap.end()) {	// variable not found, return -1
+	if(it == nodeMap.end()) {	
 		return false;
-	} else {	// variable found, return its index
+	} else {	
 
 		vector<shared_ptr<GNode>> resultVec= it->second->getNextArr();
 
@@ -346,6 +359,15 @@ set<int> NextExtractor::getNext(int progLine) {
 		resultSet = getNextResultSet(resultVec , resultSet);
 		return resultSet;
 	}
+}
+
+
+set<int> NextExtractor::getAllNext(){
+	return allNextStmt;              
+}
+
+set<int> NextExtractor::getAllPrev(){
+	return allPrevStmt;
 }
 
 set<int> NextExtractor::getPrev(int progLine) {

@@ -13,11 +13,16 @@
 #include "QTNode.h"
 #include "QueryException.h"
 #include "Subquery.h"
+#include "ModifiesProcSubquery.cpp"
 #include "ModifiesSubquery.cpp"
+#include "FollowsSubquery.cpp"
+#include "FollowsStarSubquery.cpp"
 #include "UsesSubquery.cpp"
 #include "ParentSubquery.cpp"
 #include "WithSubquery.cpp"
 #include "CallsSubquery.cpp"
+#include "CallsStarSubquery.cpp"
+#include "NextSubquery.cpp"
 
 
 using namespace std;
@@ -449,15 +454,15 @@ void NewQueryParser::matchRelRef() {
 void NewQueryParser::matchModifies() {
 	// ModifiesP: "Modifies" "(" entRef "," varRef ")"
 	// ModifiesC: "Modifies" "(" stmtRef "," varRef ")"
-	//ModifiesSubuqery modifiesSq = ModifiesSubquery(&synonyms, &controller);
+	ModifiesSubuqery modifiesSq = ModifiesSubquery(&synonyms, &controller);
 	match("(");
 	string fst = matchEntRef(true);
 	match(",");
 	string snd = matchVarRef();
 	match(")");
-	//modifiesSq.setSynonyms(fst, snd);
-	cout << "fst : " << fst << endl;
-	cout << "snd : " << snd << endl;
+	setSynonymsHelper(fst, snd, &modifiesSq);
+	//cout << "fst : " << fst << endl;
+	//cout << "snd : " << snd << endl;
 }
 
 string NewQueryParser::matchEntRef(bool excludeUnderScore) {
@@ -593,31 +598,36 @@ string NewQueryParser::matchStmtRef() {
 
 void NewQueryParser::matchFollows() {
 	// Follows: "Follows" "(" stmtRef "," stmtRef ")";
+	FollowsSubquery followsSq = FollowsSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchStmtRef();
 	match(",");
 	string snd = matchStmtRef();
 	match(")");
-	cout << "Follows: fst -> " << fst << "\tsnd -> " << snd;
+	setSynonymsHelper(fst, snd, &followsSq);
+	//cout << "Follows: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 void NewQueryParser::matchFollowsStar() {
+	FollowsStarSubquery followsStarSq = FollowsStarSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchStmtRef();
 	match(",");
 	string snd = matchStmtRef();
 	match(")");
-	cout << "Follows*: fst -> " << fst << "\tsnd -> " << snd;
+	setSynonymsHelper(fst, snd, &followsStarSq);
+	//cout << "Follows*: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 void NewQueryParser::matchNext() {
+	NextSubquery nextSq = NextSubquery(&synonyms, controller);
     match("(");
     string fst = matchLineRef();
     match(",");
     string snd = matchLineRef();
     match(")");
-
-	cout << "Next: fst -> " << fst << "\tsnd -> " << snd;
+	setSynonymsHelper(fst, snd &nextSq);
+	//cout << "Next: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 void NewQueryParser::matchNextStar() {

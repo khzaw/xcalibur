@@ -120,6 +120,7 @@ void NewQueryParser::match(int type) {
 
 void NewQueryParser::matchDeclarationVariables(string entity) {
 	string var = nextToken.name;
+	cout << var << "\t" << entity << endl;
 	synonyms[var] = entity;
 	match(var);
 	if(nextToken.name.compare(";") != 0) {
@@ -132,13 +133,13 @@ void NewQueryParser::matchDeclarationVariables(string entity) {
 
 void NewQueryParser::matchSelect() {
 	match("Select");
+	evaluator = new QE(selectVariables, controller);
 	matchResultCL();
 	matchConditions();
 	if(nextToken.name == "such" || nextToken.name == "pattern" || nextToken.name == "with") {
 		matchConditions();
 	}
 
-	evaluator = new QE(selectVariables, controller);
 }
 
 void NewQueryParser::matchResultCL() {
@@ -611,7 +612,7 @@ void NewQueryParser::matchFollows() {
 	string snd = matchStmtRef();
 	match(")");
 	setSynonymsHelper(fst, snd, &followsSq);
-	//cout << "Follows: fst -> " << fst << "\tsnd -> " << snd;
+	cout << "Follows: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 void NewQueryParser::matchFollowsStar() {

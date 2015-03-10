@@ -127,6 +127,9 @@ void NewQueryParser::matchSelect() {
 	match("Select");
 	matchResultCL();
 	matchConditions();
+	if(nextToken.name == "such" || nextToken.name == "pattern" || nextToken.name == "with") {
+		matchConditions();
+	}
 }
 
 void NewQueryParser::matchResultCL() {
@@ -176,21 +179,25 @@ void NewQueryParser::matchSuchThat() {
 	match("such");
 	match("that");
 	matchRelCond();
+	while(nextToken.name == "and") {
+		match("and");
+		matchRelCond();
+	}
 }
 
 void NewQueryParser::matchPatternCl() {
     // pattern-cl: "pattern" patternCond
 	match("pattern");
 	matchPatternCond();
+	while(nextToken.name == "and") {
+		match("and");
+		matchPatternCond();
+	}
 }
 
 void NewQueryParser::matchPatternCond() {
     // patternCond: pattern ("and" pattern)*
     matchPattern();
-    if(nextToken.name == "and") {
-        match("and");
-        matchPattern();
-	}
 }
 
 void NewQueryParser::matchPattern() {
@@ -366,15 +373,15 @@ void NewQueryParser::matchPatternWhile(string s) {
 void NewQueryParser::matchWith() {
 	match("with");
 	matchAttrCond();
+	while(nextToken.name == "and") {
+		match("and");
+		matchAttrCond();
+	}
 }
 
 void NewQueryParser::matchAttrCond() {
 	//attrCond:  attrCompare ("and" attCompare )*
 	matchAttrCompare();
-	if(nextToken.name == "and") {
-		match("and");
-		matchAttrCompare();
-	}
 }
 
 void NewQueryParser::matchAttrCompare() {
@@ -396,10 +403,6 @@ string NewQueryParser::matchRef() {
 
 void NewQueryParser::matchRelCond() {
 	matchRelRef();
-	if(nextToken.name == "and") {
-		match("and");
-		matchRelRef();
-	}
 }
 
 void NewQueryParser::matchRelRef() {
@@ -447,14 +450,15 @@ void NewQueryParser::matchModifies() {
 	// ModifiesP: "Modifies" "(" entRef "," varRef ")"
 	// ModifiesC: "Modifies" "(" stmtRef "," varRef ")"
 	//ModifiesSubuqery modifiesSq = ModifiesSubquery(&synonyms, &controller);
+	cout << "Inside Modifies" << endl;
 	match("(");
 	string fst = matchEntRef(true);
 	match(",");
 	string snd = matchVarRef();
 	match(")");
 	//modifiesSq.setSynonyms(fst, snd);
-	cout << "fst : " << fst;
-	cout << "snd : " << snd;
+	cout << "fst : " << fst << endl;
+	cout << "snd : " << snd << endl;
 }
 
 string NewQueryParser::matchEntRef(bool excludeUnderScore) {
@@ -544,6 +548,7 @@ void NewQueryParser::matchParent() {
 }
 
 void NewQueryParser::matchParentStar() {
+	cout << "insie parent*\t" << nextToken.name << "\t" << nextToken.token <<  endl;
 	match("(");
 	string fst = matchStmtRef();
 	match(",");
@@ -561,10 +566,10 @@ string NewQueryParser::matchStmtRef() {
 		match(UNDERSCORE);
 	} else if(nextToken.token == INT_LIT) {
 		param = nextToken.name;
-		match(INT_LIT);
+		match(nextToken.name);
 	} else if(nextToken.token == IDENT || nextToken.token == SIMPLE_IDENT) {
 		param = nextToken.name;
-		match(IDENT);
+		match(nextToken.name);
 	} else {
 		cout << "SYNTAX ERROR -> " << nextToken.name << "\t" << nextToken.token << endl;
 	}
@@ -621,7 +626,7 @@ string NewQueryParser::matchLineRef() {
 		match(INT_LIT);
 	} else if(nextToken.token == IDENT || nextToken.token == SIMPLE_IDENT) {
 		param = nextToken.name;
-		match(IDENT);
+		match(nextToken.name);
 	} else {
 		cout << "SYNTAX ERROR -> " << nextToken.name << "\t" << nextToken.token << endl;
 	}

@@ -86,19 +86,20 @@ void QueryParser::matchDeclaration() {
 	nextToken = getToken();
 
 	if(nextToken.name.compare("Select") != 0) {
-	//cout << "SYNSIZE:" << DESIGN_ENTITIES.size() << endl;
-	for(size_t i = 0; i < DESIGN_ENTITIES.size(); i++) {
-		if (_stricmp(nextToken.name.c_str(), DESIGN_ENTITIES[i].c_str()) == 0) {
-			match(DESIGN_ENTITIES[i]);
-			matchDeclarationVariables(DESIGN_ENTITIES[i]);
-			i = 0;
+		//cout << "SYNSIZE:" << DESIGN_ENTITIES.size() << endl;
+		for(size_t i = 0; i < DESIGN_ENTITIES.size(); i++) {
+			if (_stricmp(nextToken.name.c_str(), DESIGN_ENTITIES[i].c_str()) == 0) {
+				match(DESIGN_ENTITIES[i]);
+				matchDeclarationVariables(DESIGN_ENTITIES[i]);
+				i = 0;
+			}
 		}
-	}
 	}
 }
 
 void QueryParser::matchDeclarationVariables(string entity) {
 	string var = nextToken.name;
+	cout << var << endl;
 	match(IDENT);
 	synonyms[var] =  entity;
 

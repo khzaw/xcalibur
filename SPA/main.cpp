@@ -59,12 +59,13 @@ int main() {
 	//query = "assign a; while w; Select a such that Parent*(w,a) and Next*(60, n) and Modifies(a, \"y\") pattern a(_, \"x+y*z\")";
 	//parser = new NewQueryParser(query, controller);
 
-	query = "procedure p; Select p such that Calls(p, _)";
-	parser = new NewQueryParser(query, controller);
+	//query = "procedure p; Select p such that Calls(p, _)";
+	//parser = new NewQueryParser(query, controller);
 
-	query = "procedure p, q; Select p such that Calls(p, q)";
-	parser = new NewQueryParser(query, controller);
+	//query = "procedure p, q; Select p such that Calls(p, q)";
+	//parser = new NewQueryParser(query, controller);
 
+	query = "stmt s; Select s such that Follows*(s,10) and Follows*(s, 12)";
 	parser = new NewQueryParser(query, controller);
 
 	string t;

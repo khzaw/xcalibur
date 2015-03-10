@@ -83,6 +83,8 @@
     <ClCompile Include="TestProcTable.cpp" />
     <ClCompile Include="TestQE.cpp" />
     <ClCompile Include="TestQueryParser.cpp" />
+    <ClCompile Include="testRecursiveCFG.cpp" />
+    <ClCompile Include="testRecursiveCFG.h" />
     <ClCompile Include="testStatement.cpp" />
     <ClCompile Include="TestSubquery.cpp" />
     <ClCompile Include="TestUses.cpp" />

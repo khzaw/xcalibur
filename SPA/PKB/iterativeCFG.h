@@ -24,7 +24,10 @@ class CFG {
 	set<int> getNextStar(int);
 	set<int> getPrevStar(int);
 
-    private:
+	map<int, set<int>> getFwdMap;
+	map<int, set<int>> getBwdMap;
+
+	private:
     std::map<int, std::set<int> > AdjListFwd;
     std::map<int, std::set<int> > AdjListBwd;
     int numLines;

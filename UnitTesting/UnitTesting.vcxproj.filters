@@ -63,6 +63,12 @@
     <ClCompile Include="testIterativeCFG.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="testRecursiveCFG.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testRecursiveCFG.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestModifies.h">

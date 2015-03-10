@@ -13,17 +13,19 @@
 using namespace std;
 
 // syn = synonyms required in solution. Put Boolean in here too
-QE::QE(vector<string> syn) {
+QE::QE(vector<string> syn, PKBController* p) {
 	useOptimizedSolver = true;
 	synonyms = syn;
 	queries = vector<Subquery*>();
+	pkb = p;
 }
 
 void QE::addQuery(Subquery* q) {
 	queries.push_back(q);
 }
 
-void QE::solve() {
+vector<string> QE::solve() {
+	vector<string> answer = vector<string>();
 	if (useOptimizedSolver) {
 		OptimizedQE solver = OptimizedQE(queries);
 		solution = solver.solve();
@@ -33,18 +35,43 @@ void QE::solve() {
 
 	if (synonyms[0] == "BOOLEAN") {
 		if (solution->getAllResults().size() == 0) {
-			//return false;
+			answer.push_back("FALSE");
 		} else {
-			//return true;
+			answer.push_back("TRUE");
 		}
 	} 
 
 	if(solution->getAllResults().size() == 0) {
-		//return nothing
+		answer.push_back("none");
 	}
 
 	trimSolution();
-	// return vector<string>?
+	return convert();
+}
+
+vector<string> QE::convert() {
+	vector<string> answer = vector<string>();
+	for (size_t i = 0; i < solution->getAllResults().size(); i++) {
+		string x = "";
+		for (size_t j = 0; j < solution->getResultRow(i).size(); j++) {
+			string synonym = solution->getSynonym(j);
+			int aSolution = solution->getResultAt(i, j);
+			if (synonym == "procedure"){
+				x += pkb->procTable.getProcName(aSolution);
+			} else if (synonym == "variable"){
+				x += pkb->varTable.getVarName(aSolution);
+			} else if (synonym == "constant"){
+				x += to_string((long long)pkb->constantTable.getConstant(aSolution));
+			} else {
+				x += to_string((long long)aSolution);
+			}
+			if(j != solution->getResultRow(i).size() - 1) {
+				x += " "; 
+			}
+		}
+		answer.push_back(x);
+	}
+	return answer;
 }
 
 void QE::basicSolve() {

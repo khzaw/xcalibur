@@ -79,7 +79,7 @@ void QueryEvaluatorTest::testBQE(){
 	
 	vector<string> synonyms = vector<string>();
 	synonyms.push_back("s1");
-	QE query = QE(synonyms);
+	QE query = QE(synonyms, &pk);
 	query.addQuery(&q1);
 	query.addQuery(&q2);
 	query.solve();
@@ -91,7 +91,7 @@ void QueryEvaluatorTest::testBQE(){
 	q4.setSynonyms("s1", 1);
 	vector<string> synonyms2 = vector<string>();
 	synonyms2.push_back("s1");
-	QE query2 = QE(synonyms2);
+	QE query2 = QE(synonyms2, &pk);
 	query2.addQuery(&q3);
 	query2.addQuery(&q4);
 	query2.solve();

@@ -13,14 +13,16 @@ class QE {
 private:
 	vector<string> synonyms;
 	bool useOptimizedSolver;
+	PKBController* pkb;
 
 public:
 	ResultTuple* solution;
 	vector<Subquery*> queries;
 
-	QE(vector<string>);
+	QE(vector<string>, PKBController*);
 	void addQuery(Subquery*);
-	void solve();
+	vector<string> solve();
 	void trimSolution();
 	void basicSolve();
+	vector<string> convert();
 };

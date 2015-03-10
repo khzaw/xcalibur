@@ -51,7 +51,7 @@ vector<string> QE::solve() {
 		return answer;
 	}
 
-	trimSolution();
+	//trimSolution();
 	return convert();
 }
 
@@ -112,9 +112,9 @@ void QE::trimSolution() {
 	vector<vector<int>> newSolution = vector<vector<int> >();
 	//get index of synonyms for solutions
 	for (size_t i = 0; i < synonyms.size(); i++) {
+		cout << "syn" << solution->getSynonymIndex(synonyms[i]);
 		syns.push_back(solution->getSynonymIndex(synonyms[i]));
 	}
-
 	for (size_t i = 0; i < solution->getAllResults().size(); i++) { 
 		vector<int> temp = vector<int>();
 		for (size_t j = 0; j < syns.size(); j++) {

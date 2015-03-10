@@ -36,6 +36,7 @@
     <ClCompile Include="QueryProcessor\NextSubquery.cpp" />
     <ClCompile Include="QueryProcessor\NewQueryParser.cpp" />
     <ClCompile Include="QueryProcessor\PatternSubquery.cpp" />
+    <ClCompile Include="QueryProcessor\UsesSubquery.cpp" />
     <ClCompile Include="QueryProcessor\WithSubquery.cpp" />
     <ClInclude Include="PKB\CallsExtractor.cpp" />
     <ClInclude Include="PKB\iterativeCFG.h" />

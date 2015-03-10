@@ -22,7 +22,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( QueryEvaluatorTest );
 // method to test insertion of Follows
 
 void QueryEvaluatorTest::testBQE(){
-	PKBController pk;
+	PKBController pk = PKBController();
 	TNode stmt1("ASSIGN_NODE","a = x", 1,0);
 	TNode stmt2("ASSIGN_NODE","b = y", 2,0);
 	TNode stmt3("WHILE_NODE","c", 3,0);

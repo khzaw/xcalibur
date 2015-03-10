@@ -296,7 +296,9 @@ void SubqueryTest::testSubqueries() {
 	testUses();
 	testUsesTuple();
 	testModifiesProc();
+	testModifiesProcTuple();
 	testUsesProc();
+	testUsesProcTuple();
 	testCalls();
 	testCallsTuple();
 	testCallsT();
@@ -4189,6 +4191,9 @@ void SubqueryTest::testModifiesProc(){
 	CPPUNIT_ASSERT(!actualResultmodifiesprocsubquery143->isEmpty());
 }
 
+void SubqueryTest::testModifiesProcTuple(){
+}
+
 void SubqueryTest::testUses(){
 	// Test 1: Uses(s1, x)
 	UsesSubquery us1 = UsesSubquery(&synonymTable, pk);
@@ -4749,6 +4754,9 @@ void SubqueryTest::testUsesProc(){
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultusesprocsubquery143->getAllResults().size());
 	CPPUNIT_ASSERT(actualResultusesprocsubquery143->isBool());
 	CPPUNIT_ASSERT(!actualResultusesprocsubquery143->isEmpty());
+}
+
+void SubqueryTest::testUsesProcTuple(){
 }
 
 void SubqueryTest::testCalls(){

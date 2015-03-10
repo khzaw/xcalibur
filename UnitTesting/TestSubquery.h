@@ -43,7 +43,9 @@ public:
 	void testUses();
 	void testUsesTuple();
 	void testModifiesProc();
+	void testModifiesProcTuple();
 	void testUsesProc();
+	void testUsesProcTuple();
 	void testCalls();
 	void testCallsTuple();
 	void testCallsT();

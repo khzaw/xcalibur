@@ -13,6 +13,7 @@ class iterativeCFGTest : public CPPUNIT_NS::TestFixture {
 	CPPUNIT_TEST(testWhileWhileLoop);
 	
 	CPPUNIT_TEST_SUITE_END();
+
 public:
 	void setUp();
 	void tearDown();

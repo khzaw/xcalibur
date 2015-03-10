@@ -11,6 +11,7 @@ class recursiveCFGTest : public CPPUNIT_NS::TestFixture {
 	CPPUNIT_TEST(testIfWhileLoop);
 	CPPUNIT_TEST(testWhileIfLoop);
 	CPPUNIT_TEST(testWhileWhileLoop);
+
 	CPPUNIT_TEST_SUITE_END();
 
 public:

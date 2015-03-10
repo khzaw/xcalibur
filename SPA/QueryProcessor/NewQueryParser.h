@@ -114,4 +114,6 @@ private:
 
 	// debug
 	void printMap();
+
+	void setSynonymsHelper(string, string, Subquery*);
 };

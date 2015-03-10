@@ -26,7 +26,7 @@ template <typename T>
 T lexical_cast(const std::string& s) {
 	std::stringstream ss(s);
 	T result;
-	if((ss >> result).falt() || !(ss >> std::ws).eof()) {
+	if((ss >> result).fail() || !(ss >> std::ws).eof()) {
 		throw std::bad_cast();
 	}
 	return result;
@@ -36,7 +36,7 @@ template <typename T>
 bool lexical_cast(const std::string& s, T& t) {
 	try {
 		t = lexical_cast<T>(s);
-	} catch(const std::bad_cast& e) {
+	} catch(const std::bad_cast&) {
 		return false;
 	}
 }
@@ -450,7 +450,6 @@ void NewQueryParser::matchModifies() {
 	// ModifiesP: "Modifies" "(" entRef "," varRef ")"
 	// ModifiesC: "Modifies" "(" stmtRef "," varRef ")"
 	//ModifiesSubuqery modifiesSq = ModifiesSubquery(&synonyms, &controller);
-	cout << "Inside Modifies" << endl;
 	match("(");
 	string fst = matchEntRef(true);
 	match(",");
@@ -517,45 +516,61 @@ void NewQueryParser::matchUses() {
 
 void NewQueryParser::matchCalls() {
 	// Calls : "Calls" "(" entRef "," varRef ")"
+	CallsSubquery callsSq = CallsSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchEntRef(false);
 	match(",");
 	string snd = matchVarRef();
 	match(")");
+	setSynonymsHelper(fst, snd, &callsSq);
+	//cout << "Calls: fst -> " << fst << "\tsnd -> " << snd;
+}
 
-	cout << "Calls: fst -> " << fst << "\tsnd -> " << snd;
+void NewQueryParser::setSynonymsHelper(string fst, string snd, Subquery* query) {
+	int i, j;
+	if(lexical_cast(fst, i) && lexical_cast(snd, j)) {
+		query->setSynonyms(i, j);
+	} else if(lexical_cast(fst, i) && !(lexical_cast(snd, j))) { 
+		query->setSynonyms(i, snd);
+	} else if(!(lexical_cast(fst, i)) && lexical_cast(snd, j)) {
+		query->setSynonyms(fst, j);
+	} else {
+		query->setSynonyms(fst, snd);
+	}
 }
 
 void NewQueryParser::matchCallsStar() {
 	// CallsT : "Calls*" "(" entRef "," varRef ")"
+	CallsStarSubquery callsStarSq = CallsStarSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchEntRef(false);
 	match(",");
 	string snd = matchVarRef();
 	match(")");
-
-	cout << "Calls*: fst -> " << fst << "\tsnd -> " << snd;
+	setSynonymsHelper(fst, snd, &callsStarSq);
+	//cout << "Calls*: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 void NewQueryParser::matchParent() {
+	ParentSubquery parentSq = ParentSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchStmtRef();
 	match(",");
 	string snd = matchStmtRef();
 	match(")");
-
-	cout << "Parent: fst -> " << fst << "\tsnd -> " << snd;
+	setSynonymsHelper(fst, snd, &parentSq);
+	//cout << "Parent: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 void NewQueryParser::matchParentStar() {
-	cout << "insie parent*\t" << nextToken.name << "\t" << nextToken.token <<  endl;
+	ParentStarSubquery parentStarSq = ParentStarSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchStmtRef();
 	match(",");
 	string snd = matchStmtRef();
 	match(")");
-
-	cout << "Parent*: fst -> " << fst << "\tsnd -> " << snd;
+	setSynonymsHelper(fst, snd, &parentStarSq);
+	//cout << "Parent*: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 string NewQueryParser::matchStmtRef() {

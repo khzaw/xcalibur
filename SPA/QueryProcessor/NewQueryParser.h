@@ -44,6 +44,7 @@ enum RELATION {
 };
 
 class NewQueryParser {
+public:
 	Lexeme nextToken;
 	QueryLexer lexer;
 	string query;
@@ -57,7 +58,6 @@ class NewQueryParser {
 	string result;		// postfix expression
 
 
-public:
 	NewQueryParser();
 	NewQueryParser(string, PKBController*);
 	~NewQueryParser();

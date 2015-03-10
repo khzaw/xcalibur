@@ -110,7 +110,7 @@ void Parser::procedure() {
 	match(KEYWORDS[0]); nextToken = getToken();
 
 	procedureName();
-	procCoun = procedureNames.size() + 1;
+	procCount = procedureNames.size() + 1;
 	TNode* procNode = new TNode(TNODE_NAMES[PROC_NODE], procName, loc, procCount);
 
 	match("{"); nextToken = getToken();

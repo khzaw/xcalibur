@@ -27,7 +27,7 @@ PKBController::PKBController(){
 	this->parentExtractor = ParentExtractor(&parentTable);
 	this->modifiesExtractor = ModifiesExtractor(&modifiesTable);
 	this->usesExtractor = UsesExtractor(&usesTable);
-	this->nextExtractor = NextExtractor(&procTable);
+	this->nextExtractor = NextExtractor(&procTable,&statementTable);
 }
 
 PKBController::~PKBController() {

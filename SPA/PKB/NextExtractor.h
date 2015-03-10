@@ -13,7 +13,7 @@ class ProcTable;
 class NextExtractor {
 public:
 	NextExtractor();
-	NextExtractor(ProcTable* procTable);
+	NextExtractor(ProcTable* procTable,StatementTable* sTable);
 	
 	 //called by PQL
 	bool isNextStar(int progline1, int progline2);
@@ -22,6 +22,8 @@ public:
 	bool isPrev(int progline1, int progline2);
 	set<int> getNext(int progLine);	
 	set<int> getPrev(int progLine);
+	set<int> getAllNext();
+	set<int> getAllPrev();
 	set<int> getNextStar(int progLine);
 	set<int> getPrevStar(int progLine);
 	//called by front end controller
@@ -30,7 +32,7 @@ public:
 	map<int,std::shared_ptr<GNode>> getLastIfNode();
 	map<std::shared_ptr<GNode>,int> getFirstIfNode();
 	shared_ptr<GNode> getNodeFromMap(int progLine);
-	
+	void storeAllNextPrev();
 	//Helper method
 	vector<std::shared_ptr<CFG>> constructCFG();
 	shared_ptr<GNode> converseAST(std::shared_ptr<CFG> cfg, TNode* cur, std::shared_ptr<GNode> parent, shared_ptr<stack<std::shared_ptr<GNode>>> level);
@@ -58,7 +60,8 @@ private:
 	map<int,std::shared_ptr<GNode>> nodeMap; // store normal stmt and GNodes
 	map<int,std::shared_ptr<GNode>> lastIfNode; //for affects "to check last node of if comparison"
 	map<std::shared_ptr<GNode>, int> firstIfNode;//for affects "to check last node of if comparison"
-
+	set<int> allNextStmt;
+	set<int> allPrevStmt;
 	stack<pair<TNode*,TNode*>> lastIfWhileStmtStack;
 
 };

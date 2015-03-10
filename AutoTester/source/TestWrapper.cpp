@@ -1,8 +1,9 @@
 #include "TestWrapper.h"
 #include "Frontend\Parser.h"
-#include "QueryProcessor\QueryEvaluator.h"
-#include "QueryProcessor\QueryParser.h"
+#include "QueryProcessor\QE.h"
+#include "QueryProcessor\NewQueryParser.h"
 #include <iostream>
+#include <iterator>
 
 // implementation code of WrapperFactory - do NOT modify the next 5 lines
 AbstractWrapper* WrapperFactory::wrapper = 0;
@@ -39,11 +40,14 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
   // each result must be a string.
 	//qe->evaluato
 
-	string t;
-	QueryParser* qp = new QueryParser(query);
+	//string t;
+	//QueryParser* qp = new QueryParser(query);
 	/*cout << endl;*/
-	QueryEvaluator* qe = new QueryEvaluator(controller);
-	results = qe->evaluate(&(qp->getSynonyms()), qp->getQueryTree());
+	//QueryEvaluator* qe = new QueryEvaluator(controller);
+	//results = qe->evaluate(&(qp->getSynonyms()), qp->getQueryTree());
 	/*cout << "RESULT" << endl;
 	cout << result << endl;*/
+	NewQueryParser* qp = new NewQueryParser(query, controller);
+	vector<string> resultsVector = qp->evaluator->solve();
+	std::copy(resultsVector.begin(), resultsVector.end(), std::back_inserter(results));
 }

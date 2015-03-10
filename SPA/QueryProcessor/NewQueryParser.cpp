@@ -19,6 +19,7 @@
 #include "FollowsStarSubquery.cpp"
 #include "UsesSubquery.cpp"
 #include "ParentSubquery.cpp"
+#include "ParentStarSubquery.cpp"
 #include "WithSubquery.cpp"
 #include "CallsSubquery.cpp"
 #include "CallsStarSubquery.cpp"
@@ -54,6 +55,7 @@ NewQueryParser::NewQueryParser(string s, PKBController* controller) {
 	this->lexer = QueryLexer(s);
 	this->selectVariables = vector<string>(); 
 	this->synonyms = map<string, string>();
+	this->controller = controller;
 	parse();
 	printMap();
 }
@@ -135,6 +137,8 @@ void NewQueryParser::matchSelect() {
 	if(nextToken.name == "such" || nextToken.name == "pattern" || nextToken.name == "with") {
 		matchConditions();
 	}
+
+	evaluator = new QE(selectVariables, controller);
 }
 
 void NewQueryParser::matchResultCL() {
@@ -454,7 +458,7 @@ void NewQueryParser::matchRelRef() {
 void NewQueryParser::matchModifies() {
 	// ModifiesP: "Modifies" "(" entRef "," varRef ")"
 	// ModifiesC: "Modifies" "(" stmtRef "," varRef ")"
-	ModifiesSubuqery modifiesSq = ModifiesSubquery(&synonyms, &controller);
+	ModifiesSubquery modifiesSq = ModifiesSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchEntRef(true);
 	match(",");
@@ -542,6 +546,8 @@ void NewQueryParser::setSynonymsHelper(string fst, string snd, Subquery* query) 
 	} else {
 		query->setSynonyms(fst, snd);
 	}
+	evaluator->addQuery(query);
+
 }
 
 void NewQueryParser::matchCallsStar() {
@@ -626,7 +632,7 @@ void NewQueryParser::matchNext() {
     match(",");
     string snd = matchLineRef();
     match(")");
-	setSynonymsHelper(fst, snd &nextSq);
+	setSynonymsHelper(fst, snd, &nextSq);
 	//cout << "Next: fst -> " << fst << "\tsnd -> " << snd;
 }
 

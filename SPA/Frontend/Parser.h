@@ -39,6 +39,7 @@ class Parser {
 	stack<Operator> operatorStack;
 	stack<TNode*> operandStack;
 	stack<int> containerStack;
+	vector<string> procedureNames;
 
 public:
 	PKBController controller;
@@ -59,7 +60,7 @@ private:
 	void expr(TNode* assignNode);
 	void exprPrime();
 	void variableName();
-	void procedureName();
+	string procedureName();
 	void constantValue();
 	void factor(bool rightSide=false);
 	void error();
@@ -76,4 +77,6 @@ private:
 
 	void populateModifies(int loc);
 	void populateUses(int loc);
+
+	int getProcedureIndex(string);
 };

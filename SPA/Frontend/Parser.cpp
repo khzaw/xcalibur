@@ -33,6 +33,7 @@ const_value: INTEGER
 #include <fstream>
 #include <iostream>
 #include <stack>
+#include <algorithm>
 
 #include "..\PKB\AST.h"
 #include "Parser.h"
@@ -109,6 +110,7 @@ void Parser::procedure() {
 	match(KEYWORDS[0]); nextToken = getToken();
 
 	procedureName();
+	procCount = procedureNames.size() + 1;
 	TNode* procNode = new TNode(TNODE_NAMES[PROC_NODE], procName, loc, procCount);
 
 	match("{"); nextToken = getToken();
@@ -117,6 +119,19 @@ void Parser::procedure() {
 	stmtLst(procStmtLstNode);
 
 	match("}"); nextToken = getToken();
+}
+
+string Parser::procedureName() {
+	// TODO check valid variable name
+	procName = nextToken.name;
+	if(find(procedureNames.begin(), procedureNames.end(), procName) == procedureNames.end()) { // not found
+		procedureNames.push_back(procName);
+	} 
+	procedureNames.push_back(procName);
+	controller.procTable.insertProc(procName);
+	cout << "procName: " << nextToken.name << endl;
+	nextToken = getToken();
+	return procName;
 }
 
 void Parser::stmtLst(TNode* parent) {
@@ -132,8 +147,8 @@ void Parser::stmt(TNode* parent) {
 		controller.statementTable.insertStatement(callNode);
 		match(KEYWORDS[2]); nextToken = getToken();		// match call keyword
 
-		procedureName();
-		controller.callsTable.insertCalls(0, this->procCount);
+		string newProcedure = procedureName();
+		controller.callsTable.insertCalls(procCount, getProcedureIndex(newProcedure));
 		match(";");
 
 		if(temp > 0) {
@@ -380,15 +395,6 @@ void Parser::constantValue() {
 
 }
 
-void Parser::procedureName() {
-	// TODO check valid variable name
-	procName = nextToken.name;
-	controller.procTable.insertProc(procName);
-	this->procCount+=1;
-	cout << "procName: " << nextToken.name << endl;
-	nextToken = getToken();
-
-}
 
 void Parser::match(string s) {
 	if(nextToken.name == s) {
@@ -455,4 +461,13 @@ void Parser::populateUses(int loc) {
 		containerStack.push(temp.top());
 		temp.pop();
 	}
+}
+
+int Parser::getProcedureIndex(string proc) {
+	for(size_t i = 0; i < proc.size(); i++) {
+		if(procedureNames.at(i) == proc) {
+			return i+1;
+		}
+	}
+	return -1;
 }

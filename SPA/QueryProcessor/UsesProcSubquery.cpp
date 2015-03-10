@@ -31,6 +31,24 @@ public:
 		return ans;
 	}
 	
+	bool validate() {
+		//right synonym
+		if(isSyn == 1 || isSyn == 4 || isSyn == 3) {
+			string s = synonymTable->at(rightSynonym);
+			if (s != "procedure") {
+				return false;
+			}
+		}
+		//left synonym
+		if (isSyn == 2 || isSyn == 5 || isSyn == 3) {
+			string s = synonymTable->at(leftSynonym);
+			if (s != "variable") {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	ResultTuple* solve(ResultTuple* tuple) {
 		ResultTuple* ans;
 		switch (isSyn) {

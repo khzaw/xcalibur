@@ -77,3 +77,7 @@ ResultTuple* Subquery::solve(){
 ResultTuple* Subquery::solve(ResultTuple*){
 	return &ResultTuple();
 }
+
+bool Subquery::validate(){
+	return false;
+}

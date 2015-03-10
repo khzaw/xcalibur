@@ -26,6 +26,10 @@ void QE::addQuery(Subquery* q) {
 
 vector<string> QE::solve() {
 	vector<string> answer = vector<string>();
+	if (!validateQueries()) {
+		answer.push_back("none");
+		return answer;
+	}
 	if (useOptimizedSolver) {
 		OptimizedQE solver = OptimizedQE(queries);
 		solution = solver.solve();
@@ -39,14 +43,26 @@ vector<string> QE::solve() {
 		} else {
 			answer.push_back("TRUE");
 		}
+		return answer;
 	} 
 
 	if(solution->getAllResults().size() == 0) {
 		answer.push_back("none");
+		return answer;
 	}
 
 	trimSolution();
 	return convert();
+}
+
+bool QE::validateQueries() {
+	// can check extra synonyms here.
+	for (int i = 0; i < queries.size(); i++) {
+		if (!queries[i]->validate()) {
+			return false;
+		}
+	}
+	return true;
 }
 
 vector<string> QE::convert() {

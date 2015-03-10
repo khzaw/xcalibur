@@ -18,7 +18,7 @@ private:
 public:
 	ResultTuple* solution;
 	vector<Subquery*> queries;
-
+	bool validateQueries();
 	QE(vector<string>, PKBController*);
 	void addQuery(Subquery*);
 	vector<string> solve();

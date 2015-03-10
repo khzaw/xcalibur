@@ -45,4 +45,5 @@ public:
 	int getPriority();
 	virtual ResultTuple* solve();
 	virtual ResultTuple* solve(ResultTuple*);
+	virtual bool validate();
 };

@@ -287,7 +287,6 @@ void SubqueryTest::testSubqueries() {
 
 	
 	testFollows();
-	testFollowsTuple();
 	testParent();
 	testFollowsT();
 	testParentT();
@@ -1381,7 +1380,7 @@ void SubqueryTest::testFollows(){
 	CPPUNIT_ASSERT(!actualResultfollowssubquery143->isEmpty());
 }
 
-void SubqueryTest::testFollowsTuple(){
+void SubqueryTest::testFollowsT(){
 	// testTuple:
 	//  s1  |  a1  |  w1  |  i2  |  c2  |  l1  |  const1  |  v1  |  proc1  |
 	//  1   |  1   |  6   |  8   |  3   |  1   |  0       |  0   |  0      |
@@ -2084,10 +2083,6 @@ void SubqueryTest::testFollowsTuple(){
 			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery138[i][j], actualResultfollowssubquery138->getResultAt(i, j));
 		}
 	}
-}
-
-void SubqueryTest::testFollowsT(){
-
 }
 
 void SubqueryTest::testParent(){
@@ -2921,18 +2916,18 @@ void SubqueryTest::testParent(){
 	CPPUNIT_ASSERT(!actualResultparentsubquery143->isEmpty());
 }
 
-/*void SubqueryTest::testFollowsTuple(){
+void SubqueryTest::testParentT(){
 	// testTuple:
 	//  s1  |  a1  |  w1  |  i2  |  c2  |  l1  |  const1  |  v1  |  proc1  |
-	//  1   |  1   |  6   |  8   |  3   |  1   |  0       |  0   |  0      |
-	//  1   |  2   |  6   |  8   |  3   |  1   |  0       |  0   |  0      |
-	//  1   |  1   |  15  |  8   |  3   |  1   |  0       |  0   |  0      |
-	//  1   |  2   |  6   |  13  |  3   |  1   |  0       |  0   |  0      |
-	//  1   |  1   |  6   |  8   |  11  |  1   |  0       |  0   |  0      |
-	//  8   |  2   |  6   |  8   |  3   |  7   |  0       |  0   |  0      |
-	//  1   |  1   |  6   |  8   |  3   |  1   |  3       |  0   |  0      |
-	//  3   |  2   |  6   |  8   |  3   |  1   |  0       |  2   |  0      |
-	//  1   |  2   |  6   |  8   |  3   |  1   |  0       |  2   |  1      |
+	//  2   |  1   |  6   |  8   |  3   |  1   |  0       |  0   |  0      |
+	//  6   |  2   |  6   |  8   |  3   |  1   |  0       |  0   |  0      |
+	//  6   |  1   |  15  |  8   |  3   |  1   |  0       |  0   |  0      |
+	//  8   |  2   |  6   |  13  |  3   |  1   |  0       |  0   |  0      |
+	//  8   |  1   |  6   |  8   |  11  |  1   |  0       |  0   |  0      |
+	//  13  |  2   |  6   |  8   |  3   |  7   |  0       |  0   |  0      |
+	//  12  |  1   |  6   |  8   |  3   |  1   |  3       |  0   |  0      |
+	//  15  |  2   |  6   |  8   |  3   |  1   |  0       |  2   |  0      |
+	//  15  |  2   |  6   |  8   |  3   |  1   |  0       |  2   |  1      |
 	ResultTuple testTuple = ResultTuple();
 	int index = testTuple.addSynonym("s1");
 	testTuple.addSynonymToMap("s1", index);
@@ -2953,15 +2948,15 @@ void SubqueryTest::testParent(){
 	index = testTuple.addSynonym("proc1");
 	testTuple.addSynonymToMap("proc1", index);
 	int data[9][9] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
-		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
+		{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
+		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
+		{12   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
 	};
 	for (int i = 0; i < 9; i++){
 		vector<int> tempVector = vector<int>();
@@ -2971,630 +2966,465 @@ void SubqueryTest::testParent(){
 		}
 	}
 
-	// Test 0: Follows(s1, s2)
-	FollowsSubquery followssubquery0 = FollowsSubquery(&synonymTable, pk);
-	followssubquery0.setSynonyms("s1", "s2");
-	ResultTuple* actualResultfollowssubquery0 = followssubquery0.solve(&testTuple);
-	int expectedResultfollowssubquery0[8][10] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  3},
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  ,  2},
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  ,  11},
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  ,  2},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  ,  2}
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery0)/sizeof(expectedResultfollowssubquery0[0])), actualResultfollowssubquery0->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery0)/sizeof(expectedResultfollowssubquery0[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery0[i])/sizeof(expectedResultfollowssubquery0[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery0[i][j], actualResultfollowssubquery0->getResultAt(i, j));
+	// Test 0: Parent(s1, s2)
+	ParentSubquery Parentsubquery0 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery0.setSynonyms("s1", "s2");
+	ResultTuple* actualResultParentsubquery0 = Parentsubquery0.solve(&testTuple);
+	int expectedResultParentsubquery0[17][10] = {
+
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,   7  },
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,   8  },
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,	  11 },
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,	  12 },
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,   7  },
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,   8  },
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,   11 },
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,   12 },
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0,   9  },
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0,   10 },
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0 ,  9  },
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0 ,  10  },
+		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   , 0,   14  },
+		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   , 0,   15  },
+		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   , 0,   17  },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1,  16  },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2,  16  }
+	};	
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery0)/sizeof(expectedResultParentsubquery0[0])), actualResultParentsubquery0->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery0)/sizeof(expectedResultParentsubquery0[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery0[i])/sizeof(expectedResultParentsubquery0[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery0[i][j], actualResultParentsubquery0->getResultAt(i, j));
 		}
 	}
 
-	// Test 1: Follows(s1, a2)
-	FollowsSubquery followssubquery1 = FollowsSubquery(&synonymTable, pk);
-	followssubquery1.setSynonyms("s1", "a2");
-	ResultTuple* actualResultfollowssubquery1 = followssubquery1.solve(&testTuple);
-	int expectedResultfollowssubquery1[6][10] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  ,  2},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  ,  2}
+	// Test 1: Parent(s1, a2)
+	ParentSubquery Parentsubquery1 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery1.setSynonyms("s1", "a2");
+	ResultTuple* actualResultParentsubquery1 = Parentsubquery1.solve(&testTuple);
+	int expectedResultParentsubquery1[12][10] = {
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,   7  },
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,	  12 },
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,   7  },
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,   12 },
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0,   9  },
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0,   10 },
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0 ,  9  },
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0 ,  10  },
+		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   , 0,   14  },
+		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   , 0,   17  },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1,  16  },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2,  16  }
 	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery1)/sizeof(expectedResultfollowssubquery1[0])), actualResultfollowssubquery1->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery1)/sizeof(expectedResultfollowssubquery1[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery1[i])/sizeof(expectedResultfollowssubquery1[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery1[i][j], actualResultfollowssubquery1->getResultAt(i, j));
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery1)/sizeof(expectedResultParentsubquery1[0])), actualResultParentsubquery1->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery1)/sizeof(expectedResultParentsubquery1[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery1[i])/sizeof(expectedResultParentsubquery1[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery1[i][j], actualResultParentsubquery1->getResultAt(i, j));
 		}
 	}
 
-	// Test 2: Follows(s1, w2)
-	FollowsSubquery followssubquery2 = FollowsSubquery(&synonymTable, pk);
-	followssubquery2.setSynonyms("s1", "w2");
-	ResultTuple* actualResultfollowssubquery2 = followssubquery2.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery2->getAllResults().size());
+	// Test 2: Parent(s1, w2)
+	ParentSubquery Parentsubquery2 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery2.setSynonyms("s1", "w2");
+	ResultTuple* actualResultParentsubquery2 = Parentsubquery2.solve(&testTuple);
+	int expectedResultParentsubquery2[1][10] = {
+		
+		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   , 0,   17  },
 
-	// Test 3: Follows(s1, i2)
-	FollowsSubquery followssubquery3 = FollowsSubquery(&synonymTable, pk);
-	followssubquery3.setSynonyms("s1", "i2");
-	ResultTuple* actualResultfollowssubquery3 = followssubquery3.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery3->getAllResults().size());
-
-	// Test 6: Follows(s1, c2)
-	FollowsSubquery followssubquery6 = FollowsSubquery(&synonymTable, pk);
-	followssubquery6.setSynonyms("s1", "c2");
-	ResultTuple* actualResultfollowssubquery6 = followssubquery6.solve(&testTuple);
-	int expectedResultfollowssubquery6[1][9] = {
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  }
 	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery6)/sizeof(expectedResultfollowssubquery6[0])), actualResultfollowssubquery6->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery6)/sizeof(expectedResultfollowssubquery6[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery6[i])/sizeof(expectedResultfollowssubquery6[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery6[i][j], actualResultfollowssubquery6->getResultAt(i, j));
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery2)/sizeof(expectedResultParentsubquery2[0])), actualResultParentsubquery2->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery2)/sizeof(expectedResultParentsubquery2[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery2[i])/sizeof(expectedResultParentsubquery2[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery2[i][j], actualResultParentsubquery2->getResultAt(i, j));
 		}
 	}
 
-	// Test 7: Follows(s1, l2)
-	FollowsSubquery followssubquery7 = FollowsSubquery(&synonymTable, pk);
-	followssubquery7.setSynonyms("s1", "l2");
-	ResultTuple* actualResultfollowssubquery7 = followssubquery7.solve(&testTuple);
-	int expectedResultfollowssubquery7[8][10] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  3},
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  ,  2},
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  ,  11},
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  ,  2},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  ,  2}
+	// Test 3: Parent(s1, i2)
+	ParentSubquery Parentsubquery3 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery3.setSynonyms("s1", "i2");
+	ResultTuple* actualResultParentsubquery3 = Parentsubquery3.solve(&testTuple);
+	int expectedResultParentsubquery3[2][9] = {
+		
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0 },
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0 }
+		
 	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery7)/sizeof(expectedResultfollowssubquery7[0])), actualResultfollowssubquery7->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery7)/sizeof(expectedResultfollowssubquery7[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery7[i])/sizeof(expectedResultfollowssubquery7[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery7[i][j], actualResultfollowssubquery7->getResultAt(i, j));
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery3)/sizeof(expectedResultParentsubquery3[0])), actualResultParentsubquery3->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery3)/sizeof(expectedResultParentsubquery3[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery3[i])/sizeof(expectedResultParentsubquery3[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery3[i][j], actualResultParentsubquery3->getResultAt(i, j));
 		}
 	}
 
-	// Test 9: Follows(s1, _)
-	FollowsSubquery followssubquery9 = FollowsSubquery(&synonymTable, pk);
-	followssubquery9.setSynonyms("s1", "_");
-	ResultTuple* actualResultfollowssubquery9 = followssubquery9.solve(&testTuple);
-	int expectedResultfollowssubquery9[8][9] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
+	// Test 6: Parent(s1, c2)
+	ParentSubquery Parentsubquery6 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery6.setSynonyms("s1", "c2");
+	ResultTuple* actualResultParentsubquery6 = Parentsubquery6.solve(&testTuple);
+	int expectedResultParentsubquery6[1][10] = {
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  ,  13 }
 	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery9)/sizeof(expectedResultfollowssubquery9[0])), actualResultfollowssubquery9->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery9)/sizeof(expectedResultfollowssubquery9[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery9[i])/sizeof(expectedResultfollowssubquery9[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery9[i][j], actualResultfollowssubquery9->getResultAt(i, j));
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery6)/sizeof(expectedResultParentsubquery6[0])), actualResultParentsubquery6->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery6)/sizeof(expectedResultParentsubquery6[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery6[i])/sizeof(expectedResultParentsubquery6[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery6[i][j], actualResultParentsubquery6->getResultAt(i, j));
 		}
 	}
 
-	// Test 10: Follows(s1, 2)
-	FollowsSubquery followssubquery10 = FollowsSubquery(&synonymTable, pk);
-	followssubquery10.setSynonyms("s1", 2);
-	ResultTuple* actualResultfollowssubquery10 = followssubquery10.solve(&testTuple);
-	int expectedResultfollowssubquery10[6][9] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
+	// Test 7: Parent(s1, l2)
+	ParentSubquery Parentsubquery7 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery7.setSynonyms("s1", "l2");
+	ResultTuple* actualResultParentsubquery7 = Parentsubquery7.solve(&testTuple);
+	int expectedResultParentsubquery7[17][10] = {
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,   7  },
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,   8  },
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,	  11 },
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,	  12 },
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,   7  },
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,   8  },
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,   11 },
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0,   12 },
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0,   9  },
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0,   10 },
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0 ,  9  },
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0 ,  10  },
+		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   , 0,   14  },
+		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   , 0,   15  },
+		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   , 0,   17  },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1,  16  },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2,  16  }
 	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery10)/sizeof(expectedResultfollowssubquery10[0])), actualResultfollowssubquery10->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery10)/sizeof(expectedResultfollowssubquery10[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery10[i])/sizeof(expectedResultfollowssubquery10[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery10[i][j], actualResultfollowssubquery10->getResultAt(i, j));
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery7)/sizeof(expectedResultParentsubquery7[0])), actualResultParentsubquery7->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery7)/sizeof(expectedResultParentsubquery7[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery7[i])/sizeof(expectedResultParentsubquery7[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery7[i][j], actualResultParentsubquery7->getResultAt(i, j));
 		}
 	}
 
-	// Test 11: Follows(s1, 6)
-	FollowsSubquery followssubquery11 = FollowsSubquery(&synonymTable, pk);
-	followssubquery11.setSynonyms("s1", 6);
-	ResultTuple* actualResultfollowssubquery11 = followssubquery11.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery11->getAllResults().size());
-
-	// Test 12: Follows(a1, s2)
-	FollowsSubquery followssubquery12 = FollowsSubquery(&synonymTable, pk);
-	followssubquery12.setSynonyms("a1", "s2");
-	ResultTuple* actualResultfollowssubquery12 = followssubquery12.solve(&testTuple);
-	int expectedResultfollowssubquery12[9][10] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  3},
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  ,  3},
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  ,  2},
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  ,  3},
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  ,  2},
-		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  ,  3},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  ,  3}
+	// Test 9: Parent(s1, _)
+	ParentSubquery Parentsubquery9 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery9.setSynonyms("s1", "_");
+	ResultTuple* actualResultParentsubquery9 = Parentsubquery9.solve(&testTuple);
+	int expectedResultParentsubquery9[8][9] = {
+		
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
+		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0 },
+		{12   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0 },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1 },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2 }
 	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery12)/sizeof(expectedResultfollowssubquery12[0])), actualResultfollowssubquery12->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery12)/sizeof(expectedResultfollowssubquery12[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery12[i])/sizeof(expectedResultfollowssubquery12[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery12[i][j], actualResultfollowssubquery12->getResultAt(i, j));
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery9)/sizeof(expectedResultParentsubquery9[0])), actualResultParentsubquery9->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery9)/sizeof(expectedResultParentsubquery9[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery9[i])/sizeof(expectedResultParentsubquery9[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery9[i][j], actualResultParentsubquery9->getResultAt(i, j));
 		}
 	}
 
-	// Test 13: Follows(a1, a2)
-	FollowsSubquery followssubquery13 = FollowsSubquery(&synonymTable, pk);
-	followssubquery13.setSynonyms("a1", "a2");
-	ResultTuple* actualResultfollowssubquery13 = followssubquery13.solve(&testTuple);
-	int expectedResultfollowssubquery13[4][10] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  ,  2},
+	// Test 10: Parent(s1, 2)
+	ParentSubquery Parentsubquery10 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery10.setSynonyms("s1", 2);
+	ResultTuple* actualResultParentsubquery10 = Parentsubquery10.solve(&testTuple);
+	int expectedResultParentsubquery10[2][9] = {
+		
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  }
 	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery13)/sizeof(expectedResultfollowssubquery13[0])), actualResultfollowssubquery13->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery13)/sizeof(expectedResultfollowssubquery13[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery13[i])/sizeof(expectedResultfollowssubquery13[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery13[i][j], actualResultfollowssubquery13->getResultAt(i, j));
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery10)/sizeof(expectedResultParentsubquery10[0])), actualResultParentsubquery10->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery10)/sizeof(expectedResultParentsubquery10[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery10[i])/sizeof(expectedResultParentsubquery10[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery10[i][j], actualResultParentsubquery10->getResultAt(i, j));
 		}
 	}
 
-	// Test 14: Follows(a1, w2)
-	FollowsSubquery followssubquery14 = FollowsSubquery(&synonymTable, pk);
-	followssubquery14.setSynonyms("a1", "w2");
-	ResultTuple* actualResultfollowssubquery14 = followssubquery14.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery14->getAllResults().size());
+	// Test 11: Parent(s1, 6)
+	ParentSubquery Parentsubquery11 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery11.setSynonyms("s1", 6);
+	ResultTuple* actualResultParentsubquery11 = Parentsubquery11.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery11->getAllResults().size());
 
-	// Test 15: Follows(a1, i2)
-	FollowsSubquery followssubquery15 = FollowsSubquery(&synonymTable, pk);
-	followssubquery15.setSynonyms("a1", "i2");
-	ResultTuple* actualResultfollowssubquery15 = followssubquery15.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery15->getAllResults().size());
 
-	// Test 18: Follows(a1, c2)
-	FollowsSubquery followssubquery18 = FollowsSubquery(&synonymTable, pk);
-	followssubquery18.setSynonyms("a1", "c2");
-	ResultTuple* actualResultfollowssubquery18 = followssubquery18.solve(&testTuple);
-	int expectedResultfollowssubquery18[5][9] = {
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
-		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
+	// Test 24: Parent(w1, s2)
+	ParentSubquery Parentsubquery24 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery24.setSynonyms("w1", "s2");
+	ResultTuple* actualResultParentsubquery24 = Parentsubquery24.solve(&testTuple);
+	int expectedResultParentsubquery24[33][10] = {
+		{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  7},
+		{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  8},
+		{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  11},
+		{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  12},
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  7},
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  8},
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  11},
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  12},
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  16},
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0   ,  7},
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0   ,  8},
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0   ,  11},
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0   ,  12},
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0   ,  7},
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0   ,  8},
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0   ,  11},
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0   ,  12},
+		{13  ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0   ,  7},
+		{13  ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0   ,  8},
+		{13  ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0   ,  11},
+		{13  ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0   ,  12},
+		{12  ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0   ,  7},
+		{12  ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0   ,  8},
+		{12  ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0   ,  11},
+		{12  ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0   ,  12},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1   ,  7},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1   ,  8},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1   ,  11},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1   ,  12},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2   ,  7},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2   ,  8},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2   ,  11},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2   ,  12}
 	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery18)/sizeof(expectedResultfollowssubquery18[0])), actualResultfollowssubquery18->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery18)/sizeof(expectedResultfollowssubquery18[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery18[i])/sizeof(expectedResultfollowssubquery18[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery18[i][j], actualResultfollowssubquery18->getResultAt(i, j));
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery24)/sizeof(expectedResultParentsubquery24[0])), actualResultParentsubquery24->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery24)/sizeof(expectedResultParentsubquery24[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery24[i])/sizeof(expectedResultParentsubquery24[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery24[i][j], actualResultParentsubquery24->getResultAt(i, j));
 		}
 	}
 
-	// Test 19: Follows(a1, l2)
-	FollowsSubquery followssubquery19 = FollowsSubquery(&synonymTable, pk);
-	followssubquery19.setSynonyms("a1", "l2");
-	ResultTuple* actualResultfollowssubquery19 = followssubquery19.solve(&testTuple);
-	int expectedResultfollowssubquery19[9][10] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  3},
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  ,  3},
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  ,  2},
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  ,  3},
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  ,  2},
-		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  ,  3},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  ,  3}
+	// Test 25: Parent(w1, a2)
+	ParentSubquery Parentsubquery25 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery25.setSynonyms("w1", "a2");
+	ResultTuple* actualResultParentsubquery25 = Parentsubquery25.solve(&testTuple);
+	int expectedResultParentsubquery25[17][10] = {
+		{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  7},
+		{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  12},
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  7},
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  12},
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  16},
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0   ,  7},
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0   ,  12},
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0   ,  7},
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0   ,  12},
+		{13  ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0   ,  7},
+		{13  ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0   ,  12},
+		{12  ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0   ,  7},
+		{12  ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0   ,  12},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1   ,  7},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1   ,  12},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2   ,  7},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2   ,  12}
 	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery19)/sizeof(expectedResultfollowssubquery19[0])), actualResultfollowssubquery19->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery19)/sizeof(expectedResultfollowssubquery19[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery19[i])/sizeof(expectedResultfollowssubquery19[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery19[i][j], actualResultfollowssubquery19->getResultAt(i, j));
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery25)/sizeof(expectedResultParentsubquery25[0])), actualResultParentsubquery25->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery25)/sizeof(expectedResultParentsubquery25[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery25[i])/sizeof(expectedResultParentsubquery25[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery25[i][j], actualResultParentsubquery25->getResultAt(i, j));
 		}
 	}
 
-	// Test 21: Follows(a1, _)
-	FollowsSubquery followssubquery21 = FollowsSubquery(&synonymTable, pk);
-	followssubquery21.setSynonyms("a1", "_");
-	ResultTuple* actualResultfollowssubquery21 = followssubquery21.solve(&testTuple);
-	int expectedResultfollowssubquery21[9][9] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
-		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
+
+	// Test 26: Parent(w1, w2)
+	ParentSubquery Parentsubquery26 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery26.setSynonyms("w1", "w2");
+	ResultTuple* actualResultParentsubquery26 = Parentsubquery26.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery26->getAllResults().size());
+
+	// Test 27: Parent(w1, i2)
+	ParentSubquery Parentsubquery27 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery27.setSynonyms("w1", "i2");
+	ResultTuple* actualResultParentsubquery27 = Parentsubquery27.solve(&testTuple);
+	int expectedResultParentsubquery27[7][9] = {
+		
+		{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
+		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
+		{12   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
 	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery21)/sizeof(expectedResultfollowssubquery21[0])), actualResultfollowssubquery21->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery21)/sizeof(expectedResultfollowssubquery21[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery21[i])/sizeof(expectedResultfollowssubquery21[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery21[i][j], actualResultfollowssubquery21->getResultAt(i, j));
+		
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery27)/sizeof(expectedResultParentsubquery27[0])), actualResultParentsubquery27->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery27)/sizeof(expectedResultParentsubquery27[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery27[i])/sizeof(expectedResultParentsubquery27[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery27[i][j], actualResultParentsubquery27->getResultAt(i, j));
 		}
 	}
 
-	// Test 22: Follows(a1, 2)
-	FollowsSubquery followssubquery22 = FollowsSubquery(&synonymTable, pk);
-	followssubquery22.setSynonyms("a1", 2);
-	ResultTuple* actualResultfollowssubquery22 = followssubquery22.solve(&testTuple);
-	int expectedResultfollowssubquery22[4][9] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
+	// Test 30: Parent(w1, c2)
+	ParentSubquery Parentsubquery30 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery30.setSynonyms("w1", "c2");
+	ResultTuple* actualResultParentsubquery30 = Parentsubquery30.solve(&testTuple);
+	int expectedResultParentsubquery30[1][9] = {
+
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
 	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery22)/sizeof(expectedResultfollowssubquery22[0])), actualResultfollowssubquery22->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery22)/sizeof(expectedResultfollowssubquery22[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery22[i])/sizeof(expectedResultfollowssubquery22[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery22[i][j], actualResultfollowssubquery22->getResultAt(i, j));
+
+	// Test 31: Parent(w1, l2)
+	ParentSubquery Parentsubquery31 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery31.setSynonyms("w1", "l2");
+	ResultTuple* actualResultParentsubquery31 = Parentsubquery31.solve(&testTuple);
+	int expectedResultParentsubquery31[33][10] = {
+	{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  7},
+		{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  8},
+		{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  11},
+		{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  12},
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  7},
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  8},
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  11},
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  12},
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  16},
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0   ,  7},
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0   ,  8},
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0   ,  11},
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0   ,  12},
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0   ,  7},
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0   ,  8},
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0   ,  11},
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0   ,  12},
+		{13  ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0   ,  7},
+		{13  ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0   ,  8},
+		{13  ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0   ,  11},
+		{13  ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0   ,  12},
+		{12  ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0   ,  7},
+		{12  ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0   ,  8},
+		{12  ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0   ,  11},
+		{12  ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0   ,  12},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1   ,  7},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1   ,  8},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1   ,  11},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1   ,  12},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2   ,  7},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2   ,  8},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2   ,  11},
+		{15  ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2   ,  12}
+	};
+
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery31)/sizeof(expectedResultParentsubquery31[0])), actualResultParentsubquery31->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery31)/sizeof(expectedResultParentsubquery31[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery31[i])/sizeof(expectedResultParentsubquery31[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery31[i][j], actualResultParentsubquery31->getResultAt(i, j));
 		}
 	}
 
-	// Test 23: Follows(a1, 6)
-	FollowsSubquery followssubquery23 = FollowsSubquery(&synonymTable, pk);
-	followssubquery23.setSynonyms("a1", 6);
-	ResultTuple* actualResultfollowssubquery23 = followssubquery23.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery23->getAllResults().size());
-
-	// Test 24: Follows(w1, s2)
-	FollowsSubquery followssubquery24 = FollowsSubquery(&synonymTable, pk);
-	followssubquery24.setSynonyms("w1", "s2");
-	ResultTuple* actualResultfollowssubquery24 = followssubquery24.solve(&testTuple);
-	int expectedResultfollowssubquery24[8][10] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  , 13},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  , 13},
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  , 13},
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  , 13},
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  , 13},
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  , 13},
-		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  , 13},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  , 13}
+	// Test 33: Parent(w1, _)
+	ParentSubquery Parentsubquery33 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery33.setSynonyms("w1", "_");
+	ResultTuple* actualResultParentsubquery33 = Parentsubquery33.solve(&testTuple);
+	int expectedResultParentsubquery33[9][9] = {
+		{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
+		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
+		{12   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
 	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery24)/sizeof(expectedResultfollowssubquery24[0])), actualResultfollowssubquery24->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery24)/sizeof(expectedResultfollowssubquery24[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery24[i])/sizeof(expectedResultfollowssubquery24[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery24[i][j], actualResultfollowssubquery24->getResultAt(i, j));
+
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery33)/sizeof(expectedResultParentsubquery33[0])), actualResultParentsubquery33->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery33)/sizeof(expectedResultParentsubquery33[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery33[i])/sizeof(expectedResultParentsubquery33[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery33[i][j], actualResultParentsubquery33->getResultAt(i, j));
 		}
 	}
 
-	// Test 25: Follows(w1, a2)
-	FollowsSubquery followssubquery25 = FollowsSubquery(&synonymTable, pk);
-	followssubquery25.setSynonyms("w1", "a2");
-	ResultTuple* actualResultfollowssubquery25 = followssubquery25.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery25->getAllResults().size());
+	// Test 34: Parent(w1, 2)
+	ParentSubquery Parentsubquery34 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery34.setSynonyms("w1", 2);
+	ResultTuple* actualResultParentsubquery34 = Parentsubquery34.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery34->getAllResults().size());
 
-	// Test 26: Follows(w1, w2)
-	FollowsSubquery followssubquery26 = FollowsSubquery(&synonymTable, pk);
-	followssubquery26.setSynonyms("w1", "w2");
-	ResultTuple* actualResultfollowssubquery26 = followssubquery26.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery26->getAllResults().size());
+	// Test 35: Parent(w1, 13)
+	ParentSubquery Parentsubquery35 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery35.setSynonyms("w1", 12);
+	ResultTuple* actualResultParentsubquery35 = Parentsubquery35.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery35->getAllResults().size());
 
-	// Test 27: Follows(w1, i2)
-	FollowsSubquery followssubquery27 = FollowsSubquery(&synonymTable, pk);
-	followssubquery27.setSynonyms("w1", "i2");
-	ResultTuple* actualResultfollowssubquery27 = followssubquery27.solve(&testTuple);
-	int expectedResultfollowssubquery27[1][9] = {
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0 }
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery27)/sizeof(expectedResultfollowssubquery27[0])), actualResultfollowssubquery27->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery27)/sizeof(expectedResultfollowssubquery27[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery27[i])/sizeof(expectedResultfollowssubquery27[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery27[i][j], actualResultfollowssubquery27->getResultAt(i, j));
-		}
-	}
 
-	// Test 30: Follows(w1, c2)
-	FollowsSubquery followssubquery30 = FollowsSubquery(&synonymTable, pk);
-	followssubquery30.setSynonyms("w1", "c2");
-	ResultTuple* actualResultfollowssubquery30 = followssubquery30.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery30->getAllResults().size());
+	// Test 39: Parent(i1, i2)
+	ParentSubquery Parentsubquery39 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery39.setSynonyms("i1", "i2");
+	ResultTuple* actualResultParentsubquery39 = Parentsubquery39.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery39->getAllResults().size());
 
-	// Test 31: Follows(w1, l2)
-	FollowsSubquery followssubquery31 = FollowsSubquery(&synonymTable, pk);
-	followssubquery31.setSynonyms("w1", "l2");
-	ResultTuple* actualResultfollowssubquery31 = followssubquery31.solve(&testTuple);
-	int expectedResultfollowssubquery31[8][10] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  , 13},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  , 13},
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  , 13},
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  , 13},
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  , 13},
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  , 13},
-		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  , 13},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  , 13}
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery31)/sizeof(expectedResultfollowssubquery31[0])), actualResultfollowssubquery31->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery31)/sizeof(expectedResultfollowssubquery31[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery31[i])/sizeof(expectedResultfollowssubquery31[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery31[i][j], actualResultfollowssubquery31->getResultAt(i, j));
-		}
-	}
+	// Test 42: Parent(i1, c2)
+	ParentSubquery Parentsubquery42 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery42.setSynonyms("i1", "c2");
+	ResultTuple* actualResultParentsubquery42 = Parentsubquery42.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery42->getAllResults().size());
 
-	// Test 33: Follows(w1, _)
-	FollowsSubquery followssubquery33 = FollowsSubquery(&synonymTable, pk);
-	followssubquery33.setSynonyms("w1", "_");
-	ResultTuple* actualResultfollowssubquery33 = followssubquery33.solve(&testTuple);
-	int expectedResultfollowssubquery33[8][9] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
-		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery33)/sizeof(expectedResultfollowssubquery33[0])), actualResultfollowssubquery33->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery33)/sizeof(expectedResultfollowssubquery33[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery33[i])/sizeof(expectedResultfollowssubquery33[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery33[i][j], actualResultfollowssubquery33->getResultAt(i, j));
-		}
-	}
+	// Test 75: Parent(c1, i2)
+	ParentSubquery Parentsubquery75 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery75.setSynonyms("c1", "i2");
+	ResultTuple* actualResultParentsubquery75 = Parentsubquery75.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery75->getAllResults().size());
 
-	// Test 34: Follows(w1, 2)
-	FollowsSubquery followssubquery34 = FollowsSubquery(&synonymTable, pk);
-	followssubquery34.setSynonyms("w1", 2);
-	ResultTuple* actualResultfollowssubquery34 = followssubquery34.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery34->getAllResults().size());
+	// Test 78: Parent(c1, c2)
+	ParentSubquery Parentsubquery78 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery78.setSynonyms("c1", "c2");
+	ResultTuple* actualResultParentsubquery78 = Parentsubquery78.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery78->getAllResults().size());
 
-	// Test 35: Follows(w1, 13)
-	FollowsSubquery followssubquery35 = FollowsSubquery(&synonymTable, pk);
-	followssubquery35.setSynonyms("w1", 13);
-	ResultTuple* actualResultfollowssubquery35 = followssubquery35.solve(&testTuple);
-	int expectedResultfollowssubquery35[8][9] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
-		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery35)/sizeof(expectedResultfollowssubquery35[0])), actualResultfollowssubquery35->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery35)/sizeof(expectedResultfollowssubquery35[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery35[i])/sizeof(expectedResultfollowssubquery35[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery35[i][j], actualResultfollowssubquery35->getResultAt(i, j));
-		}
-	}
+	// Test 84: Parent(l1, s2)
+	ParentSubquery Parentsubquery84 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery84.setSynonyms("l1", "s2");
+	ResultTuple* actualResultParentsubquery84 = Parentsubquery84.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery84->getAllResults().size());
 
-	// Test 39: Follows(i1, i2)
-	FollowsSubquery followssubquery39 = FollowsSubquery(&synonymTable, pk);
-	followssubquery39.setSynonyms("i1", "i2");
-	ResultTuple* actualResultfollowssubquery39 = followssubquery39.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery39->getAllResults().size());
 
-	// Test 42: Follows(i1, c2)
-	FollowsSubquery followssubquery42 = FollowsSubquery(&synonymTable, pk);
-	followssubquery42.setSynonyms("i1", "c2");
-	ResultTuple* actualResultfollowssubquery42 = followssubquery42.solve(&testTuple);
-	int expectedResultfollowssubquery42[1][9] = {
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  }
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery42)/sizeof(expectedResultfollowssubquery42[0])), actualResultfollowssubquery42->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery42)/sizeof(expectedResultfollowssubquery42[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery42[i])/sizeof(expectedResultfollowssubquery42[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery42[i][j], actualResultfollowssubquery42->getResultAt(i, j));
-		}
-	}
+	// Test 85: Parent(l1, a2)
+	ParentSubquery Parentsubquery85 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery85.setSynonyms("l1", "a2");
+	ResultTuple* actualResultParentsubquery85 = Parentsubquery85.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery85->getAllResults().size());
 
-	// Test 75: Follows(c1, i2)
-	FollowsSubquery followssubquery75 = FollowsSubquery(&synonymTable, pk);
-	followssubquery75.setSynonyms("c1", "i2");
-	ResultTuple* actualResultfollowssubquery75 = followssubquery75.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery75->getAllResults().size());
+	// Test 86: Parent(l1, w2)
+	ParentSubquery Parentsubquery86 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery86.setSynonyms("l1", "w2");
+	ResultTuple* actualResultParentsubquery86 = Parentsubquery86.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery86->getAllResults().size());
 
-	// Test 78: Follows(c1, c2)
-	FollowsSubquery followssubquery78 = FollowsSubquery(&synonymTable, pk);
-	followssubquery78.setSynonyms("c1", "c2");
-	ResultTuple* actualResultfollowssubquery78 = followssubquery78.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery78->getAllResults().size());
+	// Test 87: Parent(l1, i2)
+	ParentSubquery Parentsubquery87 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery87.setSynonyms("l1", "i2");
+	ResultTuple* actualResultParentsubquery87 = Parentsubquery87.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery87->getAllResults().size());
 
-	// Test 84: Follows(l1, s2)
-	FollowsSubquery followssubquery84 = FollowsSubquery(&synonymTable, pk);
-	followssubquery84.setSynonyms("l1", "s2");
-	ResultTuple* actualResultfollowssubquery84 = followssubquery84.solve(&testTuple);
-	int expectedResultfollowssubquery84[9][10] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  ,  2},
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  ,  8},
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  ,  2},
-		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  ,  2},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  ,  2}
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery84)/sizeof(expectedResultfollowssubquery84[0])), actualResultfollowssubquery84->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery84)/sizeof(expectedResultfollowssubquery84[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery84[i])/sizeof(expectedResultfollowssubquery84[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery84[i][j], actualResultfollowssubquery84->getResultAt(i, j));
-		}
-	}
+	// Test 90: Parent(l1, c2)
+	ParentSubquery Parentsubquery90 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery90.setSynonyms("l1", "c2");
+	ResultTuple* actualResultParentsubquery90 = Parentsubquery90.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery90->getAllResults().size());
 
-	// Test 85: Follows(l1, a2)
-	FollowsSubquery followssubquery85 = FollowsSubquery(&synonymTable, pk);
-	followssubquery85.setSynonyms("l1", "a2");
-	ResultTuple* actualResultfollowssubquery85 = followssubquery85.solve(&testTuple);
-	int expectedResultfollowssubquery85[8][10] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  ,  2},
-		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  ,  2},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  ,  2}
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery85)/sizeof(expectedResultfollowssubquery85[0])), actualResultfollowssubquery85->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery85)/sizeof(expectedResultfollowssubquery85[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery85[i])/sizeof(expectedResultfollowssubquery85[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery85[i][j], actualResultfollowssubquery85->getResultAt(i, j));
-		}
-	}
+	// Test 91: Parent(l1, l2)
+	ParentSubquery Parentsubquery91 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery91.setSynonyms("l1", "l2");
+	ResultTuple* actualResultParentsubquery91 = Parentsubquery91.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery91->getAllResults().size());
 
-	// Test 86: Follows(l1, w2)
-	FollowsSubquery followssubquery86 = FollowsSubquery(&synonymTable, pk);
-	followssubquery86.setSynonyms("l1", "w2");
-	ResultTuple* actualResultfollowssubquery86 = followssubquery86.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery86->getAllResults().size());
+	// Test 93: Parent(l1, _)
+	ParentSubquery Parentsubquery93 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery93.setSynonyms("l1", "_");
+	ResultTuple* actualResultParentsubquery93 = Parentsubquery93.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery93->getAllResults().size());
 
-	// Test 87: Follows(l1, i2)
-	FollowsSubquery followssubquery87 = FollowsSubquery(&synonymTable, pk);
-	followssubquery87.setSynonyms("l1", "i2");
-	ResultTuple* actualResultfollowssubquery87 = followssubquery87.solve(&testTuple);
-	int expectedResultfollowssubquery87[1][9] = {
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  }
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery87)/sizeof(expectedResultfollowssubquery87[0])), actualResultfollowssubquery87->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery87)/sizeof(expectedResultfollowssubquery87[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery87[i])/sizeof(expectedResultfollowssubquery87[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery87[i][j], actualResultfollowssubquery87->getResultAt(i, j));
-		}
-	}
+	// Test 94: Parent(l1, 2)
+	ParentSubquery Parentsubquery94 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery94.setSynonyms("l1", 2);
+	ResultTuple* actualResultParentsubquery94 = Parentsubquery94.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery94->getAllResults().size());
 
-	// Test 90: Follows(l1, c2)
-	FollowsSubquery followssubquery90 = FollowsSubquery(&synonymTable, pk);
-	followssubquery90.setSynonyms("l1", "c2");
-	ResultTuple* actualResultfollowssubquery90 = followssubquery90.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery90->getAllResults().size());
+	// Test 95: Parent(l1, 6)
+	ParentSubquery Parentsubquery95 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery95.setSynonyms("l1", 6);
+	ResultTuple* actualResultParentsubquery95 = Parentsubquery95.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery95->getAllResults().size());
 
-	// Test 91: Follows(l1, l2)
-	FollowsSubquery followssubquery91 = FollowsSubquery(&synonymTable, pk);
-	followssubquery91.setSynonyms("l1", "l2");
-	ResultTuple* actualResultfollowssubquery91 = followssubquery91.solve(&testTuple);
-	int expectedResultfollowssubquery91[9][10] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  ,  2},
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  ,  8},
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  ,  2},
-		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  ,  2},
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  ,  2} 
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery91)/sizeof(expectedResultfollowssubquery91[0])), actualResultfollowssubquery91->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery91)/sizeof(expectedResultfollowssubquery91[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery91[i])/sizeof(expectedResultfollowssubquery91[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery91[i][j], actualResultfollowssubquery91->getResultAt(i, j));
-		}
-	}
-
-	// Test 93: Follows(l1, _)
-	FollowsSubquery followssubquery93 = FollowsSubquery(&synonymTable, pk);
-	followssubquery93.setSynonyms("l1", "_");
-	ResultTuple* actualResultfollowssubquery93 = followssubquery93.solve(&testTuple);
-	int expectedResultfollowssubquery93[9][9] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
-		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  } 
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery93)/sizeof(expectedResultfollowssubquery93[0])), actualResultfollowssubquery93->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery93)/sizeof(expectedResultfollowssubquery93[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery93[i])/sizeof(expectedResultfollowssubquery93[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery93[i][j], actualResultfollowssubquery93->getResultAt(i, j));
-		}
-	}
-
-	// Test 94: Follows(l1, 2)
-	FollowsSubquery followssubquery94 = FollowsSubquery(&synonymTable, pk);
-	followssubquery94.setSynonyms("l1", 2);
-	ResultTuple* actualResultfollowssubquery94 = followssubquery94.solve(&testTuple);
-	int expectedResultfollowssubquery94[8][9] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
-		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  } 
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery94)/sizeof(expectedResultfollowssubquery94[0])), actualResultfollowssubquery94->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery94)/sizeof(expectedResultfollowssubquery94[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery94[i])/sizeof(expectedResultfollowssubquery94[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery94[i][j], actualResultfollowssubquery94->getResultAt(i, j));
-		}
-	}
-
-	// Test 95: Follows(l1, 6)
-	FollowsSubquery followssubquery95 = FollowsSubquery(&synonymTable, pk);
-	followssubquery95.setSynonyms("l1", 6);
-	ResultTuple* actualResultfollowssubquery95 = followssubquery95.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery95->getAllResults().size());
-
-	// Test 111: Follows(_, i2)
-	FollowsSubquery followssubquery111 = FollowsSubquery(&synonymTable, pk);
-	followssubquery111.setSynonyms("_", "i2");
-	ResultTuple* actualResultfollowssubquery111 = followssubquery111.solve(&testTuple);
-	int expectedResultfollowssubquery111[9][9] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
-		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery111)/sizeof(expectedResultfollowssubquery111[0])), actualResultfollowssubquery111->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery111)/sizeof(expectedResultfollowssubquery111[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery111[i])/sizeof(expectedResultfollowssubquery111[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery111[i][j], actualResultfollowssubquery111->getResultAt(i, j));
-		}
-	}
-
-	// Test 114: Follows(_, c2)
-	FollowsSubquery followssubquery114 = FollowsSubquery(&synonymTable, pk);
-	followssubquery114.setSynonyms("_", "c2");
-	ResultTuple* actualResultfollowssubquery114 = followssubquery114.solve(&testTuple);
-	int expectedResultfollowssubquery114[9][9] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
-		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery114)/sizeof(expectedResultfollowssubquery114[0])), actualResultfollowssubquery114->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery114)/sizeof(expectedResultfollowssubquery114[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery114[i])/sizeof(expectedResultfollowssubquery114[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery114[i][j], actualResultfollowssubquery114->getResultAt(i, j));
-		}
-	}
-
-	// Test 123: Follows(1, i2)
-	FollowsSubquery followssubquery123 = FollowsSubquery(&synonymTable, pk);
-	followssubquery123.setSynonyms(1, "i2");
-	ResultTuple* actualResultfollowssubquery123 = followssubquery123.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery123->getAllResults().size());
-
-	// Test 126: Follows(1, c2)
-	FollowsSubquery followssubquery126 = FollowsSubquery(&synonymTable, pk);
-	followssubquery126.setSynonyms(1, "c2");
-	ResultTuple* actualResultfollowssubquery126 = followssubquery126.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowssubquery126->getAllResults().size());
-
-	// Test 135: Follows(7, i2)
-	FollowsSubquery followssubquery135 = FollowsSubquery(&synonymTable, pk);
-	followssubquery135.setSynonyms(7, "i2");
-	ResultTuple* actualResultfollowssubquery135 = followssubquery135.solve(&testTuple);
-	int expectedResultfollowssubquery135[8][9] = {
+	// Test 111: Parent(_, i2)
+	ParentSubquery Parentsubquery111 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery111.setSynonyms("_", "i2");
+	ResultTuple* actualResultParentsubquery111 = Parentsubquery111.solve(&testTuple);
+	int expectedResultParentsubquery111[8][9] = {
 		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
 		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
 		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
@@ -3604,10 +3434,58 @@ void SubqueryTest::testParent(){
 		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
 		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
 	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery135)/sizeof(expectedResultfollowssubquery135[0])), actualResultfollowssubquery135->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery135)/sizeof(expectedResultfollowssubquery135[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery135[i])/sizeof(expectedResultfollowssubquery135[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery135[i][j], actualResultfollowssubquery135->getResultAt(i, j));
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery111)/sizeof(expectedResultParentsubquery111[0])), actualResultParentsubquery111->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery111)/sizeof(expectedResultParentsubquery111[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery111[i])/sizeof(expectedResultParentsubquery111[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery111[i][j], actualResultParentsubquery111->getResultAt(i, j));
+		}
+	}
+
+	// Test 114: Parent(_, c2)
+	ParentSubquery Parentsubquery114 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery114.setSynonyms("_", "c2");
+	ResultTuple* actualResultParentsubquery114 = Parentsubquery114.solve(&testTuple);
+	int expectedResultParentsubquery114[1][9] = {
+	
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
+
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery114)/sizeof(expectedResultParentsubquery114[0])), actualResultParentsubquery114->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery114)/sizeof(expectedResultParentsubquery114[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery114[i])/sizeof(expectedResultParentsubquery114[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery114[i][j], actualResultParentsubquery114->getResultAt(i, j));
+		}
+	}
+
+	// Test 123: Parent(1, i2)
+	ParentSubquery Parentsubquery123 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery123.setSynonyms(1, "i2");
+	ResultTuple* actualResultParentsubquery123 = Parentsubquery123.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery123->getAllResults().size());
+
+	// Test 126: Parent(1, c2)
+	ParentSubquery Parentsubquery126 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery126.setSynonyms(1, "c2");
+	ResultTuple* actualResultParentsubquery126 = Parentsubquery126.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery126->getAllResults().size());
+
+	// Test 135: Parent(7, i2)
+	ParentSubquery Parentsubquery135 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery135.setSynonyms(7, "i2");
+	ResultTuple* actualResultParentsubquery135 = Parentsubquery135.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery135->getAllResults().size());
+
+	// Test 138: Parent(6, c2)
+	ParentSubquery Parentsubquery138 = ParentSubquery(&synonymTable, pk);
+	Parentsubquery138.setSynonyms(8, "c2");
+	ResultTuple* actualResultParentsubquery138 = Parentsubquery138.solve(&testTuple);
+	int expectedResultParentsubquery138[1][9] = {
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery138)/sizeof(expectedResultParentsubquery138[0])), actualResultParentsubquery138->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery138)/sizeof(expectedResultParentsubquery138[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery138[i])/sizeof(expectedResultParentsubquery138[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery138[i][j], actualResultParentsubquery138->getResultAt(i, j));
 		}
 	}
 
@@ -3626,11 +3504,8 @@ void SubqueryTest::testParent(){
 	}
 
 }
-*/
 
-void SubqueryTest::testParentT(){
 
-}
 
 void SubqueryTest::testModifies(){
 	// Test 1: Modifies(s1, x)

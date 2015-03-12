@@ -3623,9 +3623,10 @@ void SubqueryTest::testParent(){
 		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery138[i])/sizeof(expectedResultfollowssubquery138[i][0])); j++){
 			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery138[i][j], actualResultfollowssubquery138->getResultAt(i, j));
 		}
-	}*/
+	}
 
 }
+*/
 
 void SubqueryTest::testParentT(){
 

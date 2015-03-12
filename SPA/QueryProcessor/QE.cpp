@@ -30,6 +30,7 @@ vector<string> QE::solve() {
 		answer.push_back("none");
 		return answer;
 	}
+
 	if (useOptimizedSolver) {
 		OptimizedQE solver = OptimizedQE(queries);
 		solution = solver.solve();
@@ -65,6 +66,58 @@ bool QE::validateQueries() {
 	return true;
 }
 
+void QE::basicSolve() {
+	for (size_t i = 0; i < queries.size(); i++) {
+		ResultTuple* interim = queries[i]->solve();
+		if (interim->isBool() && interim->isEmpty()) {
+			solution = new ResultTuple();
+			return;
+		}
+		if (i > 0) {
+			solution = solution->join(interim);
+		} else {
+			solution = interim;
+		}
+	} 
+}
+
+string QE::convertToSolutionString() {
+	string s = "";
+	vector<int> index = vector<int>();
+	//get index of synonyms
+	for (size_t i = 0; i < synonyms.size(); i++) {
+		int temp = solution->getSynonymIndex(synonyms[i]);
+		index.push_back(temp);
+		cout << temp << ",";
+	}
+
+	int total_size = solution->getAllResults().size();
+	for (size_t i = 0; i < total_size; i++) {
+		for (int k = 0; k < index.size(); k++) {
+			string syn_type = synonymTable.at(solution->getSynonym(index[k]));
+			int sol = solution->getResultAt(i, index[k]);
+			if (syn_type == "procedure"){
+				s += pkb->procTable.getProcName(sol);
+			} else if (syn_type == "variable"){
+				s += pkb->varTable.getVarName(sol);
+			} else if (syn_type == "constant"){
+				s += to_string((long long) pkb->constantTable.getConstant(sol));
+			} else {
+				s += to_string((long long) sol);
+			}
+
+			if(k != (index.size() - 1)) {
+				s += " "; 
+			}
+		}
+
+		if (i != (total_size - 1)) {
+			s += ", ";
+		}
+	}
+	return s;
+}
+
 vector<string> QE::convert() {
 	vector<string> answer = vector<string>();
 	for (size_t i = 0; i < solution->getAllResults().size(); i++) {
@@ -90,21 +143,6 @@ vector<string> QE::convert() {
 	return answer;
 }
 
-void QE::basicSolve() {
-	for (size_t i = 0; i < queries.size(); i++) {
-		ResultTuple* interim = queries[i]->solve();
-		if (interim->isBool() && interim->isEmpty()) {
-			solution = new ResultTuple();
-			return;
-		}
-		if (i > 0) {
-			solution = solution->join(interim);
-		} else {
-			solution = interim;
-		}
-	} 
-}
-
 void QE::trimSolution() {
 	// problem: Select <s1 ,s3> such that follows(s1, s2)
 	
@@ -112,7 +150,7 @@ void QE::trimSolution() {
 	vector<vector<int>> newSolution = vector<vector<int> >();
 	//get index of synonyms for solutions
 	for (size_t i = 0; i < synonyms.size(); i++) {
-		cout << "syn" << solution->getSynonymIndex(synonyms[i]);
+		//cout << "syn" << solution->getSynonymIndex(synonyms[i]);
 		syns.push_back(solution->getSynonymIndex(synonyms[i]));
 	}
 	for (size_t i = 0; i < solution->getAllResults().size(); i++) { 

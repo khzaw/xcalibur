@@ -11,7 +11,7 @@ public:
 	FollowsSubquery(map<string, string>* m, PKBController* p) : Subquery(m, p){
 	
 	}
-
+	
 	ResultTuple* solve(){
 		ResultTuple* ans;
 		switch (isSyn) {

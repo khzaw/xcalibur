@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Frontend\NewParser.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Frontend\Lexeme.cpp" />
     <ClCompile Include="Frontend\Lexer.cpp" />
@@ -38,6 +39,7 @@
     <ClCompile Include="QueryProcessor\PatternSubquery.cpp" />
     <ClCompile Include="QueryProcessor\UsesSubquery.cpp" />
     <ClCompile Include="QueryProcessor\WithSubquery.cpp" />
+    <ClInclude Include="Frontend\NewParser.h" />
     <ClInclude Include="PKB\CallsExtractor.cpp" />
     <ClInclude Include="PKB\iterativeCFG.h" />
     <ClInclude Include="PKB\CfgNode.cpp" />

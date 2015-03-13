@@ -168,6 +168,9 @@
     <ClCompile Include="QueryProcessor\UsesSubquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
+    <ClCompile Include="Frontend\NewParser.cpp">
+      <Filter>Source Files\Frontend</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PKB\AST.h">
@@ -298,6 +301,9 @@
     </ClInclude>
     <ClInclude Include="QueryProcessor\NewQueryParser.h">
       <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="Frontend\NewParser.h">
+      <Filter>Header Files\Frontend</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

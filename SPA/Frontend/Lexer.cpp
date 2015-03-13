@@ -53,7 +53,7 @@ void Lexer::getChar() {
 		charClass = DIGIT;
 
 	if(nextChar == ' ') charClass = WHITESPACE;
-	if(nextChar == '$' || nextChar == '\0' || nextChar == '\n' ) charClass = EOL;
+	if(nextChar == '$') charClass = EOL;
 	if(nextChar == '+') charClass = PLUS;
 	if(nextChar == '*') charClass = TIMES;
 	if(nextChar == '=') charClass = EQ;
@@ -122,4 +122,5 @@ Lexeme Lexer::lex() {
 		return Lexeme(CLOSE_BLOCK, lexeme);
 		break;
 	}
+	return Lexeme(ERROR, lexeme);
 }

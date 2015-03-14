@@ -48,6 +48,7 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
 	/*cout << "RESULT" << endl;
 	cout << result << endl;*/
 	NewQueryParser* qp = new NewQueryParser(query, controller);
-	vector<string> resultsVector = qp->evaluator->solve();
-	std::copy(resultsVector.begin(), resultsVector.end(), std::back_inserter(results));
+	string resultsVector = qp->evaluator->solve();
+	results.push_back(resultsVector);
+	//std::copy(resultsVector.begin(), resultsVector.end(), std::back_inserter(results));
 }

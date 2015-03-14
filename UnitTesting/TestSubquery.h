@@ -36,8 +36,11 @@ public:
 	void testFollows();
 	void testFollowsTuple();
 	void testParent();
+	void testParentTuple();
 	void testFollowsT();
+	void testFollowsTTuple();
 	void testParentT();
+	void testParentTTuple();
 	void testModifies();
 	void testModifiesTuple();
 	void testUses();
@@ -49,6 +52,7 @@ public:
 	void testCalls();
 	void testCallsTuple();
 	void testCallsT();
+	void testCallsTTuple();
 	void testPattern();
 	void testWith();
 	void testWithTuple();

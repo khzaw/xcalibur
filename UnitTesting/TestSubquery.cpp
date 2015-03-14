@@ -290,6 +290,10 @@ void SubqueryTest::testSubqueries() {
 	testParent();
 	testFollowsT();
 	testParentT();
+	testFollowsTuple();
+	testParentTuple();
+	testFollowsTTuple();
+	testParentTTuple();
 	testModifies();
 	testModifiesTuple();
 	testUses();
@@ -301,6 +305,7 @@ void SubqueryTest::testSubqueries() {
 	testCalls();
 	testCallsTuple();
 	testCallsT();
+	testCallsTTuple();
 	testPattern();
 	testWith();
 	testWithTuple();
@@ -1380,7 +1385,7 @@ void SubqueryTest::testFollows(){
 	CPPUNIT_ASSERT(!actualResultfollowssubquery143->isEmpty());
 }
 
-void SubqueryTest::testFollowsT(){
+void SubqueryTest::testFollowsTuple(){
 	// testTuple:
 	//  s1  |  a1  |  w1  |  i2  |  c2  |  l1  |  const1  |  v1  |  proc1  |
 	//  1   |  1   |  6   |  8   |  3   |  1   |  0       |  0   |  0      |
@@ -2085,6 +2090,12 @@ void SubqueryTest::testFollowsT(){
 	}
 }
 
+void SubqueryTest::testFollowsT(){
+}
+
+void SubqueryTest::testFollowsTTuple(){
+}
+
 void SubqueryTest::testParent(){
 	// Test 1: Parent(s1, s2)
 	ParentSubquery parentSubquery1 = ParentSubquery(&synonymTable, pk);
@@ -2174,8 +2185,8 @@ void SubqueryTest::testParent(){
 	ParentSubquery parentsubquery1 = ParentSubquery(&synonymTable, pk);
 	parentsubquery1.setSynonyms("s1", "a2");
 	ResultTuple* actualResultparentsubquery1 = parentsubquery1.solve();
-	int expectedResultparentsubquery1[4][2] = {
-		{6,7} , {6,11}, {6,12}, {15,16}
+	int expectedResultparentsubquery1[7][2] = {
+		{6,7}, {6,12}, {8, 9}, {8, 10}, {13, 14}, {13, 17}, {15,16}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentsubquery1)/sizeof(expectedResultparentsubquery1[0])), actualResultparentsubquery1->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultparentsubquery1)/sizeof(expectedResultparentsubquery1[0])); i++){
@@ -2529,8 +2540,8 @@ void SubqueryTest::testParent(){
 	ParentSubquery parentsubquery86 = ParentSubquery(&synonymTable, pk);
 	parentsubquery86.setSynonyms("l1", "w2");
 	ResultTuple* actualResultparentsubquery86 = parentsubquery86.solve();
-	int expectedResultparentsubquery86[2][2] = {
-		{5, 6}, {14, 15}
+	int expectedResultparentsubquery86[1][2] = {
+		{13, 15}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentsubquery86)/sizeof(expectedResultparentsubquery86[0])), actualResultparentsubquery86->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultparentsubquery86)/sizeof(expectedResultparentsubquery86[0])); i++){
@@ -2721,7 +2732,7 @@ void SubqueryTest::testParent(){
 	ResultTuple* actualResultparentsubquery118 = parentsubquery118.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentsubquery118->getAllResults().size());
 	CPPUNIT_ASSERT(actualResultparentsubquery118->isBool());
-	CPPUNIT_ASSERT(!actualResultparentsubquery118->isEmpty());
+	CPPUNIT_ASSERT(actualResultparentsubquery118->isEmpty());
 
 	// Test 119: Parent(_, 7)
 	ParentSubquery parentsubquery119 = ParentSubquery(&synonymTable, pk);
@@ -2729,7 +2740,7 @@ void SubqueryTest::testParent(){
 	ResultTuple* actualResultparentsubquery119 = parentsubquery119.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentsubquery119->getAllResults().size());
 	CPPUNIT_ASSERT(actualResultparentsubquery119->isBool());
-	CPPUNIT_ASSERT(actualResultparentsubquery119->isEmpty());
+	CPPUNIT_ASSERT(!actualResultparentsubquery119->isEmpty());
 
 	// Test 120: Parent(15, s2)
 	ParentSubquery parentsubquery120 = ParentSubquery(&synonymTable, pk);
@@ -2797,7 +2808,7 @@ void SubqueryTest::testParent(){
 	ResultTuple* actualResultparentsubquery129 = parentsubquery129.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentsubquery129->getAllResults().size());
 	CPPUNIT_ASSERT(actualResultparentsubquery129->isBool());
-	CPPUNIT_ASSERT(!actualResultparentsubquery129->isEmpty());
+	CPPUNIT_ASSERT(actualResultparentsubquery129->isEmpty());
 
 	// Test 130: Parent(1, 2)
 	ParentSubquery parentsubquery130 = ParentSubquery(&synonymTable, pk);
@@ -2805,7 +2816,7 @@ void SubqueryTest::testParent(){
 	ResultTuple* actualResultparentsubquery130 = parentsubquery130.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentsubquery130->getAllResults().size());
 	CPPUNIT_ASSERT(actualResultparentsubquery130->isBool());
-	CPPUNIT_ASSERT(!actualResultparentsubquery130->isEmpty());
+	CPPUNIT_ASSERT(actualResultparentsubquery130->isEmpty());
 
 	// Test 131: Parent(1, 6)
 	ParentSubquery parentsubquery131 = ParentSubquery(&synonymTable, pk);
@@ -2897,7 +2908,7 @@ void SubqueryTest::testParent(){
 	ResultTuple* actualResultparentsubquery141 = parentsubquery141.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentsubquery141->getAllResults().size());
 	CPPUNIT_ASSERT(actualResultparentsubquery141->isBool());
-	CPPUNIT_ASSERT(!actualResultparentsubquery141->isEmpty());
+	CPPUNIT_ASSERT(actualResultparentsubquery141->isEmpty());
 
 	// Test 142: Parent(5, 2)
 	ParentSubquery parentsubquery142 = ParentSubquery(&synonymTable, pk);
@@ -2913,10 +2924,10 @@ void SubqueryTest::testParent(){
 	ResultTuple* actualResultparentsubquery143 = parentsubquery143.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentsubquery143->getAllResults().size());
 	CPPUNIT_ASSERT(actualResultparentsubquery143->isBool());
-	CPPUNIT_ASSERT(!actualResultparentsubquery143->isEmpty());
+	CPPUNIT_ASSERT(actualResultparentsubquery143->isEmpty());
 }
 
-void SubqueryTest::testParentT(){
+void SubqueryTest::testParentTuple(){
 	// testTuple:
 	//  s1  |  a1  |  w1  |  i2  |  c2  |  l1  |  const1  |  v1  |  proc1  |
 	//  2   |  1   |  6   |  8   |  3   |  1   |  0       |  0   |  0      |
@@ -3028,7 +3039,7 @@ void SubqueryTest::testParentT(){
 	ResultTuple* actualResultParentsubquery2 = Parentsubquery2.solve(&testTuple);
 	int expectedResultParentsubquery2[1][10] = {
 		
-		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   , 0,   17  },
+		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   , 0,   15  },
 
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery2)/sizeof(expectedResultParentsubquery2[0])), actualResultParentsubquery2->getAllResults().size());
@@ -3059,15 +3070,7 @@ void SubqueryTest::testParentT(){
 	ParentSubquery Parentsubquery6 = ParentSubquery(&synonymTable, pk);
 	Parentsubquery6.setSynonyms("s1", "c2");
 	ResultTuple* actualResultParentsubquery6 = Parentsubquery6.solve(&testTuple);
-	int expectedResultParentsubquery6[1][10] = {
-		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  ,  13 }
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery6)/sizeof(expectedResultParentsubquery6[0])), actualResultParentsubquery6->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery6)/sizeof(expectedResultParentsubquery6[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery6[i])/sizeof(expectedResultParentsubquery6[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery6[i][j], actualResultParentsubquery6->getResultAt(i, j));
-		}
-	}
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery6->getAllResults().size());
 
 	// Test 7: Parent(s1, l2)
 	ParentSubquery Parentsubquery7 = ParentSubquery(&synonymTable, pk);
@@ -3103,14 +3106,13 @@ void SubqueryTest::testParentT(){
 	ParentSubquery Parentsubquery9 = ParentSubquery(&synonymTable, pk);
 	Parentsubquery9.setSynonyms("s1", "_");
 	ResultTuple* actualResultParentsubquery9 = Parentsubquery9.solve(&testTuple);
-	int expectedResultParentsubquery9[8][9] = {
+	int expectedResultParentsubquery9[7][9] = {
 		
 		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
 		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
 		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
 		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
 		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0 },
-		{12   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0 },
 		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1 },
 		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2 }
 	};
@@ -3125,17 +3127,7 @@ void SubqueryTest::testParentT(){
 	ParentSubquery Parentsubquery10 = ParentSubquery(&synonymTable, pk);
 	Parentsubquery10.setSynonyms("s1", 2);
 	ResultTuple* actualResultParentsubquery10 = Parentsubquery10.solve(&testTuple);
-	int expectedResultParentsubquery10[2][9] = {
-		
-		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  }
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery10)/sizeof(expectedResultParentsubquery10[0])), actualResultParentsubquery10->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery10)/sizeof(expectedResultParentsubquery10[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery10[i])/sizeof(expectedResultParentsubquery10[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery10[i][j], actualResultParentsubquery10->getResultAt(i, j));
-		}
-	}
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery10->getAllResults().size());
 
 	// Test 11: Parent(s1, 6)
 	ParentSubquery Parentsubquery11 = ParentSubquery(&synonymTable, pk);
@@ -3263,7 +3255,7 @@ void SubqueryTest::testParentT(){
 	Parentsubquery31.setSynonyms("w1", "l2");
 	ResultTuple* actualResultParentsubquery31 = Parentsubquery31.solve(&testTuple);
 	int expectedResultParentsubquery31[33][10] = {
-	{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  7},
+	    {2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  7},
 		{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  8},
 		{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  11},
 		{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0   ,  12},
@@ -3334,11 +3326,26 @@ void SubqueryTest::testParentT(){
 	ResultTuple* actualResultParentsubquery34 = Parentsubquery34.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery34->getAllResults().size());
 
-	// Test 35: Parent(w1, 13)
+	// Test 35: Parent(w1, 12)
 	ParentSubquery Parentsubquery35 = ParentSubquery(&synonymTable, pk);
 	Parentsubquery35.setSynonyms("w1", 12);
 	ResultTuple* actualResultParentsubquery35 = Parentsubquery35.solve(&testTuple);
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultParentsubquery35->getAllResults().size());
+	int expectedResultParentsubquery35[8][9] = {
+		{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{8   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
+		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
+		{12   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery35)/sizeof(expectedResultParentsubquery35[0])), actualResultParentsubquery35->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery35)/sizeof(expectedResultParentsubquery35[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultParentsubquery35[i])/sizeof(expectedResultParentsubquery35[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery35[i][j], actualResultParentsubquery35->getResultAt(i, j));
+		}
+	}
 
 
 	// Test 39: Parent(i1, i2)
@@ -3425,14 +3432,14 @@ void SubqueryTest::testParentT(){
 	Parentsubquery111.setSynonyms("_", "i2");
 	ResultTuple* actualResultParentsubquery111 = Parentsubquery111.solve(&testTuple);
 	int expectedResultParentsubquery111[8][9] = {
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
-		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
-		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
-		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
-		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
+		{2   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{6   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{6   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
+		{13   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
+		{12   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
+		{15   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultParentsubquery111)/sizeof(expectedResultParentsubquery111[0])), actualResultParentsubquery111->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultParentsubquery111)/sizeof(expectedResultParentsubquery111[0])); i++){
@@ -3477,7 +3484,7 @@ void SubqueryTest::testParentT(){
 
 	// Test 138: Parent(6, c2)
 	ParentSubquery Parentsubquery138 = ParentSubquery(&synonymTable, pk);
-	Parentsubquery138.setSynonyms(8, "c2");
+	Parentsubquery138.setSynonyms(6, "c2");
 	ResultTuple* actualResultParentsubquery138 = Parentsubquery138.solve(&testTuple);
 	int expectedResultParentsubquery138[1][9] = {
 		{8   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
@@ -3488,24 +3495,13 @@ void SubqueryTest::testParentT(){
 			CPPUNIT_ASSERT_EQUAL(expectedResultParentsubquery138[i][j], actualResultParentsubquery138->getResultAt(i, j));
 		}
 	}
-
-	// Test 138: Follows(8, c2)
-	FollowsSubquery followssubquery138 = FollowsSubquery(&synonymTable, pk);
-	followssubquery138.setSynonyms(8, "c2");
-	ResultTuple* actualResultfollowssubquery138 = followssubquery138.solve(&testTuple);
-	int expectedResultfollowssubquery138[1][9] = {
-		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
-	};
-	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowssubquery138)/sizeof(expectedResultfollowssubquery138[0])), actualResultfollowssubquery138->getAllResults().size());
-	for (size_t i = 0; i < (sizeof(expectedResultfollowssubquery138)/sizeof(expectedResultfollowssubquery138[0])); i++){
-		for (size_t j = 0; j < (sizeof(expectedResultfollowssubquery138[i])/sizeof(expectedResultfollowssubquery138[i][0])); j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultfollowssubquery138[i][j], actualResultfollowssubquery138->getResultAt(i, j));
-		}
-	}
-
 }
 
+void SubqueryTest::testParentT(){
+}
 
+void SubqueryTest::testParentTTuple(){
+}
 
 void SubqueryTest::testModifies(){
 	// Test 1: Modifies(s1, x)
@@ -3809,7 +3805,6 @@ void SubqueryTest::testModifiesTuple() {
 		{1, 2}, {1, 3}, {1, 6}, {1, 11}, {1, 13}, {1, 17}, {1, 18}, {1, 21},
 		{2, 3}, {2, 5}, {2, 6}, {2, 12}
 	};
-	cout << actualResultsModifiesSubquery1_3x->toString() << endl;
 	for (size_t i = 0; i < 20; i++){
 		for (size_t j = 0; j < 2; j++){
 			CPPUNIT_ASSERT_EQUAL(expectedResultsModifiesSubquery1_3x[i][j], actualResultsModifiesSubquery1_3x->getResultAt(i, j));
@@ -4346,7 +4341,6 @@ void SubqueryTest::testUsesTuple() {
 	UsesSubquery ms1_31 = UsesSubquery(&synonymTable, pk);
 	ms1_31.setSynonyms("s1", "v2");
 	ResultTuple* actualResultsUsesSubquery1_31 = ms1_31.solve(rt);
-	//cout << actualResultsUsesSubquery1_31->toString() << endl << actualResultsUsesSubquery1_31->getAllResults().size() << endl;
 	int expectedResultsUsesSubquery1_31[49][3] = {
 		{3, 0, 0}, {3, 0, 1}, {3, 0, 2}, {3, 0, 3}, {3, 0, 4}, {3, 0, 5}, {3, 0, 6}, 
 		{3, 1, 0}, {3, 1, 1}, {3, 1, 2}, {3, 1, 3}, {3, 1, 4}, {3, 1, 5}, {3, 1, 6},
@@ -4378,7 +4372,6 @@ void SubqueryTest::testUsesTuple() {
 		{0, 3}, {0, 6}, {0, 7}, {0, 13}, {0, 14}, {0, 18}, {0, 20}, {1, 3}, {1, 6}, {1, 11}, {1, 18}, {1, 19},
 		{1, 20}, {1, 22}, {2, 3}, {2, 6}, {2, 12}, {2, 18}  
 	};
-	cout << actualResultsUsesSubquery1_3x->toString() << endl;
 	for (size_t i = 0; i < 18; i++){
 		for (size_t j = 0; j < 2; j++){
 			CPPUNIT_ASSERT_EQUAL(expectedResultsUsesSubquery1_3x[i][j], actualResultsUsesSubquery1_3x->getResultAt(i, j));
@@ -5025,6 +5018,9 @@ void SubqueryTest::testCallsTuple(){
 }
 
 void SubqueryTest::testCallsT(){
+}
+
+void SubqueryTest::testCallsTTuple(){
 }
 
 void SubqueryTest::testPattern(){

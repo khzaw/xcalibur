@@ -164,8 +164,6 @@ public:
 		index = tuple->addSynonym(rightSynonym);
 		tuple->addSynonymToMap(rightSynonym, index);
 
-		// get all Previous statement
-		// for each followee statement, get its Next
 		set<int> tempPrevious = pkb->nextExtractor.getAllPrev();
 		vector<int> Previous(tempPrevious.begin(), tempPrevious.end());
 		for (size_t i = 0; i < Previous.size(); i++) {

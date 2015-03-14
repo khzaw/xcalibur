@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include "TestSubquery.h"
+#include "..\SPA\PKB\NextExtractor.h"
 #include "QueryProcessor\Subquery.h"
 #include "QueryProcessor\Subquery.cpp"
 #include "QueryProcessor\FollowsSubquery.cpp"
@@ -15,6 +16,7 @@
 #include "QueryProcessor\ParentStarSubquery.cpp"
 #include "QueryProcessor\WithSubquery.cpp"
 #include "QueryProcessor\CallsSubquery.cpp"
+#include "QueryProcessor\NextSubquery.cpp"
 
 void 
 SubqueryTest::setUp()
@@ -83,6 +85,77 @@ void SubqueryTest::testSubqueries() {
 	TNode stmt20("ASSIGN_NODE", "x = x * y + z", 20, 1);
 	TNode stmt21("ASSIGN_NODE", "z = 5", 21, 2);
 	TNode stmt22("ASSIGN_NODE", "v = z", 22, 2);
+	
+	TNode rootNode1("PROC_NODE", "First", 0, 0);
+	TNode stmtListNode1("STMTLIST_NODE", "kek", 0, 0); 
+	stmtListNode1.addParent(&rootNode1); 
+	rootNode1.addChild(&stmtListNode1);
+	stmt1.addParent(&stmtListNode1); stmtListNode1.addChild(&stmt1); stmt1.addRightSibling(&stmt2);
+	stmt2.addParent(&stmtListNode1); stmtListNode1.addChild(&stmt2); stmt2.addRightSibling(&stmt3);
+	stmt3.addParent(&stmtListNode1); stmtListNode1.addChild(&stmt2);
+
+	TNode rootNode2("PROC_NODE", "Second", 0, 1);
+	TNode stmtListNode2("STMTLIST_NODE", "kek2", 0, 1); 
+	stmtListNode2.addParent(&rootNode2); 
+	rootNode2.addChild(&stmtListNode2);
+	// base
+	stmt4.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt4); stmt1.addRightSibling(&stmt5);
+	stmt5.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt5); stmt2.addRightSibling(&stmt6);
+	stmt6.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt6); stmt1.addRightSibling(&stmt13);
+	stmt13.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt13); stmt2.addRightSibling(&stmt18);
+	stmt18.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt18); stmt1.addRightSibling(&stmt19);
+	stmt19.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt19); stmt2.addRightSibling(&stmt20);
+	stmt20.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt20);
+	// statement 6 nesting
+	TNode var1("VAR_NODE", "i", 0, 1);
+	TNode stmtListNode2_1("STMTLIST_NODE", "stmt6", 0, 1); 
+	var1.addParent(&stmt6); stmt6.addChild(&var1); var1.addRightSibling(&stmtListNode2_1);
+	stmtListNode2_1.addParent(&stmt6); stmt6.addChild(&stmtListNode2_1);
+	stmt7.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt7); stmt2.addRightSibling(&stmt8);
+	stmt8.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt8); stmt1.addRightSibling(&stmt11);
+	stmt11.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt11); stmt2.addRightSibling(&stmt12);
+	stmt12.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt12);
+		// statement 8 nesting
+		TNode var2("VAR_NODE", "m", 0, 1);
+		TNode stmtListNode2_1_1("THEN_NODE", "stmt8", 0, 1); 
+		TNode stmtListNode2_1_2("ELSE_NODE", "stmt8", 0, 1); 
+		var2.addParent(&stmt8); stmt8.addChild(&var2); var2.addRightSibling(&stmtListNode2_1_1);
+		stmtListNode2_1_1.addParent(&stmt8); stmt8.addChild(&stmtListNode2_1_1); stmtListNode2_1_1.addRightSibling(&stmtListNode2_1_2);
+		stmtListNode2_1_2.addParent(&stmt8); stmt8.addChild(&stmtListNode2_1_2);
+		stmt9.addParent(&stmtListNode2_1_1); stmtListNode2_1_1.addChild(&stmt9);
+		stmt10.addParent(&stmtListNode2_1_2); stmtListNode2_1_2.addChild(&stmt10);
+	// statement 13 nesting
+	TNode var3("VAR_NODE", "x", 0, 1);
+	TNode stmtListNode2_2("THEN_NODE", "stmt13", 0, 1); 
+	TNode stmtListNode2_3("ELSE_NODE", "stmt13", 0, 1); 
+	var3.addParent(&stmt13); stmt13.addChild(&var3); var3.addRightSibling(&stmtListNode2_2);
+	stmtListNode2_2.addParent(&stmt8); stmt8.addChild(&stmtListNode2_2); stmtListNode2_2.addRightSibling(&stmtListNode2_3);
+	stmt14.addParent(&stmtListNode2_2); stmtListNode2_2.addChild(&stmt14); stmt14.addRightSibling(&stmt15);
+	stmt15.addParent(&stmtListNode2_2); stmtListNode2_2.addChild(&stmt15);
+		// statement 15 nesting
+		TNode var4("VAR_NODE", "m", 0, 1);
+		TNode stmtListNode2_2_1("STMTLIST_NODE", "stmt15", 0, 1); 
+		var4.addParent(&stmt15); stmt15.addChild(&var4); var4.addRightSibling(&stmtListNode2_2_1);
+		stmtListNode2_2_1.addParent(&stmt15); stmt15.addChild(&stmtListNode2_2_1);
+		stmt16.addParent(&stmtListNode2_2_1); stmtListNode2_2_1.addChild(&stmt16);
+	stmtListNode2_3.addParent(&stmt8); stmt8.addChild(&stmtListNode2_3);
+	stmt17.addParent(&stmtListNode2_3); stmtListNode2_3.addChild(&stmt17);
+
+	TNode rootNode3("PROC_NODE", "Third", 0, 2);
+	TNode stmtListNode3("STMTLIST_NODE", "kek3", 0, 2); 
+	stmtListNode3.addParent(&rootNode3); 
+	rootNode3.addChild(&stmtListNode3);
+	stmt21.addParent(&stmtListNode3); stmtListNode3.addChild(&stmt21); stmt21.addRightSibling(&stmt22);
+	stmt22.addParent(&stmtListNode3); stmtListNode3.addChild(&stmt22);
+
+	pk->ast.insertRoot(&rootNode1);
+	pk->ast.insertRoot(&rootNode2);
+	pk->ast.insertRoot(&rootNode3);
+	pk->procTable.insertASTRootNode(0, &rootNode1);
+	pk->procTable.insertASTRootNode(1, &rootNode2);
+	pk->procTable.insertASTRootNode(2, &rootNode3);
+
+	/*
 	pk->statementTable.insertStatement(&stmt1);
 	pk->statementTable.insertStatement(&stmt2);
 	pk->statementTable.insertStatement(&stmt3);
@@ -105,7 +178,7 @@ void SubqueryTest::testSubqueries() {
 	pk->statementTable.insertStatement(&stmt20);
 	pk->statementTable.insertStatement(&stmt21);
 	pk->statementTable.insertStatement(&stmt22);
-
+	*/
 	pk->procTable.insertProc("First");  // 0
 	pk->procTable.insertProc("Second"); // 1
 	pk->procTable.insertProc("Third");  // 2
@@ -265,7 +338,7 @@ void SubqueryTest::testSubqueries() {
 	pk->constructFollows();
 	pk->constructModifies();
 	pk->constructParent();
-//	pk->constructNext();
+	pk->constructNext();
 	pk->constructUses();
 
 	synonymTable["s1"]="stmt";
@@ -287,7 +360,7 @@ void SubqueryTest::testSubqueries() {
 	synonymTable["const1"]="constant";
 	synonymTable["const2"]="constant";
 
-	
+	testNext();
 	testFollows();
 	testParent();
 	testFollowsT();
@@ -7853,6 +7926,53 @@ void SubqueryTest::testWithTuple(){
 	for (size_t i = 0; i < (sizeof(expectedResultwithsubquery139)/sizeof(expectedResultwithsubquery139[0])); i++){
 		for (size_t j = 0; j < (sizeof(expectedResultwithsubquery139[i])/sizeof(expectedResultwithsubquery139[i][0])); j++){
 			CPPUNIT_ASSERT_EQUAL(expectedResultwithsubquery139[i][j], actualResultwithsubquery139->getResultAt(i, j));
+		}
+	}
+}
+
+void SubqueryTest::testNext() {
+	// Test 2: Next(s1, 2)
+	NextSubquery nextSubquery2 = NextSubquery(&synonymTable, pk);
+	nextSubquery2.setSynonyms("s1", 2);
+	ResultTuple* actualResultsNextSubquery2 = nextSubquery2.solve();
+	int expectedResultsNextSubquery2[1][1] = {
+		{1} 
+	};
+	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResultsNextSubquery2->getAllResults().size());
+	for (size_t i = 0; i < 1; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsNextSubquery2[i][j], actualResultsNextSubquery2->getResultAt(i, j));
+		}
+	}
+
+	// Test 1: Next(s1, s2)
+	NextSubquery nextSubquery1 = NextSubquery(&synonymTable, pk);
+	nextSubquery1.setSynonyms("s1", "s2");
+	ResultTuple* actualResultsNextSubquery1 = nextSubquery1.solve();
+	int expectedResultsNextSubquery1[23][2] = {
+		{1, 2}, {2, 3}, {4, 5}, {5, 6}, {6, 7}, {6, 13}, 
+		{7, 8}, {8, 9}, {8, 10}, {9, 11}, {10, 11}, {11, 12},
+		{12, 6}, {13, 14}, {13, 17}, {14, 15}, {15, 16}, {15, 18},
+		{16, 15}, {17, 18}, {18, 19}, {19, 20}, {21, 22} 
+	};
+	CPPUNIT_ASSERT_EQUAL((size_t)23, actualResultsNextSubquery1->getAllResults().size());
+	for (size_t i = 0; i < 23; i++){
+		for (size_t j = 0; j < 2; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsNextSubquery1[i][j], actualResultsNextSubquery1->getResultAt(i, j));
+		}
+	}
+
+	// Test 3: Next(s1, _)
+	NextSubquery nextSubquery3 = NextSubquery(&synonymTable, pk);
+	nextSubquery3.setSynonyms("s1", "_");
+	ResultTuple* actualResultsNextSubquery3 = nextSubquery3.solve();
+	int expectedResultsNextSubquery3[20][1] = {
+		{1}, {2}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19}, {20}, {21}
+	};
+	CPPUNIT_ASSERT_EQUAL((size_t)20, actualResultsNextSubquery3->getAllResults().size());
+	for (size_t i = 0; i < 20; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsNextSubquery3[i][j], actualResultsNextSubquery3->getResultAt(i, j));
 		}
 	}
 }

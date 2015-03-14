@@ -99,21 +99,21 @@ void SubqueryTest::testSubqueries() {
 	stmtListNode2.addParent(&rootNode2); 
 	rootNode2.addChild(&stmtListNode2);
 	// base
-	stmt4.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt4); stmt1.addRightSibling(&stmt5);
-	stmt5.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt5); stmt2.addRightSibling(&stmt6);
-	stmt6.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt6); stmt1.addRightSibling(&stmt13);
-	stmt13.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt13); stmt2.addRightSibling(&stmt18);
-	stmt18.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt18); stmt1.addRightSibling(&stmt19);
-	stmt19.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt19); stmt2.addRightSibling(&stmt20);
+	stmt4.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt4); stmt4.addRightSibling(&stmt5);
+	stmt5.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt5); stmt5.addRightSibling(&stmt6);
+	stmt6.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt6); stmt6.addRightSibling(&stmt13);
+	stmt13.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt13); stmt13.addRightSibling(&stmt18);
+	stmt18.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt18); stmt18.addRightSibling(&stmt19);
+	stmt19.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt19); stmt19.addRightSibling(&stmt20);
 	stmt20.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt20);
 	// statement 6 nesting
 	TNode var1("VAR_NODE", "i", 0, 1);
 	TNode stmtListNode2_1("STMTLIST_NODE", "stmt6", 0, 1); 
 	var1.addParent(&stmt6); stmt6.addChild(&var1); var1.addRightSibling(&stmtListNode2_1);
 	stmtListNode2_1.addParent(&stmt6); stmt6.addChild(&stmtListNode2_1);
-	stmt7.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt7); stmt2.addRightSibling(&stmt8);
-	stmt8.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt8); stmt1.addRightSibling(&stmt11);
-	stmt11.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt11); stmt2.addRightSibling(&stmt12);
+	stmt7.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt7); stmt7.addRightSibling(&stmt8);
+	stmt8.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt8); stmt8.addRightSibling(&stmt11);
+	stmt11.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt11); stmt11.addRightSibling(&stmt12);
 	stmt12.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt12);
 		// statement 8 nesting
 		TNode var2("VAR_NODE", "m", 0, 1);
@@ -129,7 +129,7 @@ void SubqueryTest::testSubqueries() {
 	TNode stmtListNode2_2("THEN_NODE", "stmt13", 0, 1); 
 	TNode stmtListNode2_3("ELSE_NODE", "stmt13", 0, 1); 
 	var3.addParent(&stmt13); stmt13.addChild(&var3); var3.addRightSibling(&stmtListNode2_2);
-	stmtListNode2_2.addParent(&stmt8); stmt8.addChild(&stmtListNode2_2); stmtListNode2_2.addRightSibling(&stmtListNode2_3);
+	stmtListNode2_2.addParent(&stmt8); stmt13.addChild(&stmtListNode2_2); stmtListNode2_2.addRightSibling(&stmtListNode2_3);
 	stmt14.addParent(&stmtListNode2_2); stmtListNode2_2.addChild(&stmt14); stmt14.addRightSibling(&stmt15);
 	stmt15.addParent(&stmtListNode2_2); stmtListNode2_2.addChild(&stmt15);
 		// statement 15 nesting
@@ -138,7 +138,7 @@ void SubqueryTest::testSubqueries() {
 		var4.addParent(&stmt15); stmt15.addChild(&var4); var4.addRightSibling(&stmtListNode2_2_1);
 		stmtListNode2_2_1.addParent(&stmt15); stmt15.addChild(&stmtListNode2_2_1);
 		stmt16.addParent(&stmtListNode2_2_1); stmtListNode2_2_1.addChild(&stmt16);
-	stmtListNode2_3.addParent(&stmt8); stmt8.addChild(&stmtListNode2_3);
+	stmtListNode2_3.addParent(&stmt13); stmt13.addChild(&stmtListNode2_3);
 	stmt17.addParent(&stmtListNode2_3); stmtListNode2_3.addChild(&stmt17);
 
 	TNode rootNode3("PROC_NODE", "Third", 0, 2);

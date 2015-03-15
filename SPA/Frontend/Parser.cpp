@@ -48,7 +48,7 @@ void Parser::parse() {
 		programString += " " + currentLine;
 	}
 	inputFile.close();
-	cout << programString << endl;
+	// cout << programString << endl;
 	lexer = Lexer(programString);
 	program();
 	debug();
@@ -231,18 +231,51 @@ void Parser::expr(TNode* assignNode) {
 	// 
 	// term: term "*" factor | factor
 	// factor: var_name | const_value | "(" expr ")"
-	string 
+	postfix = "";
+	operatorStack.push(Operator(OPERATOR_NULL, "NULL")); // sentinel
+
 	term(assignNode);
 	exprPrime(assignNode);
+
+	while(!operatorStack.top().isNull()) {
+		popOperator(operatorStack.top());
+	}
+
+	controller.ast.assignChild(assignNode, (operandStack.top()));
+	controller.ast.assignParent(operandStack.top(), assignNode);
+
+	cout << "postfix : " << postfix << endl;
+	assignNode->setData(postfix);
+	operatorStack.pop();		// remove the sentinel
 }
 
 void Parser::exprPrime(TNode* assignNode) {
 	if(nextToken.name == "+") {
 		match("+");
+
+		Operator plusOp(OPERATOR_ADDITION, "+");
+		while(plusOp.op <= operatorStack.top().op) {
+			if(operatorStack.top().isNull()) {
+				operatorStack.pop();
+			}
+			popOperator(plusOp);
+		}
+		operatorStack.push(plusOp);
+
 		term(assignNode);
 		exprPrime(assignNode);
 	} else if(nextToken.name == "-") {
 		match("-");
+
+		Operator minusOp(OPERATOR_SUBTRACTION, "-");
+		while(minusOp.op <= operatorStack.top().op) {
+			if(operatorStack.top().isNull()) {
+				operatorStack.pop();
+			}
+			popOperator(minusOp);
+		}
+		operatorStack.push(minusOp);
+
 		term(assignNode);
 		exprPrime(assignNode);
 	} else {
@@ -260,7 +293,17 @@ void Parser::term(TNode* assignNode) {
 void Parser::termPrime(TNode* assignNode) {
 	// T': "*" factor T' | epilson
 	if(nextToken.name == "*") {
-		match("*");
+		match("*");	
+
+		Operator multiplyOp(OPERATOR_MULTIPLICATION, "*");
+		while(multiplyOp.op <= operatorStack.top().op) {
+			if(operatorStack.top().isNull()) {
+				operatorStack.pop();
+			}
+			popOperator(multiplyOp);
+		}
+		operatorStack.push(multiplyOp);
+
 		factor(assignNode);
 		termPrime(assignNode);
 	} else {
@@ -276,10 +319,21 @@ void Parser::factor(TNode* assignNode) {
 		match(")");
 	}
 	else if(nextToken.token == IDENT) {
+		operandStack.push(&TNode("VAR_NODE", nextToken.name, line, currentProc));
+		if(postfix.length() > 0) postfix += " ";
+		postfix += nextToken.name;
+
 		variableName();
+
+
 		populateUses(line, currentProc, true);
 	} else {
+		operandStack.push(&TNode("CONST_NODE", nextToken.name, line, currentProc));
+		if(postfix.length() > 0) postfix += " ";
+		postfix += nextToken.name;
+
 		constantValue();
+
 	}
 }
 
@@ -381,6 +435,21 @@ void Parser::populateUses(int line, int procedure, bool assignStatement) {
 void Parser::populateRoot(TNode* procedureNode, int procedureIndex) {
 	controller.procTable.insertASTRootNode(procedureIndex, procedureNode);
 	controller.ast.insertRoot(procedureNode);
+}
+
+void Parser::popOperator(Operator op) {
+	TNode operatorNode = TNode(OPERATORS_NODE_NAMES[op.op] , op.value, line, currentProc);
+	
+	TNode* rightOperand = operandStack.top();	operandStack.pop();
+	TNode* leftOperand = operandStack.top();	operandStack.pop();
+
+	operatorNode.addChild(leftOperand);
+	operatorNode.addChild(rightOperand);
+
+	operatorStack.pop();
+	operandStack.push(&operatorNode);
+
+	postfix += " " + op.value; 
 }
 
 Lexeme Parser::getToken() {

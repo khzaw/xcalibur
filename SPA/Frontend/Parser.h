@@ -21,7 +21,7 @@ class Parser {
 	string procName;
 	Lexer lexer;
 	stack<Operator> operatorStack;
-	stack<int> operandStack;
+	stack<TNode*> operandStack;
 	stack<int> containerStack;
 	vector<string> procedureNames;
 
@@ -60,4 +60,6 @@ private:
 	void populateUses(int, int, bool = false);
 	void populateModifies(int, int);
 	void populateRoot(TNode*, int);
+
+	void popOperator(Operator);
 };

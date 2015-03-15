@@ -8,7 +8,7 @@ using namespace std;
 	}
 	
 	void Uses::insertUsesStmt(int stmt,int varIndex){
-			cout << "stmt : " << stmt << ", varIndex " << varIndex << endl;
+			 // cout << "stmt : " << stmt << ", varIndex " << varIndex << endl;
 		if(!(isUsesStmt(stmt, varIndex))){
 			stmtUses.push_back(make_pair(stmt,varIndex));
 		}

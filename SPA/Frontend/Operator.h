@@ -11,6 +11,14 @@ enum OPERATORS {
 	OPERATOR_DIVISON,
 };
 
+static string OPERATORS_NODE_NAMES[] = {
+	"NULL_NODE",
+	"PLUS_NODE",
+	"MINUS_NODE",
+	"MULTIPLY_NODE",
+	"DIVIDE_NODE"
+};
+
 class Operator {
 public:
 	int op;

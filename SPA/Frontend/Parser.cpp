@@ -86,6 +86,7 @@ void Parser::program() {
 TNode* Parser::createASTNode(string nodeName, string data, TNode* parent, int line, int parentProc) {
 	TNode* node = new TNode(nodeName, data, line, parentProc);
 	controller.ast.assignChild(parent, node);
+	controller.ast.assignParent(node, parent);
 	return node;
 }
 
@@ -230,6 +231,7 @@ void Parser::expr(TNode* assignNode) {
 	// 
 	// term: term "*" factor | factor
 	// factor: var_name | const_value | "(" expr ")"
+	string 
 	term(assignNode);
 	exprPrime(assignNode);
 }

@@ -59,4 +59,5 @@ private:
 	void populateFollows(int, bool, TNode*, TNode* );
 	void populateUses(int, int, bool = false);
 	void populateModifies(int, int);
+	void populateRoot(TNode*, int);
 };

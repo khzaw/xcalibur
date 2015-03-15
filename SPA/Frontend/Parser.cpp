@@ -98,11 +98,13 @@ void Parser::procedure() {
 	string procName = procedureName();
 	cout << procName << endl;
 	TNode* procNode = new TNode("PROC_NODE", procName, line, currentProc);
-	controller.ast.insertRoot(procNode);
+
 	match("{");
 	TNode* procStmtLstNode = createASTNode("STMTLST_NODE", "", procNode, line, currentProc);
 	stmtLst(procStmtLstNode);
 	match("}");
+
+	populateRoot(procNode, currentProc);
 }
 
 string Parser::procedureName() {
@@ -217,7 +219,6 @@ void Parser::stmt(TNode* parent) {
 		match("=");
 		expr(assignNode);
 		match(";");
-		
 	}
 }
 
@@ -373,6 +374,11 @@ void Parser::populateUses(int line, int procedure, bool assignStatement) {
 		containerStack.push(tempStack.top());
 		tempStack.pop();
 	}
+}
+
+void Parser::populateRoot(TNode* procedureNode, int procedureIndex) {
+	controller.procTable.insertASTRootNode(procedureIndex, procedureNode);
+	controller.ast.insertRoot(procedureNode);
 }
 
 Lexeme Parser::getToken() {

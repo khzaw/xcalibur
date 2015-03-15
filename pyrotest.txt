@@ -1,0 +1,10 @@
+procedure pyroTest {
+	a = b + c;
+	if v then {
+		lewis = indonesian + awesome + 123 - 234;
+
+	} else {
+		trung = vietnamese + awesome + 333 - 13123;
+		call mom;
+	}
+}

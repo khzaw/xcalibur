@@ -1,4 +1,0 @@
-procedure ABC {
-	call DEF;
-	x = y + z - x * 234;
-}

@@ -60,9 +60,6 @@
     <ClCompile Include="PKB\PKBController.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
-    <ClCompile Include="Frontend\Parser.cpp">
-      <Filter>Source Files\Frontend</Filter>
-    </ClCompile>
     <ClCompile Include="PKB\ProcTable.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
@@ -168,7 +165,7 @@
     <ClCompile Include="QueryProcessor\UsesSubquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
-    <ClCompile Include="Frontend\NewParser.cpp">
+    <ClCompile Include="Frontend\Parser.cpp">
       <Filter>Source Files\Frontend</Filter>
     </ClCompile>
   </ItemGroup>
@@ -189,9 +186,6 @@
       <Filter>Header Files\Frontend</Filter>
     </ClInclude>
     <ClInclude Include="Frontend\Operator.h">
-      <Filter>Header Files\Frontend</Filter>
-    </ClInclude>
-    <ClInclude Include="Frontend\Parser.h">
       <Filter>Header Files\Frontend</Filter>
     </ClInclude>
     <ClInclude Include="PKB\Modifies.h">
@@ -302,7 +296,7 @@
     <ClInclude Include="QueryProcessor\NewQueryParser.h">
       <Filter>Header Files\QueryProcessor</Filter>
     </ClInclude>
-    <ClInclude Include="Frontend\NewParser.h">
+    <ClInclude Include="Frontend\Parser.h">
       <Filter>Header Files\Frontend</Filter>
     </ClInclude>
   </ItemGroup>

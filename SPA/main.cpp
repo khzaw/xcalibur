@@ -33,13 +33,13 @@ int main() {
 
 	//Parser Pa("not_so_simple_sample.txt");
 	////Parser Pa("simple_sample.txt");
-	//
-	//string t;
-	//cin >> t;
 
-	string query;
-	NewQueryParser* parser;
-	PKBController* controller = new PKBController();
+	Parser Pa("test.txt");
+	//
+
+	//string query;
+	//NewQueryParser* parser;
+	//PKBController* controller = new PKBController();
 
 	//query = "if a; variable f,g; constant b, c; prog_line h; Select BOOLEAN";
 	//parser = new NewQueryParser(query, controller);
@@ -65,8 +65,8 @@ int main() {
 	//query = "procedure p, q; Select p such that Calls(p, q)";
 	//parser = new NewQueryParser(query, controller);
 
-	query = "stmt s; Select s such that Follows*(s,10) and Follows*(s, 12)";
-	parser = new NewQueryParser(query, controller);
+	//query = "stmt s; Select s such that Follows*(s,10) and Follows*(s, 12)";
+	//parser = new NewQueryParser(query, controller);
 
 	string t;
 	cin >> t;

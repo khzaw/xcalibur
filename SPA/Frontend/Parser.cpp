@@ -1,45 +1,14 @@
 #pragma once
-/*
-NAME: LETTER(LETTER|DIGIT)
-INTERGER: DIGIT+
-
-procedure: 'procedure' proc_name '{' stmtLst '}'
-stmtLst: stmt+
-stmt: assign|while
-while: 'while' var_name '{' stmtLst '}'
-assign: var_name '=' expr ';'
-expr: expr '+' factor | factor
-factor: var_name | const_value
-var_name: NAME
-proc_name: NAME
-const_value: INTEGER
-
-// full
-program: procedure+
-procedure: "procedure" proc_name "{" stmtLst "}"
-stmtLst: stmt+
-stmt: call | while | if | assign
-call: "call" proc_name ";"
-while: "while" var_name "{" stmtLst "}"
-if: "if" var_name "then" "{" stmtLst "}" "else" "{" stmtLst "}"
-assign: var_name "=" expr ";"
-expr: expr "+" term | expr "-" term | term
-term: term "*" factor | factor
-factor: var_name | const_value | "(" expr ")"
-var_name: NAME
-proc_name: NAME
-const_value: INTEGER
-*/
 #include <fstream>
 #include <iostream>
 #include <stack>
 #include <algorithm>
 
-#include "..\PKB\AST.h"
-#include "Parser.h"
-#include "Lexer.h"
+#include "../PKB/AST.h"
+#include "../PKB/PKBController.h"
 #include "Lexeme.h"
-#include "..\PKB\PKBController.h"
+#include "Lexer.h"
+#include "Parser.h"
 #include "Operator.h"
 
 using namespace std;
@@ -47,16 +16,12 @@ using namespace std;
 Parser::Parser() {
 }
 
-Parser::Parser(string file) {
-	this->procName = "";
-	this->nextToken = Lexeme();
-	this->filename = file;
-	this->loc = 0;
-	this->temp = 0;
-	this->lastVarIndex = -1;
+Parser::Parser(string filepath) {
+	this->filepath = filepath;
+	this->controller = PKBController();
 	this->lexer = Lexer("");
-	this->controller = PKBController(); 
-	this->procCount = 0;
+	this->line = 0;
+	this->currentProc = 0;
 	parse();
 }
 
@@ -64,410 +29,230 @@ Parser::~Parser() {
 }
 
 void Parser::parse() {
-	if(!(checkFileExists())) {
-		cout << filename << " does not exist!";
+	if(!checkFileExists()) {
+		cout << this->filepath << " does not exist!";
 		return;
 	}
 
 	string currentLine, programString;
 	ifstream inputFile;
-	inputFile.open(filename);
+	inputFile.open(filepath);
 	while(!inputFile.eof()) {
 		getline(inputFile, currentLine);
-		// can strip out comments from here .. not sure it's the best approach though
 		size_t comment = currentLine.find("//");
 		if(comment != string::npos) currentLine = currentLine.erase(comment);
 		programString += " " + currentLine;
 	}
 	inputFile.close();
+	cout << programString << endl;
 	lexer = Lexer(programString);
-	printOut();
-	//program();
-}
-
-void Parser::printOut() {
-	Lexeme token;
-	while(!token.equals(Lexeme(EOL, ""))) {
-		token = lexer.lex();
-		cout << "lexeme: \"" << token << endl;
-	}
-	cout << "=========" << endl;
+	program();
 }
 
 bool Parser::checkFileExists() {
-	ifstream inputFile(filename);
-	if(inputFile.fail()) return false;
+	ifstream inputFile(filepath);
+	if(inputFile.fail())
+		return false;
 	inputFile.close();
 	return true;
 }
 
 void Parser::program() {
+	// program: procedure+
 	nextToken = getToken();
 	procedure();
+	while(nextToken.name == "procedure") {
+		procedure();
+	}
+}
+
+TNode* Parser::createASTNode(string nodeName, string data, TNode* parent, int line, int parentProc) {
+	TNode* node = new TNode(nodeName, data, line, parentProc);
+	controller.ast.assignChild(parent, node);
+	return node;
 }
 
 void Parser::procedure() {
-	match(KEYWORDS[0]); nextToken = getToken();
-
-	procedureName();
-	procCount = procedureNames.size() + 1;
-	TNode* procNode = new TNode(TNODE_NAMES[PROC_NODE], procName, loc, procCount);
-
-	match("{"); nextToken = getToken();
-
-	TNode* procStmtLstNode = createASTNode(STMTLST_NODE, "", procNode);
+	// "procedure" proc_name "{" stmtLst "}"
+	match("procedure");
+	string procName = procedureName();
+	this->currentProc++;
+	cout << procName << endl;
+	TNode* procNode = new TNode("PROC_NODE", procName, line, currentProc);
+	match("{");
+	TNode* procStmtLstNode = createASTNode("STMTLST_NODE", "", procNode, line, currentProc);
 	stmtLst(procStmtLstNode);
-
-	match("}"); nextToken = getToken();
+	match("}");
 }
 
 string Parser::procedureName() {
-	// TODO check valid variable name
-	procName = nextToken.name;
+	string procName = nextToken.name;
 	if(find(procedureNames.begin(), procedureNames.end(), procName) == procedureNames.end()) { // not found
 		procedureNames.push_back(procName);
-	} 
-	procedureNames.push_back(procName);
+	}
 	controller.procTable.insertProc(procName);
-	cout << "procName: " << nextToken.name << endl;
 	nextToken = getToken();
 	return procName;
 }
 
 void Parser::stmtLst(TNode* parent) {
+	// stmtLst: stmt+
 	stmt(parent);
-	if(nextToken.token == CLOSE_BLOCK) return;
-	else stmtLst(parent);
+	if(nextToken.token == CLOSE_BLOCK) {
+		return;
+	} else {
+		cout << nextToken.name << endl;
+		stmtLst(parent);
+	}
+
 }
 
 void Parser::stmt(TNode* parent) {
-	if(nextToken.token == IDENT && nextToken.name == "call") {
-		loc++;
-		TNode* callNode = createASTNode(CALL_NODE, nextToken.name, parent, loc);
+	// stmt: call | while | if | assign
+	if(nextToken.name == "call") {
+		// call: "procedure" proc_name ";"
+		TNode* callNode = createASTNode("CALL_NODE", nextToken.name, parent, ++line, currentProc);
 		controller.statementTable.insertStatement(callNode);
-		match(KEYWORDS[2]); nextToken = getToken();		// match call keyword
+		match("call");
 
 		string newProcedure = procedureName();
-		controller.callsTable.insertCalls(procCount, getProcedureIndex(newProcedure));
+		controller.callsTable.insertCalls(currentProc, getProcedureIndex(newProcedure));
 		match(";");
 
-		if(temp > 0) {
-			controller.followsTable.insertFollows(temp, loc);
-		}
-		temp = loc;
-	}
-	else if(nextToken.token == IDENT && nextToken.name == "while") {			// while statement
-		loc++; 
-		TNode* whileNode = createASTNode(WHILE_NODE, nextToken.name, parent, loc);
-
-		// for a container stmt, set back to zero
-		if(temp > 0) {
-			controller.followsTable.insertFollows(temp, loc);
-		}
-		temp = 0;
-		containerStack.push(loc);
-
+	} else if(nextToken.name == "while") {
+		// while: "while" var_name "{" stmtLst "}"
+		TNode* whileNode = createASTNode("WHILE_NODE", nextToken.name, parent, ++line, currentProc);
 		controller.statementTable.insertStatement(whileNode);
+		match("while");
 
-		if(parent->getParent()->getNodeType() == TNODE_NAMES[WHILE_NODE] || parent->getParent()->getNodeType() == TNODE_NAMES[IF_NODE])
-			controller.parentTable.insertParent(parent->getStmtNum(), loc);
+		TNode* whileVarNode = createASTNode("VAR_NODE", nextToken.name, whileNode, line, currentProc);
+		variableName();
 
-
-		match(KEYWORDS[1]); nextToken = getToken();
-
-		TNode* whileVarNode = createASTNode(VAR_NODE, nextToken.name, whileNode, loc);	// whileVar
-		variableName(); 
-		populateUses(loc);
-		nextToken = getToken();
-
-		match("{"); nextToken = getToken();
-
-		TNode* whileStmtLstNode = createASTNode(STMTLST_NODE, "", whileNode, loc);
+		match("{");
+		TNode* whileStmtLstNode = createASTNode("STMTLST_NODE", "", whileNode, line, currentProc);
 		stmtLst(whileStmtLstNode);
 
-		match("}"); 
-		temp = containerStack.top();	containerStack.pop();
-		nextToken = getToken();
-	} else if(nextToken.token == IDENT && nextToken.name == "if") {
-		loc++;
-		TNode* ifNode = createASTNode(IF_NODE, nextToken.name, parent, loc);
-
-		// for a container stmt, set back to zero
-		if(temp > 0) {
-			controller.followsTable.insertFollows(temp, loc);
-		}
-		temp = 0;
-		containerStack.push(loc);
-		
+		match("}");
+	} else if(nextToken.name == "if") {
+		// if: "if" var_name "then" "{" stmtLst "}" "else" "{" stmtLst "}"
+		TNode* ifNode = createASTNode("IF_NODE", nextToken.name, parent, ++line, currentProc);
 		controller.statementTable.insertStatement(ifNode);
-
-		if(parent->getParent()->getNodeType() == TNODE_NAMES[WHILE_NODE] || parent->getParent()->getNodeType() == TNODE_NAMES[IF_NODE])
-			controller.parentTable.insertParent(parent->getStmtNum(), loc);
-
-		match(KEYWORDS[3]); nextToken = getToken();
-
-		TNode* ifVarNode = createASTNode(VAR_NODE, nextToken.name, ifNode, loc);	// ifVar
+		match("if");
+		TNode* ifVarNode = createASTNode("VAR_NODE", nextToken.name, ifNode, line, currentProc);
 		variableName();
-		populateUses(loc);
-		nextToken = getToken();
 
-		TNode* thenNode = createASTNode(THEN_NODE, nextToken.name, ifNode, loc);
-		match(KEYWORDS[4]);
-		match("{");	nextToken = getToken();
-		TNode* thenStmtLstNode = createASTNode(STMTLST_NODE, "", thenNode, loc);
+		TNode* thenNode = createASTNode("THEN_NODE", nextToken.name, ifNode, line, currentProc);
+		match("then");
+		match("{");
+		TNode* thenStmtLstNode = createASTNode("STMTLST_NODE", "", thenNode, line, currentProc);
 		stmtLst(thenStmtLstNode);
-		match("}"); nextToken = getToken();
+		match("}");
 
-		match(KEYWORDS[5]);
-		TNode* elseNode = createASTNode(ELSE_NODE, nextToken.name, ifNode, loc);
-		match("{"); nextToken = getToken();
-		TNode* elseStmtLstNode = createASTNode(STMTLST_NODE, "", elseNode, loc);
+		TNode* elseNode = createASTNode("ELSE_NODE", nextToken.name, ifNode, line, currentProc);
+		match("else");
+		match("{");
+		TNode* elseStmtLstNode = createASTNode("STMTLST_NODE", "", elseNode, line, currentProc);
 		stmtLst(elseStmtLstNode);
-		match("}"); nextToken = getToken();
+		match("}");
 
-		temp = containerStack.top(); containerStack.pop();
-	} else if(nextToken.token == IDENT) {
-
-		loc++;
-		TNode* assignNode = createASTNode(ASSIGN_NODE, "", parent, loc); 
-		TNode* varNode = createASTNode(VAR_NODE, nextToken.name, assignNode, loc);
+	} else {
+		// assign: var_name "=" expr ";"
+		TNode* assignNode = createASTNode("ASSIGN_NODE", "", parent, ++line, currentProc);
 		controller.statementTable.insertStatement(assignNode);
-		//cout << nextToken.name << "\t" << loc << endl;
-		variableName(); 
-		populateModifies(loc);
-		if(parent->getParent()->getNodeType() == TNODE_NAMES[WHILE_NODE] || parent->getParent()->getNodeType() == TNODE_NAMES[IF_NODE])
-			controller.parentTable.insertParent(parent->getStmtNum(), loc);
+		TNode* varNode = createASTNode("VAR_NODE", nextToken.name, assignNode, line, currentProc);
 
-		if(temp > 0) {
-			controller.followsTable.insertFollows(temp, loc);
-		}
-		temp = loc;
-
-		// assignment modifies
-		//controller.modifiesTable.insertModifiesStmt(loc, );
-
-		nextToken = getToken();
-
-		match("="); nextToken = getToken();
+		variableName();
+		match("=");
 		expr(assignNode);
-		match(";"); nextToken = getToken(); 
+		match(";");
 	}
-
 }
 
 void Parser::expr(TNode* assignNode) {
-	// expr: expr '+' factor | factor
-	/*
-	* this is a left-recursive grammar, top down parsing can't handle this
-	* transform it into
-	* expr: E'
-	* E' : +TE' | epsilon
-	*/
-
-	expressionPostfix = "";
-
-	operatorStack.push(Operator(OPERATOR_NULL, "NULL"));		// sentinel
-
-	factor(true);  nextToken = getToken();
-	exprPrime();
-
-	while(!operatorStack.top().isNull()) {
-		popOperator(operatorStack.top());
-	}
-
-	controller.ast.assignChild(assignNode, (operandStack.top()));
-	// cout << "PARENT : " <<  assignNode.getNodeType() << "\t" << "CHILD: " << operandStack.top().getNodeType() << "," << operandStack.top().getData() << endl;
-	assignNode->setData(expressionPostfix);
-	operatorStack.pop();		// remove the sentinel
-
-	//cout << "expressionPostfix:\t" << expressionPostfix << endl; 
+	// expr: expr "+" term | expr "-" term | term
+	// transform left recursive grammar into
+	// expr: E' | term
+	// E' : "+" term E' | "-" term E' | epilson
+	// 
+	// term: term "*" factor | factor
+	// factor: var_name | const_value | "(" expr ")"
+	term(assignNode);
+	exprPrime(assignNode);
 }
 
-void Parser::printOperatorStack() {
-	cout << "Operator Stack" << endl;
-	for (std::stack<Operator> dump = operatorStack; !dump.empty(); dump.pop())
-		std::cout << dump.top().value << '\n';
-}
-
-void Parser::printOperandStack() {
-	cout << "Operand Stack" << endl;
-	for (std::stack<TNode*> dump = operandStack; !dump.empty(); dump.pop())
-		std::cout << dump.top()->getData() << '\n';
-}
-
-void Parser::factor(bool rightSide) {
-	// factor: var_name | const_value
-	if(nextToken.token == IDENT) {			// TODO: check valid IDENT (not keywords)
-		//node = createASTNode(VAR_NODE, nextToken.name, &assignNode);
-		variableName();
-		if(rightSide) populateUses(loc);
-		operandStack.push(&TNode(TNODE_NAMES[VAR_NODE], nextToken.name, loc, 0));
-		if(expressionPostfix.length() > 0) expressionPostfix += " ";
-		expressionPostfix += " " + nextToken.name;
-	} else {
-		// INT_LIT;
-		//node = createASTNode(CONSTANT_NODE, nextToken.name, &assignNode);
-		constantValue();
-		operandStack.push(&TNode(TNODE_NAMES[CONSTANT_NODE], nextToken.name, loc, 0));
-		if(expressionPostfix.length() > 0) expressionPostfix += " ";
-		expressionPostfix += nextToken.name;
-	}
-}
-
-void Parser::exprPrime() {
-	// parse an operator
-	if(nextToken.token == PLUS) {
-
-		match("+"); 
-		Operator plusOp(OPERATOR_ADDITION, "+");
-
-		while(plusOp.op <= operatorStack.top().op) {
-
-			if(operatorStack.top().isNull()) { // sentinel value reached;
-				operatorStack.pop();
-			}
-
-			popOperator(plusOp);
-		}
-		operatorStack.push(plusOp);
-		nextToken = getToken();
-
-		factor(true); nextToken = getToken();
-		exprPrime();
-	} else if(nextToken.token == MINUS) {
+void Parser::exprPrime(TNode* assignNode) {
+	if(nextToken.name == "+") {
+		match("+");
+		term(assignNode);
+		exprPrime(assignNode);
+	} else if(nextToken.name == "-") {
 		match("-");
-		Operator minusOp(OPERATOR_SUBTRACTION, "-");
+		term(assignNode);
+		exprPrime(assignNode);
+	} else {
+		return;
+	}
+}
+void Parser::term(TNode* assignNode) {
+	// term: T'
+	// T': "*" factor T' | epilson
+	factor(assignNode);
+	termPrime(assignNode);
+}
 
-		while(minusOp.op <= operatorStack.top().op) {
-			if(operatorStack.top().isNull()) { // sentinel value reached;
-				operatorStack.pop();
-			}
-
-			popOperator(minusOp);
-		}
-		operatorStack.push(minusOp);
-		nextToken = getToken();
-		
-		factor(true); nextToken = getToken();
-		exprPrime();
+void Parser::termPrime(TNode* assignNode) {
+	// T': "*" factor T' | epilson
+	if(nextToken.name == "*") {
+		match("*");
+		factor(assignNode);
+		termPrime(assignNode);
 	} else {
 		return;
 	}
 }
 
-void Parser::popOperator(Operator op) {
-	TNode operatorNode = TNode(TNODE_NAMES[PLUS_NODE], "+", loc, 0);
-
-	TNode* rightOperand = operandStack.top(); operandStack.pop();
-	TNode* leftOperand = operandStack.top(); operandStack.pop();
-
-	operatorNode.addChild(leftOperand);
-	operatorNode.addChild(rightOperand);
-
-	operatorStack.pop();
-	operandStack.push(&operatorNode);
-
-	expressionPostfix += " +";
-}
-
-TNode* Parser::createASTNode(int nodeType, string name, TNode *parentNode, int lineNo, int parentProc) {
-	TNode* node = new TNode(TNODE_NAMES[nodeType], name, lineNo, parentProc);
-	if(nodeType == PROC_NODE) {
-		controller.procTable.insertProc(name);
-		controller.ast.insertRoot(node);
+void Parser::factor(TNode* assignNode) {
+	// factor: var_name | const_value | "(" expr ")"
+	if(nextToken.name == "(") {
+		match("(");
+		expr(assignNode);
+		match(")");
 	}
-	controller.ast.assignChild(parentNode, node);
-	//cout << "PARENT : " <<  parentNode->getNodeType() << "\t" << "CHILD: " << TNODE_NAMES[nodeType] << "," << node.getData() << endl;
-	return node;
-}
-
-void Parser::variableName() {
-	// TODO check valid variable name
-	// cout << "variableName: " << nextToken.name << endl;
-	lastVarIndex = controller.varTable.insertVar(nextToken.name);
-	//nextToken = getToken();
+	else if(nextToken.token == IDENT) {
+		variableName();
+	} else {
+		constantValue();
+	}
 }
 
 void Parser::constantValue() {
-	//cout << "constantValue: " << nextToken.name << endl;
-	//nextToken = getToken();
 	controller.constantTable.insertConst(atoi(nextToken.name.c_str()));
-
+	nextToken = getToken();
 }
 
+void Parser::variableName() {
+	controller.varTable.insertVar(nextToken.name);
+	nextToken = getToken();
+}
 
-void Parser::match(string s) {
-	if(nextToken.name == s) {
-		// match operator
-	} else {
-		//cout << "Syntax error: Expecting " << nextToken.name << " on line number " << loc << endl;
+int Parser::getProcedureIndex(string procName) {
+	for(size_t i = 0; i < procedureNames.size(); i++) {
+		if(procedureNames.at(i) == procName) {
+			return i+1;
+		}
 	}
-
+	return -1;
 }
 
-PKBController Parser::getController() {
-	return controller;
+void Parser::match(string tokenName) {
+	if(nextToken.name == tokenName) {
+		nextToken = getToken();
+	} else {
+		cout << "Syntax error: Expecting " << nextToken.name << " and lexeme " << nextToken.token << endl;
+	}
 }
 
 Lexeme Parser::getToken() {
 	return lexer.lex();
 }
 
-int Parser::getTotalStatementNumber() {
-	return loc;
-}
-
-void Parser::populateModifies(int loc) {
-
-	// assignment statement
-	controller.modifiesTable.insertModifiesStmt(loc, lastVarIndex);
-	controller.modifiesTable.insertModifiesProc(loc, procCount);
-
-	// container statement
-	stack<int> temp = stack<int>();
-	while(containerStack.size() > 0) {
-		int top = containerStack.top();
-		temp.push(top);
-		//cout << top << ", " << lastVarIndex << endl;
-		controller.modifiesTable.insertModifiesStmt(top, lastVarIndex);
-		controller.modifiesTable.insertModifiesProc(top, procCount);
-		containerStack.pop();
-	}
-
-
-	while(temp.size() > 0) {
-		containerStack.push(temp.top());
-		temp.pop();
-	}
-}
-
-void Parser::populateUses(int loc) {
-	//cout << loc << ", " << lastVarIndex << endl;
-	controller.usesTable.insertUsesStmt(loc, lastVarIndex);
-	controller.usesTable.insertUsesProc(loc, procCount);
-
-	// container statement
-	stack<int> temp = stack<int>();
-	while(containerStack.size() > 0) {
-		int top = containerStack.top();
-		temp.push(top);
-		//	cout << top << ", " << lastVarIndex << endl;
-		controller.usesTable.insertUsesStmt(top, lastVarIndex);
-		controller.usesTable.insertUsesProc(top, procCount);
-		containerStack.pop();
-	}
-
-	while(temp.size() > 0) {
-		containerStack.push(temp.top());
-		temp.pop();
-	}
-}
-
-int Parser::getProcedureIndex(string proc) {
-	for(size_t i = 0; i < proc.size(); i++) {
-		if(procedureNames.at(i) == proc) {
-			return i+1;
-		}
-	}
-	return -1;
-}

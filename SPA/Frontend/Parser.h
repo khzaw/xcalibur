@@ -1,82 +1,53 @@
 #pragma once
-#include <iostream>
-#include <set>
+
 #include <stack>
-#include "Lexer.h"
-#include "Lexeme.h"
 #include "../PKB/PKBController.h"
 #include "TNode.h"
 #include "Operator.h"
+#include "Lexeme.h"
+#include "Lexer.h"
 
 using namespace std;
 
-
-static string KEYWORDS[] = {
-	"procedure",
-	"while",
-	"call",
-	"if",
-	"then",
-	"else",
-};
-
-
-enum NAME {
-	PROC_NAME,
-	VAR_NAME
-};
-
 class Parser {
-	string filename;
-	string expressionPostfix;
+	string filepath;
+	string postfix;
 	Lexeme nextToken;
-	int loc;
-	int temp;
-	int lastVarIndex;
-	int procCount;
+	int line;
+	int currentProc;
 	string procName;
 	Lexer lexer;
 	stack<Operator> operatorStack;
-	stack<TNode*> operandStack;
+	stack<int> operandStack;
 	stack<int> containerStack;
 	vector<string> procedureNames;
 
 public:
 	PKBController controller;
 	Parser();
-	Parser(string filename);
+	Parser(string);
 	void parse();
 	~Parser();
 	void printOut();
 	PKBController getController();
 	int getTotalStatementNumber();
+
 private:
+	bool checkFileExists();
 	Lexeme getToken();
-	void match(string s);
+	void match(string);
 	void program();
 	void procedure();
-	void stmtLst(TNode* parent);
-	void stmt(TNode* parent);
-	void expr(TNode* assignNode);
-	void exprPrime();
-	void variableName();
 	string procedureName();
+	void stmtLst(TNode*);
+	void stmt(TNode*);
+	void expr(TNode*);
+	void exprPrime(TNode*);
+	void term(TNode*);
+	void termPrime(TNode*);
+	void factor(TNode*);
+	void variableName();
 	void constantValue();
-	void factor(bool rightSide=false);
-	void error();
-	bool checkFileExists();
-	// node creation
-	TNode* createASTNode(int nodeType, string name, TNode *parentNode, int lineNo=0, int parentProc=0);
-
-	// for operator precedence
-	void popOperator(Operator op);
-	void pushOperator(string op);
-
-	void printOperatorStack();
-	void printOperandStack();
-
-	void populateModifies(int loc);
-	void populateUses(int loc);
-
+	TNode* createASTNode(string, string, TNode*, int, int);
 	int getProcedureIndex(string);
 };

@@ -1,0 +1,4 @@
+
+procedure DEF {
+	abdfsdf = (x + y * z) - (z * klajsd * 1234) * fkwl;
+}

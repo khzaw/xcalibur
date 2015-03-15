@@ -75,14 +75,9 @@ using namespace std;
 	};
 
 class Lexer {
-
-public:
 	char nextChar;
 	int charClass;
 	string lexeme;
-
-private:
-	string input;
 
 public:
 	Lexeme lex();
@@ -92,6 +87,7 @@ public:
 	~Lexer();
 
 private:
+	string input;
 	void addChar();
 	void getChar();
 };

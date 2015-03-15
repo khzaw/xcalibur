@@ -11,11 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Frontend\NewParser.cpp" />
+    <ClCompile Include="Frontend\Parser.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Frontend\Lexeme.cpp" />
     <ClCompile Include="Frontend\Lexer.cpp" />
-    <ClCompile Include="Frontend\Parser.cpp" />
     <ClCompile Include="Frontend\Operator.cpp" />
     <ClCompile Include="Frontend\TNode.cpp" />
     <ClCompile Include="PKB\iterativeCFG.cpp" />
@@ -39,7 +38,7 @@
     <ClCompile Include="QueryProcessor\PatternSubquery.cpp" />
     <ClCompile Include="QueryProcessor\UsesSubquery.cpp" />
     <ClCompile Include="QueryProcessor\WithSubquery.cpp" />
-    <ClInclude Include="Frontend\NewParser.h" />
+    <ClInclude Include="Frontend\Parser.h" />
     <ClInclude Include="PKB\CallsExtractor.cpp" />
     <ClInclude Include="PKB\iterativeCFG.h" />
     <ClInclude Include="PKB\CfgNode.cpp" />
@@ -73,7 +72,6 @@
   <ItemGroup>
     <ClInclude Include="Frontend\Lexeme.h" />
     <ClInclude Include="Frontend\Lexer.h" />
-    <ClInclude Include="Frontend\Parser.h" />
     <ClInclude Include="Frontend\Operator.h" />
     <ClInclude Include="Frontend\TNode.h" />
     <ClInclude Include="PKB\StatementTable.h" />
@@ -112,7 +110,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v100</PlatformToolset>

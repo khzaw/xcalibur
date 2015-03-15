@@ -115,16 +115,21 @@ void SubqueryTest::testSubqueries() {
 	stmt11.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt11); stmt11.addRightSibling(&stmt12);
 	stmt12.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt12);
 		// statement 8 nesting
-		TNode stmtListNode2_1_1("THEN_NODE", "then", 0, 1); 
-		TNode stmtListNode2_1_2("ELSE_NODE", "else", 0, 1); 
-		stmtListNode2_1_1.addParent(&stmt8); stmt8.addChild(&stmtListNode2_1_1); stmtListNode2_1_1.addRightSibling(&stmtListNode2_1_2);
-		stmtListNode2_1_2.addParent(&stmt8); stmt8.addChild(&stmtListNode2_1_2);
+		TNode stmtListNode2_1_1("STMTLST_NODE", "", 0, 1); TNode thennode211("THEN_NODE", "then", 0, 1);
+		TNode stmtListNode2_1_2("STMTLST_NODE", "", 0, 1); TNode elsenode212("ELSE_NODE", "else", 0, 1);
+		thennode211.addParent(&stmt8); stmt8.addChild(&thennode211); thennode211.addRightSibling(&elsenode212);
+		elsenode212.addParent(&stmt8); stmt8.addChild(&elsenode212);
+		stmtListNode2_1_1.addParent(&thennode211); thennode211.addChild(&stmtListNode2_1_1);
+		stmtListNode2_1_2.addParent(&elsenode212); elsenode212.addChild(&stmtListNode2_1_2);
 		stmt9.addParent(&stmtListNode2_1_1); stmtListNode2_1_1.addChild(&stmt9);
 		stmt10.addParent(&stmtListNode2_1_2); stmtListNode2_1_2.addChild(&stmt10);
 	// statement 13 nesting
-	TNode stmtListNode2_2("THEN_NODE", "then", 0, 1); 
-	TNode stmtListNode2_3("ELSE_NODE", "else", 0, 1); 
-	stmtListNode2_2.addParent(&stmt8); stmt13.addChild(&stmtListNode2_2); stmtListNode2_2.addRightSibling(&stmtListNode2_3);
+	TNode stmtListNode2_2("STMTLST_NODE", "", 0, 1); TNode thennode222("THEN_NODE", "then", 0, 1);
+	TNode stmtListNode2_3("STMTLST_NODE", "", 0, 1); TNode elsenode223("ELSE_NODE", "else", 0, 1);
+	thennode222.addParent(&stmt13); stmt13.addChild(&thennode222); thennode222.addRightSibling(&elsenode223);
+	elsenode223.addParent(&stmt13); stmt13.addChild(&elsenode223);
+	stmtListNode2_2.addParent(&thennode222); thennode222.addChild(&stmtListNode2_2);
+	stmtListNode2_3.addParent(&elsenode223); elsenode223.addChild(&stmtListNode2_3);
 	stmt14.addParent(&stmtListNode2_2); stmtListNode2_2.addChild(&stmt14); stmt14.addRightSibling(&stmt15);
 	stmt15.addParent(&stmtListNode2_2); stmtListNode2_2.addChild(&stmt15);
 		// statement 15 nesting
@@ -327,6 +332,29 @@ void SubqueryTest::testSubqueries() {
 	pk->usesTable.insertUsesStmt(20, 3);
 	pk->usesTable.insertUsesStmt(22, 1);
 
+	pk->statementTable.insertStatement(&stmt1);
+	pk->statementTable.insertStatement(&stmt2);
+	pk->statementTable.insertStatement(&stmt3);
+	pk->statementTable.insertStatement(&stmt4);
+	pk->statementTable.insertStatement(&stmt5);
+	pk->statementTable.insertStatement(&stmt6);
+	pk->statementTable.insertStatement(&stmt7);
+	pk->statementTable.insertStatement(&stmt8);
+	pk->statementTable.insertStatement(&stmt9);
+	pk->statementTable.insertStatement(&stmt10);
+	pk->statementTable.insertStatement(&stmt11);
+	pk->statementTable.insertStatement(&stmt12);
+	pk->statementTable.insertStatement(&stmt13);
+	pk->statementTable.insertStatement(&stmt14);
+	pk->statementTable.insertStatement(&stmt15);
+	pk->statementTable.insertStatement(&stmt16);
+	pk->statementTable.insertStatement(&stmt17);
+	pk->statementTable.insertStatement(&stmt18);
+	pk->statementTable.insertStatement(&stmt19);
+	pk->statementTable.insertStatement(&stmt20);
+	pk->statementTable.insertStatement(&stmt21);
+	pk->statementTable.insertStatement(&stmt22);
+
 	pk->constructCalls();
 	pk->constructFollows();
 	pk->constructModifies();
@@ -353,7 +381,7 @@ void SubqueryTest::testSubqueries() {
 	synonymTable["const1"]="constant";
 	synonymTable["const2"]="constant";
 
-	testNextStar();
+	testNext();
 	/*
 	testFollows();
 	testParent();
@@ -7972,8 +8000,9 @@ void SubqueryTest::testNext() {
 
 	// Test 1: Next(s1, s2)
 	NextSubquery nextSubquery1 = NextSubquery(&synonymTable, pk);
-	nextSubquery1.setSynonyms("s1", "s2");
+	nextSubquery1.setSynonyms("_", "s2");
 	ResultTuple* actualResultsNextSubquery1 = nextSubquery1.solve();
+	cout << actualResultsNextSubquery1->toString() << endl;
 	int expectedResultsNextSubquery1[23][2] = {
 		{1, 2}, {2, 3}, {4, 5}, {5, 6}, {6, 7}, {6, 13}, 
 		{7, 8}, {8, 9}, {8, 10}, {9, 11}, {10, 11}, {11, 12},

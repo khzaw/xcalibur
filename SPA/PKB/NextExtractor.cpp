@@ -284,7 +284,7 @@ void NextExtractor::storeAllNextPrev(){
 		}
 	for (int i= 0; i < statementTable->getSize(); i++){
 		set<int> prevResult = getPrev(i);
-       allNextStmt.insert(prevResult.begin(), prevResult.end());
+       allPrevStmt.insert(prevResult.begin(), prevResult.end());
 		}
 }
 
@@ -584,7 +584,7 @@ set<int> NextExtractor::getNextResultSet(vector<shared_ptr<GNode>> nextArray , s
 
 			if (nextArray[i]->getStmtNum() == INT_MIN){ //this only occurs for if else empty node at the end
 
-				getNextResultSet(nextArray[i]->getNextArr() , result);
+			return	getNextResultSet(nextArray[i]->getNextArr() , result);
 								
 			}else {
 
@@ -604,7 +604,7 @@ set<int> NextExtractor::getPrevResultSet(vector<shared_ptr<GNode>> prevArray , s
 
 			if (prevArray[i]->getStmtNum() == INT_MIN){ //this only occurs for if else empty node at the end
 
-				getPrevResultSet(prevArray[i]->getPrevArr() , result);
+				return getPrevResultSet(prevArray[i]->getPrevArr() , result);
 								
 			}else {
 

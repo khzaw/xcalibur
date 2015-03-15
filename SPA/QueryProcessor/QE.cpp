@@ -24,11 +24,10 @@ void QE::addQuery(Subquery* q) {
 	queries.push_back(q);
 }
 
-vector<string> QE::solve() {
+string QE::solve() {
 	vector<string> answer = vector<string>();
 	if (!validateQueries()) {
-		answer.push_back("none");
-		return answer;
+		return "none";
 	}
 
 	if (useOptimizedSolver) {
@@ -38,22 +37,7 @@ vector<string> QE::solve() {
 		basicSolve();
 	}
 
-	if (synonyms[0] == "BOOLEAN") {
-		if (solution->getAllResults().size() == 0) {
-			answer.push_back("FALSE");
-		} else {
-			answer.push_back("TRUE");
-		}
-		return answer;
-	} 
-
-	if(solution->getAllResults().size() == 0) {
-		answer.push_back("none");
-		return answer;
-	}
-
-	//trimSolution();
-	return convert();
+	return convertSolutionToString();
 }
 
 bool QE::validateQueries() {
@@ -81,14 +65,24 @@ void QE::basicSolve() {
 	} 
 }
 
-string QE::convertToSolutionString() {
+string QE::convertSolutionToString() {
+	if (synonyms[0] == "BOOLEAN") {
+		if (solution->isBool()) {
+			return (solution->isEmpty()) ? "FALSE" : "TRUE";
+		}
+		return (solution->getAllResults().size()) ? "TRUE" : "FALSE"; 
+	} 
+
+	if (solution->getAllResults().size() == 0) {
+		return "none";
+	}
+	
 	string s = "";
 	vector<int> index = vector<int>();
 	//get index of synonyms
 	for (size_t i = 0; i < synonyms.size(); i++) {
 		int temp = solution->getSynonymIndex(synonyms[i]);
 		index.push_back(temp);
-		cout << temp << ",";
 	}
 
 	int total_size = solution->getAllResults().size();
@@ -116,48 +110,4 @@ string QE::convertToSolutionString() {
 		}
 	}
 	return s;
-}
-
-vector<string> QE::convert() {
-	vector<string> answer = vector<string>();
-	for (size_t i = 0; i < solution->getAllResults().size(); i++) {
-		string x = "";
-		for (size_t j = 0; j < solution->getResultRow(i).size(); j++) {
-			string synonym = solution->getSynonym(j);
-			int aSolution = solution->getResultAt(i, j);
-			if (synonym == "procedure"){
-				x += pkb->procTable.getProcName(aSolution);
-			} else if (synonym == "variable"){
-				x += pkb->varTable.getVarName(aSolution);
-			} else if (synonym == "constant"){
-				x += to_string((long long)pkb->constantTable.getConstant(aSolution));
-			} else {
-				x += to_string((long long)aSolution);
-			}
-			if(j != solution->getResultRow(i).size() - 1) {
-				x += " "; 
-			}
-		}
-		answer.push_back(x);
-	}
-	return answer;
-}
-
-void QE::trimSolution() {
-	// problem: Select <s1 ,s3> such that follows(s1, s2)
-	
-	vector<int> syns = vector<int>();
-	vector<vector<int>> newSolution = vector<vector<int> >();
-	//get index of synonyms for solutions
-	for (size_t i = 0; i < synonyms.size(); i++) {
-		//cout << "syn" << solution->getSynonymIndex(synonyms[i]);
-		syns.push_back(solution->getSynonymIndex(synonyms[i]));
-	}
-	for (size_t i = 0; i < solution->getAllResults().size(); i++) { 
-		vector<int> temp = vector<int>();
-		for (size_t j = 0; j < syns.size(); j++) {
-			temp.push_back(solution->getResultAt(i, syns[j]));
-		}
-		newSolution.push_back(temp);
-	}
 }

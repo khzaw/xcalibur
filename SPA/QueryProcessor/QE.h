@@ -23,9 +23,9 @@ public:
 	QE(vector<string>, PKBController*);
 	void addQuery(Subquery*);
 	
-	vector<string> solve();
+	string solve();
 	void trimSolution();
 	void basicSolve();
 	vector<string> convert();
-	string convertToSolutionString();
+	string convertSolutionToString();
 };

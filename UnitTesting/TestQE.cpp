@@ -328,6 +328,9 @@ void QueryEvaluatorTest::testConvertString() {
 	tup->addSynonymToMap("w1", tup->addSynonym("w1"));
 	tup->addSynonymToMap("const1", tup->addSynonym("const1"));
 	tup->addSynonymToMap("proc1", tup->addSynonym("proc1"));
+	
+
+	
 	for (int i = 0; i < 3; i++) {
 		vector<int> row = vector<int>();
 		for (int j = 0; j < 8; j++) {
@@ -335,21 +338,26 @@ void QueryEvaluatorTest::testConvertString() {
 		}
 		tup->addResultRow(row);
 	}
-	qe->solution = tup;
+
 	qe->synonyms.push_back("s1");
 	qe->synonyms.push_back("a1");
+	qe->solution = new ResultTuple();
+	string actual = qe->convertSolutionToString();
+	string expected = "none";
+	CPPUNIT_ASSERT_EQUAL(expected, actual);
 	
-	string actual = qe->convertToSolutionString();
-	string expected = "0 0, 1 1, 2 2";
+	qe->solution = tup;
+	actual = qe->convertSolutionToString();
+	expected = "0 0, 1 1, 2 2";
 	CPPUNIT_ASSERT_EQUAL(expected, actual);
 
 	qe->synonyms.push_back("const1");
-	actual = qe-> convertToSolutionString();
+	actual = qe-> convertSolutionToString();
 	expected = "0 0 2, 1 1 3, 2 2 0";
 	CPPUNIT_ASSERT_EQUAL(expected, actual);
 
 	qe->synonyms.push_back("proc1");
-	actual = qe-> convertToSolutionString();
+	actual = qe-> convertSolutionToString();
 	expected = "0 0 2 First, 1 1 3 Second, 2 2 0 Third";
 	CPPUNIT_ASSERT_EQUAL(expected, actual);
 
@@ -358,9 +366,33 @@ void QueryEvaluatorTest::testConvertString() {
 	qe->synonyms.push_back("v1");
 	qe->synonyms.push_back("const1");
 	qe->synonyms.push_back("i1");
-	actual = qe-> convertToSolutionString();
+	actual = qe-> convertSolutionToString();
 	expected = "0 0 2 First First 0 x 2 0, 1 1 3 Second Second 1 z 3 1, 2 2 0 Third Third 2 i 0 2";
 	CPPUNIT_ASSERT_EQUAL(expected, actual);
+
+	/*
+	QE* qe2 = new QE(vector<string>(), pk);
+	qe->synonyms.push_back("BOOLEAN");
+	actual = qe-> convertSolutionToString();
+	expected = "FALSE";
+	CPPUNIT_ASSERT_EQUAL(expected, actual);
+
+	qe->solution = tup;
+	actual = qe-> convertSolutionToString();
+	expected = "TRUE";
+	CPPUNIT_ASSERT_EQUAL(expected, actual);
+	
+	tup->isBoolean = true;
+	tup->isEmp = false;
+	actual = qe-> convertSolutionToString();
+	expected = "TRUE";
+	CPPUNIT_ASSERT_EQUAL(expected, actual);
+
+	tup->isEmp = true;
+	actual = qe-> convertSolutionToString();
+	expected = "FALSE";
+	CPPUNIT_ASSERT_EQUAL(expected, actual);
+	*/
 }
 
 /*

@@ -115,6 +115,10 @@ void Parser::stmt(TNode* parent) {
 		controller.statementTable.insertStatement(callNode);
 		match("call");
 
+		if(parent->getParent()->getNodeType() == "WHILE_NODE" || parent->getParent()->getNodeType() == "IF_NODE") {
+			controller.parentTable.insertParent(parent->getStmtNum(), line);
+		}
+
 		string newProcedure = procedureName();
 		controller.callsTable.insertCalls(currentProc, getProcedureIndex(newProcedure));
 		match(";");
@@ -124,6 +128,11 @@ void Parser::stmt(TNode* parent) {
 		TNode* whileNode = createASTNode("WHILE_NODE", nextToken.name, parent, ++line, currentProc);
 		controller.statementTable.insertStatement(whileNode);
 		match("while");
+
+		if(parent->getParent()->getNodeType() == "WHILE_NODE" || parent->getParent()->getNodeType() == "IF_NODE") {
+			controller.parentTable.insertParent(parent->getStmtNum(), line);
+		}
+
 
 		TNode* whileVarNode = createASTNode("VAR_NODE", nextToken.name, whileNode, line, currentProc);
 		variableName();
@@ -138,6 +147,11 @@ void Parser::stmt(TNode* parent) {
 		TNode* ifNode = createASTNode("IF_NODE", nextToken.name, parent, ++line, currentProc);
 		controller.statementTable.insertStatement(ifNode);
 		match("if");
+
+		if(parent->getParent()->getNodeType() == "WHILE_NODE" || parent->getParent()->getNodeType() == "IF_NODE") {
+			controller.parentTable.insertParent(parent->getStmtNum(), line);
+		}
+
 		TNode* ifVarNode = createASTNode("VAR_NODE", nextToken.name, ifNode, line, currentProc);
 		variableName();
 
@@ -159,9 +173,14 @@ void Parser::stmt(TNode* parent) {
 		// assign: var_name "=" expr ";"
 		TNode* assignNode = createASTNode("ASSIGN_NODE", "", parent, ++line, currentProc);
 		controller.statementTable.insertStatement(assignNode);
-		TNode* varNode = createASTNode("VAR_NODE", nextToken.name, assignNode, line, currentProc);
 
+		if(parent->getParent()->getNodeType() == "WHILE_NODE" || parent->getParent()->getNodeType() == "IF_NODE") {
+			controller.parentTable.insertParent(parent->getStmtNum(), line);
+		}
+
+		TNode* varNode = createASTNode("VAR_NODE", nextToken.name, assignNode, line, currentProc);
 		variableName();
+
 		match("=");
 		expr(assignNode);
 		match(";");
@@ -193,6 +212,7 @@ void Parser::exprPrime(TNode* assignNode) {
 		return;
 	}
 }
+
 void Parser::term(TNode* assignNode) {
 	// term: T'
 	// T': "*" factor T' | epilson

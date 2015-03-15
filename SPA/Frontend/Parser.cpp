@@ -158,7 +158,8 @@ void Parser::stmt(TNode* parent) {
 		containerStack.push(line);
 
 
-		TNode* whileVarNode = createASTNode("VAR_NODE", nextToken.name, whileNode, line, currentProc);
+		//TNode* whileVarNode = createASTNode("VAR_NODE", nextToken.name, whileNode, line, currentProc);
+		whileNode->setData(nextToken.name);
 		variableName();
 
 		populateUses(line, currentProc);
@@ -181,7 +182,8 @@ void Parser::stmt(TNode* parent) {
 		populateFollows(line, true, parent, ifNode);
 		containerStack.push(line);
 
-		TNode* ifVarNode = createASTNode("VAR_NODE", nextToken.name, ifNode, line, currentProc);
+		//TNode* ifVarNode = createASTNode("VAR_NODE", nextToken.name, ifNode, line, currentProc);
+		ifNode->setData(nextToken.name);
 		variableName();
 
 		populateUses(line, currentProc);

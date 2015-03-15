@@ -85,7 +85,7 @@ std::shared_ptr<GNode> NextExtractor::converseAST(shared_ptr<CFG> cfg,TNode* cur
 			string curTNodeType = curTNode->getNodeType();
 
 			//this is for while-if code
-			if(curTNodeParent->getNodeType() == "STMTLST_NODE" && curTNodeParent->getParent()->getData().compare("while") == 0)
+			if(curTNodeParent->getNodeType() == "STMTLST_NODE" && curTNodeParent->getParent()->getNodeType().compare("WHILE_NODE") == 0)
 			{
 				cfg->setNext(gNode, level->top());
 				level->pop();
@@ -135,7 +135,7 @@ std::shared_ptr<GNode> NextExtractor::converseAST(shared_ptr<CFG> cfg,TNode* cur
 				string curTNodeType = curTNode->getNodeType();
 
 				//this is for while-while
-				if(curTNodeParent->getNodeType() == "STMTLST_NODE" && curTNodeParent->getParent()->getData().compare("while") == 0) 
+				if(curTNodeParent->getNodeType() == "STMTLST_NODE" && curTNodeParent->getParent()->getNodeType().compare("WHILE_NODE") == 0) 
 				{
 					cfg->setNext(gNode, level->top());
 					level->pop();

@@ -61,6 +61,8 @@ void Parser::debug() {
 	cout << "Calls: " << controller.callsTable.getSize() << endl;
 	cout << "ModifiesStmt: " << controller.modifiesTable.getSizeStmtModifies() << endl;
 	cout << "ModifiesProc: " << controller.modifiesTable.getSizeProcModifies() << endl;
+	cout << "UsesStmt: " << controller.usesTable.getSizeStmtUses() << endl;
+	cout << "UsesProc: " << controller.usesTable.getSizeProcUses() << endl;
 }
 
 bool Parser::checkFileExists() {
@@ -154,6 +156,8 @@ void Parser::stmt(TNode* parent) {
 		TNode* whileVarNode = createASTNode("VAR_NODE", nextToken.name, whileNode, line, currentProc);
 		variableName();
 
+		populateUses(line, currentProc);
+
 		match("{");
 		TNode* whileStmtLstNode = createASTNode("STMTLST_NODE", "", whileNode, line, currentProc);
 		stmtLst(whileStmtLstNode);
@@ -174,6 +178,8 @@ void Parser::stmt(TNode* parent) {
 
 		TNode* ifVarNode = createASTNode("VAR_NODE", nextToken.name, ifNode, line, currentProc);
 		variableName();
+
+		populateUses(line, currentProc);
 
 		TNode* thenNode = createASTNode("THEN_NODE", nextToken.name, ifNode, line, currentProc);
 		match("then");
@@ -199,6 +205,7 @@ void Parser::stmt(TNode* parent) {
 		controller.statementTable.insertStatement(assignNode);
 
 		populateParent(parent, line);
+		populateFollows(line, false);
 
 		TNode* varNode = createASTNode("VAR_NODE", nextToken.name, assignNode, line, currentProc);
 		variableName();
@@ -209,7 +216,6 @@ void Parser::stmt(TNode* parent) {
 		expr(assignNode);
 		match(";");
 		
-		populateFollows(line, false);
 	}
 }
 
@@ -266,6 +272,7 @@ void Parser::factor(TNode* assignNode) {
 	}
 	else if(nextToken.token == IDENT) {
 		variableName();
+		populateUses(line, currentProc, true);
 	} else {
 		constantValue();
 	}
@@ -341,7 +348,26 @@ void Parser::populateModifies(int line, int procedure) {
 	}
 }
 
-void Parser::populateUses(int) {
+void Parser::populateUses(int line, int procedure, bool assignStatement) {
+	if(assignStatement) {
+		controller.usesTable.insertUsesStmt(line, lastVarIndex);
+		controller.usesTable.insertUsesProc(line, procedure);
+	}
+
+	stack<int> tempStack = stack<int>();
+	while(containerStack.size() > 0) {
+		int top = containerStack.top();
+		tempStack.push(top);
+
+		controller.usesTable.insertUsesStmt(top, lastVarIndex);
+		controller.usesTable.insertUsesProc(top, procedure);
+		containerStack.pop();
+	}
+
+	while(tempStack.size() > 0) {
+		containerStack.push(tempStack.top());
+		tempStack.pop();
+	}
 }
 
 Lexeme Parser::getToken() {

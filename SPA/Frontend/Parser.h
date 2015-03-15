@@ -56,6 +56,6 @@ private:
 
 	void populateParent(TNode*, int);
 	void populateFollows(int, bool);
-	void populateUses(int);
+	void populateUses(int, int, bool = false);
 	void populateModifies(int, int);
 };

@@ -59,6 +59,8 @@ void Parser::debug() {
 	cout << "Parent : " << controller.parentTable.getSize() << endl;
 	cout << "Follows : " << controller.followsTable.getSize() << endl;
 	cout << "Calls: " << controller.callsTable.getSize() << endl;
+	cout << "ModifiesStmt: " << controller.modifiesTable.getSizeStmtModifies() << endl;
+	cout << "ModifiesProc: " << controller.modifiesTable.getSizeProcModifies() << endl;
 }
 
 bool Parser::checkFileExists() {
@@ -201,7 +203,7 @@ void Parser::stmt(TNode* parent) {
 		TNode* varNode = createASTNode("VAR_NODE", nextToken.name, assignNode, line, currentProc);
 		variableName();
 
-//		populateModifies(line);
+		populateModifies(line, currentProc);
 
 		match("=");
 		expr(assignNode);
@@ -324,6 +326,19 @@ void Parser::populateModifies(int line, int procedure) {
 
 	// container statements
 	stack<int> tempStack = stack<int>();
+	while(containerStack.size() > 0) {
+		int top = containerStack.top();
+		tempStack.push(top);
+
+		controller.modifiesTable.insertModifiesStmt(top, lastVarIndex);
+		controller.modifiesTable.insertModifiesProc(top, procedure);
+		containerStack.pop();
+	}
+
+	while(tempStack.size() > 0) {
+		containerStack.push(tempStack.top());
+		tempStack.pop();
+	}
 }
 
 void Parser::populateUses(int) {

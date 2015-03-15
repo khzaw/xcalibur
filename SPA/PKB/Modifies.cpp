@@ -12,6 +12,7 @@ using namespace std;
 	
    void Modifies::insertModifiesStmt(int stmt,int varIndex){
 	  if(!( isModifiesStmt(stmt,varIndex))){
+		   // cout << "stmt : " << stmt << ", varIndex " << varIndex << endl;
 	   stmtMod.push_back(make_pair(stmt,varIndex));
 	  }
    }

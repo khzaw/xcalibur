@@ -47,6 +47,12 @@ void Parser::parse() {
 	cout << programString << endl;
 	lexer = Lexer(programString);
 	program();
+	debug();
+
+}
+
+void Parser::debug() {
+	cout << "Parent : " << controller.parentTable.getSize() << endl;
 }
 
 bool Parser::checkFileExists() {
@@ -61,6 +67,7 @@ void Parser::program() {
 	// program: procedure+
 	nextToken = getToken();
 	procedure();
+	this->line = 0;
 	while(nextToken.name == "procedure") {
 		procedure();
 	}
@@ -98,6 +105,7 @@ string Parser::procedureName() {
 void Parser::stmtLst(TNode* parent) {
 	// stmtLst: stmt+
 	stmt(parent);
+	debug();
 	if(nextToken.token == CLOSE_BLOCK) {
 		return;
 	} else {
@@ -111,13 +119,12 @@ void Parser::stmt(TNode* parent) {
 	// stmt: call | while | if | assign
 	if(nextToken.name == "call") {
 		// call: "procedure" proc_name ";"
-		TNode* callNode = createASTNode("CALL_NODE", nextToken.name, parent, ++line, currentProc);
+		line++;
+		TNode* callNode = createASTNode("CALL_NODE", nextToken.name, parent, line, currentProc);
 		controller.statementTable.insertStatement(callNode);
 		match("call");
 
-		if(parent->getParent()->getNodeType() == "WHILE_NODE" || parent->getParent()->getNodeType() == "IF_NODE") {
-			controller.parentTable.insertParent(parent->getStmtNum(), line);
-		}
+		populateParent(parent, line);
 
 		string newProcedure = procedureName();
 		controller.callsTable.insertCalls(currentProc, getProcedureIndex(newProcedure));
@@ -125,13 +132,12 @@ void Parser::stmt(TNode* parent) {
 
 	} else if(nextToken.name == "while") {
 		// while: "while" var_name "{" stmtLst "}"
-		TNode* whileNode = createASTNode("WHILE_NODE", nextToken.name, parent, ++line, currentProc);
+		line++;
+		TNode* whileNode = createASTNode("WHILE_NODE", nextToken.name, parent, line, currentProc);
 		controller.statementTable.insertStatement(whileNode);
 		match("while");
 
-		if(parent->getParent()->getNodeType() == "WHILE_NODE" || parent->getParent()->getNodeType() == "IF_NODE") {
-			controller.parentTable.insertParent(parent->getStmtNum(), line);
-		}
+		populateParent(parent, line);
 
 
 		TNode* whileVarNode = createASTNode("VAR_NODE", nextToken.name, whileNode, line, currentProc);
@@ -144,13 +150,12 @@ void Parser::stmt(TNode* parent) {
 		match("}");
 	} else if(nextToken.name == "if") {
 		// if: "if" var_name "then" "{" stmtLst "}" "else" "{" stmtLst "}"
-		TNode* ifNode = createASTNode("IF_NODE", nextToken.name, parent, ++line, currentProc);
+		++line;
+		TNode* ifNode = createASTNode("IF_NODE", nextToken.name, parent, line, currentProc);
 		controller.statementTable.insertStatement(ifNode);
 		match("if");
 
-		if(parent->getParent()->getNodeType() == "WHILE_NODE" || parent->getParent()->getNodeType() == "IF_NODE") {
-			controller.parentTable.insertParent(parent->getStmtNum(), line);
-		}
+		populateParent(parent, line);
 
 		TNode* ifVarNode = createASTNode("VAR_NODE", nextToken.name, ifNode, line, currentProc);
 		variableName();
@@ -171,12 +176,11 @@ void Parser::stmt(TNode* parent) {
 
 	} else {
 		// assign: var_name "=" expr ";"
-		TNode* assignNode = createASTNode("ASSIGN_NODE", "", parent, ++line, currentProc);
+		line++;
+		TNode* assignNode = createASTNode("ASSIGN_NODE", "", parent, line, currentProc);
 		controller.statementTable.insertStatement(assignNode);
 
-		if(parent->getParent()->getNodeType() == "WHILE_NODE" || parent->getParent()->getNodeType() == "IF_NODE") {
-			controller.parentTable.insertParent(parent->getStmtNum(), line);
-		}
+		populateParent(parent, line);
 
 		TNode* varNode = createASTNode("VAR_NODE", nextToken.name, assignNode, line, currentProc);
 		variableName();
@@ -270,6 +274,14 @@ void Parser::match(string tokenName) {
 	} else {
 		cout << "Syntax error: Expecting " << nextToken.name << " and lexeme " << nextToken.token << endl;
 	}
+}
+
+void Parser::populateParent(TNode* parent, int line) {
+	if(parent->getParent()->getNodeType() == "WHILE_NODE") 
+		controller.parentTable.insertParent(parent->getStmtNum(), line);
+
+	if(parent->getParent()->getNodeType() == "THEN_NODE" || parent->getParent()->getNodeType() == "ELSE_NODE")
+		controller.parentTable.insertParent(parent->getStmtNum(), line); // stmtLst node has the same line number
 }
 
 Lexeme Parser::getToken() {

@@ -50,4 +50,7 @@ private:
 	void constantValue();
 	TNode* createASTNode(string, string, TNode*, int, int);
 	int getProcedureIndex(string);
+	void debug();
+
+	void populateParent(TNode*, int);
 };

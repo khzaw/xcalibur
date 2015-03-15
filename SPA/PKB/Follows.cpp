@@ -16,7 +16,7 @@ Follows::Follows(StatementTable* s){
 
 void Follows::insertFollows(int stmt1, int stmt2){
 	if(!(isFollowsTrue(stmt1,stmt2))){
-    cout << "stmt1 : " << stmt1 << ", " << "stmt2: " << stmt2 << endl;
+    //cout << "stmt1 : " << stmt1 << ", " << "stmt2: " << stmt2 << endl;
 	pair<int,int> record(stmt1,stmt2);
 	followTable.push_back(record);
 	}

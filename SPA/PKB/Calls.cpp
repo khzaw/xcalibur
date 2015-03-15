@@ -19,6 +19,8 @@ using namespace std;
 			return -1;
 		}else{
 		*/
+
+		// cout << "stmt1 : " << callerIndex << ", " << "stmt2: " << calleeIndex << endl;
 			callTable.push_back(make_pair(callerIndex,calleeIndex));
 			return 0;
 		//}

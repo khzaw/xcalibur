@@ -16,6 +16,7 @@ class Parser {
 	int line;
 	int currentProc;
 	int previousStmt;
+	int lastVarIndex;
 	string procName;
 	Lexer lexer;
 	stack<Operator> operatorStack;
@@ -54,5 +55,7 @@ private:
 	void debug();
 
 	void populateParent(TNode*, int);
-	void populateFollows(int, int, bool);
+	void populateFollows(int, bool);
+	void populateUses(int);
+	void populateModifies(int, int);
 };

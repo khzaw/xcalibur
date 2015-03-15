@@ -71,7 +71,7 @@ public:
 		tuple->addSynonymToMap(leftSynonym, index);
 		set<int> tempPrevious;
 		if (isSyn == 2) {	// NextStar(syn, stmt): Get Previous of stmt
-			tempPrevious = pkb->nextExtractor.getPrev(rightIndex);
+			tempPrevious = pkb->nextExtractor.getPrevStar(rightIndex);
 		} else {	// NextStar(syn, _): Get all Previous stmt
 			// getAllPrevious Statements
 			tempPrevious = pkb->nextExtractor.getAllPrev();
@@ -149,7 +149,7 @@ public:
 					result->addResultRow(temp);
 				}
 			} else {	// NextStar(_, syn)
-				if (!pkb->nextExtractor.getPrev(temp.at(index)).empty()) {
+				if (!pkb->nextExtractor.getPrevStar(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -233,7 +233,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					set<int> tV = pkb->nextExtractor.getPrev(rightValue);
+					set<int> tV = pkb->nextExtractor.getPrevStar(rightValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
@@ -259,7 +259,7 @@ public:
 		if(isSyn == 0) {	//(digit, digit)
 			tuple->setEmpty(!pkb->nextExtractor.isNextStar(leftIndex, rightIndex));
 		} else if (isSyn == 7) {	//(_, digit)
-			tuple->setEmpty(pkb->nextExtractor.getPrev(rightIndex).empty());
+			tuple->setEmpty(pkb->nextExtractor.getPrevStar(rightIndex).empty());
 		} else if (isSyn == 8) {	//(digit, _)
 			tuple->setEmpty(pkb->nextExtractor.getNextStar(leftIndex).empty());
 		} else {	//(_, _)

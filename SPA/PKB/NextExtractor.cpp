@@ -278,11 +278,11 @@ TNode* NextExtractor::getLastRightSibling(TNode* curTNode){
 
 void NextExtractor::storeAllNextPrev(){
 	statementTable->getSize();
-	for (int i= 0; i < statementTable->getSize(); i++){
+	for (int i= 1; i <= statementTable->getSize(); i++){
 		set<int> nextResult = getNext(i);
        allNextStmt.insert(nextResult.begin(), nextResult.end());
 		}
-	for (int i= 0; i < statementTable->getSize(); i++){
+	for (int i= 1; i <= statementTable->getSize(); i++){
 		set<int> prevResult = getPrev(i);
        allPrevStmt.insert(prevResult.begin(), prevResult.end());
 		}
@@ -601,7 +601,7 @@ set<int> NextExtractor::getPrevResultSet(vector<shared_ptr<GNode>> prevArray , s
 	for (unsigned i =0 ; i < prevArray.size(); i++){
 
 		if (prevArray[i] != NULL){
-
+			if(prevArray[i]->getStmtNum() != 0){
 			if (prevArray[i]->getStmtNum() == INT_MIN){ //this only occurs for if else empty node at the end
 
 				return getPrevResultSet(prevArray[i]->getPrevArr() , result);
@@ -609,6 +609,7 @@ set<int> NextExtractor::getPrevResultSet(vector<shared_ptr<GNode>> prevArray , s
 			}else {
 
 				result.insert(prevArray[i]->getStmtNum());
+			}
 			}
 		}
 	}

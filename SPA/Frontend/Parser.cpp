@@ -98,6 +98,7 @@ void Parser::procedure() {
 	string procName = procedureName();
 	cout << procName << endl;
 	TNode* procNode = new TNode("PROC_NODE", procName, line, currentProc);
+	controller.ast.insertRoot(procNode);
 	match("{");
 	TNode* procStmtLstNode = createASTNode("STMTLST_NODE", "", procNode, line, currentProc);
 	stmtLst(procStmtLstNode);

@@ -22,6 +22,7 @@ Parser::Parser(string filepath) {
 	this->lexer = Lexer("");
 	this->line = 0;
 	this->currentProc = 0;
+	this->previousStmt = 0;			// for poulation of follows
 	parse();
 }
 
@@ -53,6 +54,7 @@ void Parser::parse() {
 
 void Parser::debug() {
 	cout << "Parent : " << controller.parentTable.getSize() << endl;
+	cout << "Follows : " << controller.followsTable.getSize() << endl;
 }
 
 bool Parser::checkFileExists() {
@@ -105,7 +107,6 @@ string Parser::procedureName() {
 void Parser::stmtLst(TNode* parent) {
 	// stmtLst: stmt+
 	stmt(parent);
-	debug();
 	if(nextToken.token == CLOSE_BLOCK) {
 		return;
 	} else {
@@ -130,6 +131,8 @@ void Parser::stmt(TNode* parent) {
 		controller.callsTable.insertCalls(currentProc, getProcedureIndex(newProcedure));
 		match(";");
 
+		populateFollows(previousStmt, line, true);
+
 	} else if(nextToken.name == "while") {
 		// while: "while" var_name "{" stmtLst "}"
 		line++;
@@ -146,8 +149,9 @@ void Parser::stmt(TNode* parent) {
 		match("{");
 		TNode* whileStmtLstNode = createASTNode("STMTLST_NODE", "", whileNode, line, currentProc);
 		stmtLst(whileStmtLstNode);
-
 		match("}");
+		
+		populateFollows(line, previousStmt, true);
 	} else if(nextToken.name == "if") {
 		// if: "if" var_name "then" "{" stmtLst "}" "else" "{" stmtLst "}"
 		++line;
@@ -174,6 +178,7 @@ void Parser::stmt(TNode* parent) {
 		stmtLst(elseStmtLstNode);
 		match("}");
 
+		populateFollows(line, previousStmt, true);
 	} else {
 		// assign: var_name "=" expr ";"
 		line++;
@@ -188,6 +193,9 @@ void Parser::stmt(TNode* parent) {
 		match("=");
 		expr(assignNode);
 		match(";");
+		previousStmt = line;
+		
+		populateFollows(line, previousStmt, false);
 	}
 }
 
@@ -282,6 +290,18 @@ void Parser::populateParent(TNode* parent, int line) {
 
 	if(parent->getParent()->getNodeType() == "THEN_NODE" || parent->getParent()->getNodeType() == "ELSE_NODE")
 		controller.parentTable.insertParent(parent->getStmtNum(), line); // stmtLst node has the same line number
+}
+
+void Parser::populateFollows(int previousStmt, int line, bool isContainer) {
+	if(previousStmt > 0) {
+		controller.followsTable.insertFollows(previousStmt, line);
+	}
+
+	if(isContainer) {
+		previousStmt = 0;
+	} else {
+		previousStmt = line;
+	}
 }
 
 Lexeme Parser::getToken() {

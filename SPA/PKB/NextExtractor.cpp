@@ -278,13 +278,13 @@ TNode* NextExtractor::getLastRightSibling(TNode* curTNode){
 
 void NextExtractor::storeAllNextPrev(){
 	statementTable->getSize();
-	for (int i= 0; i < statementTable->getSize(); i++){
+	for (int i= 1; i <= statementTable->getSize(); i++){
 		set<int> nextResult = getNext(i);
        allNextStmt.insert(nextResult.begin(), nextResult.end());
 		}
-	for (int i= 0; i < statementTable->getSize(); i++){
+	for (int i= 1; i <= statementTable->getSize(); i++){
 		set<int> prevResult = getPrev(i);
-       allNextStmt.insert(prevResult.begin(), prevResult.end());
+       allPrevStmt.insert(prevResult.begin(), prevResult.end());
 		}
 }
 
@@ -584,7 +584,7 @@ set<int> NextExtractor::getNextResultSet(vector<shared_ptr<GNode>> nextArray , s
 
 			if (nextArray[i]->getStmtNum() == INT_MIN){ //this only occurs for if else empty node at the end
 
-				getNextResultSet(nextArray[i]->getNextArr() , result);
+			return	getNextResultSet(nextArray[i]->getNextArr() , result);
 								
 			}else {
 
@@ -601,14 +601,15 @@ set<int> NextExtractor::getPrevResultSet(vector<shared_ptr<GNode>> prevArray , s
 	for (unsigned i =0 ; i < prevArray.size(); i++){
 
 		if (prevArray[i] != NULL){
-
+			if(prevArray[i]->getStmtNum() != 0){
 			if (prevArray[i]->getStmtNum() == INT_MIN){ //this only occurs for if else empty node at the end
 
-				getPrevResultSet(prevArray[i]->getPrevArr() , result);
+				return getPrevResultSet(prevArray[i]->getPrevArr() , result);
 								
 			}else {
 
 				result.insert(prevArray[i]->getStmtNum());
+			}
 			}
 		}
 	}

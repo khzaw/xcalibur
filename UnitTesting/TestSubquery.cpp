@@ -17,6 +17,7 @@
 #include "QueryProcessor\WithSubquery.cpp"
 #include "QueryProcessor\CallsSubquery.cpp"
 #include "QueryProcessor\NextSubquery.cpp"
+#include "QueryProcessor\NextStarSubquery.cpp"
 
 void 
 SubqueryTest::setUp()
@@ -86,16 +87,16 @@ void SubqueryTest::testSubqueries() {
 	TNode stmt21("ASSIGN_NODE", "z = 5", 21, 2);
 	TNode stmt22("ASSIGN_NODE", "v = z", 22, 2);
 	
-	TNode rootNode1("PROC_NODE", "First", 0, 0);
-	TNode stmtListNode1("STMTLIST_NODE", "", 0, 0); 
+	TNode rootNode1("PROC_NODE", "First", -1, 0);
+	TNode stmtListNode1("STMTLST_NODE", "", 0, 0); 
 	stmtListNode1.addParent(&rootNode1); 
 	rootNode1.addChild(&stmtListNode1);
 	stmt1.addParent(&stmtListNode1); stmtListNode1.addChild(&stmt1); stmt1.addRightSibling(&stmt2);
 	stmt2.addParent(&stmtListNode1); stmtListNode1.addChild(&stmt2); stmt2.addRightSibling(&stmt3);
 	stmt3.addParent(&stmtListNode1); stmtListNode1.addChild(&stmt2);
 
-	TNode rootNode2("PROC_NODE", "Second", 0, 1);
-	TNode stmtListNode2("STMTLIST_NODE", "", 0, 1); 
+	TNode rootNode2("PROC_NODE", "Second", -1, 1);
+	TNode stmtListNode2("STMTLST_NODE", "", 0, 1); 
 	stmtListNode2.addParent(&rootNode2); 
 	rootNode2.addChild(&stmtListNode2);
 	// base
@@ -107,34 +108,34 @@ void SubqueryTest::testSubqueries() {
 	stmt19.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt19); stmt19.addRightSibling(&stmt20);
 	stmt20.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt20);
 	// statement 6 nesting
-	TNode stmtListNode2_1("STMTLIST_NODE", "", 0, 1); 
+	TNode stmtListNode2_1("STMTLST_NODE", "", 0, 1); 
 	stmtListNode2_1.addParent(&stmt6); stmt6.addChild(&stmtListNode2_1);
 	stmt7.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt7); stmt7.addRightSibling(&stmt8);
 	stmt8.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt8); stmt8.addRightSibling(&stmt11);
 	stmt11.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt11); stmt11.addRightSibling(&stmt12);
 	stmt12.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt12);
 		// statement 8 nesting
-		TNode stmtListNode2_1_1("THEN_NODE", "", 0, 1); 
-		TNode stmtListNode2_1_2("ELSE_NODE", "", 0, 1); 
+		TNode stmtListNode2_1_1("THEN_NODE", "then", 0, 1); 
+		TNode stmtListNode2_1_2("ELSE_NODE", "else", 0, 1); 
 		stmtListNode2_1_1.addParent(&stmt8); stmt8.addChild(&stmtListNode2_1_1); stmtListNode2_1_1.addRightSibling(&stmtListNode2_1_2);
 		stmtListNode2_1_2.addParent(&stmt8); stmt8.addChild(&stmtListNode2_1_2);
 		stmt9.addParent(&stmtListNode2_1_1); stmtListNode2_1_1.addChild(&stmt9);
 		stmt10.addParent(&stmtListNode2_1_2); stmtListNode2_1_2.addChild(&stmt10);
 	// statement 13 nesting
-	TNode stmtListNode2_2("THEN_NODE", "", 0, 1); 
-	TNode stmtListNode2_3("ELSE_NODE", "", 0, 1); 
+	TNode stmtListNode2_2("THEN_NODE", "then", 0, 1); 
+	TNode stmtListNode2_3("ELSE_NODE", "else", 0, 1); 
 	stmtListNode2_2.addParent(&stmt8); stmt13.addChild(&stmtListNode2_2); stmtListNode2_2.addRightSibling(&stmtListNode2_3);
 	stmt14.addParent(&stmtListNode2_2); stmtListNode2_2.addChild(&stmt14); stmt14.addRightSibling(&stmt15);
 	stmt15.addParent(&stmtListNode2_2); stmtListNode2_2.addChild(&stmt15);
 		// statement 15 nesting
-		TNode stmtListNode2_2_1("STMTLIST_NODE", "", 0, 1); 
+		TNode stmtListNode2_2_1("STMTLST_NODE", "", 0, 1); 
 		stmtListNode2_2_1.addParent(&stmt15); stmt15.addChild(&stmtListNode2_2_1);
 		stmt16.addParent(&stmtListNode2_2_1); stmtListNode2_2_1.addChild(&stmt16);
 	stmtListNode2_3.addParent(&stmt13); stmt13.addChild(&stmtListNode2_3);
 	stmt17.addParent(&stmtListNode2_3); stmtListNode2_3.addChild(&stmt17);
 
-	TNode rootNode3("PROC_NODE", "Third", 0, 2);
-	TNode stmtListNode3("STMTLIST_NODE", "", 0, 2); 
+	TNode rootNode3("PROC_NODE", "Third", -1, 2);
+	TNode stmtListNode3("STMTLST_NODE", "", 0, 2); 
 	stmtListNode3.addParent(&rootNode3); 
 	rootNode3.addChild(&stmtListNode3);
 	stmt21.addParent(&stmtListNode3); stmtListNode3.addChild(&stmt21); stmt21.addRightSibling(&stmt22);
@@ -352,7 +353,7 @@ void SubqueryTest::testSubqueries() {
 	synonymTable["const1"]="constant";
 	synonymTable["const2"]="constant";
 
-	testNext();
+	testNextStar();
 	/*
 	testFollows();
 	testParent();
@@ -7925,12 +7926,42 @@ void SubqueryTest::testWithTuple(){
 }
 
 void SubqueryTest::testNext() {
+	NextSubquery nextSubqueryX = NextSubquery(&synonymTable, pk);
+	nextSubqueryX.setSynonyms(1 , 2);
+	ResultTuple* actualResultsNextSubqueryX = nextSubqueryX.solve();
+	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextSubqueryX->isBool());
+	CPPUNIT_ASSERT_EQUAL(false, actualResultsNextSubqueryX->isEmpty());
+	
+	NextSubquery nextSubqueryX1 = NextSubquery(&synonymTable, pk);
+	nextSubqueryX1.setSynonyms(6 , 13);
+	ResultTuple* actualResultsNextSubqueryX1 = nextSubqueryX1.solve();
+	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextSubqueryX1->isBool());
+	CPPUNIT_ASSERT_EQUAL(false, actualResultsNextSubqueryX1->isEmpty());
+
+	NextSubquery nextSubqueryX2 = NextSubquery(&synonymTable, pk);
+	nextSubqueryX2.setSynonyms(1 , 22);
+	ResultTuple* actualResultsNextSubqueryX2 = nextSubqueryX2.solve();
+	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextSubqueryX2->isBool());
+	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextSubqueryX2->isEmpty());
+	
+	NextSubquery nextSubqueryX3 = NextSubquery(&synonymTable, pk);
+	nextSubqueryX3.setSynonyms(6 , 9);
+	ResultTuple* actualResultsNextSubqueryX3 = nextSubqueryX3.solve();
+	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextSubqueryX3->isBool());
+	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextSubqueryX3->isEmpty());
+	
+	NextSubquery nextSubqueryX4 = NextSubquery(&synonymTable, pk);
+	nextSubqueryX4.setSynonyms("_" , 9);
+	ResultTuple* actualResultsNextSubqueryX4 = nextSubqueryX4.solve();
+	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextSubqueryX4->isBool());
+	CPPUNIT_ASSERT_EQUAL(false, actualResultsNextSubqueryX4->isEmpty());
+
 	// Test 2: Next(s1, 2)
 	NextSubquery nextSubquery2 = NextSubquery(&synonymTable, pk);
-	nextSubquery2.setSynonyms("s1", 2);
+	nextSubquery2.setSynonyms("s1", 18);
 	ResultTuple* actualResultsNextSubquery2 = nextSubquery2.solve();
 	int expectedResultsNextSubquery2[1][1] = {
-		{1} 
+		{17} 
 	};
 	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResultsNextSubquery2->getAllResults().size());
 	for (size_t i = 0; i < 1; i++){
@@ -7968,5 +7999,98 @@ void SubqueryTest::testNext() {
 		for (size_t j = 0; j < 1; j++){
 			CPPUNIT_ASSERT_EQUAL(expectedResultsNextSubquery3[i][j], actualResultsNextSubquery3->getResultAt(i, j));
 		}
+	}	
+}
+
+void SubqueryTest::testNextStar() {
+	NextStarSubquery nextStarSubqueryX = NextStarSubquery(&synonymTable, pk);
+	nextStarSubqueryX.setSynonyms(1 , 2);
+	ResultTuple* actualResultsNextStarSubqueryX = nextStarSubqueryX.solve();
+	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextStarSubqueryX->isBool());
+	CPPUNIT_ASSERT_EQUAL(false, actualResultsNextStarSubqueryX->isEmpty());
+	
+	NextStarSubquery nextStarSubqueryX1 = NextStarSubquery(&synonymTable, pk);
+	nextStarSubqueryX1.setSynonyms(6 , 13);
+	ResultTuple* actualResultsNextStarSubqueryX1 = nextStarSubqueryX1.solve();
+	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextStarSubqueryX1->isBool());
+	CPPUNIT_ASSERT_EQUAL(false, actualResultsNextStarSubqueryX1->isEmpty());
+
+	NextStarSubquery nextStarSubqueryX2 = NextStarSubquery(&synonymTable, pk);
+	nextStarSubqueryX2.setSynonyms(1 , 22);
+	ResultTuple* actualResultsNextStarSubqueryX2 = nextStarSubqueryX2.solve();
+	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextStarSubqueryX2->isBool());
+	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextStarSubqueryX2->isEmpty());
+	
+	NextStarSubquery nextStarSubqueryX3 = NextStarSubquery(&synonymTable, pk);
+	nextStarSubqueryX3.setSynonyms(6 , 9);
+	ResultTuple* actualResultsNextStarSubqueryX3 = nextStarSubqueryX3.solve();
+	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextStarSubqueryX3->isBool());
+	CPPUNIT_ASSERT_EQUAL(false, actualResultsNextStarSubqueryX3->isEmpty());
+	
+	NextStarSubquery nextStarSubqueryX4 = NextStarSubquery(&synonymTable, pk);
+	nextStarSubqueryX4.setSynonyms("_" , 9);
+	ResultTuple* actualResultsNextStarSubqueryX4 = nextStarSubqueryX4.solve();
+	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextStarSubqueryX4->isBool());
+	CPPUNIT_ASSERT_EQUAL(false, actualResultsNextStarSubqueryX4->isEmpty());
+
+	/*
+	// Test 2: NextStar(s1, 2)
+	NextStarSubquery nextStarSubquery2 = NextStarSubquery(&synonymTable, pk);
+	nextStarSubquery2.setSynonyms("s1", 18);
+	ResultTuple* actualResultsNextStarSubquery2 = nextStarSubquery2.solve();
+	int expectedResultsNextStarSubquery2[14][1] = {
+		{4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17} 
+	};
+	CPPUNIT_ASSERT_EQUAL((size_t)14, actualResultsNextStarSubquery2->getAllResults().size());
+	for (size_t i = 0; i < 14; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsNextStarSubquery2[i][j], actualResultsNextStarSubquery2->getResultAt(i, j));
+		}
 	}
+
+	NextStarSubquery nextStarSubquery2_ = NextStarSubquery(&synonymTable, pk);
+	nextStarSubquery2_.setSynonyms(6, "s1");
+	ResultTuple* actualResultsNextStarSubquery2_ = nextStarSubquery2_.solve();
+	int expectedResultsNextStarSubquery2_[15][1] = {
+		{6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19}, {20}
+	};
+	cout << actualResultsNextStarSubquery2_->toString() <<endl;
+	CPPUNIT_ASSERT_EQUAL((size_t)15, actualResultsNextStarSubquery2_->getAllResults().size());
+	for (size_t i = 0; i < 15; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsNextStarSubquery2_[i][j], actualResultsNextStarSubquery2_->getResultAt(i, j));
+		}
+	}
+	*/
+
+	// Test 1: NextStar(s1, s2)
+	NextStarSubquery nextStarSubquery1 = NextStarSubquery(&synonymTable, pk);
+	nextStarSubquery1.setSynonyms("s1", "s2");
+	ResultTuple* actualResultsNextStarSubquery1 = nextStarSubquery1.solve();
+	int expectedResultsNextStarSubquery1[23][2] = {
+		{1, 2}, {2, 3}, {4, 5}, {5, 6}, {6, 7}, {6, 13}, 
+		{7, 8}, {8, 9}, {8, 10}, {9, 11}, {10, 11}, {11, 12},
+		{12, 6}, {13, 14}, {13, 17}, {14, 15}, {15, 16}, {15, 18},
+		{16, 15}, {17, 18}, {18, 19}, {19, 20}, {21, 22} 
+	};
+	CPPUNIT_ASSERT_EQUAL((size_t)23, actualResultsNextStarSubquery1->getAllResults().size());
+	for (size_t i = 0; i < 23; i++){
+		for (size_t j = 0; j < 2; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsNextStarSubquery1[i][j], actualResultsNextStarSubquery1->getResultAt(i, j));
+		}
+	}
+
+	// Test 3: NextStar(s1, _)
+	NextStarSubquery nextStarSubquery3 = NextStarSubquery(&synonymTable, pk);
+	nextStarSubquery3.setSynonyms("s1", "_");
+	ResultTuple* actualResultsNextStarSubquery3 = nextStarSubquery3.solve();
+	int expectedResultsNextStarSubquery3[20][1] = {
+		{1}, {2}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19}, {20}, {21}
+	};
+	CPPUNIT_ASSERT_EQUAL((size_t)20, actualResultsNextStarSubquery3->getAllResults().size());
+	for (size_t i = 0; i < 20; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsNextStarSubquery3[i][j], actualResultsNextStarSubquery3->getResultAt(i, j));
+		}
+	}	
 }

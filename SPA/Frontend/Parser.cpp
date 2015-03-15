@@ -23,6 +23,7 @@ Parser::Parser(string filepath) {
 	this->line = 0;
 	this->currentProc = 0;
 	this->previousStmt = 0;			// for poulation of follows
+	this->prev = NULL;
 
 	this->lastVarIndex = -1;		// for modifies population
 	parse();
@@ -119,7 +120,7 @@ void Parser::stmtLst(TNode* parent) {
 	if(nextToken.token == CLOSE_BLOCK) {
 		return;
 	} else {
-		cout << nextToken.name << endl;
+		//cout << nextToken.name << endl;
 		stmtLst(parent);
 	}
 }
@@ -139,7 +140,7 @@ void Parser::stmt(TNode* parent) {
 		controller.callsTable.insertCalls(currentProc, getProcedureIndex(newProcedure));
 		match(";");
 
-		populateFollows(line, false);
+		populateFollows(line, false, parent, callNode);
 
 	} else if(nextToken.name == "while") {
 		// while: "while" var_name "{" stmtLst "}"
@@ -149,7 +150,7 @@ void Parser::stmt(TNode* parent) {
 		match("while");
 
 		populateParent(parent, line);
-		populateFollows(line, true);
+		populateFollows(line, true, parent, whileNode);
 		containerStack.push(line);
 
 
@@ -173,7 +174,7 @@ void Parser::stmt(TNode* parent) {
 		match("if");
 
 		populateParent(parent, line);
-		populateFollows(line, true);
+		populateFollows(line, true, parent, ifNode);
 		containerStack.push(line);
 
 		TNode* ifVarNode = createASTNode("VAR_NODE", nextToken.name, ifNode, line, currentProc);
@@ -205,7 +206,7 @@ void Parser::stmt(TNode* parent) {
 		controller.statementTable.insertStatement(assignNode);
 
 		populateParent(parent, line);
-		populateFollows(line, false);
+		populateFollows(line, false, parent, assignNode);
 
 		TNode* varNode = createASTNode("VAR_NODE", nextToken.name, assignNode, line, currentProc);
 		variableName();
@@ -313,16 +314,19 @@ void Parser::populateParent(TNode* parent, int line) {
 		controller.parentTable.insertParent(parent->getStmtNum(), line); // stmtLst node has the same line number
 }
 
-void Parser::populateFollows(int line, bool isContainer) {
+void Parser::populateFollows(int line, bool isContainer, TNode* prev, TNode* current) {
 	//cout << " line : " << line << "\tpreviousStmt" << previousStmt << endl;
-	if(previousStmt > 0) {
+	if(previousStmt > 0 && prev != NULL) {
 		controller.followsTable.insertFollows(previousStmt, line);
+		controller.ast.assignRightSibling(prev, current);
 	}
 
 	previousStmt = line;
+	prev = current;
 
 	if(isContainer) {
 		previousStmt = 0;
+		prev = NULL;
 	}
 }
 

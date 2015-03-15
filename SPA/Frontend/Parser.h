@@ -16,6 +16,7 @@ class Parser {
 	int line;
 	int currentProc;
 	int previousStmt;
+	TNode* prev;
 	int lastVarIndex;
 	string procName;
 	Lexer lexer;
@@ -55,7 +56,7 @@ private:
 	void debug();
 
 	void populateParent(TNode*, int);
-	void populateFollows(int, bool);
+	void populateFollows(int, bool, TNode*, TNode* );
 	void populateUses(int, int, bool = false);
 	void populateModifies(int, int);
 };

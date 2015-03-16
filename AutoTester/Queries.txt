@@ -1,3 +1,23 @@
+1 - ParenStar
+while w;
+Select w such that Parent*(w, 12)
+10
+5000
+2 - FollowsStar
+stmt s; while w;
+Select w such that Follows* (s, w)
+10
+5000
+3 - FollowsStar
+if ifstat;
+Select ifstat such that Follows* (ifstat, 17)
+8
+5000
+4 - Modifies
+variable v;
+Select v such that Modifies (18, v)
+m,x,y,z
+5000
 5 - Modifies, Uses
 assign a;
 Select a such that Modifies (a, "y") and Uses (a, "y")

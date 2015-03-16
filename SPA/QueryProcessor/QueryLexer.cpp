@@ -32,7 +32,7 @@ void QueryLexer::getChar() {
 		charClass = DIGIT;
 
 	if(nextChar == ' ') charClass = WHITESPACE;
-	if(nextChar == '$') charClass = EOL;
+	if(nextChar == '$' || nextChar == '\0') charClass = EOL;
 	if(nextChar == '+') charClass = PLUS;
 	if(nextChar == '*') charClass = TIMES;
 	if(nextChar == '-') charClass = MINUS;

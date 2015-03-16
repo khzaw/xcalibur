@@ -256,11 +256,8 @@ void Parser::exprPrime(TNode* assignNode) {
 		match("+");
 
 		Operator plusOp(OPERATOR_ADDITION, "+");
-		while(plusOp.op <= operatorStack.top().op) {
-			if(operatorStack.top().isNull()) {
-				operatorStack.pop();
-			}
-			popOperator(plusOp);
+		while(plusOp.op <= operatorStack.top().op || !operatorStack.top().isNull()) {
+			popOperator(operatorStack.top());
 		}
 		operatorStack.push(plusOp);
 
@@ -270,11 +267,8 @@ void Parser::exprPrime(TNode* assignNode) {
 		match("-");
 
 		Operator minusOp(OPERATOR_SUBTRACTION, "-");
-		while(minusOp.op <= operatorStack.top().op) {
-			if(operatorStack.top().isNull()) {
-				operatorStack.pop();
-			}
-			popOperator(minusOp);
+		while(minusOp.op <= operatorStack.top().op || !operatorStack.top().isNull()) {
+			popOperator(operatorStack.top());
 		}
 		operatorStack.push(minusOp);
 
@@ -298,11 +292,8 @@ void Parser::termPrime(TNode* assignNode) {
 		match("*");	
 
 		Operator multiplyOp(OPERATOR_MULTIPLICATION, "*");
-		while(multiplyOp.op <= operatorStack.top().op) {
-			if(operatorStack.top().isNull()) {
-				operatorStack.pop();
-			}
-			popOperator(multiplyOp);
+		while(multiplyOp.op <= operatorStack.top().op || !operatorStack.top().isNull()) {
+			popOperator(operatorStack.top()); 
 		}
 		operatorStack.push(multiplyOp);
 

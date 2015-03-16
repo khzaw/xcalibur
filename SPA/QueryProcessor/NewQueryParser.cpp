@@ -135,8 +135,7 @@ void NewQueryParser::matchSelect() {
 	match("Select");
 	this->evaluator = new QE(selectVariables, controller);
 	matchResultCL();
-	matchConditions();
-	if(nextToken.name == "such" || nextToken.name == "pattern" || nextToken.name == "with") {
+	while(nextToken.name == "such" || nextToken.name == "pattern" || nextToken.name == "with") {
 		matchConditions();
 	}
 

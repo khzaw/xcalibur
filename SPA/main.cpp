@@ -31,11 +31,8 @@ int main() {
 	//cout << endl << " ====================" << endl;
 
 
-	//Parser Pa("not_so_simple_sample.txt");
-	////Parser Pa("simple_sample.txt");
 
-	Parser Pa("test.txt");
-	//
+	Parser Pa("Source.txt");
 
 	//string query;
 	//NewQueryParser* parser;

@@ -153,7 +153,7 @@ void SubqueryTest::testSubqueries() {
 	pk->procTable.insertASTRootNode(0, &rootNode1);
 	pk->procTable.insertASTRootNode(1, &rootNode2);
 	pk->procTable.insertASTRootNode(2, &rootNode3);
-	/*
+	
 	pk->statementTable.insertStatement(&stmt1);
 	pk->statementTable.insertStatement(&stmt2);
 	pk->statementTable.insertStatement(&stmt3);
@@ -176,7 +176,7 @@ void SubqueryTest::testSubqueries() {
 	pk->statementTable.insertStatement(&stmt20);
 	pk->statementTable.insertStatement(&stmt21);
 	pk->statementTable.insertStatement(&stmt22);
-	*/
+	
 	pk->procTable.insertProc("First");  // 0
 	pk->procTable.insertProc("Second"); // 1
 	pk->procTable.insertProc("Third");  // 2
@@ -331,7 +331,7 @@ void SubqueryTest::testSubqueries() {
 	pk->usesTable.insertUsesStmt(20, 1);
 	pk->usesTable.insertUsesStmt(20, 3);
 	pk->usesTable.insertUsesStmt(22, 1);
-
+	/*
 	pk->statementTable.insertStatement(&stmt1);
 	pk->statementTable.insertStatement(&stmt2);
 	pk->statementTable.insertStatement(&stmt3);
@@ -354,7 +354,7 @@ void SubqueryTest::testSubqueries() {
 	pk->statementTable.insertStatement(&stmt20);
 	pk->statementTable.insertStatement(&stmt21);
 	pk->statementTable.insertStatement(&stmt22);
-
+	*/
 	pk->constructCalls();
 	pk->constructFollows();
 	pk->constructModifies();
@@ -381,7 +381,7 @@ void SubqueryTest::testSubqueries() {
 	synonymTable["const1"]="constant";
 	synonymTable["const2"]="constant";
 
-	//testNext();
+	testNext();
 	testFollows();
 	testParent();
 	testFollowsT();
@@ -10778,7 +10778,6 @@ void SubqueryTest::testNext() {
 	int expectedResultsNextSubquery2[2][1] = {
 		{15}, {17} 
 	};
-	cout << actualResultsNextSubquery2->toString();
 	CPPUNIT_ASSERT_EQUAL((size_t)2, actualResultsNextSubquery2->getAllResults().size());
 	for (size_t i = 0; i < 2; i++){
 		for (size_t j = 0; j < 1; j++){
@@ -10790,7 +10789,6 @@ void SubqueryTest::testNext() {
 	NextSubquery nextSubquery3 = NextSubquery(&synonymTable, pk);
 	nextSubquery3.setSynonyms("s1", "_");
 	ResultTuple* actualResultsNextSubquery3 = nextSubquery3.solve();
-	cout << endl << actualResultsNextSubquery3->toString() << endl;
 	int expectedResultsNextSubquery3[19][1] = {
 		{1}, {2}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19}, {21}
 	};
@@ -11816,94 +11814,5 @@ void SubqueryTest::testNext() {
 }
 
 void SubqueryTest::testNextStar() {
-	NextStarSubquery nextStarSubqueryX = NextStarSubquery(&synonymTable, pk);
-	nextStarSubqueryX.setSynonyms(1 , 2);
-	ResultTuple* actualResultsNextStarSubqueryX = nextStarSubqueryX.solve();
-	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextStarSubqueryX->isBool());
-	CPPUNIT_ASSERT_EQUAL(false, actualResultsNextStarSubqueryX->isEmpty());
 	
-	NextStarSubquery nextStarSubqueryX1 = NextStarSubquery(&synonymTable, pk);
-	nextStarSubqueryX1.setSynonyms(6 , 13);
-	ResultTuple* actualResultsNextStarSubqueryX1 = nextStarSubqueryX1.solve();
-	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextStarSubqueryX1->isBool());
-	CPPUNIT_ASSERT_EQUAL(false, actualResultsNextStarSubqueryX1->isEmpty());
-
-	NextStarSubquery nextStarSubqueryX2 = NextStarSubquery(&synonymTable, pk);
-	nextStarSubqueryX2.setSynonyms(1 , 22);
-	ResultTuple* actualResultsNextStarSubqueryX2 = nextStarSubqueryX2.solve();
-	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextStarSubqueryX2->isBool());
-	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextStarSubqueryX2->isEmpty());
-	
-	NextStarSubquery nextStarSubqueryX3 = NextStarSubquery(&synonymTable, pk);
-	nextStarSubqueryX3.setSynonyms(6 , 9);
-	ResultTuple* actualResultsNextStarSubqueryX3 = nextStarSubqueryX3.solve();
-	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextStarSubqueryX3->isBool());
-	CPPUNIT_ASSERT_EQUAL(false, actualResultsNextStarSubqueryX3->isEmpty());
-	
-	NextStarSubquery nextStarSubqueryX4 = NextStarSubquery(&synonymTable, pk);
-	nextStarSubqueryX4.setSynonyms("_" , 9);
-	ResultTuple* actualResultsNextStarSubqueryX4 = nextStarSubqueryX4.solve();
-	CPPUNIT_ASSERT_EQUAL(true, actualResultsNextStarSubqueryX4->isBool());
-	CPPUNIT_ASSERT_EQUAL(false, actualResultsNextStarSubqueryX4->isEmpty());
-
-	/*
-	// Test 2: NextStar(s1, 2)
-	NextStarSubquery nextStarSubquery2 = NextStarSubquery(&synonymTable, pk);
-	nextStarSubquery2.setSynonyms("s1", 18);
-	ResultTuple* actualResultsNextStarSubquery2 = nextStarSubquery2.solve();
-	int expectedResultsNextStarSubquery2[14][1] = {
-		{4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17} 
-	};
-	CPPUNIT_ASSERT_EQUAL((size_t)14, actualResultsNextStarSubquery2->getAllResults().size());
-	for (size_t i = 0; i < 14; i++){
-		for (size_t j = 0; j < 1; j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultsNextStarSubquery2[i][j], actualResultsNextStarSubquery2->getResultAt(i, j));
-		}
-	}
-
-	NextStarSubquery nextStarSubquery2_ = NextStarSubquery(&synonymTable, pk);
-	nextStarSubquery2_.setSynonyms(6, "s1");
-	ResultTuple* actualResultsNextStarSubquery2_ = nextStarSubquery2_.solve();
-	int expectedResultsNextStarSubquery2_[15][1] = {
-		{6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19}, {20}
-	};
-	cout << actualResultsNextStarSubquery2_->toString() <<endl;
-	CPPUNIT_ASSERT_EQUAL((size_t)15, actualResultsNextStarSubquery2_->getAllResults().size());
-	for (size_t i = 0; i < 15; i++){
-		for (size_t j = 0; j < 1; j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultsNextStarSubquery2_[i][j], actualResultsNextStarSubquery2_->getResultAt(i, j));
-		}
-	}
-	*/
-
-	// Test 1: NextStar(s1, s2)
-	NextStarSubquery nextStarSubquery1 = NextStarSubquery(&synonymTable, pk);
-	nextStarSubquery1.setSynonyms("s1", "s2");
-	ResultTuple* actualResultsNextStarSubquery1 = nextStarSubquery1.solve();
-	int expectedResultsNextStarSubquery1[23][2] = {
-		{1, 2}, {2, 3}, {4, 5}, {5, 6}, {6, 7}, {6, 13}, 
-		{7, 8}, {8, 9}, {8, 10}, {9, 11}, {10, 11}, {11, 12},
-		{12, 6}, {13, 14}, {13, 17}, {14, 15}, {15, 16}, {15, 18},
-		{16, 15}, {17, 18}, {18, 19}, {19, 20}, {21, 22} 
-	};
-	CPPUNIT_ASSERT_EQUAL((size_t)23, actualResultsNextStarSubquery1->getAllResults().size());
-	for (size_t i = 0; i < 23; i++){
-		for (size_t j = 0; j < 2; j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultsNextStarSubquery1[i][j], actualResultsNextStarSubquery1->getResultAt(i, j));
-		}
-	}
-
-	// Test 3: NextStar(s1, _)
-	NextStarSubquery nextStarSubquery3 = NextStarSubquery(&synonymTable, pk);
-	nextStarSubquery3.setSynonyms("s1", "_");
-	ResultTuple* actualResultsNextStarSubquery3 = nextStarSubquery3.solve();
-	int expectedResultsNextStarSubquery3[20][1] = {
-		{1}, {2}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19}, {20}, {21}
-	};
-	CPPUNIT_ASSERT_EQUAL((size_t)20, actualResultsNextStarSubquery3->getAllResults().size());
-	for (size_t i = 0; i < 20; i++){
-		for (size_t j = 0; j < 1; j++){
-			CPPUNIT_ASSERT_EQUAL(expectedResultsNextStarSubquery3[i][j], actualResultsNextStarSubquery3->getResultAt(i, j));
-		}
-	}	
 }

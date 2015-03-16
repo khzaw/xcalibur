@@ -24,9 +24,9 @@ public:
 	void setSynonymTable(map<string, string>);
 	void addQuery(Subquery*);
 	
-	string solve();
+	list<string> solve();
 	void trimSolution();
 	void basicSolve();
 	vector<string> convert();
-	string convertSolutionToString();
+	list<string> convertSolutionToString();
 };

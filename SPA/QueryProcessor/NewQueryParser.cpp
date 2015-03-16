@@ -459,13 +459,13 @@ void NewQueryParser::matchRelRef() {
 void NewQueryParser::matchModifies() {
 	// ModifiesP: "Modifies" "(" entRef "," varRef ")"
 	// ModifiesC: "Modifies" "(" stmtRef "," varRef ")"
-	ModifiesSubquery modifiesSq = ModifiesSubquery(&synonyms, controller);
+	ModifiesSubquery* modifiesSq = new ModifiesSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchEntRef(true);
 	match(",");
 	string snd = matchVarRef();
 	match(")");
-	setSynonymsHelper(fst, snd, &modifiesSq);
+	setSynonymsHelper(fst, snd, modifiesSq);
 	//cout << "fst : " << fst << endl;
 	//cout << "snd : " << snd << endl;
 }

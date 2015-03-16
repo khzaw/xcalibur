@@ -63,7 +63,7 @@ NewQueryParser::NewQueryParser(string s, PKBController* controller) {
 }
 
 void NewQueryParser::printMap() {
-	cout << "Synonyms: ";
+	cout << "Synonyms: "; 
 	for(map<string, string>::iterator it = synonyms.begin(); it != synonyms.end(); ++it) {
 		cout << "(" << it->first << "," << it->second << ") ";
 	}
@@ -71,6 +71,8 @@ void NewQueryParser::printMap() {
 	for(vector<string>::iterator it = selectVariables.begin(); it != selectVariables.end(); ++it) {
 		cout << *it << "\n";
 	}
+
+	cout << "Queries : " << this->evaluator->queries.size() << endl;
 }
 
 NewQueryParser::~NewQueryParser() {
@@ -467,8 +469,7 @@ void NewQueryParser::matchModifies() {
 	string snd = matchVarRef();
 	match(")");
 	setSynonymsHelper(fst, snd, modifiesSq);
-	//cout << "fst : " << fst << endl;
-	//cout << "snd : " << snd << endl;
+	//cout << "Modifies fst : " << fst << "\tModifies snd : " << snd << "\t Queries:" << this->evaluator->queries.size() << endl;
 }
 
 string NewQueryParser::matchEntRef(bool excludeUnderScore) {
@@ -520,12 +521,14 @@ string NewQueryParser::matchVarRef() {
 void NewQueryParser::matchUses() {
 	// UsesP: "Uses" "(" entRef "," varRef ")"
 	// UsesC: "Uses" "(" entRef "," varRef ")"
+	ModifiesSubquery* usesSq = new ModifiesSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchEntRef(true);
 	match(",");
 	string snd = matchVarRef();
 	match(")");
-	cout << "Uses fst : " << fst << "\tUses snd : " << snd;
+	setSynonymsHelper(fst, snd, usesSq);
+	//cout << "Uses fst : " << fst << "\tUses snd : " << snd << endl;
 }
 
 void NewQueryParser::matchCalls() {

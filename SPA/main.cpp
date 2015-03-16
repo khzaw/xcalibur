@@ -34,9 +34,9 @@ int main() {
 
 	Parser Pa("Source.txt");
 
-	//string query;
-	//NewQueryParser* parser;
-	//PKBController* controller = new PKBController();
+	string query;
+	NewQueryParser* parser;
+	PKBController* controller = new PKBController();
 
 	//query = "if a; variable f,g; constant b, c; prog_line h; Select BOOLEAN";
 	//parser = new NewQueryParser(query, controller);
@@ -62,8 +62,8 @@ int main() {
 	//query = "procedure p, q; Select p such that Calls(p, q)";
 	//parser = new NewQueryParser(query, controller);
 
-	//query = "stmt s; Select s such that Follows*(s,10) and Follows*(s, 12)";
-	//parser = new NewQueryParser(query, controller);
+	query = "assign a; Select a such that Modifies (a, \"y\") and Uses (a, \"y\")";
+	parser = new NewQueryParser(query, controller);
 
 	string t;
 	cin >> t;

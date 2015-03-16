@@ -251,7 +251,7 @@ using namespace std;
 		   if(stmtMod[i].first >= cols){
 			   cols = stmtMod[i].first;
 		   }
-		 if(stmtMod[i].second >= cols){
+		 if(stmtMod[i].second >= rows){
 			   rows = stmtMod[i].second;
 		   }
 	   }
@@ -273,7 +273,7 @@ using namespace std;
 		   if(procMod[i].first >= cols){
 			   cols = procMod[i].first;
 		   }
-		 if(procMod[i].second >= cols){
+		 if(procMod[i].second >= rows){
 			   rows = procMod[i].second;
 		   }
 	   }

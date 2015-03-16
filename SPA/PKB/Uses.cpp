@@ -243,7 +243,7 @@ using namespace std;
 		   if(stmtUses[i].first >= cols){
 			   cols = stmtUses[i].first;
 		   }
-		 if(stmtUses[i].second >= cols){
+		 if(stmtUses[i].second >= rows){
 			   rows = stmtUses[i].second;
 		   }
 	   }
@@ -265,7 +265,7 @@ using namespace std;
 		   if(procUses[i].first >= cols){
 			   cols = procUses[i].first;
 		   }
-		 if(procUses[i].second >= cols){
+		 if(procUses[i].second >= rows){
 			   rows = procUses[i].second;
 		   }
 	   }

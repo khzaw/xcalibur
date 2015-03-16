@@ -51,7 +51,7 @@ void Parser::parse() {
 	// cout << programString << endl;
 	lexer = Lexer(programString);
 	program();
-	debug();
+	//debug();
 
 }
 
@@ -97,7 +97,7 @@ void Parser::procedure() {
 
 	match("procedure");
 	string procName = procedureName();
-	cout << procName << endl;
+	// cout << procName << endl;
 	TNode* procNode = new TNode("PROC_NODE", procName, line, currentProc);
 
 	match("{");
@@ -233,7 +233,7 @@ void Parser::stmt(TNode* parent) {
 		controller.ast.assignChild(assignNode, (operandStack.top()));
 		controller.ast.assignParent(operandStack.top(), assignNode);
 
-		cout << "postfix : " << postfix << endl;
+		// cout << "postfix : " << postfix << endl;
 		assignNode->setData(postfix);
 
 		operatorStack.pop();		// remove the sentinel

@@ -72,11 +72,11 @@ public:
 		tuple->addSynonymToMap(leftSynonym, index);
 		vector<int> modifiers = vector<int>();
 		if (isSyn == 2) {	// Modifies(syn, varnum): Get syns that modifies varnum
-			set<int> tempModifiers = pkb->modifiesTable.evaluateGetModifiersStmt(rightIndex);
+			set<int> tempModifiers = pkb->modifiesTable->evaluateGetModifiersStmt(rightIndex);
 			copy(tempModifiers.begin(), tempModifiers.end(), back_inserter(modifiers)); 
 		} else {	// Modifies(syn, _): Get all modifiers
 			// not sure if this is correct
-			set<int> tempModifiers = pkb->modifiesTable.getAllModifiersStmt();//pkb->modifiesTable.getModifiesStmt();
+			set<int> tempModifiers = pkb->modifiesTable->getAllModifiersStmt();//pkb->modifiesTable->getModifiesStmt();
 			copy(tempModifiers.begin(), tempModifiers.end(), back_inserter(modifiers)); 
 		}
 
@@ -84,7 +84,7 @@ public:
 			vector<int> temp = vector<int>();
 			// synonym type check here
 			if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if" || synonymTable->at(leftSynonym)=="call")
-				&& pkb->statementTable.getTNode(modifiers[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
+				&& pkb->statementTable->getTNode(modifiers[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
 				continue;
 			}
 			temp.push_back(modifiers.at(i));
@@ -104,12 +104,12 @@ public:
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 2) {	// Modifies(syn, varnum)
 				cout << "Modifies(" << temp.at(index) << "," << rightIndex << ")" << endl;
-				if (pkb->modifiesTable.evaluateIsModifiesStmt(temp.at(index), rightIndex)) {
+				if (pkb->modifiesTable->evaluateIsModifiesStmt(temp.at(index), rightIndex)) {
 					cout << "true";
 					result->addResultRow(temp);
 				}
 			} else {	// Modifies(syn, _)
-				if (!pkb->modifiesTable.evaluateGetModifiedVarStmt(temp.at(index)).empty()) {
+				if (!pkb->modifiesTable->evaluateGetModifiedVarStmt(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -124,7 +124,7 @@ public:
 		
 		vector<int> modified;
 		if (isSyn == 1) {	// Modifies(stmt, varnum): Get Modifiers of varnum
-			set<int> tempModified = pkb->modifiesTable.evaluateGetModifiersStmt(leftIndex);
+			set<int> tempModified = pkb->modifiesTable->evaluateGetModifiersStmt(leftIndex);
 			copy(tempModified.begin(), tempModified.end(), back_inserter(modified));
 		} else {	// Modifies(_, varnum)
 			//invalid
@@ -134,7 +134,7 @@ public:
 			vector<int> temp = vector<int>();
 			// synonym type check here
 			if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if" || synonymTable->at(rightSynonym)=="call")
-				&& pkb->statementTable.getTNode(modified[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
+				&& pkb->statementTable->getTNode(modified[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
 				continue;
 			}
 			temp.push_back(modified.at(i));
@@ -152,7 +152,7 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 1) {	// Modifies(stmt, syn)
-				if (pkb->modifiesTable.evaluateIsModifiesStmt(leftIndex, temp.at(index))) {
+				if (pkb->modifiesTable->evaluateIsModifiesStmt(leftIndex, temp.at(index))) {
 					result->addResultRow(temp);
 				}
 			} else {	// Modifies(_, syn)
@@ -171,11 +171,11 @@ public:
 
 		// get all modifiers statement
 		// for each modifiers statement, get its modified var
-		vector<pair<int, int>> stmts = pkb->modifiesTable.getModifiesStmt();
+		vector<pair<int, int>> stmts = pkb->modifiesTable->getModifiesStmt();
 		for (size_t i = 0; i < stmts.size(); i++) {
 			// synonym type check
 			if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if" || synonymTable->at(leftSynonym)=="call")
-				&& pkb->statementTable.getTNode(stmts[i].first)->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
+				&& pkb->statementTable->getTNode(stmts[i].first)->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
 				continue;
 			}
 			vector<int> row = vector<int>();
@@ -196,7 +196,7 @@ public:
 		if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
 			cout << "BOTH"<<endl;
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++){
-				if (pkb->modifiesTable.evaluateIsModifiesStmt(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
+				if (pkb->modifiesTable->evaluateIsModifiesStmt(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
 					result->addResultRow(tuple->getResultRow(i));
 				}
 			}
@@ -207,14 +207,14 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
-					set<int> tV = pkb->modifiesTable.evaluateGetModifiedVarStmt(leftValue);
+					set<int> tV = pkb->modifiesTable->evaluateGetModifiedVarStmt(leftValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(leftValue);
 				for (size_t j = 0; j < vals.size(); j++){
 					if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if" || synonymTable->at(rightSynonym)=="call")
-						&& pkb->statementTable.getTNode(vals[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
+						&& pkb->statementTable->getTNode(vals[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
 						continue;
 					}
 					vector<int> newRow(tuple->getResultRow(i));
@@ -229,14 +229,14 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					set<int> tV = pkb->modifiesTable.evaluateGetModifiersStmt(rightValue);
+					set<int> tV = pkb->modifiesTable->evaluateGetModifiersStmt(rightValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(rightValue);
 				for (size_t j = 0; j < vals.size(); j++){
 					if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if" || synonymTable->at(leftSynonym)=="call")
-						&& pkb->statementTable.getTNode(vals[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
+						&& pkb->statementTable->getTNode(vals[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
 						continue;
 					}
 					vector<int> newRow(tuple->getResultRow(i));
@@ -253,11 +253,11 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		tuple->setBool(true);
 		if(isSyn == 0) {	//(digit, digit)
-			tuple->setEmpty(!pkb->modifiesTable.evaluateIsModifiesStmt(leftIndex, rightIndex));
+			tuple->setEmpty(!pkb->modifiesTable->evaluateIsModifiesStmt(leftIndex, rightIndex));
 		} else if (isSyn == 7) {	//(_, digit)
 			// invalid
 		} else if (isSyn == 8) {	//(digit, _)
-			tuple->setEmpty(pkb->modifiesTable.evaluateGetModifiedVarStmt(leftIndex).empty());
+			tuple->setEmpty(pkb->modifiesTable->evaluateGetModifiedVarStmt(leftIndex).empty());
 		} else {	//(_, _)
 			// invalid
 		}

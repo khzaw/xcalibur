@@ -18,7 +18,7 @@ Parser::Parser() {
 
 Parser::Parser(string filepath) {
 	this->filepath = filepath;
-	this->controller = PKBController();
+	this->controller = new PKBController();
 	this->lexer = Lexer("");
 	this->line = 0;
 	this->currentProc = 0;
@@ -31,12 +31,12 @@ Parser::Parser(string filepath) {
 }
 
 void Parser::constructRelations() {
-	this->controller.constructCalls();
-	this->controller.constructFollows();
-	this->controller.constructModifies();
-	this->controller.constructUses();
-	this->controller.constructParent();
-	this->controller.constructNext();
+	this->controller->constructCalls();
+	this->controller->constructFollows();
+	this->controller->constructModifies();
+	this->controller->constructUses();
+	this->controller->constructParent();
+	this->controller->constructNext();
 }
 
 Parser::~Parser() {
@@ -66,14 +66,14 @@ void Parser::parse() {
 }
 
 void Parser::debug() {
-	cout << "Statements: " << controller.statementTable.getSize() << endl;
-	cout << "Parent : " << controller.parentTable.getSize() << endl;
-	cout << "Follows : " << controller.followsTable.getSize() << endl;
-	cout << "Calls: " << controller.callsTable.getSize() << endl;
-	cout << "ModifiesStmt: " << controller.modifiesTable.getSizeStmtModifies() << endl;
-	cout << "ModifiesProc: " << controller.modifiesTable.getSizeProcModifies() << endl;
-	cout << "UsesStmt: " << controller.usesTable.getSizeStmtUses() << endl;
-	cout << "UsesProc: " << controller.usesTable.getSizeProcUses() << endl;
+	cout << "Statements: " << controller->statementTable->getSize() << endl;
+	cout << "Parent : " << controller->parentTable->getSize() << endl;
+	cout << "Follows : " << controller->followsTable->getSize() << endl;
+	cout << "Calls: " << controller->callsTable->getSize() << endl;
+	cout << "ModifiesStmt: " << controller->modifiesTable->getSizeStmtModifies() << endl;
+	cout << "ModifiesProc: " << controller->modifiesTable->getSizeProcModifies() << endl;
+	cout << "UsesStmt: " << controller->usesTable->getSizeStmtUses() << endl;
+	cout << "UsesProc: " << controller->usesTable->getSizeProcUses() << endl;
 }
 
 bool Parser::checkFileExists() {
@@ -95,8 +95,8 @@ void Parser::program() {
 
 TNode* Parser::createASTNode(string nodeName, string data, TNode* parent, int line, int parentProc) {
 	TNode* node = new TNode(nodeName, data, line, parentProc);
-	controller.ast.assignChild(parent, node);
-	controller.ast.assignParent(node, parent);
+	controller->ast->assignChild(parent, node);
+	controller->ast->assignParent(node, parent);
 	return node;
 }
 
@@ -123,7 +123,7 @@ string Parser::procedureName() {
 	if(find(procedureNames.begin(), procedureNames.end(), procName) == procedureNames.end()) { // not found
 		procedureNames.push_back(procName);
 	}
-	controller.procTable.insertProc(procName);
+	controller->procTable->insertProc(procName);
 	nextToken = getToken();
 	return procName;
 }
@@ -145,13 +145,13 @@ void Parser::stmt(TNode* parent) {
 		// call: "procedure" proc_name ";"
 		line++;
 		TNode* callNode = createASTNode("CALL_NODE", nextToken.name, parent, line, currentProc);
-		controller.statementTable.insertStatement(callNode);
+		controller->statementTable->insertStatement(callNode);
 		match("call");
 
 		populateParent(parent, line);
 
 		string newProcedure = procedureName();
-		controller.callsTable.insertCalls(currentProc, getProcedureIndex(newProcedure));
+		controller->callsTable->insertCalls(currentProc, getProcedureIndex(newProcedure));
 		match(";");
 
 		populateFollows(line, false, parent, callNode);
@@ -160,7 +160,7 @@ void Parser::stmt(TNode* parent) {
 		// while: "while" var_name "{" stmtLst "}"
 		line++;
 		TNode* whileNode = createASTNode("WHILE_NODE", nextToken.name, parent, line, currentProc);
-		controller.statementTable.insertStatement(whileNode);
+		controller->statementTable->insertStatement(whileNode);
 		match("while");
 
 		populateParent(parent, line);
@@ -185,7 +185,7 @@ void Parser::stmt(TNode* parent) {
 		// if: "if" var_name "then" "{" stmtLst "}" "else" "{" stmtLst "}"
 		++line;
 		TNode* ifNode = createASTNode("IF_NODE", nextToken.name, parent, line, currentProc);
-		controller.statementTable.insertStatement(ifNode);
+		controller->statementTable->insertStatement(ifNode);
 		match("if");
 
 		populateParent(parent, line);
@@ -219,7 +219,7 @@ void Parser::stmt(TNode* parent) {
 		// assign: var_name "=" expr ";"
 		line++;
 		TNode* assignNode = createASTNode("ASSIGN_NODE", "", parent, line, currentProc);
-		controller.statementTable.insertStatement(assignNode);
+		controller->statementTable->insertStatement(assignNode);
 
 		postfix = "";
 		operatorStack.push(Operator(0, "NULL")); // sentinel
@@ -240,8 +240,8 @@ void Parser::stmt(TNode* parent) {
 			popOperator(operatorStack.top());
 		}
 
-		controller.ast.assignChild(assignNode, (operandStack.top()));
-		controller.ast.assignParent(operandStack.top(), assignNode);
+		controller->ast->assignChild(assignNode, (operandStack.top()));
+		controller->ast->assignParent(operandStack.top(), assignNode);
 
 		// cout << "postfix : " << postfix << endl;
 		assignNode->setData(postfix);
@@ -373,12 +373,12 @@ void Parser::factor(TNode* assignNode) {
 }
 
 void Parser::constantValue() {
-	controller.constantTable.insertConst(atoi(nextToken.name.c_str()));
+	controller->constantTable->insertConst(atoi(nextToken.name.c_str()));
 	nextToken = getToken();
 }
 
 void Parser::variableName() {
-	lastVarIndex = controller.varTable.insertVar(nextToken.name);
+	lastVarIndex = controller->varTable->insertVar(nextToken.name);
 	nextToken = getToken();
 }
 
@@ -401,17 +401,17 @@ void Parser::match(string tokenName) {
 
 void Parser::populateParent(TNode* parent, int line) {
 	if(parent->getParent()->getNodeType() == "WHILE_NODE") 
-		controller.parentTable.insertParent(parent->getStmtNum(), line);
+		controller->parentTable->insertParent(parent->getStmtNum(), line);
 
 	if(parent->getParent()->getNodeType() == "THEN_NODE" || parent->getParent()->getNodeType() == "ELSE_NODE")
-		controller.parentTable.insertParent(parent->getStmtNum(), line); // stmtLst node has the same line number
+		controller->parentTable->insertParent(parent->getStmtNum(), line); // stmtLst node has the same line number
 }
 
 void Parser::populateFollows(int line, bool isContainer, TNode* prev, TNode* current) {
 	//cout << " line : " << line << "\tpreviousStmt" << previousStmt << endl;
 	if(previousStmt > 0 && prev != NULL) {
-		controller.followsTable.insertFollows(previousStmt, line);
-		controller.ast.assignRightSibling(prev, current);
+		controller->followsTable->insertFollows(previousStmt, line);
+		controller->ast->assignRightSibling(prev, current);
 	}
 
 	previousStmt = line;
@@ -425,8 +425,8 @@ void Parser::populateFollows(int line, bool isContainer, TNode* prev, TNode* cur
 
 void Parser::populateModifies(int line, int procedure) {
 	// for assignment statement
-	controller.modifiesTable.insertModifiesStmt(line, lastVarIndex);
-	controller.modifiesTable.insertModifiesProc(line, procedure);
+	controller->modifiesTable->insertModifiesStmt(line, lastVarIndex);
+	controller->modifiesTable->insertModifiesProc(line, procedure);
 
 	// container statements
 	stack<int> tempStack = stack<int>();
@@ -434,8 +434,8 @@ void Parser::populateModifies(int line, int procedure) {
 		int top = containerStack.top();
 		tempStack.push(top);
 
-		controller.modifiesTable.insertModifiesStmt(top, lastVarIndex);
-		controller.modifiesTable.insertModifiesProc(top, procedure);
+		controller->modifiesTable->insertModifiesStmt(top, lastVarIndex);
+		controller->modifiesTable->insertModifiesProc(top, procedure);
 		containerStack.pop();
 	}
 
@@ -447,8 +447,8 @@ void Parser::populateModifies(int line, int procedure) {
 
 void Parser::populateUses(int line, int procedure, bool assignStatement) {
 	if(assignStatement) {
-		controller.usesTable.insertUsesStmt(line, lastVarIndex);
-		controller.usesTable.insertUsesProc(line, procedure);
+		controller->usesTable->insertUsesStmt(line, lastVarIndex);
+		controller->usesTable->insertUsesProc(line, procedure);
 	}
 
 	stack<int> tempStack = stack<int>();
@@ -456,8 +456,8 @@ void Parser::populateUses(int line, int procedure, bool assignStatement) {
 		int top = containerStack.top();
 		tempStack.push(top);
 
-		controller.usesTable.insertUsesStmt(top, lastVarIndex);
-		controller.usesTable.insertUsesProc(top, procedure);
+		controller->usesTable->insertUsesStmt(top, lastVarIndex);
+		controller->usesTable->insertUsesProc(top, procedure);
 		containerStack.pop();
 	}
 
@@ -468,8 +468,8 @@ void Parser::populateUses(int line, int procedure, bool assignStatement) {
 }
 
 void Parser::populateRoot(TNode* procedureNode, int procedureIndex) {
-	controller.procTable.insertASTRootNode(procedureIndex, procedureNode);
-	controller.ast.insertRoot(procedureNode);
+	controller->procTable->insertASTRootNode(procedureIndex, procedureNode);
+	controller->ast->insertRoot(procedureNode);
 }
 
 void Parser::popOperator(Operator op) {

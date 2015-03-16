@@ -20,6 +20,10 @@ QE::QE(vector<string> syn, PKBController* p) {
 	pkb = p;
 }
 
+void QE::setSynonymTable(map<string, string> s){
+	this->synonymTable = s;
+}
+
 void QE::addQuery(Subquery* q) {
 	queries.push_back(q);
 }
@@ -42,7 +46,7 @@ string QE::solve() {
 
 bool QE::validateQueries() {
 	// can check extra synonyms here.
-	for (int i = 0; i < queries.size(); i++) {
+	for (size_t i = 0; i < queries.size(); i++) {
 		if (!queries[i]->validate()) {
 			return false;
 		}
@@ -86,16 +90,16 @@ string QE::convertSolutionToString() {
 	}
 
 	int total_size = solution->getAllResults().size();
-	for (size_t i = 0; i < total_size; i++) {
-		for (int k = 0; k < index.size(); k++) {
+	for (int i = 0; i < total_size; i++) {
+		for (size_t k = 0; k < index.size(); k++) {
 			string syn_type = synonymTable.at(solution->getSynonym(index[k]));
 			int sol = solution->getResultAt(i, index[k]);
 			if (syn_type == "procedure"){
-				s += pkb->procTable.getProcName(sol);
+				s += pkb->procTable->getProcName(sol);
 			} else if (syn_type == "variable"){
-				s += pkb->varTable.getVarName(sol);
+				s += pkb->varTable->getVarName(sol);
 			} else if (syn_type == "constant"){
-				s += to_string((long long) pkb->constantTable.getConstant(sol));
+				s += to_string((long long) pkb->constantTable->getConstant(sol));
 			} else {
 				s += to_string((long long) sol);
 			}

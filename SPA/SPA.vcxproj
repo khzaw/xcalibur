@@ -55,7 +55,6 @@
     <ClCompile Include="QueryProcessor\OptimizedQE.cpp" />
     <ClCompile Include="QueryProcessor\QE.cpp" />
     <ClCompile Include="QueryProcessor\QTNode.cpp" />
-    <ClCompile Include="QueryProcessor\QueryEvaluator.cpp" />
     <ClCompile Include="QueryProcessor\QueryLexer.cpp" />
     <ClCompile Include="QueryProcessor\QueryParser.cpp" />
     <CICompile Include="QueryProcessor\NewQueryParser.cpp" />

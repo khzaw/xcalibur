@@ -72,18 +72,18 @@ public:
 		tuple->addSynonymToMap(leftSynonym, index);
 		vector<int> users = vector<int>();
 		if (isSyn == 2) {	// Uses(syn, varnum): Get syns that uses varnum
-			set<int> tempUsers = pkb->usesTable.evaluateGetUsersProc(rightIndex);
+			set<int> tempUsers = pkb->usesTable->evaluateGetUsersProc(rightIndex);
 			copy(tempUsers.begin(), tempUsers.end(), back_inserter(users)); 
 		} else {	// Uses(syn, _): Get all users
 			// not sure if this is correct
 			/*
-			vector<pair<int, int>> temp = pkb->usesTable.getUsesProc();
+			vector<pair<int, int>> temp = pkb->usesTable->getUsesProc();
 			for (size_t i = 0; i < temp.size(); i++) {
 				users.push_back(temp[i].first);
 			}
 			*/
-			for (int i = 0; i < pkb->procTable.getSize(); i++){
-				if (pkb->usesTable.evaluateGetUsedVarProc(i).size() > (size_t)0){
+			for (int i = 0; i < pkb->procTable->getSize(); i++){
+				if (pkb->usesTable->evaluateGetUsedVarProc(i).size() > (size_t)0){
 					users.push_back(i);
 				}
 			}
@@ -106,11 +106,11 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 2) {	// Uses(syn, varnum)
-				if (pkb->usesTable.evaluateIsUsesProc(temp.at(index), rightIndex)) {
+				if (pkb->usesTable->evaluateIsUsesProc(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}
 			} else {	// Uses(syn, _)
-				if (!pkb->usesTable.evaluateGetUsedVarProc(temp.at(index)).empty()) {
+				if (!pkb->usesTable->evaluateGetUsedVarProc(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -125,7 +125,7 @@ public:
 		
 		vector<int> used;
 		if (isSyn == 1) {	// Uses(proc, varnum): Get var used by proc
-			set<int> tempUsed = pkb->usesTable.evaluateGetUsedVarProc(leftIndex);
+			set<int> tempUsed = pkb->usesTable->evaluateGetUsedVarProc(leftIndex);
 			copy(tempUsed.begin(), tempUsed.end(), back_inserter(used));
 		} else {	// Uses(_, varnum)
 			//invalid
@@ -148,7 +148,7 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 1) {	// Uses(stmt, syn)
-				if (pkb->usesTable.evaluateIsUsesProc(leftIndex, temp.at(index))) {
+				if (pkb->usesTable->evaluateIsUsesProc(leftIndex, temp.at(index))) {
 					result->addResultRow(temp);
 				}
 			} else {	// Uses(_, syn)
@@ -167,7 +167,7 @@ public:
 
 		// get all users statement
 		// for each users statement, get its used var
-		vector<pair<int, int>> procs = pkb->usesTable.getUsesProc();
+		vector<pair<int, int>> procs = pkb->usesTable->getUsesProc();
 		for (size_t i = 0; i < procs.size(); i++) {
 			vector<int> row = vector<int>();
 			row.push_back(procs[i].first);
@@ -186,7 +186,7 @@ public:
 		int rIndex = tuple->getSynonymIndex(rightSynonym);
 		if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++){
-				if (pkb->usesTable.evaluateIsUsesProc(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
+				if (pkb->usesTable->evaluateIsUsesProc(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
 					result->addResultRow(tuple->getResultRow(i));
 				}
 			}
@@ -197,7 +197,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
-					set<int> tV = pkb->usesTable.evaluateGetUsedVarProc(leftValue);
+					set<int> tV = pkb->usesTable->evaluateGetUsedVarProc(leftValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
@@ -215,7 +215,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					set<int> tV = pkb->usesTable.evaluateGetUsersProc(rightValue);
+					set<int> tV = pkb->usesTable->evaluateGetUsersProc(rightValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
@@ -235,11 +235,11 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		tuple->setBool(true);
 		if(isSyn == 0) {	//(digit, digit)
-			tuple->setEmpty(!pkb->usesTable.evaluateIsUsesProc(leftIndex, rightIndex));
+			tuple->setEmpty(!pkb->usesTable->evaluateIsUsesProc(leftIndex, rightIndex));
 		} else if (isSyn == 7) {	//(_, digit)
 			// invalid
 		} else if (isSyn == 8) {	//(digit, _)
-			tuple->setEmpty(pkb->usesTable.evaluateGetUsedVarProc(leftIndex).empty());
+			tuple->setEmpty(pkb->usesTable->evaluateGetUsedVarProc(leftIndex).empty());
 		} else {	//(_, _)
 			// invalid
 		}

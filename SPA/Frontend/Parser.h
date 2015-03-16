@@ -26,7 +26,7 @@ class Parser {
 	vector<string> procedureNames;
 
 public:
-	PKBController controller;
+	PKBController* controller;
 	Parser();
 	Parser(string);
 	void parse();

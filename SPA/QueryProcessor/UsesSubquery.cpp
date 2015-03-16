@@ -72,10 +72,10 @@ public:
 		tuple->addSynonymToMap(leftSynonym, index);
 		vector<int> users = vector<int>();
 		if (isSyn == 2) {	// Uses(syn, varnum): Get syns that uses varnum
-			set<int> tempUsers = pkb->usesTable.evaluateGetUsersStmt(rightIndex);
+			set<int> tempUsers = pkb->usesTable->evaluateGetUsersStmt(rightIndex);
 			copy(tempUsers.begin(), tempUsers.end(), back_inserter(users));
 		} else {	// Uses(syn, _): Get all users
-			set<int> tempUsers = pkb->usesTable.getAllUsersStmt();
+			set<int> tempUsers = pkb->usesTable->getAllUsersStmt();
 			copy(tempUsers.begin(), tempUsers.end(), back_inserter(users));
 		}
 
@@ -83,7 +83,7 @@ public:
 			vector<int> temp = vector<int>();
 			// synonym type check here
 			if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if" || synonymTable->at(leftSynonym)=="call")
-				&& pkb->statementTable.getTNode(users[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
+				&& pkb->statementTable->getTNode(users[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
 				continue;
 			}
 			temp.push_back(users.at(i));
@@ -101,11 +101,11 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 2) {	// Uses(syn, varnum)
-				if (pkb->usesTable.evaluateIsUsesStmt(temp.at(index), rightIndex)) {
+				if (pkb->usesTable->evaluateIsUsesStmt(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}
 			} else {	// Uses(syn, _)
-				if (!pkb->usesTable.evaluateGetUsedVarStmt(temp.at(index)).empty()) {
+				if (!pkb->usesTable->evaluateGetUsedVarStmt(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -120,7 +120,7 @@ public:
 		
 		vector<int> used;
 		if (isSyn == 1) {	// Uses(stmt, varnum): Get Users of varnum
-			set<int> tempUsed = pkb->usesTable.evaluateGetUsersStmt(leftIndex);
+			set<int> tempUsed = pkb->usesTable->evaluateGetUsersStmt(leftIndex);
 			copy(tempUsed.begin(), tempUsed.end(), back_inserter(used));
 		} else {	// Uses(_, varnum)
 			//invalid
@@ -130,7 +130,7 @@ public:
 			vector<int> temp = vector<int>();
 			// synonym type check here
 			if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if" || synonymTable->at(rightSynonym)=="call")
-				&& pkb->statementTable.getTNode(used[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
+				&& pkb->statementTable->getTNode(used[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
 				continue;
 			}
 			temp.push_back(used.at(i));
@@ -148,7 +148,7 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 1) {	// Uses(stmt, syn)
-				if (pkb->usesTable.evaluateIsUsesStmt(leftIndex, temp.at(index))) {
+				if (pkb->usesTable->evaluateIsUsesStmt(leftIndex, temp.at(index))) {
 					result->addResultRow(temp);
 				}
 			} else {	// Uses(_, syn)
@@ -167,11 +167,11 @@ public:
 
 		// get all users statement
 		// for each users statement, get its used var
-		vector<pair<int, int>> stmts = pkb->usesTable.getUsesStmt();
+		vector<pair<int, int>> stmts = pkb->usesTable->getUsesStmt();
 		for (size_t i = 0; i < stmts.size(); i++) {
 			// synonym type check
 			if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if" || synonymTable->at(leftSynonym)=="call")
-				&& pkb->statementTable.getTNode(stmts[i].first)->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
+				&& pkb->statementTable->getTNode(stmts[i].first)->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
 				continue;
 			}
 			vector<int> row = vector<int>();
@@ -191,7 +191,7 @@ public:
 		int rIndex = tuple->getSynonymIndex(rightSynonym);
 		if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++){
-				if (pkb->usesTable.evaluateIsUsesStmt(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
+				if (pkb->usesTable->evaluateIsUsesStmt(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
 					result->addResultRow(tuple->getResultRow(i));
 				}
 			}
@@ -202,14 +202,14 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
-					set<int> tV = pkb->usesTable.evaluateGetUsedVarStmt(leftValue);
+					set<int> tV = pkb->usesTable->evaluateGetUsedVarStmt(leftValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(leftValue);
 				for (size_t j = 0; j < vals.size(); j++){
 					if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if" || synonymTable->at(rightSynonym)=="call")
-						&& pkb->statementTable.getTNode(vals[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
+						&& pkb->statementTable->getTNode(vals[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
 						continue;
 					}
 					vector<int> newRow(tuple->getResultRow(i));
@@ -224,14 +224,14 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					set<int> tV = pkb->usesTable.evaluateGetUsersStmt(rightValue);
+					set<int> tV = pkb->usesTable->evaluateGetUsersStmt(rightValue);
 					vector<int> tempValues(tV.begin(), tV.end()); 
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(rightValue);
 				for (size_t j = 0; j < vals.size(); j++){
 					if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if" || synonymTable->at(leftSynonym)=="call")
-						&& pkb->statementTable.getTNode(vals[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
+						&& pkb->statementTable->getTNode(vals[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
 						continue;
 					}
 					vector<int> newRow(tuple->getResultRow(i));
@@ -248,11 +248,11 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		tuple->setBool(true);
 		if(isSyn == 0) {	//(digit, digit)
-			tuple->setEmpty(!pkb->usesTable.evaluateIsUsesStmt(leftIndex, rightIndex));
+			tuple->setEmpty(!pkb->usesTable->evaluateIsUsesStmt(leftIndex, rightIndex));
 		} else if (isSyn == 7) {	//(_, digit)
 			// invalid
 		} else if (isSyn == 8) {	//(digit, _)
-			tuple->setEmpty(pkb->usesTable.evaluateGetUsedVarStmt(leftIndex).empty());
+			tuple->setEmpty(pkb->usesTable->evaluateGetUsedVarStmt(leftIndex).empty());
 		} else {	//(_, _)
 			// invalid
 		}

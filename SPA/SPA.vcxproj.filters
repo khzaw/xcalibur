@@ -66,9 +66,6 @@
     <ClCompile Include="QueryProcessor\QTNode.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
-    <ClCompile Include="QueryProcessor\QueryEvaluator.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
     <ClCompile Include="QueryProcessor\QueryLexer.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>

@@ -21,6 +21,7 @@ public:
 	vector<Subquery*> queries;
 	bool validateQueries();
 	QE(vector<string>, PKBController*);
+	void setSynonymTable(map<string, string>);
 	void addQuery(Subquery*);
 	
 	string solve();

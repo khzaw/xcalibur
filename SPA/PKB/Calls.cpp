@@ -11,6 +11,13 @@ using namespace std;
 
     // constructor 
     Calls::Calls(){
+		callTable = vector<pair<int, int> >(); // contains entries of callers and callees 
+		callerTable = vector<set<int> >(); // calls |  contains set of callers that calls callees
+		calleeTable = vector<set<int> >(); // calls |  contains set of callees that is called by callers
+		callerStarTable = vector<set<int> >(); // calls*| contains set of callers that calls callees
+		calleeStarTable = vector<set<int> >(); // calls*| contains set of callees that is called by callers
+		callerIndexMap = unordered_map<int,int>(); 
+		calleeIndexMap = unordered_map<int,int>();
     }
 
 	int Calls::insertCalls(int callerIndex,int calleeIndex){

@@ -57,6 +57,7 @@ NewQueryParser::NewQueryParser(string s, PKBController* controller) {
 	this->synonyms = map<string, string>();
 	this->controller = controller;
 	parse();
+	this->evaluator->setSynonymTable(synonyms);
 	printMap();
 }
 
@@ -133,8 +134,8 @@ void NewQueryParser::matchDeclarationVariables(string entity) {
 
 void NewQueryParser::matchSelect() {
 	match("Select");
-	this->evaluator = new QE(selectVariables, controller);
 	matchResultCL();
+	this->evaluator = new QE(selectVariables, controller);
 	while(nextToken.name == "such" || nextToken.name == "pattern" || nextToken.name == "with") {
 		matchConditions();
 	}
@@ -552,35 +553,35 @@ void NewQueryParser::setSynonymsHelper(string fst, string snd, Subquery* query) 
 
 void NewQueryParser::matchCallsStar() {
 	// CallsT : "Calls*" "(" entRef "," varRef ")"
-	CallsStarSubquery callsStarSq = CallsStarSubquery(&synonyms, controller);
+	CallsStarSubquery* callsStarSq = new CallsStarSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchEntRef(false);
 	match(",");
 	string snd = matchVarRef();
 	match(")");
-	setSynonymsHelper(fst, snd, &callsStarSq);
+	setSynonymsHelper(fst, snd, callsStarSq);
 	//cout << "Calls*: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 void NewQueryParser::matchParent() {
-	ParentSubquery parentSq = ParentSubquery(&synonyms, controller);
+	ParentSubquery* parentSq = new ParentSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchStmtRef();
 	match(",");
 	string snd = matchStmtRef();
 	match(")");
-	setSynonymsHelper(fst, snd, &parentSq);
+	setSynonymsHelper(fst, snd, parentSq);
 	//cout << "Parent: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 void NewQueryParser::matchParentStar() {
-	ParentStarSubquery parentStarSq = ParentStarSubquery(&synonyms, controller);
+	ParentStarSubquery* parentStarSq = new ParentStarSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchStmtRef();
 	match(",");
 	string snd = matchStmtRef();
 	match(")");
-	setSynonymsHelper(fst, snd, &parentStarSq);
+	setSynonymsHelper(fst, snd, parentStarSq);
 	//cout << "Parent*: fst -> " << fst << "\tsnd -> " << snd;
 }
 
@@ -604,13 +605,13 @@ string NewQueryParser::matchStmtRef() {
 
 void NewQueryParser::matchFollows() {
 	// Follows: "Follows" "(" stmtRef "," stmtRef ")";
-	FollowsSubquery followsSq = FollowsSubquery(&synonyms, controller);
+	FollowsSubquery* followsSq = new FollowsSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchStmtRef();
 	match(",");
 	string snd = matchStmtRef();
 	match(")");
-	setSynonymsHelper(fst, snd, &followsSq);
+	setSynonymsHelper(fst, snd, followsSq);
 	cout << "Follows: fst -> " << fst << "\tsnd -> " << snd;
 }
 
@@ -626,13 +627,13 @@ void NewQueryParser::matchFollowsStar() {
 }
 
 void NewQueryParser::matchNext() {
-	NextSubquery nextSq = NextSubquery(&synonyms, controller);
+	NextSubquery* nextSq = new NextSubquery(&synonyms, controller);
     match("(");
     string fst = matchLineRef();
     match(",");
     string snd = matchLineRef();
     match(")");
-	setSynonymsHelper(fst, snd, &nextSq);
+	setSynonymsHelper(fst, snd, nextSq);
 	//cout << "Next: fst -> " << fst << "\tsnd -> " << snd;
 }
 

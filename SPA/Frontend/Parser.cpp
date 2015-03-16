@@ -27,6 +27,16 @@ Parser::Parser(string filepath) {
 
 	this->lastVarIndex = -1;		// for modifies population
 	parse();
+	constructRelations();
+}
+
+void Parser::constructRelations() {
+	this->controller.constructCalls();
+	this->controller.constructFollows();
+	this->controller.constructModifies();
+	this->controller.constructUses();
+	this->controller.constructParent();
+	this->controller.constructNext();
 }
 
 Parser::~Parser() {

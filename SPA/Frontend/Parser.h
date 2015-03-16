@@ -62,4 +62,6 @@ private:
 	void populateRoot(TNode*, int);
 
 	void popOperator(Operator);
+
+	void constructRelations();
 };

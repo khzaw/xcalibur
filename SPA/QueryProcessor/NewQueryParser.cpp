@@ -24,6 +24,7 @@
 #include "CallsSubquery.cpp"
 #include "CallsStarSubquery.cpp"
 #include "NextSubquery.cpp"
+#include "NextStarSubquery.cpp"
 
 
 using namespace std;
@@ -490,6 +491,8 @@ string NewQueryParser::matchEntRef(bool excludeUnderScore) {
 		match("\"");
 		fst = nextToken.name;
 		match(nextToken.name);
+		// check with synoyntable
+		// try to convert into integer first -> if yes, 
 		match("\"");
 	}
 	return fst;
@@ -508,6 +511,7 @@ string NewQueryParser::matchVarRef() {
 		match("\"");
 		snd = nextToken.name;
 		match(nextToken.name);
+		snd = to_string((long long)controller->varTable->getVarIndex(snd));
 		match("\"");
 	}
 	return snd;
@@ -525,12 +529,12 @@ void NewQueryParser::matchUses() {
 }
 
 void NewQueryParser::matchCalls() {
-	// Calls : "Calls" "(" entRef "," varRef ")"
+	// Calls : "Calls" "(" entRef "," entRef ")"
 	CallsSubquery callsSq = CallsSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchEntRef(false);
 	match(",");
-	string snd = matchVarRef();
+	string snd = matchEntRef(false);
 	match(")");
 	setSynonymsHelper(fst, snd, &callsSq);
 	//cout << "Calls: fst -> " << fst << "\tsnd -> " << snd;
@@ -548,16 +552,15 @@ void NewQueryParser::setSynonymsHelper(string fst, string snd, Subquery* query) 
 		query->setSynonyms(fst, snd);
 	}
 	evaluator->addQuery(query);
-
 }
 
 void NewQueryParser::matchCallsStar() {
-	// CallsT : "Calls*" "(" entRef "," varRef ")"
+	// CallsT : "Calls*" "(" entRef "," entRef ")"
 	CallsStarSubquery* callsStarSq = new CallsStarSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchEntRef(false);
 	match(",");
-	string snd = matchVarRef();
+	string snd = matchEntRef(false);
 	match(")");
 	setSynonymsHelper(fst, snd, callsStarSq);
 	//cout << "Calls*: fst -> " << fst << "\tsnd -> " << snd;
@@ -638,13 +641,13 @@ void NewQueryParser::matchNext() {
 }
 
 void NewQueryParser::matchNextStar() {
-	NextSubquery* nextStarSq = new NextStarSubquery(&synonyms, controller);
+	NextStarSubquery* nextStarSq = new NextStarSubquery(&synonyms, controller);
     match("(");
     string fst = matchLineRef();
     match(",");
     string snd = matchLineRef();
     match(")");
-	setSynonymsHelper(fst, snd, nextSq);
+	setSynonymsHelper(fst, snd, nextStarSq);
 
 	//cout << "Next*: fst -> " << fst << "\tsnd -> " << snd;
 }

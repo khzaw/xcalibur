@@ -59,5 +59,7 @@ public:
 	void testNext();
 	void testNextTuple();
 	void testNextStar();
+	void testNextStarTuple();
+
 };
 #endif

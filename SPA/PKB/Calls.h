@@ -9,20 +9,20 @@ using namespace std;
 class Calls{
 	
 private:
-	vector<pair<int,int>> callTable; // contains entries of callers and callees 
-	vector<set<int>> callerTable; // calls |  contains set of callers that calls callees
-	vector<set<int>> calleeTable; // calls |  contains set of callees that is called by callers
-	vector<set<int>> callerStarTable; // calls*| contains set of callers that calls callees
-    vector<set<int>> calleeStarTable; // calls*| contains set of callees that is called by callers
-	unordered_map<int,int> callerIndexMap; 
-	unordered_map<int,int> calleeIndexMap;
+	vector<pair<int,int>>* callTable; // contains entries of callers and callees 
+	vector<set<int>>* callerTable; // calls |  contains set of callers that calls callees
+	vector<set<int>>* calleeTable; // calls |  contains set of callees that is called by callers
+	vector<set<int>>* callerStarTable; // calls*| contains set of callers that calls callees
+    vector<set<int>>* calleeStarTable; // calls*| contains set of callees that is called by callers
+	unordered_map<int,int>* callerIndexMap; 
+	unordered_map<int,int>* calleeIndexMap;
 
 public:
 	
 	Calls();
 	int insertCalls(int,int);
 
-	vector<pair<int,int>> getCallTable();
+	vector<pair<int,int>>* getCallTable();
 	int getSize();
 	// Helper
 	set<int> getAllCallers(); // done

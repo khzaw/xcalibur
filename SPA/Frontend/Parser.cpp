@@ -21,7 +21,7 @@ Parser::Parser(string filepath) {
 	this->controller = new PKBController();
 	this->lexer = Lexer("");
 	this->line = 0;
-	this->currentProc = 0;
+	this->currentProc = -1;
 	this->previousStmt = 0;			// for poulation of follows
 	this->prev = NULL;
 
@@ -107,6 +107,7 @@ void Parser::procedure() {
 
 	match("procedure");
 	string procName = procedureName();
+	this->currentProc = getProcedureIndex(procName);
 	// cout << procName << endl;
 	TNode* procNode = new TNode("PROC_NODE", procName, line, currentProc);
 
@@ -385,7 +386,7 @@ void Parser::variableName() {
 int Parser::getProcedureIndex(string procName) {
 	for(size_t i = 0; i < procedureNames.size(); i++) {
 		if(procedureNames.at(i) == procName) {
-			return i+1;
+			return i;
 		}
 	}
 	return -1;

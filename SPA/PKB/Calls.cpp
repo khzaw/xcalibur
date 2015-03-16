@@ -11,13 +11,13 @@ using namespace std;
 
     // constructor 
     Calls::Calls(){
-		callTable = vector<pair<int, int> >(); // contains entries of callers and callees 
-		callerTable = vector<set<int> >(); // calls |  contains set of callers that calls callees
-		calleeTable = vector<set<int> >(); // calls |  contains set of callees that is called by callers
-		callerStarTable = vector<set<int> >(); // calls*| contains set of callers that calls callees
-		calleeStarTable = vector<set<int> >(); // calls*| contains set of callees that is called by callers
-		callerIndexMap = unordered_map<int,int>(); 
-		calleeIndexMap = unordered_map<int,int>();
+		callTable = new vector<pair<int, int> >(); // contains entries of callers and callees 
+		callerTable = new vector<set<int> >(); // calls |  contains set of callers that calls callees
+		calleeTable = new vector<set<int> >(); // calls |  contains set of callees that is called by callers
+		callerStarTable = new vector<set<int> >(); // calls*| contains set of callers that calls callees
+		calleeStarTable = new vector<set<int> >(); // calls*| contains set of callees that is called by callers
+		callerIndexMap = new unordered_map<int,int>(); 
+		calleeIndexMap = new unordered_map<int,int>();
     }
 
 	int Calls::insertCalls(int callerIndex,int calleeIndex){
@@ -28,7 +28,7 @@ using namespace std;
 		*/
 
 		// cout << "stmt1 : " << callerIndex << ", " << "stmt2: " << calleeIndex << endl;
-			callTable.push_back(make_pair(callerIndex,calleeIndex));
+			callTable->push_back(make_pair(callerIndex,calleeIndex));
 			return 0;
 		//}
 	}
@@ -37,22 +37,22 @@ using namespace std;
 	set<int> Calls::evaluateGetCallers(int callee){
 		 set<int> result;
 		int calleeIndex = Calls::getCalleeIndex(callee);
-		if ((size_t)calleeIndex>=callerTable.size()){
+		if ((size_t)calleeIndex>=callerTable->size()){
 			return result;
 		}
 		else{
-		return callerTable[calleeIndex];
+		return callerTable->at(calleeIndex);
 		}
 	}
 
 	set<int> Calls::evaluateGetCallees(int caller){
 		set<int> result;
 		int callerIndex = Calls::getCallerIndex(caller);
-		if ((size_t)callerIndex>=calleeTable.size()){
+		if ((size_t)callerIndex>=calleeTable->size()){
 			return result;
 		}
 		else{
-		return calleeTable[callerIndex];
+		return calleeTable->at(callerIndex);
 		}
 	}
 	
@@ -60,45 +60,45 @@ using namespace std;
     set<int> Calls::evaluateGetCalleesStar(int caller){
 		set<int> result;
 		int callerIndex = Calls::getCallerIndex(caller);
-		if ((size_t)callerIndex>=calleeStarTable.size()){
+		if ((size_t)callerIndex>=calleeStarTable->size()){
 			return result;
 		}
 		else{
 			
-		return calleeStarTable[callerIndex];
+		return calleeStarTable->at(callerIndex);
 		}
     }
 
 	set<int> Calls::evaluateGetCallersStar(int callee){
 	    set<int> result;
 		int calleeIndex = Calls::getCalleeIndex(callee);
-		if ((size_t)calleeIndex>=callerStarTable.size()){
+		if ((size_t)calleeIndex>=callerStarTable->size()){
 			return result;
 		}
 		else{
-		return callerStarTable[calleeIndex];
+		return callerStarTable->at(calleeIndex);
 		}
 	}
 
 		set<int> Calls::getAllCallers(){
 	    set<int> result;
-		for(size_t i =0; i<callTable.size(); i++){
-			result.insert(callTable[i].first);
+		for(size_t i =0; i<callTable->size(); i++){
+			result.insert(callTable->at(i).first);
 		}
 		return result;
 	}
 
 		set<int> Calls::getAllCallees(){
 	    set<int> result;
-		for(size_t i = 0; i<callTable.size(); i++){
-			result.insert(callTable[i].second);
+		for(size_t i = 0; i<callTable->size(); i++){
+			result.insert(callTable->at(i).second);
 		}
 		return result;
 	}
 
 	int Calls::getCallerIndex(int caller){
-		std::unordered_map<int, int>::iterator it = callerIndexMap.find(caller);
-		if(it == callerIndexMap.end()) {	
+		std::unordered_map<int, int>::iterator it = callerIndexMap->find(caller);
+		if(it == callerIndexMap->end()) {	
 		return -1;
 	} else {
 		return it->second;
@@ -106,24 +106,24 @@ using namespace std;
 	}
 
 	int Calls::getCalleeIndex(int callee){
-		std::unordered_map<int, int>::iterator it = calleeIndexMap.find(callee);
-		if(it == calleeIndexMap.end()) {	
+		std::unordered_map<int, int>::iterator it = calleeIndexMap->find(callee);
+		if(it == calleeIndexMap->end()) {	
 		return -1;
 	} else {
 		return it->second;
 	}
 	}
 
-	vector<pair<int,int>> Calls::getCallTable(){
+	vector<pair<int,int>>* Calls::getCallTable(){
 		return callTable;
 	}
 
 	set<int> Calls::getCalleesS(int procIndex){
 		set<int> calleeSet;
 		//std::set<int>::iterator it = calleeSet.begin();
-		for(size_t i = 0; i<callTable.size(); i++){
-			if (callTable[i].first == procIndex){
-				calleeSet.insert(callTable[i].second);
+		for(size_t i = 0; i<callTable->size(); i++){
+			if (callTable->at(i).first == procIndex){
+				calleeSet.insert(callTable->at(i).second);
 			}
 		}
 		return calleeSet;
@@ -132,9 +132,9 @@ using namespace std;
 	set<int> Calls::getCallerS(int procIndex){
 		set<int> callerSet;
 		//std::set<int>::iterator it = calleeSet.begin();
-		for(size_t i = 0; i<callTable.size(); i++){
-			if (callTable[i].second == procIndex){
-				callerSet.insert(callTable[i].first);
+		for(size_t i = 0; i<callTable->size(); i++){
+			if (callTable->at(i).second == procIndex){
+				callerSet.insert(callTable->at(i).first);
 			}
 		}
 		return callerSet;
@@ -165,16 +165,16 @@ using namespace std;
 }
 
 	set<int> Calls::recursiveCallerStar(set<int> &callers,int stmt){
-	set<int> callerSublist ;
-	callerSublist = Calls::getCallerS(stmt);
-	if(callerSublist.size()==0)
+		set<int> callerSublist ;
+		callerSublist = Calls::getCallerS(stmt);
+		if(callerSublist.size()==0)
+			return callers;
+		callers.insert(callerSublist.begin(), callerSublist.end());
+		for(std::set<int>::iterator it=callerSublist.begin(); it != callerSublist.end(); ++it){
+			recursiveCallerStar(callers,*it);
+		}
 		return callers;
-	callers.insert(callerSublist.begin(), callerSublist.end());
-	for(std::set<int>::iterator it=callerSublist.begin(); it != callerSublist.end(); ++it){
-		recursiveCallerStar(callers,*it);
 	}
-	return callers;
-}
 
 
 	bool Calls::isCalls(int caller,int callee){
@@ -183,7 +183,7 @@ using namespace std;
 		if (callerIndex == -1 || calleeIndex == -1){
 			return false;
 		}
-		set<int> calleeSet = calleeTable[callerIndex];
+		set<int> calleeSet = calleeTable->at(callerIndex);
 		std::set<int>::iterator it = calleeSet.find(callee);
 		if( it == calleeSet.end()){
 			return false;
@@ -199,7 +199,7 @@ using namespace std;
 			return false;
 		}
 		try {
-			set<int> calleeSet = calleeStarTable[callerIndex];
+			set<int> calleeSet = calleeStarTable->at(callerIndex);
 			std::set<int>::iterator it = calleeSet.find(callee);
 			if( it == calleeSet.end()) {
 				return false;
@@ -212,39 +212,39 @@ using namespace std;
 	}
 
 	void Calls::insertToCallerTable(set<int> caller){
-		callerTable.push_back(caller);
+		callerTable->push_back(caller);
 	}
 
 	void Calls::insertToCalleeTable(set<int> callee){
-		calleeTable.push_back(callee);
+		calleeTable->push_back(callee);
 	}
 
 	void Calls::insertToCallerStarTable(set<int> callerStar){
-		callerStarTable.push_back(callerStar);
+		callerStarTable->push_back(callerStar);
 	}
 
 	void Calls::insertToCalleeStarTable(set<int> calleeStar){
-		calleeStarTable.push_back(calleeStar);
+		calleeStarTable->push_back(calleeStar);
 	}
 
 	void Calls::insertToCallerIndexMap(pair<int,int> caller){
-		callerIndexMap.insert(caller);
+		callerIndexMap->insert(caller);
 	}
 
 	void Calls::insertToCalleeIndexMap(pair<int,int> callee){
-		calleeIndexMap.insert(callee);
+		calleeIndexMap->insert(callee);
 	}
 
 	int Calls::getCalleeIndexMapSize(){
 
-		return calleeIndexMap.size();
+		return calleeIndexMap->size();
 	}
 
 	int Calls::getCallerIndexMapSize(){
 		
-		return callerIndexMap.size();
+		return callerIndexMap->size();
 	}
 
 	int Calls::getSize(){
-		return callTable.size();
+		return callTable->size();
 	}

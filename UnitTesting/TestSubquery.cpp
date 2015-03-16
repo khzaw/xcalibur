@@ -15463,7 +15463,6 @@ void SubqueryTest::testNextStarTuple() {
 		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  , 11},
 		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  , 11}
 	};
-	cout << actualResultnextStarsubquery75->toString();
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultnextStarsubquery75)/sizeof(expectedResultnextStarsubquery75[0])), actualResultnextStarsubquery75->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultnextStarsubquery75)/sizeof(expectedResultnextStarsubquery75[0])); i++){
 		for (size_t j = 0; j < (sizeof(expectedResultnextStarsubquery75[i])/sizeof(expectedResultnextStarsubquery75[i][0])); j++){

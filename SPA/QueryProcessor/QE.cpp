@@ -29,10 +29,12 @@ void QE::addQuery(Subquery* q) {
 	queries.push_back(q);
 }
 
-string QE::solve() {
+list<string> QE::solve() {
 	vector<string> answer = vector<string>();
 	if (!validateQueries()) {
-		return "none";
+		list<string> l = list<string>();
+		l.push_back("none");
+		return l;
 	}
 
 	if (useOptimizedSolver) {
@@ -70,19 +72,31 @@ void QE::basicSolve() {
 	} 
 }
 
-string QE::convertSolutionToString() {
+list<string> QE::convertSolutionToString() {
+	list<string> answer = list<string>();
 	if (synonyms[0] == "BOOLEAN") {
 		if (solution->isBool()) {
-			return (solution->isEmpty()) ? "FALSE" : "TRUE";
+			if (solution->isEmpty()) {
+				answer.push_back("FALSE");
+			} else{
+				answer.push_back("TRUE");
+			}
+			return answer;
 		}
-		return (solution->getAllResults().size()) ? "TRUE" : "FALSE"; 
+		if (solution->getAllResults().size()){
+			answer.push_back("TRUE"); 
+		} else {
+			answer.push_back("FALSE");
+		}
+		return answer;
 	} 
 
 	if (solution->getAllResults().size() == 0) {
-		return "none";
+		answer.push_back("none");
+		return answer;
 	}
 	
-	string s = "";
+	
 	vector<int> index = vector<int>();
 	//get index of synonyms
 	for (size_t i = 0; i < synonyms.size(); i++) {
@@ -92,6 +106,7 @@ string QE::convertSolutionToString() {
 
 	int total_size = solution->getAllResults().size();
 	for (size_t i = 0; i < total_size; i++) {
+		string s = "";
 		for (int k = 0; k < index.size(); k++) {
 			string syn_type = synonymTable.at(solution->getSynonym(index[k]));
 			int sol = solution->getResultAt(i, index[k]);
@@ -110,9 +125,7 @@ string QE::convertSolutionToString() {
 			}
 		}
 
-		if (i != (total_size - 1)) {
-			s += ", ";
-		}
+		answer.push_back(s);
 	}
-	return s;
+	return answer;
 }

@@ -16,6 +16,7 @@
 #include "QueryProcessor\ParentStarSubquery.cpp"
 #include "QueryProcessor\WithSubquery.cpp"
 #include "QueryProcessor\CallsSubquery.cpp"
+#include "QueryProcessor\CallsStarSubquery.cpp"
 #include "QueryProcessor\NextSubquery.cpp"
 #include "QueryProcessor\NextStarSubquery.cpp"
 
@@ -152,7 +153,6 @@ void SubqueryTest::testSubqueries() {
 	pk->procTable.insertASTRootNode(0, &rootNode1);
 	pk->procTable.insertASTRootNode(1, &rootNode2);
 	pk->procTable.insertASTRootNode(2, &rootNode3);
-
 	/*
 	pk->statementTable.insertStatement(&stmt1);
 	pk->statementTable.insertStatement(&stmt2);
@@ -381,8 +381,7 @@ void SubqueryTest::testSubqueries() {
 	synonymTable["const1"]="constant";
 	synonymTable["const2"]="constant";
 
-	testNext();
-	/*
+	//testNext();
 	testFollows();
 	testParent();
 	testFollowsT();
@@ -406,7 +405,6 @@ void SubqueryTest::testSubqueries() {
 	testPattern();
 	testWith();
 	testWithTuple();
-	*/
 }
 
 void SubqueryTest::testFollows(){
@@ -2273,7 +2271,6 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery6 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery6.setSynonyms("s1", "c2");
 	ResultTuple* actualResultfollowsStarsubquery6 = followsStarsubquery6.solve();
-	cout << endl << actualResultfollowsStarsubquery6->toString() << endl;
 	int expectedResultfollowsStarsubquery6[4][2] = {
 		{1, 3}, 
 		{2, 3}, 
@@ -2291,8 +2288,20 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery7 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery7.setSynonyms("s1", "l2");
 	ResultTuple* actualResultfollowsStarsubquery7 = followsStarsubquery7.solve();
-	int expectedResultfollowsStarsubquery7[13][2] = {
-		{1, 2}, {2, 3}, {4, 5}, {5, 6}, {6, 13}, {7, 8}, {8, 11}, {11, 12}, {13, 18}, {14, 15}, {18, 19}, {19, 20}, {21, 22} 
+	int expectedResultfollowsStarsubquery7[32][2] = {
+		{1, 2}, {1, 3}, 
+		{2, 3}, 
+		{4, 5}, {4, 6}, {4, 13}, {4, 18}, {4, 19}, {4, 20},
+		{5, 6}, {5, 13}, {5, 18}, {5, 19}, {5, 20},
+		{6, 13}, {6, 18}, {6, 19}, {6, 20},
+		{7, 8}, {7, 11}, {7, 12},
+		{8, 11}, {8, 12},
+		{11, 12}, 
+		{13, 18}, {13, 19}, {13, 20},
+		{14, 15}, 
+		{18, 19}, {18, 20},
+		{19, 20}, 
+		{21, 22} 
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery7)/sizeof(expectedResultfollowsStarsubquery7[0])), actualResultfollowsStarsubquery7->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery7)/sizeof(expectedResultfollowsStarsubquery7[0])); i++){
@@ -2333,8 +2342,8 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery11 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery11.setSynonyms("s1", 6);
 	ResultTuple* actualResultfollowsStarsubquery11 = followsStarsubquery11.solve();
-	int expectedResultfollowsStarsubquery11[1][1] = {
-		{5}
+	int expectedResultfollowsStarsubquery11[2][1] = {
+		{4}, {5}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery11)/sizeof(expectedResultfollowsStarsubquery11[0])), actualResultfollowsStarsubquery11->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery11)/sizeof(expectedResultfollowsStarsubquery11[0])); i++){
@@ -2347,8 +2356,16 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery12 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery12.setSynonyms("a1", "s2");
 	ResultTuple* actualResultfollowsStarsubquery12 = followsStarsubquery12.solve();
-	int expectedResultfollowsStarsubquery12[9][2] = {
-		{1, 2}, {2, 3}, {4, 5}, {5, 6}, {7, 8}, {14, 15}, {18, 19}, {19, 20}, {21, 22}
+	int expectedResultfollowsStarsubquery12[22][2] = {
+		{1, 2}, {1, 3}, 
+		{2, 3}, 
+		{4, 5}, {4, 6}, {4, 13}, {4, 18}, {4, 19}, {4, 20},
+		{5, 6}, {5, 13}, {5, 18}, {5, 19}, {5, 20},
+		{7, 8}, {7, 11}, {7, 12},
+		{14, 15}, 
+		{18, 19}, {18, 20},
+		{19, 20}, 
+		{21, 22} 
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery12)/sizeof(expectedResultfollowsStarsubquery12[0])), actualResultfollowsStarsubquery12->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery12)/sizeof(expectedResultfollowsStarsubquery12[0])); i++){
@@ -2361,8 +2378,14 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery13 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery13.setSynonyms("a1", "a2");
 	ResultTuple* actualResultfollowsStarsubquery13 = followsStarsubquery13.solve();
-	int expectedResultfollowsStarsubquery13[5][2] = {
-		{1, 2}, {4, 5}, {18, 19}, {19, 20}, {21, 22}
+	int expectedResultfollowsStarsubquery13[13][2] = {
+		{1, 2},
+		{4, 5}, {4, 18}, {4, 19}, {4, 20},
+		{5, 18}, {5, 19}, {5, 20},
+		{7, 12}, 
+		{18, 19}, {18, 20},
+		{19, 20}, 
+		{21, 22} 
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery13)/sizeof(expectedResultfollowsStarsubquery13[0])), actualResultfollowsStarsubquery13->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery13)/sizeof(expectedResultfollowsStarsubquery13[0])); i++){
@@ -2375,8 +2398,10 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery14 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery14.setSynonyms("a1", "w2");
 	ResultTuple* actualResultfollowsStarsubquery14 = followsStarsubquery14.solve();
-	int expectedResultfollowsStarsubquery14[2][2] = {
-		{5, 6}, {14, 15}
+	int expectedResultfollowsStarsubquery14[3][2] = {
+		{4, 6},
+		{5, 6},
+		{14, 15}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery14)/sizeof(expectedResultfollowsStarsubquery14[0])), actualResultfollowsStarsubquery14->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery14)/sizeof(expectedResultfollowsStarsubquery14[0])); i++){
@@ -2389,7 +2414,9 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery15 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery15.setSynonyms("a1", "i2");
 	ResultTuple* actualResultfollowsStarsubquery15 = followsStarsubquery15.solve();
-	int expectedResultfollowsStarsubquery15[1][2] = {
+	int expectedResultfollowsStarsubquery15[3][2] = {
+		{4, 13}, 
+		{5, 13},
 		{7, 8}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery15)/sizeof(expectedResultfollowsStarsubquery15[0])), actualResultfollowsStarsubquery15->getAllResults().size());
@@ -2403,8 +2430,10 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery18 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery18.setSynonyms("a1", "c2");
 	ResultTuple* actualResultfollowsStarsubquery18 = followsStarsubquery18.solve();
-	int expectedResultfollowsStarsubquery18[1][2] = {
-		{2, 3}
+	int expectedResultfollowsStarsubquery18[3][2] = {
+		{1, 3}, 
+		{2, 3}, 
+		{7, 11}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery18)/sizeof(expectedResultfollowsStarsubquery18[0])), actualResultfollowsStarsubquery18->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery18)/sizeof(expectedResultfollowsStarsubquery18[0])); i++){
@@ -2417,8 +2446,16 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery19 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery19.setSynonyms("a1", "l2");
 	ResultTuple* actualResultfollowsStarsubquery19 = followsStarsubquery19.solve();
-	int expectedResultfollowsStarsubquery19[9][2] = {
-		{1, 2}, {2, 3}, {4, 5}, {5, 6}, {7, 8}, {14, 15}, {18, 19}, {19, 20}, {21, 22}
+	int expectedResultfollowsStarsubquery19[22][2] = {
+		{1, 2}, {1, 3}, 
+		{2, 3}, 
+		{4, 5}, {4, 6}, {4, 13}, {4, 18}, {4, 19}, {4, 20},
+		{5, 6}, {5, 13}, {5, 18}, {5, 19}, {5, 20},
+		{7, 8}, {7, 11}, {7, 12},
+		{14, 15}, 
+		{18, 19}, {18, 20},
+		{19, 20}, 
+		{21, 22}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery19)/sizeof(expectedResultfollowsStarsubquery19[0])), actualResultfollowsStarsubquery19->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery19)/sizeof(expectedResultfollowsStarsubquery19[0])); i++){
@@ -2459,8 +2496,8 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery23 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery23.setSynonyms("a1", 6);
 	ResultTuple* actualResultfollowsStarsubquery23 = followsStarsubquery23.solve();
-	int expectedResultfollowsStarsubquery23[1][1] = {
-		{5}
+	int expectedResultfollowsStarsubquery23[2][1] = {
+		{4}, {5}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery23)/sizeof(expectedResultfollowsStarsubquery23[0])), actualResultfollowsStarsubquery23->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery23)/sizeof(expectedResultfollowsStarsubquery23[0])); i++){
@@ -2473,8 +2510,8 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery24 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery24.setSynonyms("w1", "s2");
 	ResultTuple* actualResultfollowsStarsubquery24 = followsStarsubquery24.solve();
-	int expectedResultfollowsStarsubquery24[1][2] = {
-		{6, 13}
+	int expectedResultfollowsStarsubquery24[4][2] = {
+		{6, 13}, {6, 18}, {6, 19}, {6, 20}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery24)/sizeof(expectedResultfollowsStarsubquery24[0])), actualResultfollowsStarsubquery24->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery24)/sizeof(expectedResultfollowsStarsubquery24[0])); i++){
@@ -2487,7 +2524,15 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery25 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery25.setSynonyms("w1", "a2");
 	ResultTuple* actualResultfollowsStarsubquery25 = followsStarsubquery25.solve();
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowsStarsubquery25->getAllResults().size());
+	int expectedResultfollowsStarsubquery25[3][2] = {
+		{6, 18}, {6, 19}, {6, 20}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery25)/sizeof(expectedResultfollowsStarsubquery25[0])), actualResultfollowsStarsubquery25->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery25)/sizeof(expectedResultfollowsStarsubquery25[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultfollowsStarsubquery25[i])/sizeof(expectedResultfollowsStarsubquery25[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultfollowsStarsubquery25[i][j], actualResultfollowsStarsubquery25->getResultAt(i, j));
+		}
+	}
 
 	// Test 26: FollowsStar(w1, w2)
 	FollowsStarSubquery followsStarsubquery26 = FollowsStarSubquery(&synonymTable, pk);
@@ -2519,8 +2564,8 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery31 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery31.setSynonyms("w1", "l2");
 	ResultTuple* actualResultfollowsStarsubquery31 = followsStarsubquery31.solve();
-	int expectedResultfollowsStarsubquery31[1][2] = {
-		{6, 13}
+	int expectedResultfollowsStarsubquery31[4][2] = {
+		{6, 13}, {6, 18}, {6, 19}, {6, 20}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery31)/sizeof(expectedResultfollowsStarsubquery31[0])), actualResultfollowsStarsubquery31->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery31)/sizeof(expectedResultfollowsStarsubquery31[0])); i++){
@@ -2567,8 +2612,9 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery36 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery36.setSynonyms("i1", "s2");
 	ResultTuple* actualResultfollowsStarsubquery36 = followsStarsubquery36.solve();
-	int expectedResultfollowsStarsubquery36[2][2] = {
-		{8, 11}, {13, 18}
+	int expectedResultfollowsStarsubquery36[5][2] = {
+		{8, 11}, {8, 12},
+		{13, 18}, {13, 19}, {13, 20}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery36)/sizeof(expectedResultfollowsStarsubquery36[0])), actualResultfollowsStarsubquery36->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery36)/sizeof(expectedResultfollowsStarsubquery36[0])); i++){
@@ -2581,8 +2627,9 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery37 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery37.setSynonyms("i1", "a2");
 	ResultTuple* actualResultfollowsStarsubquery37 = followsStarsubquery37.solve();
-	int expectedResultfollowsStarsubquery37[1][2] = {
-		{13, 18}
+	int expectedResultfollowsStarsubquery37[4][2] = {
+		{8, 12},
+		{13, 18}, {13, 19}, {13, 20}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery37)/sizeof(expectedResultfollowsStarsubquery37[0])), actualResultfollowsStarsubquery37->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery37)/sizeof(expectedResultfollowsStarsubquery37[0])); i++){
@@ -2621,8 +2668,9 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery43 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery43.setSynonyms("i1", "l2");
 	ResultTuple* actualResultfollowsStarsubquery43 = followsStarsubquery43.solve();
-	int expectedResultfollowsStarsubquery43[2][2] = {
-		{8, 11}, {13, 18}
+	int expectedResultfollowsStarsubquery43[5][2] = {
+		{8, 11}, {8, 12},
+		{13, 18}, {13, 19}, {13, 20}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery43)/sizeof(expectedResultfollowsStarsubquery43[0])), actualResultfollowsStarsubquery43->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery43)/sizeof(expectedResultfollowsStarsubquery43[0])); i++){
@@ -2763,8 +2811,20 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery84 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery84.setSynonyms("l1", "s2");
 	ResultTuple* actualResultfollowsStarsubquery84 = followsStarsubquery84.solve();
-	int expectedResultfollowsStarsubquery84[13][2] = {
-		{1, 2}, {2, 3}, {4, 5}, {5, 6}, {6, 13}, {7, 8}, {8, 11}, {11, 12}, {13, 18}, {14, 15}, {18, 19}, {19, 20}, {21, 22} 
+	int expectedResultfollowsStarsubquery84[32][2] = {
+		{1, 2}, {1, 3}, 
+		{2, 3}, 
+		{4, 5}, {4, 6}, {4, 13}, {4, 18}, {4, 19}, {4, 20},
+		{5, 6}, {5, 13}, {5, 18}, {5, 19}, {5, 20},
+		{6, 13}, {6, 18}, {6, 19}, {6, 20},
+		{7, 8}, {7, 11}, {7, 12},
+		{8, 11}, {8, 12},
+		{11, 12}, 
+		{13, 18}, {13, 19}, {13, 20},
+		{14, 15}, 
+		{18, 19}, {18, 20},
+		{19, 20}, 
+		{21, 22} 
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery84)/sizeof(expectedResultfollowsStarsubquery84[0])), actualResultfollowsStarsubquery84->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery84)/sizeof(expectedResultfollowsStarsubquery84[0])); i++){
@@ -2777,8 +2837,18 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery85 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery85.setSynonyms("l1", "a2");
 	ResultTuple* actualResultfollowsStarsubquery85 = followsStarsubquery85.solve();
-	int expectedResultfollowsStarsubquery85[7][2] = {
-		{1, 2}, {4, 5}, {11, 12}, {13, 18}, {18, 19}, {19, 20}, {21, 22}
+	int expectedResultfollowsStarsubquery85[21][2] = {
+		{1, 2},
+		{4, 5}, {4, 18}, {4, 19}, {4, 20},
+		{5, 18}, {5, 19}, {5, 20},
+		{6, 18}, {6, 19}, {6, 20},
+		{7, 12},
+		{8, 12},
+		{11, 12}, 
+		{13, 18}, {13, 19}, {13, 20},
+		{18, 19}, {18, 20},
+		{19, 20}, 
+		{21, 22} 
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery85)/sizeof(expectedResultfollowsStarsubquery85[0])), actualResultfollowsStarsubquery85->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery85)/sizeof(expectedResultfollowsStarsubquery85[0])); i++){
@@ -2791,8 +2861,10 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery86 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery86.setSynonyms("l1", "w2");
 	ResultTuple* actualResultfollowsStarsubquery86 = followsStarsubquery86.solve();
-	int expectedResultfollowsStarsubquery86[2][2] = {
-		{5, 6}, {14, 15}
+	int expectedResultfollowsStarsubquery86[3][2] = {
+		{4, 6},
+		{5, 6},
+		{14, 15}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery86)/sizeof(expectedResultfollowsStarsubquery86[0])), actualResultfollowsStarsubquery86->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery86)/sizeof(expectedResultfollowsStarsubquery86[0])); i++){
@@ -2805,8 +2877,10 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery87 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery87.setSynonyms("l1", "i2");
 	ResultTuple* actualResultfollowsStarsubquery87 = followsStarsubquery87.solve();
-	int expectedResultfollowsStarsubquery87[2][2] = {
-		{6, 13}, {7, 8} 
+	int expectedResultfollowsStarsubquery87[4][2] = {
+		{4, 13}, {5, 13},
+		{6, 13},
+		{7, 8}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery87)/sizeof(expectedResultfollowsStarsubquery87[0])), actualResultfollowsStarsubquery87->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery87)/sizeof(expectedResultfollowsStarsubquery87[0])); i++){
@@ -2819,8 +2893,11 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery90 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery90.setSynonyms("l1", "c2");
 	ResultTuple* actualResultfollowsStarsubquery90 = followsStarsubquery90.solve();
-	int expectedResultfollowsStarsubquery90[2][2] = {
-		{2, 3}, {8, 11}
+	int expectedResultfollowsStarsubquery90[4][2] = {
+		{1, 3}, 
+		{2, 3}, 
+		{7, 11},
+		{8, 11}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery90)/sizeof(expectedResultfollowsStarsubquery90[0])), actualResultfollowsStarsubquery90->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery90)/sizeof(expectedResultfollowsStarsubquery90[0])); i++){
@@ -2833,8 +2910,20 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery91 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery91.setSynonyms("l1", "l2");
 	ResultTuple* actualResultfollowsStarsubquery91 = followsStarsubquery91.solve();
-	int expectedResultfollowsStarsubquery91[13][2] = {
-		{1, 2}, {2, 3}, {4, 5}, {5, 6}, {6, 13}, {7, 8}, {8, 11}, {11, 12}, {13, 18}, {14, 15}, {18, 19}, {19, 20}, {21, 22} 
+	int expectedResultfollowsStarsubquery91[32][2] = {
+		{1, 2}, {1, 3}, 
+		{2, 3}, 
+		{4, 5}, {4, 6}, {4, 13}, {4, 18}, {4, 19}, {4, 20},
+		{5, 6}, {5, 13}, {5, 18}, {5, 19}, {5, 20},
+		{6, 13}, {6, 18}, {6, 19}, {6, 20},
+		{7, 8}, {7, 11}, {7, 12},
+		{8, 11}, {8, 12},
+		{11, 12}, 
+		{13, 18}, {13, 19}, {13, 20},
+		{14, 15}, 
+		{18, 19}, {18, 20},
+		{19, 20}, 
+		{21, 22} 
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery91)/sizeof(expectedResultfollowsStarsubquery91[0])), actualResultfollowsStarsubquery91->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery91)/sizeof(expectedResultfollowsStarsubquery91[0])); i++){
@@ -2875,8 +2964,8 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery95 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery95.setSynonyms("l1", 6);
 	ResultTuple* actualResultfollowsStarsubquery95 = followsStarsubquery95.solve();
-	int expectedResultfollowsStarsubquery95[1][1] = {
-		{5}
+	int expectedResultfollowsStarsubquery95[2][1] = {
+		{4}, {5}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery95)/sizeof(expectedResultfollowsStarsubquery95[0])), actualResultfollowsStarsubquery95->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery95)/sizeof(expectedResultfollowsStarsubquery95[0])); i++){
@@ -2997,8 +3086,8 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery120 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery120.setSynonyms(1, "s2");
 	ResultTuple* actualResultfollowsStarsubquery120 = followsStarsubquery120.solve();
-	int expectedResultfollowsStarsubquery120[1][1] = {
-		{2}
+	int expectedResultfollowsStarsubquery120[2][1] = {
+		{2}, {3}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery120)/sizeof(expectedResultfollowsStarsubquery120[0])), actualResultfollowsStarsubquery120->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery120)/sizeof(expectedResultfollowsStarsubquery120[0])); i++){
@@ -3037,14 +3126,22 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery126 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery126.setSynonyms(1, "c2");
 	ResultTuple* actualResultfollowsStarsubquery126 = followsStarsubquery126.solve();
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowsStarsubquery126->getAllResults().size());
+	int expectedResultfollowsStarsubquery126[1][1] = {
+		{3}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery126)/sizeof(expectedResultfollowsStarsubquery126[0])), actualResultfollowsStarsubquery126->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery126)/sizeof(expectedResultfollowsStarsubquery126[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultfollowsStarsubquery126[i])/sizeof(expectedResultfollowsStarsubquery126[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultfollowsStarsubquery126[i][j], actualResultfollowsStarsubquery126->getResultAt(i, j));
+		}
+	}
 
 	// Test 127: FollowsStar(1, l2)
 	FollowsStarSubquery followsStarsubquery127 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery127.setSynonyms(1, "l2");
 	ResultTuple* actualResultfollowsStarsubquery127 = followsStarsubquery127.solve();
-	int expectedResultfollowsStarsubquery127[1][1] = {
-		{2}
+	int expectedResultfollowsStarsubquery127[2][1] = {
+		{2}, {3}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery127)/sizeof(expectedResultfollowsStarsubquery127[0])), actualResultfollowsStarsubquery127->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery127)/sizeof(expectedResultfollowsStarsubquery127[0])); i++){
@@ -3081,8 +3178,8 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery132 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery132.setSynonyms(5, "s2");
 	ResultTuple* actualResultfollowsStarsubquery132 = followsStarsubquery132.solve();
-	int expectedResultfollowsStarsubquery132[1][1] = {
-		{6}
+	int expectedResultfollowsStarsubquery132[5][1] = {
+		{6}, {13}, {18}, {19}, {20}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery132)/sizeof(expectedResultfollowsStarsubquery132[0])), actualResultfollowsStarsubquery132->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery132)/sizeof(expectedResultfollowsStarsubquery132[0])); i++){
@@ -3095,7 +3192,15 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery133 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery133.setSynonyms(5, "a2");
 	ResultTuple* actualResultfollowsStarsubquery133 = followsStarsubquery133.solve();
-	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultfollowsStarsubquery133->getAllResults().size());
+	int expectedResultfollowsStarsubquery133[3][1] = {
+		{18}, {19}, {20}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery133)/sizeof(expectedResultfollowsStarsubquery133[0])), actualResultfollowsStarsubquery133->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery133)/sizeof(expectedResultfollowsStarsubquery133[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultfollowsStarsubquery133[i])/sizeof(expectedResultfollowsStarsubquery133[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultfollowsStarsubquery133[i][j], actualResultfollowsStarsubquery133->getResultAt(i, j));
+		}
+	}
 
 	// Test 134: FollowsStar(5, w2)
 	FollowsStarSubquery followsStarsubquery134 = FollowsStarSubquery(&synonymTable, pk);
@@ -3111,12 +3216,12 @@ void SubqueryTest::testFollowsT(){
 		}
 	}
 
-	// Test 135: FollowsStar(7, i2)
+	// Test 135: FollowsStar(5, i2)
 	FollowsStarSubquery followsStarsubquery135 = FollowsStarSubquery(&synonymTable, pk);
-	followsStarsubquery135.setSynonyms(7, "i2");
+	followsStarsubquery135.setSynonyms(5, "i2");
 	ResultTuple* actualResultfollowsStarsubquery135 = followsStarsubquery135.solve();
 	int expectedResultfollowsStarsubquery135[1][1] = {
-		{8}
+		{13}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery135)/sizeof(expectedResultfollowsStarsubquery135[0])), actualResultfollowsStarsubquery135->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery135)/sizeof(expectedResultfollowsStarsubquery135[0])); i++){
@@ -3143,8 +3248,8 @@ void SubqueryTest::testFollowsT(){
 	FollowsStarSubquery followsStarsubquery139 = FollowsStarSubquery(&synonymTable, pk);
 	followsStarsubquery139.setSynonyms(5, "l2");
 	ResultTuple* actualResultfollowsStarsubquery139 = followsStarsubquery139.solve();
-	int expectedResultfollowsStarsubquery139[1][1] = {
-		{6}
+	int expectedResultfollowsStarsubquery139[5][1] = {
+		{6}, {13}, {18}, {19}, {20}
 	};
 	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultfollowsStarsubquery139)/sizeof(expectedResultfollowsStarsubquery139[0])), actualResultfollowsStarsubquery139->getAllResults().size());
 	for (size_t i = 0; i < (sizeof(expectedResultfollowsStarsubquery139)/sizeof(expectedResultfollowsStarsubquery139[0])); i++){
@@ -4583,6 +4688,782 @@ void SubqueryTest::testParentTuple(){
 }
 
 void SubqueryTest::testParentT(){
+	// Test 0: ParentStar(s1, s2)
+	ParentStarSubquery parentStarsubquery0 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery0.setSynonyms("s1", "s2");
+	ResultTuple* actualResultparentStarsubquery0 = parentStarsubquery0.solve();
+	int expectedResultparentStarsubquery0[13][2] = {
+		{6, 7}, {6, 8}, {6, 9}, {6, 10}, {6, 11}, {6, 12},
+		{8, 9}, {8, 10}, 
+		{13, 14}, {13, 15}, {13, 16}, {13, 17}, 
+		{15, 16}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery0)/sizeof(expectedResultparentStarsubquery0[0])), actualResultparentStarsubquery0->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery0)/sizeof(expectedResultparentStarsubquery0[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery0[i])/sizeof(expectedResultparentStarsubquery0[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery0[i][j], actualResultparentStarsubquery0->getResultAt(i, j));
+		}
+	}
+
+	// Test 1: ParentStar(s1, a2)
+	ParentStarSubquery parentStarsubquery1 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery1.setSynonyms("s1", "a2");
+	ResultTuple* actualResultparentStarsubquery1 = parentStarsubquery1.solve();
+	int expectedResultparentStarsubquery1[10][2] = {
+		{6, 7}, {6, 9}, {6, 10}, {6, 12},
+		{8, 9}, {8, 10}, 
+		{13, 14}, {13, 16}, {13, 17}, 
+		{15, 16}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery1)/sizeof(expectedResultparentStarsubquery1[0])), actualResultparentStarsubquery1->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery1)/sizeof(expectedResultparentStarsubquery1[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery1[i])/sizeof(expectedResultparentStarsubquery1[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery1[i][j], actualResultparentStarsubquery1->getResultAt(i, j));
+		}
+	}
+
+	// Test 2: parentStar(s1, w2)
+	ParentStarSubquery parentStarsubquery2 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery2.setSynonyms("s1", "w2");
+	ResultTuple* actualResultparentStarsubquery2 = parentStarsubquery2.solve();
+	int expectedResultparentStarsubquery2[1][2] = {
+		{13, 15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery2)/sizeof(expectedResultparentStarsubquery2[0])), actualResultparentStarsubquery2->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery2)/sizeof(expectedResultparentStarsubquery2[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery2[i])/sizeof(expectedResultparentStarsubquery2[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery2[i][j], actualResultparentStarsubquery2->getResultAt(i, j));
+		}
+	}
+
+	// Test 3: Follows(s1, i2)
+	ParentStarSubquery parentStarsubquery3 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery3.setSynonyms("s1", "i2");
+	ResultTuple* actualResultparentStarsubquery3 = parentStarsubquery3.solve();
+	int expectedResultparentStarsubquery3[1][2] = {
+		{6, 8}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery3)/sizeof(expectedResultparentStarsubquery3[0])), actualResultparentStarsubquery3->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery3)/sizeof(expectedResultparentStarsubquery3[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery3[i])/sizeof(expectedResultparentStarsubquery3[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery3[i][j], actualResultparentStarsubquery3->getResultAt(i, j));
+		}
+	}
+
+	// Test 6: parentStar(s1, c2)
+	ParentStarSubquery parentStarsubquery6 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery6.setSynonyms("s1", "c2");
+	ResultTuple* actualResultparentStarsubquery6 = parentStarsubquery6.solve();
+	int expectedResultparentStarsubquery6[1][2] = {
+		{6,11}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery6)/sizeof(expectedResultparentStarsubquery6[0])), actualResultparentStarsubquery6->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery6)/sizeof(expectedResultparentStarsubquery6[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery6[i])/sizeof(expectedResultparentStarsubquery6[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery6[i][j], actualResultparentStarsubquery6->getResultAt(i, j));
+		}
+	}
+
+	// Test 7: ParentStar(s1, l2)
+	ParentStarSubquery parentStarsubquery7 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery7.setSynonyms("s1", "l2");
+	ResultTuple* actualResultparentStarsubquery7 = parentStarsubquery7.solve();
+	int expectedResultparentStarsubquery7[13][2] = {
+		{6, 7}, {6, 8}, {6, 9}, {6, 10}, {6, 11}, {6, 12},
+		{8, 9}, {8, 10}, 
+		{13, 14}, {13, 15}, {13, 16}, {13, 17}, 
+		{15, 16}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery7)/sizeof(expectedResultparentStarsubquery7[0])), actualResultparentStarsubquery7->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery7)/sizeof(expectedResultparentStarsubquery7[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery7[i])/sizeof(expectedResultparentStarsubquery7[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery7[i][j], actualResultparentStarsubquery7->getResultAt(i, j));
+		}
+	}
+
+	// Test 9: ParentStar(s1, _)
+	ParentStarSubquery parentStarsubquery9 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery9.setSynonyms("s1", "_");
+	ResultTuple* actualResultparentStarsubquery9 = parentStarsubquery9.solve();
+	int expectedResultparentStarsubquery9[4][1] = {
+		{6}, {8}, {13}, {15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery9)/sizeof(expectedResultparentStarsubquery9[0])), actualResultparentStarsubquery9->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery9)/sizeof(expectedResultparentStarsubquery9[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery9[i])/sizeof(expectedResultparentStarsubquery9[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery9[i][j], actualResultparentStarsubquery9->getResultAt(i, j));
+		}
+	}
+
+	// Test 10: ParentStar(s1, 8)
+	ParentStarSubquery parentStarsubquery10 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery10.setSynonyms("s1", 8);
+	ResultTuple* actualResultparentStarsubquery10 = parentStarsubquery10.solve();
+	int expectedResultparentStarsubquery10[1][1] = {
+		{6}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery10)/sizeof(expectedResultparentStarsubquery10[0])), actualResultparentStarsubquery10->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery10)/sizeof(expectedResultparentStarsubquery10[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery10[i])/sizeof(expectedResultparentStarsubquery10[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery10[i][j], actualResultparentStarsubquery10->getResultAt(i, j));
+		}
+	}
+
+	// Test 11: ParentStar(s1, 15)
+	ParentStarSubquery parentStarsubquery11 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery11.setSynonyms("s1", 15);
+	ResultTuple* actualResultparentStarsubquery11 = parentStarsubquery11.solve();
+	int expectedResultparentStarsubquery11[1][1] = {
+		{13}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery11)/sizeof(expectedResultparentStarsubquery11[0])), actualResultparentStarsubquery11->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery11)/sizeof(expectedResultparentStarsubquery11[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery11[i])/sizeof(expectedResultparentStarsubquery11[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery11[i][j], actualResultparentStarsubquery11->getResultAt(i, j));
+		}
+	}
+
+
+	// Test 24: ParentStar(w1, s2)
+	ParentStarSubquery parentStarsubquery24 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery24.setSynonyms("w1", "s2");
+	ResultTuple* actualResultparentStarsubquery24 = parentStarsubquery24.solve();
+	int expectedResultparentStarsubquery24[7][2] = {
+		{6, 7} , {6, 8}, {6, 9}, {6, 10}, {6, 11}, {6, 12}, {15, 16}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery24)/sizeof(expectedResultparentStarsubquery24[0])), actualResultparentStarsubquery24->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery24)/sizeof(expectedResultparentStarsubquery24[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery24[i])/sizeof(expectedResultparentStarsubquery24[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery24[i][j], actualResultparentStarsubquery24->getResultAt(i, j));
+		}
+	}
+
+	// Test 25: ParentStar(w1, a2)
+	ParentStarSubquery parentStarsubquery25 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery25.setSynonyms("w1", "a2");
+	ResultTuple* actualResultparentStarsubquery25 = parentStarsubquery25.solve();
+	int expectedResultparentStarsubquery25[5][2] = {
+		{6, 7}, {6, 9}, {6, 10}, {6, 12}, {15, 16}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery25)/sizeof(expectedResultparentStarsubquery25[0])), actualResultparentStarsubquery25->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery25)/sizeof(expectedResultparentStarsubquery25[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery25[i])/sizeof(expectedResultparentStarsubquery25[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery25[i][j], actualResultparentStarsubquery25->getResultAt(i, j));
+		}
+	}
+
+	// Test 26: ParentStar(w1, w2)
+	ParentStarSubquery parentStarsubquery26 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery26.setSynonyms("w1", "w2");
+	ResultTuple* actualResultparentStarsubquery26 = parentStarsubquery26.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery26->getAllResults().size());
+
+	// Test 27: ParentStar(w1, i2)
+	ParentStarSubquery parentStarsubquery27 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery27.setSynonyms("w1", "i2");
+	ResultTuple* actualResultparentStarsubquery27 = parentStarsubquery27.solve();
+	int expectedResultparentStarsubquery27[1][2] = {
+		{6, 8}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery27)/sizeof(expectedResultparentStarsubquery27[0])), actualResultparentStarsubquery27->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery27)/sizeof(expectedResultparentStarsubquery27[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery27[i])/sizeof(expectedResultparentStarsubquery27[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery27[i][j], actualResultparentStarsubquery27->getResultAt(i, j));
+		}
+	}
+
+	// Test 30: ParentStar(w1, c2)
+	ParentStarSubquery parentStarsubquery30 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery30.setSynonyms("w1", "c2");
+	ResultTuple* actualResultparentStarsubquery30 = parentStarsubquery30.solve();
+	int expectedResultparentStarsubquery30[1][2] = {
+		{6, 11}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery30)/sizeof(expectedResultparentStarsubquery30[0])), actualResultparentStarsubquery30->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery30)/sizeof(expectedResultparentStarsubquery30[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery30[i])/sizeof(expectedResultparentStarsubquery30[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery30[i][j], actualResultparentStarsubquery30->getResultAt(i, j));
+		}
+	}
+
+	// Test 31: ParentStar(w1, l2)
+	ParentStarSubquery parentStarsubquery31 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery31.setSynonyms("w1", "l2");
+	ResultTuple* actualResultparentStarsubquery31 = parentStarsubquery31.solve();
+	int expectedResultparentStarsubquery31[7][2] = {
+		{6, 7}, {6, 8}, {6, 9}, {6, 10}, {6, 11}, {6, 12}, {15, 16}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery31)/sizeof(expectedResultparentStarsubquery31[0])), actualResultparentStarsubquery31->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery31)/sizeof(expectedResultparentStarsubquery31[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery31[i])/sizeof(expectedResultparentStarsubquery31[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery31[i][j], actualResultparentStarsubquery31->getResultAt(i, j));
+		}
+	}
+
+	// Test 33: ParentStar(w1, _)
+	ParentStarSubquery parentStarsubquery33 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery33.setSynonyms("w1", "_");
+	ResultTuple* actualResultparentStarsubquery33 = parentStarsubquery33.solve();
+	int expectedResultparentStarsubquery33[2][1] = {
+		{6}, {15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery33)/sizeof(expectedResultparentStarsubquery33[0])), actualResultparentStarsubquery33->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery33)/sizeof(expectedResultparentStarsubquery33[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery33[i])/sizeof(expectedResultparentStarsubquery33[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery33[i][j], actualResultparentStarsubquery33->getResultAt(i, j));
+		}
+	}
+
+	// Test 34: ParentStar(w1, 2)
+	ParentStarSubquery parentStarsubquery34 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery34.setSynonyms("w1", 2);
+	ResultTuple* actualResultparentStarsubquery34 = parentStarsubquery34.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery34->getAllResults().size());
+
+	// Test 35: ParentStar(w1, 11)
+	ParentStarSubquery parentStarsubquery35 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery35.setSynonyms("w1", 11);
+	ResultTuple* actualResultparentStarsubquery35 = parentStarsubquery35.solve();
+	int expectedResultparentStarsubquery35[1][1] = {
+		{6}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery35)/sizeof(expectedResultparentStarsubquery35[0])), actualResultparentStarsubquery35->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery35)/sizeof(expectedResultparentStarsubquery35[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery35[i])/sizeof(expectedResultparentStarsubquery35[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery35[i][j], actualResultparentStarsubquery35->getResultAt(i, j));
+		}
+	}
+
+	// Test 36: ParentStar(i1, s2)
+	ParentStarSubquery parentStarsubquery36 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery36.setSynonyms("i1", "s2");
+	ResultTuple* actualResultparentStarsubquery36 = parentStarsubquery36.solve();
+	int expectedResultparentStarsubquery36[6][2] = {
+		{8, 9}, {8, 10}, {13, 14}, {13, 15}, {13, 16}, {13, 17}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery36)/sizeof(expectedResultparentStarsubquery36[0])), actualResultparentStarsubquery36->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery36)/sizeof(expectedResultparentStarsubquery36[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery36[i])/sizeof(expectedResultparentStarsubquery36[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery36[i][j], actualResultparentStarsubquery36->getResultAt(i, j));
+		}
+	}
+
+	// Test 37: ParentStar(i1, a2)
+	ParentStarSubquery parentStarsubquery37 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery37.setSynonyms("i1", "a2");
+	ResultTuple* actualResultparentStarsubquery37 = parentStarsubquery37.solve();
+	int expectedResultparentStarsubquery37[5][2] = {
+		{8, 9}, {8, 10}, {13, 14}, {13, 16}, {13, 17}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery37)/sizeof(expectedResultparentStarsubquery37[0])), actualResultparentStarsubquery37->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery37)/sizeof(expectedResultparentStarsubquery37[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery37[i])/sizeof(expectedResultparentStarsubquery37[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery37[i][j], actualResultparentStarsubquery37->getResultAt(i, j));
+		}
+	}
+
+	// Test 38: ParentStar(i1, w2)
+	ParentStarSubquery parentStarsubquery38 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery38.setSynonyms("i1", "w2");
+	ResultTuple* actualResultparentStarsubquery38 = parentStarsubquery38.solve();
+	int expectedResultparentStarsubquery38[1][2] = {
+		{13, 15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery38)/sizeof(expectedResultparentStarsubquery38[0])), actualResultparentStarsubquery38->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery38)/sizeof(expectedResultparentStarsubquery38[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery38[i])/sizeof(expectedResultparentStarsubquery38[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery38[i][j], actualResultparentStarsubquery38->getResultAt(i, j));
+		}
+	}
+
+	// Test 39: ParentStar(i1, i2)
+	ParentStarSubquery parentStarsubquery39 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery39.setSynonyms("i1", "i2");
+	ResultTuple* actualResultparentStarsubquery39 = parentStarsubquery39.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery39->getAllResults().size());
+
+	// Test 42: ParentStar(i1, c2)
+	ParentStarSubquery parentStarsubquery42 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery42.setSynonyms("i1", "c2");
+	ResultTuple* actualResultparentStarsubquery42 = parentStarsubquery42.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery42->getAllResults().size());
+
+	// Test 43: ParentStar(i1, l2)
+	ParentStarSubquery parentStarsubquery43 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery43.setSynonyms("i1", "l2");
+	ResultTuple* actualResultparentStarsubquery43 = parentStarsubquery43.solve();
+	int expectedResultparentStarsubquery43[6][2] = {
+		{8, 9}, {8, 10}, {13, 14}, {13, 15}, {13, 16}, {13, 17}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery43)/sizeof(expectedResultparentStarsubquery43[0])), actualResultparentStarsubquery43->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery43)/sizeof(expectedResultparentStarsubquery43[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery43[i])/sizeof(expectedResultparentStarsubquery43[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery43[i][j], actualResultparentStarsubquery43->getResultAt(i, j));
+		}
+	}
+
+
+	// Test 45: ParentStar(i1, _)
+	ParentStarSubquery parentStarsubquery45 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery45.setSynonyms("i1", "_");
+	ResultTuple* actualResultparentStarsubquery45 = parentStarsubquery45.solve();
+	int expectedResultparentStarsubquery45[2][1] = {
+		{8}, {13}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery45)/sizeof(expectedResultparentStarsubquery45[0])), actualResultparentStarsubquery45->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery45)/sizeof(expectedResultparentStarsubquery45[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery45[i])/sizeof(expectedResultparentStarsubquery45[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery45[i][j], actualResultparentStarsubquery45->getResultAt(i, j));
+		}
+	}
+
+	// Test 46: ParentStar(i1, 2)
+	ParentStarSubquery parentStarsubquery46 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery46.setSynonyms("i1", 2);
+	ResultTuple* actualResultparentStarsubquery46 = parentStarsubquery46.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery46->getAllResults().size());
+
+	// Test 47: ParentStar(i1, 14)
+	ParentStarSubquery parentStarsubquery47 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery47.setSynonyms("i1", 14);
+	ResultTuple* actualResultparentStarsubquery47 = parentStarsubquery47.solve();
+	int expectedResultparentStarsubquery47[1][1] = {
+		{13}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery47)/sizeof(expectedResultparentStarsubquery47[0])), actualResultparentStarsubquery47->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery47)/sizeof(expectedResultparentStarsubquery47[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery47[i])/sizeof(expectedResultparentStarsubquery47[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery47[i][j], actualResultparentStarsubquery47->getResultAt(i, j));
+		}
+	}
+
+
+	// Test 84: ParentStar(l1, s2)
+	ParentStarSubquery parentStarsubquery84 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery84.setSynonyms("l1", "s2");
+	ResultTuple* actualResultparentStarsubquery84 = parentStarsubquery84.solve();
+	int expectedResultparentStarsubquery84[13][2] = {
+		{6, 7}, {6, 8}, {6, 9}, {6, 10}, {6, 11}, {6, 12},
+		{8, 9}, {8, 10}, 
+		{13, 14}, {13, 15}, {13, 16}, {13, 17}, 
+		{15, 16}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery84)/sizeof(expectedResultparentStarsubquery84[0])), actualResultparentStarsubquery84->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery84)/sizeof(expectedResultparentStarsubquery84[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery84[i])/sizeof(expectedResultparentStarsubquery84[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery84[i][j], actualResultparentStarsubquery84->getResultAt(i, j));
+		}
+	}
+
+	// Test 85: ParentStar(l1, a2)
+	ParentStarSubquery parentStarsubquery85 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery85.setSynonyms("l1", "a2");
+	ResultTuple* actualResultparentStarsubquery85 = parentStarsubquery85.solve();
+	int expectedResultparentStarsubquery85[10][2] = {
+		{6, 7}, {6, 9}, {6, 10}, {6, 12},
+		{8, 9}, {8, 10}, 
+		{13, 14}, {13, 16}, {13, 17}, 
+		{15, 16}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery85)/sizeof(expectedResultparentStarsubquery85[0])), actualResultparentStarsubquery85->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery85)/sizeof(expectedResultparentStarsubquery85[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery85[i])/sizeof(expectedResultparentStarsubquery85[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery85[i][j], actualResultparentStarsubquery85->getResultAt(i, j));
+		}
+	}
+ 
+	// Test 86: ParentStar(l1, w2)
+	ParentStarSubquery parentStarsubquery86 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery86.setSynonyms("l1", "w2");
+	ResultTuple* actualResultparentStarsubquery86 = parentStarsubquery86.solve();
+	int expectedResultparentStarsubquery86[1][2] = {
+		{13, 15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery86)/sizeof(expectedResultparentStarsubquery86[0])), actualResultparentStarsubquery86->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery86)/sizeof(expectedResultparentStarsubquery86[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery86[i])/sizeof(expectedResultparentStarsubquery86[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery86[i][j], actualResultparentStarsubquery86->getResultAt(i, j));
+		}
+	}
+
+	// Test 87: ParentStar(l1, i2)
+	ParentStarSubquery parentStarsubquery87 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery87.setSynonyms("l1", "i2");
+	ResultTuple* actualResultparentStarsubquery87 = parentStarsubquery87.solve();
+	int expectedResultparentStarsubquery87[1][2] = {
+		{6, 8} 
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery87)/sizeof(expectedResultparentStarsubquery87[0])), actualResultparentStarsubquery87->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery87)/sizeof(expectedResultparentStarsubquery87[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery87[i])/sizeof(expectedResultparentStarsubquery87[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery87[i][j], actualResultparentStarsubquery87->getResultAt(i, j));
+		}
+	}
+
+	// Test 90: ParentStar(l1, c2)
+	ParentStarSubquery parentStarsubquery90 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery90.setSynonyms("l1", "c2");
+	ResultTuple* actualResultparentStarsubquery90 = parentStarsubquery90.solve();
+	int expectedResultparentStarsubquery90[1][2] = {
+		{6, 11}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery90)/sizeof(expectedResultparentStarsubquery90[0])), actualResultparentStarsubquery90->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery90)/sizeof(expectedResultparentStarsubquery90[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery90[i])/sizeof(expectedResultparentStarsubquery90[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery90[i][j], actualResultparentStarsubquery90->getResultAt(i, j));
+		}
+	}
+
+	// Test 91: ParentStar(l1, l2)
+	ParentStarSubquery parentStarsubquery91 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery91.setSynonyms("l1", "l2");
+	ResultTuple* actualResultparentStarsubquery91 = parentStarsubquery91.solve();
+	int expectedResultparentStarsubquery91[13][2] = {
+		{6, 7}, {6, 8}, {6, 9}, {6, 10}, {6, 11}, {6, 12},
+		{8, 9}, {8, 10}, 
+		{13, 14}, {13, 15}, {13, 16}, {13, 17}, 
+		{15, 16}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery91)/sizeof(expectedResultparentStarsubquery91[0])), actualResultparentStarsubquery91->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery91)/sizeof(expectedResultparentStarsubquery91[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery91[i])/sizeof(expectedResultparentStarsubquery91[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery91[i][j], actualResultparentStarsubquery91->getResultAt(i, j));
+		}
+	}
+
+	// Test 93: ParentStar(l1, _)
+	ParentStarSubquery parentStarsubquery93 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery93.setSynonyms("l1", "_");
+	ResultTuple* actualResultparentStarsubquery93 = parentStarsubquery93.solve();
+	int expectedResultparentStarsubquery93[4][1] = {
+		{6}, {8}, {13}, {15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery93)/sizeof(expectedResultparentStarsubquery93[0])), actualResultparentStarsubquery93->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery93)/sizeof(expectedResultparentStarsubquery93[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery93[i])/sizeof(expectedResultparentStarsubquery93[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery93[i][j], actualResultparentStarsubquery93->getResultAt(i, j));
+		}
+	}
+
+	// Test 94: ParentStar(l1, 7)
+	ParentStarSubquery parentStarsubquery94 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery94.setSynonyms("l1", 7);
+	ResultTuple* actualResultparentStarsubquery94 = parentStarsubquery94.solve();
+	int expectedResultparentStarsubquery94[1][1] = {
+		{6}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery94)/sizeof(expectedResultparentStarsubquery94[0])), actualResultparentStarsubquery94->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery94)/sizeof(expectedResultparentStarsubquery94[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery94[i])/sizeof(expectedResultparentStarsubquery94[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery94[i][j], actualResultparentStarsubquery94->getResultAt(i, j));
+		}
+	}
+
+	// Test 95: ParentStar(l1, 11)
+	ParentStarSubquery parentStarsubquery95 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery95.setSynonyms("l1", 11);
+	ResultTuple* actualResultparentStarsubquery95 = parentStarsubquery95.solve();
+	int expectedResultparentStarsubquery95[1][1] = {
+		{6}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery95)/sizeof(expectedResultparentStarsubquery95[0])), actualResultparentStarsubquery95->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery95)/sizeof(expectedResultparentStarsubquery95[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery95[i])/sizeof(expectedResultparentStarsubquery95[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery95[i][j], actualResultparentStarsubquery95->getResultAt(i, j));
+		}
+	}
+
+	// Test 108: ParentStar(_, s2)
+	ParentStarSubquery parentStarsubquery108 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery108.setSynonyms("_", "s2");
+	ResultTuple* actualResultparentStarsubquery108 = parentStarsubquery108.solve();
+	int expectedResultparentStarsubquery108[10][1] = {
+		{7}, {8}, {9}, {10}, {11}, {12}, {14}, {15}, {16}, {17}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery108)/sizeof(expectedResultparentStarsubquery108[0])), actualResultparentStarsubquery108->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery108)/sizeof(expectedResultparentStarsubquery108[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery108[i])/sizeof(expectedResultparentStarsubquery108[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery108[i][j], actualResultparentStarsubquery108->getResultAt(i, j));
+		}
+	}
+
+	// Test 109: ParentStar(_, a2)
+	ParentStarSubquery parentStarsubquery109 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery109.setSynonyms("_", "a2");
+	ResultTuple* actualResultparentStarsubquery109 = parentStarsubquery109.solve();
+	int expectedResultparentStarsubquery109[7][1] = {
+		{7}, {9}, {10}, {12}, {14}, {16}, {17}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery109)/sizeof(expectedResultparentStarsubquery109[0])), actualResultparentStarsubquery109->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery109)/sizeof(expectedResultparentStarsubquery109[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery109[i])/sizeof(expectedResultparentStarsubquery109[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery109[i][j], actualResultparentStarsubquery109->getResultAt(i, j));
+		}
+	}
+
+	// Test 110: ParentStar(_, w2)
+	ParentStarSubquery parentStarsubquery110 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery110.setSynonyms("_", "w2");
+	ResultTuple* actualResultparentStarsubquery110 = parentStarsubquery110.solve();
+	int expectedResultparentStarsubquery110[1][1] = {
+		{15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery110)/sizeof(expectedResultparentStarsubquery110[0])), actualResultparentStarsubquery110->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery110)/sizeof(expectedResultparentStarsubquery110[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery110[i])/sizeof(expectedResultparentStarsubquery110[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery110[i][j], actualResultparentStarsubquery110->getResultAt(i, j));
+		}
+	}
+
+	// Test 111: ParentStar(_, i2)
+	ParentStarSubquery parentStarsubquery111 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery111.setSynonyms("_", "i2");
+	ResultTuple* actualResultparentStarsubquery111 = parentStarsubquery111.solve();
+	int expectedResultparentStarsubquery111[1][1] = {
+		{8}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery111)/sizeof(expectedResultparentStarsubquery111[0])), actualResultparentStarsubquery111->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery111)/sizeof(expectedResultparentStarsubquery111[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery111[i])/sizeof(expectedResultparentStarsubquery111[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery111[i][j], actualResultparentStarsubquery111->getResultAt(i, j));
+		}
+	}
+
+	// Test 114: ParentStar(_, c2)
+	ParentStarSubquery parentStarsubquery114 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery114.setSynonyms("_", "c2");
+	ResultTuple* actualResultparentStarsubquery114 = parentStarsubquery114.solve();
+	int expectedResultparentStarsubquery114[1][1] = {
+		{11}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery114)/sizeof(expectedResultparentStarsubquery114[0])), actualResultparentStarsubquery114->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery114)/sizeof(expectedResultparentStarsubquery114[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery114[i])/sizeof(expectedResultparentStarsubquery114[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery114[i][j], actualResultparentStarsubquery114->getResultAt(i, j));
+		}
+	}
+
+	// Test 115: ParentStar(_, l2)
+	ParentStarSubquery parentStarsubquery115 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery115.setSynonyms("_", "l2");
+	ResultTuple* actualResultparentStarsubquery115 = parentStarsubquery115.solve();
+	int expectedResultparentStarsubquery115[10][1] = {
+		{7}, {8}, {9}, {10}, {11}, {12}, {14}, {15}, {16}, {17}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery115)/sizeof(expectedResultparentStarsubquery115[0])), actualResultparentStarsubquery115->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery115)/sizeof(expectedResultparentStarsubquery115[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery115[i])/sizeof(expectedResultparentStarsubquery115[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery115[i][j], actualResultparentStarsubquery115->getResultAt(i, j));
+		}
+	}
+
+	// Test 117: ParentStar(_, _)
+	ParentStarSubquery parentStarsubquery117 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery117.setSynonyms("_", "_");
+	ResultTuple* actualResultparentStarsubquery117 = parentStarsubquery117.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery117->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultparentStarsubquery117->isBool());
+	CPPUNIT_ASSERT(!actualResultparentStarsubquery117->isEmpty());
+
+	// Test 118: ParentStar(_, 2)
+	ParentStarSubquery parentStarsubquery118 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery118.setSynonyms("_", 2);
+	ResultTuple* actualResultparentStarsubquery118 = parentStarsubquery118.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery118->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultparentStarsubquery118->isBool());
+	CPPUNIT_ASSERT(actualResultparentStarsubquery118->isEmpty());
+
+	// Test 119: ParentStar(_, 7)
+	ParentStarSubquery parentStarsubquery119 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery119.setSynonyms("_", 7);
+	ResultTuple* actualResultparentStarsubquery119 = parentStarsubquery119.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery119->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultparentStarsubquery119->isBool());
+	CPPUNIT_ASSERT(!actualResultparentStarsubquery119->isEmpty());
+
+	// Test 120: ParentStar(15, s2)
+	ParentStarSubquery parentStarsubquery120 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery120.setSynonyms(15, "s2");
+	ResultTuple* actualResultparentStarsubquery120 = parentStarsubquery120.solve();
+	int expectedResultparentStarsubquery120[1][1] = {
+		{16}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery120)/sizeof(expectedResultparentStarsubquery120[0])), actualResultparentStarsubquery120->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery120)/sizeof(expectedResultparentStarsubquery120[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery120[i])/sizeof(expectedResultparentStarsubquery120[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery120[i][j], actualResultparentStarsubquery120->getResultAt(i, j));
+		}
+	}
+
+	// Test 121: ParentStar(15, a2)
+	ParentStarSubquery parentStarsubquery121 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery121.setSynonyms(15, "a2");
+	ResultTuple* actualResultparentStarsubquery121 = parentStarsubquery121.solve();
+	int expectedResultparentStarsubquery121[1][1] = {
+		{16}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery121)/sizeof(expectedResultparentStarsubquery121[0])), actualResultparentStarsubquery121->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery121)/sizeof(expectedResultparentStarsubquery121[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery121[i])/sizeof(expectedResultparentStarsubquery121[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery121[i][j], actualResultparentStarsubquery121->getResultAt(i, j));
+		}
+	}
+
+	// Test 122: ParentStar(1, w2)
+	ParentStarSubquery parentStarsubquery122 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery122.setSynonyms(1, "w2");
+	ResultTuple* actualResultparentStarsubquery122 = parentStarsubquery122.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery122->getAllResults().size());
+
+	// Test 123: ParentStar(1, i2)
+	ParentStarSubquery parentStarsubquery123 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery123.setSynonyms(1, "i2");
+	ResultTuple* actualResultparentStarsubquery123 = parentStarsubquery123.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery123->getAllResults().size());
+
+	// Test 126: ParentStar(1, c2)
+	ParentStarSubquery parentStarsubquery126 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery126.setSynonyms(1, "c2");
+	ResultTuple* actualResultparentStarsubquery126 = parentStarsubquery126.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery126->getAllResults().size());
+
+	// Test 127: ParentStar(15, l2)
+	ParentStarSubquery parentStarsubquery127 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery127.setSynonyms(15, "l2");
+	ResultTuple* actualResultparentStarsubquery127 = parentStarsubquery127.solve();
+	int expectedResultparentStarsubquery127[1][1] = {
+		{16}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery127)/sizeof(expectedResultparentStarsubquery127[0])), actualResultparentStarsubquery127->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery127)/sizeof(expectedResultparentStarsubquery127[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery127[i])/sizeof(expectedResultparentStarsubquery127[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery127[i][j], actualResultparentStarsubquery127->getResultAt(i, j));
+		}
+	}
+
+	// Test 129: ParentStar(1, _)
+	ParentStarSubquery parentStarsubquery129 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery129.setSynonyms(1, "_");
+	ResultTuple* actualResultparentStarsubquery129 = parentStarsubquery129.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery129->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultparentStarsubquery129->isBool());
+	CPPUNIT_ASSERT(actualResultparentStarsubquery129->isEmpty());
+
+	// Test 130: ParentStar(1, 2)
+	ParentStarSubquery parentStarsubquery130 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery130.setSynonyms(1, 2);
+	ResultTuple* actualResultparentStarsubquery130 = parentStarsubquery130.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery130->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultparentStarsubquery130->isBool());
+	CPPUNIT_ASSERT(actualResultparentStarsubquery130->isEmpty());
+
+	// Test 131: ParentStar(1, 6)
+	ParentStarSubquery parentStarsubquery131 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery131.setSynonyms(1, 6);
+	ResultTuple* actualResultparentStarsubquery131 = parentStarsubquery131.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery131->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultparentStarsubquery131->isBool());
+	CPPUNIT_ASSERT(actualResultparentStarsubquery131->isEmpty());
+
+	// Test 132: ParentStar(8, s2)
+	ParentStarSubquery parentStarsubquery132 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery132.setSynonyms(8, "s2");
+	ResultTuple* actualResultparentStarsubquery132 = parentStarsubquery132.solve();
+	int expectedResultparentStarsubquery132[2][1] = {
+		{9}, {10}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery132)/sizeof(expectedResultparentStarsubquery132[0])), actualResultparentStarsubquery132->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery132)/sizeof(expectedResultparentStarsubquery132[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery132[i])/sizeof(expectedResultparentStarsubquery132[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery132[i][j], actualResultparentStarsubquery132->getResultAt(i, j));
+		}
+	}
+
+	// Test 133: ParentStar(5, a2)
+	ParentStarSubquery parentStarsubquery133 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery133.setSynonyms(5, "a2");
+	ResultTuple* actualResultparentStarsubquery133 = parentStarsubquery133.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery133->getAllResults().size());
+
+	// Test 134: ParentStar(13, w2)
+	ParentStarSubquery parentStarsubquery134 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery134.setSynonyms(13, "w2");
+	ResultTuple* actualResultparentStarsubquery134 = parentStarsubquery134.solve();
+	int expectedResultparentStarsubquery134[1][1] = {
+		{15}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery134)/sizeof(expectedResultparentStarsubquery134[0])), actualResultparentStarsubquery134->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery134)/sizeof(expectedResultparentStarsubquery134[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery134[i])/sizeof(expectedResultparentStarsubquery134[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery134[i][j], actualResultparentStarsubquery134->getResultAt(i, j));
+		}
+	}
+
+	// Test 135: ParentStar(6, i2)
+	ParentStarSubquery parentStarsubquery135 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery135.setSynonyms(6, "i2");
+	ResultTuple* actualResultparentStarsubquery135 = parentStarsubquery135.solve();
+	int expectedResultparentStarsubquery135[1][1] = {
+		{8}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery135)/sizeof(expectedResultparentStarsubquery135[0])), actualResultparentStarsubquery135->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery135)/sizeof(expectedResultparentStarsubquery135[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery135[i])/sizeof(expectedResultparentStarsubquery135[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery135[i][j], actualResultparentStarsubquery135->getResultAt(i, j));
+		}
+	}
+
+	// Test 138: ParentStar(6, c2)
+	ParentStarSubquery parentStarsubquery138 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery138.setSynonyms(6, "c2");
+	ResultTuple* actualResultparentStarsubquery138 = parentStarsubquery138.solve();
+	int expectedResultparentStarsubquery138[1][1] = {
+		{11}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery138)/sizeof(expectedResultparentStarsubquery138[0])), actualResultparentStarsubquery138->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery138)/sizeof(expectedResultparentStarsubquery138[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery138[i])/sizeof(expectedResultparentStarsubquery138[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery138[i][j], actualResultparentStarsubquery138->getResultAt(i, j));
+		}
+	}
+
+	// Test 139: ParentStar(15, l2)
+	ParentStarSubquery parentStarsubquery139 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery139.setSynonyms(15, "l2");
+	ResultTuple* actualResultparentStarsubquery139 = parentStarsubquery139.solve();
+	int expectedResultparentStarsubquery139[1][1] = {
+		{16}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultparentStarsubquery139)/sizeof(expectedResultparentStarsubquery139[0])), actualResultparentStarsubquery139->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultparentStarsubquery139)/sizeof(expectedResultparentStarsubquery139[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultparentStarsubquery139[i])/sizeof(expectedResultparentStarsubquery139[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultparentStarsubquery139[i][j], actualResultparentStarsubquery139->getResultAt(i, j));
+		}
+	}
+
+	// Test 141: ParentStar(5, _)
+	ParentStarSubquery parentStarsubquery141 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery141.setSynonyms(5, "_");
+	ResultTuple* actualResultparentStarsubquery141 = parentStarsubquery141.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery141->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultparentStarsubquery141->isBool());
+	CPPUNIT_ASSERT(actualResultparentStarsubquery141->isEmpty());
+
+	// Test 142: ParentStar(5, 2)
+	ParentStarSubquery parentStarsubquery142 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery142.setSynonyms(5, 2);
+	ResultTuple* actualResultparentStarsubquery142 = parentStarsubquery142.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery142->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultparentStarsubquery142->isBool());
+	CPPUNIT_ASSERT(actualResultparentStarsubquery142->isEmpty());
+
+	// Test 143: ParentStar(5, 6)
+	ParentStarSubquery parentStarsubquery143 = ParentStarSubquery(&synonymTable, pk);
+	parentStarsubquery143.setSynonyms(5, 6);
+	ResultTuple* actualResultparentStarsubquery143 = parentStarsubquery143.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultparentStarsubquery143->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultparentStarsubquery143->isBool());
+	CPPUNIT_ASSERT(actualResultparentStarsubquery143->isEmpty());
 }
 
 void SubqueryTest::testParentTTuple(){
@@ -6103,9 +6984,407 @@ void SubqueryTest::testCallsTuple(){
 }
 
 void SubqueryTest::testCallsT(){
+	// Test 65: CallsStar(proc1, proc2)
+	CallsStarSubquery callsStarsubquery65 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery65.setSynonyms("proc1", "proc2");
+	ResultTuple* actualResultcallsStarsubquery65 = callsStarsubquery65.solve();
+	int expectedResultcallsStarsubquery65[3][2] = {
+		{0, 1}, {0, 2}, {1, 2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultcallsStarsubquery65)/sizeof(expectedResultcallsStarsubquery65[0])), actualResultcallsStarsubquery65->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultcallsStarsubquery65)/sizeof(expectedResultcallsStarsubquery65[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultcallsStarsubquery65[i])/sizeof(expectedResultcallsStarsubquery65[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultcallsStarsubquery65[i][j], actualResultcallsStarsubquery65->getResultAt(i, j));
+		}
+	}
+
+	// Test 69: CallsStar(proc1, _)
+	CallsStarSubquery callsStarsubquery69 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery69.setSynonyms("proc1", "_");
+	ResultTuple* actualResultcallsStarsubquery69 = callsStarsubquery69.solve();
+	int expectedResultcallsStarsubquery69[2][1] = {
+		{0}, {1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultcallsStarsubquery69)/sizeof(expectedResultcallsStarsubquery69[0])), actualResultcallsStarsubquery69->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultcallsStarsubquery69)/sizeof(expectedResultcallsStarsubquery69[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultcallsStarsubquery69[i])/sizeof(expectedResultcallsStarsubquery69[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultcallsStarsubquery69[i][j], actualResultcallsStarsubquery69->getResultAt(i, j));
+		}
+	}
+
+	// Test 70: CallsStar(proc1, 2)
+	CallsStarSubquery callsStarsubquery70 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery70.setSynonyms("proc1", 2);
+	ResultTuple* actualResultcallsStarsubquery70 = callsStarsubquery70.solve();
+	int expectedResultcallsStarsubquery70[2][1] = {
+		{0}, {1}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultcallsStarsubquery70)/sizeof(expectedResultcallsStarsubquery70[0])), actualResultcallsStarsubquery70->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultcallsStarsubquery70)/sizeof(expectedResultcallsStarsubquery70[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultcallsStarsubquery70[i])/sizeof(expectedResultcallsStarsubquery70[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultcallsStarsubquery70[i][j], actualResultcallsStarsubquery70->getResultAt(i, j));
+		}
+	}
+
+	// Test 71: CallsStar(proc1, 6)
+	CallsStarSubquery callsStarsubquery71 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery71.setSynonyms("proc1", 6);
+	ResultTuple* actualResultcallsStarsubquery71 = callsStarsubquery71.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallsStarsubquery71->getAllResults().size());
+
+	// Test 113: CallsStar(_, proc2)
+	CallsStarSubquery callsStarsubquery113 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery113.setSynonyms("_", "proc2");
+	ResultTuple* actualResultcallsStarsubquery113 = callsStarsubquery113.solve();
+	int expectedResultcallsStarsubquery113[2][1] = {
+		{1}, {2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultcallsStarsubquery113)/sizeof(expectedResultcallsStarsubquery113[0])), actualResultcallsStarsubquery113->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultcallsStarsubquery113)/sizeof(expectedResultcallsStarsubquery113[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultcallsStarsubquery113[i])/sizeof(expectedResultcallsStarsubquery113[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultcallsStarsubquery113[i][j], actualResultcallsStarsubquery113->getResultAt(i, j));
+		}
+	}
+
+	// Test 117: CallsStar(_, _)
+	CallsStarSubquery callsStarsubquery117 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery117.setSynonyms("_", "_");
+	ResultTuple* actualResultcallsStarsubquery117 = callsStarsubquery117.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallsStarsubquery117->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallsStarsubquery117->isBool());
+	CPPUNIT_ASSERT(!actualResultcallsStarsubquery117->isEmpty());
+
+	// Test 118: CallsStar(_, 2)
+	CallsStarSubquery callsStarsubquery118 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery118.setSynonyms("_", 2);
+	ResultTuple* actualResultcallsStarsubquery118 = callsStarsubquery118.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallsStarsubquery118->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallsStarsubquery118->isBool());
+	CPPUNIT_ASSERT(!actualResultcallsStarsubquery118->isEmpty());
+
+	// Test 119: CallsStar(_, 6)
+	CallsStarSubquery callsStarsubquery119 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery119.setSynonyms("_", 6);
+	ResultTuple* actualResultcallsStarsubquery119 = callsStarsubquery119.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallsStarsubquery119->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallsStarsubquery119->isBool());
+	CPPUNIT_ASSERT(actualResultcallsStarsubquery119->isEmpty());
+
+	// Test 125: CallsStar(1, proc2)
+	CallsStarSubquery callsStarsubquery125 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery125.setSynonyms(1, "proc2");
+	ResultTuple* actualResultcallsStarsubquery125 = callsStarsubquery125.solve();
+	int expectedResultcallsStarsubquery125[1][1] = {
+		{2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultcallsStarsubquery125)/sizeof(expectedResultcallsStarsubquery125[0])), actualResultcallsStarsubquery125->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultcallsStarsubquery125)/sizeof(expectedResultcallsStarsubquery125[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultcallsStarsubquery125[i])/sizeof(expectedResultcallsStarsubquery125[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultcallsStarsubquery125[i][j], actualResultcallsStarsubquery125->getResultAt(i, j));
+		}
+	}
+
+	// Test 129: CallsStar(1, _)
+	CallsStarSubquery callsStarsubquery129 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery129.setSynonyms(1, "_");
+	ResultTuple* actualResultcallsStarsubquery129 = callsStarsubquery129.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallsStarsubquery129->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallsStarsubquery129->isBool());
+	CPPUNIT_ASSERT(!actualResultcallsStarsubquery129->isEmpty());
+
+	// Test 130: CallsStar(1, 2)
+	CallsStarSubquery callsStarsubquery130 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery130.setSynonyms(1, 2);
+	ResultTuple* actualResultcallsStarsubquery130 = callsStarsubquery130.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallsStarsubquery130->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallsStarsubquery130->isBool());
+	CPPUNIT_ASSERT(!actualResultcallsStarsubquery130->isEmpty());
+
+	// Test 131: CallsStar(1, 6)
+	CallsStarSubquery callsStarsubquery131 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery131.setSynonyms(1, 6);
+	ResultTuple* actualResultcallsStarsubquery131 = callsStarsubquery131.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallsStarsubquery131->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallsStarsubquery131->isBool());
+	CPPUNIT_ASSERT(actualResultcallsStarsubquery131->isEmpty());
+
+	// Test 137: CallsStar(5, proc2)
+	CallsStarSubquery callsStarsubquery137 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery137.setSynonyms(5, "proc2");
+	ResultTuple* actualResultcallsStarsubquery137 = callsStarsubquery137.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallsStarsubquery137->getAllResults().size());
+	
+	// Test 141: CallsStar(5, _)
+	CallsStarSubquery callsStarsubquery141 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery141.setSynonyms(5, "_");
+	ResultTuple* actualResultcallsStarsubquery141 = callsStarsubquery141.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallsStarsubquery141->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallsStarsubquery141->isBool());
+	CPPUNIT_ASSERT(actualResultcallsStarsubquery141->isEmpty());
+
+	// Test 142: CallsStar(5, 2)
+	CallsStarSubquery callsStarsubquery142 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery142.setSynonyms(5, 2);
+	ResultTuple* actualResultcallsStarsubquery142 = callsStarsubquery142.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallsStarsubquery142->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallsStarsubquery142->isBool());
+	CPPUNIT_ASSERT(actualResultcallsStarsubquery142->isEmpty());
+
+	// Test 143: CallsStar(5, 6)
+	CallsStarSubquery callsStarsubquery143 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery143.setSynonyms(5, 6);
+	ResultTuple* actualResultcallsStarsubquery143 = callsStarsubquery143.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallsStarsubquery143->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallsStarsubquery143->isBool());
+	CPPUNIT_ASSERT(actualResultcallsStarsubquery143->isEmpty());
+
+	// Test 144: CallsStar(0, 2)
+	CallsStarSubquery callsStarsubquery144 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery144.setSynonyms(0, 2);
+	ResultTuple* actualResultcallsStarsubquery144 = callsStarsubquery144.solve();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallsStarsubquery144->getAllResults().size());
+	CPPUNIT_ASSERT(actualResultcallsStarsubquery144->isBool());
+	CPPUNIT_ASSERT(!actualResultcallsStarsubquery144->isEmpty());
 }
 
 void SubqueryTest::testCallsTTuple(){
+	// testTuple:
+	//  s1  |  a1  |  w1  |  i2  |  c2  |  l1  |  const1  |  v1  |  proc1  |
+	//  1   |  1   |  6   |  8   |  3   |  1   |  0       |  0   |  0      |
+	//  1   |  2   |  6   |  8   |  3   |  1   |  0       |  0   |  0      |
+	//  1   |  1   |  15  |  8   |  3   |  1   |  0       |  0   |  0      |
+	//  1   |  2   |  6   |  13  |  3   |  1   |  0       |  0   |  0      |
+	//  1   |  1   |  6   |  8   |  11  |  1   |  0       |  0   |  0      |
+	//  8   |  2   |  6   |  8   |  3   |  7   |  0       |  0   |  0      |
+	//  1   |  1   |  6   |  8   |  3   |  1   |  3       |  0   |  0      |
+	//  3   |  2   |  6   |  8   |  3   |  1   |  0       |  2   |  0      |
+	//  1   |  2   |  6   |  8   |  3   |  1   |  0       |  2   |  1      |
+	ResultTuple testTuple = ResultTuple();
+	int index = testTuple.addSynonym("s1");
+	testTuple.addSynonymToMap("s1", index);
+	index = testTuple.addSynonym("a1");
+	testTuple.addSynonymToMap("a1", index);
+	index = testTuple.addSynonym("w1");
+	testTuple.addSynonymToMap("w1", index);
+	index = testTuple.addSynonym("i2");
+	testTuple.addSynonymToMap("i2", index);
+	index = testTuple.addSynonym("c2");
+	testTuple.addSynonymToMap("c2", index);
+	index = testTuple.addSynonym("l1");
+	testTuple.addSynonymToMap("l1", index);
+	index = testTuple.addSynonym("const1");
+	testTuple.addSynonymToMap("const1", index);
+	index = testTuple.addSynonym("v1");
+	testTuple.addSynonymToMap("v1", index);
+	index = testTuple.addSynonym("proc1");
+	testTuple.addSynonymToMap("proc1", index);
+	int data[9][9] = {
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
+		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
+		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
+	};
+	for (int i = 0; i < 9; i++){
+		vector<int> tempVector = vector<int>();
+		testTuple.addResultRow(tempVector);
+		for (int j = 0; j < 9; j++){
+			testTuple.addResult(i, data[i][j]);
+		}
+	}
+
+	// Test 65: CallsStar(proc1, proc2)
+	CallsStarSubquery callsStarsubquery65 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery65.setSynonyms("proc1", "proc2");
+	ResultTuple* actualResultcallsStarsubquery65 = callsStarsubquery65.solve(&testTuple);
+	int expectedResultcallsStarsubquery65[15][10] = {
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  1},
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  1},
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
+		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  1},
+		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
+		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  ,  1},
+		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
+		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  ,  1},
+		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  ,  2},
+		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  ,  1},
+		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  ,  2},
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  ,  1},
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  ,  2},
+		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  ,  2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultcallsStarsubquery65)/sizeof(expectedResultcallsStarsubquery65[0])), actualResultcallsStarsubquery65->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultcallsStarsubquery65)/sizeof(expectedResultcallsStarsubquery65[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultcallsStarsubquery65[i])/sizeof(expectedResultcallsStarsubquery65[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultcallsStarsubquery65[i][j], actualResultcallsStarsubquery65->getResultAt(i, j));
+		}
+	}
+
+	// Test 69: CallsStar(proc1, _)
+	CallsStarSubquery callsStarsubquery69 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery69.setSynonyms("proc1", "_");
+	ResultTuple* actualResultcallsStarsubquery69 = callsStarsubquery69.solve(&testTuple);
+	int expectedResultcallsStarsubquery69[8][9] = {
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
+		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
+		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultcallsStarsubquery69)/sizeof(expectedResultcallsStarsubquery69[0])), actualResultcallsStarsubquery69->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultcallsStarsubquery69)/sizeof(expectedResultcallsStarsubquery69[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultcallsStarsubquery69[i])/sizeof(expectedResultcallsStarsubquery69[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultcallsStarsubquery69[i][j], actualResultcallsStarsubquery69->getResultAt(i, j));
+		}
+	}
+
+	// Test 70: CallsStar(proc1, 2)
+	CallsStarSubquery callsStarsubquery70 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery70.setSynonyms("proc1", 2);
+	ResultTuple* actualResultcallsStarsubquery70 = callsStarsubquery70.solve(&testTuple);
+	int expectedResultcallsStarsubquery70[8][9] = {
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
+		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
+		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultcallsStarsubquery70)/sizeof(expectedResultcallsStarsubquery70[0])), actualResultcallsStarsubquery70->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultcallsStarsubquery70)/sizeof(expectedResultcallsStarsubquery70[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultcallsStarsubquery70[i])/sizeof(expectedResultcallsStarsubquery70[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultcallsStarsubquery70[i][j], actualResultcallsStarsubquery70->getResultAt(i, j));
+		}
+	}
+	
+	// Test 71: CallsStar(proc1, 6)
+	CallsStarSubquery callsStarsubquery71 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery71.setSynonyms("proc1", 6);
+	ResultTuple* actualResultcallsStarsubquery71 = callsStarsubquery71.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultcallsStarsubquery71->getAllResults().size());
+
+	// Test 72: CallsStar(0, proc1)
+	CallsStarSubquery callsStarsubquery72 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery72.setSynonyms(0, "proc1");
+	ResultTuple* actualResultcallsStarsubquery72 = callsStarsubquery72.solve(&testTuple);
+	int expectedResultcallsStarsubquery72[2][9] = {
+		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultcallsStarsubquery72)/sizeof(expectedResultcallsStarsubquery72[0])), actualResultcallsStarsubquery72->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultcallsStarsubquery72)/sizeof(expectedResultcallsStarsubquery72[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultcallsStarsubquery72[i])/sizeof(expectedResultcallsStarsubquery72[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultcallsStarsubquery72[i][j], actualResultcallsStarsubquery72->getResultAt(i, j));
+		}
+	}
+
+	// Test 73: CallsStar("_", proc1)
+	CallsStarSubquery callsStarsubquery73 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery73.setSynonyms("_", "proc1");
+	ResultTuple* actualResultcallsStarsubquery73 = callsStarsubquery73.solve(&testTuple);
+	int expectedResultcallsStarsubquery73[2][9] = {
+		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultcallsStarsubquery73)/sizeof(expectedResultcallsStarsubquery73[0])), actualResultcallsStarsubquery73->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultcallsStarsubquery73)/sizeof(expectedResultcallsStarsubquery73[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultcallsStarsubquery73[i])/sizeof(expectedResultcallsStarsubquery73[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultcallsStarsubquery73[i][j], actualResultcallsStarsubquery73->getResultAt(i, j));
+		}
+	}
+
+	ResultTuple testTuple2 = ResultTuple();
+	index = testTuple2.addSynonym("proc1");
+	testTuple2.addSynonymToMap("proc1", index);
+	index = testTuple2.addSynonym("proc2");
+	testTuple2.addSynonymToMap("proc2", index);
+	int data2[5][2] = {
+		{0  ,  1  },
+		{0  ,  0  },
+		{1  ,  0  },
+		{1  ,  2  },
+		{2  ,  0  }
+	};
+	for (int i = 0; i < 5; i++){
+		vector<int> tempVector = vector<int>();
+		testTuple2.addResultRow(tempVector);
+		for (int j = 0; j < 2; j++){
+			testTuple2.addResult(i, data2[i][j]);
+		}
+	}
+
+	// Test 75: CallsStar(proc1, proc2)
+	CallsStarSubquery callsStarsubquery75 = CallsStarSubquery(&synonymTable, pk);
+	callsStarsubquery75.setSynonyms("proc1", "proc2");
+	ResultTuple* actualResultcallsStarsubquery75 = callsStarsubquery75.solve(&testTuple2);
+	int expectedResultcallsStarsubquery75[2][2] = {
+		{0, 1}, {1, 2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultcallsStarsubquery75)/sizeof(expectedResultcallsStarsubquery75[0])), actualResultcallsStarsubquery75->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultcallsStarsubquery75)/sizeof(expectedResultcallsStarsubquery75[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultcallsStarsubquery75[i])/sizeof(expectedResultcallsStarsubquery75[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultcallsStarsubquery75[i][j], actualResultcallsStarsubquery75->getResultAt(i, j));
+		}
+	}
+
+	PKBController* pk2 = new PKBController();
+
+	TNode stmt1("CALL_NODE", "Two", 1, 0);
+	TNode stmt2("CALL_NODE", "Three", 2, 0);
+	TNode stmt3("CALL_NODE", "Three", 3, 1);
+	TNode stmt4("ASSIGN_NODE", "a = 1", 4, 2);
+	pk2->statementTable.insertStatement(&stmt1);
+	pk2->statementTable.insertStatement(&stmt2);
+	pk2->statementTable.insertStatement(&stmt3);
+	pk2->statementTable.insertStatement(&stmt4);
+
+	pk2->procTable.insertProc("One");  // 0
+	pk2->procTable.insertProc("Two"); // 1
+	pk2->procTable.insertProc("Three");  // 2
+
+	pk2->callsTable.insertCalls(0, 1);
+	pk2->callsTable.insertCalls(0, 2);
+	pk2->callsTable.insertCalls(1, 2);
+
+	pk2->constructCalls();
+
+	// Test 76: CallsStar(proc1, proc2)
+	CallsStarSubquery callsStarsubquery76 = CallsStarSubquery(&synonymTable, pk2);
+	callsStarsubquery76.setSynonyms("proc1", "proc2");
+	ResultTuple* actualResultcallsStarsubquery76 = callsStarsubquery76.solve(&testTuple);
+	int expectedResultcallsStarsubquery76[15][10] = {
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  1},
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  1},
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
+		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  1},
+		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
+		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  ,  1},
+		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  ,  2},
+		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  ,  1},
+		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  ,  2},
+		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  ,  1},
+		{8   ,  2   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  ,  2},
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  ,  1},
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  ,  2},
+		{3   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  ,  2}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultcallsStarsubquery76)/sizeof(expectedResultcallsStarsubquery76[0])), actualResultcallsStarsubquery76->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultcallsStarsubquery76)/sizeof(expectedResultcallsStarsubquery76[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultcallsStarsubquery76[i])/sizeof(expectedResultcallsStarsubquery76[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultcallsStarsubquery76[i][j], actualResultcallsStarsubquery76->getResultAt(i, j));
+		}
+	}
 }
 
 void SubqueryTest::testPattern(){

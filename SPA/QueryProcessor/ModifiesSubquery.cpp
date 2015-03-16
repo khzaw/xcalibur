@@ -124,7 +124,7 @@ public:
 		
 		vector<int> modified;
 		if (isSyn == 1) {	// Modifies(stmt, varnum): Get Modifiers of varnum
-			set<int> tempModified = pkb->modifiesTable->evaluateGetModifiersStmt(leftIndex);
+			set<int> tempModified = pkb->modifiesTable->evaluateGetModifiedVarStmt(leftIndex);
 			copy(tempModified.begin(), tempModified.end(), back_inserter(modified));
 		} else {	// Modifies(_, varnum)
 			//invalid

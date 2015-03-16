@@ -211,6 +211,9 @@ void Parser::stmt(TNode* parent) {
 		TNode* assignNode = createASTNode("ASSIGN_NODE", "", parent, line, currentProc);
 		controller.statementTable.insertStatement(assignNode);
 
+		postfix = "";
+		operatorStack.push(Operator(0, "NULL")); // sentinel
+
 		populateParent(parent, line);
 		populateFollows(line, false, parent, assignNode);
 
@@ -222,6 +225,18 @@ void Parser::stmt(TNode* parent) {
 		match("=");
 		expr(assignNode);
 		match(";");
+
+		while(!operatorStack.top().isNull()) {
+			popOperator(operatorStack.top());
+		}
+
+		controller.ast.assignChild(assignNode, (operandStack.top()));
+		controller.ast.assignParent(operandStack.top(), assignNode);
+
+		cout << "postfix : " << postfix << endl;
+		assignNode->setData(postfix);
+
+		operatorStack.pop();		// remove the sentinel
 	}
 }
 
@@ -233,32 +248,28 @@ void Parser::expr(TNode* assignNode) {
 	// 
 	// term: term "*" factor | factor
 	// factor: var_name | const_value | "(" expr ")"
-	postfix = "";
-	operatorStack.push(Operator(OPERATOR_NULL, "NULL")); // sentinel
 
 	term(assignNode);
 	exprPrime(assignNode);
-
-	while(!operatorStack.top().isNull()) {
-		popOperator(operatorStack.top());
-	}
-
-	controller.ast.assignChild(assignNode, (operandStack.top()));
-	controller.ast.assignParent(operandStack.top(), assignNode);
-
-	cout << "postfix : " << postfix << endl;
-	assignNode->setData(postfix);
-	operatorStack.pop();		// remove the sentinel
 }
 
 void Parser::exprPrime(TNode* assignNode) {
 	if(nextToken.name == "+") {
 		match("+");
 
-		Operator plusOp(OPERATOR_ADDITION, "+");
-		while(plusOp.op <= operatorStack.top().op || !operatorStack.top().isNull()) {
-			popOperator(operatorStack.top());
+		Operator plusOp(1, "+");
+		while(!operatorStack.top().isNull() && operatorStack.top().op != 3) {
+			if(operatorStack.top().op == OPERATOR_OPENPAREN) {
+				operatorStack.push(plusOp);
+			} else {
+				if(plusOp.op <= operatorStack.top().op) {
+					popOperator(operatorStack.top());
+				} else {
+					break;
+				}
+			}
 		}
+
 		operatorStack.push(plusOp);
 
 		term(assignNode);
@@ -266,9 +277,17 @@ void Parser::exprPrime(TNode* assignNode) {
 	} else if(nextToken.name == "-") {
 		match("-");
 
-		Operator minusOp(OPERATOR_SUBTRACTION, "-");
-		while(minusOp.op <= operatorStack.top().op || !operatorStack.top().isNull()) {
-			popOperator(operatorStack.top());
+		Operator minusOp(1, "-");
+		while(!operatorStack.top().isNull() && operatorStack.top().op != 3) {
+			if(operatorStack.top().op == OPERATOR_OPENPAREN) {
+				operatorStack.push(minusOp);
+			} else {
+				if(minusOp.op <= operatorStack.top().op) {
+					popOperator(operatorStack.top());
+				} else {
+					break;
+				}
+			}
 		}
 		operatorStack.push(minusOp);
 
@@ -291,9 +310,17 @@ void Parser::termPrime(TNode* assignNode) {
 	if(nextToken.name == "*") {
 		match("*");	
 
-		Operator multiplyOp(OPERATOR_MULTIPLICATION, "*");
-		while(multiplyOp.op <= operatorStack.top().op || !operatorStack.top().isNull()) {
-			popOperator(operatorStack.top()); 
+		Operator multiplyOp(2, "*");
+		while(!operatorStack.top().isNull() && operatorStack.top().op != 3) {
+			if(operatorStack.top().op == OPERATOR_OPENPAREN) {
+				operatorStack.push(multiplyOp);
+			} else {
+				if(multiplyOp.op <= operatorStack.top().op) {
+					popOperator(operatorStack.top());
+				} else {
+					break;
+				}
+			}
 		}
 		operatorStack.push(multiplyOp);
 
@@ -308,11 +335,16 @@ void Parser::factor(TNode* assignNode) {
 	// factor: var_name | const_value | "(" expr ")"
 	if(nextToken.name == "(") {
 		match("(");
+		Operator openParen(3, "(");
+		operatorStack.push(openParen);
 		expr(assignNode);
 		match(")");
+		while(operatorStack.top().op != 3)
+			popOperator(operatorStack.top());
+		operatorStack.pop(); // "("
 	}
 	else if(nextToken.token == IDENT) {
-		operandStack.push(&TNode("VAR_NODE", nextToken.name, line, currentProc));
+		operandStack.push(new TNode("VAR_NODE", nextToken.name, line, currentProc));
 		if(postfix.length() > 0) postfix += " ";
 		postfix += nextToken.name;
 
@@ -321,7 +353,7 @@ void Parser::factor(TNode* assignNode) {
 
 		populateUses(line, currentProc, true);
 	} else {
-		operandStack.push(&TNode("CONST_NODE", nextToken.name, line, currentProc));
+		operandStack.push(new TNode("CONST_NODE", nextToken.name, line, currentProc));
 		if(postfix.length() > 0) postfix += " ";
 		postfix += nextToken.name;
 

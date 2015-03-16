@@ -638,13 +638,15 @@ void NewQueryParser::matchNext() {
 }
 
 void NewQueryParser::matchNextStar() {
+	NextSubquery* nextStarSq = new NextStarSubquery(&synonyms, controller);
     match("(");
     string fst = matchLineRef();
     match(",");
     string snd = matchLineRef();
     match(")");
+	setSynonymsHelper(fst, snd, nextSq);
 
-	cout << "Next*: fst -> " << fst << "\tsnd -> " << snd;
+	//cout << "Next*: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 string NewQueryParser::matchLineRef() {

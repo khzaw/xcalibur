@@ -57,7 +57,8 @@ NewQueryParser::NewQueryParser(string s, PKBController* controller) {
 	this->synonyms = map<string, string>();
 	this->controller = controller;
 	parse();
-	printMap();
+	this->evaluator->setSynonymTable(synonyms);
+	//printMap();
 }
 
 void NewQueryParser::printMap() {
@@ -120,7 +121,7 @@ void NewQueryParser::match(int type) {
 
 void NewQueryParser::matchDeclarationVariables(string entity) {
 	string var = nextToken.name;
-	cout << var << "\t" << entity << endl;
+	// cout << var << "\t" << entity << endl;
 	synonyms[var] = entity;
 	match(var);
 	if(nextToken.name.compare(";") != 0) {
@@ -133,8 +134,8 @@ void NewQueryParser::matchDeclarationVariables(string entity) {
 
 void NewQueryParser::matchSelect() {
 	match("Select");
-	this->evaluator = new QE(selectVariables, controller);
 	matchResultCL();
+	this->evaluator = new QE(selectVariables, controller);
 	while(nextToken.name == "such" || nextToken.name == "pattern" || nextToken.name == "with") {
 		matchConditions();
 	}
@@ -249,7 +250,7 @@ void NewQueryParser::matchPatternAssign(string s) {
 	}
 	match(")");
 	
-	cout << "POSTFIX : " << result << "\n";
+	// cout << "POSTFIX : " << result << "\n";
 	// result postfix is ready
 }
 
@@ -399,7 +400,7 @@ void NewQueryParser::matchAttrCompare() {
 	string fst = matchRef();
 	match("=");
 	string snd = matchRef();
-	cout << "With: fst -> " << fst << "\tsnd -> " << snd;
+	// cout << "With: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 string NewQueryParser::matchRef() {
@@ -520,7 +521,7 @@ void NewQueryParser::matchUses() {
 	match(",");
 	string snd = matchVarRef();
 	match(")");
-	cout << "Uses fst : " << fst << "\tUses snd : " << snd;
+	// cout << "Uses fst : " << fst << "\tUses snd : " << snd;
 }
 
 void NewQueryParser::matchCalls() {
@@ -611,7 +612,7 @@ void NewQueryParser::matchFollows() {
 	string snd = matchStmtRef();
 	match(")");
 	setSynonymsHelper(fst, snd, &followsSq);
-	cout << "Follows: fst -> " << fst << "\tsnd -> " << snd;
+	// cout << "Follows: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 void NewQueryParser::matchFollowsStar() {
@@ -643,7 +644,7 @@ void NewQueryParser::matchNextStar() {
     string snd = matchLineRef();
     match(")");
 
-	cout << "Next*: fst -> " << fst << "\tsnd -> " << snd;
+	// cout << "Next*: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 string NewQueryParser::matchLineRef() {
@@ -670,7 +671,7 @@ void NewQueryParser::matchAffects() {
     match(",");
     string snd = matchStmtRef();
     match(")");
-	cout << "Affects: fst -> " << fst << "\tsnd -> " << snd;
+	// cout << "Affects: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 void NewQueryParser::matchAffectsStar() {
@@ -679,5 +680,5 @@ void NewQueryParser::matchAffectsStar() {
     match(",");
     string snd = matchStmtRef();
     match(")");
-	cout << "Affects: fst -> " << fst << "\tsnd -> " << snd;
+	// cout << "Affects: fst -> " << fst << "\tsnd -> " << snd;
 }

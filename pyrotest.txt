@@ -1,10 +1,33 @@
-procedure pyroTest {
-	a = b + c;
-	if v then {
-		lewis = indonesian + awesome + 123 - 234;
+call Trio;                     
+	n = z + x;                     
+	call Quartet;                  
+	n = z + x;                     
+	if z then {                    
+    k = x - m;                   
+	  while y {                    
+      m = m + z;                 
+      y = m + 1;}                
+    x = m + z;}                  
+  else {
+	  x = m + z;                   
+	  call Quartet;                
+	  y = y - 1;}                  
+  call Duo; }                    
 
-	} else {
-		trung = vietnamese + awesome + 333 - 13123;
-		call mom;
-	}
-}
+procedure Duo {
+	while y  {                    
+    z = m + 3 * x + y;          
+    call Trio;                 
+    y = y + 20;}               
+ 	m = z;}                      
+
+procedure Trio {
+  while m {                     
+    if z then {                  
+      m = z + 2;}                
+    else {                      
+      x = z * x + m + k * n; }} 
+  y = x + k;}                    
+
+procedure Quartet {
+  z = x + z;}                    

@@ -34,33 +34,33 @@ int main() {
 
 	Parser Pa("Source.txt");
 
-	//string query;
-	//NewQueryParser* parser;
-	//PKBController* controller = new PKBController();
+	string query;
+	NewQueryParser* parser;
+	PKBController* controller = new PKBController();
 
-	//query = "if a; variable f,g; constant b, c; prog_line h; Select BOOLEAN";
-	//parser = new NewQueryParser(query, controller);
+	query = "while w; Select w such that Parent*(w, 12)";
+	parser = new NewQueryParser(query, controller);
 
-	//query = "if a; variable f,g; constant b, c; prog_line h; Select <a, f, g>";
-	//parser = new NewQueryParser(query, controller);
+	query = "stmt s; while w; Select w such that Follows* (s, w)";
+	parser = new NewQueryParser(query, controller);
 
-	//query = "if a; variable f,g; constant b, c; prog_line h; Select <a, f, g>";
-	//parser = new NewQueryParser(query, controller);
+	query = "if ifstat; Select ifstat such that Follows* (ifstat, 17)";
+	parser = new NewQueryParser(query, controller);
 
-	//query = "if a; variable f,g; constant b, c; prog_line h; Select a such that Modifies(a, f)";
-	//parser = new NewQueryParser(query, controller);
+	query = "variable v; Select v such that Modifies (18, v)";
+	parser = new NewQueryParser(query, controller);
 
-	//query = "assign a; Select a pattern a(_, \"x*y+z-a\")";
-	//parser = new NewQueryParser(query, controller);
+	query = "assign a; Select a such that Modifies (a, \"y\") and Uses (a, \"y\")";
+	parser = new NewQueryParser(query, controller);
 
-	//query = "assign a; while w; Select a such that Parent*(w,a) and Next*(60, n) and Modifies(a, \"y\") pattern a(_, \"x+y*z\")";
-	//parser = new NewQueryParser(query, controller);
+	query = "procedure p; Select p such that Calls* (p, \"Trio\")";
+	parser = new NewQueryParser(query, controller);
 
-	//query = "procedure p; Select p such that Calls(p, _)";
-	//parser = new NewQueryParser(query, controller);
+	query = "assign a; Select a pattern a (\"m\", \"z * x\")";
+	parser = new NewQueryParser(query, controller);
 
-	//query = "procedure p, q; Select p such that Calls(p, q)";
-	//parser = new NewQueryParser(query, controller);
+	query = "prog_line n; Select n such that Next* (9, n) and Next* (n, 12)";
+	parser = new NewQueryParser(query, controller);
 
 	//query = "stmt s; Select s such that Follows*(s,10) and Follows*(s, 12)";
 	//parser = new NewQueryParser(query, controller);

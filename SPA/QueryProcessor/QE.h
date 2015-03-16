@@ -22,6 +22,7 @@ public:
 	bool validateQueries();
 	QE(vector<string>, PKBController*);
 	void addQuery(Subquery*);
+	void setSynonymTable(map<string, string>);
 	
 	string solve();
 	void trimSolution();

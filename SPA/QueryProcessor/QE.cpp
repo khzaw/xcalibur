@@ -20,6 +20,11 @@ QE::QE(vector<string> syn, PKBController* p) {
 	pkb = p;
 }
 
+void QE::setSynonymTable(map<string, string> s){
+	this->synonymTable = s;
+}
+
+
 void QE::addQuery(Subquery* q) {
 	queries.push_back(q);
 }

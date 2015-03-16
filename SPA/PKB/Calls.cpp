@@ -188,6 +188,9 @@ using namespace std;
 	bool Calls::isCallsStar(int caller,int callee){
 		int callerIndex = Calls::getCallerIndex(caller);
 		int calleeIndex = Calls::getCalleeIndex(callee);
+		if (callerIndex == -1 || calleeIndex == -1){
+			return false;
+		}
 		try {
 			set<int> calleeSet = calleeStarTable[callerIndex];
 			std::set<int>::iterator it = calleeSet.find(callee);

@@ -27,7 +27,7 @@ vector<std::shared_ptr<CFG>> NextExtractor::constructCFG()
 	{
 		
 		TNode* curTNode = this->procTable->getASTRootNode(i); 
-		shared_ptr<GNode> curGNodeParent = std::make_shared<GNode>(0, "PROCEDURE"); //create a CFG ROOT node
+		shared_ptr<GNode> curGNodeParent = std::make_shared<GNode>(0, "PROC_NODE"); //create a CFG ROOT node
 
 		nodeMap.insert(pair<int, shared_ptr<GNode>>(curGNodeParent->getStmtNum(), curGNodeParent)); 
 
@@ -491,9 +491,9 @@ set<int> NextExtractor::getNextStar(int progLine1)
 	std::queue<int> queue;  
 	std::map<int,bool> checker;
 
-	if(it == nodeMap.end()) {	// variable not found, return -1
+	if(it == nodeMap.end()) {	
 		return resultSet;
-	} else {	// variable found, return its index
+	} else {	
 
 
 		resultSet = getNext(progLine1);
@@ -601,7 +601,7 @@ set<int> NextExtractor::getPrevResultSet(vector<shared_ptr<GNode>> prevArray , s
 	for (unsigned i =0 ; i < prevArray.size(); i++){
 
 		if (prevArray[i] != NULL){
-			if(prevArray[i]->getStmtNum() != 0){
+			if(prevArray[i]->getASTNodeType() != "PROC_NODE"){
 			if (prevArray[i]->getStmtNum() == INT_MIN){ //this only occurs for if else empty node at the end
 
 				return getPrevResultSet(prevArray[i]->getPrevArr() , result);

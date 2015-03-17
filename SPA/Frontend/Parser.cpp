@@ -156,7 +156,7 @@ void Parser::stmt(TNode* parent) {
 		callStatements.insert(pair<int, string>(line, newProcedure));
 		match(";");
 
-		populateFollows(line, false, parent, callNode);
+		populateFollows(line, false, prev, callNode);
 
 	} else if(nextToken.name == "while") {
 		// while: "while" var_name "{" stmtLst "}"
@@ -166,7 +166,7 @@ void Parser::stmt(TNode* parent) {
 		match("while");
 
 		populateParent(parent, line);
-		populateFollows(line, true, parent, whileNode);
+		populateFollows(line, true, prev, whileNode);
 		containerStack.push(line);
 
 
@@ -191,7 +191,7 @@ void Parser::stmt(TNode* parent) {
 		match("if");
 
 		populateParent(parent, line);
-		populateFollows(line, true, parent, ifNode);
+		populateFollows(line, true, prev, ifNode);
 		containerStack.push(line);
 
 		//TNode* ifVarNode = createASTNode("VAR_NODE", nextToken.name, ifNode, line, currentProc);
@@ -227,7 +227,7 @@ void Parser::stmt(TNode* parent) {
 		operatorStack.push(Operator(0, "NULL")); // sentinel
 
 		populateParent(parent, line);
-		populateFollows(line, false, parent, assignNode);
+		populateFollows(line, false, prev, assignNode);
 
 		TNode* varNode = createASTNode("VAR_NODE", nextToken.name, assignNode, line, currentProc);
 		variableName();
@@ -411,17 +411,27 @@ void Parser::populateParent(TNode* parent, int line) {
 
 void Parser::populateFollows(int line, bool isContainer, TNode* prev, TNode* current) {
 	//cout << " line : " << line << "\tpreviousStmt" << previousStmt << endl;
+	//cout << "prev : ";
+	//if(prev == NULL) cout << "NULL";
+	//else cout << prev->getNodeType();
+
+	//cout << "\t current : ";
+	//if(current == NULL) cout << "NULL";
+	//else cout << current->getNodeType();
+
 	if(previousStmt > 0 && prev != NULL) {
 		controller->followsTable->insertFollows(previousStmt, line);
 		controller->ast->assignRightSibling(prev, current);
+		//cout << " right ";
 	}
+	//cout << endl;
 
 	previousStmt = line;
-	prev = current;
+	this->prev = current;
 
 	if(isContainer) {
 		previousStmt = 0;
-		prev = NULL;
+		this->prev = NULL;
 	}
 }
 

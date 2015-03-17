@@ -10,7 +10,6 @@ using namespace std;
 
 typedef int INDEX;
 typedef string STRING;
-typedef void VOID;
 
 class QTNode {
 	public:
@@ -30,10 +29,10 @@ class QTNode {
 	  int getValue();
 	  
 	  // Mutator
-	  VOID addChild(QTNode*);
-	  VOID setParent(QTNode*);
-	  VOID setKey(STRING);
-	  VOID setData(STRING);
+	  void addChild(QTNode*);
+	  void setParent(QTNode*);
+	  void setKey(STRING);
+	  void setData(STRING);
    
 	private:
       STRING key, data;

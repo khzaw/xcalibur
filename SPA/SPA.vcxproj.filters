@@ -165,6 +165,9 @@
     <ClCompile Include="Frontend\Parser.cpp">
       <Filter>Source Files\Frontend</Filter>
     </ClCompile>
+    <ClCompile Include="QueryProcessor\OptimizedSubquerySolver.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PKB\AST.h">
@@ -295,6 +298,9 @@
     </ClInclude>
     <ClInclude Include="Frontend\Parser.h">
       <Filter>Header Files\Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\OptimizedSubquerySolver.h">
+      <Filter>Header Files\QueryProcessor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

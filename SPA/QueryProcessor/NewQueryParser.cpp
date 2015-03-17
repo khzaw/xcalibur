@@ -507,16 +507,14 @@ string NewQueryParser::matchEntRef(bool excludeUnderScore, Subquery*& subquery, 
 		match("\"");
 		fst = nextToken.name;
 		match(nextToken.name);
-		if(controller->procTable->getProcIndex(fst)) {
+		if(controller->procTable->getProcIndex(fst) != -1) {
 			fst = to_string((long long)controller->procTable->getProcIndex(fst));
 			if(modifies || uses) {
-				if(modifies)
-					subquery = new ModifiesProcSubquery(&synonyms, controller);
-				if(uses)
-					subquery = new UsesProcSubquery(&synonyms, controller);
+				if(modifies) subquery = new ModifiesProcSubquery(&synonyms, controller);
+				if(uses) subquery = new UsesProcSubquery(&synonyms, controller);
 			}
 		}
-		if(controller->varTable->getVarIndex(fst)) {
+		if(controller->varTable->getVarIndex(fst) != -1) {
 			fst = to_string((long long)controller->varTable->getVarIndex(fst));
 			if(modifies || uses) {
 				if(modifies) 

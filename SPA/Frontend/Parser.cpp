@@ -153,6 +153,7 @@ void Parser::stmt(TNode* parent) {
 
 		string newProcedure = procedureName();
 		controller->callsTable->insertCalls(currentProc, getProcedureIndex(newProcedure));
+		callStatements.insert(pair<int, string>(line, newProcedure));
 		match(";");
 
 		populateFollows(line, false, parent, callNode);
@@ -425,9 +426,20 @@ void Parser::populateFollows(int line, bool isContainer, TNode* prev, TNode* cur
 }
 
 void Parser::populateModifies(int line, int procedure) {
+
+	string currentProcedureName = procedureNames.at(procedure);
 	// for assignment statement
 	controller->modifiesTable->insertModifiesStmt(line, lastVarIndex);
 	controller->modifiesTable->insertModifiesProc(line, procedure);
+
+	if(callStatements.size() > 0) {
+		for(std::map<int, string>::iterator it=callStatements.begin(); it!=callStatements.end(); ++it) {
+			if(it->second == currentProcedureName) {
+				controller->modifiesTable->insertModifiesStmt(it->first, lastVarIndex);
+			}
+		}
+	}
+	
 
 	// container statements
 	stack<int> tempStack = stack<int>();
@@ -447,9 +459,17 @@ void Parser::populateModifies(int line, int procedure) {
 }
 
 void Parser::populateUses(int line, int procedure, bool assignStatement) {
+	string currentProcedureName = procedureNames.at(procedure);
 	if(assignStatement) {
 		controller->usesTable->insertUsesStmt(line, lastVarIndex);
 		controller->usesTable->insertUsesProc(line, procedure);
+		if(callStatements.size() > 0) {
+			for(std::map<int, string>::iterator it=callStatements.begin(); it!=callStatements.end(); ++it) {
+				if(it->second == currentProcedureName) {
+					controller->usesTable->insertUsesStmt(it->first, lastVarIndex);
+				}
+			}
+		}
 	}
 
 	stack<int> tempStack = stack<int>();
@@ -458,6 +478,13 @@ void Parser::populateUses(int line, int procedure, bool assignStatement) {
 		tempStack.push(top);
 
 		controller->usesTable->insertUsesStmt(top, lastVarIndex);
+		if(callStatements.size() > 0) {
+			for(std::map<int, string>::iterator it=callStatements.begin(); it!=callStatements.end(); ++it) {
+				if(it->second == currentProcedureName) {
+					controller->usesTable->insertUsesStmt(it->first, lastVarIndex);
+				}
+			}
+		}
 		controller->usesTable->insertUsesProc(top, procedure);
 		containerStack.pop();
 	}

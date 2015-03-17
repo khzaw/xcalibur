@@ -24,6 +24,7 @@ public:
 	void testOSS();
 	void testSolveSet();
 	void testMultithreadSolve();
+	void compareTime();
 };
 #endif
     

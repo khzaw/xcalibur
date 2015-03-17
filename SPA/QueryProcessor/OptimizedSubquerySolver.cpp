@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <ctime>
 
 #include "Subquery.h"
 #include "ResultTuple.h"
@@ -35,5 +36,13 @@ vector<ResultTuple* > OptimizedSubquerySolver::multithreadSolve(vector<vector<Su
 	for(size_t i = 0; i < concAns.size(); i++){
 		ans.push_back(concAns[i]);
 	}
+	return ans;
+}
+
+vector<ResultTuple* > OptimizedSubquerySolver::singlethreadSolve(vector<vector<Subquery*> > disjointSubqueries){
+	vector<ResultTuple* > ans;
+	for_each(begin(disjointSubqueries), end(disjointSubqueries), [&](vector<Subquery* > n) {
+		ans.push_back(solveSet(n));
+	});
 	return ans;
 }

@@ -293,6 +293,7 @@ void OptimizedSubquerySolverTest::testOSS() {
 
 	testSolveSet();
 	testMultithreadSolve();
+	compareTime();
 }
 
 void OptimizedSubquerySolverTest::testSolveSet() {
@@ -368,4 +369,47 @@ void OptimizedSubquerySolverTest::testMultithreadSolve() {
 	for (size_t i = 0; i < actualResult.size(); i++){
 		cout << endl << actualResult[i]->toString() << endl;
 	}
+}
+
+void OptimizedSubquerySolverTest::compareTime(){
+	FollowsStarSubquery* f1 = new FollowsStarSubquery(&synonymTable, pk);
+	f1->setSynonyms(4, "s1");
+	ParentStarSubquery* p1 = new ParentStarSubquery(&synonymTable, pk);
+	p1->setSynonyms("s1", "s2");
+	FollowsStarSubquery* f2 = new FollowsStarSubquery(&synonymTable, pk);
+	f2->setSynonyms("s2", 12);
+	vector<Subquery*> queries1;
+	queries1.push_back(f1);
+	queries1.push_back(p1);
+	queries1.push_back(f2);
+	FollowsSubquery* f3 = new FollowsSubquery(&synonymTable, pk);
+	f3->setSynonyms("a1", "w1");
+	ParentSubquery* p2 = new ParentSubquery(&synonymTable, pk);
+	p2->setSynonyms("w1", "i1");
+	FollowsStarSubquery* f4 = new FollowsStarSubquery(&synonymTable, pk);
+	f4->setSynonyms("i1", "c1");
+	vector<Subquery*> queries2;
+	queries2.push_back(f3);
+	queries2.push_back(p2);
+	queries2.push_back(f4);
+	vector<vector<Subquery*> > testSets;
+	testSets.push_back(queries1);
+	testSets.push_back(queries2);
+	clock_t beginM = clock();
+	vector<ResultTuple*> multithreadResult = oss->multithreadSolve(testSets);
+	clock_t endM = clock();
+	cout << endl << "RESULT FROM MULTITHREAD SOLVE: " << endl;
+	for (size_t i = 0; i < multithreadResult.size(); i++){
+		cout << endl << multithreadResult[i]->toString() << endl;
+	}
+	cout << endl << "SOLVING TIME: " << (endM - beginM) << endl;
+	clock_t beginS = clock();
+	vector<ResultTuple*> singlethreadResult = oss->singlethreadSolve(testSets);
+	clock_t endS = clock();
+	cout << endl << "RESULT FROM SINGLETHREAD SOLVE: " << endl;
+	for (size_t i = 0; i < singlethreadResult.size(); i++){
+		cout << endl << singlethreadResult[i]->toString() << endl;
+	}
+	cout << endl << "SOLVING TIME: " << (endS - beginS) << endl;
+	CPPUNIT_ASSERT(endM - beginM < endS - beginS);
 }

@@ -1,27 +1,38 @@
 #include <cppunit/config/SourcePrefix.h>
-#include "TestQE.h"
+#include "TestOptimizedSubquerySolver.h"
 #include "QueryProcessor\Subquery.h"
-#include "QueryProcessor\QE.cpp"
+#include "QueryProcessor\OptimizedSubquerySolver.cpp"
 #include "QueryProcessor\FollowsSubquery.cpp"
+#include "QueryProcessor\FollowsStarSubquery.cpp"
 #include "QueryProcessor\ModifiesSubquery.cpp"
+#include "QueryProcessor\ModifiesProcSubquery.cpp"
+#include "QueryProcessor\UsesSubquery.cpp"
+#include "QueryProcessor\UsesProcSubquery.cpp"
+#include "QueryProcessor\ParentSubquery.cpp"
+#include "QueryProcessor\ParentStarSubquery.cpp"
+#include "QueryProcessor\WithSubquery.cpp"
+#include "QueryProcessor\CallsSubquery.cpp"
+#include "QueryProcessor\CallsStarSubquery.cpp"
+#include "QueryProcessor\NextSubquery.cpp"
+#include "QueryProcessor\NextStarSubquery.cpp"
 
 #include <iostream>
 #include <string>
 
 void 
-QueryEvaluatorTest::setUp()
+OptimizedSubquerySolverTest::setUp()
 {
 }
 
 void 
-QueryEvaluatorTest::tearDown()
+OptimizedSubquerySolverTest::tearDown()
 {
 }	
 
-CPPUNIT_TEST_SUITE_REGISTRATION( QueryEvaluatorTest );
+CPPUNIT_TEST_SUITE_REGISTRATION( OptimizedSubquerySolverTest );
 // method to test insertion of Follows
 
-void QueryEvaluatorTest::testQE() {
+void OptimizedSubquerySolverTest::testOSS() {
 	/** SIMPLE source code
 	procedure First{
 		x = 2;					// 1
@@ -53,6 +64,7 @@ void QueryEvaluatorTest::testQE() {
 	**/
 	pk = new PKBController();
 	synonymTable = map<string, string>();
+	oss = new OptimizedSubquerySolver();
 	TNode stmt1("ASSIGN_NODE", "x = 2", 1, 0);
 	TNode stmt2("ASSIGN_NODE", "z = 3", 2, 0);
 	TNode stmt3("CALL_NODE", "Second", 3, 0);
@@ -279,230 +291,125 @@ void QueryEvaluatorTest::testQE() {
 	synonymTable["const1"]="constant";
 	synonymTable["const2"]="constant";
 
-	testInsert();
-	testValidate();
-	testConvertString();
+	testSolveSet();
+	testMultithreadSolve();
+	compareTime();
 }
 
-void QueryEvaluatorTest::testInsert() {
-	qe = new QE(vector<string>(), pk);
-	qe->addQuery(&FollowsSubquery(&synonymTable, pk));
-	CPPUNIT_ASSERT_EQUAL((size_t) 1, qe->queries.size());
-	qe->addQuery(&ModifiesSubquery(&synonymTable, pk));
-	CPPUNIT_ASSERT_EQUAL((size_t) 2, qe->queries.size());
-}
-
-void QueryEvaluatorTest::testValidate() {
-	qe = new QE(vector<string>(), pk);
-	FollowsSubquery f = FollowsSubquery(&synonymTable, pk);
-	f.setSynonyms("s1", 2);
-	ModifiesSubquery m = ModifiesSubquery(&synonymTable, pk);
-	m.setSynonyms("s2", "v1");
-	FollowsSubquery f2 = FollowsSubquery(&synonymTable, pk);
-	f2.setSynonyms("s1", "const1");
-	ModifiesSubquery m2 = ModifiesSubquery(&synonymTable, pk);
-	m2.setSynonyms("s2", "i1");
-
-	qe->addQuery(&f);
-	CPPUNIT_ASSERT_EQUAL(true, qe->validateQueries());
-	qe->addQuery(&m);
-	CPPUNIT_ASSERT_EQUAL(true, qe->validateQueries());
-	qe->addQuery(&m2);
-	CPPUNIT_ASSERT_EQUAL(false, qe->validateQueries());
-	qe->addQuery(&f2);
-	CPPUNIT_ASSERT_EQUAL(false, qe->validateQueries());
-	qe->addQuery(&f);
-	CPPUNIT_ASSERT_EQUAL(false, qe->validateQueries());
-}
-
-void QueryEvaluatorTest::testConvertString() {
-	qe = new QE(vector<string>(), pk);
-	qe->synonymTable = synonymTable;
-
-	ResultTuple* tup = new ResultTuple();
-	tup->addSynonymToMap("s1", tup->addSynonym("s1"));
-	tup->addSynonymToMap("a1", tup->addSynonym("a1"));
-	tup->addSynonymToMap("v1", tup->addSynonym("v1"));
-	tup->addSynonymToMap("c1", tup->addSynonym("c1"));
-	tup->addSynonymToMap("i1", tup->addSynonym("i1"));
-	tup->addSynonymToMap("w1", tup->addSynonym("w1"));
-	tup->addSynonymToMap("const1", tup->addSynonym("const1"));
-	tup->addSynonymToMap("proc1", tup->addSynonym("proc1"));
-	
-
-	
-	for (int i = 0; i < 3; i++) {
-		vector<int> row = vector<int>();
-		for (int j = 0; j < 8; j++) {
-			row.push_back(i);
+void OptimizedSubquerySolverTest::testSolveSet() {
+	FollowsStarSubquery* f = new FollowsStarSubquery(&synonymTable, pk);
+	f->setSynonyms(4, "s1");
+	ParentStarSubquery* p = new ParentStarSubquery(&synonymTable, pk);
+	p->setSynonyms("s1", "s2");
+	FollowsStarSubquery* f2 = new FollowsStarSubquery(&synonymTable, pk);
+	f2->setSynonyms("s2", 12);
+	vector<Subquery*> queries;
+	queries.push_back(f);
+	queries.push_back(p);
+	queries.push_back(f2);
+	ResultTuple* actualResult = oss->solveSet(queries);
+	int expectedResult[3][2] = {
+		{6, 7},
+		{6, 8},
+		{6, 11}
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResult)/sizeof(expectedResult[0])), actualResult->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResult)/sizeof(expectedResult[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResult[i])/sizeof(expectedResult[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResult[i][j], actualResult->getResultAt(i, j));
 		}
-		tup->addResultRow(row);
-	}
-
-	qe->synonyms.push_back("s1");
-	qe->synonyms.push_back("a1");
-	qe->solution = new ResultTuple();
-	list<string> actual = qe->convertSolutionToString();
-<<<<<<< HEAD
-	string expected = "none";
-	CPPUNIT_ASSERT_EQUAL(expected, actual.front());
-	
-	qe->solution = tup;
-	actual = qe->convertSolutionToString();
-	string expected2[3] = {"0 0", "1 1" , "2 2"};
-	CPPUNIT_ASSERT_EQUAL(expected2[0], actual.front());
-	actual.pop_front();
-	CPPUNIT_ASSERT_EQUAL(expected2[1], actual.front());
-	actual.pop_front();
-	CPPUNIT_ASSERT_EQUAL(expected2[2], actual.front());
-
-	qe->synonyms.push_back("const1");
-	actual = qe-> convertSolutionToString();
-	string expected3[3] = {"0 0 2", "1 1 3", "2 2 0"};
-	CPPUNIT_ASSERT_EQUAL(expected3[0], actual.front());
-	actual.pop_front();
-	CPPUNIT_ASSERT_EQUAL(expected3[1], actual.front());
-	actual.pop_front();
-	CPPUNIT_ASSERT_EQUAL(expected3[2], actual.front());
-
-	qe->synonyms.push_back("proc1");
-	actual = qe-> convertSolutionToString();
-	string expected4[3] = {"0 0 2 First", "1 1 3 Second", "2 2 0 Third"};
-	CPPUNIT_ASSERT_EQUAL(expected4[0], actual.front());
-	actual.pop_front();
-	CPPUNIT_ASSERT_EQUAL(expected4[1], actual.front());
-	actual.pop_front();
-	CPPUNIT_ASSERT_EQUAL(expected4[2], actual.front());
-=======
-	string expected;
-	//CPPUNIT_ASSERT_EQUAL(expected, actual.front());
-	
-	qe->solution = tup;
-	actual = qe->convertSolutionToString();
-	expected = "0 0, 1 1, 2 2";
-	//CPPUNIT_ASSERT_EQUAL(expected, actual.front());
-
-	qe->synonyms.push_back("const1");
-	actual = qe-> convertSolutionToString();
-	expected = "0 0 2, 1 1 3, 2 2 0";
-	//CPPUNIT_ASSERT_EQUAL(expected, actual.front());
-
-	qe->synonyms.push_back("proc1");
-	actual = qe-> convertSolutionToString();
-	expected = "0 0 2 First, 1 1 3 Second, 2 2 0 Third";
-	//CPPUNIT_ASSERT_EQUAL(expected, actual.front());
-	actual = qe-> convertSolutionToString();
-	string expected5[3] = {"0 0 2 First First 0 x 2 0", "1 1 3 Second Second 1 z 3 1", "2 2 0 Third Third 2 i 0 2"};
-	CPPUNIT_ASSERT_EQUAL(expected5[0], actual.front());
-	actual.pop_front();
-	CPPUNIT_ASSERT_EQUAL(expected5[1], actual.front());
-	actual.pop_front();
-	CPPUNIT_ASSERT_EQUAL(expected5[2], actual.front());
-
-	/*
-	QE* qe2 = new QE(vector<string>(), pk);
-	qe->synonyms.push_back("BOOLEAN");
-	actual = qe-> convertSolutionToString();
-	expected = "FALSE";
-	CPPUNIT_ASSERT_EQUAL(expected, actual);
-
-	qe->solution = tup;
-	actual = qe-> convertSolutionToString();
-	expected = "TRUE";
-	CPPUNIT_ASSERT_EQUAL(expected, actual);
-	
-	tup->isBoolean = true;
-	tup->isEmp = false;
-	actual = qe-> convertSolutionToString();
-	expected = "TRUE";
-	CPPUNIT_ASSERT_EQUAL(expected, actual);
-
-	tup->isEmp = true;
-	actual = qe-> convertSolutionToString();
-	expected = "FALSE";
-	CPPUNIT_ASSERT_EQUAL(expected, actual);
-	*/
-}
-
-/*
-void QueryEvaluatorTest::testBQE(){
-	FollowsSubquery q1 = FollowsSubquery(&table1, &pk);
-	q1.setSynonyms(1, "s1");
-	FollowsSubquery q2 = FollowsSubquery(&table1, &pk);
-	q2.setSynonyms("s1", "s2");
-	
-	vector<string> synonyms = vector<string>();
-	synonyms.push_back("s1");
-	QE query = QE(synonyms, &pk);
-	query.addQuery(&q1);
-	query.addQuery(&q2);
-	query.solve();
-	CPPUNIT_ASSERT_EQUAL(2, query.solution->getResultRow(0).at(0));
-
-	ModifiesSubquery q3 = ModifiesSubquery(&table1, &pk);
-	q3.setSynonyms("s1", 0);
-	FollowsSubquery q4 = FollowsSubquery(&table1, &pk);
-	q4.setSynonyms("s1", 1);
-	vector<string> synonyms2 = vector<string>();
-	synonyms2.push_back("s1");
-	QE query2 = QE(synonyms2, &pk);
-	query2.addQuery(&q3);
-	query2.addQuery(&q4);
-	query2.solve();
-	CPPUNIT_ASSERT_EQUAL((size_t) 0, query2.solution->getAllResults().size());
-}
-*/
-
-/*
-void QueryEvaluatorTest::testUnion(){
-	PKBController pk;
-	map<string, string> table1;
-	
-	// TEST 1:
-	// (s1, s2), (s3, s2), (s4, s5), (s5, s1)
-	// (s6, s7), (s7, s8)
-	QE q1 = QE(vector<string>());
-	Subquery s1 = Subquery(&table1, &pk);
-	s1.setSynonyms("s1", "s2");
-	Subquery s2 = Subquery(&table1, &pk);
-	s2.setSynonyms("s6", "s7");
-	Subquery s3 = Subquery(&table1, &pk);
-	s3.setSynonyms("s4", "s5");
-	Subquery s4 = Subquery(&table1, &pk);
-	s4.setSynonyms("s3", "s2");
-	Subquery s5 = Subquery(&table1, &pk);
-	s5.setSynonyms("s7", "s8");
-	Subquery s6 = Subquery(&table1, &pk);
-	s6.setSynonyms("s5", "s1");
-	q1.addQuery(s1); q1.addQuery(s2); q1.addQuery(s3); 
-	q1.addQuery(s4); q1.addQuery(s5); q1.addQuery(s6);
-	q1.unionQuerySets();
-	string expectL1[4] = {"s1", "s3", "s4","s5"};
-	string expectR1[4] = {"s2", "s2", "s5","s1"};
-	string expectL2[2] = {"s6", "s7"};
-	string expectR2[2] = {"s7", "s8"};
-	for (int i = 0; i < 4; i++){
-		CPPUNIT_ASSERT_EQUAL(expectL1[i], q1.queries[0][i].leftSynonym);
-		CPPUNIT_ASSERT_EQUAL(expectR1[i], q1.queries[0][i].rightSynonym);
-	}
-	for (int i = 0; i < 2; i++){
-		CPPUNIT_ASSERT_EQUAL(expectL2[i], q1.queries[1][i].leftSynonym);
-		CPPUNIT_ASSERT_EQUAL(expectR2[i], q1.queries[1][i].rightSynonym);
-	}
-
-	// TEST 2:
-	QE q2 = QE(vector<string>());
-	Subquery s7 = Subquery(&table1, &pk);
-	s7.setSynonyms("s5", "s6");
-	q2.addQuery(s1); q2.addQuery(s2); q2.addQuery(s3); 
-	q2.addQuery(s4); q2.addQuery(s5); q2.addQuery(s6);
-	q2.addQuery(s7);
-	q2.unionQuerySets();
-	string expectL3[7] = {"s1", "s3", "s4","s5", "s5", "s6", "s7"};
-	string expectR3[7] = {"s2", "s2", "s5","s1", "s6", "s7", "s8"};
-	for (int i = 0; i < 7; i++){
-		CPPUNIT_ASSERT_EQUAL(expectL3[i], q2.queries[0][i].leftSynonym);
-		CPPUNIT_ASSERT_EQUAL(expectR3[i], q2.queries[0][i].rightSynonym);
 	}
 }
-*/
+
+void OptimizedSubquerySolverTest::testMultithreadSolve() {
+	FollowsStarSubquery* f1 = new FollowsStarSubquery(&synonymTable, pk);
+	f1->setSynonyms(4, "s1");
+	ParentStarSubquery* p1 = new ParentStarSubquery(&synonymTable, pk);
+	p1->setSynonyms("s1", "s2");
+	FollowsStarSubquery* f2 = new FollowsStarSubquery(&synonymTable, pk);
+	f2->setSynonyms("s2", 12);
+	vector<Subquery*> queries1;
+	queries1.push_back(f1);
+	queries1.push_back(p1);
+	queries1.push_back(f2);
+	FollowsSubquery* f3 = new FollowsSubquery(&synonymTable, pk);
+	f3->setSynonyms("a1", "w1");
+	ParentSubquery* p2 = new ParentSubquery(&synonymTable, pk);
+	p2->setSynonyms("w1", "i1");
+	FollowsStarSubquery* f4 = new FollowsStarSubquery(&synonymTable, pk);
+	f4->setSynonyms("i1", "c1");
+	vector<Subquery*> queries2;
+	queries2.push_back(f3);
+	queries2.push_back(p2);
+	queries2.push_back(f4);
+	vector<vector<Subquery*> > testSets;
+	testSets.push_back(queries1);
+	testSets.push_back(queries2);
+	vector<ResultTuple*> actualResult = oss->multithreadSolve(testSets);
+	int expectedResult0[1][4] = {
+		{5, 6, 8, 11}
+	};
+	int expectedResult1[3][2] = {
+		{6, 7},
+		{6, 8},
+		{6, 11}
+	};
+	CPPUNIT_ASSERT_EQUAL((size_t)2, actualResult.size());
+	for (size_t i = 0; i < (sizeof(expectedResult0)/sizeof(expectedResult0[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResult0[i])/sizeof(expectedResult0[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResult0[i][j], actualResult[0]->getResultAt(i, j));
+		}
+	}
+	for (size_t i = 0; i < (sizeof(expectedResult1)/sizeof(expectedResult1[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResult1[i])/sizeof(expectedResult1[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResult1[i][j], actualResult[1]->getResultAt(i, j));
+		}
+	}
+	cout << endl << "RESULT FROM MULTITHREAD SOLVE: " << endl;
+	for (size_t i = 0; i < actualResult.size(); i++){
+		cout << endl << actualResult[i]->toString() << endl;
+	}
+}
+
+void OptimizedSubquerySolverTest::compareTime(){
+	FollowsStarSubquery* f1 = new FollowsStarSubquery(&synonymTable, pk);
+	f1->setSynonyms(4, "s1");
+	ParentStarSubquery* p1 = new ParentStarSubquery(&synonymTable, pk);
+	p1->setSynonyms("s1", "s2");
+	FollowsStarSubquery* f2 = new FollowsStarSubquery(&synonymTable, pk);
+	f2->setSynonyms("s2", 12);
+	vector<Subquery*> queries1;
+	queries1.push_back(f1);
+	queries1.push_back(p1);
+	queries1.push_back(f2);
+	FollowsSubquery* f3 = new FollowsSubquery(&synonymTable, pk);
+	f3->setSynonyms("a1", "w1");
+	ParentSubquery* p2 = new ParentSubquery(&synonymTable, pk);
+	p2->setSynonyms("w1", "i1");
+	FollowsStarSubquery* f4 = new FollowsStarSubquery(&synonymTable, pk);
+	f4->setSynonyms("i1", "c1");
+	vector<Subquery*> queries2;
+	queries2.push_back(f3);
+	queries2.push_back(p2);
+	queries2.push_back(f4);
+	vector<vector<Subquery*> > testSets;
+	testSets.push_back(queries1);
+	testSets.push_back(queries2);
+	clock_t beginM = clock();
+	vector<ResultTuple*> multithreadResult = oss->multithreadSolve(testSets);
+	clock_t endM = clock();
+	cout << endl << "RESULT FROM MULTITHREAD SOLVE: " << endl;
+	for (size_t i = 0; i < multithreadResult.size(); i++){
+		cout << endl << multithreadResult[i]->toString() << endl;
+	}
+	cout << endl << "SOLVING TIME: " << (endM - beginM) << endl;
+	clock_t beginS = clock();
+	vector<ResultTuple*> singlethreadResult = oss->singlethreadSolve(testSets);
+	clock_t endS = clock();
+	cout << endl << "RESULT FROM SINGLETHREAD SOLVE: " << endl;
+	for (size_t i = 0; i < singlethreadResult.size(); i++){
+		cout << endl << singlethreadResult[i]->toString() << endl;
+	}
+	cout << endl << "SOLVING TIME: " << (endS - beginS) << endl;
+	CPPUNIT_ASSERT(endM - beginM < endS - beginS);
+}

@@ -112,7 +112,7 @@ private:
 
 
 	string matchVarRef();
-	string matchEntRef(bool);
+	string matchEntRef(bool, Subquery*&, bool = false, bool = false);
 	string matchStmtRef();
 	string matchLineRef();
 

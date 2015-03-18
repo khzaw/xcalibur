@@ -66,24 +66,24 @@ public:
 	vector<int> getValues(string syn, int index){
 		vector<int> values = vector<int>();
 		if (synonymTable->at(syn)=="procedure"){
-			if (index < pkb->procTable.getSize()){
+			if (index < pkb->procTable->getSize()){
 				values.push_back(index);
 			}
 		} else if (synonymTable->at(syn)=="variable"){
-			if (index < pkb->varTable.getSize()){
+			if (index < pkb->varTable->getSize()){
 				values.push_back(index);
 			}
 		} else if (synonymTable->at(syn)=="constant"){
-			if (pkb->constantTable.containsConst(index)){
-				values.push_back(pkb->constantTable.getConstIndex(index));
+			if (pkb->constantTable->containsConst(index)){
+				values.push_back(pkb->constantTable->getConstIndex(index));
 			}
 		} else {
 			if (synonymTable->at(syn)=="stmt" || synonymTable->at(syn) == "prog_line"){
-				if (0 < index && index <= pkb->statementTable.getSize()){
+				if (0 < index && index <= pkb->statementTable->getSize()){
 					values.push_back(index);
 				}
 			} else if (synonymTable->at(syn)=="assign" || synonymTable->at(syn) == "while" || synonymTable->at(syn)=="if" || synonymTable->at(syn) == "call"){
-				if (0 < index && index <= pkb->statementTable.getSize() && pkb->statementTable.getTNode(index)->getNodeType()==TNODE_NAMES[synToNodeType.at(synonymTable->at(syn))]){
+				if (0 < index && index <= pkb->statementTable->getSize() && pkb->statementTable->getTNode(index)->getNodeType()==TNODE_NAMES[synToNodeType.at(synonymTable->at(syn))]){
 					values.push_back(index);
 				}
 			}
@@ -98,39 +98,39 @@ public:
 		if ((sourceSynType == "variable" || sourceSynType == "procedure") && (targetSynType == "variable" || targetSynType == "procedure")) {
 			string sourceString;
 			if (sourceSynType == "variable"){
-				sourceString = pkb->varTable.getVarName(sourceIndex);
+				sourceString = pkb->varTable->getVarName(sourceIndex);
 			}
 			if (sourceSynType == "procedure"){
-				sourceString = pkb->procTable.getProcName(sourceIndex);
+				sourceString = pkb->procTable->getProcName(sourceIndex);
 			}
 			if (targetSynType == "variable"){
-				if(pkb->varTable.containsVar(sourceString)){
-					result.push_back(pkb->varTable.getVarIndex(sourceString));
+				if(pkb->varTable->containsVar(sourceString)){
+					result.push_back(pkb->varTable->getVarIndex(sourceString));
 				}
 			}
 			if (targetSynType == "procedure"){
-				if(pkb->procTable.containsProc(sourceString)){
-					result.push_back(pkb->procTable.getProcIndex(sourceString));
+				if(pkb->procTable->containsProc(sourceString)){
+					result.push_back(pkb->procTable->getProcIndex(sourceString));
 				}
 			}
 		} else if ((sourceSynType=="stmt" || sourceSynType=="assign" || sourceSynType=="call" || sourceSynType=="while" || sourceSynType=="if" || sourceSynType=="constant" || sourceSynType=="prog_line") &&
 			(targetSynType=="stmt" || targetSynType=="assign" || targetSynType=="call" || targetSynType=="while" || targetSynType=="if" || targetSynType=="constant" || targetSynType=="prog_line")){
 			int sourceNum;
 			if (sourceSynType == "constant"){
-				sourceNum = pkb->constantTable.getConstant(sourceIndex);	
+				sourceNum = pkb->constantTable->getConstant(sourceIndex);	
 			} else {
 				sourceNum = sourceIndex;
 			}
 			if (targetSynType == "constant"){
-				if (pkb->constantTable.containsConst(sourceNum)){
-					result.push_back(pkb->constantTable.getConstIndex(sourceNum));
+				if (pkb->constantTable->containsConst(sourceNum)){
+					result.push_back(pkb->constantTable->getConstIndex(sourceNum));
 				}
 			} else if (targetSynType == "stmt" || targetSynType == "prog_line"){
-				if (sourceNum > 0 && sourceNum <= pkb->statementTable.getSize()){
+				if (sourceNum > 0 && sourceNum <= pkb->statementTable->getSize()){
 					result.push_back(sourceNum);
 				}
 			} else {
-				if (sourceNum > 0 && sourceNum <= pkb->statementTable.getSize() && pkb->statementTable.getTNode(sourceNum)->getNodeType()==TNODE_NAMES[synToNodeType.at(targetSynType)]){
+				if (sourceNum > 0 && sourceNum <= pkb->statementTable->getSize() && pkb->statementTable->getTNode(sourceNum)->getNodeType()==TNODE_NAMES[synToNodeType.at(targetSynType)]){
 					result.push_back(sourceNum);
 				}
 			}
@@ -168,7 +168,7 @@ public:
 			if (isSyn == 2) {	// with syn.attr = num
 				if ((temp.at(index) == rightIndex && synonymTable->at(leftSynonym)!="constant")) {
 					result->addResultRow(temp);
-				} else if (synonymTable->at(leftSynonym)=="constant" && pkb->constantTable.containsConst(rightIndex) && pkb->constantTable.getConstant(temp.at(index)) == rightIndex){
+				} else if (synonymTable->at(leftSynonym)=="constant" && pkb->constantTable->containsConst(rightIndex) && pkb->constantTable->getConstant(temp.at(index)) == rightIndex){
 					result->addResultRow(temp);
 				}
 			} else {	// with syn.attr = _
@@ -208,7 +208,7 @@ public:
 			if (isSyn == 1) {	// with num = syn.attr
 				if ((temp.at(index) == leftIndex && synonymTable->at(rightSynonym)!="constant")) {
 					result->addResultRow(temp);
-				} else if (synonymTable->at(rightSynonym)=="constant" && pkb->constantTable.containsConst(leftIndex) && pkb->constantTable.getConstant(temp.at(index)) == leftIndex){
+				} else if (synonymTable->at(rightSynonym)=="constant" && pkb->constantTable->containsConst(leftIndex) && pkb->constantTable->getConstant(temp.at(index)) == leftIndex){
 					result->addResultRow(temp);
 				}
 			} else {	// with syn.attr = _
@@ -252,11 +252,11 @@ public:
 		vector<string> results;
 		string synType = synonymTable->at(syn);
 		if (synType=="procedure"){
-			for (int i = 0; i < pkb->procTable.getSize(); i++){
-				results.push_back(pkb->procTable.getProcName(i));
+			for (int i = 0; i < pkb->procTable->getSize(); i++){
+				results.push_back(pkb->procTable->getProcName(i));
 			}
 		} else if (synType=="variable"){
-			results = pkb->varTable.getAllVar();
+			results = pkb->varTable->getAllVar();
 		} else {
 			// invalid
 		}
@@ -267,11 +267,11 @@ public:
 		vector<int> results;
 		string synType = synonymTable->at(syn);
 		if (synType =="constant"){
-			results = pkb->constantTable.getAllConstant();
+			results = pkb->constantTable->getAllConstant();
 		} else if (synType=="stmt" || synType=="prog_line"){
-			results = pkb->statementTable.getAllStmtNum();
+			results = pkb->statementTable->getAllStmtNum();
 		} else if (synType=="assign" || synType=="while" || synType=="if" || synType=="call"){
-			results = pkb->statementTable.getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(syn))]);
+			results = pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(syn))]);
 		} else {
 			// invalid
 		}
@@ -285,11 +285,11 @@ public:
 		vector<pair<int, int> > results;
 		if (syn2Type == "procedure"){
 			for (size_t i = 0; i < leftStrings.size(); i++){
-				if (pkb->procTable.containsProc(leftStrings[i])){
+				if (pkb->procTable->containsProc(leftStrings[i])){
 					if (syn1Type == "procedure"){
-						results.push_back(make_pair(pkb->procTable.getProcIndex(leftStrings[i]), pkb->procTable.getProcIndex(leftStrings[i])));
+						results.push_back(make_pair(pkb->procTable->getProcIndex(leftStrings[i]), pkb->procTable->getProcIndex(leftStrings[i])));
 					} else if (syn1Type == "variable"){
-						results.push_back(make_pair(pkb->varTable.getVarIndex(leftStrings[i]), pkb->procTable.getProcIndex(leftStrings[i])));
+						results.push_back(make_pair(pkb->varTable->getVarIndex(leftStrings[i]), pkb->procTable->getProcIndex(leftStrings[i])));
 					} else {
 						// invalid
 					}
@@ -297,11 +297,11 @@ public:
 			}
 		} else if (syn2Type == "variable"){
 			for (size_t i = 0; i < leftStrings.size(); i++){
-				if (pkb->varTable.containsVar(leftStrings[i])){
+				if (pkb->varTable->containsVar(leftStrings[i])){
 					if (syn1Type == "procedure"){
-						results.push_back(make_pair(pkb->procTable.getProcIndex(leftStrings[i]), pkb->varTable.getVarIndex(leftStrings[i])));
+						results.push_back(make_pair(pkb->procTable->getProcIndex(leftStrings[i]), pkb->varTable->getVarIndex(leftStrings[i])));
 					} else if (syn1Type == "variable"){
-						results.push_back(make_pair(pkb->varTable.getVarIndex(leftStrings[i]), pkb->varTable.getVarIndex(leftStrings[i])));
+						results.push_back(make_pair(pkb->varTable->getVarIndex(leftStrings[i]), pkb->varTable->getVarIndex(leftStrings[i])));
 					} else {
 						// invalid
 					}
@@ -321,32 +321,32 @@ public:
 
 		if (syn2Type =="constant"){
 			for (size_t i = 0; i < leftNums.size(); i++){
-				if (pkb->constantTable.containsConst(leftNums[i])){
+				if (pkb->constantTable->containsConst(leftNums[i])){
 					if (syn1Type == "constant"){
-						results.push_back(make_pair(pkb->constantTable.getConstIndex(leftNums[i]), pkb->constantTable.getConstIndex(leftNums[i])));
+						results.push_back(make_pair(pkb->constantTable->getConstIndex(leftNums[i]), pkb->constantTable->getConstIndex(leftNums[i])));
 					} else {
-						results.push_back(make_pair(leftNums[i], pkb->constantTable.getConstIndex(leftNums[i])));
+						results.push_back(make_pair(leftNums[i], pkb->constantTable->getConstIndex(leftNums[i])));
 					}
 				}
 			}
 		} else if (syn2Type == "stmt" || syn2Type == "prog_line"){
 			for (size_t i = 0; i < leftNums.size(); i++){
-				if (leftNums[i] > pkb->statementTable.getSize() || leftNums[i] <= 0){
+				if (leftNums[i] > pkb->statementTable->getSize() || leftNums[i] <= 0){
 					continue;
 				}
 				if (syn1Type == "constant"){
-					results.push_back(make_pair(pkb->constantTable.getConstIndex(leftNums[i]), leftNums[i]));
+					results.push_back(make_pair(pkb->constantTable->getConstIndex(leftNums[i]), leftNums[i]));
 				} else {
 					results.push_back(make_pair(leftNums[i], leftNums[i]));
 				}
 			}
 		} else if (syn2Type=="assign" || syn2Type=="while" || syn2Type=="if" || syn2Type=="call"){
 			for (size_t i = 0; i < leftNums.size(); i++){
-				if (leftNums[i] <= 0 || leftNums[i] > pkb->statementTable.getSize() || pkb->statementTable.getTNode(leftNums[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(syn2Type)]){
+				if (leftNums[i] <= 0 || leftNums[i] > pkb->statementTable->getSize() || pkb->statementTable->getTNode(leftNums[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(syn2Type)]){
 					continue;
 				}
 				if (syn1Type == "constant"){
-					results.push_back(make_pair(pkb->constantTable.getConstIndex(leftNums[i]), leftNums[i]));
+					results.push_back(make_pair(pkb->constantTable->getConstIndex(leftNums[i]), leftNums[i]));
 				} else {
 					results.push_back(make_pair(leftNums[i], leftNums[i]));
 				}
@@ -364,28 +364,28 @@ public:
 		if ((leftSynType == "variable" || leftSynType == "procedure") && (rightSynType == "variable" || rightSynType == "procedure")) {
 			string leftString, rightString;
 			if (leftSynType == "variable"){
-				leftString = pkb->varTable.getVarName(tuple->getResultAt(row, index1));
+				leftString = pkb->varTable->getVarName(tuple->getResultAt(row, index1));
 			}
 			if (leftSynType == "procedure"){
-				leftString = pkb->procTable.getProcName(tuple->getResultAt(row, index1));
+				leftString = pkb->procTable->getProcName(tuple->getResultAt(row, index1));
 			}
 			if (rightSynType == "variable"){
-				rightString = pkb->varTable.getVarName(tuple->getResultAt(row, index2));
+				rightString = pkb->varTable->getVarName(tuple->getResultAt(row, index2));
 			}
 			if (rightSynType == "procedure"){
-				rightString = pkb->procTable.getProcName(tuple->getResultAt(row, index2));
+				rightString = pkb->procTable->getProcName(tuple->getResultAt(row, index2));
 			}
 			return leftString == rightString;
 		} else if ((leftSynType=="stmt" || leftSynType=="assign" || leftSynType=="call" || leftSynType=="while" || leftSynType=="if" || leftSynType=="constant" || leftSynType=="prog_line") &&
 			(rightSynType=="stmt" || rightSynType=="assign" || rightSynType=="call" || rightSynType=="while" || rightSynType=="if" || rightSynType=="constant" || rightSynType=="prog_line")){
 			int leftNum, rightNum;
 			if (leftSynType == "constant"){
-				leftNum = pkb->constantTable.getConstant(tuple->getResultAt(row, index1));	
+				leftNum = pkb->constantTable->getConstant(tuple->getResultAt(row, index1));	
 			} else {
 				leftNum = tuple->getResultAt(row, index1);
 			}
 			if (rightSynType == "constant"){
-				rightNum = pkb->constantTable.getConstant(tuple->getResultAt(row, index2));
+				rightNum = pkb->constantTable->getConstant(tuple->getResultAt(row, index2));
 			} else {
 				rightNum = tuple->getResultAt(row, index2);
 			}

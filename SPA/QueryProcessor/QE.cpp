@@ -24,7 +24,6 @@ void QE::setSynonymTable(map<string, string> s){
 	this->synonymTable = s;
 }
 
-
 void QE::addQuery(Subquery* q) {
 	queries.push_back(q);
 }
@@ -32,9 +31,8 @@ void QE::addQuery(Subquery* q) {
 list<string> QE::solve() {
 	vector<string> answer = vector<string>();
 	if (!validateQueries()) {
-		list<string> l = list<string>();
-		l.push_back("none");
-		return l;
+		list<string> none = list<string>();
+		return none;
 	}
 
 	if (useOptimizedSolver) {
@@ -49,7 +47,7 @@ list<string> QE::solve() {
 
 bool QE::validateQueries() {
 	// can check extra synonyms here.
-	for (int i = 0; i < queries.size(); i++) {
+	for (size_t i = 0; i < queries.size(); i++) {
 		if (!queries[i]->validate()) {
 			return false;
 		}
@@ -73,30 +71,27 @@ void QE::basicSolve() {
 }
 
 list<string> QE::convertSolutionToString() {
-	list<string> answer = list<string>();
+	list<string> ans = list<string>();
 	if (synonyms[0] == "BOOLEAN") {
 		if (solution->isBool()) {
-			if (solution->isEmpty()) {
-				answer.push_back("FALSE");
-			} else{
-				answer.push_back("TRUE");
+			if (solution->isEmpty()){
+				ans.push_back("FALSE");
+			} else {
+				ans.push_back("TRUE");
 			}
-			return answer;
+			return ans;
 		}
 		if (solution->getAllResults().size()){
-			answer.push_back("TRUE"); 
+			ans.push_back("TRUE");
 		} else {
-			answer.push_back("FALSE");
+			ans.push_back("FALSE");
 		}
-		return answer;
+		return ans;
 	} 
 
 	if (solution->getAllResults().size() == 0) {
-		answer.push_back("none");
-		return answer;
+		return ans;
 	}
-	
-	
 	vector<int> index = vector<int>();
 	//get index of synonyms
 	for (size_t i = 0; i < synonyms.size(); i++) {
@@ -105,17 +100,17 @@ list<string> QE::convertSolutionToString() {
 	}
 
 	int total_size = solution->getAllResults().size();
-	for (size_t i = 0; i < total_size; i++) {
+	for (int i = 0; i < total_size; i++) {
 		string s = "";
-		for (int k = 0; k < index.size(); k++) {
+		for (size_t k = 0; k < index.size(); k++) {
 			string syn_type = synonymTable.at(solution->getSynonym(index[k]));
 			int sol = solution->getResultAt(i, index[k]);
 			if (syn_type == "procedure"){
-				s += pkb->procTable.getProcName(sol);
+				s += pkb->procTable->getProcName(sol);
 			} else if (syn_type == "variable"){
-				s += pkb->varTable.getVarName(sol);
+				s += pkb->varTable->getVarName(sol);
 			} else if (syn_type == "constant"){
-				s += to_string((long long) pkb->constantTable.getConstant(sol));
+				s += to_string((long long) pkb->constantTable->getConstant(sol));
 			} else {
 				s += to_string((long long) sol);
 			}
@@ -124,8 +119,7 @@ list<string> QE::convertSolutionToString() {
 				s += " "; 
 			}
 		}
-
-		answer.push_back(s);
+		ans.push_back(s);
 	}
-	return answer;
+	return ans;
 }

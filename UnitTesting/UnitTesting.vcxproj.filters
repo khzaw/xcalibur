@@ -42,15 +42,6 @@
     <ClCompile Include="testStatement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestParser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TestQueryParser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TestAST.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TestQE.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -60,14 +51,23 @@
     <ClCompile Include="TestSubquery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="testRecursiveCFG.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
     <ClCompile Include="testIterativeCFG.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestQueryParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="testRecursiveCFG.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="testRecursiveCFG.h">
-      <Filter>Header Files</Filter>
+    <ClCompile Include="TestAST.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestOptimizedSubquerySolver.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +114,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="testIterativeCFG.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestOptimizedSubquerySolver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

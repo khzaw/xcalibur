@@ -24,9 +24,10 @@ class Parser {
 	stack<TNode*> operandStack;
 	stack<int> containerStack;
 	vector<string> procedureNames;
+	map<int, string> callStatements;
 
 public:
-	PKBController controller;
+	PKBController* controller;
 	Parser();
 	Parser(string);
 	void parse();

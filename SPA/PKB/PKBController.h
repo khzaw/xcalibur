@@ -26,23 +26,23 @@ using namespace std;
 
 class PKBController {
 public:
-	VarTable varTable;
-	ProcTable procTable;
-	AST ast;
-	ConstantTable constantTable;
-	Parent parentTable;
-	Follows followsTable;
-	Modifies modifiesTable;
-	Uses usesTable;
-	StatementTable statementTable;
-	Calls callsTable;
+	VarTable* varTable;
+	ProcTable* procTable;
+	AST* ast;
+	ConstantTable* constantTable;
+	Parent* parentTable;
+	Follows* followsTable;
+	Modifies* modifiesTable;
+	Uses* usesTable;
+	StatementTable* statementTable;
+	Calls* callsTable;
 	//Design Extractor
-	CallsExtractor callsExtractor;
-	FollowsExtractor followsExtractor;
-	ParentExtractor parentExtractor;
-	ModifiesExtractor modifiesExtractor;
-	UsesExtractor usesExtractor;
-	NextExtractor nextExtractor;
+	CallsExtractor* callsExtractor;
+	FollowsExtractor* followsExtractor;
+	ParentExtractor* parentExtractor;
+	ModifiesExtractor* modifiesExtractor;
+	UsesExtractor* usesExtractor;
+	NextExtractor* nextExtractor;
 
 	PKBController();
 	~PKBController();

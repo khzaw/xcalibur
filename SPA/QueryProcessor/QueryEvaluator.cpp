@@ -1415,7 +1415,7 @@ vector<int> QueryEvaluator::solve(string selectSynonym, map<STRING, STRING>* syn
 
 			vector<int> patternModifiedVars;
 			for (size_t i=0; i<resultFromPattern.size(); i++){
-				set<int> tt = pkb->modifiesTable.getModifiedVarStmt(resultFromPattern[i]);
+				set<int> tt = pkb->modifiesTable->getModifiedVarStmt(resultFromPattern[i]);
 				vector<int> temp(tt.begin(), tt.end());
 				for (size_t j=0; j<temp.size(); j++){
 					patternModifiedVars.push_back(temp[j]);
@@ -1458,31 +1458,31 @@ vector<int> QueryEvaluator::solve(string selectSynonym, map<STRING, STRING>* syn
 			return answer;
 		} else if (mergeOutputValues.size()>0&&mergeOutputValues[0].size()>0){
 			if (synonymTable->at(selectSynonym)=="stmt"||synonymTable->at(selectSynonym)=="prog_line"){
-				for (int i=1; i<=pkb->statementTable.getSize(); i++){
+				for (int i=1; i<=pkb->statementTable->getSize(); i++){
 					answer.push_back(i);
 				}
 				return answer;
 			} else if (synonymTable->at(selectSynonym)=="assign"){
-				for (int i=1; i<=pkb->statementTable.getSize(); i++){
-					if (pkb->statementTable.getTNode(i)->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
+				for (int i=1; i<=pkb->statementTable->getSize(); i++){
+					if (pkb->statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[ASSIGN_NODE]){
 						answer.push_back(i);
 					}
 				}
 				return answer;
 			} else if (synonymTable->at(selectSynonym)=="while"){
-				for (int i=1; i<=pkb->statementTable.getSize(); i++){
-					if (pkb->statementTable.getTNode(i)->getNodeType()==TNODE_NAMES[WHILE_NODE]){
+				for (int i=1; i<=pkb->statementTable->getSize(); i++){
+					if (pkb->statementTable->getTNode(i)->getNodeType()==TNODE_NAMES[WHILE_NODE]){
 						answer.push_back(i);
 					}
 				}
 				return answer;
 			} else if (synonymTable->at(selectSynonym)=="variable"){
-				for (int i=0; i<pkb->varTable.getSize(); i++){
+				for (int i=0; i<pkb->varTable->getSize(); i++){
 					answer.push_back(i);
 				}
 				return answer;
 			} else if (synonymTable->at(selectSynonym)=="constant"){
-				for (int i=0; i<pkb->constantTable.getSize(); i++){
+				for (int i=0; i<pkb->constantTable->getSize(); i++){
 					answer.push_back(i);
 				}
 				return answer;
@@ -1516,19 +1516,19 @@ list<string> QueryEvaluator::evaluate(map<STRING, STRING>* synonymTable, QueryTr
 		synonymTable->at(selectSynonym)=="constant"){
 		if (synonymTable->at(selectSynonym)=="variable"){
 			for (size_t i=0; i<answer.size(); i++){
-				temp = temp + ("" + pkb->varTable.getVarName(answer.at(i)));
-				outputlist.push_back(pkb->varTable.getVarName(answer.at(i)));
+				temp = temp + ("" + pkb->varTable->getVarName(answer.at(i)));
+				outputlist.push_back(pkb->varTable->getVarName(answer.at(i)));
 				if (i!=answer.size()-1){
 					temp = temp+",";
 				}
 			}
 		} else if (synonymTable->at(selectSynonym)=="procedure"){
 			for (size_t i=0; i<answer.size(); i++){
-				temp = temp + ("" + pkb->procTable.getProcName(answer.at(i)));
+				temp = temp + ("" + pkb->procTable->getProcName(answer.at(i)));
 				if (i!=answer.size()-1){
 					temp = temp+",";
 				}
-				outputlist.push_back(pkb->procTable.getProcName(answer.at(i)));
+				outputlist.push_back(pkb->procTable->getProcName(answer.at(i)));
 			}
 		} else {
 			for (size_t i=0; i<answer.size(); i++){
@@ -1536,7 +1536,7 @@ list<string> QueryEvaluator::evaluate(map<STRING, STRING>* synonymTable, QueryTr
 				if (i!=answer.size()-1){
 					temp = temp+",";
 				}*/
-				outputlist.push_back(to_string((long long)pkb->constantTable.getConstant(answer.at(i))));
+				outputlist.push_back(to_string((long long)pkb->constantTable->getConstant(answer.at(i))));
 			}
 		}
 	} else {

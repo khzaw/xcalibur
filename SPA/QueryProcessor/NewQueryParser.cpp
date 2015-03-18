@@ -18,12 +18,14 @@
 #include "FollowsSubquery.cpp"
 #include "FollowsStarSubquery.cpp"
 #include "UsesSubquery.cpp"
+#include "UsesProcSubquery.cpp"
 #include "ParentSubquery.cpp"
 #include "ParentStarSubquery.cpp"
 #include "WithSubquery.cpp"
 #include "CallsSubquery.cpp"
 #include "CallsStarSubquery.cpp"
 #include "NextSubquery.cpp"
+#include "NextStarSubquery.cpp"
 
 
 using namespace std;
@@ -62,7 +64,7 @@ NewQueryParser::NewQueryParser(string s, PKBController* controller) {
 }
 
 void NewQueryParser::printMap() {
-	cout << "Synonyms: ";
+	cout << "Synonyms: "; 
 	for(map<string, string>::iterator it = synonyms.begin(); it != synonyms.end(); ++it) {
 		cout << "(" << it->first << "," << it->second << ") ";
 	}
@@ -70,6 +72,8 @@ void NewQueryParser::printMap() {
 	for(vector<string>::iterator it = selectVariables.begin(); it != selectVariables.end(); ++it) {
 		cout << *it << "\n";
 	}
+
+	cout << "Queries : " << this->evaluator->queries.size() << endl;
 }
 
 NewQueryParser::~NewQueryParser() {
@@ -459,18 +463,18 @@ void NewQueryParser::matchRelRef() {
 void NewQueryParser::matchModifies() {
 	// ModifiesP: "Modifies" "(" entRef "," varRef ")"
 	// ModifiesC: "Modifies" "(" stmtRef "," varRef ")"
-	ModifiesSubquery modifiesSq = ModifiesSubquery(&synonyms, controller);
+	Subquery* subquery = new Subquery(&synonyms, controller);
+	//ModifiesSubquery* modifiesSq = new ModifiesSubquery(&synonyms, controller);
 	match("(");
-	string fst = matchEntRef(true);
+	string fst = matchEntRef(true, *&subquery, true);
 	match(",");
 	string snd = matchVarRef();
 	match(")");
-	setSynonymsHelper(fst, snd, &modifiesSq);
-	//cout << "fst : " << fst << endl;
-	//cout << "snd : " << snd << endl;
+	setSynonymsHelper(fst, snd, subquery);
+	//cout << "Modifies fst : " << fst << "\tModifies snd : " << snd << "\t Queries:" << this->evaluator->queries.size() << endl;
 }
 
-string NewQueryParser::matchEntRef(bool excludeUnderScore) {
+string NewQueryParser::matchEntRef(bool excludeUnderScore, Subquery*& subquery, bool modifies, bool uses) {
 	// entRef: synonym | "_" | """ IDENT """ | INTEGER
 	string fst = "";
 	if(nextToken.name.compare("_") == 0) {
@@ -483,13 +487,44 @@ string NewQueryParser::matchEntRef(bool excludeUnderScore) {
 	} else if(nextToken.token == INT_LIT) {
 		fst = nextToken.name;
 		match(nextToken.name);
-	} else if(nextToken.token == IDENT || nextToken.token == SIMPLE_IDENT) {
+		if(modifies || uses) {
+			if(modifies) subquery = new ModifiesSubquery(&synonyms, controller);
+			if(uses) subquery = new UsesSubquery(&synonyms, controller);
+		}
+	} else if(nextToken.token == IDENT || nextToken.token == SIMPLE_IDENT) { // synonym
 		fst = nextToken.name;
 		match(nextToken.name);
+		if(modifies || uses) {
+			if(synonyms.at(fst) == "procedure") {
+				if(modifies) subquery = new ModifiesProcSubquery(&synonyms, controller);
+				if(uses) subquery = new UsesProcSubquery(&synonyms, controller);
+			} else {
+				if(modifies) subquery = new ModifiesSubquery(&synonyms, controller);
+				if(uses) subquery = new UsesSubquery(&synonyms, controller);
+			}
+		}
 	} else if(nextToken.name.compare("\"") == 0) {
 		match("\"");
 		fst = nextToken.name;
 		match(nextToken.name);
+		if(controller->procTable->getProcIndex(fst) != -1) {
+			fst = to_string((long long)controller->procTable->getProcIndex(fst));
+			if(modifies || uses) {
+				if(modifies) subquery = new ModifiesProcSubquery(&synonyms, controller);
+				if(uses) subquery = new UsesProcSubquery(&synonyms, controller);
+			}
+		}
+		if(controller->varTable->getVarIndex(fst) != -1) {
+			fst = to_string((long long)controller->varTable->getVarIndex(fst));
+			if(modifies || uses) {
+				if(modifies) 
+					subquery = new ModifiesSubquery(&synonyms, controller);
+				if(uses)
+					subquery = new UsesSubquery(&synonyms, controller);
+			}
+		}
+		// check with synoyntable
+		// try to convert into integer first -> if yes, 
 		match("\"");
 	}
 	return fst;
@@ -508,6 +543,7 @@ string NewQueryParser::matchVarRef() {
 		match("\"");
 		snd = nextToken.name;
 		match(nextToken.name);
+		snd = to_string((long long)controller->varTable->getVarIndex(snd));
 		match("\"");
 	}
 	return snd;
@@ -516,23 +552,25 @@ string NewQueryParser::matchVarRef() {
 void NewQueryParser::matchUses() {
 	// UsesP: "Uses" "(" entRef "," varRef ")"
 	// UsesC: "Uses" "(" entRef "," varRef ")"
+	Subquery* subquery = new Subquery(&synonyms, controller);
 	match("(");
-	string fst = matchEntRef(true);
+	string fst = matchEntRef(true, *&subquery, false, true);
 	match(",");
 	string snd = matchVarRef();
 	match(")");
-	// cout << "Uses fst : " << fst << "\tUses snd : " << snd;
+	setSynonymsHelper(fst, snd, subquery);
+	//cout << "Uses fst : " << fst << "\tUses snd : " << snd << endl;
 }
 
 void NewQueryParser::matchCalls() {
-	// Calls : "Calls" "(" entRef "," varRef ")"
-	CallsSubquery callsSq = CallsSubquery(&synonyms, controller);
+	// Calls : "Calls" "(" entRef "," entRef ")"
+	Subquery* callsSq = new CallsSubquery(&synonyms, controller);
 	match("(");
-	string fst = matchEntRef(false);
+	string fst = matchEntRef(false, *&callsSq);
 	match(",");
-	string snd = matchVarRef();
+	string snd = matchEntRef(false, *&callsSq);
 	match(")");
-	setSynonymsHelper(fst, snd, &callsSq);
+	setSynonymsHelper(fst, snd, callsSq);
 	//cout << "Calls: fst -> " << fst << "\tsnd -> " << snd;
 }
 
@@ -548,40 +586,39 @@ void NewQueryParser::setSynonymsHelper(string fst, string snd, Subquery* query) 
 		query->setSynonyms(fst, snd);
 	}
 	evaluator->addQuery(query);
-
 }
 
 void NewQueryParser::matchCallsStar() {
-	// CallsT : "Calls*" "(" entRef "," varRef ")"
-	CallsStarSubquery callsStarSq = CallsStarSubquery(&synonyms, controller);
+	// CallsT : "Calls*" "(" entRef "," entRef ")"
+	Subquery* callsStarSq = new CallsStarSubquery(&synonyms, controller);
 	match("(");
-	string fst = matchEntRef(false);
+	string fst = matchEntRef(false, *&callsStarSq);
 	match(",");
-	string snd = matchVarRef();
+	string snd = matchEntRef(false, *&callsStarSq);
 	match(")");
-	setSynonymsHelper(fst, snd, &callsStarSq);
+	setSynonymsHelper(fst, snd, callsStarSq);
 	//cout << "Calls*: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 void NewQueryParser::matchParent() {
-	ParentSubquery parentSq = ParentSubquery(&synonyms, controller);
+	ParentSubquery* parentSq = new ParentSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchStmtRef();
 	match(",");
 	string snd = matchStmtRef();
 	match(")");
-	setSynonymsHelper(fst, snd, &parentSq);
+	setSynonymsHelper(fst, snd, parentSq);
 	//cout << "Parent: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 void NewQueryParser::matchParentStar() {
-	ParentStarSubquery parentStarSq = ParentStarSubquery(&synonyms, controller);
+	ParentStarSubquery* parentStarSq = new ParentStarSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchStmtRef();
 	match(",");
 	string snd = matchStmtRef();
 	match(")");
-	setSynonymsHelper(fst, snd, &parentStarSq);
+	setSynonymsHelper(fst, snd, parentStarSq);
 	//cout << "Parent*: fst -> " << fst << "\tsnd -> " << snd;
 }
 
@@ -605,14 +642,14 @@ string NewQueryParser::matchStmtRef() {
 
 void NewQueryParser::matchFollows() {
 	// Follows: "Follows" "(" stmtRef "," stmtRef ")";
-	FollowsSubquery followsSq = FollowsSubquery(&synonyms, controller);
+	FollowsSubquery* followsSq = new FollowsSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchStmtRef();
 	match(",");
 	string snd = matchStmtRef();
 	match(")");
-	setSynonymsHelper(fst, snd, &followsSq);
-	// cout << "Follows: fst -> " << fst << "\tsnd -> " << snd;
+	setSynonymsHelper(fst, snd, followsSq);
+	//cout << "Follows: fst -> " << fst << "\tsnd -> " << snd << endl;
 }
 
 void NewQueryParser::matchFollowsStar() {
@@ -623,28 +660,29 @@ void NewQueryParser::matchFollowsStar() {
 	string snd = matchStmtRef();
 	match(")");
 	setSynonymsHelper(fst, snd, followsStarSq);
-	//cout << "Follows*: fst -> " << fst << "\tsnd -> " << snd;
+	//cout << "Follows*: fst -> " << fst << "\tsnd -> " << snd << endl;
 }
 
 void NewQueryParser::matchNext() {
-	NextSubquery nextSq = NextSubquery(&synonyms, controller);
+	NextSubquery* nextSq = new NextSubquery(&synonyms, controller);
     match("(");
     string fst = matchLineRef();
     match(",");
     string snd = matchLineRef();
     match(")");
-	setSynonymsHelper(fst, snd, &nextSq);
-	//cout << "Next: fst -> " << fst << "\tsnd -> " << snd;
+	setSynonymsHelper(fst, snd, nextSq);
+	//cout << "Next: fst -> " << fst << "\tsnd -> " << snd << endl;
 }
 
 void NewQueryParser::matchNextStar() {
+	NextStarSubquery* nextStarSq = new NextStarSubquery(&synonyms, controller);
     match("(");
     string fst = matchLineRef();
     match(",");
     string snd = matchLineRef();
     match(")");
-
-	// cout << "Next*: fst -> " << fst << "\tsnd -> " << snd;
+	setSynonymsHelper(fst, snd, nextStarSq);
+	//cout << "Next*: fst -> " << fst << "\tsnd -> " << snd << endl;
 }
 
 string NewQueryParser::matchLineRef() {

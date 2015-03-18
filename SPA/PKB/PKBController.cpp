@@ -11,48 +11,49 @@
 using namespace std;
 
 PKBController::PKBController(){
-	this->ast = AST();
-	this->procTable = ProcTable();
-	this->varTable = VarTable();
-	this->constantTable = ConstantTable();
-	this->statementTable = StatementTable();
-	this->parentTable = Parent(&statementTable);
-	this->followsTable = Follows(&statementTable);
-	this->modifiesTable = Modifies();
-	this->usesTable = Uses();	
-	this->modifiesTable = Modifies();
-	this->callsTable = Calls();
-	this->callsExtractor = CallsExtractor(&callsTable);
-	this->followsExtractor = FollowsExtractor(&followsTable);
-	this->parentExtractor = ParentExtractor(&parentTable);
-	this->modifiesExtractor = ModifiesExtractor(&modifiesTable);
-	this->usesExtractor = UsesExtractor(&usesTable);
-	this->nextExtractor = NextExtractor(&procTable,&statementTable);
+	this->ast = new AST();
+	this->procTable = new ProcTable();
+	this->varTable = new VarTable();
+	this->constantTable = new ConstantTable();
+	this->statementTable = new StatementTable();
+	this->parentTable = new Parent(statementTable);
+	this->followsTable = new Follows(statementTable);
+	this->modifiesTable = new Modifies();
+	this->usesTable = new Uses();	
+	this->modifiesTable = new Modifies();
+	this->callsTable = new Calls();
+	this->callsExtractor = new CallsExtractor(callsTable);
+	this->followsExtractor = new FollowsExtractor(followsTable);
+	this->parentExtractor = new ParentExtractor(parentTable);
+	this->modifiesExtractor = new ModifiesExtractor(modifiesTable);
+	this->usesExtractor = new UsesExtractor(usesTable);
+	this->nextExtractor = new NextExtractor(procTable, statementTable);
 }
 
 PKBController::~PKBController() {
 }
 
 void PKBController::constructFollows() {
-	followsExtractor.construct();
+	followsExtractor->construct();
 }
 
 void PKBController::constructParent() {
-	parentExtractor.construct();
+	parentExtractor->construct();
 }
 
 void PKBController::constructCalls() {
-	callsExtractor.construct();
+	this->callsTable;
+	callsExtractor->construct();
 }
 
 void PKBController::constructModifies() {
-	modifiesExtractor.construct();
+	modifiesExtractor->construct();
 }
 
 void PKBController::constructUses() {
-	usesExtractor.construct();
+	usesExtractor->construct();
 }
 
 void PKBController::constructNext(){
-	nextExtractor.construct();
+	nextExtractor->construct();
 }

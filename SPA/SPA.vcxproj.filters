@@ -66,9 +66,6 @@
     <ClCompile Include="QueryProcessor\QTNode.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
-    <ClCompile Include="QueryProcessor\QueryEvaluator.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
     <ClCompile Include="QueryProcessor\QueryLexer.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
@@ -167,6 +164,9 @@
     </ClCompile>
     <ClCompile Include="Frontend\Parser.cpp">
       <Filter>Source Files\Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\OptimizedSubquerySolver.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -298,6 +298,9 @@
     </ClInclude>
     <ClInclude Include="Frontend\Parser.h">
       <Filter>Header Files\Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\OptimizedSubquerySolver.h">
+      <Filter>Header Files\QueryProcessor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

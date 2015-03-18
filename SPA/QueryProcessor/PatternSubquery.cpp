@@ -36,12 +36,12 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		int index = tuple->addSynonym(leftSynonym);
 		tuple->addSynonymToMap(leftSynonym, index);
-		vector<int> assign = pkb->statementTable.getStmtNumUsingNodeType("assign");
+		vector<int> assign = pkb->statementTable->getStmtNumUsingNodeType("assign");
 		switch(isSyn) {
 			{case 0: case 2: case 7:		//pattern a (int, ...)
 				for (size_t i = 0; i < assign.size(); i++) {
-					if (pkb->modifiesTable.evaluateIsModifiesStmt(assign[i], rightIndex)) {
-						if(matchPattern(pkb->statementTable.getTNode(assign[i])->getData())) {
+					if (pkb->modifiesTable->evaluateIsModifiesStmt(assign[i], rightIndex)) {
+						if(matchPattern(pkb->statementTable->getTNode(assign[i])->getData())) {
 							vector<int> temp = vector<int>();
 							temp.push_back(assign[i]);
 							tuple->addResultRow(temp);
@@ -54,21 +54,21 @@ public:
 				// get all assignment statements
 				int index2 = tuple->addSynonym(rightSynonym);
 				tuple->addSynonymToMap(rightSynonym, index2);
-				for (int i = 0; i < assign.size(); i++) {
-					string temp = pkb->statementTable.getTNode(assign[i])->getData();
+				for (size_t i = 0; i < assign.size(); i++) {
+					string temp = pkb->statementTable->getTNode(assign[i])->getData();
 					if(matchPattern(temp)) {
 						vector<int> temp2 = vector<int>();
 						temp2.push_back(assign[i]);
-						temp2.push_back(pkb->varTable.getVarIndex(temp));
+						temp2.push_back(pkb->varTable->getVarIndex(temp));
 						tuple->addResultRow(temp2);
 					}
 				}
 				break;
 			}
 			{default:					//pattern a (_, ...)
-				for(int i = 0; i < assign.size(); i++) {
-					if (matchPattern(pkb->statementTable.getTNode(assign[i])->getData())) {
-						for (int j = 0; j < assign.size(); j++) {
+				for(size_t i = 0; i < assign.size(); i++) {
+					if (matchPattern(pkb->statementTable->getTNode(assign[i])->getData())) {
+						for (size_t j = 0; j < assign.size(); j++) {
 							vector<int> temp = vector<int>();
 							temp.push_back(assign[i]);
 							tuple->addResultRow(temp);
@@ -89,10 +89,10 @@ public:
 		
 		switch(isSyn) {
 			{case 0: case 2: case 7:		//pattern a ("x", ...)
-				for (int i = 0; i < r->getAllResults().size(); i++) {
+				for (size_t i = 0; i < r->getAllResults().size(); i++) {
 					int res = r->getResultAt(index, i);
-					if (pkb->modifiesTable.evaluateIsModifiesStmt(res, rightIndex)) {	//if modifies(a[i], "x")
-						if(matchPattern(pkb->statementTable.getTNode(res)->getData())) {
+					if (pkb->modifiesTable->evaluateIsModifiesStmt(res, rightIndex)) {	//if modifies(a[i], "x")
+						if(matchPattern(pkb->statementTable->getTNode(res)->getData())) {
 							tuple->addResultRow(r->getResultRow(i));
 						}
 					}
@@ -111,9 +111,9 @@ public:
 				}
 			}
 			{default:					//pattern a (_, ...)
-				for(int i = 0; i < r->getAllResults().size(); i++) {
+				for(size_t i = 0; i < r->getAllResults().size(); i++) {
 					int res = r->getResultAt(index, i);
-					if (matchPattern(pkb->statementTable.getTNode(res)->getData())) {
+					if (matchPattern(pkb->statementTable->getTNode(res)->getData())) {
 						tuple->addResultRow(r->getResultRow(i));
 					}
 				}
@@ -125,12 +125,12 @@ public:
 	ResultTuple* assignRightSyn(ResultTuple* answer, ResultTuple* r, int index) {
 		int ind = answer->addSynonym(leftSynonym);
 		answer->addSynonymToMap(leftSynonym, ind);
-		for (int i = 0; i < r->getAllResults().size(); i++) {
+		for (size_t i = 0; i < r->getAllResults().size(); i++) {
 			// can store this in map
-			vector<int> assign = pkb->statementTable.getStmtNumUsingNodeType("assign");
-			for (int j = 0; j < assign.size(); j++) {
-				if (pkb->modifiesTable.evaluateIsModifiesStmt(assign[j], r->getResultAt(i, index)) && 
-					matchPattern(pkb->statementTable.getTNode(assign[j])->getData())) {
+			vector<int> assign = pkb->statementTable->getStmtNumUsingNodeType("assign");
+			for (size_t j = 0; j < assign.size(); j++) {
+				if (pkb->modifiesTable->evaluateIsModifiesStmt(assign[j], r->getResultAt(i, index)) && 
+					matchPattern(pkb->statementTable->getTNode(assign[j])->getData())) {
 						answer->addResultRow(r->getResultRow(i));
 						answer->addResult(r->getAllResults().size()-1, assign[j]);
 				}
@@ -142,12 +142,12 @@ public:
 	ResultTuple* assignLeftSyn(ResultTuple* answer, ResultTuple* r, int index) {
 		int ind = answer->addSynonym(rightSynonym);
 		answer->addSynonymToMap(rightSynonym, ind);
-		for (int i = 0; i < r->getAllResults().size(); i++) {
+		for (size_t i = 0; i < r->getAllResults().size(); i++) {
 			// can store this in map
-			vector<int> var = pkb->varTable.getAllVarNum();
-			for (int j = 0; j < var.size(); j++) {
-				if (pkb->modifiesTable.evaluateIsModifiesStmt(r->getResultAt(i, index), var[j]) && 
-					matchPattern(pkb->statementTable.getTNode(r->getResultAt(i, index))->getData())) {
+			vector<int> var = pkb->varTable->getAllVarNum();
+			for (size_t j = 0; j < var.size(); j++) {
+				if (pkb->modifiesTable->evaluateIsModifiesStmt(r->getResultAt(i, index), var[j]) && 
+					matchPattern(pkb->statementTable->getTNode(r->getResultAt(i, index))->getData())) {
 						answer->addResultRow(r->getResultRow(i));
 						answer->addResult(r->getAllResults().size()-1, var[j]);
 				}
@@ -157,9 +157,9 @@ public:
 	}
 
 	ResultTuple* assignBothSyn(ResultTuple* answer, ResultTuple* r, int lIndex, int rIndex) {
-		for (int i = 0; i < r->getAllResults().size(); i++) {
-			if (pkb->modifiesTable.evaluateIsModifiesStmt(r->getResultAt(i, lIndex), r->getResultAt(i, rIndex)) && 
-				matchPattern(pkb->statementTable.getTNode(r->getResultAt(i, lIndex))->getData())) {
+		for (size_t i = 0; i < r->getAllResults().size(); i++) {
+			if (pkb->modifiesTable->evaluateIsModifiesStmt(r->getResultAt(i, lIndex), r->getResultAt(i, rIndex)) && 
+				matchPattern(pkb->statementTable->getTNode(r->getResultAt(i, lIndex))->getData())) {
 					answer->addResultRow(r->getResultRow(i));
 			}
 		}

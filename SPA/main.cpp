@@ -62,8 +62,8 @@ int main() {
 	query = "prog_line n; Select n such that Next* (9, n) and Next* (n, 12)";
 	parser = new NewQueryParser(query, controller);
 
-	//query = "stmt s; Select s such that Follows*(s,10) and Follows*(s, 12)";
-	//parser = new NewQueryParser(query, controller);
+	query = "assign a; Select a such that Modifies (a, \"y\") and Uses (a, \"y\")";
+	parser = new NewQueryParser(query, controller);
 
 	string t;
 	cin >> t;

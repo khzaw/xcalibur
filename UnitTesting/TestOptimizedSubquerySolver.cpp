@@ -411,5 +411,5 @@ void OptimizedSubquerySolverTest::compareTime(){
 		cout << endl << singlethreadResult[i]->toString() << endl;
 	}
 	cout << endl << "SOLVING TIME: " << (endS - beginS) << endl;
-	CPPUNIT_ASSERT(endM - beginM < endS - beginS);
+	CPPUNIT_ASSERT(endM - beginM <= endS - beginS);
 }

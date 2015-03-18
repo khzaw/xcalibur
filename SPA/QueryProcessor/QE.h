@@ -23,7 +23,6 @@ public:
 	QE(vector<string>, PKBController*);
 	void setSynonymTable(map<string, string>);
 	void addQuery(Subquery*);
-	void setSynonymTable(map<string, string>);
 	
 	list<string> solve();
 	void trimSolution();

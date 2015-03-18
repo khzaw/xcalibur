@@ -25,17 +25,10 @@ ResultTuple* OptimizedSubquerySolver::solveSet(vector<Subquery*> subqueriesSet){
 	
 vector<ResultTuple* > OptimizedSubquerySolver::multithreadSolve(vector<vector<Subquery*> > disjointSubqueries){
 	Concurrency::concurrent_vector<ResultTuple* > concAns;
-	Concurrency::concurrent_vector<vector<Subquery* > > concDisjointSubqueries;
-	for (size_t i = 0; i < disjointSubqueries.size(); i++){
-		concDisjointSubqueries.push_back(disjointSubqueries[i]);
-	}
-	vector<ResultTuple* > ans;
-	Concurrency::parallel_for_each (begin(concDisjointSubqueries), end(concDisjointSubqueries), [&](vector<Subquery* > n) {
+	Concurrency::parallel_for_each (begin(disjointSubqueries), end(disjointSubqueries), [&](vector<Subquery* > n) {
 		concAns.push_back(solveSet(n));
 	});
-	for(size_t i = 0; i < concAns.size(); i++){
-		ans.push_back(concAns[i]);
-	}
+	vector<ResultTuple* > ans(concAns.begin(), concAns.end());
 	return ans;
 }
 

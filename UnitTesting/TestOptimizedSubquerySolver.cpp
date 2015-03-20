@@ -471,16 +471,20 @@ void OptimizedSubquerySolverTest::compareTime(){
 	q2.push_back(y5); q2.push_back(y6); q2.push_back(y7); q2.push_back(y8); 
 	q2.push_back(y9); q2.push_back(y10); q2.push_back(y11); q2.push_back(y12); 
 	
+	vector<vector<Subquery*> > ts;
+	ts.push_back(q1);
+	ts.push_back(q2);
+
 	clock_t beginM2 = clock();
-	vector<ResultTuple*> multithreadResult2 = oss->multithreadSolve(testSets);
+	vector<ResultTuple*> multithreadResult2 = oss->multithreadSolve(ts);
 	clock_t endM2 = clock();
-	cout << endl << "RESULT FROM MULTITHREAD SOLVE2: " << endl;
+	cout << "-----" << endl << "RESULT FROM MULTITHREAD SOLVE2: " << endl;
 	for (size_t i = 0; i < multithreadResult2.size(); i++){
 		cout << endl << multithreadResult2[i]->toString() << endl;
 	}
 	cout << endl << "SOLVING TIME: " << (endM2 - beginM2) << endl;
 	clock_t beginS2 = clock();
-	vector<ResultTuple*> singlethreadResult2 = oss->singlethreadSolve(testSets);
+	vector<ResultTuple*> singlethreadResult2 = oss->singlethreadSolve(ts);
 	clock_t endS2 = clock();
 	cout << endl << "RESULT FROM SINGLETHREAD SOLVE2: " << endl;
 	for (size_t i = 0; i < singlethreadResult2.size(); i++){

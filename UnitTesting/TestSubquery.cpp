@@ -7158,6 +7158,20 @@ void SubqueryTest::testModifies(){
 			CPPUNIT_ASSERT_EQUAL(expectedResultsModifiesSubquery5_3[i][j], actualResultsModifiesSubquery5_3->getResultAt(i, j));
 		}
 	}
+
+	// Test 5.4: Modifies(6, v1)
+	ModifiesSubquery ms5_32 = ModifiesSubquery(&synonymTable, pk);
+	ms5_32.setSynonyms(6, "v1");
+	ResultTuple* actualResultsModifiesSubquery5_32 = ms5_32.solve();
+	cout << actualResultsModifiesSubquery5_32->toString();
+	int expectedResultsModifiesSubquery5_32[6][1] = {
+		{0}, {1}, {2}, {4}, {5}, {7}
+	};
+	for (size_t i = 0; i < 6; i++){
+		for (size_t j = 0; j < 1; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsModifiesSubquery5_32[i][j], actualResultsModifiesSubquery5_32->getResultAt(i, j));
+		}
+	}
 }
 
 void SubqueryTest::testModifiesTuple() {

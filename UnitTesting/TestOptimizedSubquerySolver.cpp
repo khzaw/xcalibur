@@ -412,4 +412,80 @@ void OptimizedSubquerySolverTest::compareTime(){
 	}
 	cout << endl << "SOLVING TIME: " << (endS - beginS) << endl;
 	CPPUNIT_ASSERT(endM - beginM <= endS - beginS);
+
+	NextStarSubquery* x1 = new NextStarSubquery(&synonymTable, pk);
+	x1->setSynonyms(4, "s1");
+	NextStarSubquery* x2 = new NextStarSubquery(&synonymTable, pk);
+	x2->setSynonyms("s1", "s2");
+	NextStarSubquery* x3 = new NextStarSubquery(&synonymTable, pk);
+	x3->setSynonyms("s2", 12);
+	NextStarSubquery* x4 = new NextStarSubquery(&synonymTable, pk);
+	x4->setSynonyms(4, "s1");
+	NextStarSubquery* x5 = new NextStarSubquery(&synonymTable, pk);
+	x5->setSynonyms("s2", "s3");
+	NextStarSubquery* x6 = new NextStarSubquery(&synonymTable, pk);
+	x6->setSynonyms("s3", 12);
+	NextStarSubquery* x7 = new NextStarSubquery(&synonymTable, pk);
+	x7->setSynonyms(4, "s3");
+	NextStarSubquery* x8 = new NextStarSubquery(&synonymTable, pk);
+	x8->setSynonyms("s3", "s4");
+	NextStarSubquery* x9 = new NextStarSubquery(&synonymTable, pk);
+	x9->setSynonyms("s4", 12);
+	NextStarSubquery* x10 = new NextStarSubquery(&synonymTable, pk);
+	x10->setSynonyms(4, "s2");
+	NextStarSubquery* x11 = new NextStarSubquery(&synonymTable, pk);
+	x11->setSynonyms("s2", "s4");
+	NextStarSubquery* x12 = new NextStarSubquery(&synonymTable, pk);
+	x12->setSynonyms("s2", 19);
+	vector<Subquery*> q1;
+	q1.push_back(x1); q1.push_back(x2); q1.push_back(x3); q1.push_back(x4); 
+	q1.push_back(x5); q1.push_back(x6); q1.push_back(x7); q1.push_back(x8); 
+	q1.push_back(x9); q1.push_back(x10); q1.push_back(x11); q1.push_back(x12); 
+
+	NextStarSubquery* y1 = new NextStarSubquery(&synonymTable, pk);
+	y1->setSynonyms(4, "s1");
+	NextStarSubquery* y2 = new NextStarSubquery(&synonymTable, pk);
+	y2->setSynonyms("s1", "s2");
+	NextStarSubquery* y3 = new NextStarSubquery(&synonymTable, pk);
+	y3->setSynonyms("s2", 12);
+	NextStarSubquery* y4 = new NextStarSubquery(&synonymTable, pk);
+	y4->setSynonyms(4, "s1");
+	NextStarSubquery* y5 = new NextStarSubquery(&synonymTable, pk);
+	y5->setSynonyms("s2", "s3");
+	NextStarSubquery* y6 = new NextStarSubquery(&synonymTable, pk);
+	y6->setSynonyms("s3", 12);
+	NextStarSubquery* y7 = new NextStarSubquery(&synonymTable, pk);
+	y7->setSynonyms(4, "s3");
+	NextStarSubquery* y8 = new NextStarSubquery(&synonymTable, pk);
+	y8->setSynonyms("s3", "s4");
+	NextStarSubquery* y9 = new NextStarSubquery(&synonymTable, pk);
+	y9->setSynonyms("s4", 12);
+	NextStarSubquery* y10 = new NextStarSubquery(&synonymTable, pk);
+	y10->setSynonyms(4, "s2");
+	NextStarSubquery* y11 = new NextStarSubquery(&synonymTable, pk);
+	y11->setSynonyms("s2", "s4");
+	NextStarSubquery* y12 = new NextStarSubquery(&synonymTable, pk);
+	y12->setSynonyms("s2", 19);
+	vector<Subquery*> q2;
+	q2.push_back(y1); q2.push_back(y2); q2.push_back(y3); q2.push_back(y4); 
+	q2.push_back(y5); q2.push_back(y6); q2.push_back(y7); q2.push_back(y8); 
+	q2.push_back(y9); q2.push_back(y10); q2.push_back(y11); q2.push_back(y12); 
+	
+	clock_t beginM2 = clock();
+	vector<ResultTuple*> multithreadResult2 = oss->multithreadSolve(testSets);
+	clock_t endM2 = clock();
+	cout << endl << "RESULT FROM MULTITHREAD SOLVE2: " << endl;
+	for (size_t i = 0; i < multithreadResult2.size(); i++){
+		cout << endl << multithreadResult2[i]->toString() << endl;
+	}
+	cout << endl << "SOLVING TIME: " << (endM2 - beginM2) << endl;
+	clock_t beginS2 = clock();
+	vector<ResultTuple*> singlethreadResult2 = oss->singlethreadSolve(testSets);
+	clock_t endS2 = clock();
+	cout << endl << "RESULT FROM SINGLETHREAD SOLVE2: " << endl;
+	for (size_t i = 0; i < singlethreadResult2.size(); i++){
+		cout << endl << singlethreadResult2[i]->toString() << endl;
+	}
+	cout << endl << "SOLVING TIME2: " << (endS2 - beginS2) << endl;
+	CPPUNIT_ASSERT(endM2 - beginM2 <= endS2 - beginS2);
 }

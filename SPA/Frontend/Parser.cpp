@@ -33,9 +33,9 @@ void Parser::constructRelations() {
 	this->controller->constructCalls();
 	this->controller->constructFollows();
 	this->controller->constructModifies();
-	this->controller->constructUses();
 	this->controller->constructParent();
 	this->controller->constructNext();
+	this->controller->constructUses();
 }
 
 Parser::~Parser() {
@@ -65,6 +65,8 @@ void Parser::parse() {
 }
 
 void Parser::debug() {
+	cout << "VarTable: " << controller->varTable->getSize() << endl;
+	cout << "ConstTable: " << controller->constantTable->getSize() << endl;
 	cout << "Statements: " << controller->statementTable->getSize() << endl;
 	cout << "Parent : " << controller->parentTable->getSize() << endl;
 	cout << "Follows : " << controller->followsTable->getSize() << endl;
@@ -73,6 +75,7 @@ void Parser::debug() {
 	cout << "ModifiesProc: " << controller->modifiesTable->getSizeProcModifies() << endl;
 	cout << "UsesStmt: " << controller->usesTable->getSizeStmtUses() << endl;
 	cout << "UsesProc: " << controller->usesTable->getSizeProcUses() << endl;
+	cout << "Debug: Done" << endl;
 }
 
 bool Parser::checkFileExists() {
@@ -404,8 +407,10 @@ void Parser::populateParent(TNode* parent, int line) {
 	if(parent->getParent()->getNodeType() == "WHILE_NODE") 
 		controller->parentTable->insertParent(parent->getStmtNum(), line);
 
-	if(parent->getParent()->getNodeType() == "THEN_NODE" || parent->getParent()->getNodeType() == "ELSE_NODE")
-		controller->parentTable->insertParent(parent->getStmtNum(), line); // stmtLst node has the same line number
+	if(parent->getParent()->getNodeType() == "THEN_NODE" || parent->getParent()->getNodeType() == "ELSE_NODE") {
+		//controller->parentTable->insertParent(parent->getStmtNum(), line); // stmtLst node has the same line number
+		controller->parentTable->insertParent(containerStack.top(), line);
+	}
 }
 
 void Parser::populateFollows(int line, bool isContainer, TNode* prev, TNode* current) {
@@ -439,7 +444,7 @@ void Parser::populateModifies(int line, int procedure) {
 	string currentProcedureName = procedureNames.at(procedure);
 	// for assignment statement
 	controller->modifiesTable->insertModifiesStmt(line, lastVarIndex);
-	controller->modifiesTable->insertModifiesProc(line, procedure);
+	controller->modifiesTable->insertModifiesProc(procedure, lastVarIndex);
 
 	if(callStatements.size() > 0) {
 		for(std::map<int, string>::iterator it=callStatements.begin(); it!=callStatements.end(); ++it) {
@@ -457,7 +462,7 @@ void Parser::populateModifies(int line, int procedure) {
 		tempStack.push(top);
 
 		controller->modifiesTable->insertModifiesStmt(top, lastVarIndex);
-		controller->modifiesTable->insertModifiesProc(top, procedure);
+		controller->modifiesTable->insertModifiesProc(procedure, top);
 		containerStack.pop();
 	}
 

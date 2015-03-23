@@ -89,5 +89,104 @@ void OptimizedQETest::testMakeDisjointSet() {
 	que.push_back(z3);
 	vector<vector<Subquery*> > q;
 	q = qe.makeDisjointSets(que);
-	cout << "end" << endl;
+	cout << endl;
+	for (size_t i = 0; i < q.size(); i++){
+		cout << "Disjoint set number " << i << ": " << endl;
+		for (size_t j = 0; j < q[i].size(); j++){
+			cout << "(";
+			switch (q[i][j]->isSyn){
+				case 0: cout << q[i][j]->leftIndex << ", " << q[i][j]->rightIndex; break;
+				case 1: case 8: cout << q[i][j]->leftIndex << ", " << q[i][j]->rightSynonym; break;
+				case 2: case 7: cout << q[i][j]->leftSynonym << ", " << q[i][j]->rightIndex; break;
+				case 3: case 4: case 5: case 6: cout << q[i][j]->leftSynonym << ", " << q[i][j]->rightSynonym; break;
+			}
+			cout << ") ";
+		}
+		cout << endl;
+	}
+
+	Subquery* t1 = new Subquery(&synonymTable, &pk);
+	t1->setSynonyms("a", "b");
+	Subquery* t2 = new Subquery(&synonymTable, &pk);
+	t2->setSynonyms("b", "c");
+	Subquery* t3 = new Subquery(&synonymTable, &pk);
+	t3->setSynonyms("a", "a");
+	Subquery* t4 = new Subquery(&synonymTable, &pk);
+	t4->setSynonyms("_", "a");
+	Subquery* t5 = new Subquery(&synonymTable, &pk);
+	t5->setSynonyms("_", "_");
+	Subquery* t6 = new Subquery(&synonymTable, &pk);
+	t6->setSynonyms("d", "e");
+	Subquery* t7 = new Subquery(&synonymTable, &pk);
+	t7->setSynonyms("d", 1);
+	Subquery* t8 = new Subquery(&synonymTable, &pk);
+	t8->setSynonyms(1, 2);
+	Subquery* t9 = new Subquery(&synonymTable, &pk);
+	t9->setSynonyms("a", "e");
+	Subquery* t10 = new Subquery(&synonymTable, &pk);
+	t10->setSynonyms("f", "g");
+	Subquery* t11 = new Subquery(&synonymTable, &pk);
+	t11->setSynonyms("g", "g");
+	Subquery* t12 = new Subquery(&synonymTable, &pk);
+	t12->setSynonyms("ga", "y");
+	Subquery* t13 = new Subquery(&synonymTable, &pk);
+	t13->setSynonyms("y", "olo");
+	Subquery* t14 = new Subquery(&synonymTable, &pk);
+	t14->setSynonyms("y", "eo");
+	Subquery* t15 = new Subquery(&synonymTable, &pk);
+	t15->setSynonyms("m", "an");
+	Subquery* t16 = new Subquery(&synonymTable, &pk);
+	t16->setSynonyms("_", "_");
+	Subquery* t17 = new Subquery(&synonymTable, &pk);
+	t17->setSynonyms(12, "_");
+	Subquery* t18 = new Subquery(&synonymTable, &pk);
+	t18->setSynonyms("an", "z");
+	Subquery* t19 = new Subquery(&synonymTable, &pk);
+	t19->setSynonyms("gg", "gg");
+	Subquery* t20 = new Subquery(&synonymTable, &pk);
+	t20->setSynonyms("ba", "ck");
+	Subquery* t21 = new Subquery(&synonymTable, &pk);
+	t21->setSynonyms(14, 14);
+	Subquery* t22 = new Subquery(&synonymTable, &pk);
+	t22->setSynonyms("ck", 15);
+	vector<Subquery*> que1;
+	que1.push_back(t1);
+	que1.push_back(t2);
+	que1.push_back(t3);
+	que1.push_back(t4);
+	que1.push_back(t5);
+	que1.push_back(t6);
+	que1.push_back(t7);
+	que1.push_back(t8);
+	que1.push_back(t9);
+	que1.push_back(t10);
+	que1.push_back(t11);
+	que1.push_back(t12);
+	que1.push_back(t13);
+	que1.push_back(t14);
+	que1.push_back(t15);
+	que1.push_back(t16);
+	que1.push_back(t17);
+	que1.push_back(t18);
+	que1.push_back(t19);
+	que1.push_back(t20);
+	que1.push_back(t21);
+	que1.push_back(t22);
+	vector<vector<Subquery*> > q1;
+	q1 = qe.makeDisjointSets(que1);
+	cout << endl;
+	for (size_t i = 0; i < q1.size(); i++){
+		cout << "Disjoint set number " << i << ": " << endl;
+		for (size_t j = 0; j < q1[i].size(); j++){
+			cout << "(";
+			switch (q1[i][j]->isSyn){
+				case 0: cout << q1[i][j]->leftIndex << ", " << q1[i][j]->rightIndex; break;
+				case 1: case 8: cout << q1[i][j]->leftIndex << ", " << q1[i][j]->rightSynonym; break;
+				case 2: case 7: cout << q1[i][j]->leftSynonym << ", " << q1[i][j]->rightIndex; break;
+				case 3: case 4: case 5: case 6: cout << q1[i][j]->leftSynonym << ", " << q1[i][j]->rightSynonym; break;
+			}
+			cout << ") ";
+		}
+		cout << endl;
+	}
 }

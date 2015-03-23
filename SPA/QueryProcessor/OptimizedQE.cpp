@@ -54,9 +54,9 @@ vector<vector<Subquery*> > OptimizedQE::makeDisjointSets(vector<Subquery*> syn){
 	});
 	for_each(syn.begin(), syn.end(), [&](Subquery* s) {
 		if (s->isSyn == 3){
-			if (s->leftSynonym <= s->rightSynonym){
+			if (s->leftSynonym < s->rightSynonym){
 				setParent(&parents, s->leftSynonym, s->rightSynonym);
-			} else {
+			} else if (s->leftSynonym > s->rightSynonym){
 				setParent(&parents, s->rightSynonym, s->leftSynonym);
 			}
 		}

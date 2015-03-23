@@ -11,7 +11,7 @@
 class OptimizedSubquerySolverTest : public CPPUNIT_NS::TestFixture // Note 2 
 { 
 	CPPUNIT_TEST_SUITE( OptimizedSubquerySolverTest ); // Note 3 
-	CPPUNIT_TEST(testOSS);
+	//CPPUNIT_TEST(testOSS);
 	CPPUNIT_TEST_SUITE_END();
 
 public:

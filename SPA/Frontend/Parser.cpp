@@ -479,10 +479,13 @@ void Parser::populateModifies(int line, int procedure) {
 }
 
 void Parser::populateUses(int line, int procedure, bool assignStatement) {
+	set<int> callers = controller->callsTable->getCallerS(procedure);
 	string currentProcedureName = procedureNames.at(procedure);
 	if(assignStatement) {
+
 		controller->usesTable->insertUsesStmt(line, lastVarIndex);
-		controller->usesTable->insertUsesProc(line, procedure);
+		controller->usesTable->insertUsesProc(procedure, lastVarIndex); 
+
 		if(callStatements.size() > 0) {
 			for(std::map<int, string>::iterator it=callStatements.begin(); it!=callStatements.end(); ++it) {
 				if(it->second == currentProcedureName) {
@@ -491,6 +494,10 @@ void Parser::populateUses(int line, int procedure, bool assignStatement) {
 			}
 		}
 	}
+
+	for_each(callers.begin(), callers.end(), [&](int num){
+		controller->usesTable->insertUsesProc(num, lastVarIndex);
+	});
 
 	stack<int> tempStack = stack<int>();
 	while(containerStack.size() > 0) {
@@ -505,7 +512,7 @@ void Parser::populateUses(int line, int procedure, bool assignStatement) {
 				}
 			}
 		}
-		controller->usesTable->insertUsesProc(top, procedure);
+		controller->usesTable->insertUsesProc(procedure, lastVarIndex);
 		containerStack.pop();
 	}
 

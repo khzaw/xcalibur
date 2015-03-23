@@ -24,7 +24,6 @@ Parser::Parser(string filepath) {
 	this->currentProc = -1;
 	this->previousStmt = 0;			// for poulation of follows
 	this->prev = NULL;
-
 	this->lastVarIndex = -1;		// for modifies population
 	parse();
 	constructRelations();

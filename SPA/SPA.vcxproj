@@ -33,6 +33,8 @@
     <ClCompile Include="PKB\PKBController.cpp" />
     <ClCompile Include="PKB\ProcTable.cpp" />
     <ClCompile Include="PKB\Calls.cpp" />
+    <ClCompile Include="QueryProcessor\AffectsStarSubquery.cpp" />
+    <ClCompile Include="QueryProcessor\AffectsSubquery.cpp" />
     <ClCompile Include="QueryProcessor\NextStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\NextSubquery.cpp" />
     <ClCompile Include="QueryProcessor\NewQueryParser.cpp" />

@@ -71,7 +71,7 @@ public:
 		tuple->addSynonymToMap(leftSynonym, index);
 		set<int> tempPrevious;
 		if (isSyn == 2) {	// Affects(syn, stmt): Get Previous of stmt
-			tempPrevious = pkb->affectsExtractor->getAffects(rightIndex);
+			tempPrevious = pkb->affectsExtractor->getAffectsBy(rightIndex);
 		} else {	// Affects(syn, _): Get all Previous stmt
 			// getAllPrevious Statements
 			tempPrevious = set<int>();
@@ -175,13 +175,13 @@ public:
 
 		vector<int> previous = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 		for (size_t i = 0; i < previous.size(); i++) {
-			set<int> tempAffects = pkb->affectsExtractor->getAffects(previous[i]);
-			vector<int> affects(tempAffects.begin(), tempAffects.end());
-			for (size_t j = 0; j < affects.size(); j++) {
-				vector<int> row = vector<int>();
-				row.push_back(previous.at(i));
-				row.push_back(affects.at(j));
-				tuple->addResultRow(row);
+			for (size_t j = 0; j < previous.size(); j++) {
+				if (pkb->affectsExtractor->isAffects(previous[i], previous[j])) {
+					vector<int> row = vector<int>();
+					row.push_back(previous.at(i));
+					row.push_back(previous.at(j));
+					tuple->addResultRow(row);
+				}
 			}
 		}
 		return tuple;

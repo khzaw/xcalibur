@@ -441,6 +441,7 @@ void Parser::populateFollows(int line, bool isContainer, TNode* prev, TNode* cur
 
 void Parser::populateModifies(int line, int procedure) {
 
+	set<int> callers = controller->callsTable->getCallerS(procedure);
 	string currentProcedureName = procedureNames.at(procedure);
 	// for assignment statement
 	controller->modifiesTable->insertModifiesStmt(line, lastVarIndex);
@@ -452,7 +453,12 @@ void Parser::populateModifies(int line, int procedure) {
 				controller->modifiesTable->insertModifiesStmt(it->first, lastVarIndex);
 			}
 		}
+
 	}
+
+	for_each(callers.begin(), callers.end(), [&](int num){
+		controller->modifiesTable->insertModifiesProc(num, lastVarIndex);
+	});
 	
 
 	// container statements

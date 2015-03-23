@@ -20,6 +20,7 @@
 #include "..\PKB\ModifiesExtractor.h"
 #include "..\PKB\UsesExtractor.h"
 #include "..\PKB\NextExtractor.h"
+#include "..\PKB\AffectsExtractor.h"
 
 
 using namespace std;
@@ -43,6 +44,7 @@ public:
 	ModifiesExtractor* modifiesExtractor;
 	UsesExtractor* usesExtractor;
 	NextExtractor* nextExtractor;
+	AffectsExtractor* affectsExtractor;
 
 	PKBController();
 	~PKBController();

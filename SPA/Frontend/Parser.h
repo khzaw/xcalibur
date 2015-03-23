@@ -25,6 +25,7 @@ class Parser {
 	stack<int> containerStack;
 	vector<string> procedureNames;
 	map<int, string> callStatements;
+	map<int, set<int>> procAndContainers;
 
 public:
 	PKBController* controller;
@@ -60,9 +61,11 @@ private:
 	void populateFollows(int, bool, TNode*, TNode* );
 	void populateUses(int, int, bool = false);
 	void populateModifies(int, int);
+	void populateCallsModifies(int, int);
 	void populateRoot(TNode*, int);
 
 	void popOperator(Operator);
 
+	void populateProcAndContainers(int, int);
 	void constructRelations();
 };

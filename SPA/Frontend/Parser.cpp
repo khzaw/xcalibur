@@ -154,6 +154,7 @@ void Parser::stmt(TNode* parent) {
 		populateParent(parent, line);
 
 		string newProcedure = procedureName();
+
 		controller->callsTable->insertCalls(currentProc, getProcedureIndex(newProcedure));
 		callStatements.insert(pair<int, string>(line, newProcedure));
 		match(";");
@@ -171,6 +172,7 @@ void Parser::stmt(TNode* parent) {
 		populateFollows(line, true, prev, whileNode);
 		containerStack.push(line);
 
+		populateProcAndContainers(currentProc, line);
 
 		//TNode* whileVarNode = createASTNode("VAR_NODE", nextToken.name, whileNode, line, currentProc);
 		whileNode->setData(nextToken.name);
@@ -195,6 +197,8 @@ void Parser::stmt(TNode* parent) {
 		populateParent(parent, line);
 		populateFollows(line, true, prev, ifNode);
 		containerStack.push(line);
+
+		populateProcAndContainers(currentProc, line);
 
 		//TNode* ifVarNode = createASTNode("VAR_NODE", nextToken.name, ifNode, line, currentProc);
 		ifNode->setData(nextToken.name);
@@ -447,10 +451,16 @@ void Parser::populateModifies(int line, int procedure) {
 	controller->modifiesTable->insertModifiesStmt(line, lastVarIndex);
 	controller->modifiesTable->insertModifiesProc(procedure, lastVarIndex);
 
+	set<int>::iterator it;
+
+
+
 	if(callStatements.size() > 0) {
 		for(std::map<int, string>::iterator it=callStatements.begin(); it!=callStatements.end(); ++it) {
 			if(it->second == currentProcedureName) {
 				controller->modifiesTable->insertModifiesStmt(it->first, lastVarIndex);
+
+
 			}
 		}
 
@@ -476,6 +486,18 @@ void Parser::populateModifies(int line, int procedure) {
 		containerStack.push(tempStack.top());
 		tempStack.pop();
 	}
+}
+
+void Parser::populateProcAndContainers(int procedure, int containerLine) {
+	map<int, set<int>>::iterator it = procAndContainers.find(procedure);
+	if(it != procAndContainers.end()) {
+		it->second.insert(containerLine);
+	} else {
+		set<int> newSet;
+		newSet.insert(containerLine);
+		procAndContainers.insert(pair<int, set<int>>(procedure, newSet));
+	}
+
 }
 
 void Parser::populateUses(int line, int procedure, bool assignStatement) {

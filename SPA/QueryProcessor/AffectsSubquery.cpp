@@ -75,7 +75,7 @@ public:
 		} else {	// Affects(syn, _): Get all Previous stmt
 			// getAllPrevious Statements
 			tempPrevious = set<int>();
-			vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("assign");
+			vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 			for (size_t i = 0; i < assStmt.size(); i++) {
 				for (size_t j = 0; j < assStmt.size(); j++) {
 					if (pkb->affectsExtractor->isAffects(assStmt[i], assStmt[j])) {
@@ -126,7 +126,7 @@ public:
 			tempNext = pkb->affectsExtractor->getAffects(leftIndex);
 		} else {	// Affects(_, syn): Get all Affected stmt
 			tempNext = set<int>();
-			vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("assign");
+			vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 			for (size_t i = 0; i < assStmt.size(); i++) {
 				for (size_t j = 0; j < assStmt.size(); j++) {
 					if (pkb->affectsExtractor->isAffects(assStmt[i], assStmt[j])) {
@@ -173,7 +173,7 @@ public:
 		index = tuple->addSynonym(rightSynonym);
 		tuple->addSynonymToMap(rightSynonym, index);
 
-		vector<int> previous = pkb->statementTable->getStmtNumUsingNodeType("assign");
+		vector<int> previous = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 		for (size_t i = 0; i < previous.size(); i++) {
 			set<int> tempAffects = pkb->affectsExtractor->getAffects(previous[i]);
 			vector<int> affects(tempAffects.begin(), tempAffects.end());
@@ -251,7 +251,7 @@ public:
 		} else if (isSyn == 8) {	//(digit, _)
 			tuple->setEmpty(pkb->affectsExtractor->getAffects(leftIndex).empty());
 		} else {	//(_, _)
-			vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("assign");
+			vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 			for (size_t i = 0; i < assStmt.size(); i++) {
 				for (size_t j = 0; j < assStmt.size(); j++) {
 					if (pkb->affectsExtractor->isAffects(assStmt[i], assStmt[j])) {

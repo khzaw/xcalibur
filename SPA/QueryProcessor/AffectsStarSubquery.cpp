@@ -34,14 +34,14 @@ public:
 		//right synonym
 		if(isSyn == 1 || isSyn == 4 || isSyn == 3) {
 			string s = synonymTable->at(rightSynonym);
-			if (s != "assign") {
+			if (s != "ASSIGN_NODE") {
 				return false;
 			}
 		}
 		//left synonym
 		if (isSyn == 2 || isSyn == 5 || isSyn == 3) {
 			string s = synonymTable->at(leftSynonym);
-			if (s != "assign") {
+			if (s != "ASSIGN_NODE") {
 				return false;
 			}
 		}
@@ -75,7 +75,7 @@ public:
 		} else {	// AffectsStar(syn, _): Get all Previous stmt
 			// getAllPrevious Statements
 			tempPrevious = set<int>();
-			vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("assign");
+			vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 			for (size_t i = 0; i < assStmt.size(); i++) {
 				for (size_t j = 0; j < assStmt.size(); j++) {
 					if (pkb->affectsExtractor->isAffectsStar(assStmt[i], assStmt[j])) {
@@ -126,7 +126,7 @@ public:
 			tempNext = pkb->affectsExtractor->getAffectsStar(leftIndex);
 		} else {	// AffectsStar(_, syn): Get all Affected stmt
 			tempNext = set<int>();
-			vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("assign");
+			vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 			for (size_t i = 0; i < assStmt.size(); i++) {
 				for (size_t j = 0; j < assStmt.size(); j++) {
 					if (pkb->affectsExtractor->isAffectsStar(assStmt[i], assStmt[j])) {
@@ -173,7 +173,7 @@ public:
 		index = tuple->addSynonym(rightSynonym);
 		tuple->addSynonymToMap(rightSynonym, index);
 
-		vector<int> previous = pkb->statementTable->getStmtNumUsingNodeType("assign");
+		vector<int> previous = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 		for (size_t i = 0; i < previous.size(); i++) {
 			set<int> tempAffectsStar = pkb->affectsExtractor->getAffectsStar(previous[i]);
 			vector<int> AffectsStar(tempAffectsStar.begin(), tempAffectsStar.end());
@@ -251,7 +251,7 @@ public:
 		} else if (isSyn == 8) {	//(digit, _)
 			tuple->setEmpty(pkb->affectsExtractor->getAffectsStar(leftIndex).empty());
 		} else {	//(_, _)
-			vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("assign");
+			vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 			for (size_t i = 0; i < assStmt.size(); i++) {
 				for (size_t j = 0; j < assStmt.size(); j++) {
 					if (pkb->affectsExtractor->isAffectsStar(assStmt[i], assStmt[j])) {

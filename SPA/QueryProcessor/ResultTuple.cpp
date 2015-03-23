@@ -2,6 +2,10 @@
 #include <vector>
 #include <string>
 #include "ResultTuple.h"
+#include <Windows.h>
+#include <process.h>
+#include <ppl.h>
+#include <concurrent_vector.h>
 
 using namespace std;
 
@@ -107,9 +111,30 @@ ResultTuple* ResultTuple::cross(ResultTuple* other) {
 	for (size_t i = 0; i < tempSyn.size(); i++) {
 		final->addSynonymToMap(tempSyn[i], i);
 	}
-
+	
 	//cross product
 	int s1 = results.size();
+	/*
+	int s2 = other->getAllResults().size();
+	Concurrency::concurrent_vector<vector<int >> concAns;
+	vector<vector<int>> tempResults = getAllResults();
+	Concurrency::parallel_for_each(begin(tempResults), end(tempResults), [&](vector<int > n) {
+		//concAns.push_back(solveSet(n));
+		for (int j = 0; j < s2; j++) {	
+			vector<int> temp = vector<int>();
+			vector<int> tempResult = n;
+			vector<int> otherTempResult = other->getAllResults()[j];
+			temp.insert(temp.end(), tempResult.begin(), tempResult.end());
+			temp.insert(temp.end(), otherTempResult.begin(), otherTempResult.end());
+			concAns.push_back(temp);
+		}
+	});
+
+	for (size_t i = 0; i < concAns.size(); i++) {
+		final->addResultRow(concAns[i]);
+	}
+	*/
+	
 	for (int i = 0; i < s1; i++) {
 		int s2 = other->getAllResults().size();
 		for (int j = 0; j < s2; j++) {	
@@ -121,6 +146,7 @@ ResultTuple* ResultTuple::cross(ResultTuple* other) {
 			final->addResultRow(temp);
 		}
 	}
+	
 
 	return final;
 }

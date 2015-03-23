@@ -56,22 +56,9 @@ bool QE::validateQueries() {
 }
 
 void QE::basicSolve() {
-	//for (size_t i = 0; i < queries.size(); i++) {
-	//	ResultTuple* interim = queries[i]->solve();
-	//	if (interim->isBool() && interim->isEmpty()) {
-	//		solution = new ResultTuple();
-	//		return;
-	//	}
-	//	if (i > 0) {
-	//		solution = solution->join(interim);
-	//	} else {
-	//		solution = interim;
-	//	}
-	//} 
-
 	solution = queries[0]->solve();
 	for(size_t i = 1; i < queries.size(); i++) {
-		if((solution->getSynonymIndex(queries[i]->leftSynonym) != 1) || (solution->getSynonymIndex(queries[i]->rightSynonym) != -1)) {
+		if((solution->getSynonymIndex(queries[i]->leftSynonym) != -1) || (solution->getSynonymIndex(queries[i]->rightSynonym) != -1)) {
 			solution = queries[i]->solve(solution);
 		} else {
 			ResultTuple* interim = queries[i]->solve();

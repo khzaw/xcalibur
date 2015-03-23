@@ -31,7 +31,7 @@ public:
 	void unionQuerySets();
 	void sortQuerySets();
 	void solveQuerySets();
-	void joinQuerySolutions();
+	void joinQuerySolutions(vector<ResultTuple*>);
 };
 
 struct pairCompare {

@@ -6,6 +6,7 @@
 #include <algorithm>
 
 #include "OptimizedQE.h"
+#include "OptimizedSubquerySolver.h"
 #include "Subquery.h"
 #include "ResultTuple.h"
 
@@ -17,20 +18,10 @@ OptimizedQE::OptimizedQE(){
 // syn = synonyms required in solution. Put Boolean in here too
 OptimizedQE::OptimizedQE(vector<Subquery*> syn) {
 	disjointCheck = map<string, int>();	//string for synonym, int for positions in the vector which hold the synonym
-	queries = vector<vector<Subquery*> >();
-	unionOrder = vector<pair<int, int> >();
+	queries = makeDisjointSets(syn);
 	solutions = vector<ResultTuple*>();
 	finalSolution = new ResultTuple();
-	splitIntoDisjoint(syn);
 	sortQuerySets();
-}
-
-void OptimizedQE::splitIntoDisjoint(vector<Subquery*> syn) {
-	/*for (size_t i = 0; i < syn.size(); i++) {
-		addQuery(syn[i]);
-	}
-	unionQuerySets();*/
-	queries = makeDisjointSets(syn);
 }
 
 vector<vector<Subquery*> > OptimizedQE::makeDisjointSets(vector<Subquery*> syn){
@@ -171,8 +162,8 @@ void OptimizedQE::unionQuerySets() {
 }
 
 ResultTuple* OptimizedQE::solve() {
-	solveQuerySets();
-	joinQuerySolutions();
+	OptimizedSubquerySolver qss = OptimizedSubquerySolver();
+	joinQuerySolutions(qss.multithreadSolve(queries));
 	return finalSolution;
 }
 
@@ -257,11 +248,11 @@ void OptimizedQE::solveQuerySets() {
 	}
 }
 
-void OptimizedQE::joinQuerySolutions() {
-	if (solutions.size() > 0) {
-		finalSolution = solutions[0];
+void OptimizedQE::joinQuerySolutions(vector<ResultTuple*> r) {
+	if (r.size() > 0) {
+		finalSolution = r[0];
 	}
-	for (size_t i = 1; i < solutions.size(); i++) {
-		finalSolution = finalSolution->cross(solutions[i]);
+	for (size_t i = 1; i < r.size(); i++) {
+		finalSolution = finalSolution->cross(r[i]);
 	}
 }

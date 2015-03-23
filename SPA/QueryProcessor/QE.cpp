@@ -14,7 +14,7 @@ using namespace std;
 
 // syn = synonyms required in solution. Put Boolean in here too
 QE::QE(vector<string> syn, PKBController* p) {
-	useOptimizedSolver = false;
+	useOptimizedSolver = true;
 	synonyms = syn;
 	queries = vector<Subquery*>();
 	pkb = p;

@@ -99,9 +99,10 @@ ResultTuple* ResultTuple::cross(ResultTuple* other) {
 	ResultTuple* final = new ResultTuple();
 
 	//adding synonym
+	vector<string> temp2 = other->getSynonyms();
 	vector<string> tempSyn = vector<string>();
 	tempSyn.insert(tempSyn.end(), synonyms.begin(), synonyms.end());
-	tempSyn.insert(tempSyn.end(), other->getSynonyms().begin(), other->getSynonyms().end());
+	tempSyn.insert(tempSyn.end(), temp2.begin(), temp2.end());
 	final->setSynonym(tempSyn);
 	for (size_t i = 0; i < tempSyn.size(); i++) {
 		final->addSynonymToMap(tempSyn[i], i);
@@ -113,8 +114,10 @@ ResultTuple* ResultTuple::cross(ResultTuple* other) {
 		int s2 = other->getAllResults().size();
 		for (int j = 0; j < s2; j++) {	
 			vector<int> temp = vector<int>();
-			temp.insert(temp.end(), results[i].begin(), results[i].end());
-			temp.insert(temp.end(), other->getAllResults()[j].begin(), other->getAllResults()[j].end());
+			vector<int> tempResult = results[i];
+			vector<int> otherTempResult = other->getAllResults()[j];
+			temp.insert(temp.end(), tempResult.begin(), tempResult.end());
+			temp.insert(temp.end(), otherTempResult.begin(), otherTempResult.end());
 			final->addResultRow(temp);
 		}
 	}

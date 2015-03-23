@@ -462,7 +462,7 @@ void Parser::populateModifies(int line, int procedure) {
 		tempStack.push(top);
 
 		controller->modifiesTable->insertModifiesStmt(top, lastVarIndex);
-		controller->modifiesTable->insertModifiesProc(procedure, top);
+		controller->modifiesTable->insertModifiesProc(procedure, lastVarIndex); 
 		containerStack.pop();
 	}
 

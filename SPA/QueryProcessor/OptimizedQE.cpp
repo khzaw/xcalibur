@@ -11,6 +11,9 @@
 
 using namespace std;
 
+OptimizedQE::OptimizedQE(){
+}
+
 // syn = synonyms required in solution. Put Boolean in here too
 OptimizedQE::OptimizedQE(vector<Subquery*> syn) {
 	disjointCheck = map<string, int>();	//string for synonym, int for positions in the vector which hold the synonym
@@ -23,10 +26,92 @@ OptimizedQE::OptimizedQE(vector<Subquery*> syn) {
 }
 
 void OptimizedQE::splitIntoDisjoint(vector<Subquery*> syn) {
-	for (size_t i = 0; i < syn.size(); i++) {
+	/*for (size_t i = 0; i < syn.size(); i++) {
 		addQuery(syn[i]);
 	}
-	unionQuerySets();
+	unionQuerySets();*/
+	queries = makeDisjointSets(syn);
+}
+
+vector<vector<Subquery*> > OptimizedQE::makeDisjointSets(vector<Subquery*> syn){
+	vector<vector<Subquery*> > results;
+	set<string> synonyms;
+	for_each(syn.begin(), syn.end(), [&](Subquery* s) {
+		if (s->isSyn == 1 || s->isSyn == 4){
+			synonyms.insert(s->rightSynonym);
+		}
+		if (s->isSyn == 2 || s->isSyn == 5){
+			synonyms.insert(s->leftSynonym);
+		}
+		if (s->isSyn == 3){
+			synonyms.insert(s->leftSynonym);
+			synonyms.insert(s->rightSynonym);
+		}
+	});
+	map<string, string> parents;
+	for_each(synonyms.begin(), synonyms.end(), [&](string s){
+		parents.insert(make_pair(s, s));
+	});
+	for_each(syn.begin(), syn.end(), [&](Subquery* s) {
+		if (s->isSyn == 3){
+			if (s->leftSynonym <= s->rightSynonym){
+				setParent(&parents, s->leftSynonym, s->rightSynonym);
+			} else {
+				setParent(&parents, s->rightSynonym, s->leftSynonym);
+			}
+		}
+	});
+	int numSet = 0;
+	map<string, int> synToSet;
+	for_each(synonyms.begin(), synonyms.end(), [&](string s) {
+		if (parents.at(s) == s){
+			synToSet.insert(make_pair(s, numSet));
+			numSet++;
+		} else {
+			string parent = findParent(s, &parents);
+			synToSet.insert(make_pair(s, synToSet.at(parent)));
+		}
+	});
+	for (int i = 0; i < numSet; i++){
+		vector<Subquery* > temp;
+		results.push_back(temp);
+	}
+	for_each(syn.begin(), syn.end(), [&](Subquery* s) {
+		if (s->isSyn == 1 || s->isSyn == 4){
+			int index = synToSet.at(s->rightSynonym);
+			results[index].push_back(s);
+		} else if (s->isSyn == 2 || s->isSyn == 5){
+			int index = synToSet.at(s->leftSynonym);
+			results[index].push_back(s);
+		} else if (s->isSyn == 3){
+			int index = synToSet.at(s->leftSynonym);
+			results[index].push_back(s);
+		} else {
+			vector<Subquery*> temp;
+			temp.push_back(s);
+			results.push_back(temp);
+		}
+	});
+	return results;
+}
+
+void OptimizedQE::setParent(map<string, string>* parents, string parent, string child){
+	if (parents->at(child) == child){
+		parents->at(child) = parent;
+	} else if (parents->at(child) > parent){
+		setParent(parents, parent, parents->at(child));
+	} else if (parents->at(child) < parent){
+		setParent(parents, parents->at(child), parent);
+		parents->at(child) = parent;
+	}
+}
+
+string OptimizedQE::findParent(string child, map<string, string>* parents){
+	if (child == parents->at(child)){
+		return child;
+	} else {
+		return findParent(parents->at(child), parents);
+	}
 }
 
 void OptimizedQE::addQuery(Subquery* q) {

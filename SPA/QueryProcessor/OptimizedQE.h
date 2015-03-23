@@ -21,9 +21,13 @@ public:
 	ResultTuple* finalSolution;
 	vector<vector<Subquery*>> queries;
 
+	OptimizedQE();
 	OptimizedQE(vector<Subquery*>);
 	ResultTuple* solve();
 	void splitIntoDisjoint(vector<Subquery*>);
+	vector<vector<Subquery*> > makeDisjointSets(vector<Subquery*>);
+	void setParent(map<string, string>*, string, string);
+	string findParent(string, map<string, string>*);
 	void unionQuerySets();
 	void sortQuerySets();
 	void solveQuerySets();

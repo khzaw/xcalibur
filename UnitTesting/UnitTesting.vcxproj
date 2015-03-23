@@ -80,6 +80,7 @@
     <ClCompile Include="testFollows.cpp" />
     <ClCompile Include="testIterativeCFG.cpp" />
     <ClCompile Include="TestModifies.cpp" />
+    <ClCompile Include="TestOptimizedQE.cpp" />
     <ClCompile Include="TestOptimizedSubquerySolver.cpp" />
     <ClCompile Include="testParent.cpp" />
     <ClCompile Include="TestProcTable.cpp" />
@@ -100,6 +101,7 @@
     <ClInclude Include="testConstant.h" />
     <ClInclude Include="testFollows.h" />
     <ClInclude Include="TestModifies.h" />
+    <ClInclude Include="TestOptimizedQE.h" />
     <ClInclude Include="TestOptimizedSubquerySolver.h" />
     <ClInclude Include="testParent.h" />
     <ClInclude Include="TestParser.h" />

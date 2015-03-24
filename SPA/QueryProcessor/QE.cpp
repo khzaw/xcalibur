@@ -8,6 +8,7 @@
 #include "QE.h"
 #include "OptimizedQE.h"
 #include "Subquery.h"
+#include "StubSubquery.cpp"
 #include "ResultTuple.h"
 
 using namespace std;
@@ -49,12 +50,35 @@ list<string> QE::solve() {
 }
 
 bool QE::validateQueries() {
-	// can check extra synonyms here.
+	map<string, int> synMap = map<string, int>();
 	for (size_t i = 0; i < queries.size(); i++) {
+		switch(queries[i]->isSyn) {
+			case 1: case 4:
+				synMap.insert(make_pair(queries[i]->rightSynonym, i));
+				break;
+			case 2: case 5:
+				synMap.insert(make_pair(queries[i]->leftSynonym, i));
+				break;
+			case 3:
+				synMap.insert(make_pair(queries[i]->rightSynonym, i));
+				synMap.insert(make_pair(queries[i]->leftSynonym, i));
+				break;
+		}
+		
 		if (!queries[i]->validate()) {
 			return false;
 		}
 	}
+
+	//check for extra synonyms
+	for (size_t i = 0; i < synonyms.size() ; i++) {
+		if (synMap.find(synonyms[i]) == synMap.end()) {
+			StubSubquery* s = new StubSubquery(&synonymTable, pkb);//new StubSubquery(synonymTable, pkb); 
+			s->setSynonyms(synonyms[i], 0);
+			addQuery(s);
+		}
+	}
+
 	return true;
 }
 

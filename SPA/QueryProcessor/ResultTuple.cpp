@@ -114,7 +114,6 @@ ResultTuple* ResultTuple::cross(ResultTuple* other) {
 	
 	//cross product
 	int s1 = results.size();
-	/*
 	int s2 = other->getAllResults().size();
 	Concurrency::concurrent_vector<vector<int >> concAns;
 	vector<vector<int>> tempResults = getAllResults();
@@ -133,8 +132,8 @@ ResultTuple* ResultTuple::cross(ResultTuple* other) {
 	for (size_t i = 0; i < concAns.size(); i++) {
 		final->addResultRow(concAns[i]);
 	}
-	*/
-	
+
+	/*
 	for (int i = 0; i < s1; i++) {
 		int s2 = other->getAllResults().size();
 		for (int j = 0; j < s2; j++) {	
@@ -146,7 +145,7 @@ ResultTuple* ResultTuple::cross(ResultTuple* other) {
 			final->addResultRow(temp);
 		}
 	}
-	
+	*/
 
 	return final;
 }

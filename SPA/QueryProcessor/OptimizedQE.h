@@ -24,6 +24,7 @@ public:
 	OptimizedQE();
 	OptimizedQE(vector<Subquery*>);
 	ResultTuple* solve();
+	vector<ResultTuple*> solve2();
 	void splitIntoDisjoint(vector<Subquery*>);
 	vector<vector<Subquery*> > makeDisjointSets(vector<Subquery*>);
 	void setParent(map<string, string>*, string, string);

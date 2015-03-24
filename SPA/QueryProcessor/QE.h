@@ -18,12 +18,15 @@ public:
 	map<string, string> synonymTable;
 	vector<string> synonyms;
 	ResultTuple* solution;
+	vector<ResultTuple*> answers;
 	vector<Subquery*> queries;
 	bool validateQueries();
 	QE(vector<string>, PKBController*);
 	void setSynonymTable(map<string, string>);
 	void addQuery(Subquery*);
-	
+	map<int, list<string>> memo;
+
+	list<string> getAnswers(vector<int>, vector<int>, int, int);
 	list<string> solve();
 	void trimSolution();
 	void basicSolve();

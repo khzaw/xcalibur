@@ -167,6 +167,11 @@ ResultTuple* OptimizedQE::solve() {
 	return finalSolution;
 }
 
+vector<ResultTuple*> OptimizedQE::solve2() {
+	OptimizedSubquerySolver qss = OptimizedSubquerySolver();
+	return qss.multithreadSolve(queries);
+}
+
 void OptimizedQE::sortQuerySets() {
 	// sort each vector
 	for (size_t i = 0; i < queries.size(); i++) {

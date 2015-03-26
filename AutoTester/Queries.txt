@@ -10,6 +10,6 @@ Select a such that Modifies (a, "y") and Uses (a, "y")
 5000
 4 - Next*
 stmt a, b, c, d, e, f, g, h, i; variable v;
-Select c such that Next*(a, b) and Next*(c, d)
+Select <a, c, d> such that Next*(a, b) and Next*(c, d)
 m,x,y,z
 100000

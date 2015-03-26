@@ -20,9 +20,10 @@ public:
 	vector<ResultTuple*> solutions;
 	ResultTuple* finalSolution;
 	vector<vector<Subquery*>> queries;
+	vector<string> synonyms;
 
 	OptimizedQE();
-	OptimizedQE(vector<Subquery*>);
+	OptimizedQE(vector<Subquery*>, vector<string>);
 	ResultTuple* solve();
 	vector<ResultTuple*> solve2();
 	void splitIntoDisjoint(vector<Subquery*>);
@@ -33,6 +34,7 @@ public:
 	void sortQuerySets();
 	void solveQuerySets();
 	void joinQuerySolutions(vector<ResultTuple*>);
+	ResultTuple* optimizedJoin(vector<ResultTuple*>);
 };
 
 struct pairCompare {

@@ -177,6 +177,9 @@
     <ClCompile Include="QueryProcessor\AffectsStarSubquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
+    <ClCompile Include="QueryProcessor\StubSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PKB\AST.h">

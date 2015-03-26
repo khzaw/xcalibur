@@ -39,7 +39,7 @@ list<string> QE::solve() {
 	}
 
 	if (useOptimizedSolver) {
-		OptimizedQE solver = OptimizedQE(queries);
+		OptimizedQE solver = OptimizedQE(queries, synonyms);
 		solution = solver.solve();
 		//answers = solver.solve2();
 	} else {

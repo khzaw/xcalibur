@@ -40,6 +40,7 @@
     <ClCompile Include="QueryProcessor\NewQueryParser.cpp" />
     <ClCompile Include="QueryProcessor\OptimizedSubquerySolver.cpp" />
     <ClCompile Include="QueryProcessor\PatternSubquery.cpp" />
+    <ClCompile Include="QueryProcessor\StubSubquery.cpp" />
     <ClCompile Include="QueryProcessor\UsesSubquery.cpp" />
     <ClCompile Include="QueryProcessor\WithSubquery.cpp" />
     <ClInclude Include="Frontend\Parser.h" />

@@ -2,6 +2,16 @@
 #include <iostream>
 #include <map>
 #include <vector>
+//#include <windows.h>
+
+/*
+CRITICAL_SECTION cs_nStar;
+CRITICAL_SECTION cs_pStar;
+CRITICAL_SECTION cs_affects;
+CRITICAL_SECTION cs_affected;
+CRITICAL_SECTION cs_affectsStar;
+CRITICAL_SECTION cs_affectedStar;
+*/
 
 using namespace std;
 
@@ -46,5 +56,11 @@ public:
 	void insertAffectsStarCache(int, vector<int>);
 	void insertAffectedStarCache(int, vector<int>);
 
+	void updateNextStarCache(map<int, vector<int>>);
+	void updatePreviousStarCache(map<int, vector<int>>);
+	void updateAffectsCache(map<int, vector<int>>);
+	void updateAffectedCache(map<int, vector<int>>);
+	void updateAffectsStarCache(map<int, vector<int>>);
+	void updateAffectedStarCache(map<int, vector<int>>);
 };
 

@@ -18,6 +18,7 @@
     <ClCompile Include="Frontend\Operator.cpp" />
     <ClCompile Include="Frontend\TNode.cpp" />
     <ClCompile Include="PKB\AffectsExtractor.cpp" />
+    <ClCompile Include="PKB\CacheTable.cpp" />
     <ClCompile Include="PKB\iterativeCFG.cpp" />
     <ClCompile Include="PKB\CFG.cpp" />
     <ClCompile Include="PKB\GNode.cpp" />
@@ -45,6 +46,7 @@
     <ClCompile Include="QueryProcessor\WithSubquery.cpp" />
     <ClInclude Include="Frontend\Parser.h" />
     <ClInclude Include="PKB\AffectsExtractor.h" />
+    <ClInclude Include="PKB\CacheTable.h" />
     <ClInclude Include="PKB\CallsExtractor.cpp" />
     <ClInclude Include="PKB\iterativeCFG.h" />
     <ClInclude Include="PKB\CfgNode.cpp" />

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
+
 #include "CacheTable.h"
 
 using namespace std;
@@ -16,15 +17,15 @@ CacheTable::CacheTable() {
 }
 
 /***ACCESSORS***/
-map<pair<int, int>, bool> CacheTable::getPairAffectsStarCache(){
+map<pair<int, int>, bool> CacheTable::getPairNextStarCache(){
 	return pairNextStarCache;	
 }
 
-map<int, vector<int>> CacheTable::getAffectsStarCache() {
+map<int, vector<int>> CacheTable::getNextStarCache() {
 	return nextStarCache;
 }
 
-map<int, vector<int>> CacheTable::getAffectedStarCache() {
+map<int, vector<int>> CacheTable::getPreviousStarCache() {
 	return previousStarCache;
 }
 
@@ -53,11 +54,11 @@ map<int, vector<int>> CacheTable::getAffectedStarCache() {
 }
 
 /***MODIFIERS***/
-void CacheTable::insertToPairAffectsStarCache(int a, int b, bool truth) {
+void CacheTable::insertToPairNextStarCache(int a, int b, bool truth) {
 	pairNextStarCache.insert(map<pair<int, int>, bool>::value_type(make_pair(a, b), truth));
 }
 
-void CacheTable::insertAffectsStarCache(int i, vector<int> v) {
+void CacheTable::insertNextStarCache(int i, vector<int> v) {
 	nextStarCache.insert(map<int, vector<int>>::value_type(i, v));
 }
 
@@ -89,5 +90,37 @@ void CacheTable::insertAffectedStarCache(int i, vector<int> v) {
 	affectedStarCache.insert(map<int, vector<int>>::value_type(i, v));
 }
 
+/***BULK UPDATE***/
+void CacheTable::updateNextStarCache(map<int, vector<int>> update) {
+	//EnterCriticalSection(&cs_nStar);
+	nextStarCache.insert(update.begin(), update.end());
+	//LeaveCriticalSection(&cs_nStar);
+}
 
+void CacheTable::updatePreviousStarCache(map<int, vector<int>> update) {
+	//EnterCriticalSection(&cs_pStar);
+	previousStarCache.insert(update.begin(), update.end());
+	//LeaveCriticalSection(&cs_pStar);
+}
 
+void CacheTable::updateAffectsCache(map<int, vector<int>> update) {
+	//EnterCriticalSection(&cs_affects);
+	affectsCache.insert(update.begin(), update.end());
+	//LeaveCriticalSection(&cs_affects);
+}
+
+void CacheTable::updateAffectedCache(map<int, vector<int>> update) {
+	//EnterCriticalSection(&cs_affected);
+	affectedCache.insert(update.begin(), update.end());
+	//LeaveCriticalSection(&cs_affected);
+}
+void CacheTable::updateAffectsStarCache(map<int, vector<int>> update) {
+	//EnterCriticalSection(&cs_affectsStar);
+	affectsStarCache.insert(update.begin(), update.end());
+	//LeaveCriticalSection(&cs_affectsStar);
+}
+void CacheTable::updateAffectedStarCache(map<int, vector<int>> update) {
+	//EnterCriticalSection(&cs_affectedStar);
+	affectedStarCache.insert(update.begin(), update.end());
+	//LeaveCriticalSection(&cs_affectedStar);
+}

@@ -1487,6 +1487,24 @@ void SubqueryTest::testFollows(){
 }
 
 void SubqueryTest::testFollowsTuple(){
+	/*
+	FollowsSubquery test1 = FollowsSubquery(&synonymTable, pk);
+	test1.setSynonyms("s1", "s2");
+	FollowsSubquery test2 = FollowsSubquery(&synonymTable, pk);
+	test2.setSynonyms("s2", "l1");
+	ResultTuple* testing1 = test1.solve(test2.solve());
+	ResultTuple* testing2 = test2.solve(test1.solve());
+	cout << "(s1, s2)" << endl << testing1->toString() << endl;
+	cout << "(s2, l1)" << endl << testing2->toString() << endl;
+	for (size_t i = 0; i < testing1->getAllResults().size(); i++) {
+		vector<int> row1 = testing1->getResultRow(i);
+		vector<int> row2 = testing2->getResultRow(i);
+		for (size_t j = 0; j < row1.size(); j++) {
+			CPPUNIT_ASSERT_EQUAL(row1[j], row2[j]);	
+		}
+	}
+	*/
+	
 	// testTuple:
 	//  s1  |  a1  |  w1  |  i2  |  c2  |  l1  |  const1  |  v1  |  proc1  |
 	//  1   |  1   |  6   |  8   |  3   |  1   |  0       |  0   |  0      |

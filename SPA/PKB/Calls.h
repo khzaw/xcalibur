@@ -24,6 +24,8 @@ public:
 
 	vector<pair<int,int>>* getCallTable();
 	int getSize();
+	int getStarSize();
+
 	// Helper
 	set<int> getAllCallers(); // done
 	set<int> getAllCallees(); // done 

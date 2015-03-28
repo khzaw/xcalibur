@@ -248,3 +248,7 @@ using namespace std;
 	int Calls::getSize(){
 		return callTable->size();
 	}
+
+	int Calls::getStarSize() {
+		return calleeStarTable->size() * callerStarTable->size();
+	}

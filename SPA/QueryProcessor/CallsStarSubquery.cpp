@@ -65,6 +65,29 @@ public:
 		return ans;
 	}
 
+	void setPriority() {
+		switch (isSyn) {
+			case 1: // (int, syn)
+				priority = pkb->callsTable->evaluateGetCalleesStar(leftIndex).size();
+				break;
+			case 2: // (syn, int)
+				priority = pkb->callsTable->evaluateGetCallersStar(rightIndex).size();
+				break;
+			case 3: // (syn, syn)
+				priority = pkb->callsTable->getStarSize();
+				break;
+			case 4: // (_, syn)
+				priority = pkb->callsTable->getSize();
+				break;
+			case 5:	// (syn, _)
+				priority =  pkb->statementTable->getNodesMatchingNodeType("CALL_NODE").size();
+				break;
+			default: 
+				priority = 0;
+				break;
+		}
+	}
+
 	ResultTuple* solveLeftSyn() {
 		ResultTuple* tuple = new ResultTuple();
 		int index = tuple->addSynonym(leftSynonym);

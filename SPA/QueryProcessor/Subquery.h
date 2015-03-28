@@ -10,10 +10,8 @@ using namespace std;
 
 class Subquery{
 
-private: 
-	int priority;
-
 public:
+	int priority;
 	PKBController* pkb;
 	map<string, string>* synonymTable;
 	int leftIndex, rightIndex;
@@ -34,6 +32,7 @@ public:
 	Subquery(map<string, string>*, PKBController*);
 
 	// Mutators
+	void setPriority();
 	void setPriority(int);
 	void setSynonyms(string, string);
 	void setSynonyms(string, int);

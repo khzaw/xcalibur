@@ -6,6 +6,7 @@
 #include <algorithm>
 
 #include "OptimizedQE.h"
+#include "OptimizedSubquerySolver.h"
 #include "Subquery.h"
 #include "ResultTuple.h"
 
@@ -15,22 +16,13 @@ OptimizedQE::OptimizedQE(){
 }
 
 // syn = synonyms required in solution. Put Boolean in here too
-OptimizedQE::OptimizedQE(vector<Subquery*> syn) {
+OptimizedQE::OptimizedQE(vector<Subquery*> subs, vector<string> synos) {
 	disjointCheck = map<string, int>();	//string for synonym, int for positions in the vector which hold the synonym
-	queries = vector<vector<Subquery*> >();
-	unionOrder = vector<pair<int, int> >();
+	queries = makeDisjointSets(subs);
 	solutions = vector<ResultTuple*>();
 	finalSolution = new ResultTuple();
-	splitIntoDisjoint(syn);
+	synonyms = synos;
 	sortQuerySets();
-}
-
-void OptimizedQE::splitIntoDisjoint(vector<Subquery*> syn) {
-	/*for (size_t i = 0; i < syn.size(); i++) {
-		addQuery(syn[i]);
-	}
-	unionQuerySets();*/
-	queries = makeDisjointSets(syn);
 }
 
 vector<vector<Subquery*> > OptimizedQE::makeDisjointSets(vector<Subquery*> syn){
@@ -171,9 +163,15 @@ void OptimizedQE::unionQuerySets() {
 }
 
 ResultTuple* OptimizedQE::solve() {
-	solveQuerySets();
-	joinQuerySolutions();
-	return finalSolution;
+	OptimizedSubquerySolver qss = OptimizedSubquerySolver();
+	//joinQuerySolutions(qss.multithreadSolve(queries));
+	//return finalSolution;
+	return optimizedJoin(qss.multithreadSolve(queries));
+}
+
+vector<ResultTuple*> OptimizedQE::solve2() {
+	OptimizedSubquerySolver qss = OptimizedSubquerySolver();
+	return qss.multithreadSolve(queries);
 }
 
 void OptimizedQE::sortQuerySets() {
@@ -257,11 +255,63 @@ void OptimizedQE::solveQuerySets() {
 	}
 }
 
-void OptimizedQE::joinQuerySolutions() {
-	if (solutions.size() > 0) {
-		finalSolution = solutions[0];
+ResultTuple* OptimizedQE::optimizedJoin(vector<ResultTuple*> r) {
+	vector<ResultTuple*> tuples;
+	ResultTuple* answer = new ResultTuple();
+	for (size_t i = 0; i < r.size(); i++) {
+		if ((r[i]->isBool() && r[i]->isEmpty()) || r[i]->getAllResults().empty()) {
+			return answer;
+		} 
+
+		ResultTuple* rt = new ResultTuple();
+		vector<int> synons = vector<int>();
+		// check which synonyms are inside
+		for (size_t j = 0; j < synonyms.size(); j++) {
+			int temp = r[i]->getSynonymIndex(synonyms[j]);
+			if (temp >= 0) {
+				synons.push_back(temp);
+				rt->addSynonymToMap(synonyms[j], rt->addSynonym(synonyms[j]));
+			}
+		}
+		if (synons.size() == 0) {
+			continue;
+		}
+
+		// reduce the columns for each row
+		set<vector<int>> sets = set<vector<int>>();
+		for (size_t l = 0; l < r[i]->getAllResults().size(); l++ ) {
+			vector<int> oldRow = r[i]->getResultRow(l);
+			vector<int> newRow = vector<int>();
+			for (size_t m = 0; m < synons.size(); m++) {
+				newRow.push_back(oldRow[synons[m]]);
+			}
+			//rt->addResultRow(newRow);
+			sets.insert(newRow);
+		}
+		for (set<vector<int>>::iterator it = sets.begin(); it != sets.end(); it++) {
+			rt->addResultRow(*it);
+		}
+
+		tuples.push_back(rt);
 	}
-	for (size_t i = 1; i < solutions.size(); i++) {
-		finalSolution = finalSolution->cross(solutions[i]);
+
+	if (tuples.size() == 0) {
+		return answer;
+	}
+
+	answer = tuples[0];
+	for (size_t n = 1; n < tuples.size(); n++) {
+		answer = answer->cross(tuples[n]);
+	}
+
+	return answer;
+}
+
+void OptimizedQE::joinQuerySolutions(vector<ResultTuple*> r) {
+	if (r.size() > 0) {
+		finalSolution = r[0];
+	}
+	for (size_t i = 1; i < r.size(); i++) {
+		finalSolution = finalSolution->cross(r[i]);
 	}
 }

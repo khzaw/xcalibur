@@ -48,6 +48,32 @@ public:
 		return true;
 	}
 
+	void setPriority() {
+		switch (isSyn) {
+			case 1: // (int, syn)
+				priority = pkb->statementTable->getSize() - leftIndex;
+				break;
+			case 2: // (syn, int)
+				priority = rightIndex;
+				break;
+			case 3: // (syn, syn)
+				// or calculate using synonym types?
+				int a = pkb->followsTable->getAllFolloweeStmt().size();
+				int b = pkb->followsTable->getAllFollowerStmt().size();
+				priority = a * b;
+				break;
+			case 4: // (_, syn)
+				priority = pkb->followsTable->getAllFollowerStmt().size();
+				break;
+			case 5:	// (syn, _)
+				priority = pkb->followsTable->getAllFolloweeStmt().size();
+				break;
+			default: 
+				priority = 0;
+				break;
+		}
+	}
+
 	ResultTuple* solve(ResultTuple* tuple) {
 		ResultTuple* ans;
 		switch (isSyn) {

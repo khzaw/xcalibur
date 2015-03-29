@@ -21,8 +21,8 @@ Subquery::Subquery(map<string, string>* m, PKBController* p){
 	priority = 0;
 }
 
-void Subquery::setPriority(int p){
-	priority = p;
+void Subquery::setPriority(){
+	priority = 1000000;
 }
 
 void Subquery::setSynonyms(string str1, string str2){

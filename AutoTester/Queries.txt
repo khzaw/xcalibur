@@ -1,6 +1,6 @@
 4 - Modifies
-variable v;
-Select v such that Modifies (18, v)
+assign a, b, c, d, e, f, g, h, i; variable v;
+Select a such that Follows(a, b) and Follows (b, c) and Follows(e, f) and Follows(f, g) and Follows(h, i)
 m,x,y,z
 5000
 5 - Modifies, Uses
@@ -8,3 +8,8 @@ assign a;
 Select a such that Modifies (a, "y") and Uses (a, "y")
 16,21
 5000
+4 - Next*
+stmt a, b, c, d, e, f, g, h, i; variable v;
+Select <a, c, d> such that Next*(a, b) and Next*(c, d)
+m,x,y,z
+100000

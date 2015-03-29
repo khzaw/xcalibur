@@ -48,6 +48,29 @@ public:
 		return true;
 	}
 
+	void setPriority() {
+		switch (isSyn) {
+			case 1: // (int, syn)
+				priority = 1;
+				break;
+			case 2: // (syn, int)
+				priority = 1;
+				break;
+			case 3: // (syn, syn)
+				priority = pkb->followsTable->getSize();
+				break;
+			case 4: // (_, syn)
+				priority = pkb->followsTable->getAllFollowerStmt().size();
+				break;
+			case 5:	// (syn, _)
+				priority = pkb->followsTable->getAllFolloweeStmt().size();
+				break;
+			default: 
+				priority = 0;
+				break;
+		}
+	}
+
 	ResultTuple* solve(ResultTuple* tuple) {
 		ResultTuple* ans;
 		switch (isSyn) {

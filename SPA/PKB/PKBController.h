@@ -22,6 +22,8 @@
 #include "..\PKB\NextExtractor.h"
 #include "..\PKB\AffectsExtractor.h"
 
+#include "..\PKB\CacheTable.h"
+
 
 using namespace std;
 
@@ -45,6 +47,7 @@ public:
 	UsesExtractor* usesExtractor;
 	NextExtractor* nextExtractor;
 	AffectsExtractor* affectsExtractor;
+	CacheTable* cache;
 
 	PKBController();
 	~PKBController();

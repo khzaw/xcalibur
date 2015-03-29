@@ -17,9 +17,19 @@ OptimizedSubquerySolver::OptimizedSubquerySolver(){
 
 ResultTuple* OptimizedSubquerySolver::solveSet(vector<Subquery*> subqueriesSet){
 	ResultTuple* ans = subqueriesSet.at(0)->solve();
+	for(size_t i = 1; i < subqueriesSet.size(); i++) {
+		if((ans->getSynonymIndex(subqueriesSet[i]->leftSynonym) != -1) || (ans->getSynonymIndex(subqueriesSet[i]->rightSynonym) != -1)) {
+			ans = subqueriesSet[i]->solve(ans);
+		} else {
+			ResultTuple* interim = subqueriesSet[i]->solve();
+			ans = ans->cross(interim);
+		}
+	}
+	/*
 	for (size_t i = 1; i < subqueriesSet.size(); i++){
 		ans = subqueriesSet.at(i)->solve(ans);
 	}
+	*/
 	return ans;
 }
 	

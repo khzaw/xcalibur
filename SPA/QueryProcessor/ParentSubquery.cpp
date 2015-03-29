@@ -48,6 +48,29 @@ public:
 		return true;
 	}
 
+	void setPriority() {
+		switch (isSyn) {
+			case 1: // (int, syn)
+				priority = pkb->parentTable->evaluateGetChildren(leftIndex).size();
+				break;
+			case 2: // (syn, int)
+				priority = pkb->parentTable->evaluateGetParent(rightIndex).size();
+				break;
+			case 3: // (syn, syn)
+				priority = pkb->parentTable->getSize();
+				break;
+			case 4: // (_, syn)
+				priority = pkb->parentTable->getAllChildrenStmt().size();
+				break;
+			case 5:	// (syn, _)
+				priority = pkb->parentTable->getAllParentStmt().size();
+				break;
+			default: 
+				priority = 0;
+				break;
+		}
+	}
+
 	ResultTuple* solve(ResultTuple* tuple) {
 		ResultTuple* ans;
 		switch (isSyn) {

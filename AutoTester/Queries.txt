@@ -1,55 +1,50 @@
-1 - Proc
-stmt a, b, c, d;
-Select a such that Follows(a, b) and Next*(b, c)
+1 - ParenStar
+while w;
+Select w such that Parent*(w, 12)
+10
+5000
+2 - FollowsStar
+stmt s; while w;
+Select w such that Follows* (s, w)
+10
+5000
+3 - FollowsStar
+if ifstat;
+Select ifstat such that Follows* (ifstat, 17)
+8
+5000
+4 - Modifies
+variable v;
+Select v such that Modifies (18, v)
 m,x,y,z
 5000
-1 - Proc
-stmt a, b, c, d;
-Select a such that Next*(b, c) and Follows(a, b)
-m,x,y,z
-50000
-1 - Proc
-stmt a, b;
-Select a such that Follows(a, b)
-m,x,y,z
-5000000
-1 - Proc
-procedure p, q;
-Select p such that Calls(p, q)
-m,x,y,z
+5 - Modifies, Uses
+assign a;
+Select a such that Modifies (a, "y") and Uses (a, "y")
+16,21
 5000
-2 - Proc2
+6 - CallsStar
 procedure p;
-Select p such that Calls(p, _)
-m,x,y,z
+Select p such that Calls* (p, "Trio")
+Solo,Duo
 5000
-3 - Proc3
-procedure q;
-Select q such that Calls(_, q)
-m,x,y,z
+7 - Pattern
+assign a;
+Select a pattern a ("m", "z * x")
+none
 5000
-4 - Proc4
-procedure p, q;
-Select <p, q> such that Calls(p, q)
-m,x,y,z
+8 - NextStar
+prog_line n;
+Select n such that Next* (9, n) and Next* (n, 12)
+10,11,12
 5000
-5 - Proc5
-procedure p, q;
-Select p with p.procName="Duo"
-m,x,y,z
+9 - With
+stmt s; constant co;
+Select s with s.stmt# = co.value
+1, 2, 3, 10, 20
 5000
-6 - Proc6
-procedure p, q;
-Select q such that Calls(p, q) with p.procName="Duo"
-m,x,y,z
-5000
-7 - Proc7
-procedure q;
-Select q such that Calls("Duo", q)
-m,x,y,z
-5000
-8 - Proc8
-procedure p;
-Select p such that Calls(p, "Duo") and Modifies(p, "x")
-m,x,y,z
+10 - Modifies, Uses, Follows, ParentStar, multiple clauses
+assign a;
+Select a such that Modifies (a, "y") and Uses (a, "y") and Follows (15, a) and Parent* (_, a)
+16
 5000

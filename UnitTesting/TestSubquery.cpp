@@ -95,7 +95,7 @@ void SubqueryTest::testSubqueries() {
 	rootNode1.addChild(&stmtListNode1);
 	stmt1.addParent(&stmtListNode1); stmtListNode1.addChild(&stmt1); stmt1.addRightSibling(&stmt2);
 	stmt2.addParent(&stmtListNode1); stmtListNode1.addChild(&stmt2); stmt2.addRightSibling(&stmt3);
-	stmt3.addParent(&stmtListNode1); stmtListNode1.addChild(&stmt2);
+	stmt3.addParent(&stmtListNode1); stmtListNode1.addChild(&stmt3);
 
 	TNode rootNode2("PROC_NODE", "Second", -1, 1);
 	TNode stmtListNode2("STMTLST_NODE", "", 0, 1); 

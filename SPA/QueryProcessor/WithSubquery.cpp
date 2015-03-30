@@ -27,6 +27,20 @@ public:
 	
 	}
 
+	bool validate() {
+		//both synonym
+		if (isSyn == 3) {
+			string s1 = synonymTable->at(leftSynonym);
+			string s2 = synonymTable->at(rightSynonym);
+			if ((s1 == "procedure" || s1 == "variable") && !(s2 == "procedure" || s2 == "variable")) {
+				return false;
+			} else if ((s2 == "procedure" || s2 == "variable") && !(s1 == "procedure" || s1 == "variable")){
+				return false;
+			}
+		}
+		return true;
+	}
+
 	ResultTuple* solve(){
 		ResultTuple* ans;
 		switch (isSyn) {

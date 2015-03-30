@@ -1,15 +1,55 @@
-4 - Modifies
-assign a, b, c, d, e, f, g, h, i; variable v;
-Select a such that Follows(a, b) and Follows (b, c) and Follows(e, f) and Follows(f, g) and Follows(h, i)
+1 - Proc
+stmt a, b, c, d;
+Select a such that Follows(a, b) and Next*(b, c)
 m,x,y,z
 5000
-5 - Modifies, Uses
-assign a;
-Select a such that Modifies (a, "y") and Uses (a, "y")
-16,21
-5000
-4 - Next*
-stmt a, b, c, d, e, f, g, h, i; variable v;
-Select <a, c, d> such that Next*(a, b) and Next*(c, d)
+1 - Proc
+stmt a, b, c, d;
+Select a such that Next*(b, c) and Follows(a, b)
 m,x,y,z
-100000
+50000
+1 - Proc
+stmt a, b;
+Select a such that Follows(a, b)
+m,x,y,z
+5000000
+1 - Proc
+procedure p, q;
+Select p such that Calls(p, q)
+m,x,y,z
+5000
+2 - Proc2
+procedure p;
+Select p such that Calls(p, _)
+m,x,y,z
+5000
+3 - Proc3
+procedure q;
+Select q such that Calls(_, q)
+m,x,y,z
+5000
+4 - Proc4
+procedure p, q;
+Select <p, q> such that Calls(p, q)
+m,x,y,z
+5000
+5 - Proc5
+procedure p, q;
+Select p with p.procName="Duo"
+m,x,y,z
+5000
+6 - Proc6
+procedure p, q;
+Select q such that Calls(p, q) with p.procName="Duo"
+m,x,y,z
+5000
+7 - Proc7
+procedure q;
+Select q such that Calls("Duo", q)
+m,x,y,z
+5000
+8 - Proc8
+procedure p;
+Select p such that Calls(p, "Duo") and Modifies(p, "x")
+m,x,y,z
+5000

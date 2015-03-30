@@ -68,6 +68,8 @@ bool QE::validateQueries() {
 		if (!queries[i]->validate()) {
 			return false;
 		}
+
+		//queries[i]->setPriority();
 	}
 
 	//check for extra synonyms

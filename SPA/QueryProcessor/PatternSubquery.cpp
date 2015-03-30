@@ -21,6 +21,16 @@ public:
 		return (synonymTable->at(leftSynonym) == "assign") ? solveAssign() : solveIfWhile(t);
 	}
 
+	void setPriority() {
+		if (synonymTable->at(leftSynonym) == "assign") {
+			priority = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE").size();
+		} else if (synonymTable->at(leftSynonym) == "if") {
+			priority = pkb->statementTable->getStmtNumUsingNodeType("IF_NODE").size();
+		} else {
+			priority = pkb->statementTable->getStmtNumUsingNodeType("WHILE_NODE").size();
+		}
+	}
+
 	bool matchPattern(string target) {
 		if (specialValue == "_") {
 			return true;

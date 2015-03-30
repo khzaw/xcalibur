@@ -21,10 +21,6 @@ Subquery::Subquery(map<string, string>* m, PKBController* p){
 	priority = 0;
 }
 
-void Subquery::setPriority(){
-	priority = 1000000;
-}
-
 void Subquery::setSynonyms(string str1, string str2){
 	leftSynonym = str1;
 	rightSynonym = str2;
@@ -81,4 +77,8 @@ ResultTuple* Subquery::solve(ResultTuple*){
 
 bool Subquery::validate(){
 	return false;
+}
+
+void Subquery::setPriority(){
+	priority = 10000;
 }

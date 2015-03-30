@@ -49,6 +49,29 @@ public:
 		return true;
 	}
 
+	void setPriority() {
+		switch (isSyn) {
+			case 1: // (int, syn)
+				priority = pkb->modifiesTable->evaluateGetModifiedVarStmt(leftIndex).size();
+				break;
+			case 2: // (syn, int)
+				priority = pkb->modifiesTable->evaluateGetModifiersStmt(rightIndex).size();
+				break;
+			case 3: // (syn, syn)
+				priority = pkb->modifiesTable->getSizeStmtModifies();
+				break;
+			case 4: // (_, syn)
+				priority = pkb->modifiesTable->getAllModifiedVarStmt().size();
+				break;
+			case 5:	// (syn, _)
+				priority = pkb->modifiesTable->getAllModifiersStmt().size();
+				break;
+			default: 
+				priority = 0;
+				break;
+		}
+	}
+
 	ResultTuple* solve(ResultTuple* tuple) {
 		ResultTuple* ans;
 		switch (isSyn) {

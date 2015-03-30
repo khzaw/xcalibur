@@ -32,8 +32,6 @@ public:
 	Subquery(map<string, string>*, PKBController*);
 
 	// Mutators
-	void setPriority();
-	void setPriority(int);
 	void setSynonyms(string, string);
 	void setSynonyms(string, int);
 	void setSynonyms(int, string);
@@ -45,4 +43,5 @@ public:
 	virtual ResultTuple* solve();
 	virtual ResultTuple* solve(ResultTuple*);
 	virtual bool validate();
+	virtual void setPriority();
 };

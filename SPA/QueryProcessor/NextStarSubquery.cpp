@@ -48,6 +48,32 @@ public:
 		return true;
 	}
 
+	void setPriority() {
+		//int magnitude = 5;	//calculated during profiling
+		switch (isSyn) {
+			case 1: // (int, syn)
+				priority = pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(rightSynonym)]).size();
+				break;
+			case 2: // (syn, int)
+				priority = pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(leftSynonym)]).size();
+				break;
+			case 3: // (syn, syn)
+				priority = pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(leftSynonym)]).size() * pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(rightSynonym)]).size();
+				break;
+			case 4: // (_, syn)
+				priority = pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(rightSynonym)]).size();
+				break;
+			case 5:	// (syn, _)
+				priority = pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(leftSynonym)]).size();
+				break;
+			default: 
+				priority = 0;
+				break;
+		}
+
+		//priority *= magnitude;
+	}
+
 	ResultTuple* solve(ResultTuple* tuple) {
 		ResultTuple* ans;
 		switch (isSyn) {

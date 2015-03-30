@@ -69,7 +69,7 @@ bool QE::validateQueries() {
 			return false;
 		}
 
-		//queries[i]->setPriority();
+		queries[i]->setPriority();
 	}
 
 	//check for extra synonyms

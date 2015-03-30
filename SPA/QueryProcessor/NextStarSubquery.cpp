@@ -49,29 +49,61 @@ public:
 	}
 
 	void setPriority() {
-		//int magnitude = 5;	//calculated during profiling
+		int magnitude = 5;	//calculated during profiling
+		bool isLeftSynStmtOrProgLine = true;
+		bool isRightSynStmtOrProgLine = true;
 		switch (isSyn) {
 			case 1: // (int, syn)
-				priority = pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(rightSynonym)]).size();
+				isRightSynStmtOrProgLine = (synonymTable->at(rightSynonym) == "stmt" || synonymTable->at(rightSynonym) == "prog_line");
+				if (isRightSynStmtOrProgLine){
+					priority = pkb->statementTable->getAllStmtNum().size();
+				} else {
+					priority = (pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))])).size();
+				}
 				break;
 			case 2: // (syn, int)
-				priority = pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(leftSynonym)]).size();
+				isLeftSynStmtOrProgLine = (synonymTable->at(leftSynonym) == "stmt" || synonymTable->at(leftSynonym) == "prog_line");
+				if (isLeftSynStmtOrProgLine){
+					priority = pkb->statementTable->getAllStmtNum().size();
+				} else {
+					priority = (pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))])).size();
+				}
 				break;
 			case 3: // (syn, syn)
-				priority = pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(leftSynonym)]).size() * pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(rightSynonym)]).size();
+				isLeftSynStmtOrProgLine = (synonymTable->at(leftSynonym) == "stmt" || synonymTable->at(leftSynonym) == "prog_line");
+				isRightSynStmtOrProgLine = (synonymTable->at(rightSynonym) == "stmt" || synonymTable->at(rightSynonym) == "prog_line");
+				if (isLeftSynStmtOrProgLine && isRightSynStmtOrProgLine){
+					priority = pkb->statementTable->getAllStmtNum().size() * pkb->statementTable->getAllStmtNum().size();
+				} else if (isLeftSynStmtOrProgLine){
+					priority = pkb->statementTable->getAllStmtNum().size() * (pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))])).size();
+				} else if (isRightSynStmtOrProgLine){
+					priority = (pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))])).size() * pkb->statementTable->getAllStmtNum().size();
+				} else {
+					priority = (pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))])).size() * (pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))])).size();
+				}
 				break;
 			case 4: // (_, syn)
-				priority = pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(rightSynonym)]).size();
+				isRightSynStmtOrProgLine = (synonymTable->at(rightSynonym) == "stmt" || synonymTable->at(rightSynonym) == "prog_line");
+				if (isRightSynStmtOrProgLine){
+					priority = pkb->statementTable->getAllStmtNum().size();
+				} else {
+					priority = (pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))])).size();
+				}
 				break;
 			case 5:	// (syn, _)
-				priority = pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(leftSynonym)]).size();
+				isLeftSynStmtOrProgLine = (synonymTable->at(leftSynonym) == "stmt" || synonymTable->at(leftSynonym) == "prog_line");
+				if (isLeftSynStmtOrProgLine){
+					priority = pkb->statementTable->getAllStmtNum().size();
+				} else {
+					priority = (pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))])).size();
+				}
 				break;
 			default: 
 				priority = 0;
 				break;
 		}
 
-		//priority *= magnitude;
+		priority *= magnitude;
 	}
 
 	ResultTuple* solve(ResultTuple* tuple) {

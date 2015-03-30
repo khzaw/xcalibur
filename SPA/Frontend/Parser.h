@@ -27,6 +27,9 @@ class Parser {
 	map<int, string> callStatements;
 	map<int, set<int>> procAndContainers;
 
+	int totalParents;
+	int totalSiblings;
+
 public:
 	PKBController* controller;
 	Parser();

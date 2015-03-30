@@ -147,6 +147,11 @@ Lexeme QueryLexer::lex() {
 			return Lexeme(UNDERSCORE, lexeme);
 			break;
 
+		case EQ:
+			addChar(); getChar();
+			return Lexeme(EQ, lexeme);
+			break;
+
 		default:
 			return Lexeme(ERROR, lexeme);
 	}

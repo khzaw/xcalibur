@@ -38,31 +38,37 @@ int main() {
 	NewQueryParser* parser;
 	PKBController* controller = new PKBController();
 
-	query = "while w; Select w such that Parent*(w, 12)";
+	//query = "while w; Select w such that Parent*(w, 12)";
+	//parser = new NewQueryParser(query, controller);
+
+	//query = "stmt s; while w; Select w such that Follows* (s, w)";
+	//parser = new NewQueryParser(query, controller);
+
+	//query = "if ifstat; Select ifstat such that Follows* (ifstat, 17)";
+	//parser = new NewQueryParser(query, controller);
+
+	//query = "variable v; Select v such that Modifies (18, v)";
+	//parser = new NewQueryParser(query, controller);
+
+	//query = "assign a; Select a such that Modifies (a, \"y\") and Uses (a, \"y\")";
+	//parser = new NewQueryParser(query, controller);
+
+	//query = "procedure p; Select p such that Calls* (p, \"Trio\")";
+	//parser = new NewQueryParser(query, controller);
+
+	//query = "assign a; Select a pattern a (\"m\", \"z * x\")";
+	//parser = new NewQueryParser(query, controller);
+
+	//query = "prog_line n; Select n such that Next* (9, n) and Next* (n, 12)";
+	//parser = new NewQueryParser(query, controller);
+
+	//query = "assign a; Select a such that Modifies (a, \"y\") and Uses (a, \"y\")";
+	//parser = new NewQueryParser(query, controller);
+
+	query = "stmt s; constant c; Select s with s.stmt# = c.value";
 	parser = new NewQueryParser(query, controller);
 
-	query = "stmt s; while w; Select w such that Follows* (s, w)";
-	parser = new NewQueryParser(query, controller);
-
-	query = "if ifstat; Select ifstat such that Follows* (ifstat, 17)";
-	parser = new NewQueryParser(query, controller);
-
-	query = "variable v; Select v such that Modifies (18, v)";
-	parser = new NewQueryParser(query, controller);
-
-	query = "assign a; Select a such that Modifies (a, \"y\") and Uses (a, \"y\")";
-	parser = new NewQueryParser(query, controller);
-
-	query = "procedure p; Select p such that Calls* (p, \"Trio\")";
-	parser = new NewQueryParser(query, controller);
-
-	query = "assign a; Select a pattern a (\"m\", \"z * x\")";
-	parser = new NewQueryParser(query, controller);
-
-	query = "prog_line n; Select n such that Next* (9, n) and Next* (n, 12)";
-	parser = new NewQueryParser(query, controller);
-
-	query = "assign a; Select a such that Modifies (a, \"y\") and Uses (a, \"y\")";
+	query = "variable v; procedure p; Select p with p.procName = v.varName";
 	parser = new NewQueryParser(query, controller);
 
 	string t;

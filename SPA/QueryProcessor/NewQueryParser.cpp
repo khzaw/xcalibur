@@ -404,15 +404,37 @@ void NewQueryParser::matchAttrCompare() {
 	string fst = matchRef();
 	match("=");
 	string snd = matchRef();
-	// cout << "With: fst -> " << fst << "\tsnd -> " << snd;
+	cout << "With: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 string NewQueryParser::matchRef() {
 	// ref: attrRef | synonym | '"' IDENT '"' | INTEGER
 	// in the above synonym must be a synonym of prog_line
 	// attRef: synonym '.' attrname
-	return "";
 
+	string result = "";
+	if(nextToken.name.compare("\"") == 0) {
+		match("\"");
+		result = nextToken.name;
+		match(nextToken.name);
+		match("\"");
+		return result;
+	}
+
+	if(nextToken.token == IDENT || nextToken.token == SIMPLE_IDENT) { // synonyms 
+		result = nextToken.name; // synonym
+		match(nextToken.name);
+		if(nextToken.name.compare(".") == 0) {
+			match(".");
+			string attrname = nextToken.name;
+			match(nextToken.name);
+			return result;
+		} 
+	} else if(nextToken.token == INT_LIT) {
+			result = nextToken.name;
+			match(nextToken.name);
+	}
+	return result;
 }
 
 void NewQueryParser::matchRelCond() {

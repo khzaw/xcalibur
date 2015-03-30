@@ -25,6 +25,8 @@ Parser::Parser(string filepath) {
 	this->previousStmt = 0;			// for poulation of follows
 	this->prev = NULL;
 	this->lastVarIndex = -1;		// for modifies population
+	this->totalParents = 0;
+	this->totalSiblings = 0;
 	parse();
 	constructRelations();
 }
@@ -75,6 +77,8 @@ void Parser::debug() {
 	cout << "ModifiesProc: " << controller->modifiesTable->getSizeProcModifies() << endl;
 	cout << "UsesStmt: " << controller->usesTable->getSizeStmtUses() << endl;
 	cout << "UsesProc: " << controller->usesTable->getSizeProcUses() << endl;
+	cout << "Total Parents: " << totalParents << endl;
+	cout << "Total Siblings: " << totalSiblings << endl;
 	cout << "Debug: Done" << endl;
 }
 
@@ -99,6 +103,7 @@ TNode* Parser::createASTNode(string nodeName, string data, TNode* parent, int li
 	TNode* node = new TNode(nodeName, data, line, parentProc);
 	controller->ast->assignChild(parent, node);
 	controller->ast->assignParent(node, parent);
+	totalParents++;
 	return node;
 }
 
@@ -248,8 +253,8 @@ void Parser::stmt(TNode* parent) {
 			popOperator(operatorStack.top());
 		}
 
-		controller->ast->assignChild(assignNode, (operandStack.top()));
-		controller->ast->assignParent(operandStack.top(), assignNode);
+		//controller->ast->assignChild(assignNode, (operandStack.top()));
+		//controller->ast->assignParent(operandStack.top(), assignNode);
 
 		// cout << "postfix : " << postfix << endl;
 		assignNode->setData(postfix);
@@ -430,6 +435,7 @@ void Parser::populateFollows(int line, bool isContainer, TNode* prev, TNode* cur
 	if(previousStmt > 0 && prev != NULL) {
 		controller->followsTable->insertFollows(previousStmt, line);
 		controller->ast->assignRightSibling(prev, current);
+		totalSiblings++;
 		//cout << " right ";
 	}
 	//cout << endl;

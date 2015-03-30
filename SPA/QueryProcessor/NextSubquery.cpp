@@ -49,17 +49,33 @@ public:
 	}
 
 	void setPriority() {
+		int magnitude = 5;	//calculated during profiling
+		bool isLeftSynStmtOrProgLine = (synonymTable->at(leftSynonym) == "stmt" || synonymTable->at(leftSynonym) == "prog_line");
+		bool isRightSynStmtOrProgLine = (synonymTable->at(rightSynonym) == "stmt" || synonymTable->at(rightSynonym) == "prog_line");
 		switch (isSyn) {
 			case 1: // (int, syn)
-				priority = 2;
+				if (isRightSynStmtOrProgLine){
+					priority = pkb->statementTable->getAllStmtNum().size();
+				} else {
+					priority = (pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))])).size();
+				}
 				break;
 			case 2: // (syn, int)
-				priority = 2;
+				if (isLeftSynStmtOrProgLine){
+					priority = pkb->statementTable->getAllStmtNum().size();
+				} else {
+					priority = (pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))])).size();
+				}
 				break;
-			case 3: { // (syn, syn)
-				TNODE_TYPE type1 = synToNodeType.at(leftSynonym);
-				TNODE_TYPE type2 = synToNodeType.at(leftSynonym);
-				priority = pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[type1]).size() * pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[type2]).size();
+			case 3: // (syn, syn)
+				if (isLeftSynStmtOrProgLine && isRightSynStmtOrProgLine){
+					priority = pkb->statementTable->getAllStmtNum().size() * pkb->statementTable->getAllStmtNum().size();
+				} else if (isLeftSynStmtOrProgLine){
+					priority = pkb->statementTable->getAllStmtNum().size() * (pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))])).size();
+				} else if (isRightSynStmtOrProgLine){
+					priority = (pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))])).size() * pkb->statementTable->getAllStmtNum().size();
+				} else {
+					priority = (pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))])).size() * (pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))])).size();
 				}
 				break;
 			case 4: // (_, syn)
@@ -72,6 +88,8 @@ public:
 				priority = 0;
 				break;
 		}
+
+		priority *= magnitude;
 	}
 
 	ResultTuple* solve(ResultTuple* tuple) {

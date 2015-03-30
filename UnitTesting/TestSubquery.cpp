@@ -15864,21 +15864,22 @@ void SubqueryTest::testNextStarTuple() {
 }
 
 void SubqueryTest::testAffects() {
-	/*
 	// Test 1: Affects(s1, s2)
 	AffectsSubquery affectsSubquery1 = AffectsSubquery(&synonymTable, pk);
 	affectsSubquery1.setSynonyms("s1", "s2");
 	ResultTuple* actualResultsAffectsSubquery1 = affectsSubquery1.solve();
-	int expectedResultsAffectsSubquery1[23][2] = {
-
+	int expectedResultsAffectsSubquery1[22][2] = {
+		{4, 7}, {4, 14}, {4, 18}, {4, 20}, {5, 12}, {5, 18}, 
+		{7, 7}, {7, 14}, {7, 18}, {7, 20}, {9, 16}, {10, 9}, {12, 12}, {12, 18},
+		{14, 18}, {14, 20}, {16, 16}, {17, 18}, {18, 19}, {18, 20}, {19, 20}, {21, 22} 
 	};
-	CPPUNIT_ASSERT_EQUAL((size_t)23, actualResultsAffectsSubquery1->getAllResults().size());
-	for (size_t i = 0; i < 23; i++){
+	CPPUNIT_ASSERT_EQUAL((size_t)22, actualResultsAffectsSubquery1->getAllResults().size());
+	for (size_t i = 0; i < 22; i++){
 		for (size_t j = 0; j < 2; j++){
 			CPPUNIT_ASSERT_EQUAL(expectedResultsAffectsSubquery1[i][j], actualResultsAffectsSubquery1->getResultAt(i, j));
 		}
 	}
-
+	/*
 	// Test 2: Affects(s1, 18)
 	AffectsSubquery affectsSubquery2 = AffectsSubquery(&synonymTable, pk);
 	affectsSubquery2.setSynonyms("s1", 18);

@@ -22,7 +22,7 @@ public:
 	}
 
 	bool validate() {
-		/*if (synonymTable->at(leftSynonym) == "assign" || synonymTable->at(leftSynonym) == "while" || synonymTable->at(leftSynonym) == "if") {
+		if (synonymTable->at(leftSynonym) == "assign" || synonymTable->at(leftSynonym) == "while" || synonymTable->at(leftSynonym) == "if") {
 			if(isSyn == 1 || isSyn == 4 || isSyn == 3) {
 				if (synonymTable->at(rightSynonym) != "variable") {
 					return false;
@@ -30,7 +30,7 @@ public:
 			}
 		} else {
 			return false;
-		}*/
+		}
 		return true;
 	}
 
@@ -150,7 +150,7 @@ public:
 		answer->addSynonymToMap(leftSynonym, ind);
 		for (size_t i = 0; i < r->getAllResults().size(); i++) {
 			// can store this in map
-			vector<int> assign = pkb->statementTable->getStmtNumUsingNodeType("assign");
+			vector<int> assign = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 			for (size_t j = 0; j < assign.size(); j++) {
 				if (pkb->modifiesTable->evaluateIsModifiesStmt(assign[j], r->getResultAt(i, index)) && 
 					matchPattern(pkb->statementTable->getTNode(assign[j])->getData())) {

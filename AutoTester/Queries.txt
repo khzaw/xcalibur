@@ -28,11 +28,6 @@ procedure p;
 Select p such that Calls* (p, "Trio")
 Solo,Duo
 5000
-7 - Pattern
-assign a;
-Select a pattern a ("m", "z * x")
-none
-5000
 8 - NextStar
 prog_line n;
 Select n such that Next* (9, n) and Next* (n, 12)
@@ -47,4 +42,14 @@ Select s with s.stmt# = co.value
 assign a;
 Select a such that Modifies (a, "y") and Uses (a, "y") and Follows (15, a) and Parent* (_, a)
 16
+5000
+7 - Pattern
+assign a;
+Select a pattern a (_, _"3 * x"_)
+19
+5000
+8 - while pattern
+while w;
+Select w pattern w("y", _)
+18
 5000

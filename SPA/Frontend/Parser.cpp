@@ -268,7 +268,7 @@ void Parser::stmt(TNode* parent) {
 		//controller->ast->assignChild(assignNode, (operandStack.top()));
 		//controller->ast->assignParent(operandStack.top(), assignNode);
 
-		// cout << "postfix : " << postfix << endl;
+		cout << "postfix : " << postfix << endl;
 		assignNode->setData(postfix);
 
 		operatorStack.pop();		// remove the sentinel

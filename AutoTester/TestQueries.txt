@@ -1,0 +1,10 @@
+8 - Next
+stmt s;
+Select s such that Next(s, 4)
+2
+5000
+8 - Next
+stmt s;
+Select s such that Next(2, s)
+3, 4
+5000

@@ -246,7 +246,7 @@ void NewQueryParser::matchPattern() {
 void NewQueryParser::matchPatternAssign(string s) {
 	// assign : synonym "(" varRef "," expression-spec | "_" ")"
 	// expression-spec : """ expr | "_" """ expr """ "_"
-	Subquery* patternSq = new PatternSubquery(&synonyms, controller);
+	Subquery* patternAssignSq = new PatternSubquery(&synonyms, controller);
 	result = "";
 	match("(");
 	string fst = matchVarRef();
@@ -275,7 +275,7 @@ void NewQueryParser::matchPatternAssign(string s) {
 	// cout << "POSTFIX : " << result << "\n";
 	// result postfix is ready
 
-	setSynonymsHelper(fst, snd, patternSq);
+	setSynonymsHelper(fst, snd, patternAssignSq);
 
 }
 
@@ -387,22 +387,30 @@ int NewQueryParser::comparePrecedence(string a, string b) {
 
 void NewQueryParser::matchPatternIf(string s) {
 	// if : synonym "(" varRef "," "_" "," "_" ")"
+	Subquery* patternIfSq = new PatternSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchVarRef();
 	match(",");
 	match(UNDERSCORE);
+	string snd = "_";
 	match(",");
 	match(UNDERSCORE);
+	string third = "_";
 	match(")");
+	setSynonymsHelper(fst, snd, patternIfSq);
 }
 
 void NewQueryParser::matchPatternWhile(string s) {
 	// while : synonym "(" varRef "," "_" ")"
+	Subquery* patternWhileSq = new PatternSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchVarRef();
 	match(",");
 	match(UNDERSCORE);
+	string snd = "_";
 	match(")");
+	setSynonymsHelper(fst, snd, patternWhileSq);
+	
 }
 
 void NewQueryParser::matchWith() {

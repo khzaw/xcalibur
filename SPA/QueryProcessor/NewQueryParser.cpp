@@ -47,7 +47,8 @@ T lexical_cast(const std::string& s) {
 template <typename T>
 bool lexical_cast(const std::string& s, T& t) {
 	try {
-		t = lexical_cast<T>(s);
+		if (s == "0") t = 0;
+		else t = lexical_cast<T>(s);
 	} catch(const std::bad_cast&) {
 		return false;
 	}
@@ -250,7 +251,7 @@ void NewQueryParser::matchPatternAssign(string s) {
 	result = "";
 	string value = result;
 	match("(");
-	string fst = "a";
+	string fst = s;
 	string snd = matchVarRef();
 	match(",");
 	if(nextToken.name == "_") {
@@ -390,7 +391,7 @@ void NewQueryParser::matchPatternIf(string s) {
 	// if : synonym "(" varRef "," "_" "," "_" ")"
 	Subquery* patternIfSq = new PatternSubquery(&synonyms, controller);
 	match("(");
-	string fst = "i";
+	string fst = s;
 	string snd = matchVarRef();
 	match(",");
 	match(UNDERSCORE);
@@ -404,7 +405,7 @@ void NewQueryParser::matchPatternWhile(string s) {
 	// while : synonym "(" varRef "," "_" ")"
 	Subquery* patternWhileSq = new PatternSubquery(&synonyms, controller);
 	match("(");
-	string fst = "w";
+	string fst = s;
 	string snd = matchVarRef();
 	match(",");
 	match(UNDERSCORE);

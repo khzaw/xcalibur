@@ -255,7 +255,7 @@ void NewQueryParser::matchPatternAssign(string s) {
 	match(",");
 	if(nextToken.name == "_") {
 		match(UNDERSCORE);
-		value += "_";
+		//value += "_";
 	}
 
 	if(nextToken.name == "\"") {
@@ -267,7 +267,7 @@ void NewQueryParser::matchPatternAssign(string s) {
 
 	if(nextToken.name == "_") {
 		match(UNDERSCORE);
-		value += "_";
+		//value += "_";
 	}
 	match(")");
 

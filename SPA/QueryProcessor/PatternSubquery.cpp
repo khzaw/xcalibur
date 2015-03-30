@@ -22,7 +22,7 @@ public:
 	}
 
 	bool validate() {
-		if (synonymTable->at(leftSynonym) == "assign" || synonymTable->at(leftSynonym) == "while" || synonymTable->at(leftSynonym) == "if") {
+		/*if (synonymTable->at(leftSynonym) == "assign" || synonymTable->at(leftSynonym) == "while" || synonymTable->at(leftSynonym) == "if") {
 			if(isSyn == 1 || isSyn == 4 || isSyn == 3) {
 				if (synonymTable->at(rightSynonym) != "variable") {
 					return false;
@@ -30,7 +30,7 @@ public:
 			}
 		} else {
 			return false;
-		}
+		}*/
 		return true;
 	}
 
@@ -59,7 +59,7 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		int index = tuple->addSynonym(leftSynonym);
 		tuple->addSynonymToMap(leftSynonym, index);
-		vector<int> assign = pkb->statementTable->getStmtNumUsingNodeType("assign");
+		vector<int> assign = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 		switch(isSyn) {
 			{case 0: case 2: case 7:		//pattern a (int, ...)
 				for (size_t i = 0; i < assign.size(); i++) {

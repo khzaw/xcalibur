@@ -28,6 +28,10 @@ public:
 		return true;
 	}
 
+	void setPriority() {
+		priority = 0;
+	}
+
 	// should not be used at all
 	ResultTuple* solve(ResultTuple* tuple) {
 		return new ResultTuple();

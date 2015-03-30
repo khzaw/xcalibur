@@ -49,6 +49,29 @@ public:
 		return true;
 	}
 
+	void setPriority() {
+		switch (isSyn) {
+			case 1: // (int, syn)
+				priority = pkb->usesTable->evaluateGetUsedVarStmt(leftIndex).size();
+				break;
+			case 2: // (syn, int)
+				priority = pkb->usesTable->evaluateGetUsersStmt(rightIndex).size();
+				break;
+			case 3: // (syn, syn)
+				priority = pkb->usesTable->getSizeStmtUses();
+				break;
+			case 4: // (_, syn)
+				priority = pkb->usesTable->getAllUsedVarStmt().size();
+				break;
+			case 5:	// (syn, _)
+				priority = pkb->usesTable->getAllUsersStmt().size();
+				break;
+			default: 
+				priority = 0;
+				break;
+		}
+	}
+
 	ResultTuple* solve(ResultTuple* tuple) {
 		ResultTuple* ans;
 		switch (isSyn) {

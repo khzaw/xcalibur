@@ -150,7 +150,7 @@ public:
 		answer->addSynonymToMap(leftSynonym, ind);
 		for (size_t i = 0; i < r->getAllResults().size(); i++) {
 			// can store this in map
-			vector<int> assign = pkb->statementTable->getStmtNumUsingNodeType("assign");
+			vector<int> assign = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 			for (size_t j = 0; j < assign.size(); j++) {
 				if (pkb->modifiesTable->evaluateIsModifiesStmt(assign[j], r->getResultAt(i, index)) && 
 					matchPattern(pkb->statementTable->getTNode(assign[j])->getData())) {

@@ -29,6 +29,7 @@
 #include "NextStarSubquery.cpp"
 #include "AffectsSubquery.cpp"
 #include "AffectsStarSubquery.cpp"
+#include "PatternSubquery.cpp"
 
 
 using namespace std;
@@ -245,27 +246,37 @@ void NewQueryParser::matchPattern() {
 void NewQueryParser::matchPatternAssign(string s) {
 	// assign : synonym "(" varRef "," expression-spec | "_" ")"
 	// expression-spec : """ expr | "_" """ expr """ "_"
+	Subquery* patternSq = new PatternSubquery(&synonyms, controller);
 	result = "";
 	match("(");
 	string fst = matchVarRef();
+	string snd;
 	match(",");
 	if(nextToken.name == "_") {
+		snd = "_";
 		match(UNDERSCORE);
 	}
 
 	if(nextToken.name == "\"") {
 		match("\"");
 		matchExpression();
+		snd += result;
 		match("\"");
 	}
 
 	if(nextToken.name == "_") {
+		snd += "_";
 		match(UNDERSCORE);
 	}
 	match(")");
+
 	
+	// cout << "fst: " << fst << "\tsnd: "
 	// cout << "POSTFIX : " << result << "\n";
 	// result postfix is ready
+
+	setSynonymsHelper(fst, snd, patternSq);
+
 }
 
 QTNode* NewQueryParser::matchExpression() {

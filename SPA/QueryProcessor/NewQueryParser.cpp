@@ -7,6 +7,7 @@
 #include <stack>
 #include <iostream>
 #include <sstream>
+#include <string>
 
 #include "NewQueryParser.h"
 #include "QueryLexer.h"
@@ -58,6 +59,13 @@ NewQueryParser::NewQueryParser(string s, PKBController* controller) {
 	this->selectVariables = vector<string>(); 
 	this->synonyms = map<string, string>();
 	this->controller = controller;
+
+	this->withVar = false;
+	this->withProc = false;
+	this->withVal = false;
+	this->withFirst = "";
+	this->withSecond = "";
+
 	parse();
 	this->evaluator->setSynonymTable(synonyms);
 	//printMap();
@@ -401,13 +409,24 @@ void NewQueryParser::matchAttrCond() {
 void NewQueryParser::matchAttrCompare() {
 	// attrCompare : ref '=' ref
 	// lhs and rhs 'ref' msut be of teh same type (INTEGER or character string)	
-	string fst = matchRef();
+
+	Subquery* withSq = new WithSubquery(&synonyms, controller);
+	string fst = matchRef(true);
 	match("=");
-	string snd = matchRef();
-	cout << "With: fst -> " << fst << "\tsnd -> " << snd;
+	string snd = matchRef(false);
+
+	if(withSecond == "procName") {
+		fst = to_string((long long)controller->procTable->getProcIndex(fst));
+	}
+	if(withSecond == "varName") {
+		fst = to_string((long long)controller->varTable->getVarIndex(fst));
+	}
+
+	cout << "With: fst -> " << fst << "\tsnd -> " << snd << endl;
+	// setSynonymsHelper(fst, snd, withSq);
 }
 
-string NewQueryParser::matchRef() {
+string NewQueryParser::matchRef(bool lhs) {
 	// ref: attrRef | synonym | '"' IDENT '"' | INTEGER
 	// in the above synonym must be a synonym of prog_line
 	// attRef: synonym '.' attrname
@@ -415,7 +434,11 @@ string NewQueryParser::matchRef() {
 	string result = "";
 	if(nextToken.name.compare("\"") == 0) {
 		match("\"");
-		result = nextToken.name;
+		if(!lhs) {
+			if(withVar) result = to_string((long long)controller->varTable->getVarIndex(nextToken.name));
+			if(withProc) result = to_string((long long)controller->procTable->getProcIndex(nextToken.name));
+		}
+
 		match(nextToken.name);
 		match("\"");
 		return result;
@@ -427,6 +450,12 @@ string NewQueryParser::matchRef() {
 		if(nextToken.name.compare(".") == 0) {
 			match(".");
 			string attrname = nextToken.name;
+			if(attrname == "procName")  withProc = true;
+			if(attrname == "varName") withVar = true;
+			if(attrname == "value") withVal = true;
+			if(!lhs) {
+				withSecond = attrname;
+			}
 			match(nextToken.name);
 			return result;
 		} 

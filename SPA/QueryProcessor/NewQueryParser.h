@@ -26,7 +26,8 @@ static const string design_entity[] = {
 	"prog_line",
 	"plus",
 	"minus",
-	"times"
+	"times",
+	"procedure"
 };
 
 static vector<string> DESIGN_ENTITIES(design_entity, design_entity + sizeof(design_entity) / sizeof(design_entity[0]));
@@ -68,6 +69,13 @@ public:
 	void print();
 	map<string, string> getSynonyms();
 
+
+	bool withVar;
+	bool withProc;
+	bool withVal;
+	string withFirst;
+	string withSecond;
+
 private:
 	Lexeme getToken();
 	void match(string);
@@ -82,7 +90,7 @@ private:
 	void matchSuchThat();
 	void matchWith();
 	void matchAttrCompare();
-	string matchRef();
+	string matchRef(bool);
 
 	void matchPatternCl();
 	void matchPatternCond();

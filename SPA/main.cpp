@@ -71,6 +71,23 @@ int main() {
 	query = "variable v; procedure p; Select p with p.procName = v.varName";
 	parser = new NewQueryParser(query, controller);
 
+	query = "stmt s; Select s with s.stmt# = 1";
+	parser = new NewQueryParser(query, controller);
+
+	query = "stmt s1; assign a1; Select s1 with s1.stmt# = a1.stmt#";
+	parser = new NewQueryParser(query, controller);
+
+	query = "while w1; Select w1 with 3 = w1.stmt#";
+	parser = new NewQueryParser(query, controller);
+
+	//query = "Select BOOLEAN with 3 = 2";
+	//parser = new NewQueryParser(query, controller);
+
+	query = "procedure p1; Select p1 with p1.procName = \"First\"";
+	parser = new NewQueryParser(query, controller);
+
+
+
 	string t;
 	cin >> t;
 

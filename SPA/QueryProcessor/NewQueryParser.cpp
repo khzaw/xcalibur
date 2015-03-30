@@ -390,13 +390,12 @@ void NewQueryParser::matchPatternIf(string s) {
 	// if : synonym "(" varRef "," "_" "," "_" ")"
 	Subquery* patternIfSq = new PatternSubquery(&synonyms, controller);
 	match("(");
-	string fst = matchVarRef();
+	string fst = "i";
+	string snd = matchVarRef();
 	match(",");
 	match(UNDERSCORE);
-	string snd = "_";
 	match(",");
 	match(UNDERSCORE);
-	string third = "_";
 	match(")");
 	setSynonymsHelper(fst, snd, patternIfSq);
 }
@@ -405,10 +404,10 @@ void NewQueryParser::matchPatternWhile(string s) {
 	// while : synonym "(" varRef "," "_" ")"
 	Subquery* patternWhileSq = new PatternSubquery(&synonyms, controller);
 	match("(");
-	string fst = matchVarRef();
+	string fst = "w";
+	string snd = matchVarRef();
 	match(",");
 	match(UNDERSCORE);
-	string snd = "_";
 	match(")");
 	setSynonymsHelper(fst, snd, patternWhileSq);
 	

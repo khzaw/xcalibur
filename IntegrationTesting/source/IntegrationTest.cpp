@@ -21,7 +21,7 @@ Parser* parser;
 PKBController* controller;
 
 parser = new Parser("../Debug/Sample-Source.txt");
-controller = &(parser->controller);
+controller = parser->controller;
 
 //string query = "assign a; Select a pattern a(\"oSCar\", \"1 + beta + tmp\" )";
 string query = "assign a; Select a pattern a(\"oSCar\", \"_\" )";

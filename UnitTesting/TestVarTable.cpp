@@ -15,7 +15,7 @@ VarTableTest::tearDown()
 {
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION( VarTableTest );
+// CPPUNIT_TEST_SUITE_REGISTRATION( VarTableTest );
 
 // method to test insertion of procedures
 void 

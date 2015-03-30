@@ -88,8 +88,8 @@
     <ClCompile Include="TestQueryParser.cpp" />
     <ClCompile Include="testRecursiveCFG.cpp" />
     <ClCompile Include="testRecursiveCFG.h" />
+    <ClCompile Include="TestSimpleSubquery.cpp" />
     <ClCompile Include="testStatement.cpp" />
-    <ClCompile Include="TestSubquery.cpp" />
     <ClCompile Include="TestUses.cpp" />
     <ClCompile Include="TestVarTable.cpp" />
     <ClCompile Include="UnitTest.cpp" />

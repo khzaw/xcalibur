@@ -23,6 +23,7 @@ class Parser {
 	stack<Operator> operatorStack;
 	stack<TNode*> operandStack;
 	stack<int> containerStack;
+	stack<TNode*> containerNodeStack;
 	vector<string> procedureNames;
 	map<int, string> callStatements;
 	map<int, set<int>> procAndContainers;

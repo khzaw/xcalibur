@@ -86,6 +86,9 @@ int main() {
 	query = "procedure p1; Select p1 with p1.procName = \"First\"";
 	parser = new NewQueryParser(query, controller);
 
+	query = "assign a; while w; Select a such that Parent* (w, a) and Next*(60, n) pattern a(\"x\", _) such that a.stmt# = n";
+	parser = new NewQueryParser(query, controller);
+
 
 
 	string t;

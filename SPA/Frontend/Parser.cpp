@@ -38,6 +38,7 @@ void Parser::constructRelations() {
 	this->controller->constructParent();
 	this->controller->constructNext();
 	this->controller->constructUses();
+	// cout << "yay" << endl;
 }
 
 Parser::~Parser() {
@@ -79,6 +80,8 @@ void Parser::debug() {
 	cout << "UsesProc: " << controller->usesTable->getSizeProcUses() << endl;
 	cout << "Total Parents: " << totalParents << endl;
 	cout << "Total Siblings: " << totalSiblings << endl;
+	
+
 	cout << "Debug: Done" << endl;
 }
 
@@ -101,8 +104,11 @@ void Parser::program() {
 
 TNode* Parser::createASTNode(string nodeName, string data, TNode* parent, int line, int parentProc) {
 	TNode* node = new TNode(nodeName, data, line, parentProc);
-	controller->ast->assignChild(parent, node);
-	controller->ast->assignParent(node, parent);
+	parent->addChild(node);
+	node->addParent(parent);
+
+	//controller->ast->assignChild(parent, node);
+	//controller->ast->assignParent(node, parent);
 	totalParents++;
 	return node;
 }
@@ -156,7 +162,6 @@ void Parser::stmt(TNode* parent) {
 		controller->statementTable->insertStatement(callNode);
 		match("call");
 
-		populateParent(parent, line);
 
 		string newProcedure = procedureName();
 
@@ -165,6 +170,7 @@ void Parser::stmt(TNode* parent) {
 		match(";");
 
 		populateFollows(line, false, prev, callNode);
+		populateParent(parent, line);
 
 	} else if(nextToken.name == "while") {
 		// while: "while" var_name "{" stmtLst "}"
@@ -173,9 +179,10 @@ void Parser::stmt(TNode* parent) {
 		controller->statementTable->insertStatement(whileNode);
 		match("while");
 
-		populateParent(parent, line);
 		populateFollows(line, true, prev, whileNode);
+		populateParent(parent, line);
 		containerStack.push(line);
+		containerNodeStack.push(whileNode);
 
 		populateProcAndContainers(currentProc, line);
 
@@ -191,6 +198,7 @@ void Parser::stmt(TNode* parent) {
 		match("}");
 		 
 		previousStmt = containerStack.top(); containerStack.pop();
+		prev = containerNodeStack.top(); containerNodeStack.pop();
 		
 	} else if(nextToken.name == "if") {
 		// if: "if" var_name "then" "{" stmtLst "}" "else" "{" stmtLst "}"
@@ -199,9 +207,10 @@ void Parser::stmt(TNode* parent) {
 		controller->statementTable->insertStatement(ifNode);
 		match("if");
 
-		populateParent(parent, line);
 		populateFollows(line, true, prev, ifNode);
+		populateParent(parent, line);
 		containerStack.push(line);
+		containerNodeStack.push(ifNode);
 
 		populateProcAndContainers(currentProc, line);
 
@@ -229,6 +238,7 @@ void Parser::stmt(TNode* parent) {
 		controller->ast->assignRightSibling(thenNode, elseNode);
 
 		previousStmt = containerStack.top(); containerStack.pop();
+		prev = containerNodeStack.top(); containerNodeStack.pop();
 
 	} else {
 		// assign: var_name "=" expr ";"
@@ -239,10 +249,10 @@ void Parser::stmt(TNode* parent) {
 		postfix = "";
 		operatorStack.push(Operator(0, "NULL")); // sentinel
 
-		populateParent(parent, line);
 		populateFollows(line, false, prev, assignNode);
+		populateParent(parent, line);
 
-		TNode* varNode = createASTNode("VAR_NODE", nextToken.name, assignNode, line, currentProc);
+//		TNode* varNode = createASTNode("VAR_NODE", nextToken.name, assignNode, line, currentProc);
 		variableName();
 
 		populateModifies(line, currentProc);
@@ -439,19 +449,20 @@ void Parser::populateFollows(int line, bool isContainer, TNode* previousNode, TN
 
 
 	if(previousStmt > 0 && prev != NULL) {
-		controller->followsTable->insertFollows(previousStmt, line);
+		// cout << previousNode->getNodeType() << "" << previousNode->getStmtNum() << "\t" << currentNode->getNodeType() << "" << currentNode->getStmtNum() << endl;
 		controller->ast->assignRightSibling(previousNode, currentNode);
+		controller->followsTable->insertFollows(previousStmt, line);
 		totalSiblings++;
 		//cout << " right ";
 	}
 	//cout << endl;
 
 	previousStmt = line;
-	this->prev = currentNode;
+	prev = currentNode;
 
 	if(isContainer) {
 		previousStmt = 0;
-		this->prev = NULL;
+		prev = NULL;
 	}
 }
 
@@ -557,8 +568,8 @@ void Parser::populateUses(int line, int procedure, bool assignStatement) {
 }
 
 void Parser::populateRoot(TNode* procedureNode, int procedureIndex) {
-	controller->procTable->insertASTRootNode(procedureIndex, procedureNode);
 	controller->ast->insertRoot(procedureNode);
+	controller->procTable->insertASTRootNode(procedureIndex, procedureNode);
 }
 
 void Parser::popOperator(Operator op) {

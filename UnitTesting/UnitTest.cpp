@@ -11,16 +11,16 @@ int main(int argc, char* argv[])
 // Get the top level suite from the registry
 //CPPUNIT_NS::Test *suite = CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest();
 CppUnit::TestSuite *unitSuite = new CppUnit::TestSuite( "All unit test" );
-unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("VarTableTest").makeTest());	
-unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ProcTableTest").makeTest());
-unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ModifiesTest").makeTest());
-unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("UsesTest").makeTest());	
-unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ParentTest").makeTest());	
-unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("FollowsTest").makeTest());	
-unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ConstantTest").makeTest());	
-unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("StatementTest").makeTest());	
-unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("CallsTest").makeTest());
-unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("QueryParserTest").makeTest());
+//unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("VarTableTest").makeTest());	
+//unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ProcTableTest").makeTest());
+//unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ModifiesTest").makeTest());
+//unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("UsesTest").makeTest());	
+//unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ParentTest").makeTest());	
+//unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("FollowsTest").makeTest());	
+//unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ConstantTest").makeTest());	
+//unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("StatementTest").makeTest());	
+//unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("CallsTest").makeTest());
+//unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("QueryParserTest").makeTest());
 
 CppUnit::TestFactoryRegistry::getRegistry().addTestToSuite(unitSuite);
 CppUnit::TextUi::TestRunner runner;

@@ -20,7 +20,7 @@ UsesTest::tearDown()
 {
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION( UsesTest );
+// CPPUNIT_TEST_SUITE_REGISTRATION( UsesTest );
 
 //statements
 

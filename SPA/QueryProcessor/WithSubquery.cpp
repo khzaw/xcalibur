@@ -45,7 +45,7 @@ public:
 		}
 		return ans;
 	}
-	
+
 	ResultTuple* solve(ResultTuple* tuple) {
 		ResultTuple* ans;
 		switch (isSyn) {
@@ -63,13 +63,17 @@ public:
 		return ans;
 	}
 
+	void setPriority() {
+		priority = 1;
+	}
+
 	vector<int> getValues(string syn, int index){
 		vector<int> values = vector<int>();
 		if (synonymTable->at(syn)=="procedure"){
-			if (index < pkb->procTable->getSize()){
+			if (index < pkb->procTable->getSize() && index >= 0){
 				values.push_back(index);
 			}
-		} else if (synonymTable->at(syn)=="variable"){
+		} else if (synonymTable->at(syn)=="variable" && index >= 0){
 			if (index < pkb->varTable->getSize()){
 				values.push_back(index);
 			}

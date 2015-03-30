@@ -94,7 +94,7 @@ public:
 		tuple->addSynonymToMap(leftSynonym, index);
 		set<int> tempParents;
 		if (isSyn == 2) {	// Parent(syn, stmt): Get parents of stmt
-			tempParents = pkb->parentTable->getParents(rightIndex);
+			tempParents = pkb->parentTable->evaluateGetParent(rightIndex);
 		} else {	// Parent(syn, _): Get all parents stmt
 			tempParents = pkb->parentTable->getAllParentStmt();
 		}
@@ -121,11 +121,11 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 2) {	// Parent(syn, stmt)
-				if (pkb->parentTable->isParentTrue(temp.at(index), rightIndex)) {
+				if (pkb->parentTable->evaluateIsParent(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}
 			} else {	// Parent(syn, _)
-				if (!pkb->parentTable->getChildren(temp.at(index)).empty()) {
+				if (!pkb->parentTable->evaluateGetChildren(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -140,7 +140,7 @@ public:
 		
 		set<int> tempChildren;
 		if (isSyn == 1) {	// Parent(stmt, syn): Get children of stmt
-			tempChildren = pkb->parentTable->getChildren(leftIndex);
+			tempChildren = pkb->parentTable->evaluateGetChildren(leftIndex);
 		} else {	// Parent(_, syn): Get all children stmt
 			tempChildren = pkb->parentTable->getAllChildrenStmt();
 		}
@@ -167,11 +167,11 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 1) {	// Parent(stmt, syn)
-				if (pkb->parentTable->isParentTrue(leftIndex, temp.at(index))) {
+				if (pkb->parentTable->evaluateIsParent(leftIndex, temp.at(index))) {
 					result->addResultRow(temp);
 				}
 			} else {	// Parent(_, syn)
-				if (!pkb->parentTable->getParents(temp.at(index)).empty()) {
+				if (!pkb->parentTable->evaluateGetParent(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -196,7 +196,7 @@ public:
 				&& pkb->statementTable->getTNode(parents[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
 				continue;
 			}
-			set<int> tempChildren = pkb->parentTable->getChildren(parents[i]);
+			set<int> tempChildren = pkb->parentTable->evaluateGetChildren(parents[i]);
 			vector<int> children(tempChildren.begin(), tempChildren.end());
 			for (size_t j = 0; j < children.size(); j++) {
 				// synonym type check
@@ -222,7 +222,7 @@ public:
 		int rIndex = tuple->getSynonymIndex(rightSynonym);
 		if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++){
-				if (pkb->parentTable->isParentTrue(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
+				if (pkb->parentTable->evaluateIsParent(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
 					result->addResultRow(tuple->getResultRow(i));
 				}
 			}
@@ -233,7 +233,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
-					set<int> tV = pkb->parentTable->getChildren(leftValue);
+					set<int> tV = pkb->parentTable->evaluateGetChildren(leftValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
@@ -255,7 +255,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					set<int> tV = pkb->parentTable->getParents(rightValue);
+					set<int> tV = pkb->parentTable->evaluateGetParent(rightValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
@@ -279,11 +279,11 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		tuple->setBool(true);
 		if(isSyn == 0) {	//(digit, digit)
-			tuple->setEmpty(!pkb->parentTable->isParentTrue(leftIndex, rightIndex));
+			tuple->setEmpty(!pkb->parentTable->evaluateIsParent(leftIndex, rightIndex));
 		} else if (isSyn == 7) {	//(_, digit)
-			tuple->setEmpty(pkb->parentTable->getParents(rightIndex).empty());
+			tuple->setEmpty(pkb->parentTable->evaluateGetParent(rightIndex).empty());
 		} else if (isSyn == 8) {	//(digit, _)
-			tuple->setEmpty(pkb->parentTable->getChildren(leftIndex).empty());
+			tuple->setEmpty(pkb->parentTable->evaluateGetChildren(leftIndex).empty());
 		} else {	//(_, _)
 			tuple->setEmpty(pkb->parentTable->getAllChildrenStmt().empty());
 		}

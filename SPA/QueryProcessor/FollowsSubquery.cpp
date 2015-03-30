@@ -94,7 +94,7 @@ public:
 		tuple->addSynonymToMap(leftSynonym, index);
 		set<int> tempFollowees;
 		if (isSyn == 2) {	// Follows(syn, stmt): Get followees of stmt
-			tempFollowees = pkb->followsTable->getFollowees(rightIndex);
+			tempFollowees = pkb->followsTable->evaluateGetFollowees(rightIndex);
 		} else {	// Follows(syn, _): Get all followees stmt
 			tempFollowees = pkb->followsTable->getAllFolloweeStmt();
 		}
@@ -121,11 +121,11 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 2) {	// Follows(syn, stmt)
-				if (pkb->followsTable->isFollowsTrue(temp.at(index), rightIndex)) {
+				if (pkb->followsTable->evaluateIsFollows(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}
 			} else {	// Follows(syn, _)
-				if (!pkb->followsTable->getFollowers(temp.at(index)).empty()) {
+				if (!pkb->followsTable->evaluateGetFollowers(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -140,7 +140,7 @@ public:
 		
 		set<int> tempFollowers;
 		if (isSyn == 1) {	// Follows(stmt, syn): Get followers of stmt
-			tempFollowers = pkb->followsTable->getFollowers(leftIndex);
+			tempFollowers = pkb->followsTable->evaluateGetFollowers(leftIndex);
 		} else {	// Follows(_, syn): Get all followers stmt
 			tempFollowers = pkb->followsTable->getAllFollowerStmt();
 		}
@@ -167,11 +167,11 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 1) {	// Follows(stmt, syn)
-				if (pkb->followsTable->isFollowsTrue(leftIndex, temp.at(index))) {
+				if (pkb->followsTable->evaluateIsFollows(leftIndex, temp.at(index))) {
 					result->addResultRow(temp);
 				}
 			} else {	// Follows(_, syn)
-				if (!pkb->followsTable->getFollowees(temp.at(index)).empty()) {
+				if (!pkb->followsTable->evaluateGetFollowees(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -196,7 +196,7 @@ public:
 				&& pkb->statementTable->getTNode(followees[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
 				continue;
 			}
-			set<int> tempFollowers = pkb->followsTable->getFollowers(followees[i]);
+			set<int> tempFollowers = pkb->followsTable->evaluateGetFollowers(followees[i]);
 			vector<int> followers(tempFollowers.begin(), tempFollowers.end());
 			for (size_t j = 0; j < followers.size(); j++) {
 				// synonym type check
@@ -222,7 +222,7 @@ public:
 		int rIndex = tuple->getSynonymIndex(rightSynonym);
 		if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++){
-				if (pkb->followsTable->isFollowsTrue(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
+				if (pkb->followsTable->evaluateIsFollows(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
 					result->addResultRow(tuple->getResultRow(i));
 				}
 			}
@@ -233,7 +233,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
-					set<int> tV = pkb->followsTable->getFollowers(leftValue);
+					set<int> tV = pkb->followsTable->evaluateGetFollowers(leftValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
@@ -255,7 +255,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					set<int> tV = pkb->followsTable->getFollowees(rightValue);
+					set<int> tV = pkb->followsTable->evaluateGetFollowees(rightValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
@@ -279,11 +279,11 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		tuple->setBool(true);
 		if(isSyn == 0) {	//(digit, digit)
-			tuple->setEmpty(!pkb->followsTable->isFollowsTrue(leftIndex, rightIndex));
+			tuple->setEmpty(!pkb->followsTable->evaluateIsFollows(leftIndex, rightIndex));
 		} else if (isSyn == 7) {	//(_, digit)
-			tuple->setEmpty(pkb->followsTable->getFollowees(rightIndex).empty());
+			tuple->setEmpty(pkb->followsTable->evaluateGetFollowees(rightIndex).empty());
 		} else if (isSyn == 8) {	//(digit, _)
-			tuple->setEmpty(pkb->followsTable->getFollowers(leftIndex).empty());
+			tuple->setEmpty(pkb->followsTable->evaluateGetFollowers(leftIndex).empty());
 		} else {	//(_, _)
 			tuple->setEmpty(pkb->followsTable->getAllFollowerStmt().empty());
 		}

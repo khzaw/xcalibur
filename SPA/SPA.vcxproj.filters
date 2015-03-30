@@ -183,9 +183,6 @@
     <ClCompile Include="PKB\CacheTable.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
-    <ClCompile Include="Contains.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PKB\AST.h">
@@ -324,9 +321,6 @@
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
     <ClInclude Include="PKB\CacheTable.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="Contains.h">
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
   </ItemGroup>

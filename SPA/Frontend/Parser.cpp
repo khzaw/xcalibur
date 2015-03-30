@@ -226,6 +226,8 @@ void Parser::stmt(TNode* parent) {
 		stmtLst(elseStmtLstNode);
 		match("}");
 
+		controller->ast->assignRightSibling(thenNode, elseNode);
+
 		previousStmt = containerStack.top(); containerStack.pop();
 
 	} else {
@@ -422,7 +424,7 @@ void Parser::populateParent(TNode* parent, int line) {
 	}
 }
 
-void Parser::populateFollows(int line, bool isContainer, TNode* prev, TNode* current) {
+void Parser::populateFollows(int line, bool isContainer, TNode* previousNode, TNode* currentNode) {
 	//cout << " line : " << line << "\tpreviousStmt" << previousStmt << endl;
 	//cout << "prev : ";
 	//if(prev == NULL) cout << "NULL";
@@ -432,16 +434,20 @@ void Parser::populateFollows(int line, bool isContainer, TNode* prev, TNode* cur
 	//if(current == NULL) cout << "NULL";
 	//else cout << current->getNodeType();
 
+	// call statement
+		// populateFollows(line, false, prev, callNode);
+
+
 	if(previousStmt > 0 && prev != NULL) {
 		controller->followsTable->insertFollows(previousStmt, line);
-		controller->ast->assignRightSibling(prev, current);
+		controller->ast->assignRightSibling(previousNode, currentNode);
 		totalSiblings++;
 		//cout << " right ";
 	}
 	//cout << endl;
 
 	previousStmt = line;
-	this->prev = current;
+	this->prev = currentNode;
 
 	if(isContainer) {
 		previousStmt = 0;

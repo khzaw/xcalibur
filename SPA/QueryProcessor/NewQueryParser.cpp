@@ -27,6 +27,8 @@
 #include "CallsStarSubquery.cpp"
 #include "NextSubquery.cpp"
 #include "NextStarSubquery.cpp"
+#include "AffectsSubquery.cpp"
+#include "AffectsStarSubquery.cpp"
 
 
 using namespace std;

@@ -49,7 +49,7 @@ public:
 	}
 
 	void setPriority() {
-		int magnitude = 5;	//calculated during profiling
+		int magnitude = 50;	//calculated during profiling
 		bool isLeftSynStmtOrProgLine = true;
 		bool isRightSynStmtOrProgLine = true;
 		switch (isSyn) {

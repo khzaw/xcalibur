@@ -34,14 +34,14 @@ public:
 		//right synonym
 		if(isSyn == 1 || isSyn == 4 || isSyn == 3) {
 			string s = synonymTable->at(rightSynonym);
-			if (s != "ASSIGN_NODE") {
+			if (!(s == "assign" || s == "stmt" || s == "prog_line")) {
 				return false;
 			}
 		}
 		//left synonym
 		if (isSyn == 2 || isSyn == 5 || isSyn == 3) {
 			string s = synonymTable->at(leftSynonym);
-			if (s != "ASSIGN_NODE") {
+			if (!(s == "assign" || s == "stmt" || s == "prog_line")) {
 				return false;
 			}
 		}
@@ -63,6 +63,34 @@ public:
 			default: break;
 		}
 		return ans;
+	}
+
+	void setPriority() {
+		int magnitude = 50;	//calculated during profiling
+		bool isLeftSynStmtOrProgLine = true;
+		bool isRightSynStmtOrProgLine = true;
+		switch (isSyn) {
+			case 1: // (int, syn)
+				priority = (pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE")).size();
+				break;
+			case 2: // (syn, int)
+				priority = (pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE")).size();
+				break;
+			case 3: // (syn, syn)
+				priority = (pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE")).size() * (pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE")).size();
+				break;
+			case 4: // (_, syn)
+				priority = (pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE")).size();
+				break;
+			case 5:	// (syn, _)
+				priority = (pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE")).size();
+				break;
+			default: 
+				priority = 1;
+				break;
+		}
+
+		priority *= magnitude;
 	}
 
 	ResultTuple* solveLeftSyn() {

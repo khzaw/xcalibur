@@ -22,7 +22,7 @@ public:
 	}
 
 	bool validate() {
-		/*if (synonymTable->at(leftSynonym) == "assign" || synonymTable->at(leftSynonym) == "while" || synonymTable->at(leftSynonym) == "if") {
+		if (synonymTable->at(leftSynonym) == "assign" || synonymTable->at(leftSynonym) == "while" || synonymTable->at(leftSynonym) == "if") {
 			if(isSyn == 1 || isSyn == 4 || isSyn == 3) {
 				if (synonymTable->at(rightSynonym) != "variable") {
 					return false;
@@ -30,7 +30,7 @@ public:
 			}
 		} else {
 			return false;
-		}*/
+		}
 		return true;
 	}
 

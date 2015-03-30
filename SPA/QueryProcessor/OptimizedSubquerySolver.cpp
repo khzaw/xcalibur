@@ -17,6 +17,7 @@ OptimizedSubquerySolver::OptimizedSubquerySolver(){
 
 ResultTuple* OptimizedSubquerySolver::solveSet(vector<Subquery*> subqueriesSet){
 	ResultTuple* ans = subqueriesSet.at(0)->solve();
+	/*
 	for(size_t i = 1; i < subqueriesSet.size(); i++) {
 		if((ans->getSynonymIndex(subqueriesSet[i]->leftSynonym) != -1) || (ans->getSynonymIndex(subqueriesSet[i]->rightSynonym) != -1)) {
 			ans = subqueriesSet[i]->solve(ans);
@@ -25,11 +26,38 @@ ResultTuple* OptimizedSubquerySolver::solveSet(vector<Subquery*> subqueriesSet){
 			ans = ans->cross(interim);
 		}
 	}
-	/*
-	for (size_t i = 1; i < subqueriesSet.size(); i++){
-		ans = subqueriesSet.at(i)->solve(ans);
-	}
 	*/
+	subqueriesSet.erase(subqueriesSet.begin());
+	while (subqueriesSet.size() > 0) {
+		if((ans->getSynonymIndex(subqueriesSet[0]->leftSynonym) != -1) || (ans->getSynonymIndex(subqueriesSet[0]->rightSynonym) != -1)) {
+			ans = subqueriesSet[0]->solve(ans);
+			subqueriesSet.erase(subqueriesSet.begin());
+		} else {
+			// expected size of ans + cost to do cartesian product
+			int cost1 = subqueriesSet.front()->getPriority() + subqueriesSet.front()->getPriority() * ans->getAllResults().size();
+			
+			// find next query with related synonyms
+			int index = -1;
+			for (size_t i = 1; i < subqueriesSet.size(); i++) {
+				if ((ans->getSynonymIndex(subqueriesSet[i]->leftSynonym) != -1) || (ans->getSynonymIndex(subqueriesSet[i]->rightSynonym) != -1)) {
+					if (subqueriesSet[i]->getPriority() <= cost1) {
+						index = i;
+						break;
+					}
+				}
+			}
+
+			if (index != -1) {
+				ans = subqueriesSet[index]->solve(ans);
+				subqueriesSet.erase(subqueriesSet.begin() + index);
+			} else {
+				ResultTuple* interim = subqueriesSet[0]->solve();
+				ans = ans->cross(interim);
+				subqueriesSet.erase(subqueriesSet.begin());
+			}
+		}
+	}
+
 	return ans;
 }
 	

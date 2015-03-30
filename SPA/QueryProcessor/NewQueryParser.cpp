@@ -248,25 +248,26 @@ void NewQueryParser::matchPatternAssign(string s) {
 	// expression-spec : """ expr | "_" """ expr """ "_"
 	Subquery* patternAssignSq = new PatternSubquery(&synonyms, controller);
 	result = "";
+	string value = result;
 	match("(");
-	string fst = matchVarRef();
-	string snd;
+	string fst = "a";
+	string snd = matchVarRef();
 	match(",");
 	if(nextToken.name == "_") {
-		snd = "_";
 		match(UNDERSCORE);
+		value += "_";
 	}
 
 	if(nextToken.name == "\"") {
 		match("\"");
 		matchExpression();
-		snd += result;
+		value += result;
 		match("\"");
 	}
 
 	if(nextToken.name == "_") {
-		snd += "_";
 		match(UNDERSCORE);
+		value += "_";
 	}
 	match(")");
 
@@ -274,7 +275,7 @@ void NewQueryParser::matchPatternAssign(string s) {
 	// cout << "fst: " << fst << "\tsnd: "
 	// cout << "POSTFIX : " << result << "\n";
 	// result postfix is ready
-
+	patternAssignSq->setValue(value, true);
 	setSynonymsHelper(fst, snd, patternAssignSq);
 
 }

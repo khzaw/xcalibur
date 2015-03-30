@@ -422,8 +422,8 @@ void NewQueryParser::matchAttrCompare() {
 		fst = to_string((long long)controller->varTable->getVarIndex(fst));
 	}
 
-	cout << "With: fst -> " << fst << "\tsnd -> " << snd << endl;
-	// setSynonymsHelper(fst, snd, withSq);
+	// cout << "With: fst -> " << fst << "\tsnd -> " << snd << endl;
+	setSynonymsHelper(fst, snd, withSq);
 }
 
 string NewQueryParser::matchRef(bool lhs) {
@@ -755,19 +755,24 @@ string NewQueryParser::matchLineRef() {
 }
 
 void NewQueryParser::matchAffects() {
+	AffectsSubquery* affectsSq = new AffectsSubquery(&synonyms, controller);
     match("(");
     string fst = matchStmtRef();
     match(",");
     string snd = matchStmtRef();
     match(")");
+	setSynonymsHelper(fst, snd, affectsSq);
+
 	// cout << "Affects: fst -> " << fst << "\tsnd -> " << snd;
 }
 
 void NewQueryParser::matchAffectsStar() {
+	AffectsStarSubquery* affectsStarSq = new AffectsStarSubquery(&synonyms, controller);
     match("(");
     string fst = matchStmtRef();
     match(",");
     string snd = matchStmtRef();
     match(")");
+	setSynonymsHelper(fst, snd, affectsStarSq);
 	// cout << "Affects: fst -> " << fst << "\tsnd -> " << snd;
 }

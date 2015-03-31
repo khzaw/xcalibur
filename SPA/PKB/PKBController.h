@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+#include <stack>
 #include <iostream>
 
 #include "..\PKB\AST.h"
@@ -48,6 +50,8 @@ public:
 	NextExtractor* nextExtractor;
 	AffectsExtractor* affectsExtractor;
 	CacheTable* cache;
+
+	map<int, stack<int>> procAndContainers;
 
 	PKBController();
 	~PKBController();

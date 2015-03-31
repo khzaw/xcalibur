@@ -25,7 +25,7 @@ PKBController::PKBController(){
 	this->callsExtractor = new CallsExtractor(callsTable);
 	this->followsExtractor = new FollowsExtractor(followsTable);
 	this->parentExtractor = new ParentExtractor(parentTable);
-	this->modifiesExtractor = new ModifiesExtractor(modifiesTable);
+	this->modifiesExtractor = new ModifiesExtractor(modifiesTable, procTable, callsTable);
 	this->usesExtractor = new UsesExtractor(usesTable);
 	this->nextExtractor = new NextExtractor(procTable, statementTable);
 	this->affectsExtractor = new AffectsExtractor(modifiesTable,usesTable,nextExtractor ,varTable, statementTable,callsTable);

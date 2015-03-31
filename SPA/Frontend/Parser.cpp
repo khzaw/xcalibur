@@ -29,6 +29,7 @@ Parser::Parser(string filepath) {
 	this->totalSiblings = 0;
 	parse();
 	constructRelations();
+	debug();
 }
 
 void Parser::constructRelations() {
@@ -80,8 +81,6 @@ void Parser::debug() {
 	cout << "UsesProc: " << controller->usesTable->getSizeProcUses() << endl;
 	cout << "Total Parents: " << totalParents << endl;
 	cout << "Total Siblings: " << totalSiblings << endl;
-	
-
 	cout << "Debug: Done" << endl;
 }
 
@@ -164,11 +163,13 @@ void Parser::stmt(TNode* parent) {
 
 
 		string newProcedure = procedureName();
+		int procIndex = getProcedureIndex(newProcedure);
 
-		controller->callsTable->insertCalls(currentProc, getProcedureIndex(newProcedure));
+		controller->callsTable->insertCalls(currentProc, procIndex);
 		callStatements.insert(pair<int, string>(line, newProcedure));
 		match(";");
 
+		populateProcAndContainers(procIndex, line);
 		populateFollows(line, false, prev, callNode);
 		populateParent(parent, line);
 
@@ -183,8 +184,8 @@ void Parser::stmt(TNode* parent) {
 		populateParent(parent, line);
 		containerStack.push(line);
 		containerNodeStack.push(whileNode);
-
 		populateProcAndContainers(currentProc, line);
+
 
 		//TNode* whileVarNode = createASTNode("VAR_NODE", nextToken.name, whileNode, line, currentProc);
 		whileNode->setData(nextToken.name);
@@ -211,7 +212,6 @@ void Parser::stmt(TNode* parent) {
 		populateParent(parent, line);
 		containerStack.push(line);
 		containerNodeStack.push(ifNode);
-
 		populateProcAndContainers(currentProc, line);
 
 		//TNode* ifVarNode = createASTNode("VAR_NODE", nextToken.name, ifNode, line, currentProc);
@@ -482,8 +482,6 @@ void Parser::populateModifies(int line, int procedure) {
 		for(std::map<int, string>::iterator it=callStatements.begin(); it!=callStatements.end(); ++it) {
 			if(it->second == currentProcedureName) {
 				controller->modifiesTable->insertModifiesStmt(it->first, lastVarIndex);
-
-
 			}
 		}
 
@@ -512,13 +510,13 @@ void Parser::populateModifies(int line, int procedure) {
 }
 
 void Parser::populateProcAndContainers(int procedure, int containerLine) {
-	map<int, set<int>>::iterator it = procAndContainers.find(procedure);
-	if(it != procAndContainers.end()) {
-		it->second.insert(containerLine);
+	map<int, stack<int>>::iterator it = procAndContainers.find(procedure);
+	if(it != procAndContainers.end() && procedure == currentProc) {
+		it->second.push(containerLine);
 	} else {
-		set<int> newSet;
-		newSet.insert(containerLine);
-		procAndContainers.insert(pair<int, set<int>>(procedure, newSet));
+		stack<int> newStack;
+		newStack.push(containerLine);
+		procAndContainers.insert(pair<int, stack<int>>(procedure, newStack));
 	}
 
 }

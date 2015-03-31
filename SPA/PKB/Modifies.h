@@ -37,6 +37,8 @@ class Modifies{
 	
 
 	//getters
+	set<int> getAllVariablesModifiedByProc(int);
+
 	set<int> getAllModifiersStmt();
 	set<int> getAllModifiedVarStmt();
 	set<int> getAllModifiersProc();

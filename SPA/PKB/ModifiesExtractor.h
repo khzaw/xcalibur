@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include "..\PKB\Modifies.h"
+#include "ProcTable.h"
+#include "Calls.h"
 
 
 using namespace std;
@@ -10,12 +12,17 @@ class ModifiesExtractor{
 private:
 
 	Modifies* modifies;
+	ProcTable* procTable;
+	Calls* callsTable;
 
 public:
 
+		ModifiesExtractor(Modifies* modifies, ProcTable* procTable, Calls* callsTable);
 		ModifiesExtractor(Modifies* modifies);
 		ModifiesExtractor();
 		void construct();
+
+	void buildCallStmtMod();
 
 	//build stmt modifies table
 	void buildStmtVarMod();  // done

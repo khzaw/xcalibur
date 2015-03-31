@@ -26,7 +26,7 @@ class Parser {
 	stack<TNode*> containerNodeStack;
 	vector<string> procedureNames;
 	map<int, string> callStatements;
-	map<int, set<int>> procAndContainers;
+	map<int, stack<int>> procAndContainers;
 
 	int totalParents;
 	int totalSiblings;

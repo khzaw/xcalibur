@@ -278,7 +278,6 @@ void NewQueryParser::matchPatternAssign(string s) {
 	// result postfix is ready
 	patternAssignSq->setValue(value, true);
 	setSynonymsHelper(fst, snd, patternAssignSq);
-
 }
 
 QTNode* NewQueryParser::matchExpression() {

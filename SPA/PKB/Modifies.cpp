@@ -17,6 +17,17 @@ using namespace std;
 	  }
    }
 
+   set<int> Modifies::getAllVariablesModifiedByProc(int procIndex) {
+	   set<int> results;
+	   for(size_t i = 0; i < procMod.size(); i++) {
+		   if(procMod[i].first == procIndex) {
+			   results.insert(procMod[i].second);
+		   }
+	   }
+	   return results;
+   }
+
+
    int Modifies::getSizeStmtModifies() {
 	   return stmtMod.size();
    }
@@ -340,5 +351,3 @@ using namespace std;
 	void Modifies::insertToVarProcIndexMap(pair<int,int> p){
 	      varProcIndexMap.insert(p);
 	}
-
- 

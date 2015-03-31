@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "ProcTable.h"
 #include <stdexcpt.h>
+#include <set>
 using namespace std;
 
 /************** Constructors **********************/
@@ -21,6 +22,14 @@ int ProcTable::insertProc(string p){
 	    pTable.push_back(p);
 		return size;
 	}
+}
+
+set<int> ProcTable::getAllProc() {
+	set<int> allProcedures;
+	for(std::map<string, int>::iterator it = pMap.begin(); it != pMap.end(); ++it) {
+		allProcedures.insert(it->second);
+	}
+	return allProcedures;
 }
 
 int ProcTable::getSize(){

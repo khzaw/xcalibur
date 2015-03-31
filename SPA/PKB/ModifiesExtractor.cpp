@@ -3,8 +3,10 @@
 #include "ModifiesExtractor.h"
 
 
-ModifiesExtractor::ModifiesExtractor(Modifies* modifies){
+ModifiesExtractor::ModifiesExtractor(Modifies* modifies, ProcTable* procTable, Calls* callsTable) {
 	this->modifies  = modifies;
+	this->procTable = procTable;
+	this->callsTable = callsTable;
 }
 
 ModifiesExtractor::ModifiesExtractor(){
@@ -12,6 +14,7 @@ ModifiesExtractor::ModifiesExtractor(){
 }
 
 void ModifiesExtractor::construct(){
+	buildCallStmtMod();
 	buildStmtVarIndex();
 	buildVarStmtIndex();
     buildVarProcIndex();
@@ -22,6 +25,32 @@ void ModifiesExtractor::construct(){
 	buildProcVarMod();
 	buildStmtBool();
 	buildProcBool();
+}
+
+void ModifiesExtractor::buildCallStmtMod() {
+
+	// for each procedure
+	set<int> allProcedures = procTable->getAllProc();
+	for(std::set<int>::iterator it = allProcedures.begin(); it != allProcedures.end(); ++it) {
+		// get all variables modified by a procedure
+		set<int> variablesInProc = modifies->getAllVariablesModifiedByProc(*it);
+
+		// get all caller procedures
+		set<int> callerProcedures = callsTable->getCallerS(*it);
+
+		for(std::set<int>::iterator i = callerProcedures.begin(); i != callerProcedures.end(); ++i) {
+			for(std::set<int>::iterator j = variablesInProc.begin(); j != variablesInProc.end(); ++j) {
+				modifies->insertModifiesProc(*i, *j);
+			}
+		}
+
+
+	}
+
+	//for(std::set<int>::iterator it=
+	// get all variables modified by a procedure
+	// get all caller procedures
+	// set modifies
 }
 
 void ModifiesExtractor::buildStmtVarMod(){

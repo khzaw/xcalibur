@@ -741,7 +741,7 @@ Contains::Contains(){
 
 	vector<int> Contains::getAllStmtPlusContainees(){ //return all the pluses which are contained within a statement
 		vector<int> results;
-		for(int i=0; i<stmtConst.size(); i++)
+		for(int i=0; i<stmtPlus.size(); i++)
 			results.push_back(stmtPlus[i].second);
 		return results;
 	}
@@ -862,7 +862,7 @@ Contains::Contains(){
 
 	vector<int> Contains::getAllMinusConstContainers(){ //returns the list of all minus nodes which contain some constant
 		vector<int> results;
-		for(int i=0; i<minusVar.size(); i++)
+		for(int i=0; i<minusConst.size(); i++)
 			results.push_back(minusVar[i].first);
 		return results;
 	}

@@ -11,6 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Contains.cpp" />
+    <ClCompile Include="extractContainsFromAst.cpp" />
     <ClCompile Include="Frontend\Parser.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Frontend\Lexeme.cpp" />
@@ -44,6 +46,8 @@
     <ClCompile Include="QueryProcessor\StubSubquery.cpp" />
     <ClCompile Include="QueryProcessor\UsesSubquery.cpp" />
     <ClCompile Include="QueryProcessor\WithSubquery.cpp" />
+    <ClInclude Include="Contains.h" />
+    <ClInclude Include="extractContainsFromAst.h" />
     <ClInclude Include="Frontend\Parser.h" />
     <ClInclude Include="PKB\AffectsExtractor.h" />
     <ClInclude Include="PKB\CacheTable.h" />

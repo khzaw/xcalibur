@@ -1,7 +1,6 @@
 #pragma once
-#include "Contains.h"
+#include "Contains.h" 
 #include<iostream>
-
 
 using namespace std;
 	

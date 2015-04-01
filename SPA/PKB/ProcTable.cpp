@@ -69,3 +69,7 @@ void ProcTable::insertASTRootNode(int procIndex , TNode * tNode)
 {
 	return procRootTable[procIndex];
 }
+
+ vector<TNode*> ProcTable::getProcRootTable (){
+	return procRootTable;
+}

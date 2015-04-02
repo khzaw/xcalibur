@@ -91,12 +91,17 @@ public:
 			{default:					//pattern a (_, ...)
 				for(size_t i = 0; i < assign.size(); i++) {
 					if (matchPattern(pkb->statementTable->getTNode(assign[i])->getData())) {
+						/*
 						for (size_t j = 0; j < assign.size(); j++) {
 							vector<int> temp = vector<int>();
 							temp.push_back(assign[i]);
 							tuple->addResultRow(temp);
 						}
 						break;
+						*/
+						vector<int> temp = vector<int>();
+						temp.push_back(assign[i]);
+						tuple->addResultRow(temp);
 					}
 				}
 			}

@@ -79,7 +79,6 @@
     <ClCompile Include="testConstant.cpp" />
     <ClCompile Include="testFollows.cpp" />
     <ClCompile Include="testIterativeCFG.cpp" />
-    <ClCompile Include="TestModifies.cpp" />
     <ClCompile Include="TestOptimizedQE.cpp" />
     <ClCompile Include="TestOptimizedSubquerySolver.cpp" />
     <ClCompile Include="testParent.cpp" />
@@ -88,8 +87,8 @@
     <ClCompile Include="TestQueryParser.cpp" />
     <ClCompile Include="testRecursiveCFG.cpp" />
     <ClCompile Include="testRecursiveCFG.h" />
-    <ClCompile Include="TestSimpleSubquery.cpp" />
     <ClCompile Include="testStatement.cpp" />
+    <ClCompile Include="TestSubquery.cpp" />
     <ClCompile Include="TestUses.cpp" />
     <ClCompile Include="TestVarTable.cpp" />
     <ClCompile Include="UnitTest.cpp" />

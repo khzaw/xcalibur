@@ -196,15 +196,34 @@ public:
 
 	ResultTuple* solveIfWhile() {
 		ResultTuple* tuple = new ResultTuple();
-		UsesSubquery* s = new UsesSubquery(this->synonymTable, this->pkb);
-		switch(isSyn) {
-			case 0: case 2: case 7:	//pattern i (int, _) -> if(x)
-				s->setSynonyms(leftSynonym, rightIndex);
-				break;	
-			default :	//pattern i (syn, _) or (_, _)
-				s->setSynonyms(leftSynonym, rightSynonym);
+		tuple->addSynonymToMap(leftSynonym, tuple->addSynonym(leftSynonym));
+		vector<int> nodes = (synonymTable->at(leftSynonym)=="while") ? pkb->statementTable->getStmtNumUsingNodeType("WHILE_NODE") : pkb->statementTable->getStmtNumUsingNodeType("IF_NODE");
+		
+		if (isSyn == 2) {
+			for (size_t i = 0; i < nodes.size(); i++) {
+				if (rightIndex == pkb->varTable->getVarIndex((pkb->statementTable->getTNode(nodes[i])->getData()))) {
+					vector<int> temp = vector<int>();
+					temp.push_back(nodes[i]);
+					tuple->addResultRow(temp);
+				}
+			}
+		} else if (isSyn == 3) {
+			tuple->addSynonymToMap(rightSynonym, tuple->addSynonym(rightSynonym));
+			for (size_t i = 0; i < nodes.size(); i++) {
+				vector<int> temp = vector<int>();
+				temp.push_back(nodes[i]);
+				temp.push_back(pkb->varTable->getVarIndex((pkb->statementTable->getTNode(nodes[i])->getData())));
+				tuple->addResultRow(temp);
+			}
+		} else {
+			for (size_t i = 0; i < nodes.size(); i++) {
+				vector<int> temp = vector<int>();
+				temp.push_back(nodes[i]);
+				tuple->addResultRow(temp);
+			
+			}
 		}
-		tuple = s->solve();
+
 		return tuple;
 	}
 

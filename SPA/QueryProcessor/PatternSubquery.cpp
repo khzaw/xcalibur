@@ -82,7 +82,7 @@ public:
 					if(matchPattern(temp)) {
 						vector<int> temp2 = vector<int>();
 						temp2.push_back(assign[i]);
-						temp2.push_back(pkb->varTable->getVarIndex(temp));
+						temp2.push_back(*(pkb->modifiesTable->evaluateGetModifiedVarStmt(assign[i]).begin()));
 						tuple->addResultRow(temp2);
 					}
 				}

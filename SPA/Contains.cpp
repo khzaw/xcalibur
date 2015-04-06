@@ -10,13 +10,6 @@ Contains::Contains(){
 		
 	//containers
 
-	//insert contains(prog,proc)
-	void Contains::insertProgProc(int progNum, int proc) {
-		pair<int,int> record(progNum, proc);
-		if(isContainsProgProc(progNum, proc)==false)
-			progProc.push_back(record);
-	}
-
 	//insert contains(proc,stmtLst)
 	void Contains::insertProcStmtLst(int proc, int stmtLst){
 		pair<int,int> record(proc, stmtLst);
@@ -184,820 +177,777 @@ Contains::Contains(){
 
 	//getters
 
-	//for program ContainerStar
-	//returns the procedures Contained within a program
-	vector<int> Contains::getProcContainedInProg (int prog) {  
-		vector<int> result;
-		for(int i =0; i<progProc.size(); i++) {
-			if(progProc[i].first == prog)
-				result.push_back(progProc[i].second);
-		}
-		return result;
-	}
-	
-	vector<int> Contains::getProgContainingProc (int proc) {  //return the program which contains the procedure
-		vector<int> result;
-		for(int i =0; i<progProc.size(); i++) {
-			if(progProc[i].second == proc)
-				result.push_back(progProc[i].first);
-		}
-		return result;
-	}
-	
 	//for procedures as containers
-	vector<int> Contains::getStmtLstContainedInProc(int proc) { //returns the statement list contained in proc (WILL NEVER BE QUERIED !!!)
-		vector<int> result;
+	set<int> Contains::getStmtLstContainedInProc(int proc) { //returns the statement list contained in proc (WILL NEVER BE QUERIED !!!)
+		set<int> result;
 		for(int i =0; i<procStmtLst.size(); i++) {
 			if(procStmtLst[i].first == proc)
-				result.push_back(procStmtLst[i].second);
+				result.insert(procStmtLst[i].second);
 		}
 		return result;
 	}
 
 
-	vector<int> Contains::getProcContainingStmtLst(int stmtLst) { //returns the procedure which contains the given stmtLst
-		vector<int> result;
+	set<int> Contains::getProcContainingStmtLst(int stmtLst) { //returns the procedure which contains the given stmtLst
+		set<int> result;
 		for(int i =0; i<procStmtLst.size(); i++) {
 			if(procStmtLst[i].second == stmtLst)
-				result.push_back(procStmtLst[i].first);
+				result.insert(procStmtLst[i].first);
 		}
 		return result;
 
 	}
 
 	//for statementlist as containers
-	vector<int> Contains::getStmtContainedInStmtLst(int stmtLst) { //returns the statements contained in statement list
-		vector<int> result;
+	set<int> Contains::getStmtContainedInStmtLst(int stmtLst) { //returns the statements contained in statement list
+		set<int> result;
 		for(int i =0; i<stmtLstStmt.size(); i++) {
 			if(stmtLstStmt[i].first == stmtLst)
-				result.push_back(stmtLstStmt[i].second);
+				result.insert(stmtLstStmt[i].second);
 		}
 		return result;
 
 	}
 
-	vector<int> Contains::getStmtLstContainingStmt(int stmt) { //returns the statementlist containing statements
-		vector<int> result;
+	set<int> Contains::getStmtLstContainingStmt(int stmt) { //returns the statementlist containing statements
+		set<int> result;
 		for(int i =0; i<stmtLstStmt.size(); i++) {
 			if(stmtLstStmt[i].second == stmt)
-				result.push_back(stmtLstStmt[i].first);
+				result.insert(stmtLstStmt[i].first);
 		}
 		return result;
 	}
 
 
 	//for statements as containers
-	vector<int> Contains::getVarContainedInStmt (int stmt) {   //returns the variables contained in a stmt
-		vector<int> result;
+	set<int> Contains::getVarContainedInStmt (int stmt) {   //returns the variables contained in a stmt
+		set<int> result;
 		for(int i=0; i<stmtVar.size(); i ++){
 			if(stmtVar[i].first == stmt)
-				result.push_back(stmtVar[i].second);
+				result.insert(stmtVar[i].second);
 		}
 		return result;
 
 	}
 
-	vector<int> Contains::getStmtContainingVar (int var) {   //returns the statements which conatins the variable
-		vector<int> result;
+	set<int> Contains::getStmtContainingVar (int var) {   //returns the statements which conatins the variable
+		set<int> result;
 		for(int i=0; i<stmtVar.size(); i ++){
 			if(stmtVar[i].second == var)
-				result.push_back(stmtVar[i].first);
+				result.insert(stmtVar[i].first);
 		}
 		return result;
 
 	}
 
-	vector<int> Contains::getConstContainedInStmt (int stmt) {  //returns the constants which are conatined within a statement
-		vector<int> result;
+	set<int> Contains::getConstContainedInStmt (int stmt) {  //returns the constants which are conatined within a statement
+		set<int> result;
 		for(int i=0; i<stmtConst.size(); i++){
 			if(stmtConst[i].first==stmt)
-				result.push_back(stmtConst[i].second);
+				result.insert(stmtConst[i].second);
 		}
 		return result; 
 	}
 
-	vector<int> Contains::getStmtContainingConst(int constant ) {  //returns the statements which contain the constant
-		vector<int> result;
+	set<int> Contains::getStmtContainingConst(int constant ) {  //returns the statements which contain the constant
+		set<int> result;
 		for(int i=0; i<stmtConst.size(); i++){
 			if(stmtConst[i].second==constant)
-				result.push_back(stmtConst[i].first);
+				result.insert(stmtConst[i].first);
 		}
 		return result;
 
 	}
 
-	vector<int> Contains::getStmtLstContainedInStmt (int stmt) { //returns the statementList which are contained in statement (WILL NEVER APPEAR AS QUERY!!!)
-		vector<int> result;
+	set<int> Contains::getStmtLstContainedInStmt (int stmt) { //returns the statementList which are contained in statement (WILL NEVER APPEAR AS QUERY!!!)
+		set<int> result;
 		for(int i=0; i<stmtStmtLst.size(); i++){
 			if(stmtStmtLst[i].first==stmt)
-				result.push_back(stmtStmtLst[i].second);
+				result.insert(stmtStmtLst[i].second);
 		}
 		return result;
 
 	}
 
-	vector<int> Contains::getStmtContainingStmtLst (int stmtLst) { //returns the statements contain statementList 
-		vector<int> result;
+	set<int> Contains::getStmtContainingStmtLst (int stmtLst) { //returns the statements contain statementList 
+		set<int> result;
 		for(int i=0; i<stmtStmtLst.size(); i++){
 			if(stmtStmtLst[i].second==stmtLst)
-				result.push_back(stmtStmtLst[i].first);
+				result.insert(stmtStmtLst[i].first);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getPlusContainedInStmt(int stmt) { //returns the plus contained in statement (WILL NEVER APPEAR AS QUERY !!!)
-		vector<int> result;
+	set<int> Contains::getPlusContainedInStmt(int stmt) { //returns the plus contained in statement (WILL NEVER APPEAR AS QUERY !!!)
+		set<int> result;
 		for(int i=0; i<stmtPlus.size();i++){
 			if(stmtPlus[i].first==stmt)
-				result.push_back(stmtPlus[i].second);
+				result.insert(stmtPlus[i].second);
 		}
 		return result;
 	}
 
 
-	vector<int> Contains::getStmtContainingPlus(int plus) { //returns the statements containing plus 
-		vector<int> result;
+	set<int> Contains::getStmtContainingPlus(int plus) { //returns the statements containing plus 
+		set<int> result;
 		for(int i=0; i<stmtPlus.size();i++){
 			if(stmtPlus[i].second==plus)
-				result.push_back(stmtPlus[i].first);
+				result.insert(stmtPlus[i].first);
 		}
 		return result;
 	}
 
 
-	vector<int> Contains::getMinusContainedInStmt(int stmt) { //returns the minus contained in statement (WILL NEVER APPEAR AS QUERY !!!)
-		vector<int> result;
+	set<int> Contains::getMinusContainedInStmt(int stmt) { //returns the minus contained in statement (WILL NEVER APPEAR AS QUERY !!!)
+		set<int> result;
 		for(int i=0; i<stmtMinus.size();i++){
 			if(stmtMinus[i].first==stmt)
-				result.push_back(stmtMinus[i].second);
+				result.insert(stmtMinus[i].second);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getStmtContainingMinus(int minus) { //returns the statements containing minus
-		vector<int> result;
+	set<int> Contains::getStmtContainingMinus(int minus) { //returns the statements containing minus
+		set<int> result;
 		for(int i=0; i<stmtMinus.size();i++){
 			if(stmtMinus[i].second==minus)
-				result.push_back(stmtMinus[i].first);
+				result.insert(stmtMinus[i].first);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getTimesContainedInStmt(int stmt) { //returns the  imescontained in statement (WILL NEVER APPEAR AS QUERY !!!)
-		vector<int> result;
+	set<int> Contains::getTimesContainedInStmt(int stmt) { //returns the  imescontained in statement (WILL NEVER APPEAR AS QUERY !!!)
+		set<int> result;
 		for(int i=0; i<stmtTimes.size();i++){
 			if(stmtTimes[i].first==stmt)
-				result.push_back(stmtTimes[i].second);
+				result.insert(stmtTimes[i].second);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getStmtContainingTimes(int times) { //returns the statements containing times
-		vector<int> result;
+	set<int> Contains::getStmtContainingTimes(int times) { //returns the statements containing times
+		set<int> result;
 		for(int i=0; i<stmtTimes.size();i++){
 			if(stmtTimes[i].second==times)
-				result.push_back(stmtTimes[i].first);
+				result.insert(stmtTimes[i].first);
 		}
 		return result;
 	}
 
 
 	//for plus node as container 
-	vector<int> Contains::getVarContainedInPlus(int plus) { //returns all those variables which are children of the plus node in the AST
-		vector<int> result;
+	set<int> Contains::getVarContainedInPlus(int plus) { //returns all those variables which are children of the plus node in the AST
+		set<int> result;
 		for(int i=0; i<plusVar.size(); i++){
 			if(plusVar[i].first==plus)
-				result.push_back(plusVar[i].second);
+				result.insert(plusVar[i].second);
 		}
 	return result;
 	}
 
-	vector<int> Contains::getPlusContainingVar(int var) { //returns all those pluses which contain the variable node
-		vector<int> result;
+	set<int> Contains::getPlusContainingVar(int var) { //returns all those pluses which contain the variable node
+		set<int> result;
 		for(int i=0; i<plusVar.size(); i++){
 			if(plusVar[i].second==var)
-				result.push_back(plusVar[i].first);
+				result.insert(plusVar[i].first);
 		}
 	return result;
 	}
 
-	vector<int> Contains::getConstContainedInPlus(int plus) { //returns all those constants which are children of the plus node in the AST
-		vector<int> result;
+	set<int> Contains::getConstContainedInPlus(int plus) { //returns all those constants which are children of the plus node in the AST
+		set<int> result;
 		for(int i=0; i<plusConst.size(); i++){
 			if(plusConst[i].first==plus)
-				result.push_back(plusConst[i].second);
+				result.insert(plusConst[i].second);
 		}
 	return result;
 	}
 
 
-	vector<int> Contains::getPlusContainingConst(int constant) { //returns all those pluses which contain the constant
-		vector<int> result;
+	set<int> Contains::getPlusContainingConst(int constant) { //returns all those pluses which contain the constant
+		set<int> result;
 		for(int i=0; i<plusConst.size(); i++){
 			if(plusConst[i].second==constant)
-				result.push_back(plusConst[i].first);
+				result.insert(plusConst[i].first);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getPlusContainedInPlus(int plus) { //returns all those plus which are children of the plus node in the AST
-		vector<int> result;
+	set<int> Contains::getPlusContainedInPlus(int plus) { //returns all those plus which are children of the plus node in the AST
+		set<int> result;
 		for(int i=0; i<plusPlus.size(); i++){
 			if(plusPlus[i].first==plus)
-				result.push_back(plusPlus[i].second);
+				result.insert(plusPlus[i].second);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getPlusContainingPlus(int plus) { //returns all those pluses which contain the plus node
-		vector<int> result;
+	set<int> Contains::getPlusContainingPlus(int plus) { //returns all those pluses which contain the plus node
+		set<int> result;
 		for(int i=0; i<plusPlus.size(); i++){
 			if(plusPlus[i].second==plus)
-				result.push_back(plusPlus[i].first);
+				result.insert(plusPlus[i].first);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getMinusContainedInPlus(int plus) { //returns all those minus which are children of the plus node in the AST
-		vector<int> result;
+	set<int> Contains::getMinusContainedInPlus(int plus) { //returns all those minus which are children of the plus node in the AST
+		set<int> result;
 		for(int i=0; i<plusMinus.size(); i++){
 			if(plusMinus[i].first==plus)
-				result.push_back(plusMinus[i].second);
+				result.insert(plusMinus[i].second);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getPlusContainingMinus(int minus) { //returns all those pluses which contain the minus node
-		vector<int> result;
+	set<int> Contains::getPlusContainingMinus(int minus) { //returns all those pluses which contain the minus node
+		set<int> result;
 		for(int i=0; i<plusMinus.size(); i++){
 			if(plusMinus[i].second==minus)
-				result.push_back(plusMinus[i].first);
+				result.insert(plusMinus[i].first);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getTimesContainedInPlus(int plus) { //returns all those times which are children of the plus node in the AST
-		vector<int> result;
+	set<int> Contains::getTimesContainedInPlus(int plus) { //returns all those times which are children of the plus node in the AST
+		set<int> result;
 		for(int i=0; i<timesPlus.size(); i++){
 			if(timesPlus[i].first==plus)
-				result.push_back(plusTimes[i].second);
+				result.insert(plusTimes[i].second);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getPlusContainingTimes(int times) { //returns all those pluses which contain the times node
-		vector<int> result;
+	set<int> Contains::getPlusContainingTimes(int times) { //returns all those pluses which contain the times node
+		set<int> result;
 		for(int i=0; i<timesPlus.size(); i++) {
 			if(timesPlus[i].second==times)
-				result.push_back(plusTimes[i].first);
+				result.insert(plusTimes[i].first);
 		}
 		return result;
 
 	}
 
 	//for minus node as container
-	vector<int> Contains::getVarContainedInMinus(int minus) { //returns all those variables which are children of the minus node in the AST
-		vector<int> result;
+	set<int> Contains::getVarContainedInMinus(int minus) { //returns all those variables which are children of the minus node in the AST
+		set<int> result;
 		for(int i=0; i<minusVar.size(); i++){
 			if(minusVar[i].first==minus)
-				result.push_back(minusVar[i].second);
+				result.insert(minusVar[i].second);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getMinusContainingVar(int var) { //returns all those minus which contain the variable node
-		vector<int> result;
+	set<int> Contains::getMinusContainingVar(int var) { //returns all those minus which contain the variable node
+		set<int> result;
 		for(int i=0; i<minusVar.size(); i++){
 			if(minusVar[i].second==var)
-				result.push_back(minusVar[i].first);
+				result.insert(minusVar[i].first);
 		}
 		return result;
 	}
 	
-	vector<int> Contains::getConstContainedInMinus(int minus) { //returns all those constants which are children of the minus node in the AST
-		vector<int> result;
+	set<int> Contains::getConstContainedInMinus(int minus) { //returns all those constants which are children of the minus node in the AST
+		set<int> result;
 		for(int i=0; i<minusConst.size(); i++){
 			if(minusConst[i].first==minus)
-				result.push_back(minusConst[i].second);
+				result.insert(minusConst[i].second);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getMinusContainingConst(int constant) { //returns all those minus which contain the constant
-		 vector<int> result;
+	set<int> Contains::getMinusContainingConst(int constant) { //returns all those minus which contain the constant
+		 set<int> result;
 		for(int i=0; i<minusConst.size(); i++){
 			if(minusConst[i].second==constant)
-				result.push_back(minusConst[i].first);
+				result.insert(minusConst[i].first);
 		}
 		return result;
 	}
 	
-	vector<int> Contains::getPlusContainedInMius(int minus) { //returns all those plus which are children of the minus node in the AST
-		vector<int> result;
+	set<int> Contains::getPlusContainedInMinus(int minus) { //returns all those plus which are children of the minus node in the AST
+		set<int> result;
 		for(int i=0; i<minusPlus.size(); i++){
 			if(minusPlus[i].first==minus)
-				result.push_back(minusPlus[i].second);
+				result.insert(minusPlus[i].second);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getMinusContainingPlus(int plus) { //returns all those minuses which contain the plus node
-		 vector<int> result;
+	set<int> Contains::getMinusContainingPlus(int plus) { //returns all those minuses which contain the plus node
+		 set<int> result;
 		for(int i=0; i<minusPlus.size(); i++){
 			if(minusPlus[i].second==plus)
-				result.push_back(minusPlus[i].first);
+				result.insert(minusPlus[i].first);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getMinusContainedInMinus(int minus) { //returns all those minus which are children of the minus node in the AST
-		vector<int> result;
+	set<int> Contains::getMinusContainedInMinus(int minus) { //returns all those minus which are children of the minus node in the AST
+		set<int> result;
 		for(int i=0; i<minusMinus.size(); i++) {
 			if(minusMinus[i].first==minus)
-				result.push_back(minusMinus[i].second);
+				result.insert(minusMinus[i].second);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getMinusContainingMinus(int minus) { //returns all those minus which contain the minus node
-		vector<int> result;
+	set<int> Contains::getMinusContainingMinus(int minus) { //returns all those minus which contain the minus node
+		set<int> result;
 		for(int i=0; i<minusMinus.size(); i++){
 			if(minusMinus[i].second==minus)
-				result.push_back(minusMinus[i].first);
+				result.insert(minusMinus[i].first);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getTimesContainedInMinus(int minus) { //returns all those times which are children of the minus node in the AST
-		vector<int> result;
+	set<int> Contains::getTimesContainedInMinus(int minus) { //returns all those times which are children of the minus node in the AST
+		set<int> result;
 		for(int i=0; i<minusTimes.size(); i++) {
 			if(minusTimes[i].first==minus)
-				result.push_back(minusTimes[i].second);
+				result.insert(minusTimes[i].second);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getMinusContainingTimes(int times) { //returns all those minuses which contain the times node
-		vector<int> result;
+	set<int> Contains::getMinusContainingTimes(int times) { //returns all those minuses which contain the times node
+		set<int> result;
 		for(int i=0; i<minusTimes.size(); i++) {
 			if(minusTimes[i].second==times)
-				result.push_back(minusTimes[i].first);
+				result.insert(minusTimes[i].first);
 		}
 		return result;
 	}
 
 	//for times node as container
-	vector<int> Contains::getVarContainedInTimes(int times) { //returns all those variables which are children of the times node in the AST
-		vector<int> result;
+	set<int> Contains::getVarContainedInTimes(int times) { //returns all those variables which are children of the times node in the AST
+		set<int> result;
 		for(int i=0; i<timesVar.size(); i++){
 			if(timesVar[i].first==times)
-				result.push_back(timesVar[i].second);
+				result.insert(timesVar[i].second);
 		}
 		return result;
 
 	}
 
-	vector<int> Contains::getTimesContainingVar(int var) { //returns all those times which contain the variable node
-		vector<int> result;
+	set<int> Contains::getTimesContainingVar(int var) { //returns all those times which contain the variable node
+		set<int> result;
 		for(int i=0; i<timesVar.size(); i++){
 			if(timesVar[i].second==var)
-				result.push_back(timesVar[i].first);
+				result.insert(timesVar[i].first);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getConstContainedInTimes(int times) { //returns all those constants which are children of the times node in the AST
-		vector<int> result;
+	set<int> Contains::getConstContainedInTimes(int times) { //returns all those constants which are children of the times node in the AST
+		set<int> result;
 		for(int i=0; i<timesConst.size(); i++){
 			if(timesConst[i].first==times)
-				result.push_back(timesConst[i].second);
+				result.insert(timesConst[i].second);
 		}
 		return result;
 
 	}
 	
-	vector<int> Contains::getTimesContainingConst(int constant) { //returns all those times which contain the constant
-		vector<int> result;
+	set<int> Contains::getTimesContainingConst(int constant) { //returns all those times which contain the constant
+		set<int> result;
 		for(int i=0; i<timesConst.size(); i++){
 			if(timesConst[i].second==constant)
-				result.push_back(timesConst[i].first);
+				result.insert(timesConst[i].first);
 		}
 		return result;
 
 	}
 
-	vector<int> Contains::getPlusContainedInTimes(int times) { //returns all those plus which are children of the times node in the AST
-		vector<int> result;
+	set<int> Contains::getPlusContainedInTimes(int times) { //returns all those plus which are children of the times node in the AST
+		set<int> result;
 		for(int i=0; i<timesPlus.size(); i++){
 			if(timesPlus[i].first==times)
-				result.push_back(timesPlus[i].second);
+				result.insert(timesPlus[i].second);
 		}
 		return result;
 	}
 
 
-	vector<int> Contains::getTimesContainingPlus(int plus) { //returns all those times which contain the plus node
-		vector<int> result;
+	set<int> Contains::getTimesContainingPlus(int plus) { //returns all those times which contain the plus node
+		set<int> result;
 		for(int i=0; i<timesPlus.size(); i++){
 			if(timesPlus[i].second==plus)
-				result.push_back(timesPlus[i].first);
+				result.insert(timesPlus[i].first);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getMinusContainedInTimes(int times) { //returns all those minus which are children of the times node in the AST
-		vector<int> result;
+	set<int> Contains::getMinusContainedInTimes(int times) { //returns all those minus which are children of the times node in the AST
+		set<int> result;
 		for(int i=0; i<timesMinus.size(); i++) {
 			if(timesMinus[i].first==times)
-				result.push_back(timesMinus[i].second);
+				result.insert(timesMinus[i].second);
 		}
 		return result;
 	}
 
 
-	vector<int> Contains::getTimesContainingMinus(int minus) { //returns all those times which contain the minus node
-		vector<int> result;
+	set<int> Contains::getTimesContainingMinus(int minus) { //returns all those times which contain the minus node
+		set<int> result;
 		for(int i=0; i<timesMinus.size(); i++) {
 			if(timesMinus[i].first==minus)
-				result.push_back(timesMinus[i].second);
+				result.insert(timesMinus[i].second);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getTimesContainedInTimes(int times) { //returns all those times which are children of the times node in the AST
-		vector<int> result;
+	set<int> Contains::getTimesContainedInTimes(int times) { //returns all those times which are children of the times node in the AST
+		set<int> result;
 		for(int i=0; i<timesTimes.size(); i++) {
 			if(timesTimes[i].first==times)
-				result.push_back(timesTimes[i].second);
+				result.insert(timesTimes[i].second);
 		}
 		return result;
 	}
 
-	vector<int> Contains::getTimesContainingTimes(int times) { //returns all those times which contain the times node
-		vector<int> result;
+	set<int> Contains::getTimesContainingTimes(int times) { //returns all those times which contain the times node
+		set<int> result;
 		for(int i=0; i<timesTimes.size(); i++) {
 			if(timesTimes[i].second==times)
-				result.push_back(timesTimes[i].first);
+				result.insert(timesTimes[i].first);
 		}
 		return result;
 	}
 
 
 	//get all container and Containees
-	//for program as container
-	vector<int> Contains::getAllProgProcContainers(){  //returns all the programs which contain some procedure
-		vector<int> results;
-		for(int i=0; i<progProc.size(); i++)
-			results.push_back(progProc[i].first);
-		return results;
-	}
-
-	vector<int> Contains::getAllProgProcContainees(){ //returns all the procedures which are contained within some program
-		vector<int> results;
-		for(int i=0; i<progProc.size(); i++)
-			results.push_back(progProc[i].second);
-		return results;
-	}
-
 	//for procedure as container
-	vector<int> Contains::getAllProcStmtLstContainers(){ //returns the procedures which contain statement list
-		vector<int> results;
+	set<int> Contains::getAllProcStmtLstContainers(){ //returns the procedures which contain statement list
+		set<int> results;
 		for(int i=0; i<procStmtLst.size(); i++)
-			results.push_back(procStmtLst[i].first);
+			results.insert(procStmtLst[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllProcStmtLstContainees(){ //return the statement list which are ocntained in some procedure
-		vector<int> results;
+	set<int> Contains::getAllProcStmtLstContainees(){ //return the statement list which are ocntained in some procedure
+		set<int> results;
 		for(int i=0; i<procStmtLst.size(); i++)
-			results.push_back(procStmtLst[i].second);
+			results.insert(procStmtLst[i].second);
 		return results;
 	}
 
 	//for statement list as container
-	vector<int> Contains::getAllStmtLstStmtContainers(){ //returns the statementList which contain some statement
-		vector<int> results;
+	set<int> Contains::getAllStmtLstStmtContainers(){ //returns the statementList which contain some statement
+		set<int> results;
 		for(int i=0; i<stmtLstStmt.size(); i++)
-			results.push_back(stmtLstStmt[i].first);
+			results.insert(stmtLstStmt[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllStmtLstStmtContainees(){ //returns the statements which are contained withing a statement list
-		vector<int> results;
+	set<int> Contains::getAllStmtLstStmtContainees(){ //returns the statements which are contained withing a statement list
+		set<int> results;
 		for(int i=0; i<stmtLstStmt.size(); i++)
-			results.push_back(stmtLstStmt[i].second);
+			results.insert(stmtLstStmt[i].second);
 		return results;
 	}
 
 	//for statement as container
-	vector<int> Contains::getAllStmtStmtLstContainers(){ // returns all the statements which contain some statementlist
-		vector<int> results;
+	set<int> Contains::getAllStmtStmtLstContainers(){ // returns all the statements which contain some statementlist
+		set<int> results;
 		for(int i=0; i<stmtStmtLst.size(); i++)
-			results.push_back(stmtStmtLst[i].first);
+			results.insert(stmtStmtLst[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllStmtStmtLstContainees(){ //returns all the statement list conatained within some statement
-		vector<int> results;
+	set<int> Contains::getAllStmtStmtLstContainees(){ //returns all the statement list conatained within some statement
+		set<int> results;
 		for(int i=0; i<stmtStmtLst.size(); i++)
-			results.push_back(stmtStmtLst[i].second);
+			results.insert(stmtStmtLst[i].second);
 		return results;
 	}
 
-	vector<int> Contains::getAllStmtVarContainers(){  //returns all the statements which contain some variable
-		vector<int> results;
+	set<int> Contains::getAllStmtVarContainers(){  //returns all the statements which contain some variable
+		set<int> results;
 		for(int i=0; i<stmtVar.size(); i++)
-			results.push_back(stmtVar[i].first);
+			results.insert(stmtVar[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllStmtVarContainees(){  //returns all the variables contained within some statement
-		vector<int> results;
+	set<int> Contains::getAllStmtVarContainees(){  //returns all the variables contained within some statement
+		set<int> results;
 		for(int i=0; i<stmtVar.size(); i++)
-			results.push_back(stmtVar[i].second);
+			results.insert(stmtVar[i].second);
 		return results;
 	}
 
-	vector<int> Contains::getAllStmtConstContainers(){ //returns all the statements which contain some constants
-		vector<int> results;
+	set<int> Contains::getAllStmtConstContainers(){ //returns all the statements which contain some constants
+		set<int> results;
 		for(int i=0; i<stmtConst.size(); i++)
-			results.push_back(stmtConst[i].first);
+			results.insert(stmtConst[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllStmtConstContainees(){ //returns all the constants conatained within some statement
-		vector<int> results;
+	set<int> Contains::getAllStmtConstContainees(){ //returns all the constants conatained within some statement
+		set<int> results;
 		for(int i=0; i<stmtConst.size(); i++)
-			results.push_back(stmtConst[i].second);
+			results.insert(stmtConst[i].second);
 		return results;
 	}
 
-	vector<int> Contains::getAllStmtPlusContainers(){ //returns all the statements which contain some plus
-		vector<int> results;
+	set<int> Contains::getAllStmtPlusContainers(){ //returns all the statements which contain some plus
+		set<int> results;
 		for(int i=0; i<stmtPlus.size(); i++)
-			results.push_back(stmtPlus[i].first);
+			results.insert(stmtPlus[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllStmtPlusContainees(){ //return all the pluses which are contained within a statement
-		vector<int> results;
+	set<int> Contains::getAllStmtPlusContainees(){ //return all the pluses which are contained within a statement
+		set<int> results;
 		for(int i=0; i<stmtPlus.size(); i++)
-			results.push_back(stmtPlus[i].second);
+			results.insert(stmtPlus[i].second);
 		return results;
 	}
 
-	vector<int> Contains::getAllStmtMinusContainers(){ //return all the statements which contain some minus
-		vector<int> results;
+	set<int> Contains::getAllStmtMinusContainers(){ //return all the statements which contain some minus
+		set<int> results;
 		for(int i=0; i<stmtMinus.size(); i++)
-			results.push_back(stmtMinus[i].first);
+			results.insert(stmtMinus[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllStmtMinusContainees(){ //return all the minuses which are contained in some statement
-		vector<int> results;
+	set<int> Contains::getAllStmtMinusContainees(){ //return all the minuses which are contained in some statement
+		set<int> results;
 		for(int i=0; i<stmtMinus.size(); i++)
-			results.push_back(stmtMinus[i].second);
+			results.insert(stmtMinus[i].second);
 		return results;
 	}
 
-	vector<int> Contains::getAllStmtTimesContainers(){ //return all the statements which contain some times node
-		vector<int> results;
+	set<int> Contains::getAllStmtTimesContainers(){ //return all the statements which contain some times node
+		set<int> results;
 		for(int i=0; i<stmtTimes.size(); i++)
-			results.push_back(stmtTimes[i].first);
+			results.insert(stmtTimes[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllStmtTimesContainees(){ //return all the times nodes which are contained within a statement
-		vector<int> results;
+	set<int> Contains::getAllStmtTimesContainees(){ //return all the times nodes which are contained within a statement
+		set<int> results;
 		for(int i=0; i<stmtTimes.size(); i++)
-			results.push_back(stmtTimes[i].second);
+			results.insert(stmtTimes[i].second);
 		return results;
 	}
 
 	// for plus node as container 
-	vector<int> Contains::getAllPlusVarContainers(){ //returns the list of all plus nodes which contain some variable
-		vector<int> results;
+	set<int> Contains::getAllPlusVarContainers(){ //returns the list of all plus nodes which contain some variable
+		set<int> results;
 		for(int i=0; i<plusVar.size(); i++)
-			results.push_back(plusVar[i].first);
+			results.insert(plusVar[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllPlusVarContainees(){ //returns the list of all variables which are contained in some plus node
-		vector<int> results;
+	set<int> Contains::getAllPlusVarContainees(){ //returns the list of all variables which are contained in some plus node
+		set<int> results;
 		for(int i=0; i<plusVar.size(); i++)
-			results.push_back(plusVar[i].second);
+			results.insert(plusVar[i].second);
 		return results;
 	}
 
-	vector<int> Contains::getAllPlusConstContainers(){ //returns the list of all plus nodes which contain some constant
-		vector<int> results;
+	set<int> Contains::getAllPlusConstContainers(){ //returns the list of all plus nodes which contain some constant
+		set<int> results;
 		for(int i=0; i<plusConst.size(); i++)
-			results.push_back(plusConst[i].first);
+			results.insert(plusConst[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllPlusConstContainees(){ //returns the list of all constants which are contained in some plus node
-		vector<int> results;
+	set<int> Contains::getAllPlusConstContainees(){ //returns the list of all constants which are contained in some plus node
+		set<int> results;
 		for(int i=0; i<plusConst.size(); i++)
-			results.push_back(plusConst[i].second);
+			results.insert(plusConst[i].second);
 		return results;
 	}
 
-	vector<int> Contains::getAllPlusPlusContainers(){ //returns the list of all plus nodes which contain some plus nodes
-		vector<int> results;
+	set<int> Contains::getAllPlusPlusContainers(){ //returns the list of all plus nodes which contain some plus nodes
+		set<int> results;
 		for(int i=0; i<plusPlus.size(); i++)
-			results.push_back(plusPlus[i].first);
+			results.insert(plusPlus[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllPlusPlusContainees(){ //returns the list of all pluses which are contained in some plus node
-		vector<int> results;
+	set<int> Contains::getAllPlusPlusContainees(){ //returns the list of all pluses which are contained in some plus node
+		set<int> results;
 		for(int i=0; i<plusPlus.size(); i++)
-			results.push_back(plusPlus[i].second);
+			results.insert(plusPlus[i].second);
 		return results;
 	}
 
-	vector<int> Contains::getAllPlusMinusContainers(){ //returns the list of all plus nodes which contain some minus
-		vector<int> results;
+	set<int> Contains::getAllPlusMinusContainers(){ //returns the list of all plus nodes which contain some minus
+		set<int> results;
 		for(int i=0; i<plusMinus.size(); i++)
-			results.push_back(plusMinus[i].first);
+			results.insert(plusMinus[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllPlusMinusContainees(){ //returns the list of all minuses which are contained in some plus node
-		vector<int> results;
+	set<int> Contains::getAllPlusMinusContainees(){ //returns the list of all minuses which are contained in some plus node
+		set<int> results;
 		for(int i=0; i<plusMinus.size(); i++)
-			results.push_back(plusMinus[i].second);
+			results.insert(plusMinus[i].second);
 		return results;
 	}
 
-	vector<int> Contains::getAllPlusTimesContainers(){ //returns the list of all plus nodes which contain some times nose
-		vector<int> results;
+	set<int> Contains::getAllPlusTimesContainers(){ //returns the list of all plus nodes which contain some times nose
+		set<int> results;
 		for(int i=0; i<plusTimes.size(); i++)
-			results.push_back(plusTimes[i].first);
+			results.insert(plusTimes[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllPlusTimesContainees(){ //returns the list of all times which are contained in some plus node
-		vector<int> results;
+	set<int> Contains::getAllPlusTimesContainees(){ //returns the list of all times which are contained in some plus node
+		set<int> results;
 		for(int i=0; i<plusTimes.size(); i++)
-			results.push_back(plusTimes[i].second);
+			results.insert(plusTimes[i].second);
 		return results;
 	}
 	
 	//for minus node as container
-	vector<int> Contains::getAllMinusVarContainers(){ //returns the list of all minus nodes which contain some variable
-		vector<int> results;
+	set<int> Contains::getAllMinusVarContainers(){ //returns the list of all minus nodes which contain some variable
+		set<int> results;
 		for(int i=0; i<minusVar.size(); i++)
-			results.push_back(minusVar[i].first);
+			results.insert(minusVar[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllMinusVarContainees(){ //returns the list of all variables which are contained in some minus node
-		vector<int> results;
+	set<int> Contains::getAllMinusVarContainees(){ //returns the list of all variables which are contained in some minus node
+		set<int> results;
 		for(int i=0; i<minusVar.size(); i++)
-			results.push_back(minusVar[i].second);
+			results.insert(minusVar[i].second);
 		return results;
 	}
 
-	vector<int> Contains::getAllMinusConstContainers(){ //returns the list of all minus nodes which contain some constant
-		vector<int> results;
+	set<int> Contains::getAllMinusConstContainers(){ //returns the list of all minus nodes which contain some constant
+		set<int> results;
 		for(int i=0; i<minusConst.size(); i++)
-			results.push_back(minusVar[i].first);
+			results.insert(minusVar[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllMinusConstContainees(){ //returns the list of all constants which are contained in some minus node
-		vector<int> results;
+	set<int> Contains::getAllMinusConstContainees(){ //returns the list of all constants which are contained in some minus node
+		set<int> results;
 		for(int i=0; i<minusConst.size(); i++)
-			results.push_back(minusConst[i].second);
+			results.insert(minusConst[i].second);
 		return results;
 	}
 
-	vector<int> Contains::getAllMinusPlusContainers(){ //returns the list of all minus nodes which contain some minus nodes
-		vector<int> results;
+	set<int> Contains::getAllMinusPlusContainers(){ //returns the list of all minus nodes which contain some minus nodes
+		set<int> results;
 		for(int i=0; i<minusPlus.size(); i++)
-			results.push_back(minusPlus[i].first);
+			results.insert(minusPlus[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllMinusPlusContainees(){ //returns the list of all minuses which are contained in some minus node
-		vector<int> results;
+	set<int> Contains::getAllMinusPlusContainees(){ //returns the list of all minuses which are contained in some minus node
+		set<int> results;
 		for(int i=0; i<minusPlus.size(); i++)
-			results.push_back(minusPlus[i].second);
+			results.insert(minusPlus[i].second);
 		return results;
 	}
 
-	vector<int> Contains::getAllMinusMinusContainers(){ //returns the list of all minus nodes which contain some minus
-		vector<int> results;
+	set<int> Contains::getAllMinusMinusContainers(){ //returns the list of all minus nodes which contain some minus
+		set<int> results;
 		for(int i=0; i<minusMinus.size(); i++)
-			results.push_back(minusMinus[i].first);
+			results.insert(minusMinus[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllMinusMinusContainees(){ //returns the list of all minuses which are contained in some minus node
-		vector<int> results;
+	set<int> Contains::getAllMinusMinusContainees(){ //returns the list of all minuses which are contained in some minus node
+		set<int> results;
 		for(int i=0; i<minusMinus.size(); i++)
-			results.push_back(minusMinus[i].second);
+			results.insert(minusMinus[i].second);
 		return results;
 	}
 
-	vector<int> Contains::getAllMinusTimesContainers(){ //returns the list of all minus nodes which contain some times node
-		vector<int> results;
+	set<int> Contains::getAllMinusTimesContainers(){ //returns the list of all minus nodes which contain some times node
+		set<int> results;
 		for(int i=0; i<minusTimes.size(); i++)
-			results.push_back(minusTimes[i].first);
+			results.insert(minusTimes[i].first);
 		return results;
 	}
-	vector<int> Contains::getAllMinusTimesContainees(){ //returns the list of all times which are contained in some minus node
-		vector<int> results;
+	set<int> Contains::getAllMinusTimesContainees(){ //returns the list of all times which are contained in some minus node
+		set<int> results;
 		for(int i=0; i<minusTimes.size(); i++)
-			results.push_back(minusTimes[i].second);
+			results.insert(minusTimes[i].second);
 		return results;
 	}
 
 	
 	//for times node as container
-	vector<int> Contains::getAllTimesVarContainers(){ //returns the list of all Times nodes which contain some variable
-		vector<int> results;
+	set<int> Contains::getAllTimesVarContainers(){ //returns the list of all Times nodes which contain some variable
+		set<int> results;
 		for(int i=0; i<timesVar.size(); i++)
-			results.push_back(timesVar[i].first);
+			results.insert(timesVar[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllTimesVarContainees(){ //returns the list of all variables which are contained in some Times node
-		vector<int> results;
+	set<int> Contains::getAllTimesVarContainees(){ //returns the list of all variables which are contained in some Times node
+		set<int> results;
 		for(int i=0; i<timesVar.size(); i++)
-			results.push_back(timesVar[i].second);
+			results.insert(timesVar[i].second);
 		return results;
 	}
 
-	vector<int> Contains::getAllTimesConstContainers(){ //returns the list of all Times nodes which contain some constant
-		vector<int> results;
+	set<int> Contains::getAllTimesConstContainers(){ //returns the list of all Times nodes which contain some constant
+		set<int> results;
 		for(int i=0; i<timesConst.size(); i++)
-			results.push_back(timesConst[i].first);
+			results.insert(timesConst[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllTimesConstContainees(){ //returns the list of all constants which are contained in some Times node
-		vector<int> results;
+	set<int> Contains::getAllTimesConstContainees(){ //returns the list of all constants which are contained in some Times node
+		set<int> results;
 		for(int i=0; i<timesConst.size(); i++)
-			results.push_back(timesConst[i].second);
+			results.insert(timesConst[i].second);
 		return results;
 	}
 
-	vector<int> Contains::getAllTimesPlusContainers(){  //returns the list of all Times nodes which contain some Times nodes
-		vector<int> results;
+	set<int> Contains::getAllTimesPlusContainers(){  //returns the list of all Times nodes which contain some Times nodes
+		set<int> results;
 		for(int i=0; i<timesPlus.size(); i++)
-			results.push_back(timesPlus[i].first);
+			results.insert(timesPlus[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllTimesPlusContainees(){ //returns the list of all Timeses which are contained in some Times node
-		vector<int> results;
+	set<int> Contains::getAllTimesPlusContainees(){ //returns the list of all Timeses which are contained in some Times node
+		set<int> results;
 		for(int i=0; i<timesPlus.size(); i++)
-			results.push_back(timesPlus[i].second);
+			results.insert(timesPlus[i].second);
 		return results;
 	}
 
-	vector<int> Contains::getAllTimesMinusContainers(){ //returns the list of all Times nodes which contain some minus
-		vector<int> results;
+	set<int> Contains::getAllTimesMinusContainers(){ //returns the list of all Times nodes which contain some minus
+		set<int> results;
 		for(int i=0; i<timesMinus.size(); i++)
-			results.push_back(timesMinus[i].first);
+			results.insert(timesMinus[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllTimesMinusContainees(){ //returns the list of all minuses which are contained in some Times node
-		vector<int> results;
+	set<int> Contains::getAllTimesMinusContainees(){ //returns the list of all minuses which are contained in some Times node
+		set<int> results;
 		for(int i=0; i<timesMinus.size(); i++)
-			results.push_back(timesMinus[i].second);
+			results.insert(timesMinus[i].second);
 		return results;
 	}
 
-	vector<int> Contains::getAllTimesTimesContainers(){ //returns the list of all Times nodes which contain some times node
-		vector<int> results;
+	set<int> Contains::getAllTimesTimesContainers(){ //returns the list of all Times nodes which contain some times node
+		set<int> results;
 		for(int i=0; i<timesTimes.size(); i++)
-			results.push_back(timesTimes[i].first);
+			results.insert(timesTimes[i].first);
 		return results;
 	}
 
-	vector<int> Contains::getAllTimesTimesContainees(){ //returns the list of all times which are contained in some Times node
-		vector<int> results;
+	set<int> Contains::getAllTimesTimesContainees(){ //returns the list of all times which are contained in some Times node
+		set<int> results;
 		for(int i=0; i<timesTimes.size(); i++)
-			results.push_back(timesTimes[i].first);
+			results.insert(timesTimes[i].first);
 		return results;
 	}
 	
 
 	 
 	//boolean functions
-	bool Contains::isContainsProgProc(int prog, int proc){ //returns true if contains(prog,proc) holds
-		for(int i=0; i<progProc.size(); i++){
-			if(progProc[i].first==prog && progProc[i].second==proc)
-				return true;
-		}
-		return false;
-
-	}
 	bool Contains::isContainsProcStmtLst(int proc, int stmtLst){ //returns true if contains(proc,stmtlst) holds
 		for(int i=0; i<procStmtLst.size(); i++){
 			if(procStmtLst[i].first==proc && procStmtLst[i].second==stmtLst)
@@ -1186,224 +1136,1555 @@ Contains::Contains(){
 	//contains *
 	//***********************************************************************************************************************************************************************************************************
 
-	/* COMMENTING OUT TO PREVENT BUILD ERRORS AT THE MOMENT
-
-
-	//for program containers
-	vector<int> Contains::getProcContainedStarInProg (int) {}  //returns the procedures contained within a program
-	vector<int> Contains::getProgContainingStarProc (int) {}  //return the program which contains* the procedure
 	
+
 	//for procedures as containers
-	vector<int> Contains::getStmtLstContainedStarInProc(int) {} //returns the statement list ContainedStar in proc (WILL NEVER BE QUERIED !!!)
-	vector<int> Contains::getProcContainingStarStmtLst(int) {} //returns the procedure which contains the given stmtLst directly/indirectly
-	vector<int> Contains::getStmtContainedStarInProc(int) {} //returns statement which is contained in a proc directly/indirectly
-	vector<int> Contains::getProcContainingStarStmt(int) {} //returns the proc which contains statements directly/indirectly
-	vector<int> Contains::getVarContainedStarInProc (int) {}   //returns the variables ContainedStar in a proc
-	vector<int> Contains::getProcsContainingStarVar (int) {}   //returns the procedures which conatins the variable
-	vector<int> Contains::getConstContainedStarInProc (int) {}  //returns the constants which are contained within a procedure
-	vector<int> Contains::getProcContainingStarConst(int) {}  //returns the procedures which contain the constant
-	vector<int> Contains::getPlusContainedStarInProc(int) {} //returns the plus ContainedStar in procedure (WILL NEVER APPEAR AS QUERY !!!)
-	vector<int> Contains::getProcContainingStarPlus(int) {} //returns the procedure ContainingStar plus 
-	vector<int> Contains::getMinusContainedStarInProc(int) {} //returns the minus ContainedStar in procedure (WILL NEVER APPEAR AS QUERY !!!)
-	vector<int> Contains::getProcContainingStarMinus(int) {} //returns the procedure ContainingStar minus
-	vector<int> Contains::getTimesContainedStarInProc(int) {} //returns the times ContainedStar in procedure (WILL NEVER APPEAR AS QUERY !!!)
-	vector<int> Contains::getProcContainingStarTimes(int) {} //returns the procedures ContainingStartimes
+	set<int> Contains::getStmtLstContainedStarInProc(int proc) { //returns the statement list ContainedStar in proc (WILL NEVER BE QUERIED !!!)
+		set<int> results;
+		set<int> stmtLstInProc = getStmtLstContainedInProc(proc);
+		results.insert(stmtLstInProc.begin(), stmtLstInProc.end());
+		for(std::set<int>::iterator i = stmtLstInProc.begin(); i!=stmtLstInProc.end(); i++) {
+			set<int> stmtLstContainedStarInStmtLst = getStmtLstContainedStarInStmtLst(*i);
+			results.insert(stmtLstContainedStarInStmtLst.begin(), stmtLstContainedStarInStmtLst.end());
+		}
+		return results;
+	}
+
+	set<int> Contains::getProcContainingStarStmtLst(int stmtLst) { //returns the procedure which contains the given stmtLst directly/indirectly
+		set<int> results;
+		set<int> procs = getProcContainingStmtLst(stmtLst);
+		set<int> stmts = getStmtContainingStmtLst(stmtLst);
+		for(std::set<int>::iterator it=stmts.begin(); it!=stmts.end(); it++){
+			set<int> procs1 = getProcContainingStarStmt(*it);
+			results.insert(procs1.begin(),procs.end());
+		}
+		return results;
+	}
+
+	set<int> Contains::getStmtContainedStarInProc(int proc) { //returns statement which is contained in a proc directly/indirectly
+		set<int> results;
+		set<int> stmtLst = getStmtLstContainedInProc(proc);
+		for(std::set<int>::iterator i = stmtLst.begin(); i!=stmtLst.end(); i++) {
+			set<int> stmtContainedStarInStmtLst = getStmtContainedStarInStmtLst(*i);
+			results.insert(stmtContainedStarInStmtLst.begin(), stmtContainedStarInStmtLst.end());
+		}
+		return results;
+	}
+
+	set<int> Contains::getProcContainingStarStmt(int stmt) { //returns the proc which contains statements directly/indirectly
+		set<int> results;
+		set<int> stmtLst = getStmtLstContainingStmt(stmt);
+		for(std::set<int>::iterator i = stmtLst.begin(); i!=stmtLst.end(); i++) {
+			set<int> procs = getProcContainingStarStmtLst(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+		return results;
+	}
+
+	set<int> Contains::getVarContainedStarInProc (int proc) {   //returns the variables ContainedStar in a proc
+		set<int> results;
+		set<int> stmtLst = getStmtLstContainedStarInProc(proc);
+		for(std::set<int>::iterator i = stmtLst.begin(); i!=stmtLst.end(); i++) {
+			set<int> vars = getVarContainedStarInStmtLst(*i);
+			results.insert(vars.begin(), vars.end());
+		}
+		return results;
+	}
+
+	set<int> Contains::getProcsContainingStarVar (int var) {  //returns the procedures which contains the variable
+		set<int> results;
+		set<int> stmt = getStmtContainingVar(var);
+		set<int> plus1 = getPlusContainingVar(var);
+		set<int> minus1 = getMinusContainingVar(var);
+		set<int> times1 = getTimesContainingVar(var);
+
+		for(std::set<int>::iterator i=stmt.begin(); i!=stmt.end(); i++){
+			set<int> procs = getProcContainingStarStmt(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+			set<int> procs = getProcContainingStarPlus(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+			set<int> procs = getProcContainingStarMinus(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+			set<int> procs = getProcContainingStarTimes(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		return results;
+	}
+
+	set<int> Contains::getConstContainedStarInProc (int proc) {  //returns the constants which are contained within a procedure
+		set<int> results;
+		set<int> stmtLst = getStmtLstContainedStarInProc(proc);
+		for(std::set<int>::iterator i = stmtLst.begin(); i!=stmtLst.end(); i++) {
+			set<int> consts = getConstContainedStarInStmtLst(*i);
+			results.insert(consts.begin(), consts.end());
+		}
+		return results;
+
+	}
+
+	set<int> Contains::getProcContainingStarConst(int constant) {  //returns the procedures which contain the constant
+		set<int> results;
+		set<int> stmt = getStmtContainingConst(constant);
+		set<int> plus1 = getPlusContainingConst(constant);
+		set<int> minus1 = getMinusContainingConst(constant);
+		set<int> times1 = getTimesContainingConst(constant);
+
+		for(std::set<int>::iterator i=stmt.begin(); i!=stmt.end(); i++){
+			set<int> procs = getProcContainingStarStmt(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+			set<int> procs = getProcContainingStarPlus(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+			set<int> procs = getProcContainingStarMinus(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+			set<int> procs = getProcContainingStarTimes(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		
+		return results;
+	}
+
+	set<int> Contains::getPlusContainedStarInProc(int proc) { //returns the plus ContainedStar in procedure (WILL NEVER APPEAR AS QUERY !!!)
+		set<int> results;
+		set<int> stmtLst = getStmtLstContainedInProc(proc);
+		for(std::set<int>::iterator i=stmtLst.begin(); i!=stmtLst.end(); i++){
+			set<int> plus = getPlusContainedStarInStmtLst(*i);
+			results.insert(plus.begin(), plus.end());
+		}
+		return results;
+
+	}
+
+	set<int> Contains::getProcContainingStarPlus(int plus) { //returns the procedure ContainingStar plus 
+		set<int> results;
+		set<int> stmt = getStmtContainingPlus(plus);
+		set<int> plus1 = getPlusContainingPlus(plus);
+		set<int> minus1 = getMinusContainingPlus(plus);
+		set<int> times1 = getTimesContainingPlus(plus);
+
+		for(std::set<int>::iterator i=stmt.begin(); i!=stmt.end(); i++){
+			set<int> procs = getProcContainingStarStmt(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+			set<int> procs = getProcContainingStarPlus(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+			set<int> procs = getProcContainingStarMinus(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+			set<int> procs = getProcContainingStarTimes(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		return results;
+	}
+
+	set<int> Contains::getMinusContainedStarInProc(int proc) { //returns the minus ContainedStar in procedure (WILL NEVER APPEAR AS QUERY !!!)
+		set<int> results;
+		set<int> stmtLst = getStmtLstContainedInProc(proc);
+		for(std::set<int>::iterator i=stmtLst.begin(); i!=stmtLst.end(); i++){
+			set<int> minus = getMinusContainedStarInStmtLst(*i);
+			results.insert(minus.begin(), minus.end());
+		}
+		return results;
+	}
+
+	set<int> Contains::getProcContainingStarMinus(int minus) { //returns the procedure ContainingStar minus
+		set<int> results;
+		set<int> stmt = getStmtContainingMinus(minus);
+		set<int> plus1 = getPlusContainingMinus(minus);
+		set<int> minus1 = getMinusContainingMinus(minus);
+		set<int> times1 = getTimesContainingMinus(minus);
+
+		for(std::set<int>::iterator i=stmt.begin(); i!=stmt.end(); i++){
+			set<int> procs = getProcContainingStarStmt(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+			set<int> procs = getProcContainingStarPlus(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+			set<int> procs = getProcContainingStarMinus(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+			set<int> procs = getProcContainingStarTimes(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		return results;
+	}
+
+	set<int> Contains::getTimesContainedStarInProc(int proc) { //returns the times ContainedStar in procedure (WILL NEVER APPEAR AS QUERY !!!)
+		set<int> results;
+		set<int> stmtLst = getStmtLstContainedInProc(proc);
+		for(std::set<int>::iterator i=stmtLst.begin(); i!=stmtLst.end(); i++){
+			set<int> times = getTimesContainedStarInStmtLst(*i);
+			results.insert(times.begin(), times.end());
+		}
+		return results;
+	}
+
+	set<int> Contains::getProcContainingStarTimes(int times) { //returns the procedures ContainingStartimes
+		set<int> results;
+		set<int> stmt = getStmtContainingTimes(times);
+		set<int> plus1 = getPlusContainingTimes(times);
+		set<int> minus1 = getMinusContainingTimes(times);
+		set<int> times1 = getTimesContainingTimes(times);
+
+		for(std::set<int>::iterator i=stmt.begin(); i!=stmt.end(); i++){
+			set<int> procs = getProcContainingStarStmt(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+			set<int> procs = getProcContainingStarPlus(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+			set<int> procs = getProcContainingStarMinus(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+			set<int> procs = getProcContainingStarTimes(*i);
+			results.insert(procs.begin(), procs.end());
+		}
+
+		return results;
+	}
+
 
 	//for statementlist as containers
-	vector<int> Contains::getStmtContainedStarInStmtLst(int) {} //returns the statements ContainedStar in statement list
-	vector<int> Contains::getStmtLstContainingStarStmt(int) {} //returns the statementlist ContainingStar statements
-	vector<int> Contains::getVarContainedStarInStmtLst (int) {}   //returns the variables ContainedStar in a stmtlist
-	vector<int> Contains::getStmtLstContainingStarVar (int) {}   //returns the statementlist which conatins the variable
-	vector<int> Contains::getConstContainedStarInStmtLst (int) {}  //returns the constants which are contained within a statementlist
-	vector<int> Contains::getStmtLstContainingStarConst(int) {}  //returns the statementlist which contain the constant
-	vector<int> Contains::getPlusContainedStarInStmtLst(int) {} //returns the plus ContainedStar in statementlist (WILL NEVER APPEAR AS QUERY !!!)
-	vector<int> Contains::getStmtLstContainingStarPlus(int) {} //returns the statementlist ContainingStar plus 
-	vector<int> Contains::getMinusContainedStarInStmtLst(int) {} //returns the minus ContainedStar in statementlist (WILL NEVER APPEAR AS QUERY !!!)
-	vector<int> Contains::getStmtLstContainingStarMinus(int) {} //returns the statementlist ContainingStar minus
-	vector<int> Contains::getTimesContainedStarInStmtLst(int) {} //returns the times ContainedStar in statementlist (WILL NEVER APPEAR AS QUERY !!!)
-	vector<int> Contains::getStmtLstContainingStarTimes(int) {} //returns the statementlist ContainingStar times
-	vector<int> Contains::getStmtLstContainingStarStmtLst(int) {}  //returns the statementlist which contain the statementList
-	vector<int> Contains::getStmtLstContainedStarInStmtLst (int) {} //returns the statementList which are ContainedStar in statementLst 
+	set<int> Contains::getStmtContainedStarInStmtLst(int stmtLst) { //returns the statements ContainedStar in statement list
+		set<int> results;
+		set<int> stmts = getStmtContainedInStmtLst(stmtLst);
+		results.insert(stmts.begin(), stmts.end());
+		for(std::set<int>::iterator i=stmts.begin(); i!=stmts.end(); i++){
+			set<int> stmts1 = getStmtContainedStarInStmt(*i);
+			results.insert(stmts1.begin(), stmts1.end());
+		}
+		return results;
+	}
+
+	set<int> Contains::getStmtLstContainingStarStmt(int stmt) { //returns the statementlist ContainingStar statements
+		set<int> results;
+		set<int> stmtLst = getStmtLstContainingStmt(stmt);
+		results.insert(stmtLst.begin(), stmtLst.end());
+		for(std::set<int>::iterator i=stmtLst.begin(); i!=stmtLst.end(); i++){
+			set<int> stmtLst1 = getStmtLstContainingStarStmtLst(*i);
+			results.insert(stmtLst1.begin(), stmtLst1.end());
+		}
+		return results;
+	}
+
+	set<int> Contains::getVarContainedStarInStmtLst (int stmtLst) {   //returns the variables ContainedStar in a stmtlist
+		set<int> results;
+		set<int> stmts = getStmtContainedStarInStmtLst(stmtLst);
+		for(std::set<int>::iterator i=stmts.begin(); i!=stmts.end(); i++){
+			set<int> vars = getVarContainedStarInStmt(*i);
+			results.insert(vars.begin(), vars.end());
+		}
+		return results;
+	}
+
+	set<int> Contains::getStmtLstContainingStarVar (int var) {   //returns the statementlist which conatins the variable
+		set<int> results;
+		set<int> stmts = getStmtContainingVar(var);
+		set<int> plus1 = getPlusContainingVar(var);
+		set<int> minus1 = getMinusContainingVar(var);
+		set<int> times1 = getTimesContainingVar(var);
+
+		for(std::set<int>::iterator i=stmts.begin(); i!=stmts.end(); i++){
+			set<int> stmtLst = getStmtLstContainingStarStmt(*i);
+			results.insert(stmtLst.begin(), stmtLst.end());
+		}
+
+		for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+			set<int> stmtLst = getStmtLstContainingStarPlus(*i);
+			results.insert(stmtLst.begin(), stmtLst.end());
+		}
+
+		for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+			set<int> stmtLst = getStmtLstContainingStarMinus(*i);
+			results.insert(stmtLst.begin(), stmtLst.end());
+		}
+
+		for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+			set<int> stmtLst = getStmtLstContainingStarTimes(*i);
+			results.insert(stmtLst.begin(), stmtLst.end());
+		}
+
+		return results;
+	}
+
+	set<int> Contains::getConstContainedStarInStmtLst (int stmtLst) {  //returns the constants which are contained within a statementlist
+		set<int> results;
+		set<int> stmts = getStmtContainedStarInStmtLst(stmtLst);
+		for(std::set<int>::iterator i=stmts.begin(); i!=stmts.end(); i++){
+			set<int> constant = getConstContainedStarInStmt(*i);
+			results.insert(constant.begin(), constant.end());
+		}
+		return results;
+	}
+
+	set<int> Contains::getStmtLstContainingStarConst(int constant) {  //returns the statementlist which contain the constant
+		set<int> results;
+		set<int> stmts = getStmtContainingConst(constant);
+		set<int> plus1 = getPlusContainingConst(constant);
+		set<int> minus1 = getMinusContainingConst(constant);
+		set<int> times1 = getTimesContainingConst(constant);
+
+		for(std::set<int>::iterator i=stmts.begin(); i!=stmts.end(); i++){
+			set<int> stmtLst = getStmtLstContainingStarStmt(*i);
+			results.insert(stmtLst.begin(), stmtLst.end());
+		}
+
+		for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+			set<int> stmtLst = getStmtLstContainingStarPlus(*i);
+			results.insert(stmtLst.begin(), stmtLst.end());
+		}
+
+		for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+			set<int> stmtLst = getStmtLstContainingStarMinus(*i);
+			results.insert(stmtLst.begin(), stmtLst.end());
+		}
+
+		for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+			set<int> stmtLst = getStmtLstContainingStarTimes(*i);
+			results.insert(stmtLst.begin(), stmtLst.end());
+		}
+		return results;
+	}
+
+
+	set<int> Contains::getPlusContainedStarInStmtLst(int) { //returns the plus ContainedStar in statementlist (WILL NEVER APPEAR AS QUERY !!!)
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getStmtLstContainingStarPlus(int) { //returns the statementlist ContainingStar plus 
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getMinusContainedStarInStmtLst(int) { //returns the minus ContainedStar in statementlist (WILL NEVER APPEAR AS QUERY !!!)
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getStmtLstContainingStarMinus(int) { //returns the statementlist ContainingStar minus
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getTimesContainedStarInStmtLst(int) { //returns the times ContainedStar in statementlist (WILL NEVER APPEAR AS QUERY !!!)
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getStmtLstContainingStarTimes(int) { //returns the statementlist ContainingStar times
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getStmtLstContainingStarStmtLst(int) {  //returns the statementlist which contain the statementList
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getStmtLstContainedStarInStmtLst (int) { //returns the statementList which are ContainedStar in statementLst 
+		set<int> results;
+		return results;
+	}
 	
 	
 	//for statements as containers
-	vector<int> Contains::getVarContainedStarInStmt (int) {}   //returns the variables ContainedStar in a stmt
-	vector<int> Contains::getStmtContainingStarVar (int) {}   //returns the statements which conatins the variable
-	vector<int> Contains::getConstContainedStarInStmt (int) {}  //returns the constants which are contained within a statement
-	vector<int> Contains::getStmtContainingStarConst(int) {}  //returns the statements which contain the constant
-	vector<int> Contains::getStmtLstContainedStarInStmt (int) {}//returns the statementList which are ContainedStar in statement (WILL NEVER APPEAR AS QUERY!!!)
-	vector<int> Contains::getStmtContainingStarStmtLst (int) {} //returns the statements contain statementList 
-	vector<int> Contains::getPlusContainedStarInStmt(int) {} //returns the plus ContainedStar in statement (WILL NEVER APPEAR AS QUERY !!!)
-	vector<int> Contains::getStmtContainingStarPlus(int) {} //returns the statements ContainingStar plus 
-	vector<int> Contains::getMinusContainedStarInStmt(int) {} //returns the minus ContainedStar in statement (WILL NEVER APPEAR AS QUERY !!!)
-	vector<int> Contains::getStmtContainingStarMinus(int) {} //returns the statements ContainingStar minus
-	vector<int> Contains::getTimesContainedStarInStmt(int) {} //returns the times ContainedStar in statement (WILL NEVER APPEAR AS QUERY !!!)
-	vector<int> Contains::getStmtContainingStarTimes(int) {} //returns the statements ContainingStar times 
-
+	set<int> Contains::getVarContainedStarInStmt (int) {   //returns the variables ContainedStar in a stmt
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getStmtContainingStarVar (int) {   //returns the statements which conatins the variable
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getConstContainedStarInStmt (int) {  //returns the constants which are contained within a statement
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getStmtContainingStarConst(int) {  //returns the statements which contain the constant
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getStmtLstContainedStarInStmt (int) {//returns the statementList which are ContainedStar in statement (WILL NEVER APPEAR AS QUERY!!!)
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getStmtContainingStarStmtLst (int) { //returns the statements contain statementList 
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getPlusContainedStarInStmt(int) { //returns the plus ContainedStar in statement (WILL NEVER APPEAR AS QUERY !!!)
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getStmtContainingStarPlus(int) { //returns the statements ContainingStar plus 
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getMinusContainedStarInStmt(int) { //returns the minus ContainedStar in statement (WILL NEVER APPEAR AS QUERY !!!)
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getStmtContainingStarMinus(int) { //returns the statements ContainingStar minus
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getTimesContainedStarInStmt(int) { //returns the times ContainedStar in statement (WILL NEVER APPEAR AS QUERY !!!)
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getStmtContainingStarTimes(int) { //returns the statements ContainingStar times 
+		set<int> results;
+		return results;
+	}
+	set<int> Contains::getStmtContainedStarInStmt(int){
+		set<int> results;
+		return results;
+	}
+	
 
 	//for plus node as container 
-	vector<int> Contains::getVarContainedStarInPlus(int) {} //returns all those variables which are children of the plus node in the AST
-	vector<int> Contains::getPlusContainingStarVar(int) {} //returns all those pluses which contain the variable node
-	vector<int> Contains::getConstContainedStarInPlus(int) {} //returns all those constants which are children of the plus node in the AST
-	vector<int> Contains::getPlusContainingStarConst(int) {} //returns all those pluses which contain the constant
-	vector<int> Contains::getPlusContainedStarInPlus(int) {} //returns all those plus which are children of the plus node in the AST
-	vector<int> Contains::getPlusContainingStarPlus(int) {} //returns all those pluses which contain the plus node
-	vector<int> Contains::getMinusContainedStarInPlus(int) {} //returns all those minus which are children of the plus node in the AST
-	vector<int> Contains::getPlusContainingStarMinus(int) {} //returns all those pluses which contain the minus node
-	vector<int> Contains::getTimesContainedStarInPlus(int) {} //returns all those times which are children of the plus node in the AST
-	vector<int> Contains::getPlusContainingStarTimes(int) {} //returns all those pluses which contain the times node
+	set<int> Contains::getVarContainedStarInPlus(int plus) { //returns all those variables which are children of the plus node in the AST
+		set<int> results;
+		set<int> vars = getVarContainedInPlus(plus);
+		results.insert( vars.begin(), vars.end());
 
+		if(getTimesContainedInPlus(plus).size()!=0){
+			set<int> times = getTimesContainedInPlus(plus);
+			for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+				set<int> vars1 = getVarContainedStarInTimes(*i);
+				results.insert(vars1.begin(), vars1.end());
+			}
+		}
+		if(getPlusContainedInPlus(plus).size()!=0){
+			set<int> plus1 = getPlusContainedInPlus(plus);
+			for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+				set<int> vars2 = getVarContainedStarInPlus(*i);
+				results.insert(vars2.begin(), vars2.end());
+			}
+		}
+		if(getMinusContainedInPlus(plus).size()!=0){
+			set<int> minus1 = getMinusContainedInPlus(plus);
+			for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+				set<int> vars3 = getVarContainedStarInMinus(*i);
+				results.insert(vars3.begin(), vars3.end());
+			}
+		}
+		return results;
+	}
+
+	set<int> Contains::getPlusContainingStarVar(int var) { //returns all those pluses which contain the variable node
+		set<int> results;
+		set<int> plus = getPlusContainingVar(var);
+		results.insert(plus.begin(), plus.end());
+		for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+			set<int> plus1 = getPlusContainingStarPlus(*i);
+			results.insert(plus1.begin(), plus1.end());
+		}
+		set<int> minus = getMinusContainingVar(var);
+		for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+			set<int> plus2 = getPlusContainingStarMinus(*i);
+			results.insert(plus2.begin(), plus2.end());
+		}
+		set<int> times = getTimesContainingVar(var);
+		for(std::set<int>::iterator i=times.begin(); i!=times.end();i++){
+			set<int> plus3 = getPlusContainingStarTimes(*i);
+			results.insert(plus3.begin(), plus3.end());
+		}
+
+		return results;
+	}
+
+	set<int> Contains::getConstContainedStarInPlus(int plus) { //returns all those constants which are children of the plus node in the AST
+		set<int> results;
+		set<int> constants = getConstContainedInPlus(plus);
+		results.insert( constants.begin(), constants.end());
+
+		if(getTimesContainedInPlus(plus).size()!=0){
+			set<int> times = getTimesContainedInPlus(plus);
+			for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+				set<int> constants1 = getConstContainedStarInTimes(*i);
+				results.insert(constants1.begin(), constants1.end());
+			}
+		}
+		if(getPlusContainedInPlus(plus).size()!=0){
+			set<int> plus1 = getPlusContainedInPlus(plus);
+			for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+				set<int> constants2 = getConstContainedStarInPlus(*i);
+				results.insert(constants2.begin(), constants2.end());
+			}
+		}
+		if(getMinusContainedInPlus(plus).size()!=0){
+			set<int> minus1 = getMinusContainedInPlus(plus);
+			for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+				set<int> constants3 = getConstContainedStarInMinus(*i);
+				results.insert(constants3.begin(), constants3.end());
+			}
+		}
+		return results;
+	}
+
+	set<int> Contains::getPlusContainingStarConst(int constant) { //returns all those pluses which contain the constant
+		set<int> results;
+		set<int> plus = getPlusContainingConst(constant);
+		results.insert(plus.begin(), plus.end());
+		for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+			set<int> plus1 = getPlusContainingStarPlus(*i);
+			results.insert(plus1.begin(), plus1.end());
+		}
+
+		set<int> minus = getMinusContainingConst(constant);
+		for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+			set<int> plus2 = getPlusContainingStarMinus(*i);
+			results.insert(plus2.begin(), plus2.end());
+		}
+
+		set<int> times = getTimesContainingConst(constant);
+		for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+			set<int> plus3 = getPlusContainingStarTimes(*i);
+			results.insert(plus3.begin(), plus3.end());
+		}
+		return results;
+	}
+
+	set<int> Contains::getPlusContainedStarInPlus(int plus) { //returns all those plus which are children of the plus node in the AST
+		set<int> results;
+		set<int> plus1 = getPlusContainedInPlus(plus);
+		results.insert( plus1.begin(), plus1.end());
+
+		if(getTimesContainedInPlus(plus).size()!=0){
+			set<int> times = getTimesContainedInPlus(plus);
+			for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+				set<int> plus2 = getPlusContainedStarInTimes(*i);
+				results.insert(plus2.begin(), plus2.end());
+			}
+		}
+		if(getPlusContainedInPlus(plus).size()!=0){
+			set<int> plus2 = getPlusContainedInPlus(plus);
+			for(std::set<int>::iterator i=plus2.begin(); i!=plus2.end(); i++){
+				set<int> plus3 = getPlusContainedStarInPlus(*i);
+				results.insert(plus3.begin(), plus3.end());
+			}
+		}
+		if(getMinusContainedInPlus(plus).size()!=0){
+			set<int> minus1 = getMinusContainedInPlus(plus);
+			for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+				set<int> plus2 = getPlusContainedStarInMinus(*i);
+				results.insert(plus2.begin(), plus2.end());
+			}
+		}
+		return results;
+	}
+
+
+	set<int> Contains::getPlusContainingStarPlus(int plus) { //returns all those pluses which contain the plus node
+		set<int> results;
+		set<int> plus1 = getPlusContainingPlus(plus);
+		results.insert(plus1.begin(), plus1.end());
+		for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+			set<int> plus2 = getPlusContainingStarPlus(*i);
+			results.insert(plus2.begin(), plus2.end());
+		}
+
+		set<int> minus = getMinusContainingPlus(plus);
+		for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+			set<int> plus2 = getPlusContainingStarMinus(*i);
+			results.insert(plus2.begin(), plus2.end());
+		}
+
+		set<int> times = getTimesContainingPlus(plus);
+		for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+			set<int> plus3 = getPlusContainingStarTimes(*i);
+			results.insert(plus3.begin(), plus3.end());
+		}
+		return results;
+
+	}
+
+	set<int> Contains::getMinusContainedStarInPlus(int plus) { //returns all those minus which are children of the plus node in the AST
+		set<int> results;
+		set<int> minus = getMinusContainedInPlus(plus);
+		results.insert( minus.begin(), minus.end());
+
+		if(getTimesContainedInPlus(plus).size()!=0){
+			set<int> times = getTimesContainedInPlus(plus);
+			for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+				set<int> minus1 = getMinusContainedStarInTimes(*i);
+				results.insert(minus1.begin(), minus1.end());
+			}
+		}
+		if(getPlusContainedInPlus(plus).size()!=0){
+			set<int> plus1 = getPlusContainedInPlus(plus);
+			for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+				set<int> minus2 = getMinusContainedStarInPlus(*i);
+				results.insert(minus2.begin(), minus2.end());
+			}
+		}
+		if(getMinusContainedInPlus(plus).size()!=0){
+			set<int> minus1 = getMinusContainedInPlus(plus);
+			for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+				set<int> minus3 = getMinusContainedStarInMinus(*i);
+				results.insert(minus3.begin(), minus3.end());
+			}
+		}
+		return results;
+	}
+
+	set<int> Contains::getPlusContainingStarMinus(int minus) { //returns all those pluses which contain the minus node
+		set<int> results;
+		set<int> plus1 = getPlusContainingMinus(minus);
+		results.insert(plus1.begin(), plus1.end());
+		for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+			set<int> plus2 = getPlusContainingStarPlus(*i);
+			results.insert(plus2.begin(), plus2.end());
+		}
+
+		set<int> minus1 = getMinusContainingMinus(minus);
+		for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+			set<int> plus2 = getPlusContainingStarMinus(*i);
+			results.insert(plus2.begin(), plus2.end());
+		}
+
+		set<int> times = getTimesContainingMinus(minus);
+		for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+			set<int> plus3 = getPlusContainingStarTimes(*i);
+			results.insert(plus3.begin(), plus3.end());
+		}
+		return results;
+
+	}
+
+	set<int> Contains::getTimesContainedStarInPlus(int plus) { //returns all those times which are children of the plus node in the AST
+		set<int> results;
+		set<int> times = getTimesContainedInPlus(plus);
+		results.insert( times.begin(), times.end());
+
+		if(getTimesContainedInPlus(plus).size()!=0){
+			set<int> times1 = getTimesContainedInPlus(plus);
+			for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+				set<int> times2 = getTimesContainedStarInTimes(*i);
+				results.insert(times2.begin(), times2.end());
+			}
+		}
+		if(getPlusContainedInPlus(plus).size()!=0){
+			set<int> plus1 = getPlusContainedInPlus(plus);
+			for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+				set<int> times2 = getTimesContainedStarInPlus(*i);
+				results.insert(times2.begin(), times2.end());
+			}
+		}
+		if(getMinusContainedInPlus(plus).size()!=0){
+			set<int> minus1 = getMinusContainedInPlus(plus);
+			for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+				set<int> times3 = getTimesContainedStarInMinus(*i);
+				results.insert(times3.begin(), times3.end());
+			}
+		}
+		return results;
+	}
+
+	set<int> Contains::getPlusContainingStarTimes(int times) { //returns all those pluses which contain the times node
+		set<int> results;
+		set<int> plus = getPlusContainingTimes(times);
+		results.insert(plus.begin(), plus.end());
+		for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+			set<int> plus1 = getPlusContainingStarPlus(*i);
+			results.insert(plus1.begin(), plus1.end());
+		}
+
+		set<int> minus = getMinusContainingTimes(times);
+		for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+			set<int> plus2 = getPlusContainingStarMinus(*i);
+			results.insert(plus2.begin(), plus2.end());
+		}
+
+		set<int> times1 = getTimesContainingTimes(times);
+		for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+			set<int> plus3 = getPlusContainingStarTimes(*i);
+			results.insert(plus3.begin(), plus3.end());
+		}
+		return results;
+	}
+
+
+	
 	//for minus node as container
-	vector<int> Contains::getVarContainedStarInMinus(int) {} //returns all those variables which are children of the minus node in the AST
-	vector<int> Contains::getMinusContainingStarVar(int) {} //returns all those minus which contain the variable node
-	vector<int> Contains::getConstContainedStarInMinus(int) {} //returns all those constants which are children of the minus node in the AST
-	vector<int> Contains::getMinusContainingStarConst(int) {} //returns all those minus which contain the constant
-	vector<int> Contains::getPlusContainedStarInMius(int) {} //returns all those plus which are children of the minus node in the AST
-	vector<int> Contains::getMinusContainingStarPlus(int) {} //returns all those minuses which contain the plus node
-	vector<int> Contains::getMinusContainedStarInMinus(int) {} //returns all those minus which are children of the minus node in the AST
-	vector<int> Contains::getMinusContainingStarMinus(int) {} //returns all those minus which contain the minus node
-	vector<int> Contains::getTimesContainedStarInMinus(int) {} //returns all those times which are children of the minus node in the AST
-	vector<int> Contains::getMinusContainingStarTimes(int) {} //returns all those minuses which contain the times node
+	set<int> Contains::getVarContainedStarInMinus(int minus) { //returns all those variables which are children of the minus node in the AST
+		set<int> results;
+		set<int> vars = getVarContainedInMinus(minus);
+		results.insert( vars.begin(), vars.end());
+
+		if(getTimesContainedInMinus(minus).size()!=0){
+			set<int> times = getTimesContainedInMinus(minus);
+			for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+				set<int> vars1 = getVarContainedStarInTimes(*i);
+				results.insert(vars1.begin(), vars1.end());
+			}
+		}
+		if(getPlusContainedInMinus(minus).size()!=0){
+			set<int> plus = getPlusContainedInMinus(minus);
+			for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+				set<int> vars2 = getVarContainedStarInPlus(*i);
+				results.insert(vars2.begin(), vars2.end());
+			}
+		}
+		if(getMinusContainedInMinus(minus).size()!=0){
+			set<int> minus1 = getMinusContainedInMinus(minus);
+			for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+				set<int> vars3 = getVarContainedStarInMinus(*i);
+				results.insert(vars3.begin(), vars3.end());
+			}
+		}
+		return results;
+	}
+	
+	
+
+	set<int> Contains::getMinusContainingStarVar(int var) { //returns all those minus which contain the variable node
+		set<int> results;
+		set<int> minus = getMinusContainingVar(var);
+		results.insert(minus.begin(), minus.end());
+		for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+			set<int> minus1 = getMinusContainingStarMinus(*i);
+			results.insert(minus1.begin(), minus1.end());
+		}
+
+		set<int> plus = getPlusContainingVar(var);
+		for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+			set<int> minus2 = getMinusContainingStarPlus(*i);
+			results.insert(minus2.begin(),minus2.end());
+		}
+
+		set<int> times = getTimesContainingVar(var);
+		for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+			set<int> minus2 = getMinusContainingStarTimes(*i);
+			results.insert(minus2.begin(),minus2.end());
+		}
+
+		return results;
+	}
+
+	set<int> Contains::getConstContainedStarInMinus(int minus) { //returns all those constants which are children of the minus node in the AST
+		set<int> results;
+		set<int> constants = getConstContainedInMinus(minus);
+		results.insert( constants.begin(), constants.end());
+
+		if(getTimesContainedInMinus(minus).size()!=0){
+			set<int> times = getTimesContainedInMinus(minus);
+			for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+				set<int> constants1 = getConstContainedStarInTimes(*i);
+				results.insert(constants1.begin(), constants1.end());
+			}
+		}
+		if(getPlusContainedInMinus(minus).size()!=0){
+			set<int> plus = getPlusContainedInMinus(minus);
+			for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+				set<int> constants2 = getConstContainedStarInPlus(*i);
+				results.insert(constants2.begin(), constants2.end());
+			}
+		}
+		if(getMinusContainedInMinus(minus).size()!=0){
+			set<int> minus1 = getMinusContainedInMinus(minus);
+			for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+				set<int> constants3 = getConstContainedStarInMinus(*i);
+				results.insert(constants3.begin(), constants3.end());
+			}
+		}
+		return results;
+	}
+
+	set<int> Contains::getMinusContainingStarConst(int constant) { //returns all those minus which contain the constant
+		set<int> results;
+		set<int> minus = getMinusContainingConst(constant);
+		results.insert(minus.begin(), minus.end());
+		for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+			set<int> minus1 = getMinusContainingStarMinus(*i);
+			results.insert(minus1.begin(), minus1.end());
+		}
+		set<int> plus = getPlusContainingConst(constant);
+		for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+			set<int> minus2 = getMinusContainingStarPlus(*i);
+			results.insert(minus2.begin(),minus2.end());
+		}
+
+		set<int> times = getTimesContainingConst(constant);
+		for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+			set<int> minus2 = getMinusContainingStarTimes(*i);
+			results.insert(minus2.begin(),minus2.end());
+		}
+
+		return results;
+	}
+
+	set<int> Contains::getPlusContainedStarInMinus(int minus) { //returns all those plus which are children of the minus node in the AST
+		set<int> results;
+		set<int> plus = getPlusContainedInMinus(minus);
+		results.insert( plus.begin(), plus.end());
+
+		if(getTimesContainedInMinus(minus).size()!=0){
+			set<int> times = getTimesContainedInMinus(minus);
+			for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+				set<int> plus1 = getPlusContainedStarInTimes(*i);
+				results.insert(plus1.begin(), plus1.end());
+			}
+		}
+		if(getPlusContainedInMinus(minus).size()!=0){
+			set<int> plus2 = getPlusContainedInMinus(minus);
+			for(std::set<int>::iterator i=plus2.begin(); i!=plus2.end(); i++){
+				set<int> plus3 = getPlusContainedStarInPlus(*i);
+				results.insert(plus3.begin(), plus3.end());
+			}
+		}
+		if(getMinusContainedInMinus(minus).size()!=0){
+			set<int> minus1 = getMinusContainedInMinus(minus);
+			for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+				set<int> plus1 = getPlusContainedStarInMinus(*i);
+				results.insert(plus1.begin(), plus1.end());
+			}
+		}
+		return results;
+	}
+
+	set<int> Contains::getMinusContainingStarPlus(int plus) { //returns all those minuses which contain the plus node
+		set<int> results;
+		set<int> minus = getMinusContainingPlus(plus);
+		results.insert(minus.begin(), minus.end());
+		for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+			set<int> minus1 = getMinusContainingStarMinus(*i);
+			results.insert(minus1.begin(), minus1.end());
+		}
+		set<int> plus1 = getPlusContainingPlus(plus);
+		for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+			set<int> minus2 = getMinusContainingStarPlus(*i);
+			results.insert(minus2.begin(),minus2.end());
+		}
+
+		set<int> times = getTimesContainingPlus(plus);
+		for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+			set<int> minus2 = getMinusContainingStarTimes(*i);
+			results.insert(minus2.begin(),minus2.end());
+		}
+
+		return results;
+	}
+
+	set<int> Contains::getMinusContainedStarInMinus(int minus) { //returns all those minus which are children of the minus node in the AST
+		set<int> results;
+		set<int> minus1 = getMinusContainedInMinus(minus);
+		results.insert( minus1.begin(), minus1.end());
+
+		if(getTimesContainedInMinus(minus).size()!=0){
+			set<int> times = getTimesContainedInMinus(minus);
+			for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+				set<int> minus2 = getMinusContainedStarInTimes(*i);
+				results.insert(minus2.begin(), minus2.end());
+			}
+		}
+		if(getPlusContainedInMinus(minus).size()!=0){
+			set<int> plus = getPlusContainedInMinus(minus);
+			for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+				set<int> minus2 = getMinusContainedStarInPlus(*i);
+				results.insert(minus2.begin(), minus2.end());
+			}
+		}
+		if(getMinusContainedInMinus(minus).size()!=0){
+			set<int> minus2= getMinusContainedInMinus(minus);
+			for(std::set<int>::iterator i=minus2.begin(); i!=minus2.end(); i++){
+				set<int> minus3 = getMinusContainedStarInMinus(*i);
+				results.insert(minus3.begin(), minus3.end());
+			}
+		}
+		return results;
+	}
+
+	set<int> Contains::getMinusContainingStarMinus(int minus) { //returns all those minus which contain the minus node
+		set<int> results;
+		set<int> minus1 = getMinusContainingMinus(minus);
+		results.insert(minus1.begin(), minus1.end());
+		for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+			set<int> minus2 = getMinusContainingStarMinus(*i);
+			results.insert(minus2.begin(), minus2.end());
+		}
+		set<int> plus = getPlusContainingMinus(minus);
+		for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+			set<int> minus2 = getMinusContainingStarPlus(*i);
+			results.insert(minus2.begin(),minus2.end());
+		}
+
+		set<int> times = getTimesContainingMinus(minus);
+		for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+			set<int> minus2 = getMinusContainingStarTimes(*i);
+			results.insert(minus2.begin(),minus2.end());
+		}
+
+		return results;
+	}
+	
+
+	set<int> Contains::getTimesContainedStarInMinus(int minus) { //returns all those times which are children of the minus node in the AST
+		set<int> results;
+		set<int> times = getTimesContainedInMinus(minus);
+		results.insert( times.begin(), times.end());
+
+		if(getTimesContainedInMinus(minus).size()!=0){
+			set<int> times1 = getTimesContainedInMinus(minus);
+			for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+				set<int> times2 = getTimesContainedStarInTimes(*i);
+				results.insert(times2.begin(), times2.end());
+			}
+		}
+		if(getPlusContainedInMinus(minus).size()!=0){
+			set<int> plus = getPlusContainedInMinus(minus);
+			for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+				set<int> times2 = getTimesContainedStarInPlus(*i);
+				results.insert(times2.begin(), times2.end());
+			}
+		}
+		if(getMinusContainedInMinus(minus).size()!=0){
+			set<int> minus2= getMinusContainedInMinus(minus);
+			for(std::set<int>::iterator i=minus2.begin(); i!=minus2.end(); i++){
+				set<int> times2 = getTimesContainedStarInMinus(*i);
+				results.insert(times2.begin(), times2.end());
+			}
+		}
+		return results;
+
+	}
+
+	set<int> Contains::getMinusContainingStarTimes(int times) { //returns all those minuses which contain the times node
+		set<int> results;
+		set<int> minus1 = getMinusContainingTimes(times);
+		results.insert(minus1.begin(), minus1.end());
+		for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+			set<int> minus2 = getMinusContainingStarMinus(*i);
+			results.insert(minus2.begin(), minus2.end());
+		}
+
+		set<int> plus = getPlusContainingTimes(times);
+		for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+			set<int> minus2 = getMinusContainingStarPlus(*i);
+			results.insert(minus2.begin(),minus2.end());
+		}
+
+		set<int> times1 = getTimesContainingTimes(times);
+		for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+			set<int> minus2 = getMinusContainingStarTimes(*i);
+			results.insert(minus2.begin(),minus2.end());
+		}
+
+		return results;
+	}
 
 	//for times node as container
-	vector<int> Contains::getVarContainedStarInTimes(int) {} //returns all those variables which are children of the times node in the AST
-	vector<int> Contains::getTimesContainingStarVar(int) {} //returns all those times which contain the variable node
-	vector<int> Contains::getConstContainedStarInTimes(int) {} //returns all those constants which are children of the times node in the AST
-	vector<int> Contains::getTimesContainingStarConst(int) {} //returns all those times which contain the constant
-	vector<int> Contains::getPlusContainedStarInTimes(int) {} //returns all those plus which are children of the times node in the AST
-	vector<int> Contains::getTimesContainingStarPlus(int) {} //returns all those times which contain the plus node
-	vector<int> Contains::getMinusContainedStarInTimes(int) {} //returns all those minus which are children of the times node in the AST
-	vector<int> Contains::getTimesContainingStarMinus(int) {} //returns all those times which contain the minus node
-	vector<int> Contains::getTimesContainedStarInTimes(int) {} //returns all those times which are children of the times node in the AST
-	vector<int> Contains::getTimesContainingStarTimes(int) {} //returns all those times which contain the times node
-
-	//get all container and containees 
-	//for program as container
-	vector<int> Contains::getAllProgProcContainersStar(){}  //returns all the programs which contain* some procedure
-	vector<int> Contains::getAllProgProcContaineesStar(){} //returns all the procedures which are ContainedStar within some program
-
-	//for procedure as container
-	vector<int> Contains::getAllProcStmtLstContainersStar(){} //returns the procedures which contain* statement list
-	vector<int> Contains::getAllProcStmtLstContaineesStar(){} //return the statement list which are contained* in some procedure
-	vector<int> Contains::getALLProcStmtContaineesStar() {} //returns all the statements which is contained in a proc directly/indirectly
-	vector<int> Contains::getAllProcStmtContainersStar(){} //returns all the procs which contains statements directly/indirectly
-	vector<int> Contains::getAllProcVarContaineesStar(){}   //returns all the variables ContainedStar in a proc
-	vector<int> Contains::getAllProcVarContainersStar(){}   //returns all the procedures which contains* the variable
-	vector<int> Contains::getAllProcConstContainees(){}  //returns all the constants which are contained* within a procedure
-	vector<int> Contains::getAllProcConstContainers(){}  //returns all the procedures which contain* the constant
-	vector<int> Contains::getAllProcPlusContainees(){} //returns the plus ContainedStar in procedure (WILL NEVER APPEAR AS QUERY !!!)
-	vector<int> Contains::getAllProcPlusContainers(){} //returns the procedure ContainingStar plus 
-	vector<int> Contains::getAllProcMinusContainees(){} //returns the minus ContainedStar in procedure (WILL NEVER APPEAR AS QUERY !!!)
-	vector<int> Contains::getAllProcMinusContainers(){} //returns the procedure ContainingStar minus
-	vector<int> Contains::getAllProcTimesContainees(int) {} //returns the plus ContainedStar in procedure (WILL NEVER APPEAR AS QUERY !!!)
-	vector<int> Contains::getAllProcTimesContainers(int) {} //returns the procedures ContainingStar times
+	set<int> Contains::getVarContainedStarInTimes(int times) { //returns all those variables which are children of the times node in the AST
+		set<int> results;
+		set<int> vars = getVarContainedInTimes(times);
+		results.insert( vars.begin(), vars.end());
+		if(getTimesContainedInTimes(times).size()!=0){
+			set<int> times1 = getTimesContainedInTimes(times);
+			for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+				set<int> vars1 = getVarContainedStarInTimes(*i);
+				results.insert(vars1.begin(), vars1.end());
+			}
+		}
+		if(getPlusContainedInTimes(times).size()!=0){
+			set<int> plus = getPlusContainedInTimes(times);
+			for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+				set<int> vars2 = getVarContainedStarInPlus(*i);
+				results.insert(vars2.begin(), vars2.end());
+			}
+		}
+		if(getMinusContainedInTimes(times).size()!=0){
+			set<int> minus = getMinusContainedInTimes(times);
+			for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+				set<int> vars3 = getVarContainedStarInMinus(*i);
+				results.insert(vars3.begin(), vars3.end());
+			}
+		}
+		return results;
+	}
 
 
-	//for statement list as container
-	vector<int> Contains::getAllStmtLstStmtContainersStar(){} //returns the statementList which contain* some statement
-	vector<int> Contains::getAllStmtLstStmtContaineesStar(){} //returns the statements which are ContainedStar withing a statement list
-	vector<int> Contains::getAllStmtLstVarContainees(){}   //returns all the variables ContainedStar in a stmtlist
-	vector<int> Contains::getAllStmtLstVarContainers(){}   //returns the statementlist which conatins the variable
-	vector<int> Contains::getAllStmtLstConstContainees(){}  //returns the constants which are contained within a statementlist
-	vector<int> Contains::getAllStmtLstConstContainers(){}  //returns the statementlist which contain the constant
-	vector<int> Contains::getAllStmtLstPlusContainees(){} //returns the plus ContainedStar in statementlist (WILL NEVER APPEAR AS QUERY !!!)
-	vector<int> Contains::getAllStmtLstPlusContainers(){} //returns the statementlist ContainingStar plus 
-	vector<int> Contains::getAllStmtLstMinusContainees(){} //returns the minus ContainedStar in statementlist (WILL NEVER APPEAR AS QUERY !!!)
-	vector<int> Contains::getAllStmtLstMinusContainers(){} //returns the statementlist ContainingStar minus
-	vector<int> Contains::getAllStmtLstTimesContainees(){} //returns the times ContainedStar in statementlist (WILL NEVER APPEAR AS QUERY !!!)
-	vector<int> Contains::getAllStmtLstTimesContainers(){} //returns the statementlist ContainingStar times
-	vector<int> Contains::getAllStmtLstStmtLstContainees(){}  //returns the statementlist which contain the statementList
-	vector<int> Contains::getAllStmtLstStmtLstContainers(){} //returns the statementList which are ContainedStar in statementLst 
-	
+	set<int> Contains::getTimesContainingStarVar(int var) { //returns all those times which contain the variable node
+		set<int> results;
+		set<int> times = getTimesContainingVar(var);
+		results.insert(times.begin(), times.end());
+		for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+			set<int> times1 = getTimesContainingStarTimes(*i);
+			results.insert(times1.begin(), times1.end());
+		}
+		set<int> plus = getPlusContainingVar(var);
+		for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+			set<int> times2 = getTimesContainingStarPlus(*i);
+			results.insert(times2.begin(),times2.end());
+		}
+
+		set<int> minus = getMinusContainingVar(var);
+		for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+			set<int> times2 = getTimesContainingStarMinus(*i);
+			results.insert(times2.begin(),times2.end());
+		}
+
+		return results;
+	}
 
 
-	//for statement as container
-	vector<int> Contains::getAllStmtStmtLstContainersStar(){} // returns all the statements which contain* some statementlist
-	vector<int> Contains::getAllStmtStmtLstContaineesStar(){} //returns all the statement list conatained within some statement
-	vector<int> Contains::getAllStmtVarContaineesStar(){}  //returns all the statements which contain* some variable
-	vector<int> Contains::getAllStmtVarContainersStar(){}  //returns all the variables ContainedStar within some statement
-	vector<int> Contains::getAllStmtConstContaineesStar(){} //returns all the statements which contain* some constants
-	vector<int> Contains::getAllStmtConstContainersStar(){} //returns all the constants conatained within some statement
-	vector<int> Contains::getAllStmtPlusContaineesStar(){} //returns all the statements which contain* some plus
-	vector<int> Contains::getAllStmtPlusContainersStar(){} //return all the pluses which are ContainedStar within a statement
-	vector<int> Contains::getAllStmtMinusContainersStar(){} //return all the statements which contain* some minus
-	vector<int> Contains::getAllStmtMinusContaineesStar(){} //return all the minuses which are ContainedStar in some statement
-	vector<int> Contains::getAllStmtTimesContainersStar(){} //return all the statements which contain* some times node
-	vector<int> Contains::getAllStmtTimesContaineesStar(){} //return all the times nodes which are ContainedStar within a statement
+	set<int> Contains::getConstContainedStarInTimes(int times) { //returns all those constants which are children of the times node in the AST
+		set<int> results;
+		set<int> constants = getConstContainedInTimes(times);
+		results.insert( constants.begin(), constants.end());
+		if(getTimesContainedInTimes(times).size()!=0){
+			set<int> times1 = getTimesContainedInTimes(times);
+			for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+				set<int> constants1 = getConstContainedStarInTimes(*i);
+				results.insert(constants1.begin(), constants1.end());
+			}
+		}
+		if(getPlusContainedInTimes(times).size()!=0){
+			set<int> plus = getPlusContainedInTimes(times);
+			for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+				set<int> const2 = getConstContainedStarInPlus(*i);
+				results.insert(const2.begin(), const2.end());
+			}
+		}
+		if(getMinusContainedInTimes(times).size()!=0){
+			set<int> minus = getMinusContainedInTimes(times);
+			for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+				set<int> const3 = getConstContainedStarInMinus(*i);
+				results.insert(const3.begin(), const3.end());
+			}
+		}
+		return results;
 
-	// for plus node as container 
-	vector<int> Contains::getAllPlusVarContainersStar(){} //returns the list of all plus nodes which contain* some variable
-	vector<int> Contains::getAllPlusVarContaineesStar(){} //returns the list of all variables which are ContainedStar in some plus node
-	vector<int> Contains::getAllPlusConstContainersStar(){} //returns the list of all plus nodes which contain* some constant
-	vector<int> Contains::getAllPlusConstContaineesStar(){} //returns the list of all constants which are ContainedStar in some plus node
-	vector<int> Contains::getAllPlusPlusContainersStar(){} //returns the list of all plus nodes which contain* some plus nodes
-	vector<int> Contains::getAllPlusPlusContaineesStar(){} //returns the list of all pluses which are ContainedStar in some plus node
-	vector<int> Contains::getAllPlusMinusContainersStar(){} //returns the list of all plus nodes which contain* some minus
-	vector<int> Contains::getAllPlusMinusContaineesStar(){} //returns the list of all minuses which are ContainedStar in some plus node
-	vector<int> Contains::getAllPlusTimesContainersStar(){} //returns the list of all plus nodes which contain* some times nose
-	vector<int> Contains::getAllPlusTimesContaineesStar(){} //returns the list of all times which are ContainedStar in some plus node
-	
-	//for minus node as container
-	vector<int> Contains::getAllMinusVarContainersStar(){} //returns the list of all minus nodes which contain* some variable
-	vector<int> Contains::getAllMinusVarContaineesStar(){} //returns the list of all variables which are ContainedStar in some minus node
-	vector<int> Contains::getAllMinusConstContainersStar(){} //returns the list of all minus nodes which contain* some constant
-	vector<int> Contains::getAllMinusConstContaineesStar(){} //returns the list of all constants which are ContainedStar in some minus node
-	vector<int> Contains::getAllMinusPlusContainersStar(){} //returns the list of all minus nodes which contain* some minus nodes
-	vector<int> Contains::getAllMinusPlusContaineesStar(){} //returns the list of all minuses which are ContainedStar in some minus node
-	vector<int> Contains::getAllMinusMinusContainersStar(){} //returns the list of all minus nodes which contain* some minus
-	vector<int> Contains::getAllMinusMinusContaineesStar(){} //returns the list of all minuses which are ContainedStar in some minus node
-	vector<int> Contains::getAllMinusTimesContainersStar(){} //returns the list of all minus nodes which contain* some times nose
-	vector<int> Contains::getAllMinusTimesContaineesStar(){} //returns the list of all times which are ContainedStar in some minus node
-	
-	//for times node as container
-	vector<int> Contains::getAllTimesVarContainersStar(){} //returns the list of all Times nodes which contain* some variable
-	vector<int> Contains::getAllTimesVarContaineesStar(){} //returns the list of all variables which are ContainedStar in some Times node
-	vector<int> Contains::getAllTimesConstContainersStar(){} //returns the list of all Times nodes which contain* some constant
-	vector<int> Contains::getAllTimesConstContaineesStar(){} //returns the list of all constants which are ContainedStar in some Times node
-	vector<int> Contains::getAllTimesPlusContainersStar(){} //returns the list of all Times nodes which contain* some Times nodes
-	vector<int> Contains::getAllTimesPlusContaineesStar(){} //returns the list of all Timeses which are ContainedStar in some Times node
-	vector<int> Contains::getAllTimesMinusContainersStar(){} //returns the list of all Times nodes which contain* some minus
-	vector<int> Contains::getAllTimesMinusContaineesStar(){} //returns the list of all minuses which are ContainedStar in some Times node
-	vector<int> Contains::getAllTimesTimesContainersStar(){} //returns the list of all Times nodes which contain* some times nose
-	vector<int> Contains::getAllTimesTimesContaineesStar(){} //returns the list of all times which are ContainedStar in some Times node
-	
+	}
+
+	set<int> Contains::getTimesContainingStarConst(int constant) { //returns all those times which contain the constant
+		set<int> results;
+		set<int> times = getTimesContainingConst(constant);
+		results.insert(times.begin(), times.end());
+		for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+			set<int> times1 = getTimesContainingStarTimes(*i);
+			results.insert(times1.begin(), times1.end());
+		}
+		set<int> plus = getPlusContainingConst(constant);
+		for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+			set<int> times2 = getTimesContainingStarPlus(*i);
+			results.insert(times2.begin(),times2.end());
+		}
+
+		set<int> minus = getMinusContainingConst(constant);
+		for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+			set<int> times2 = getTimesContainingStarMinus(*i);
+			results.insert(times2.begin(),times2.end());
+		}
+		return results;
+	}
+
+	set<int> Contains::getPlusContainedStarInTimes(int times) { //returns all those plus which are children of the times node in the AST
+		set<int> results;
+		set<int> plus = getPlusContainedInTimes(times);
+		results.insert( plus.begin(), plus.end());
+		if(getTimesContainedInTimes(times).size()!=0){
+			set<int> times1 = getTimesContainedInTimes(times);
+			for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+				set<int> plus1 = getPlusContainedStarInTimes(*i);
+				results.insert(plus1.begin(), plus1.end());
+			}
+		}
+		if(getPlusContainedInTimes(times).size()!=0){
+			set<int> plus = getPlusContainedInTimes(times);
+			for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+				set<int> Plus2 = getPlusContainedStarInPlus(*i);
+				results.insert(Plus2.begin(), Plus2.end());
+			}
+		}
+		if(getMinusContainedInTimes(times).size()!=0){
+			set<int> minus = getMinusContainedInTimes(times);
+			for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+				set<int> Plus3 = getPlusContainedStarInMinus(*i);
+				results.insert(Plus3.begin(), Plus3.end());
+			}
+		}
+		return results;
+
+	}
+
+	set<int> Contains::getTimesContainingStarPlus(int plus) { //returns all those times which contain the plus node
+		set<int> results;
+		set<int> times = getTimesContainingPlus(plus);
+		results.insert(times.begin(), times.end());
+		for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+			set<int> times1 = getTimesContainingStarTimes(*i);
+			results.insert(times1.begin(), times1.end());
+		}
+		set<int> plus1 = getPlusContainingPlus(plus);
+		for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+			set<int> times2 = getTimesContainingStarPlus(*i);
+			results.insert(times2.begin(),times2.end());
+		}
+
+		set<int> minus = getMinusContainingPlus(plus);
+		for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+			set<int> times2 = getTimesContainingStarMinus(*i);
+			results.insert(times2.begin(),times2.end());
+		}
+		return results;
+	}
+
+	set<int> Contains::getMinusContainedStarInTimes(int times) { //returns all those minus which are children of the times node in the AST
+		set<int> results;
+		set<int> minus = getMinusContainedInTimes(times);
+		results.insert( minus.begin(), minus.end());
+		if(getTimesContainedInTimes(times).size()!=0){
+			set<int> times1 = getTimesContainedInTimes(times);
+			for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+				set<int> minus1 = getMinusContainedStarInTimes(*i);
+				results.insert(minus1.begin(), minus1.end());
+			}
+		}
+		if(getPlusContainedInTimes(times).size()!=0){
+			set<int> plus = getPlusContainedInTimes(times);
+			for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+				set<int> minus2 = getMinusContainedStarInPlus(*i);
+				results.insert(minus2.begin(), minus2.end());
+			}
+		}
+		if(getMinusContainedInTimes(times).size()!=0){
+			set<int> minus = getMinusContainedInTimes(times);
+			for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+				set<int> minus3 = getMinusContainedStarInMinus(*i);
+				results.insert(minus3.begin(), minus3.end());
+			}
+		}
+		return results;
+	}
+
+	set<int> Contains::getTimesContainingStarMinus(int minus) { //returns all those times which contain the minus node
+		set<int> results;
+		set<int> times = getTimesContainingMinus(minus);
+		results.insert(times.begin(), times.end());
+		for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+			set<int> times1 = getTimesContainingStarTimes(*i);
+			results.insert(times1.begin(), times1.end());
+		}
+		set<int> plus = getPlusContainingMinus(minus);
+		for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+			set<int> times2 = getTimesContainingStarPlus(*i);
+			results.insert(times2.begin(),times2.end());
+		}
+
+		set<int> minus1 = getMinusContainingMinus(minus);
+		for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+			set<int> times2 = getTimesContainingStarMinus(*i);
+			results.insert(times2.begin(),times2.end());
+		}
+		return results;
+	}
+
+	set<int> Contains::getTimesContainedStarInTimes(int times) { //returns all those times which are children of the times node in the AST
+		set<int> results;
+		set<int> times1 = getTimesContainedInTimes(times);
+		results.insert( times1.begin(), times1.end());
+		if(getTimesContainedInTimes(times).size()!=0){
+			set<int> times2 = getTimesContainedInTimes(times);
+			for(std::set<int>::iterator i=times2.begin(); i!=times2.end(); i++){
+				set<int> times3 = getTimesContainedStarInTimes(*i);
+				results.insert(times3.begin(), times3.end());
+			}
+		}
+		if(getPlusContainedInTimes(times).size()!=0){
+			set<int> plus = getPlusContainedInTimes(times);
+			for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+				set<int> times1 = getTimesContainedStarInPlus(*i);
+				results.insert(times1.begin(), times1.end());
+			}
+		}
+		if(getMinusContainedInTimes(times).size()!=0){
+			set<int> minus = getMinusContainedInTimes(times);
+			for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+				set<int> times1 = getTimesContainedStarInMinus(*i);
+				results.insert(times1.begin(), times1.end());
+			}
+		}
+		return results;
+	}
+
+	set<int> Contains::getTimesContainingStarTimes(int times) { //returns all those times which contain the times node
+		set<int> results;
+		set<int> times1 = getTimesContainingTimes(times);
+		results.insert(times1.begin(), times1.end());
+		for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+			set<int> times2 = getTimesContainingStarTimes(*i);
+			results.insert(times2.begin(), times2.end());
+		}
+		set<int> plus = getPlusContainingTimes(times);
+		for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+			set<int> times2 = getTimesContainingStarPlus(*i);
+			results.insert(times2.begin(),times2.end());
+		}
+
+		set<int> minus = getMinusContainingTimes(times);
+		for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+			set<int> times2 = getTimesContainingStarMinus(*i);
+			results.insert(times2.begin(),times2.end());
+		}
+		return results;
+	}
+
 
 	//boolean functions
-	bool Contains:: isContainsStarProgProc(int, int){} //returns true if contains*(prog,proc) holds
-	bool Contains:: isContainsStarProcStmtLst(int, int){} //returns true if contains*(proc,stmtlst) holds
-	bool Contains:: isContainsStarProcStmt(int, int){} //returns true if contains*(proc,stmt) holds
-	bool Contains:: isContainsStarProcVar(int, int){} //returns true if contains*(proc,var) holds
-	bool Contains:: isContainsStarProcPlus(int, int){} //returns true if contains*(proc,plus) holds
-	bool Contains:: isContainsStarProcConst(int, int){} //returns true if contains*(proc,const) holds
-	bool Contains:: isContainsStarProcMinus(int, int){} //returns true if contains*(proc,minus) holds
-	bool Contains:: isContainsStarProcTimes(int, int){} //returns true if contains*(proc,times) holds
-	bool Contains:: isContainsStarStmtLstStmt(int,int){} //returns true if contains*(stmtLst, stmt) holds
-	bool Contains:: isContainsStarStmtLstVar(int,int){} //returns true if contains*(stmtLst, var) holds
-	bool Contains:: isContainsStarStmtLstConst(int,int){} //returns true if contains*(stmtLst, const) holds
-	bool Contains:: isContainsStarStmtLstPlus(int,int){} //returns true if contains*(stmtLst, plus) holds
-	bool Contains:: isContainsStarStmtLstMinus(int,int){} //returns true if contains*(stmtLst, minus) holds
-	bool Contains:: isContainsStarStmtLstTimes(int,int){} //returns true if contains*(stmtLst, times) holds
-	bool Contains:: isContainsStarStmtLstStmtLst(int,int){} //returns true if contains*(stmtLst,stmtLst) hold
-	bool Contains:: isContainsStarStmtVar(int,int){} //returns true if contains*(Stmt,var) holds  
-	bool Contains:: isContainsStarStmtConst(int,int){} //returns true if contains*(Stmt,Const) holds 
-	bool Contains:: isContainsStarStmtPlus(int,int){} //returns true if contains*(stmt,plus) holds
-	bool Contains:: isContainsStarStmtMinus(int,int){} //returns true if contains*(stmt,minus) holds 
-	bool Contains:: isContainsStarStmtTimes(int,int){} //returns true if contains*(stmt, times) holds 
-	bool Contains:: isContainsStarStmtStmtLst(int,int){} //returns true if contains*(stmt,stmtlst) holds 
-	bool Contains:: isContainsStarPlusVar(int,int){} //returns true if contains*(plus,var) holds 
-	bool Contains:: isContainsStarPlusConst(int,int){} //returns true if contains*(plus,const) holds
-	bool Contains:: isContainsStarMinusVar(int,int){} //returns true if contains*(minus,var) holds
-	bool Contains:: isContainsStarMinusConst(int,int){} //returns true if contains*(minus,const) holds
-	bool Contains:: isContainsStarTimesVar(int,int){} //returns true if contains*(times,var) holds
-	bool Contains:: isContainsStarTimesConst(int,int){} //returns true if contains*(times,const) holds
-	bool Contains:: isContainsStarPlusPlus(int,int){} //returns true if contains*(plus,plus) holds
-	bool Contains:: isContainsStarPlusMinus(int,int){} //return true if contains*(plus,minus) holds
-	bool Contains:: isContainsStarPlusTimes(int,int){} //returns true if contains*(plus,plus) holds
-	bool Contains:: isContainsStarMinusTimes(int,int){} //return true if contains*(minus,times) holds
-	bool Contains:: isContainsStarMinusPlus(int,int){} //returns true if contains*(minus,plus) holds
-	bool Contains:: isContainsStarMinusMinus(int,int){} //return true if contains*(minus,minus) holds
-	bool Contains:: isContainsStarTimesPlus (int,int){} //return true if contains*(times,plus) holds 
-	bool Contains:: isContainsStarTimesMinus(int,int){} // return true if contains*(times,minus) holds
-	bool Contains:: isContainsStarTimesTimes(int,int){} // return true if contains*(times,times) holds 
 
-	*/
+	bool Contains:: isContainsStarProcStmtLst(int proc, int stmtLst){ //returns true if contains*(proc,stmtlst) holds
+		set<int> stmtLst1 = getStmtLstContainedStarInProc(proc);
+		std::set<int>::iterator it = stmtLst1.find(stmtLst);
+		if(it!=stmtLst1.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarProcStmt(int proc, int stmt){ //returns true if contains*(proc,stmt) holds
+		set<int> stmts = getStmtContainedStarInProc(proc);
+		std::set<int>::iterator it = stmts.find(stmt);
+		if(it!=stmts.end())
+			return true;
+		else
+			return false;
+	}
+	
+
+	bool Contains:: isContainsStarProcVar(int proc, int var){ //returns true if contains*(proc,var) holds
+		set<int> vars = getVarContainedStarInProc(proc);
+		std::set<int>::iterator it = vars.find(var);
+		if(it!=vars.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarProcPlus(int proc, int plus){ //returns true if contains*(proc,plus) holds
+		set<int> pluses = getPlusContainedStarInProc(proc);
+		std::set<int>::iterator it = pluses.find(plus);
+		if(it!=pluses.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarProcConst(int proc, int constant){ //returns true if contains*(proc,const) holds
+		set<int> consts = getConstContainedStarInProc(proc);
+		std::set<int>::iterator it = consts.find(constant);
+		if(it!=consts.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarProcMinus(int proc, int minus){ //returns true if contains*(proc,minus) holds
+		set<int> minuses = getMinusContainedStarInProc(proc);
+		std::set<int>::iterator it = minuses.find(minus);
+		if(it!=minuses.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarProcTimes(int proc, int times){//returns true if contains*(proc,times) holds
+		set<int> times1 = getTimesContainedStarInProc(proc);
+		std::set<int>::iterator it = times1.find(times);
+		if(it!=times1.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarStmtLstStmt(int stmtLst, int stmt){ //returns true if contains*(stmtLst, stmt) holds
+		set<int> stmts = getStmtContainedStarInStmtLst(stmtLst);
+		std::set<int>::iterator it = stmts.find(stmt);
+		if(it!=stmts.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarStmtLstVar(int stmtLst, int var){ //returns true if contains*(stmtLst, var) holds
+		set<int> vars = getVarContainedStarInStmtLst(stmtLst);
+		std::set<int>::iterator it = vars.find(var);
+		if(it!=vars.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarStmtLstConst(int stmtLst, int constant){ //returns true if contains*(stmtLst, const) holds
+		set<int> consts = getConstContainedStarInStmtLst(stmtLst);
+		std::set<int>::iterator it = consts.find(constant);
+		if(it!=consts.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarStmtLstPlus(int stmtLst, int plus){ //returns true if contains*(stmtLst, plus) holds
+		set<int> pluses = getPlusContainedStarInStmtLst(stmtLst);
+		std::set<int>::iterator it = pluses.find(plus);
+		if(it!=pluses.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarStmtLstMinus(int stmtLst, int minus){ //returns true if contains*(stmtLst, minus) holds
+		set<int> minuses = getMinusContainedStarInStmtLst(stmtLst);
+		std::set<int>::iterator it = minuses.find(minus);
+		if(it!=minuses.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarStmtLstTimes(int stmtLst, int times){ //returns true if contains*(stmtLst, times) holds
+		set<int> times1 = getTimesContainedStarInStmtLst(stmtLst);
+		std::set<int>::iterator it = times1.find(times);
+		if(it!=times1.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarStmtLstStmtLst(int stmtLst1, int stmtLst2){ //returns true if contains*(stmtLst,stmtLst) hold
+		set<int> stmtLst3 = getStmtLstContainedStarInStmtLst(stmtLst1);
+		std::set<int>::iterator it = stmtLst3.find(stmtLst2);
+		if(it!=stmtLst3.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarStmtVar(int stmt, int var){ //returns true if contains*(Stmt,var) holds  
+		set<int> vars = getVarContainedStarInStmt(stmt);
+		std::set<int>::iterator it = vars.find(var);
+		if(it!=vars.end())
+			return true;
+		else
+			return false;
+	}
+
+
+	bool Contains:: isContainsStarStmtConst(int stmt, int constant){ //returns true if contains*(Stmt,Const) holds 
+		set<int> consts = getConstContainedStarInStmt(stmt);
+		std::set<int>::iterator it = consts.find(constant);
+		if(it!=consts.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarStmtPlus(int stmt, int plus){ //returns true if contains*(stmt,plus) holds
+		set<int> pluses = getPlusContainedStarInStmt(stmt);
+		std::set<int>::iterator it = pluses.find(plus);
+		if(it!=pluses.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarStmtMinus(int stmt, int minus){ //returns true if contains*(stmt,minus) holds 
+		set<int> minuses = getMinusContainedStarInStmt(stmt);
+		std::set<int>::iterator it = minuses.find(minus);
+		if(it!=minuses.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarStmtTimes(int stmt, int times){ //returns true if contains*(stmt, times) holds 
+		set<int> times1 = getTimesContainedStarInStmt(stmt);
+		std::set<int>::iterator it = times1.find(times);
+		if(it!=times1.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarStmtStmtLst(int stmt, int stmtLst){ //returns true if contains*(stmt,stmtlst) holds 
+		set<int> stmtLsts = getStmtLstContainedStarInStmt(stmt);
+		std::set<int>::iterator it = stmtLsts.find(stmtLst);
+		if(it!=stmtLsts.end())
+			return true;
+		else
+			return false;
+	}
+
+
+
+	bool Contains:: isContainsStarPlusVar(int plus, int var){ //returns true if contains*(plus,var) holds 
+		set<int> vars = getVarContainedStarInPlus(plus);
+		std::set<int>::iterator it = vars.find(var);
+		if(it!=vars.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarPlusConst(int plus, int constant){ //returns true if contains*(plus,const) holds
+		set<int> constants = getConstContainedStarInPlus(plus);
+		std::set<int>::iterator it = constants.find(constant);
+		if(it!=constants.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarMinusVar(int minus,int var){ //returns true if contains*(minus,var) holds
+		set<int> vars = getVarContainedStarInMinus(minus);
+		std::set<int>::iterator it = vars.find(var);
+		if(it!=vars.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarMinusConst(int minus, int constant){ //returns true if contains*(minus,const) holds
+		set<int> constants = getConstContainedStarInMinus(minus);
+		std::set<int>::iterator it = constants.find(constant);
+		if(it!=constants.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarTimesVar(int times, int var){ //returns true if contains*(times,var) holds
+		set<int> vars = getVarContainedStarInTimes(times);
+		std::set<int>::iterator it = vars.find(var);
+		if(it!=vars.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarTimesConst(int times, int constant){ //returns true if contains*(times,const) holds
+		set<int> constants = getConstContainedStarInTimes(times);
+		std::set<int>::iterator it = constants.find(constant);
+		if(it!=constants.end())
+			return true;
+		else
+			return false;
+	}
+	
+	bool Contains:: isContainsStarPlusPlus(int plus1, int plus2){ //returns true if contains*(plus,plus) holds
+		set<int> pluses = getPlusContainedStarInPlus(plus1);
+		std::set<int>::iterator it = pluses.find(plus2);
+		if(it!=pluses.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarPlusMinus(int plus, int minus){ //return true if contains*(plus,minus) holds
+		set<int> minuses = getMinusContainedStarInPlus(plus);
+		std::set<int>::iterator it = minuses.find(minus);
+		if(it!=minuses.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarPlusTimes(int plus, int times){ //returns true if contains*(plus,plus) holds
+		set<int> times1 = getTimesContainedStarInPlus(plus);
+		std::set<int>::iterator it = times1.find(times);
+		if(it!=times1.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarMinusTimes(int minus,int times){ //return true if contains*(minus,times) holds
+		set<int> times1 = getTimesContainedStarInMinus(minus);
+		std::set<int>::iterator it = times1.find(times);
+		if(it!=times1.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarMinusPlus(int minus, int plus){ //returns true if contains*(minus,plus) holds
+		set<int> pluses = getPlusContainedStarInMinus(minus);
+		std::set<int>::iterator it = pluses.find(plus);
+		if(it!=pluses.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarMinusMinus(int minus1, int minus2){ //return true if contains*(minus,minus) holds
+		set<int> minuses = getMinusContainedStarInMinus(minus1);
+		std::set<int>::iterator it = minuses.find(minus2);
+		if(it!=minuses.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarTimesPlus (int times, int plus){ //return true if contains*(times,plus) holds 
+		set<int> pluses = getPlusContainedStarInTimes(times);
+		std::set<int>::iterator it = pluses.find(plus);
+		if(it!=pluses.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarTimesMinus(int times, int minus){ // return true if contains*(times,minus) holds
+		set<int> minuses = getMinusContainedStarInTimes(times);
+		std::set<int>::iterator it = minuses.find(minus);
+		if(it!=minuses.end())
+			return true;
+		else
+			return false;
+	}
+
+	bool Contains:: isContainsStarTimesTimes(int times1, int times2){ // return true if contains*(times,times) holds 
+		set<int> times3 = getTimesContainedStarInTimes(times1);
+		std::set<int>::iterator it = times3.find(times2);
+		if(it!=times3.end())
+			return true;
+		else
+			return false;
+	}
+
+	

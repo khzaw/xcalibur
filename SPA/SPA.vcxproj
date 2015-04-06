@@ -79,6 +79,7 @@
     <ClCompile Include="QueryProcessor\ParentStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\ParentSubquery.cpp" />
     <ClCompile Include="QueryProcessor\UsesProcSubquery.cpp" />
+    <ClInclude Include="Siblings.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Frontend\Lexeme.h" />

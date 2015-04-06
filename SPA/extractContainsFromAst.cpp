@@ -89,82 +89,85 @@ void ExtractContainsFromAST::recursiveExtractContains(TNode* root){
 			return;
 		}
 		if(root->getData().compare("+")==0) {
+			int plusCountOfRoot = plusCount;
 			for(int i=0; i<root->getNumChildren(); i++) {
 				string nodeTypeC = root->getChild(i)->getNodeType();
 				if(nodeTypeC.compare("VAR_NODE")==0){
 					int varIndex = varTable->getVarIndex(root->getChild(i)->getData());
-					contains->insertPlusVar(plusCount,varIndex);
+					contains->insertPlusVar(plusCountOfRoot,varIndex);
 				}
 				if(nodeTypeC.compare("CONSTANT_NODE")==0){
 					int constIndex = constTable->getConstIndex(atoi(root->getChild(i)->getData().c_str()));
-					contains->insertPlusConst(plusCount,constIndex);
+					contains->insertPlusConst(plusCountOfRoot,constIndex);
 				}
 				if(root->getChild(i)->getData().compare("+")==0){
 					plusCount ++;
-					contains->insertPlusPlus(plusCount-1,plusCount);
+					contains->insertPlusPlus(plusCountOfRoot,plusCount);
 				}
 				if(root->getChild(i)->getData().compare("-")==0){
 					minusCount ++;
-					contains->insertPlusMinus(plusCount,minusCount);
+					contains->insertPlusMinus(plusCountOfRoot,minusCount);
 				}
 				if(root->getChild(i)->getData().compare("*")==0){
 					timesCount ++;
-					contains->insertPlusTimes(plusCount,timesCount);
+					contains->insertPlusTimes(plusCountOfRoot,timesCount);
 				}
 				recursiveExtractContains(root->getChild(i));
 			}
 			return;
 		}
 		if(root->getData().compare("-")==0) {
+			int minusCountOfRoot;
 			for(int i=0; i<root->getNumChildren(); i++) {
 				string nodeTypeC = root->getChild(i)->getNodeType();
 				if(nodeTypeC.compare("VAR_NODE")==0){
 					int varIndex = varTable->getVarIndex(root->getChild(i)->getData());
-					contains->insertMinusVar(minusCount,varIndex);
+					contains->insertMinusVar(minusCountOfRoot,varIndex);
 				}
 				if(nodeTypeC.compare("CONSTANT_NODE")==0){
 					int constIndex = constTable->getConstIndex(atoi(root->getChild(i)->getData().c_str()));
-					contains->insertMinusConst(minusCount,constIndex);
+					contains->insertMinusConst(minusCountOfRoot,constIndex);
 				}
 				if(root->getChild(i)->getData().compare("+")==0){
 					plusCount ++;
-					contains->insertMinusPlus(minusCount,plusCount);
+					contains->insertMinusPlus(minusCountOfRoot,plusCount);
 				}
 				if(root->getChild(i)->getData().compare("-")==0){
 					minusCount ++;
-					contains->insertMinusMinus(minusCount-1,minusCount);
+					contains->insertMinusMinus(minusCountOfRoot,minusCount);
 				}
 				if(root->getChild(i)->getData().compare("*")==0){
 					timesCount ++;
-					contains->insertMinusTimes(minusCount,timesCount);
+					contains->insertMinusTimes(minusCountOfRoot,timesCount);
 				}
 				recursiveExtractContains(root->getChild(i));
 			}
 			return;
 		}
 
-		if(root->getData().compare("-")==0) {
+		if(root->getData().compare("*")==0) {
+			int timesCountOfRoot = timesCount;
 			for(int i=0; i<root->getNumChildren(); i++) {
 				string nodeTypeC = root->getChild(i)->getNodeType();
 				if(nodeTypeC.compare("VAR_NODE")==0){
 					int varIndex = varTable->getVarIndex(root->getChild(i)->getData());
-					contains->insertTimesVar(timesCount,varIndex);
+					contains->insertTimesVar(timesCountOfRoot,varIndex);
 				}
 				if(nodeTypeC.compare("CONSTANT_NODE")==0){
 					int constIndex = constTable->getConstIndex(atoi(root->getChild(i)->getData().c_str()));
-					contains->insertTimesConst(timesCount,constIndex);
+					contains->insertTimesConst(timesCountOfRoot,constIndex);
 				}
 				if(root->getChild(i)->getData().compare("+")==0){
 					plusCount ++;
-					contains->insertTimesPlus(timesCount,plusCount);
+					contains->insertTimesPlus(timesCountOfRoot,plusCount);
 				}
 				if(root->getChild(i)->getData().compare("-")==0){
 					minusCount ++;
-					contains->insertTimesMinus(timesCount,minusCount);
+					contains->insertTimesMinus(timesCountOfRoot,minusCount);
 				}
 				if(root->getChild(i)->getData().compare("*")==0){
 					timesCount ++;
-					contains->insertTimesTimes(timesCount-1,timesCount);
+					contains->insertTimesTimes(timesCountOfRoot,timesCount);
 				}
 				recursiveExtractContains(root->getChild(i));
 			}

@@ -335,5 +335,8 @@
     <ClInclude Include="extractContainsFromAst.h">
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
+    <ClInclude Include="Siblings.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

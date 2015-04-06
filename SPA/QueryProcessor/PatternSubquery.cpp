@@ -284,9 +284,10 @@ public:
 				}
 			}
 		} else { // (Synonym, _)
-			// don't have to do anything?
+			//do synonym type checking only
+			return rt;
 		}
 
-		return rt;
+		return result;
 	}
 };

@@ -9805,6 +9805,147 @@ void SubqueryTest::testPatternTuple(){
 	ResultTuple* a8 = p8.solve(&testTuple);
 	CPPUNIT_ASSERT_EQUAL((size_t)0, a8->getAllResults().size());
 
+	// Test 9: assign a(synonym, expression)
+	PatternSubquery p9 = PatternSubquery(&synonymTable, pk);
+	p9.setSynonyms("a1", "v1");
+	p9.setValue("x 1 + ", false);
+	ResultTuple* a9 = p9.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t) 0, a9->getAllResults().size());
+
+	// Test 10: assign a(synonym, expression2)
+	PatternSubquery p10 = PatternSubquery(&synonymTable, pk);
+	p10.setSynonyms("a1", "v1");
+	p10.setValue("x y *", false);
+	ResultTuple* a10 = p10.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t) 0, a10->getAllResults().size());
+
+	// Test 11: assign a(synonym, _expression_)
+	PatternSubquery p11 = PatternSubquery(&synonymTable, pk);
+	p11.setSynonyms("a1", "v1");
+	p11.setValue("x y * ", true);
+	ResultTuple* a11 = p11.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t) 0, a11->getAllResults().size());
+
+	// Test 12: assign a(synonym, _expression2_)
+	PatternSubquery p12 = PatternSubquery(&synonymTable, pk);
+	p12.setSynonyms("a1", "v1");
+	p12.setValue("y z +", true);
+	ResultTuple* a12 = p12.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t) 0, a12->getAllResults().size());
+
+	// Test 13: while w(var, _)
+	PatternSubquery p13 = PatternSubquery(&synonymTable, pk);
+	p13.setSynonyms("w1", 0);
+	ResultTuple* a13 = p13.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t) 0, a13->getAllResults().size());
+
+	// Test 14: while w(var2, _)
+	PatternSubquery p14 = PatternSubquery(&synonymTable, pk);
+	p14.setSynonyms("w1", 4);
+	ResultTuple* a14 = p14.solve(&testTuple);
+	int e14[1][9] = {
+		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(e14)/sizeof(e14[0])), a14->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(e14)/sizeof(e14[0])); i++){
+		for (size_t j = 0; j < (sizeof(e14[i])/sizeof(e14[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(e14[i][j], a14->getResultAt(i, j));
+		}
+	}
+
+	// Test 15: while w(synonym, _)
+	PatternSubquery p15 = PatternSubquery(&synonymTable, pk);
+	p15.setSynonyms("w1", "v1");
+	ResultTuple* a15 = p15.solve(&testTuple);
+	int e15[2][9] = {
+		{3   ,  9   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(e15)/sizeof(e15[0])), a15->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(e15)/sizeof(e15[0])); i++){
+		for (size_t j = 0; j < (sizeof(e15[i])/sizeof(e15[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(e15[i][j], a15->getResultAt(i, j));
+		}
+	}
+
+	// Test 16: while w(_, _)
+	PatternSubquery p16 = PatternSubquery(&synonymTable, pk);
+	p16.setSynonyms("w1", "_");
+	ResultTuple* a16 = p16.solve(&testTuple);
+	int e16[9][9] = {
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
+		{8   ,  7   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
+		{3   ,  9   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(e16)/sizeof(e16[0])), a16->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(e16)/sizeof(e16[0])); i++){
+		for (size_t j = 0; j < (sizeof(e16[i])/sizeof(e16[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(e16[i][j], a16->getResultAt(i, j));
+		}
+	}
+
+	// Test 17: if i(var, _)
+	PatternSubquery p17 = PatternSubquery(&synonymTable, pk);
+	p17.setSynonyms("i2", 0);
+	ResultTuple* a17 = p17.solve(&testTuple);
+	int e17[1][9] = {
+		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(e17)/sizeof(e17[0])), a17->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(e17)/sizeof(e17[0])); i++){
+		for (size_t j = 0; j < (sizeof(e17[i])/sizeof(e17[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(e17[i][j], a17->getResultAt(i, j));
+		}
+	}
+
+	// Test 18: if i(var2, _)
+	PatternSubquery p18 = PatternSubquery(&synonymTable, pk);
+	p18.setSynonyms("i2", 5);
+	ResultTuple* a18 = p18.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t) 0, a18->getAllResults().size());
+
+
+	// Test 19: if i(synonym, _)
+	PatternSubquery p19 = PatternSubquery(&synonymTable, pk);
+	p19.setSynonyms("i2", "v1");
+	ResultTuple* a19 = p19.solve(&testTuple);
+	int e19[1][9] = {
+		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(e19)/sizeof(e19[0])), a19->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(e19)/sizeof(e19[0])); i++){
+		for (size_t j = 0; j < (sizeof(e19[i])/sizeof(e19[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(e19[i][j], a19->getResultAt(i, j));
+		}
+	}
+
+	// Test 20: if i(_, _)
+	PatternSubquery p20 = PatternSubquery(&synonymTable, pk);
+	p20.setSynonyms("i2", "_");
+	ResultTuple* a20 = p20.solve(&testTuple);
+	int e20[9][9] = {
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{2   ,  1   ,  15  ,  8   ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  2   ,  6   ,  13  ,  3   ,  1   ,  0   ,  0   ,  0  },
+		{1   ,  1   ,  6   ,  8   ,  11  ,  1   ,  0   ,  0   ,  0  },
+		{8   ,  7   ,  6   ,  8   ,  3   ,  7   ,  0   ,  0   ,  0  },
+		{1   ,  1   ,  6   ,  8   ,  3   ,  1   ,  3   ,  0   ,  0  },
+		{3   ,  9   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  1  },
+		{1   ,  2   ,  6   ,  8   ,  3   ,  1   ,  0   ,  2   ,  2  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(e20)/sizeof(e20[0])), a20->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(e20)/sizeof(e20[0])); i++){
+		for (size_t j = 0; j < (sizeof(e20[i])/sizeof(e20[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(e20[i][j], a20->getResultAt(i, j));
+		}
+	}
 }
 
 void SubqueryTest::testWith(){

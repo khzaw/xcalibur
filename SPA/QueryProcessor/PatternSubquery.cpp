@@ -18,7 +18,7 @@ public:
 	}
 
 	ResultTuple* solve(ResultTuple* t){
-		return (synonymTable->at(leftSynonym) == "assign") ? solveAssign() : solveIfWhile(t);
+		return (synonymTable->at(leftSynonym) == "assign") ? solveAssign(t) : solveIfWhile(t);
 	}
 
 	bool validate() {
@@ -115,38 +115,34 @@ public:
 		tuple->setSynonymMap(r->getSynonymMap());
 		int index = r->getSynonymIndex(leftSynonym);
 		
-		switch(isSyn) {
-			{case 0: case 2: case 7:		//pattern a ("x", ...)
-				for (size_t i = 0; i < r->getAllResults().size(); i++) {
-					int res = r->getResultAt(index, i);
-					if (pkb->modifiesTable->evaluateIsModifiesStmt(res, rightIndex)) {	//if modifies(a[i], "x")
-						if(matchPattern(pkb->statementTable->getTNode(res)->getData())) {
-							tuple->addResultRow(r->getResultRow(i));
-						}
-					}
-				}
-				break;
-			}
-			{case 1: case 3: case 4:		//pattern a (syn, ...)
-				int lIndex = r->getSynonymIndex(leftSynonym);
-				int rIndex = r->getSynonymIndex(rightSynonym);
-				if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
-					tuple = assignBothSyn(tuple, r, lIndex, rIndex);
-				} else if (rIndex == -1) { //case 2: only left is inside
-					tuple = assignLeftSyn(tuple, r, lIndex);
-				} else { //case 3: only right is inside
-					tuple = assignRightSyn(tuple, r, rIndex);
-				}
-			}
-			{default:					//pattern a (_, ...)
-				for(size_t i = 0; i < r->getAllResults().size(); i++) {
-					int res = r->getResultAt(index, i);
-					if (matchPattern(pkb->statementTable->getTNode(res)->getData())) {
+		if (isSyn == 0 || isSyn == 2 || isSyn == 7) { //pattern a ("x", ...)
+			for (size_t i = 0; i < r->getAllResults().size(); i++) {
+				int res = r->getResultAt(i, index);
+				if (pkb->modifiesTable->evaluateIsModifiesStmt(res, rightIndex)) {	//if modifies(a[i], "x")
+					if(matchPattern(pkb->statementTable->getTNode(res)->getData())) {
 						tuple->addResultRow(r->getResultRow(i));
 					}
 				}
 			}
+		} else if (isSyn == 1 || isSyn == 3 || isSyn == 4) { //pattern a (syn, ...)
+			int lIndex = r->getSynonymIndex(leftSynonym);
+			int rIndex = r->getSynonymIndex(rightSynonym);
+			if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
+				tuple = assignBothSyn(tuple, r, lIndex, rIndex);
+			} else if (rIndex == -1) { //case 2: only left is inside
+				tuple = assignLeftSyn(tuple, r, lIndex);
+			} else { //case 3: only right is inside
+				tuple = assignRightSyn(tuple, r, rIndex);
+			}
+		} else {
+			for(size_t i = 0; i < r->getAllResults().size(); i++) {
+				int res = r->getResultAt(i, index);
+				if (matchPattern(pkb->statementTable->getTNode(res)->getData())) {
+					tuple->addResultRow(r->getResultRow(i));
+				}
+			}
 		}
+
 		return tuple;
 	}
 

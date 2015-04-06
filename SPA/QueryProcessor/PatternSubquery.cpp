@@ -228,16 +228,69 @@ public:
 	}
 
 	ResultTuple* solveIfWhile(ResultTuple* rt) {
-		ResultTuple* tuple = new ResultTuple();
-		UsesSubquery* s = new UsesSubquery(this->synonymTable, this->pkb);
-		switch(isSyn) {
-			case 0: case 2: case 7:	//pattern i (int, _) -> if(x)
-				s->setSynonyms(leftSynonym, rightIndex);
-				break;	
-			default :	//pattern i (syn, _) or (_, _)
-				s->setSynonyms(leftSynonym, rightSynonym);
+		ResultTuple* result = new ResultTuple();
+		result->setSynonym(rt->getSynonyms());
+		result->setSynonymMap(rt->getSynonymMap());
+
+		if (isSyn == 2) { //(Synonym, var_index)
+			int index = rt->getSynonymIndex(leftSynonym);
+			int size = rt->getAllResults().size();
+
+			for (size_t i = 0; i < size; i++) {
+				int cell = rt->getResultAt(i, index);
+				if (pkb->varTable->getVarIndex(pkb->statementTable->getTNode(cell)->getData()) == rightIndex) {
+					result->addResultRow(rt->getResultRow(i));
+				}
+			}
+		} else if (isSyn == 3) { //(Synonym, Synonym)
+			int left = rt->getSynonymIndex(leftSynonym);
+			int right = rt->getSynonymIndex(rightSynonym);
+			int size = rt->getAllResults().size();
+
+			if (left != -1 && right != -1) {
+				for (size_t i = 0; i < size; i++) {
+					if (pkb->varTable->getVarIndex(pkb->statementTable->getTNode(rt->getResultAt(i, left))->getData()) == rt->getResultAt(i, right)) {
+						result->addResultRow(rt->getResultRow(i));
+					}
+				}
+			} else if (left != -1) {
+				rt->addSynonymToMap(rightSynonym, rt->addSynonym(rightSynonym));
+				for (size_t i = 0; i < size; i++) {
+					int data = pkb->varTable->getVarIndex(pkb->statementTable->getTNode(rt->getResultAt(i, left))->getData());
+					vector<int> row = rt->getResultRow(i);
+					row.push_back(data);
+					result->addResultRow(row);
+				}
+			} else if (right != -1) {
+				rt->addSynonymToMap(leftSynonym, rt->addSynonym(leftSynonym));
+				vector<int> nodes = (synonymTable->at(leftSynonym)=="while") ? pkb->statementTable->getStmtNumUsingNodeType("WHILE_NODE") : pkb->statementTable->getStmtNumUsingNodeType("IF_NODE");
+				map <int, vector<int>> tempCache = map<int, vector<int>>();
+				for (size_t i = 0; i < size; i++) {
+					if (tempCache.find(rt->getResultAt(i, right)) != tempCache.end()) {
+						vector<int> v = tempCache.at(rt->getResultAt(i, right));
+						for (size_t j = 0; j < v.size(); j++) {
+							vector<int> row = rt->getResultRow(i);
+							row.push_back(v[j]);
+							result->addResultRow(row);
+						}
+					} else {
+						vector<int> v = vector<int>();
+						for (size_t j = 0; j < nodes.size(); j++) {
+							if (pkb->varTable->getVarIndex(pkb->statementTable->getTNode(nodes[j])->getData()) == rt->getResultAt(i, right)) {
+								v.push_back(nodes[j]);
+								vector<int> row = rt->getResultRow(i);
+								row.push_back(nodes[j]);
+								result->addResultRow(row);
+							}
+						}
+						tempCache.insert(map<int,vector<int>>::value_type(rt->getResultAt(i, right), v));
+					}
+				}
+			}
+		} else { // (Synonym, _)
+			// don't have to do anything?
 		}
-		tuple = s->solve(rt);
-		return tuple;
+
+		return rt;
 	}
 };

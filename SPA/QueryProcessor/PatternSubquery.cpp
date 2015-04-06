@@ -22,7 +22,8 @@ public:
 	}
 
 	bool validate() {
-		if (synonymTable->at(leftSynonym) == "assign" || synonymTable->at(leftSynonym) == "while" || synonymTable->at(leftSynonym) == "if") {
+		string left = synonymTable->at(leftSynonym);
+		if (left == "assign" || left == "while" || left == "if") {
 			if(isSyn == 1 || isSyn == 4 || isSyn == 3) {
 				if (synonymTable->at(rightSynonym) != "variable") {
 					return false;

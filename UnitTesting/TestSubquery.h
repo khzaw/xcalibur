@@ -62,6 +62,7 @@ public:
 	void testNextStar();
 	void testNextStarTuple();
 	void testAffects();
+	void testAffectsStar();
 
 };
 #endif

@@ -20,6 +20,7 @@
 #include "QueryProcessor\NextSubquery.cpp"
 #include "QueryProcessor\NextStarSubquery.cpp"
 #include "QueryProcessor\AffectsSubquery.cpp"
+#include "QueryProcessor\AffectsStarSubquery.cpp"
 #include "QueryProcessor\PatternSubquery.cpp"
 
 void 
@@ -410,9 +411,10 @@ void SubqueryTest::testSubqueries() {
 	testNextTuple();
 	testNextStar();
 	testNextStarTuple();
-	testAffects();
 	testPattern();
 	testPatternTuple();
+	//testAffects();
+	testAffectsStar();
 }
 
 void SubqueryTest::testFollows(){
@@ -16652,7 +16654,7 @@ void SubqueryTest::testAffects() {
 			CPPUNIT_ASSERT_EQUAL(expectedResultaffectssubquery115[i][j], actualResultaffectssubquery115->getResultAt(i, j));
 		}
 	}
-	
+	/*
 	// Test 120: Affects(1, s2)
 	AffectsSubquery affectssubquery120 = AffectsSubquery(&synonymTable, pk);
 	affectssubquery120.setSynonyms(1, "s2");
@@ -16664,7 +16666,8 @@ void SubqueryTest::testAffects() {
 	affectssubquery127.setSynonyms(1, "l2");
 	ResultTuple* actualResultaffectssubquery127 = affectssubquery127.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t) 0, actualResultaffectssubquery127->getAllResults().size());
-	
+	*/
+	/*
 	// Test 132: Affects(5, s2)
 	AffectsSubquery affectssubquery132 = AffectsSubquery(&synonymTable, pk);
 	affectssubquery132.setSynonyms(5, "s2");
@@ -16678,7 +16681,7 @@ void SubqueryTest::testAffects() {
 			CPPUNIT_ASSERT_EQUAL(expectedResultaffectssubquery132[i][j], actualResultaffectssubquery132->getResultAt(i, j));
 		}
 	}
-	/*
+	
 	// Test 139: Affects(5, l2)
 	AffectsSubquery affectssubquery139 = AffectsSubquery(&synonymTable, pk);
 	affectssubquery139.setSynonyms(5, "l2");
@@ -16693,6 +16696,7 @@ void SubqueryTest::testAffects() {
 		}
 	}
 	*/
+	
 
 	// Test 6: Affects(1,"a1")
 	AffectsSubquery affectsSubquery6 = AffectsSubquery(&synonymTable, pk);
@@ -16875,4 +16879,25 @@ void SubqueryTest::testAffects() {
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultaffectssubquery143->getAllResults().size());
 	CPPUNIT_ASSERT(actualResultaffectssubquery143->isBool());
 	CPPUNIT_ASSERT(actualResultaffectssubquery143->isEmpty());
+}
+
+void SubqueryTest::testAffectsStar() {
+	/*
+	// Test 1: AffectsStar(s1, s2)
+	AffectsStarSubquery affectsStarSubquery1 = AffectsStarSubquery(&synonymTable, pk);
+	affectsStarSubquery1.setSynonyms("s1", "s2");
+	ResultTuple* actualResultsAffectsStarSubquery1 = affectsStarSubquery1.solve();
+	int expectedResultsAffectsStarSubquery1[32][2] = {
+		{4, 7}, {4, 14}, {4, 18}, {4, 19}, {4, 20}, {5, 12}, {5, 18}, {5, 19}, {5, 20}, {7, 7}, 
+		{7, 14}, {7, 18}, {7, 19}, {7, 20}, {9, 16}, {10, 9}, {10, 16}, {12, 12}, {12, 18}, {12, 19}, 
+		{12, 20}, {14, 18}, {14, 19}, {14, 20}, {16, 16}, {17, 18}, {17, 19}, {17, 20}, {18, 19}, {18, 20}, 
+		{19, 20}, {21, 22} 
+	};
+	CPPUNIT_ASSERT_EQUAL((size_t)32, actualResultsAffectsStarSubquery1->getAllResults().size());
+	for (size_t i = 0; i < 32; i++){
+		for (size_t j = 0; j < 2; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsAffectsStarSubquery1[i][j], actualResultsAffectsStarSubquery1->getResultAt(i, j));
+		}
+	}
+	*/
 }

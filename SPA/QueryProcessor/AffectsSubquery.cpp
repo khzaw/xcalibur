@@ -257,16 +257,27 @@ public:
 			}
 		} else if (lIndex == -1) { //case 3: only right is inside
 			int index = result->addSynonym(leftSynonym);
+			int size = tuple->getAllResults().size();
 			result->addSynonymToMap(leftSynonym, index);
+			
+			// to store already calcultated solution
 			map<int, vector<int>> prevSolution = map<int, vector<int>>();
-			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
-				int rightValue = tuple->getResultAt(i, rIndex);
-				if (prevSolution.find(rightValue) == prevSolution.end()){
-					set<int> tV = pkb->affectsExtractor->getAffectsBy(rightValue);
-					vector<int> tempValues(tV.begin(), tV.end());
-					prevSolution.insert(make_pair(rightValue, tempValues));
+
+			for (size_t i = 0; i < size; i++) {
+				int right = tuple->getResultAt(i, rIndex);
+				// check if already calculated
+				if (prevSolution.find(right) == prevSolution.end()) {
+					vector<int> pre = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
+					vector<int> ans = vector<int>();
+					for (size_t x = 0; x < pre.size(); x++) {
+						if (pkb->affectsExtractor->isAffects(pre[x], right)) {
+							ans.push_back(pre[x]);
+						}
+					}
+					prevSolution.insert(make_pair(right, ans));
 				}
-				vector<int> vals = prevSolution.at(rightValue);
+
+				vector<int> vals = prevSolution.at(right);
 				for (size_t j = 0; j < vals.size(); j++){
 					vector<int> newRow(tuple->getResultRow(i));
 					newRow.push_back(vals[j]);

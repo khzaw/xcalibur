@@ -1410,7 +1410,7 @@ Contains::Contains(){
 
 	set<int> Contains::getVarContainedStarInStmtLst (int stmtLst) {   //returns the variables ContainedStar in a stmtlist
 		set<int> results;
-		set<int> stmts = getStmtContainedStarInStmtLst(stmtLst);
+		set<int> stmts = getStmtContainedInStmtLst(stmtLst);
 		for(std::set<int>::iterator i=stmts.begin(); i!=stmts.end(); i++){
 			set<int> vars = getVarContainedStarInStmt(*i);
 			results.insert(vars.begin(), vars.end());
@@ -1450,7 +1450,7 @@ Contains::Contains(){
 
 	set<int> Contains::getConstContainedStarInStmtLst (int stmtLst) {  //returns the constants which are contained within a statementlist
 		set<int> results;
-		set<int> stmts = getStmtContainedStarInStmtLst(stmtLst);
+		set<int> stmts = getStmtContainedInStmtLst(stmtLst);
 		for(std::set<int>::iterator i=stmts.begin(); i!=stmts.end(); i++){
 			set<int> constant = getConstContainedStarInStmt(*i);
 			results.insert(constant.begin(), constant.end());
@@ -1488,59 +1488,262 @@ Contains::Contains(){
 	}
 
 
-	set<int> Contains::getPlusContainedStarInStmtLst(int) { //returns the plus ContainedStar in statementlist (WILL NEVER APPEAR AS QUERY !!!)
+	set<int> Contains::getPlusContainedStarInStmtLst(int stmtLst) { //returns the plus ContainedStar in statementlist (WILL NEVER APPEAR AS QUERY !!!)
 		set<int> results;
+		set<int> stmts = getStmtContainedInStmtLst(stmtLst);
+		for(std::set<int>::iterator i=stmts.begin(); i!=stmts.end(); i++){
+			set<int> plus = getPlusContainedStarInStmt(*i);
+			results.insert(plus.begin(), plus.end());
+		}
 		return results;
 	}
-	set<int> Contains::getStmtLstContainingStarPlus(int) { //returns the statementlist ContainingStar plus 
+	set<int> Contains::getStmtLstContainingStarPlus(int plus) { //returns the statementlist ContainingStar plus 
 		set<int> results;
+		set<int> stmt = getStmtContainingPlus(plus);
+		set<int> plus1 = getPlusContainingPlus(plus);
+		set<int> minus1 = getMinusContainingPlus(plus);
+		set<int> times1 = getTimesContainingPlus(plus);
+
+		for(std::set<int>::iterator i=stmt.begin(); i!=stmt.end(); i++){
+			set<int> stmtLst1 = getStmtLstContainingStarStmt(*i);
+			results.insert(stmtLst1.begin(), stmtLst1.end());
+		}
+
+		for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+			set<int> stmtLst1 = getStmtLstContainingStarPlus(*i);
+			results.insert(stmtLst1.begin(), stmtLst1.end());
+		}
+
+		for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+			set<int> stmtLst1 = getStmtLstContainingStarMinus(*i);
+			results.insert(stmtLst1.begin(), stmtLst1.end());
+		}
+
+		for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+			set<int> stmtLst1 = getStmtLstContainingStarTimes(*i);
+			results.insert(stmtLst1.begin(), stmtLst1.end());
+		}
+
 		return results;
 	}
-	set<int> Contains::getMinusContainedStarInStmtLst(int) { //returns the minus ContainedStar in statementlist (WILL NEVER APPEAR AS QUERY !!!)
+	set<int> Contains::getMinusContainedStarInStmtLst(int stmtLst) { //returns the minus ContainedStar in statementlist (WILL NEVER APPEAR AS QUERY !!!)
 		set<int> results;
+		set<int> stmts = getStmtContainedInStmtLst(stmtLst);
+		for(std::set<int>::iterator i=stmts.begin(); i!=stmts.end(); i++){
+			set<int> minus = getMinusContainedStarInStmt(*i);
+			results.insert(minus.begin(), minus.end());
+		}
 		return results;
 	}
-	set<int> Contains::getStmtLstContainingStarMinus(int) { //returns the statementlist ContainingStar minus
+	set<int> Contains::getStmtLstContainingStarMinus(int minus) { //returns the statementlist ContainingStar minus
 		set<int> results;
+		set<int> stmt = getStmtContainingMinus(minus);
+		set<int> plus1 = getPlusContainingMinus(minus);
+		set<int> minus1 = getMinusContainingMinus(minus);
+		set<int> times1 = getTimesContainingMinus(minus);
+
+		for(std::set<int>::iterator i=stmt.begin(); i!=stmt.end(); i++){
+			set<int> stmtLst = getStmtLstContainingStarStmt(*i);
+			results.insert(stmtLst.begin(), stmtLst.end());
+		}
+
+		for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+			set<int> stmtLst = getStmtLstContainingStarPlus(*i);
+			results.insert(stmtLst.begin(), stmtLst.end());
+		}
+
+		for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+			set<int> stmtLst = getStmtLstContainingStarMinus(*i);
+			results.insert(stmtLst.begin(), stmtLst.end());
+		}
+
+		for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+			set<int> stmtLst = getStmtLstContainingStarTimes(*i);
+			results.insert(stmtLst.begin(), stmtLst.end());
+		}
+
 		return results;
 	}
-	set<int> Contains::getTimesContainedStarInStmtLst(int) { //returns the times ContainedStar in statementlist (WILL NEVER APPEAR AS QUERY !!!)
+	set<int> Contains::getTimesContainedStarInStmtLst(int stmtLst) { //returns the times ContainedStar in statementlist (WILL NEVER APPEAR AS QUERY !!!)
 		set<int> results;
+		set<int> stmts = getStmtContainedInStmtLst(stmtLst);
+		for(std::set<int>::iterator i=stmts.begin(); i!=stmts.end(); i++){
+			set<int> times = getTimesContainedStarInStmt(*i);
+			results.insert(times.begin(), times.end());
+		}
 		return results;
 	}
-	set<int> Contains::getStmtLstContainingStarTimes(int) { //returns the statementlist ContainingStar times
+	set<int> Contains::getStmtLstContainingStarTimes(int times) { //returns the statementlist ContainingStar times
 		set<int> results;
+		set<int> stmt = getStmtContainingTimes(times);
+		set<int> plus1 = getPlusContainingTimes(times);
+		set<int> minus1 = getMinusContainingTimes(times);
+		set<int> times1 = getTimesContainingTimes(times);
+
+		for(std::set<int>::iterator i=stmt.begin(); i!=stmt.end(); i++){
+			set<int> stmtLst = getStmtLstContainingStarStmt(*i);
+			results.insert(stmtLst.begin(), stmtLst.end());
+		}
+
+		for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+			set<int> stmtLst = getStmtLstContainingStarPlus(*i);
+			results.insert(stmtLst.begin(), stmtLst.end());
+		}
+
+		for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+			set<int> stmtLst = getStmtLstContainingStarMinus(*i);
+			results.insert(stmtLst.begin(), stmtLst.end());
+		}
+
+		for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+			set<int> stmtLst = getStmtLstContainingStarTimes(*i);
+			results.insert(stmtLst.begin(), stmtLst.end());
+		}
+
 		return results;
 	}
-	set<int> Contains::getStmtLstContainingStarStmtLst(int) {  //returns the statementlist which contain the statementList
+	set<int> Contains::getStmtLstContainingStarStmtLst(int stmtLst) {  //returns the statementlist which contain the statementList
 		set<int> results;
+		set<int> stmts = getStmtContainingStmtLst(stmtLst);
+		for(std::set<int>::iterator i=stmts.begin(); i!=stmts.end(); i++){
+			set<int> stmtLst1 = getStmtLstContainingStarStmt(*i);
+			results.insert(stmtLst1.begin(), stmtLst1.end());
+		}
 		return results;
 	}
-	set<int> Contains::getStmtLstContainedStarInStmtLst (int) { //returns the statementList which are ContainedStar in statementLst 
+	set<int> Contains::getStmtLstContainedStarInStmtLst (int stmtLst) { //returns the statementList which are ContainedStar in statementLst 
 		set<int> results;
+		set<int> stmts = getStmtContainedInStmtLst(stmtLst);
+		for(std::set<int>::iterator i=stmts.begin(); i!=stmts.end(); i++){
+			set<int> stmtLst1 = getStmtLstContainedStarInStmt(*i);
+			results.insert(stmtLst1.begin(), stmtLst1.end());
+		}
 		return results;
 	}
 	
 	
 	//for statements as containers
-	set<int> Contains::getVarContainedStarInStmt (int) {   //returns the variables ContainedStar in a stmt
+	set<int> Contains::getVarContainedStarInStmt (int stmt) {   //returns the variables ContainedStar in a stmt
 		set<int> results;
+		set<int> var = getVarContainedInStmt(stmt);
+		results.insert(var.begin(), var.end());
+
+		set<int> stmtLst = getStmtLstContainedInStmt(stmt);
+		for(std::set<int>::iterator i=stmtLst.begin(); i!=stmtLst.end(); i++){
+			set<int> var2 = getVarContainedStarInStmtLst(*i);
+			results.insert(var2.begin(),var2.end());
+		}
+
+		set<int> plus = getPlusContainedInStmt(stmt);
+		for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+			set<int> var2 = getVarContainedStarInPlus(*i);
+			results.insert(var2.begin(),var2.end());
+		}
+
+		set<int> minus = getMinusContainedInStmt(stmt);
+		for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+			set<int> var2 = getVarContainedStarInMinus(*i);
+			results.insert(var2.begin(),var2.end());
+		}
+
+		set<int> times = getTimesContainedInStmt(stmt);
+		for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+			set<int> var2 = getVarContainedStarInTimes(*i);
+			results.insert(var2.begin(),var2.end());
+		}
+
 		return results;
 	}
-	set<int> Contains::getStmtContainingStarVar (int) {   //returns the statements which conatins the variable
+	set<int> Contains::getStmtContainingStarVar (int var) {   //returns the statements which conatins the variable
 		set<int> results;
+		set<int> stmts = getStmtContainingVar(var);
+		set<int> plus1 = getPlusContainingVar(var);
+		set<int> minus1 = getMinusContainingVar(var);
+		set<int> times1 = getTimesContainingVar(var);
+
+		for(std::set<int>::iterator i=stmts.begin(); i!=stmts.end(); i++){
+			set<int> stmt1 = getStmtContainingStarStmt(*i);
+			results.insert(stmt1.begin(), stmt1.end());
+		}
+
+		for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+			set<int> stmt = getStmtContainingStarPlus(*i);
+			results.insert(stmt.begin(), stmt.end());
+		}
+
+		for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+			set<int> stmt = getStmtContainingStarMinus(*i);
+			results.insert(stmt.begin(), stmt.end());
+		}
+
+		for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+			set<int> stmt = getStmtContainingStarTimes(*i);
+			results.insert(stmt.begin(), stmt.end());
+		}
+
 		return results;
 	}
-	set<int> Contains::getConstContainedStarInStmt (int) {  //returns the constants which are contained within a statement
+	set<int> Contains::getConstContainedStarInStmt (int stmt) {  //returns the constants which are contained within a statement
 		set<int> results;
+		set<int> constant = getConstContainedInStmt(stmt);
+		results.insert(constant.begin(), constant.end());
+
+		set<int> stmtLst = getStmtLstContainedInStmt(stmt);
+		for(std::set<int>::iterator i=stmtLst.begin(); i!=stmtLst.end(); i++){
+			set<int> constant2 = getConstContainedStarInStmtLst(*i);
+			results.insert(constant2.begin(),constant2.end());
+		}
+
+		set<int> plus = getPlusContainedInStmt(stmt);
+		for(std::set<int>::iterator i=plus.begin(); i!=plus.end(); i++){
+			set<int> constant2 = getConstContainedStarInPlus(*i);
+			results.insert(constant2.begin(),constant2.end());
+		}
+
+		set<int> minus = getMinusContainedInStmt(stmt);
+		for(std::set<int>::iterator i=minus.begin(); i!=minus.end(); i++){
+			set<int> constant2 = getConstContainedStarInMinus(*i);
+			results.insert(constant2.begin(),constant2.end());
+		}
+
+		set<int> times = getTimesContainedInStmt(stmt);
+		for(std::set<int>::iterator i=times.begin(); i!=times.end(); i++){
+			set<int> constant2 = getConstContainedStarInTimes(*i);
+			results.insert(constant2.begin(),constant2.end());
+		}
 		return results;
 	}
-	set<int> Contains::getStmtContainingStarConst(int) {  //returns the statements which contain the constant
+	set<int> Contains::getStmtContainingStarConst(int constant) {  //returns the statements which contain the constant
 		set<int> results;
+		set<int> stmts = getStmtContainingConst(constant);
+		set<int> plus1 = getPlusContainingConst(constant);
+		set<int> minus1 = getMinusContainingConst(constant);
+		set<int> times1 = getTimesContainingConst(constant);
+
+		for(std::set<int>::iterator i=stmts.begin(); i!=stmts.end(); i++){
+			set<int> stmt = getStmtContainingStarStmt(*i);
+			results.insert(stmt.begin(), stmt.end());
+		}
+
+		for(std::set<int>::iterator i=plus1.begin(); i!=plus1.end(); i++){
+			set<int> stmt = getStmtContainingStarPlus(*i);
+			results.insert(stmt.begin(), stmt.end());
+		}
+
+		for(std::set<int>::iterator i=minus1.begin(); i!=minus1.end(); i++){
+			set<int> stmt = getStmtContainingStarMinus(*i);
+			results.insert(stmt.begin(), stmt.end());
+		}
+
+		for(std::set<int>::iterator i=times1.begin(); i!=times1.end(); i++){
+			set<int> stmt = getStmtContainingStarTimes(*i);
+			results.insert(stmt.begin(), stmt.end());
+		}
 		return results;
 	}
-	set<int> Contains::getStmtLstContainedStarInStmt (int) {//returns the statementList which are ContainedStar in statement (WILL NEVER APPEAR AS QUERY!!!)
+	set<int> Contains::getStmtLstContainedStarInStmt (int stmt) {//returns the statementList which are ContainedStar in statement (WILL NEVER APPEAR AS QUERY!!!)
 		set<int> results;
+
 		return results;
 	}
 	set<int> Contains::getStmtContainingStarStmtLst (int) { //returns the statements contain statementList 
@@ -1871,8 +2074,7 @@ Contains::Contains(){
 		}
 		return results;
 	}
-	
-	
+		
 
 	set<int> Contains::getMinusContainingStarVar(int var) { //returns all those minus which contain the variable node
 		set<int> results;

@@ -189,6 +189,12 @@
     <ClCompile Include="extractContainsFromAst.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
+    <ClCompile Include="Siblings.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="SiblingsExtractor.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PKB\AST.h">
@@ -336,6 +342,9 @@
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
     <ClInclude Include="Siblings.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="SiblingsExtractor.h">
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
   </ItemGroup>

@@ -179,17 +179,24 @@ public:
 		ResultTuple* result = new ResultTuple();
 		result->setSynonym(tuple->getSynonyms());
 		result->setSynonymMap(tuple->getSynonymMap());
-
+		int size = tuple->getAllResults().size();
+		vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 		int index = tuple->getSynonymIndex(rightSynonym);
-		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
-			vector<int> temp = tuple->getAllResults().at(i);
-			if (isSyn == 1) {	// Affects(stmt, syn)
-				if (pkb->affectsExtractor->isAffects(leftIndex, temp.at(index))) {
+		if (isSyn == 1) {	// Affects(stmt, syn)
+			for (size_t i = 0; i < size; i++) {
+				vector<int> temp = tuple->getAllResults().at(i);
+				if (pkb->affectsExtractor->isAffects(leftIndex, temp[index])) {
 					result->addResultRow(temp);
 				}
-			} else {	// Affects(_, syn)
-				if (!pkb->affectsExtractor->getAffectsBy(temp.at(index)).empty()) {
-					result->addResultRow(temp);
+			}
+		} else {	// Affects(_, syn)
+			for (size_t i = 0; i < size; i++) {
+				vector<int> temp = tuple->getAllResults().at(i);
+				for (size_t j = 0; j < assStmt.size(); j++) {
+					if (pkb->affectsExtractor->isAffects(assStmt[j], temp[index])) {
+						result->addResultRow(temp);
+						break;
+					}
 				}
 			}
 		}

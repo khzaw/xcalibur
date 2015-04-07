@@ -414,6 +414,7 @@ void SubqueryTest::testSubqueries() {
 	testPattern();
 	testPatternTuple();
 	testAffects();
+	testAffectsTuple();
 	testAffectsStar();
 }
 
@@ -16586,13 +16587,13 @@ void SubqueryTest::testAffects() {
 	ResultTuple* actualResultaffectssubquery10 = affectssubquery10.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t) 0, actualResultaffectssubquery10->getAllResults().size());
 	
-	/*
+	
 	// Test 11: Affects(s1, 6)
 	AffectsSubquery affectssubquery11 = AffectsSubquery(&synonymTable, pk);
 	affectssubquery11.setSynonyms("s1", 6);
 	ResultTuple* actualResultaffectssubquery11 = affectssubquery11.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t) 0, actualResultaffectssubquery11->getAllResults().size());
-	*/
+	
 
 	// Test 12: Affects(a1, s2)
 	AffectsSubquery affectssubquery12 = AffectsSubquery(&synonymTable, pk);
@@ -16750,13 +16751,13 @@ void SubqueryTest::testAffects() {
 	ResultTuple* actualResultaffectssubquery22x = affectssubquery22x.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t) 0, actualResultaffectssubquery22x->getAllResults().size());
 	
-	/*
+	
 	// Test 23: Affects(a1, 6)
 	AffectsSubquery affectssubquery23 = AffectsSubquery(&synonymTable, pk);
 	affectssubquery23.setSynonyms("a1", 6);
 	ResultTuple* actualResultaffectssubquery23 = affectssubquery23.solve();
 	CPPUNIT_ASSERT_EQUAL((size_t) 0, actualResultaffectssubquery23->getAllResults().size());
-	*/
+	
 
 	// Test 109: Affects(_, a2)
 	AffectsSubquery affectssubquery109 = AffectsSubquery(&synonymTable, pk);
@@ -16871,6 +16872,427 @@ void SubqueryTest::testAffects() {
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultaffectssubquery143->getAllResults().size());
 	CPPUNIT_ASSERT(actualResultaffectssubquery143->isBool());
 	CPPUNIT_ASSERT(actualResultaffectssubquery143->isEmpty());
+}
+
+void SubqueryTest::testAffectsTuple() {	
+	// testTuple:
+	//  s1  |  s2  |  a1  |  a2  |  l1  |  l2  |  const1  |  v1  |  proc1  |
+	//  1   |  16  |  4   |  12  |  4   |  14  |  0       |  0   |  0      |
+	//  7   |  20  |  4   |  12  |  5   |  14  |  0       |  0   |  0      |
+	//  1   |  18  |  16  |  12  |  6   |  15  |  0       |  0   |  0      |
+	//  9   |  20  |  18  |  16  |  7   |  15  |  0       |  0   |  0      |
+	//  16  |  19  |  18  |  16  |  8   |  16  |  0       |  0   |  0      |
+	//  8   |  21  |  18  |  19  |  9   |  16  |  0       |  0   |  0      |
+	//  19  |  18  |  19  |  19  |  10  |  18  |  3       |  0   |  0      |
+	//  3   |  21  |  19  |  20  |  11  |  18  |  0       |  2   |  0      |
+	//  20  |  2   |  20  |  20  |  20  |  1   |  0       |  2   |  1      |
+	ResultTuple testTuple = ResultTuple();
+	int index = testTuple.addSynonym("s1");
+	testTuple.addSynonymToMap("s1", index);
+	index = testTuple.addSynonym("s2");
+	testTuple.addSynonymToMap("s2", index);
+	index = testTuple.addSynonym("a1");
+	testTuple.addSynonymToMap("a1", index);
+	index = testTuple.addSynonym("a2");
+	testTuple.addSynonymToMap("a2", index);
+	index = testTuple.addSynonym("l1");
+	testTuple.addSynonymToMap("l1", index);
+	index = testTuple.addSynonym("l2");
+	testTuple.addSynonymToMap("l2", index);
+	index = testTuple.addSynonym("const1");
+	testTuple.addSynonymToMap("const1", index);
+	index = testTuple.addSynonym("v1");
+	testTuple.addSynonymToMap("v1", index);
+	index = testTuple.addSynonym("proc1");
+	testTuple.addSynonymToMap("proc1", index);
+	int data[9][9] = {
+		{1   ,  16  ,  4   ,  12  ,  4   ,  14  ,  0   ,  0   ,  0  },
+		{7   ,  20  ,  4   ,  12  ,  5   ,  14  ,  0   ,  0   ,  0  },
+		{1   ,  18  ,  16  ,  12  ,  6   ,  15  ,  0   ,  0   ,  0  },
+		{9   ,  20  ,  18  ,  16  ,  7   ,  15  ,  0   ,  0   ,  0  },
+		{16  ,  19  ,  18  ,  16  ,  8   ,  16  ,  0   ,  0   ,  0  },
+		{8   ,  21  ,  18  ,  19  ,  9   ,  16  ,  0   ,  0   ,  0  },
+		{19  ,  18  ,  19  ,  19  ,  10  ,  18  ,  3   ,  0   ,  0  },
+		{3   ,  21  ,  19  ,  20  ,  11  ,  18  ,  0   ,  2   ,  1  },
+		{20  ,  2   ,  20  ,  20  ,  20  ,  1   ,  0   ,  2   ,  2  }
+	};
+	for (int i = 0; i < 9; i++){
+		vector<int> tempVector = vector<int>();
+		testTuple.addResultRow(tempVector);
+		for (int j = 0; j < 9; j++){
+			testTuple.addResult(i, data[i][j]);
+		}
+	}
+
+	// Test 1: Affects(s1, s2)
+	AffectsSubquery affectsSubquery1 = AffectsSubquery(&synonymTable, pk);
+	affectsSubquery1.setSynonyms("s1", "s2");
+	ResultTuple* actualResultsAffectsSubquery1 = affectsSubquery1.solve(&testTuple);
+	int expectedResultsAffectsSubquery1[1][9] = {
+		{7   ,  20  ,  4   ,  12  ,  5   ,  14  ,  0   ,  0   ,  0  }
+	};
+	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResultsAffectsSubquery1->getAllResults().size());
+	for (size_t i = 0; i < 1; i++){
+		for (size_t j = 0; j < 9; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsAffectsSubquery1[i][j], actualResultsAffectsSubquery1->getResultAt(i, j));
+		}
+	}
+	
+	// Test 2: Affects(s1, 18)
+	AffectsSubquery affectsSubquery2 = AffectsSubquery(&synonymTable, pk);
+	affectsSubquery2.setSynonyms("s1", 18);
+	ResultTuple* actualResultsAffectsSubquery2 = affectsSubquery2.solve(&testTuple);
+	int expectedResultsAffectsSubquery2[1][9] = {
+		{7   ,  20  ,  4   ,  12  ,  5   ,  14  ,  0   ,  0   ,  0  }
+	};
+	CPPUNIT_ASSERT_EQUAL((size_t)1, actualResultsAffectsSubquery2->getAllResults().size());
+	for (size_t i = 0; i < 1; i++){
+		for (size_t j = 0; j < 9; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsAffectsSubquery2[i][j], actualResultsAffectsSubquery2->getResultAt(i, j));
+		}
+	}
+
+	// Test 3: Affects(s1, _)
+	AffectsSubquery affectsSubquery3 = AffectsSubquery(&synonymTable, pk);
+	affectsSubquery3.setSynonyms("s1", "_");
+	ResultTuple* actualResultsAffectsSubquery3 = affectsSubquery3.solve(&testTuple);
+	int expectedResultsAffectsSubquery3[4][9] = {
+		{7   ,  20  ,  4   ,  12  ,  5   ,  14  ,  0   ,  0   ,  0  },
+		{9   ,  20  ,  18  ,  16  ,  7   ,  15  ,  0   ,  0   ,  0  },
+		{16  ,  19  ,  18  ,  16  ,  8   ,  16  ,  0   ,  0   ,  0  },
+		{19  ,  18  ,  19  ,  19  ,  10  ,  18  ,  3   ,  0   ,  0  }
+	};
+	CPPUNIT_ASSERT_EQUAL((size_t)4, actualResultsAffectsSubquery3->getAllResults().size());
+	for (size_t i = 0; i < 4; i++){
+		for (size_t j = 0; j < 9; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsAffectsSubquery3[i][j], actualResultsAffectsSubquery3->getResultAt(i, j));
+		}
+	}	
+	
+	// Test 5: Affects(2,s1)
+	AffectsSubquery affectsSubquery5 = AffectsSubquery(&synonymTable, pk);
+	affectsSubquery5.setSynonyms(2, "s1");
+	ResultTuple* actualResultsAffectsSubquery5 = affectsSubquery5.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t) 0, actualResultsAffectsSubquery5->getAllResults().size());
+
+	// Test 7: Affects(_,s1)
+	AffectsSubquery affectsSubquery7 = AffectsSubquery(&synonymTable, pk);
+	affectsSubquery7.setSynonyms("_", "s1");
+	ResultTuple* actualResultsAffectsSubquery7 = affectsSubquery7.solve(&testTuple);
+	int expectedResultsAffectsSubquery7[5][9] = {
+		{7   ,  20  ,  4   ,  12  ,  5   ,  14  ,  0   ,  0   ,  0  },
+		{9   ,  20  ,  18  ,  16  ,  7   ,  15  ,  0   ,  0   ,  0  },
+		{16  ,  19  ,  18  ,  16  ,  8   ,  16  ,  0   ,  0   ,  0  },
+		{19  ,  18  ,  19  ,  19  ,  10  ,  18  ,  3   ,  0   ,  0  },
+		{20  ,  2   ,  20  ,  20  ,  20  ,  1   ,  0   ,  2   ,  2  }
+	};
+	CPPUNIT_ASSERT_EQUAL((size_t) 5, actualResultsAffectsSubquery7->getAllResults().size());
+	for (size_t i = 0; i < 5; i++){
+		for (size_t j = 0; j < 9; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsAffectsSubquery7[i][j], actualResultsAffectsSubquery7->getResultAt(i, j));
+		}
+	}
+	
+	// Test 1: Affects(s1, a2)
+	AffectsSubquery affectssubquery1 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery1.setSynonyms("s1", "a2");
+	ResultTuple* actualResultaffectssubquery1 = affectssubquery1.solve(&testTuple);
+	int expectedResultaffectssubquery1[2][9] = {
+		{9   ,  20  ,  18  ,  16  ,  7   ,  15  ,  0   ,  0   ,  0  },
+		{16  ,  19  ,  18  ,  16  ,  8   ,  16  ,  0   ,  0   ,  0  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultaffectssubquery1)/sizeof(expectedResultaffectssubquery1[0])), actualResultaffectssubquery1->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultaffectssubquery1)/sizeof(expectedResultaffectssubquery1[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultaffectssubquery1[i])/sizeof(expectedResultaffectssubquery1[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultaffectssubquery1[i][j], actualResultaffectssubquery1->getResultAt(i, j));
+		}
+	}
+	
+	// Test 7: Affects(s1, l2)
+	AffectsSubquery affectssubquery7 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery7.setSynonyms("s1", "l2");
+	ResultTuple* actualResultaffectssubquery7 = affectssubquery7.solve(&testTuple);
+	int expectedResultaffectssubquery7[2][9] = {
+		{7   ,  20  ,  4   ,  12  ,  5   ,  14  ,  0   ,  0   ,  0  },
+		{16  ,  19  ,  18  ,  16  ,  8   ,  16  ,  0   ,  0   ,  0  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultaffectssubquery7)/sizeof(expectedResultaffectssubquery7[0])), actualResultaffectssubquery7->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultaffectssubquery7)/sizeof(expectedResultaffectssubquery7[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultaffectssubquery7[i])/sizeof(expectedResultaffectssubquery7[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultaffectssubquery7[i][j], actualResultaffectssubquery7->getResultAt(i, j));
+		}
+	}
+	
+	// Test 9: Affects(s1, _)
+	AffectsSubquery affectssubquery9 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery9.setSynonyms("s1", "_");
+	ResultTuple* actualResultaffectssubquery9 = affectssubquery9.solve(&testTuple);
+	int expectedResultaffectssubquery9[4][9] = {
+		{7   ,  20  ,  4   ,  12  ,  5   ,  14  ,  0   ,  0   ,  0  },
+		{9   ,  20  ,  18  ,  16  ,  7   ,  15  ,  0   ,  0   ,  0  },
+		{16  ,  19  ,  18  ,  16  ,  8   ,  16  ,  0   ,  0   ,  0  },
+		{19  ,  18  ,  19  ,  19  ,  10  ,  18  ,  3   ,  0   ,  0  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultaffectssubquery9)/sizeof(expectedResultaffectssubquery9[0])), actualResultaffectssubquery9->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultaffectssubquery9)/sizeof(expectedResultaffectssubquery9[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultaffectssubquery9[i])/sizeof(expectedResultaffectssubquery9[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultaffectssubquery9[i][j], actualResultaffectssubquery9->getResultAt(i, j));
+		}
+	}
+	
+	// Test 10: Affects(s1, 2)
+	AffectsSubquery affectssubquery10 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery10.setSynonyms("s1", 2);
+	ResultTuple* actualResultaffectssubquery10 = affectssubquery10.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t) 0, actualResultaffectssubquery10->getAllResults().size());
+	
+	
+	// Test 11: Affects(s1, 6)
+	AffectsSubquery affectssubquery11 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery11.setSynonyms("s1", 6);
+	ResultTuple* actualResultaffectssubquery11 = affectssubquery11.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t) 0, actualResultaffectssubquery11->getAllResults().size());
+	
+
+	// Test 12: Affects(a1, s2)
+	AffectsSubquery affectssubquery12 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery12.setSynonyms("a1", "s2");
+	ResultTuple* actualResultaffectssubquery12 = affectssubquery12.solve(&testTuple);
+	int expectedResultaffectssubquery12[3][9] = {
+		{7   ,  20  ,  4   ,  12  ,  5   ,  14  ,  0   ,  0   ,  0  },
+		{9   ,  20  ,  18  ,  16  ,  7   ,  15  ,  0   ,  0   ,  0  },
+		{16  ,  19  ,  18  ,  16  ,  8   ,  16  ,  0   ,  0   ,  0  } 
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultaffectssubquery12)/sizeof(expectedResultaffectssubquery12[0])), actualResultaffectssubquery12->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultaffectssubquery12)/sizeof(expectedResultaffectssubquery12[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultaffectssubquery12[i])/sizeof(expectedResultaffectssubquery12[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultaffectssubquery12[i][j], actualResultaffectssubquery12->getResultAt(i, j));
+		}
+	}
+	
+	// Test 19: Affects(a1, l2)
+	AffectsSubquery affectssubquery19 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery19.setSynonyms("a1", "l2");
+	ResultTuple* actualResultaffectssubquery19 = affectssubquery19.solve(&testTuple);
+	int expectedResultaffectssubquery19[2][9] = {
+		{1   ,  16  ,  4   ,  12  ,  4   ,  14  ,  0   ,  0   ,  0  },
+		{7   ,  20  ,  4   ,  12  ,  5   ,  14  ,  0   ,  0   ,  0  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultaffectssubquery19)/sizeof(expectedResultaffectssubquery19[0])), actualResultaffectssubquery19->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultaffectssubquery19)/sizeof(expectedResultaffectssubquery19[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultaffectssubquery19[i])/sizeof(expectedResultaffectssubquery19[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultaffectssubquery19[i][j], actualResultaffectssubquery19->getResultAt(i, j));
+		}
+	}
+
+	// Test 108: Affects(_, s2)
+	AffectsSubquery affectssubquery108 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery108.setSynonyms("_", "s2");
+	ResultTuple* actualResultaffectssubquery108 = affectssubquery108.solve(&testTuple);
+	int expectedResultaffectssubquery108[6][9] = {
+		{1   ,  16  ,  4   ,  12  ,  4   ,  14  ,  0   ,  0   ,  0  },
+		{7   ,  20  ,  4   ,  12  ,  5   ,  14  ,  0   ,  0   ,  0  },
+		{1   ,  18  ,  16  ,  12  ,  6   ,  15  ,  0   ,  0   ,  0  },
+		{9   ,  20  ,  18  ,  16  ,  7   ,  15  ,  0   ,  0   ,  0  },
+		{16  ,  19  ,  18  ,  16  ,  8   ,  16  ,  0   ,  0   ,  0  },
+		{19  ,  18  ,  19  ,  19  ,  10  ,  18  ,  3   ,  0   ,  0  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultaffectssubquery108)/sizeof(expectedResultaffectssubquery108[0])), actualResultaffectssubquery108->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultaffectssubquery108)/sizeof(expectedResultaffectssubquery108[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultaffectssubquery108[i])/sizeof(expectedResultaffectssubquery108[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultaffectssubquery108[i][j], actualResultaffectssubquery108->getResultAt(i, j));
+		}
+	}
+	
+	// Test 115: Affects(_, l2)
+	AffectsSubquery affectssubquery115 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery115.setSynonyms("_", "l2");
+	ResultTuple* actualResultaffectssubquery115 = affectssubquery115.solve(&testTuple);
+	int expectedResultaffectssubquery115[6][9] = {
+		{1   ,  16  ,  4   ,  12  ,  4   ,  14  ,  0   ,  0   ,  0  },
+		{7   ,  20  ,  4   ,  12  ,  5   ,  14  ,  0   ,  0   ,  0  },
+		{16  ,  19  ,  18  ,  16  ,  8   ,  16  ,  0   ,  0   ,  0  },
+		{8   ,  21  ,  18  ,  19  ,  9   ,  16  ,  0   ,  0   ,  0  },
+		{19  ,  18  ,  19  ,  19  ,  10  ,  18  ,  3   ,  0   ,  0  },
+		{3   ,  21  ,  19  ,  20  ,  11  ,  18  ,  0   ,  2   ,  1  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultaffectssubquery115)/sizeof(expectedResultaffectssubquery115[0])), actualResultaffectssubquery115->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultaffectssubquery115)/sizeof(expectedResultaffectssubquery115[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultaffectssubquery115[i])/sizeof(expectedResultaffectssubquery115[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultaffectssubquery115[i][j], actualResultaffectssubquery115->getResultAt(i, j));
+		}
+	}
+
+	// Test 120: Affects(1, s2)
+	AffectsSubquery affectssubquery120 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery120.setSynonyms(1, "s2");
+	ResultTuple* actualResultaffectssubquery120 = affectssubquery120.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t) 0, actualResultaffectssubquery120->getAllResults().size());
+
+	// Test 127: Affects(1, l2)
+	AffectsSubquery affectssubquery127 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery127.setSynonyms(1, "l2");
+	ResultTuple* actualResultaffectssubquery127 = affectssubquery127.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t) 0, actualResultaffectssubquery127->getAllResults().size());
+	
+	// Test 132: Affects(5, s2)
+	AffectsSubquery affectssubquery132 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery132.setSynonyms(5, "s2");
+	ResultTuple* actualResultaffectssubquery132 = affectssubquery132.solve(&testTuple);
+	int expectedResultaffectssubquery132[2][9] = {
+		{1   ,  18  ,  16  ,  12  ,  6   ,  15  ,  0   ,  0   ,  0  },
+		{19  ,  18  ,  19  ,  19  ,  10  ,  18  ,  3   ,  0   ,  0  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultaffectssubquery132)/sizeof(expectedResultaffectssubquery132[0])), actualResultaffectssubquery132->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultaffectssubquery132)/sizeof(expectedResultaffectssubquery132[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultaffectssubquery132[i])/sizeof(expectedResultaffectssubquery132[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultaffectssubquery132[i][j], actualResultaffectssubquery132->getResultAt(i, j));
+		}
+	}
+	
+	// Test 139: Affects(5, l2)
+	AffectsSubquery affectssubquery139 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery139.setSynonyms(5, "l2");
+	ResultTuple* actualResultaffectssubquery139 = affectssubquery139.solve(&testTuple);
+	int expectedResultaffectssubquery139[2][9] = {
+		{19  ,  18  ,  19  ,  19  ,  10  ,  18  ,  3   ,  0   ,  0  },
+		{3   ,  21  ,  19  ,  20  ,  11  ,  18  ,  0   ,  2   ,  1  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultaffectssubquery139)/sizeof(expectedResultaffectssubquery139[0])), actualResultaffectssubquery139->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultaffectssubquery139)/sizeof(expectedResultaffectssubquery139[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultaffectssubquery139[i])/sizeof(expectedResultaffectssubquery139[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultaffectssubquery139[i][j], actualResultaffectssubquery139->getResultAt(i, j));
+		}
+	}
+	
+	// Test 6: Affects(1,"a1")
+	AffectsSubquery affectsSubquery6 = AffectsSubquery(&synonymTable, pk);
+	affectsSubquery6.setSynonyms(1, "a1");
+	ResultTuple* actualResultsAffectsSubquery6 = affectsSubquery6.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultsAffectsSubquery6->getAllResults().size());
+	
+	//Test 8 : Affects(_,a1)
+	AffectsSubquery affectsSubquery8 = AffectsSubquery(&synonymTable, pk);
+	affectsSubquery8.setSynonyms("_", "a1");
+	ResultTuple* actualResultsAffectsSubquery8 = affectsSubquery8.solve(&testTuple);
+	int expectedResultsAffectsSubquery8[7][9] = {
+		{1   ,  18  ,  16  ,  12  ,  6   ,  15  ,  0   ,  0   ,  0  },
+		{9   ,  20  ,  18  ,  16  ,  7   ,  15  ,  0   ,  0   ,  0  },
+		{16  ,  19  ,  18  ,  16  ,  8   ,  16  ,  0   ,  0   ,  0  },
+		{8   ,  21  ,  18  ,  19  ,  9   ,  16  ,  0   ,  0   ,  0  },
+		{19  ,  18  ,  19  ,  19  ,  10  ,  18  ,  3   ,  0   ,  0  },
+		{3   ,  21  ,  19  ,  20  ,  11  ,  18  ,  0   ,  2   ,  1  },
+		{20  ,  2   ,  20  ,  20  ,  20  ,  1   ,  0   ,  2   ,  2  }
+	};
+	CPPUNIT_ASSERT_EQUAL((size_t)7, actualResultsAffectsSubquery8->getAllResults().size());
+	for (size_t i = 0; i < 7; i++){
+		for (size_t j = 0; j < 9; j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultsAffectsSubquery8[i][j], actualResultsAffectsSubquery8->getResultAt(i, j));
+		}
+	}
+
+	// Test 13: Affects(a1, a2)
+	AffectsSubquery affectssubquery13 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery13.setSynonyms("a1", "a2");
+	ResultTuple* actualResultaffectssubquery13 = affectssubquery13.solve(&testTuple);
+	int expectedResultaffectssubquery13[2][9] = {
+		{8   ,  21  ,  18  ,  19  ,  9   ,  16  ,  0   ,  0   ,  0  },
+		{3   ,  21  ,  19  ,  20  ,  11  ,  18  ,  0   ,  2   ,  1  },
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultaffectssubquery13)/sizeof(expectedResultaffectssubquery13[0])), actualResultaffectssubquery13->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultaffectssubquery13)/sizeof(expectedResultaffectssubquery13[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultaffectssubquery13[i])/sizeof(expectedResultaffectssubquery13[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultaffectssubquery13[i][j], actualResultaffectssubquery13->getResultAt(i, j));
+		}
+	}
+	
+
+	// Test 21: Affects(a1, _)
+	AffectsSubquery affectssubquery21 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery21.setSynonyms("a1", "_");
+	ResultTuple* actualResultaffectssubquery21 = affectssubquery21.solve(&testTuple);
+	int expectedResultaffectssubquery21[8][9] = {
+		{1   ,  16  ,  4   ,  12  ,  4   ,  14  ,  0   ,  0   ,  0  },
+		{7   ,  20  ,  4   ,  12  ,  5   ,  14  ,  0   ,  0   ,  0  },
+		{1   ,  18  ,  16  ,  12  ,  6   ,  15  ,  0   ,  0   ,  0  },
+		{9   ,  20  ,  18  ,  16  ,  7   ,  15  ,  0   ,  0   ,  0  },
+		{16  ,  19  ,  18  ,  16  ,  8   ,  16  ,  0   ,  0   ,  0  },
+		{8   ,  21  ,  18  ,  19  ,  9   ,  16  ,  0   ,  0   ,  0  },
+		{19  ,  18  ,  19  ,  19  ,  10  ,  18  ,  3   ,  0   ,  0  },
+		{3   ,  21  ,  19  ,  20  ,  11  ,  18  ,  0   ,  2   ,  1  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultaffectssubquery21)/sizeof(expectedResultaffectssubquery21[0])), actualResultaffectssubquery21->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultaffectssubquery21)/sizeof(expectedResultaffectssubquery21[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultaffectssubquery21[i])/sizeof(expectedResultaffectssubquery21[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultaffectssubquery21[i][j], actualResultaffectssubquery21->getResultAt(i, j));
+		}
+	}
+	// Test 22: Affects(a1, 2)
+	AffectsSubquery affectssubquery22x = AffectsSubquery(&synonymTable, pk);
+	affectssubquery22x.setSynonyms("a1", 2);
+	ResultTuple* actualResultaffectssubquery22x = affectssubquery22x.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t) 0, actualResultaffectssubquery22x->getAllResults().size());
+	
+	
+	// Test 23: Affects(a1, 6)
+	AffectsSubquery affectssubquery23 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery23.setSynonyms("a1", 6);
+	ResultTuple* actualResultaffectssubquery23 = affectssubquery23.solve(&testTuple);
+	CPPUNIT_ASSERT_EQUAL((size_t) 0, actualResultaffectssubquery23->getAllResults().size());
+	
+
+	// Test 109: Affects(_, a2)
+	AffectsSubquery affectssubquery109 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery109.setSynonyms("_", "a2");
+	ResultTuple* actualResultaffectssubquery109 = affectssubquery109.solve(&testTuple);
+	int expectedResultaffectssubquery109[9][9] = {
+		{1   ,  16  ,  4   ,  12  ,  4   ,  14  ,  0   ,  0   ,  0  },
+		{7   ,  20  ,  4   ,  12  ,  5   ,  14  ,  0   ,  0   ,  0  },
+		{1   ,  18  ,  16  ,  12  ,  6   ,  15  ,  0   ,  0   ,  0  },
+		{9   ,  20  ,  18  ,  16  ,  7   ,  15  ,  0   ,  0   ,  0  },
+		{16  ,  19  ,  18  ,  16  ,  8   ,  16  ,  0   ,  0   ,  0  },
+		{8   ,  21  ,  18  ,  19  ,  9   ,  16  ,  0   ,  0   ,  0  },
+		{19  ,  18  ,  19  ,  19  ,  10  ,  18  ,  3   ,  0   ,  0  },
+		{3   ,  21  ,  19  ,  20  ,  11  ,  18  ,  0   ,  2   ,  1  },
+		{20  ,  2   ,  20  ,  20  ,  20  ,  1   ,  0   ,  2   ,  2  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultaffectssubquery109)/sizeof(expectedResultaffectssubquery109[0])), actualResultaffectssubquery109->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultaffectssubquery109)/sizeof(expectedResultaffectssubquery109[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultaffectssubquery109[i])/sizeof(expectedResultaffectssubquery109[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultaffectssubquery109[i][j], actualResultaffectssubquery109->getResultAt(i, j));
+		}
+	}
+
+	// Test 133: Affects(5, a2)
+	AffectsSubquery affectssubquery133 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery133.setSynonyms(5, "a2");
+	ResultTuple* actualResultaffectssubquery133 = affectssubquery133.solve(&testTuple);
+	int expectedResultaffectssubquery133[3][9] = {
+		{1   ,  16  ,  4   ,  12  ,  4   ,  14  ,  0   ,  0   ,  0  },
+		{7   ,  20  ,  4   ,  12  ,  5   ,  14  ,  0   ,  0   ,  0  },
+		{1   ,  18  ,  16  ,  12  ,  6   ,  15  ,  0   ,  0   ,  0  },	
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultaffectssubquery133)/sizeof(expectedResultaffectssubquery133[0])), actualResultaffectssubquery133->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultaffectssubquery133)/sizeof(expectedResultaffectssubquery133[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultaffectssubquery133[i])/sizeof(expectedResultaffectssubquery133[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultaffectssubquery133[i][j], actualResultaffectssubquery133->getResultAt(i, j));
+		}
+	}
+
+	// Test 133_2: Affects(7, a2)
+	AffectsSubquery affectssubquery133_2 = AffectsSubquery(&synonymTable, pk);
+	affectssubquery133_2.setSynonyms(7, "a2");
+	ResultTuple* actualResultaffectssubquery133_2 = affectssubquery133_2.solve(&testTuple);
+	int expectedResultaffectssubquery133_2[2][9] = {
+		{3   ,  21  ,  19  ,  20  ,  11  ,  18  ,  0   ,  2   ,  1  },
+		{20  ,  2   ,  20  ,  20  ,  20  ,  1   ,  0   ,  2   ,  2  }
+	};
+	CPPUNIT_ASSERT_EQUAL((sizeof(expectedResultaffectssubquery133_2)/sizeof(expectedResultaffectssubquery133_2[0])), actualResultaffectssubquery133_2->getAllResults().size());
+	for (size_t i = 0; i < (sizeof(expectedResultaffectssubquery133_2)/sizeof(expectedResultaffectssubquery133_2[0])); i++){
+		for (size_t j = 0; j < (sizeof(expectedResultaffectssubquery133_2[i])/sizeof(expectedResultaffectssubquery133_2[i][0])); j++){
+			CPPUNIT_ASSERT_EQUAL(expectedResultaffectssubquery133_2[i][j], actualResultaffectssubquery133_2->getResultAt(i, j));
+		}
+	}
 }
 
 void SubqueryTest::testAffectsStar() {

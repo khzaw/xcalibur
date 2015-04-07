@@ -97,13 +97,16 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		int index = tuple->addSynonym(leftSynonym);
 		tuple->addSynonymToMap(leftSynonym, index);
-		set<int> tempPrevious;
+		vector<int> previous = vector<int>();
+		vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
+		set<int> tempPrevious = set<int>();
 		if (isSyn == 2) {	// AffectsStar(syn, stmt): Get Previous of stmt
-			tempPrevious = pkb->affectsExtractor->getAffectsStar(rightIndex);
-		} else {	// AffectsStar(syn, _): Get all Previous stmt
-			// getAllPrevious Statements
-			tempPrevious = set<int>();
-			vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
+			for (size_t i = 0; i < assStmt.size(); i++) {
+				if (pkb->affectsExtractor->isAffectsStar(assStmt[i], rightIndex)) {
+					tempPrevious.insert(assStmt[i]);
+				} 
+			}
+		} else {	// Affects(syn, _): Get all Previous stmt
 			for (size_t i = 0; i < assStmt.size(); i++) {
 				for (size_t j = 0; j < assStmt.size(); j++) {
 					if (pkb->affectsExtractor->isAffectsStar(assStmt[i], assStmt[j])) {
@@ -111,12 +114,11 @@ public:
 					}
 				}
 			}
-			//tempPrevious = pkb->nextExtractor->getAllPrev();
 		}
+
 		vector<int> Previous(tempPrevious.begin(), tempPrevious.end());
 		for(size_t i = 0; i < Previous.size(); i++) {
-			vector<int> temp = vector<int>();
-			
+			vector<int> temp = vector<int>();	
 			temp.push_back(Previous.at(i));
 			tuple->addResultRow(temp);
 		}

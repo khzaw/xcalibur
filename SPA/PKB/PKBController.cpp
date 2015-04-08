@@ -5,6 +5,8 @@
 #include "FollowsExtractor.cpp"
 #include "ModifiesExtractor.cpp"
 #include "UsesExtractor.cpp"
+#include "SiblingsExtractor.cpp"
+#include "extractContainsFromAst.h"
 
 #include "PKBController.h"
 
@@ -22,6 +24,8 @@ PKBController::PKBController(){
 	this->usesTable = new Uses();	
 	this->modifiesTable = new Modifies();
 	this->callsTable = new Calls();
+	this->containsTable = new Contains();
+	this->siblingTable = new Sibling();
 	this->callsExtractor = new CallsExtractor(callsTable);
 	this->followsExtractor = new FollowsExtractor(followsTable);
 	this->parentExtractor = new ParentExtractor(parentTable);
@@ -29,6 +33,8 @@ PKBController::PKBController(){
 	this->usesExtractor = new UsesExtractor(usesTable);
 	this->nextExtractor = new NextExtractor(procTable, statementTable);
 	this->affectsExtractor = new AffectsExtractor(modifiesTable,usesTable,nextExtractor ,varTable, statementTable,callsTable);
+	this->containsExtractor = new ExtractContainsFromAST(containsTable, varTable, constantTable, procTable);
+	this->siblingsExtractor = new SiblingsExtractor(siblingTable, varTable, constantTable, procTable);
 }
 
 PKBController::~PKBController() {
@@ -57,4 +63,12 @@ void PKBController::constructUses() {
 
 void PKBController::constructNext(){
 	nextExtractor->construct();
+}
+
+void PKBController::constructContains(){
+	containsExtractor->extractContains();
+}
+
+void PKBController::constructSiblings(){
+	siblingsExtractor->extractSibling();
 }

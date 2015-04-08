@@ -1,9 +1,9 @@
 #pragma once
 #include <iostream>
 #include "extractContainsFromAst.h"
-#include "Frontend\TNode.h"
+#include "..\Frontend\TNode.h"
 #include "Contains.h"
-#include "PKB\ProcTable.h"
+#include "ProcTable.h"
 
 using namespace std;
 

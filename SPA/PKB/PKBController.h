@@ -14,6 +14,8 @@
 #include "..\PKB\Uses.h"
 #include "..\PKB\StatementTable.h"
 #include "..\PKB\Modifies.h"
+#include "..\PKB\Contains.h"
+#include "..\PKB\Siblings.h"
 
 //Design Extractor
 #include "..\PKB\CallsExtractor.h"
@@ -23,6 +25,8 @@
 #include "..\PKB\UsesExtractor.h"
 #include "..\PKB\NextExtractor.h"
 #include "..\PKB\AffectsExtractor.h"
+#include "..\PKB\extractContainsFromAst.h"
+#include "..\PKB\SiblingsExtractor.h"
 
 #include "..\PKB\CacheTable.h"
 
@@ -41,6 +45,9 @@ public:
 	Uses* usesTable;
 	StatementTable* statementTable;
 	Calls* callsTable;
+	Contains* containsTable;
+	Sibling* siblingTable;
+
 	//Design Extractor
 	CallsExtractor* callsExtractor;
 	FollowsExtractor* followsExtractor;
@@ -49,6 +56,8 @@ public:
 	UsesExtractor* usesExtractor;
 	NextExtractor* nextExtractor;
 	AffectsExtractor* affectsExtractor;
+	ExtractContainsFromAST* containsExtractor;
+	SiblingsExtractor* siblingsExtractor;
 	CacheTable* cache;
 
 	map<int, stack<int>> procAndContainers;
@@ -63,4 +72,6 @@ public:
 	void constructModifies();
 	void constructUses();
 	void constructNext();
+	void constructContains();
+	void constructSiblings();
 };

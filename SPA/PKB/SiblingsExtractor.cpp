@@ -1,10 +1,10 @@
 #pragma once
 #include <iostream>
-#include "Frontend\TNode.h"
+#include "..\Frontend\TNode.h"
 #include "Siblings.h"
-#include "PKB\VarTable.h"
-#include "PKB\ConstantTable.h"
-#include "PKB\ProcTable.h"
+#include "VarTable.h"
+#include "ConstantTable.h"
+#include "ProcTable.h"
 #include "SiblingsExtractor.h"
 
 using namespace std;

@@ -591,8 +591,8 @@ Contains::Contains(){
 	set<int> Contains::getTimesContainingMinus(int minus) { //returns all those times which contain the minus node
 		set<int> result;
 		for(int i=0; i<timesMinus.size(); i++) {
-			if(timesMinus[i].first==minus)
-				result.insert(timesMinus[i].second);
+			if(timesMinus[i].second==minus)
+				result.insert(timesMinus[i].first);
 		}
 		return result;
 	}

@@ -6,6 +6,7 @@
 #include "ConstantTable.h"
 #include "ProcTable.h"
 #include "SiblingsExtractor.h"
+#include <set>
 
 using namespace std;
 
@@ -113,7 +114,7 @@ void SiblingsExtractor::recursiveExtractSibling(TNode* root){
 			return;
 		}
 
-		if(root->getNodeType().compare("PLUS_NODE")==0 || root->getNodeType().compare("-")==0 || root->getNodeType().compare("TIMES_NODE")==0){
+		if(root->getNodeType().compare("PLUS_NODE")==0 || root->getNodeType().compare("MINUS_NODE")==0 || root->getNodeType().compare("TIMES_NODE")==0){
 			TNode* child0 = root->getChild(0);
 			TNode* child1 = root->getChild(1);
 
@@ -127,7 +128,7 @@ void SiblingsExtractor::recursiveExtractSibling(TNode* root){
 					plusCount++;
 					sibling->insertVarPlus(varTable->getVarIndex(child0->getData()),plusCount);
 				}
-				if(child1->getNodeType().compare("-")==0){
+				if(child1->getNodeType().compare("MINUS_NODE")==0){
 					minusCount++;
 					sibling->insertVarMinus(varTable->getVarIndex(child0->getData()),minusCount);
 				}
@@ -199,7 +200,7 @@ void SiblingsExtractor::recursiveExtractSibling(TNode* root){
 				}
 			}
 			if(child0->getNodeType().compare("TIMES_NODE")==0){
-				int rootCount = plusCount;
+				int rootCount = timesCount;
 				if(child1->getNodeType().compare("VAR_NODE"))
 					sibling->insertVarTimes(varTable->getVarIndex(child1->getData()),rootCount);
 				if(child1->getNodeType().compare("CONSTANT_NODE"))

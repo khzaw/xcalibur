@@ -24,12 +24,10 @@ SiblingsExtractor::SiblingsExtractor(Sibling* sibling, VarTable* varTable, Const
 }
 
 void SiblingsExtractor::extractSibling(){
-	set<int> procs = procTable->getAllProc();
-	if(procs.size()==0)
-		return;
-	vector<int> procsVec ;
-	for(std::set<int>::iterator it=procs.begin(); it!=procs.end(); it++){
-		procsVec.push_back(*it);
+	vector<int> procsVec;
+	vector<TNode*> rootTable = procTable->getProcRootTable();
+	for(int i=0; i<rootTable.size();i++){
+		procsVec.push_back(procTable->getProcIndex(rootTable.at(i)->getData()));
 	}
 	for(int i=0; i<procsVec.size(); i++){
 		for(int j=i+1; j<procsVec.size(); j++){
@@ -76,15 +74,15 @@ void SiblingsExtractor::recursiveExtractSibling(TNode* root){
 				int constant = constTable->getConstIndex(atoi(root->getChild(1)->getData().c_str()));
 				sibling->insertVarConst(var,constant);
 			}
-			if(root->getChild(1)->getData().compare("+")==0){
+			if(root->getChild(1)->getNodeType().compare("+")==0){
 				plusCount ++;
 				sibling->insertVarPlus(var,plusCount);
 			}
-			if(root->getChild(1)->getData().compare("-")==0){
+			if(root->getChild(1)->getNodeType().compare("MINUS_NODE")==0){
 				minusCount ++;
 				sibling->insertVarMinus(var,minusCount);
 			}
-			if(root->getChild(1)->getData().compare("*")==0){
+			if(root->getChild(1)->getNodeType().compare("TIMES_NODE")==0){
 				timesCount ++;
 				sibling->insertVarTimes(var,timesCount);
 			}
@@ -115,7 +113,7 @@ void SiblingsExtractor::recursiveExtractSibling(TNode* root){
 			return;
 		}
 
-		if(root->getData().compare("+")==0 || root->getData().compare("-")==0 || root->getData().compare("*")==0){
+		if(root->getNodeType().compare("PLUS_NODE")==0 || root->getNodeType().compare("-")==0 || root->getNodeType().compare("TIMES_NODE")==0){
 			TNode* child0 = root->getChild(0);
 			TNode* child1 = root->getChild(1);
 
@@ -125,15 +123,15 @@ void SiblingsExtractor::recursiveExtractSibling(TNode* root){
 				if(child1->getNodeType().compare("CONSTANT_NODE"))
 					sibling->insertVarConst(varTable->getVarIndex(child0->getData()), constTable->getConstIndex(atoi(child1->getData().c_str())));
 				
-				if(child1->getData().compare("+")==0){
+				if(child1->getNodeType().compare("PLUS_NODE")==0){
 					plusCount++;
 					sibling->insertVarPlus(varTable->getVarIndex(child0->getData()),plusCount);
 				}
-				if(child1->getData().compare("-")==0){
+				if(child1->getNodeType().compare("-")==0){
 					minusCount++;
 					sibling->insertVarMinus(varTable->getVarIndex(child0->getData()),minusCount);
 				}
-				if(child1->getData().compare("*")==0){
+				if(child1->getNodeType().compare("TIMES_NODE")==0){
 					timesCount++;
 					sibling->insertVarTimes(varTable->getVarIndex(child0->getData()),timesCount);
 				}
@@ -145,77 +143,77 @@ void SiblingsExtractor::recursiveExtractSibling(TNode* root){
 				if(child1->getNodeType().compare("CONSTANT_NODE"))
 					sibling->insertConstConst(constTable->getConstIndex(atoi(child0->getData().c_str())), constTable->getConstIndex(atoi(child1->getData().c_str())));
 				
-				if(child1->getData().compare("+")==0){
+				if(child1->getNodeType().compare("PLUS_NODE")==0){
 					plusCount++;
 					sibling->insertConstPlus(constTable->getConstIndex(atoi(child0->getData().c_str())),plusCount);
 				}
-				if(child1->getData().compare("-")==0){
+				if(child1->getNodeType().compare("MINUS_NODE")==0){
 					minusCount++;
 					sibling->insertConstMinus(constTable->getConstIndex(atoi(child0->getData().c_str())),minusCount);
 				}
-				if(child1->getData().compare("*")==0){
+				if(child1->getNodeType().compare("TIMES_NODE")==0){
 					timesCount++;
 					sibling->insertConstTimes(constTable->getConstIndex(atoi(child0->getData().c_str())),timesCount);
 				}
 			}
 
-			if(child0->getData().compare("+")==0){
+			if(child0->getNodeType().compare("PLUS_NODE")==0){
 				int rootCount = plusCount;
 				if(child1->getNodeType().compare("VAR_NODE"))
 					sibling->insertVarPlus(varTable->getVarIndex(child1->getData()),rootCount);
 				if(child1->getNodeType().compare("CONSTANT_NODE"))
 					sibling->insertConstPlus(constTable->getConstIndex(atoi(child1->getData().c_str())), rootCount);
 				
-				if(child1->getData().compare("+")==0){
+				if(child1->getNodeType().compare("PLUS_NODE")==0){
 					plusCount++;
 					sibling->insertPlusPlus(rootCount,plusCount);
 				}
-				if(child1->getData().compare("-")==0){
+				if(child1->getNodeType().compare("MINUS_NODE")==0){
 					minusCount++;
 					sibling->insertPlusMinus(rootCount,minusCount);
 				}
-				if(child1->getData().compare("*")==0){
+				if(child1->getNodeType().compare("TIMES_NODE")==0){
 					timesCount++;
 					sibling->insertPlusTimes(rootCount,timesCount);
 				}
 			}
 
-			if(child0->getData().compare("-")==0){
+			if(child0->getNodeType().compare("MINUS_NODE")==0){
 				int rootCount = minusCount;
 				if(child1->getNodeType().compare("VAR_NODE"))
 					sibling->insertVarMinus(varTable->getVarIndex(child1->getData()),rootCount);
 				if(child1->getNodeType().compare("CONSTANT_NODE"))
 					sibling->insertConstMinus(constTable->getConstIndex(atoi(child1->getData().c_str())), rootCount);
 				
-				if(child1->getData().compare("+")==0){
+				if(child1->getNodeType().compare("PLUS_NODE")==0){
 					plusCount++;
 					sibling->insertPlusMinus(plusCount,rootCount);
 				}
-				if(child1->getData().compare("-")==0){
+				if(child1->getNodeType().compare("MINUS_NODE")==0){
 					minusCount++;
 					sibling->insertMinusMinus(rootCount,minusCount);
 				}
-				if(child1->getData().compare("*")==0){
+				if(child1->getNodeType().compare("TIMES_NODE")==0){
 					timesCount++;
 					sibling->insertMinusTimes(rootCount,timesCount);
 				}
 			}
-			if(child0->getData().compare("*")==0){
+			if(child0->getNodeType().compare("TIMES_NODE")==0){
 				int rootCount = plusCount;
 				if(child1->getNodeType().compare("VAR_NODE"))
 					sibling->insertVarTimes(varTable->getVarIndex(child1->getData()),rootCount);
 				if(child1->getNodeType().compare("CONSTANT_NODE"))
 					sibling->insertConstTimes(constTable->getConstIndex(atoi(child1->getData().c_str())), rootCount);
 				
-				if(child1->getData().compare("+")==0){
+				if(child1->getNodeType().compare("PLUS_NODE")==0){
 					plusCount++;
 					sibling->insertPlusTimes(plusCount,rootCount);
 				}
-				if(child1->getData().compare("-")==0){
+				if(child1->getNodeType().compare("MINUS_NODE")==0){
 					minusCount++;
 					sibling->insertMinusTimes(minusCount, rootCount);
 				}
-				if(child1->getData().compare("*")==0){
+				if(child1->getNodeType().compare("TIMES_NODE")==0){
 					timesCount++;
 					sibling->insertTimesTimes(rootCount,timesCount);
 				}

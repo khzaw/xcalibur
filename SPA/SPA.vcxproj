@@ -11,8 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Contains.cpp" />
-    <ClCompile Include="extractContainsFromAst.cpp" />
     <ClCompile Include="Frontend\Parser.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Frontend\Lexeme.cpp" />
@@ -21,10 +19,14 @@
     <ClCompile Include="Frontend\TNode.cpp" />
     <ClCompile Include="PKB\AffectsExtractor.cpp" />
     <ClCompile Include="PKB\CacheTable.cpp" />
+    <ClCompile Include="PKB\Contains.cpp" />
+    <ClCompile Include="PKB\extractContainsFromAst.cpp" />
     <ClCompile Include="PKB\iterativeCFG.cpp" />
     <ClCompile Include="PKB\CFG.cpp" />
     <ClCompile Include="PKB\GNode.cpp" />
     <ClCompile Include="PKB\NextExtractor.cpp" />
+    <ClCompile Include="PKB\Siblings.cpp" />
+    <ClCompile Include="PKB\SiblingsExtractor.cpp" />
     <ClCompile Include="PKB\StatementTable.cpp" />
     <ClCompile Include="PKB\Uses.cpp" />
     <ClCompile Include="PKB\VarTable.cpp" />
@@ -46,14 +48,12 @@
     <ClCompile Include="QueryProcessor\StubSubquery.cpp" />
     <ClCompile Include="QueryProcessor\UsesSubquery.cpp" />
     <ClCompile Include="QueryProcessor\WithSubquery.cpp" />
-    <ClCompile Include="Siblings.cpp" />
-    <ClCompile Include="SiblingsExtractor.cpp" />
-    <ClInclude Include="Contains.h" />
-    <ClInclude Include="extractContainsFromAst.h" />
     <ClInclude Include="Frontend\Parser.h" />
     <ClInclude Include="PKB\AffectsExtractor.h" />
     <ClInclude Include="PKB\CacheTable.h" />
     <ClInclude Include="PKB\CallsExtractor.cpp" />
+    <ClInclude Include="PKB\Contains.h" />
+    <ClInclude Include="PKB\extractContainsFromAst.h" />
     <ClInclude Include="PKB\iterativeCFG.h" />
     <ClInclude Include="PKB\CfgNode.cpp" />
     <ClInclude Include="PKB\CFG.h" />
@@ -62,6 +62,8 @@
     <ClInclude Include="PKB\ModifiesExtractor.cpp" />
     <ClInclude Include="PKB\NextExtractor.h" />
     <ClInclude Include="PKB\ParentExtractor.cpp" />
+    <ClInclude Include="PKB\Siblings.h" />
+    <ClInclude Include="PKB\SiblingsExtractor.h" />
     <ClInclude Include="PKB\UsesExtractor.cpp" />
     <ClCompile Include="QueryProcessor\CallsStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\CallsSubquery.cpp" />
@@ -81,8 +83,6 @@
     <ClCompile Include="QueryProcessor\ParentStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\ParentSubquery.cpp" />
     <ClCompile Include="QueryProcessor\UsesProcSubquery.cpp" />
-    <ClInclude Include="Siblings.h" />
-    <ClInclude Include="SiblingsExtractor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Frontend\Lexeme.h" />

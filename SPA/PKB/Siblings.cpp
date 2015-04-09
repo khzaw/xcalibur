@@ -88,46 +88,55 @@ vector<pair<int,int>> Sibling::getConstConstSibling(){
 //functions to insert
 void Sibling::insertProcProc(int proc, int proc1) {
 	pair<int,int> pair1(proc,proc1);
-	procProc.push_back(pair1);
+	if(isSiblingProcProc(proc,proc)==false)
+		procProc.push_back(pair1);
 }
 
 void Sibling::insertStmtLstStmtLst(int stmtLst1, int stmtLst2){
 	pair<int,int> pair1(stmtLst1,stmtLst2);
-	stmtLstStmtLst.push_back(pair1);
+	if(isSiblingStmtLstStmtLst(stmtLst1,stmtLst2)==false)
+		stmtLstStmtLst.push_back(pair1);
 }
 
 void Sibling::insertStmtStmt(int stmt1, int stmt2){
 	pair<int,int> pair1(stmt1,stmt2);
-	stmtStmt.push_back(pair1);
+	if(isSiblingStmtStmt(stmt1,stmt2)==false)
+		stmtStmt.push_back(pair1);
 }
 
 void Sibling::inserVarStmtLst(int var, int stmtLst) {
 	pair<int,int> pair1(var,stmtLst);
-	varStmtLst.push_back(pair1);
+	if(isSiblingVarStmtLst(var,stmtLst))
+		varStmtLst.push_back(pair1);
 }
 
 void Sibling::insertVarConst(int var, int constant){
 	pair<int,int> pair1(var,constant);
-	varConst.push_back(pair1);
+	if(isSiblingVarConst(var,constant))
+		varConst.push_back(pair1);
 }
 
 void Sibling::insertVarPlus(int var, int plus){
 	pair<int,int> pair1(var,plus);
+	if(isSiblingVarPlus(var,plus))
 	varPlus.push_back(pair1);
 }
 
 void Sibling::insertVarMinus(int var,int minus){
 	pair<int,int> pair1(var, minus);
+	if(isSiblingVarMinus(var,minus))
 	varMinus.push_back(pair1);
 }
 
 void Sibling::insertVarTimes(int var, int times){
 	pair<int,int> pair1(var,times);
+	if(isSiblingVarTimes(var,times))
 	varTimes.push_back(pair1);
 }
 
 void Sibling::insertConstStmtLst(int constant, int stmtLst){
 	pair<int,int> pair1(constant, stmtLst);
+	if(isSiblingConstStmtLst(constant,stmtLst))
 	constStmtLst.push_back(pair1);
 }
 
@@ -185,10 +194,276 @@ void Sibling::insertVarVar(int var1, int var2){
 	varVar.push_back(pair1);
 }
 
+vector<pair<int,int>> Sibling::getProcProcSibling(){
+	return procProc;
+}
+
+vector<pair<int,int>> Sibling::getStmtLstStmtLstSibling(){
+	return stmtLstStmtLst;
+}
+
+vector<pair<int,int>> Sibling::getStmtStmtSibling(){
+	return stmtStmt;
+}
+
+vector<pair<int,int>> Sibling::getVarStmtLstSibling() {  // var-then, var-else
+	return varStmtLst;
+}
+
+vector<pair<int,int>> Sibling::getVarConstSibling() { //assign 
+	return varConst;
+}
+
+vector<pair<int,int>> Sibling::getVarPlusSibling(){
+	return varPlus;
+}
+
+vector<pair<int,int>> Sibling::getVarMinusSibling(){
+	return varMinus;
+}
+
+vector<pair<int,int>> Sibling::getVarTimesSibling(){
+	return varTimes;
+}
+
+vector<pair<int,int>> Sibling::getConstPlusSibling(){
+	return constPlus;
+}
+
+vector<pair<int,int>> Sibling::getConstMinusSibling(){
+	return constMinus;
+}
+
+vector<pair<int,int>> Sibling::getConstTimesSibling(){
+	return plusPlus;
+}
+
+vector<pair<int,int>> Sibling::getPlusPlusSibling(){
+	return plusPlus;
+}
+
+vector<pair<int,int>> Sibling::getPlusMinusSibling(){
+	return plusMinus;
+}
+
+vector<pair<int,int>> Sibling::getPlusTimesSibling(){
+	return plusTimes;
+}
+
+vector<pair<int,int>> Sibling::getMinusMinusSibling(){
+	return minusMinus;
+}
+
+vector<pair<int,int>> Sibling::getMinusTimesSibling(){
+	return minusTimes;
+}
+
+vector<pair<int,int>> Sibling::getTimesTimesSibling(){
+	return timesTimes;
+}
+
+vector<pair<int,int>> Sibling::getVarVarSibling(){
+	return varVar;
+}
+
+vector<pair<int,int>> Sibling::getConstConstSibling(){
+	return constConst;
+}
+
+vector<pair<int,int>> Sibling::getConstStmtLstSibling(){
+	return constStmtLst;
+}
+
+//functions to return siblings
+
+set<int> Sibling::getProcsSiblingOfProc(int proc){
+	set<int> results;
+	for(int i=0; i<procProc.size(); i++){
+		if(procProc.at(i).first==proc)
+			results.insert(procProc.at(i).second);
+		if(procProc.at(i).second==proc)
+			results.insert(procProc.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getStmtLstSiblingOfStmtLst(int stmtLst){
+	set<int> results;
+	for(int i=0; i<stmtLstStmtLst.size(); i++){
+		if(stmtLstStmtLst.at(i).first==stmtLst)
+			results.insert(stmtLstStmtLst.at(i).second);
+		if(stmtLstStmtLst.at(i).second==stmtLst)
+			results.insert(stmtLstStmtLst.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getStmtSiblingOfStmt(int stmt){
+	set<int> results;
+	for(int i=0; i<stmtStmt.size(); i++){
+		if(stmtStmt.at(i).first==stmt)
+			results.insert(stmtStmt.at(i).second);
+		if(stmtStmt.at(i).second==stmt)
+			results.insert(stmtStmt.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getVarSiblingOfConst(int constant){
+	set<int> results;
+	for(int i=0; i<varConst.size(); i++){
+		if(varConst.at(i).second==constant)
+			results.insert(varConst.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getConstSiblingOfVar(int var){
+	set<int> results;
+	for(int i=0; i<varConst.size(); i++){
+		if(varConst.at(i).first==var)
+			results.insert(varConst.at(i).second);
+	}
+	return results;
+}
+
+set<int> Sibling::getVarSiblingOfVar(int var){
+	set<int> results;
+	for(int i=0; i<varVar.size(); i++){
+		if(varVar.at(i).first==var)
+			results.insert(varVar.at(i).second);
+		if(varVar.at(i).second==var)
+			results.insert(varVar.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getConstSiblingOfConst(int constant){
+	set<int> results;
+	for(int i=0; i<constConst.size(); i++){
+		if(constConst.at(i).first==constant)
+			results.insert(constConst.at(i).second);
+		if(constConst.at(i).second==constant)
+			results.insert(constConst.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getAllProcsSiblingOfProc(){
+	set<int> results;
+	for(int i=0; i<procProc.size(); i++){
+		results.insert(procProc.at(i).second);
+		results.insert(procProc.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getAllStmtLstSiblingOfStmtLst(){
+	set<int> results;
+	for(int i=0; i<stmtLstStmtLst.size(); i++){
+		results.insert(stmtLstStmtLst.at(i).second);
+		results.insert(stmtLstStmtLst.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getAllStmtSiblingOfStmt(){
+	set<int> results;
+	for(int i=0; i<stmtStmt.size(); i++){
+		results.insert(stmtStmt.at(i).second);
+		results.insert(stmtStmt.at(i).first);
+	}
+	return results;
+}
+
+
+set<int> Sibling::getAllVarSiblingOfConst(){
+	set<int> results;
+	for(int i=0; i<varConst.size(); i++){
+		results.insert(varConst.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getAllConstSiblingOfVar(){
+	set<int> results;
+	for(int i=0; i<varConst.size(); i++){
+		results.insert(varConst.at(i).second);
+	}
+	return results;
+}
+
+set<int> Sibling::getAllVarSiblingOfVar(){
+	set<int> results;
+	for(int i=0; i<varVar.size(); i++){
+		results.insert(varVar.at(i).second);
+		results.insert(varVar.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getAllVarSiblingOfMinus(){
+	set<int> results;
+	for(int i=0; i<varMinus.size(); i++){
+		results.insert(varMinus.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getAllVarSiblingOfPlus(){
+	set<int> results;
+	for(int i=0; i<varMinus.size(); i++){
+		results.insert(varMinus.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getAllVarSiblingOfTimes(){
+	set<int> results;
+	for(int i=0; i<varTimes.size(); i++){
+		results.insert(varTimes.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getAllConstSiblingOfPlus(){
+	set<int> results;
+	for(int i=0; i<constPlus.size(); i++){
+		results.insert(constPlus.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getAllConstSiblingOfMinus(){
+	set<int> results;
+	for(int i=0; i<constMinus.size(); i++){
+		results.insert(constMinus.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getAllConstSiblingOfTimes(){
+	set<int> results;
+	for(int i=0; i<constTimes.size(); i++){
+		results.insert(constTimes.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getAllConstSiblingOfConst(){
+	set<int> results;
+	for(int i=0; i<constConst.size(); i++){
+		results.insert(constConst.at(i).second);
+		results.insert(constConst.at(i).first);
+	}
+	return results;
+
+}
+
 
 //boolean functions
 bool Sibling::isSiblingProcProc(int proc1,int proc2){
-	vector<pair<int,int>> procProc = getProcProcSibling();
+	vector<pair<int,int>> procProc = getProcProcSibling(){}
 	for(int i=0; i<procProc.size(); i++){
 		if(procProc.at(i).first==proc1 && procProc.at(i).second==proc2 )
 			return true;
@@ -356,6 +631,15 @@ bool Sibling::isSiblingConstConst(int const1, int const2){
 		if(constConst.at(i).first==const1 && constConst.at(i).second==const2)
 			return true;
 		if(constConst.at(i).second==const1 && constConst.at(i).first==const2)
+			return true;
+	}
+	return false;
+}
+
+bool Sibling::isSiblingConstStmtLst(int const1, int stmtLst) {
+	vector<pair<int,int>> constStmtLst = getConstStmtLstSibling();
+	for(int i=0; i<constStmtLst.size(); i++) {
+		if(constStmtLst.at(i).first==const1 && constStmtLst.at(i).second==stmtLst)
 			return true;
 	}
 	return false;

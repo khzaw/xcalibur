@@ -2,6 +2,7 @@
 #include <utility>
 #include <vector>
 #include <iostream>
+#include <set>
 
 using namespace std;
 
@@ -76,6 +77,29 @@ public :
 	vector<pair<int,int>> getTimesTimesSibling();
 	vector<pair<int,int>> getVarVarSibling();
 	vector<pair<int,int>> getConstConstSibling();
+	vector<pair<int,int>> getConstStmtLstSibling();
+
+	set<int> getProcsSiblingOfProc(int);
+	set<int> getStmtLstSiblingOfStmtLst(int);
+	set<int> getStmtSiblingOfStmt(int);
+	set<int> getVarSiblingOfConst(int);
+	set<int> getConstSiblingOfVar(int);
+	set<int> getVarSiblingOfVar(int);
+	set<int> getConstSiblingOfConst(int);
+
+	set<int> getAllProcsSiblingOfProc();
+	set<int> getAllStmtLstSiblingOfStmtLst();
+	set<int> getAllStmtSiblingOfStmt();
+	set<int> getAllVarSiblingOfConst();
+	set<int> getAllConstSiblingOfVar();
+	set<int> getAllVarSiblingOfVar();
+	set<int> getAllVarSiblingOfMinus();
+	set<int> getAllVarSiblingOfPlus();
+	set<int> getAllVarSiblingOfTimes();
+	set<int> getAllConstSiblingOfPlus();
+	set<int> getAllConstSiblingOfMinus();
+	set<int> getAllConstSiblingOfTimes();
+	set<int> getAllConstSiblingOfConst();
 
 	//boolean functions
 	bool isSiblingProcProc(int,int);
@@ -90,6 +114,7 @@ public :
 	bool isSiblingConstConst(int,int);
 	bool isSiblingConstPlus(int,int);
 	bool isSiblingConstMinus(int,int);
+	bool isSiblingConstStmtLst(int,int);
 	bool isSiblingConstTimes(int,int);
 	bool isSiblingPlusPlus(int,int);
 	bool isSiblingPlusMinus(int,int);

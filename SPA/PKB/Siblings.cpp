@@ -83,6 +83,9 @@ vector<pair<int,int>> Sibling::getConstConstSibling(){
 	return constConst;
 }
 
+vector<pair<int,int>> Sibling::getConstStmtLstSibling(){
+	return constStmtLst;
+}
 
 
 //functions to insert
@@ -194,85 +197,7 @@ void Sibling::insertVarVar(int var1, int var2){
 	varVar.push_back(pair1);
 }
 
-vector<pair<int,int>> Sibling::getProcProcSibling(){
-	return procProc;
-}
 
-vector<pair<int,int>> Sibling::getStmtLstStmtLstSibling(){
-	return stmtLstStmtLst;
-}
-
-vector<pair<int,int>> Sibling::getStmtStmtSibling(){
-	return stmtStmt;
-}
-
-vector<pair<int,int>> Sibling::getVarStmtLstSibling() {  // var-then, var-else
-	return varStmtLst;
-}
-
-vector<pair<int,int>> Sibling::getVarConstSibling() { //assign 
-	return varConst;
-}
-
-vector<pair<int,int>> Sibling::getVarPlusSibling(){
-	return varPlus;
-}
-
-vector<pair<int,int>> Sibling::getVarMinusSibling(){
-	return varMinus;
-}
-
-vector<pair<int,int>> Sibling::getVarTimesSibling(){
-	return varTimes;
-}
-
-vector<pair<int,int>> Sibling::getConstPlusSibling(){
-	return constPlus;
-}
-
-vector<pair<int,int>> Sibling::getConstMinusSibling(){
-	return constMinus;
-}
-
-vector<pair<int,int>> Sibling::getConstTimesSibling(){
-	return plusPlus;
-}
-
-vector<pair<int,int>> Sibling::getPlusPlusSibling(){
-	return plusPlus;
-}
-
-vector<pair<int,int>> Sibling::getPlusMinusSibling(){
-	return plusMinus;
-}
-
-vector<pair<int,int>> Sibling::getPlusTimesSibling(){
-	return plusTimes;
-}
-
-vector<pair<int,int>> Sibling::getMinusMinusSibling(){
-	return minusMinus;
-}
-
-vector<pair<int,int>> Sibling::getMinusTimesSibling(){
-	return minusTimes;
-}
-
-vector<pair<int,int>> Sibling::getTimesTimesSibling(){
-	return timesTimes;
-}
-
-vector<pair<int,int>> Sibling::getVarVarSibling(){
-	return varVar;
-}
-
-vector<pair<int,int>> Sibling::getConstConstSibling(){
-	return constConst;
-}
-
-vector<pair<int,int>> Sibling::getConstStmtLstSibling(){
-	return constStmtLst;
-}
 
 //functions to return siblings
 
@@ -463,7 +388,7 @@ set<int> Sibling::getAllConstSiblingOfConst(){
 
 //boolean functions
 bool Sibling::isSiblingProcProc(int proc1,int proc2){
-	vector<pair<int,int>> procProc = getProcProcSibling(){}
+	vector<pair<int,int>> procProc = getProcProcSibling();
 	for(int i=0; i<procProc.size(); i++){
 		if(procProc.at(i).first==proc1 && procProc.at(i).second==proc2 )
 			return true;

@@ -118,10 +118,10 @@ void SiblingsExtractor::recursiveExtractSibling(TNode* root){
 			TNode* child0 = root->getChild(0);
 			TNode* child1 = root->getChild(1);
 
-			if(child0->getNodeType().compare("VAR_NODE")){
-				if(child1->getNodeType().compare("VAR_NODE"))
+			if(child0->getNodeType().compare("VAR_NODE")==0){
+				if(child1->getNodeType().compare("VAR_NODE")==0)
 					sibling->insertVarVar(varTable->getVarIndex(child0->getData()), varTable->getVarIndex(child1->getData()));
-				if(child1->getNodeType().compare("CONSTANT_NODE"))
+				if(child1->getNodeType().compare("CONSTANT_NODE")==0)
 					sibling->insertVarConst(varTable->getVarIndex(child0->getData()), constTable->getConstIndex(atoi(child1->getData().c_str())));
 				
 				if(child1->getNodeType().compare("PLUS_NODE")==0){
@@ -138,10 +138,10 @@ void SiblingsExtractor::recursiveExtractSibling(TNode* root){
 				}
 			}
 
-			if(child0->getNodeType().compare("CONSTANT_NODE")){
-				if(child1->getNodeType().compare("VAR_NODE"))
+			if(child0->getNodeType().compare("CONSTANT_NODE")==0){
+				if(child1->getNodeType().compare("VAR_NODE")==0)
 					sibling->insertVarConst(varTable->getVarIndex(child1->getData()), constTable->getConstIndex(atoi(child0->getData().c_str())));
-				if(child1->getNodeType().compare("CONSTANT_NODE"))
+				if(child1->getNodeType().compare("CONSTANT_NODE")==0)
 					sibling->insertConstConst(constTable->getConstIndex(atoi(child0->getData().c_str())), constTable->getConstIndex(atoi(child1->getData().c_str())));
 				
 				if(child1->getNodeType().compare("PLUS_NODE")==0){
@@ -151,6 +151,7 @@ void SiblingsExtractor::recursiveExtractSibling(TNode* root){
 				if(child1->getNodeType().compare("MINUS_NODE")==0){
 					minusCount++;
 					sibling->insertConstMinus(constTable->getConstIndex(atoi(child0->getData().c_str())),minusCount);
+					cout<<"####" << child0->getData()<<endl;
 				}
 				if(child1->getNodeType().compare("TIMES_NODE")==0){
 					timesCount++;
@@ -160,9 +161,9 @@ void SiblingsExtractor::recursiveExtractSibling(TNode* root){
 
 			if(child0->getNodeType().compare("PLUS_NODE")==0){
 				int rootCount = plusCount;
-				if(child1->getNodeType().compare("VAR_NODE"))
+				if(child1->getNodeType().compare("VAR_NODE")==0)
 					sibling->insertVarPlus(varTable->getVarIndex(child1->getData()),rootCount);
-				if(child1->getNodeType().compare("CONSTANT_NODE"))
+				if(child1->getNodeType().compare("CONSTANT_NODE")==0)
 					sibling->insertConstPlus(constTable->getConstIndex(atoi(child1->getData().c_str())), rootCount);
 				
 				if(child1->getNodeType().compare("PLUS_NODE")==0){
@@ -181,11 +182,11 @@ void SiblingsExtractor::recursiveExtractSibling(TNode* root){
 
 			if(child0->getNodeType().compare("MINUS_NODE")==0){
 				int rootCount = minusCount;
-				if(child1->getNodeType().compare("VAR_NODE"))
+				if(child1->getNodeType().compare("VAR_NODE")==0)
 					sibling->insertVarMinus(varTable->getVarIndex(child1->getData()),rootCount);
-				if(child1->getNodeType().compare("CONSTANT_NODE"))
-					sibling->insertConstMinus(constTable->getConstIndex(atoi(child1->getData().c_str())), rootCount);
-				
+				if(child1->getNodeType().compare("CONSTANT_NODE")==0){
+					sibling->insertConstMinus(constTable->getConstIndex(atoi(child1->getData().c_str())), rootCount);	
+				}
 				if(child1->getNodeType().compare("PLUS_NODE")==0){
 					plusCount++;
 					sibling->insertPlusMinus(plusCount,rootCount);
@@ -201,9 +202,9 @@ void SiblingsExtractor::recursiveExtractSibling(TNode* root){
 			}
 			if(child0->getNodeType().compare("TIMES_NODE")==0){
 				int rootCount = timesCount;
-				if(child1->getNodeType().compare("VAR_NODE"))
+				if(child1->getNodeType().compare("VAR_NODE")==0)
 					sibling->insertVarTimes(varTable->getVarIndex(child1->getData()),rootCount);
-				if(child1->getNodeType().compare("CONSTANT_NODE"))
+				if(child1->getNodeType().compare("CONSTANT_NODE")==0)
 					sibling->insertConstTimes(constTable->getConstIndex(atoi(child1->getData().c_str())), rootCount);
 				
 				if(child1->getNodeType().compare("PLUS_NODE")==0){

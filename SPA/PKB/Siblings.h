@@ -100,6 +100,8 @@ public :
 	set<int> getAllConstSiblingOfMinus();
 	set<int> getAllConstSiblingOfTimes();
 	set<int> getAllConstSiblingOfConst();
+	set<int> getAllVarSiblingOfStmtLst();
+	set<int> getAllStmtLstSiblingOfVar();
 
 	//boolean functions
 	bool isSiblingProcProc(int,int);

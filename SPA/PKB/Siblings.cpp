@@ -109,92 +109,103 @@ void Sibling::insertStmtStmt(int stmt1, int stmt2){
 
 void Sibling::inserVarStmtLst(int var, int stmtLst) {
 	pair<int,int> pair1(var,stmtLst);
-	if(isSiblingVarStmtLst(var,stmtLst))
+	if(isSiblingVarStmtLst(var,stmtLst)==false)
 		varStmtLst.push_back(pair1);
 }
 
 void Sibling::insertVarConst(int var, int constant){
 	pair<int,int> pair1(var,constant);
-	if(isSiblingVarConst(var,constant))
+	if(isSiblingVarConst(var,constant)==false)
 		varConst.push_back(pair1);
 }
 
 void Sibling::insertVarPlus(int var, int plus){
 	pair<int,int> pair1(var,plus);
 	if(isSiblingVarPlus(var,plus))
-	varPlus.push_back(pair1);
+		varPlus.push_back(pair1);
 }
 
 void Sibling::insertVarMinus(int var,int minus){
 	pair<int,int> pair1(var, minus);
-	if(isSiblingVarMinus(var,minus))
-	varMinus.push_back(pair1);
+	if(isSiblingVarMinus(var,minus)==false)
+		varMinus.push_back(pair1);
 }
 
 void Sibling::insertVarTimes(int var, int times){
 	pair<int,int> pair1(var,times);
 	if(isSiblingVarTimes(var,times))
-	varTimes.push_back(pair1);
+		varTimes.push_back(pair1);
 }
 
 void Sibling::insertConstStmtLst(int constant, int stmtLst){
 	pair<int,int> pair1(constant, stmtLst);
-	if(isSiblingConstStmtLst(constant,stmtLst))
-	constStmtLst.push_back(pair1);
+	if(isSiblingConstStmtLst(constant,stmtLst)==false)
+		constStmtLst.push_back(pair1);
 }
 
 void Sibling::insertConstConst(int const1, int const2){
 	pair<int,int> pair1(const1, const2);
-	constConst.push_back(pair1);
+	if(isSiblingConstConst(const1,const2)==false)
+		constConst.push_back(pair1);
 }
 
 void Sibling::insertConstPlus(int constant, int plus){
 	pair<int,int> pair1(constant,plus);
-	constPlus.push_back(pair1);
+	if(isSiblingConstPlus(constant,plus)==false)
+		constPlus.push_back(pair1);
 }
 
 void Sibling::insertConstMinus(int constant, int minus){
 	pair<int,int> pair1(constant, minus);
-	constMinus.push_back(pair1);
+	if(isSiblingConstMinus(constant,minus)==false)
+		constMinus.push_back(pair1);
 }
 
 void Sibling::insertConstTimes(int constant, int times){
 	pair<int,int> pair1(constant, times);
-	constTimes.push_back(pair1);
+	if(isSiblingConstTimes(constant,times)==false)
+		constTimes.push_back(pair1);
 }
 
 void Sibling::insertPlusPlus(int plus1, int plus2){
 	pair<int,int> pair1(plus1,plus2);
-	plusPlus.push_back(pair1);
+	if(isSiblingPlusPlus(plus1,plus2)==false)
+		plusPlus.push_back(pair1);
 }
 void Sibling::insertPlusMinus(int plus, int minus){
 	pair<int,int> pair1(plus, minus);
-	plusMinus.push_back(pair1);
+	if(isSiblingPlusMinus(plus,minus)==false)
+		plusMinus.push_back(pair1);
 }
 
 void Sibling::insertPlusTimes(int plus1, int times){
 	pair<int,int> pair1(plus1,times);
-	plusTimes.push_back(pair1);
+	if(isSiblingPlusTimes(plus1,times)==false)
+		plusTimes.push_back(pair1);
 }
 
 void Sibling::insertMinusMinus(int minus1, int minus2){
 	pair<int,int> pair1(minus1, minus2);
-	minusMinus.push_back(pair1);
+	if(isSiblingMinusMinus(minus1,minus2)==false)
+		minusMinus.push_back(pair1);
 }
 
 void Sibling::insertMinusTimes(int minus, int times){
 	pair<int,int> pair1(minus,times);
-	minusTimes.push_back(pair1);
+	if(isSiblingMinusTimes(minus,times)==false)
+		minusTimes.push_back(pair1);
 }
 
 void Sibling::insertTimesTimes(int times1, int times2){
 	pair<int,int> pair1(times1,times2);
-	timesTimes.push_back(pair1);
+	if(isSiblingTimesTimes(times1,times2)==false)
+		timesTimes.push_back(pair1);
 }
 
 void Sibling::insertVarVar(int var1, int var2){
 	pair<int,int> pair1(var1,var2);
-	varVar.push_back(pair1);
+	if(isSiblingVarVar(var1,var2)==false)
+		varVar.push_back(pair1);
 }
 
 
@@ -385,6 +396,22 @@ set<int> Sibling::getAllConstSiblingOfConst(){
 
 }
 
+
+set<int> Sibling::getAllVarSiblingOfStmtLst(){
+	set<int> results;
+	for(int i=0; i<varStmtLst.size(); i++){
+		results.insert(varStmtLst.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getAllStmtLstSiblingOfVar(){
+	set<int> results;
+	for(int i=0; i<varStmtLst.size(); i++){
+		results.insert(varStmtLst.at(i).second);
+	}
+	return results;
+}
 
 //boolean functions
 bool Sibling::isSiblingProcProc(int proc1,int proc2){

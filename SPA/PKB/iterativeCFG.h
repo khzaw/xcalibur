@@ -8,10 +8,10 @@
 
 using namespace std;
 
-class CFG {
+class iterativeCFG {
   public:
-    CFG();
-    CFG(TNode* root);
+    iterativeCFG();
+    iterativeCFG(TNode* root);
 
     void addLink(int, int);
     bool isNext(int, int);
@@ -27,9 +27,11 @@ class CFG {
 	map<int, set<int>> getFwdMap;
 	map<int, set<int>> getBwdMap;
 
-	private:
+	
     std::map<int, std::set<int> > AdjListFwd;
     std::map<int, std::set<int> > AdjListBwd;
+
+  private:
     int numLines;
     void linkStmtList(vector<TNode*>);
     void pushStmtListOntoStack(std::stack<TNode*>*, vector<TNode*>);

@@ -194,6 +194,11 @@
     </ClCompile>
     <ClCompile Include="QueryProcessor\CacheTable.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
+    <ClCompile Include="PKB\OptimizedCFG.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\AggNode.cpp">
+      <Filter>Source Files\PKB</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -346,6 +351,11 @@
     </ClInclude>
     <ClInclude Include="QueryProcessor\CacheTable.h">
       <Filter>Header Files\QueryProcessor</Filter>
+    <ClInclude Include="PKB\OptimizedCFG.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\AggNode.h">
+      <Filter>Header Files\PKB</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

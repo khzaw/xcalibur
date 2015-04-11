@@ -195,6 +195,12 @@
     <ClCompile Include="PKB\SiblingsExtractor.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
+    <ClCompile Include="PKB\OptimizedCFG.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\AggNode.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PKB\AST.h">
@@ -345,6 +351,12 @@
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
     <ClInclude Include="PKB\SiblingsExtractor.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\OptimizedCFG.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\AggNode.h">
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
   </ItemGroup>

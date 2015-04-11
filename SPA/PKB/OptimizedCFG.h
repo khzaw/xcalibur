@@ -13,7 +13,7 @@ using namespace std;
 class OptimizedCFG {
   public:
     OptimizedCFG();
-    OptimizedCFG(TNode* root);
+    OptimizedCFG(TNode*, PKBController*);
 
 	// CFG construction
     void addLink(int, int);
@@ -33,7 +33,7 @@ class OptimizedCFG {
 
   // AggNodeMap
     AggNode* getAggNodeOfStmt(int);
-    std::map<int, AggNode*> populateAggNodeMap(vector<TNode*>, std::map<int, AggNode*>, AggNode*, AggNode*);
+    std::map<int, AggNode*> populateAggNodeMap(vector<TNode*>, std::map<int, AggNode*>, PKBController *, AggNode*, AggNode*);
 
 	private:
 

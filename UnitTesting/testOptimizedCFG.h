@@ -1,6 +1,7 @@
 #ifndef testOptimizedCFG_h
 #define testOptimizedCFG_h
 #include <cppunit/extensions/HelperMacros.h>
+#include "..\SPA\PKB\PKBController.h"
 
 class OptimizedCFGTest : public CPPUNIT_NS::TestFixture {
 	CPPUNIT_TEST_SUITE(OptimizedCFGTest);
@@ -16,6 +17,8 @@ class OptimizedCFGTest : public CPPUNIT_NS::TestFixture {
 	CPPUNIT_TEST_SUITE_END();
 
 public:
+  PKBController* pk;
+	map<string, string> synonymTable;
 	void setUp();
 	void tearDown();
 	void testSourceProgram();

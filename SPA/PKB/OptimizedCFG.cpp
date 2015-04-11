@@ -15,7 +15,7 @@ OptimizedCFG::OptimizedCFG() {
 }
 
 // build OptimizedCFG from AST root
-OptimizedCFG::OptimizedCFG(TNode* root) {
+OptimizedCFG::OptimizedCFG(TNode* root, PKBController* pk) {
 
 	std::stack<TNode*> pq;
 
@@ -132,7 +132,7 @@ OptimizedCFG::OptimizedCFG(TNode* root) {
   // end handle end sentinels linking
 
   // AggNode Map
-  stmtToAggNodeMap = populateAggNodeMap(firstStmtList, stmtToAggNodeMap, NULL, NULL);
+  stmtToAggNodeMap = populateAggNodeMap(firstStmtList, stmtToAggNodeMap, pk, NULL, NULL);
 
 }
 
@@ -323,7 +323,7 @@ AggNode* OptimizedCFG::getAggNodeOfStmt(int line) {
 }
 
 // recursive
-std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList, std::map<int, AggNode*> stmtToAggNodeMap, AggNode* prevNode, AggNode* nextNode) {
+std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList, std::map<int, AggNode*> stmtToAggNodeMap, PKBController* pk, AggNode* prevNode, AggNode* nextNode) {
 
   int first_line_of_Agg_AC_Node = -1;
   AggNode* curr_ANode = NULL;
@@ -340,6 +340,8 @@ std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList
         AggNode* temp = new AggNode();
         temp->setType(type);
         temp->addProgLine(currStmtNum);
+        temp->addVarModifiedByThisNode(pk->modifiesTable->getModifiedVarStmt(currStmtNum));
+        temp->addVarUsedByThisNode(pk->usesTable->getUsedVarStmt(currStmtNum));
         stmtToAggNodeMap[currStmtNum] = temp;
         first_line_of_Agg_AC_Node = currStmtNum;
 
@@ -353,6 +355,9 @@ std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList
       else {
         curr_ANode->addProgLine(currStmtNum);
         stmtToAggNodeMap[currStmtNum] = curr_ANode;
+        curr_ANode->addVarModifiedByThisNode(pk->modifiesTable->getModifiedVarStmt(currStmtNum));
+        curr_ANode->addVarUsedByThisNode(pk->usesTable->getUsedVarStmt(currStmtNum));
+        
       }
     }
 
@@ -360,6 +365,10 @@ std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList
       AggNode* temp = new AggNode();
       temp->addProgLine(currStmtNum);
       stmtToAggNodeMap[currStmtNum] = temp;
+
+      temp->addVarModifiedByThisNode(pk->modifiesTable->getModifiedVarStmt(currStmtNum));
+      temp->addVarUsedByThisNode(pk->usesTable->getUsedVarStmt(currStmtNum));
+        
 
       if (curr_ANode!=NULL) { 
         curr_ANode->setNextAggNode(temp);
@@ -395,15 +404,15 @@ std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList
 
     if (type=="WHILE_NODE") {
       vector<TNode*> while_stmtList = curr_TNode->getChild(0)->getChildren();
-      stmtToAggNodeMap = populateAggNodeMap(while_stmtList, stmtToAggNodeMap, thisNode, thisNode);
+      stmtToAggNodeMap = populateAggNodeMap(while_stmtList, stmtToAggNodeMap, pk, thisNode, thisNode);
     }
     else {
       if (type=="IF_NODE") {
         vector<TNode*> then_stmtList = curr_TNode->getChild(0)->getChild(0)->getChildren();
         vector<TNode*> else_stmtList = curr_TNode->getChild(1)->getChild(0)->getChildren();
         
-        stmtToAggNodeMap = populateAggNodeMap(then_stmtList, stmtToAggNodeMap, thisNode, thisNode->getNextAggNode());
-        stmtToAggNodeMap = populateAggNodeMap(else_stmtList, stmtToAggNodeMap, thisNode, thisNode->getNextAggNode());
+        stmtToAggNodeMap = populateAggNodeMap(then_stmtList, stmtToAggNodeMap, pk, thisNode, thisNode->getNextAggNode());
+        stmtToAggNodeMap = populateAggNodeMap(else_stmtList, stmtToAggNodeMap, pk, thisNode, thisNode->getNextAggNode());
 
       }
     }

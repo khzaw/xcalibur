@@ -13,10 +13,10 @@ public:
     void setType(string);
     string getType();
 
-    void addVarModifiedByThisNode(int);
+    void addVarModifiedByThisNode(set<int>);
     set<int> getVarModifiedByThisNode();
 
-    void addVarUsedByThisNode(int);
+    void addVarUsedByThisNode(set<int>);
     set<int> getVarUsedByThisNode();
 
     void setNextAggNode(AggNode*);

@@ -7,25 +7,32 @@
 
 using namespace std;
 
-CacheTable::CacheTable() {
-	pairAffectsCache = map<pair<int, int>, bool>();
-	affectsCache = map<int, vector<int>>();
-	affectedCache = map<int, vector<int>>();
-	pairAffectsStarCache = map<pair<int, int>, bool>();
-	affectsStarCache = map<int, vector<int>>();
-	affectedStarCache = map<int, vector<int>>();
-}
+map<pair<int, int>, bool>* CacheTable::pairNextStarCache = new map<pair<int, int>, bool>();
+map<int, vector<int>>* CacheTable::nextStarCache = new map<int, vector<int>>();
+map<int, vector<int>>* CacheTable::previousStarCache = new map<int, vector<int>>();
+map<pair<int, int>, bool> CacheTable::pairAffectsCache = map<pair<int, int>, bool>();
+map<int, vector<int>> CacheTable::affectsCache = map<int, vector<int>>();
+map<int, vector<int>> CacheTable::affectedCache = map<int, vector<int>>();
+map<pair<int, int>, bool> CacheTable::pairAffectsStarCache = map<pair<int, int>, bool>();
+map<int, vector<int>> CacheTable::affectsStarCache = map<int, vector<int>>();
+map<int, vector<int>> CacheTable::affectedStarCache = map<int, vector<int>>();
 
-/***ACCESSORS***/
-map<pair<int, int>, bool> CacheTable::getPairNextStarCache(){
+/***NEXT ACCESSORS***/
+map<pair<int, int>, bool>* CacheTable::getPairNextStarCache(){
 	return pairNextStarCache;	
 }
 
-map<int, vector<int>> CacheTable::getNextStarCache() {
+map<int, vector<int>>* CacheTable::getNextStarCache() {
+	/*if (!TryEnterCriticalSection(&cs_nStar)) {
+		return NULL;
+	}*/
 	return nextStarCache;
 }
 
-map<int, vector<int>> CacheTable::getPreviousStarCache() {
+map<int, vector<int>>* CacheTable::getPreviousStarCache() {
+	/*if (!TryEnterCriticalSection(&cs_pStar)) {
+		return NULL;
+	}*/
 	return previousStarCache;
 }
 
@@ -55,17 +62,18 @@ map<int, vector<int>> CacheTable::getAffectedStarCache() {
 
 /***MODIFIERS***/
 void CacheTable::insertToPairNextStarCache(int a, int b, bool truth) {
-	pairNextStarCache.insert(map<pair<int, int>, bool>::value_type(make_pair(a, b), truth));
+	pairNextStarCache->insert(map<pair<int, int>, bool>::value_type(make_pair(a, b), truth));
 }
 
 void CacheTable::insertNextStarCache(int i, vector<int> v) {
-	nextStarCache.insert(map<int, vector<int>>::value_type(i, v));
+	nextStarCache->insert(map<int, vector<int>>::value_type(i, v));
 }
 
 void CacheTable::insertPreviousStarCache(int i, vector<int> v) {
-	previousStarCache.insert(map<int, vector<int>>::value_type(i, v));
+	previousStarCache->insert(map<int, vector<int>>::value_type(i, v));
 }
-/********/
+
+/*******/
 void CacheTable::insertToPairAffectsCache(int a, int b, bool truth) {
 	pairAffectsCache.insert(map<pair<int, int>, bool>::value_type(make_pair(a, b), truth));
 }
@@ -91,15 +99,15 @@ void CacheTable::insertAffectedStarCache(int i, vector<int> v) {
 }
 
 /***BULK UPDATE***/
-void CacheTable::updateNextStarCache(map<int, vector<int>> update) {
+void CacheTable::updateNextStarCache(map<int, vector<int>>* update) {
 	//EnterCriticalSection(&cs_nStar);
-	nextStarCache.insert(update.begin(), update.end());
+	nextStarCache->insert(update->begin(), update->end());
 	//LeaveCriticalSection(&cs_nStar);
 }
 
-void CacheTable::updatePreviousStarCache(map<int, vector<int>> update) {
+void CacheTable::updatePreviousStarCache(map<int, vector<int>>* update) {
 	//EnterCriticalSection(&cs_pStar);
-	previousStarCache.insert(update.begin(), update.end());
+	previousStarCache->insert(update->begin(), update->end());
 	//LeaveCriticalSection(&cs_pStar);
 }
 

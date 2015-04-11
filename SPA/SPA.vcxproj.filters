@@ -180,9 +180,6 @@
     <ClCompile Include="QueryProcessor\StubSubquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
-    <ClCompile Include="PKB\CacheTable.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
     <ClCompile Include="PKB\Contains.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
@@ -194,6 +191,9 @@
     </ClCompile>
     <ClCompile Include="PKB\SiblingsExtractor.cpp">
       <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\CacheTable.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -332,9 +332,6 @@
     <ClInclude Include="PKB\AffectsExtractor.h">
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
-    <ClInclude Include="PKB\CacheTable.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
     <ClInclude Include="PKB\Contains.h">
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
@@ -346,6 +343,9 @@
     </ClInclude>
     <ClInclude Include="PKB\SiblingsExtractor.h">
       <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\CacheTable.h">
+      <Filter>Header Files\QueryProcessor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

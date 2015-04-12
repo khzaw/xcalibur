@@ -201,6 +201,9 @@
     <ClCompile Include="PKB\AggNode.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
+    <ClCompile Include="QueryProcessor\ContainsSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PKB\AST.h">

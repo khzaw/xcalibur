@@ -42,6 +42,7 @@
     <ClCompile Include="QueryProcessor\AffectsStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\AffectsSubquery.cpp" />
     <ClCompile Include="QueryProcessor\CacheTable.cpp" />
+    <ClCompile Include="QueryProcessor\ContainsSubquery.cpp" />
     <ClCompile Include="QueryProcessor\NextStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\NextSubquery.cpp" />
     <ClCompile Include="QueryProcessor\NewQueryParser.cpp" />

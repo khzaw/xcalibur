@@ -182,7 +182,8 @@ bool OptimizedCFG::isPrev(int line1, int line2) {
 		return false;
 	else return true;
 }
-
+// slow old version of isNextStar
+/*
 bool OptimizedCFG::isNextStar(int line1, int line2) {
 
 	// check for try/catch out_of_range exception
@@ -230,6 +231,73 @@ bool OptimizedCFG::isNextStar(int line1, int line2) {
 
 	// return answer;
 	return ans;
+}
+*/
+
+// complexity: O(k) where k = level of nesting, i.e. no. of ParentStar
+
+bool OptimizedCFG::isNextStar(int line1, int line2) {
+  cout << "evaluating next*"<< line1<< ","<< line2<< endl;
+   
+  set<int> parentStarOfLine1 = pk->parentTable->getParentStar(line1);
+  set<int> parentStarOfLine2 = pk->parentTable->getParentStar(line2);
+
+  parentStarOfLine1.insert(line1);
+  parentStarOfLine2.insert(line2);
+
+  int size1 = parentStarOfLine1.size();
+  int size2 = parentStarOfLine2.size();
+  
+  // same stmtList
+  if (pk->followsTable->evaluateIsFollowsStar(line1, line2)) {
+    cout << line1 << " in same stmtList as " << line2 << endl;
+    return true;
+  }
+  
+  /*
+  // parent of line 2 same nesting level as line 1
+  if (!parentStarOfLine2.empty()) {
+    int parentOfLine2 = *(std::next(parentStarOfLine2.begin(), size1));
+    if (pk->followsTable->evaluateIsFollowsStar(line1, parentOfLine2)) 
+      return true;
+  }
+  */
+
+  if (parentStarOfLine2.find(line1)!=parentStarOfLine2.end()) {
+    cout << line1 << " is parent* of " << line2 << endl;
+    return true;
+  }
+
+  // keep only first n elems of 2 sets, n=min(size1,size2)
+  if (size1!=size2) {
+    if (size1>size2) {
+      parentStarOfLine1.erase(std::next(parentStarOfLine1.begin(),size2), parentStarOfLine1.end());
+    }
+    else {
+      parentStarOfLine2.erase(std::next(parentStarOfLine2.begin(),size1), parentStarOfLine2.end());
+    }
+  }
+
+  for (int i=0; i<parentStarOfLine1.size(); i++) {
+    std::set<int>::iterator it1=parentStarOfLine1.begin();
+    std::set<int>::iterator it2=parentStarOfLine2.begin();
+
+    if(*it1==*it2 && pk->statementTable->getTNodeType(*it1)=="WHILE_NODE") {
+      cout << "common while ancestor at "<<*it2 << endl;
+      return true;
+    }
+
+    cout << "checking follows*("<<*it1<<","<<*it2<<")"<<endl;
+    if (pk->followsTable->evaluateIsFollowsStar(*it1, *it2)) {
+      cout << "true. terminating"<<endl;
+      return true;
+    }
+
+    ++it1; ++it2;
+    cout << "moving on to next nesting level"<< endl;
+  }
+
+  return false;
 }
 
 bool OptimizedCFG::isPrevStar(int line1, int line2) {
@@ -281,6 +349,7 @@ set<int> OptimizedCFG::getNextStar(int line1) {
 	
 	return ans;
 }
+
 
 set<int> OptimizedCFG::getPrevStar(int line1) {
 

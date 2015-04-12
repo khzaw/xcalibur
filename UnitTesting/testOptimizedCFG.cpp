@@ -393,18 +393,43 @@ void OptimizedCFGTest::testSourceProgram() {
   CPPUNIT_ASSERT(CFG2.isNext(15,18));
   CPPUNIT_ASSERT(CFG2.isNext(17,18));
 
+  // testing is next star
+
+  
   CPPUNIT_ASSERT(CFG2.isNextStar(4,7));
   CPPUNIT_ASSERT(CFG2.isNextStar(4,20));
   CPPUNIT_ASSERT(CFG2.isNextStar(9,20));
   CPPUNIT_ASSERT(CFG2.isNextStar(10,20));
   CPPUNIT_ASSERT(CFG2.isNextStar(12,20));
   CPPUNIT_ASSERT(CFG2.isNextStar(16,20));
+  CPPUNIT_ASSERT(CFG2.isNextStar(14,20));
   CPPUNIT_ASSERT(CFG2.isNextStar(17,20));
   
+  CPPUNIT_ASSERT(CFG2.isNextStar(8,9));
+  CPPUNIT_ASSERT(CFG2.isNextStar(8,12));
+  CPPUNIT_ASSERT(CFG2.isNextStar(9,12));
+  CPPUNIT_ASSERT(CFG2.isNextStar(10,12));
+  CPPUNIT_ASSERT(CFG2.isNextStar(9,16));
+  CPPUNIT_ASSERT(CFG2.isNextStar(10,17));
+  
+  CPPUNIT_ASSERT(CFG2.isNextStar(9,10));
+
   CPPUNIT_ASSERT(CFG2.isNextStar(9,8));
   CPPUNIT_ASSERT(CFG2.isNextStar(10,8));
   CPPUNIT_ASSERT(CFG2.isNextStar(11,8));
   
+  CPPUNIT_ASSERT(CFG2.isNextStar(13,14));
+  CPPUNIT_ASSERT(CFG2.isNextStar(13,15));
+  CPPUNIT_ASSERT(CFG2.isNextStar(13,16));
+  CPPUNIT_ASSERT(CFG2.isNextStar(13,17));
+
+  CPPUNIT_ASSERT(!CFG2.isNextStar(14,13));
+  CPPUNIT_ASSERT(!CFG2.isNextStar(15,13));
+  CPPUNIT_ASSERT(CFG2.isNextStar(16,13));
+  CPPUNIT_ASSERT(CFG2.isNextStar(17,13));
+
+
+
   // Affects
   CPPUNIT_ASSERT(!CFG2.isAffects(4,5));
   CPPUNIT_ASSERT(!CFG2.isAffects(5,7));
@@ -412,6 +437,7 @@ void OptimizedCFGTest::testSourceProgram() {
   CPPUNIT_ASSERT(!CFG2.isAffects(9,10));
   CPPUNIT_ASSERT(!CFG2.isAffects(12,14));
   CPPUNIT_ASSERT(!CFG2.isAffects(14,16));
+
 
   // CFG2.printAggNodeMap();
   //cout << endl << "printing out NextList for proc 2 " << endl;

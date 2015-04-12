@@ -52,7 +52,6 @@ class OptimizedCFG {
     void pushStmtListOntoStack(std::stack<TNode*>*, vector<TNode*>);
     
     // ds for NextStar, Affect, and AffectStar
-    // vector<AggNode*> AggNodeMap;
     std::map<int, AggNode*> stmtToAggNodeMap;
     
 };

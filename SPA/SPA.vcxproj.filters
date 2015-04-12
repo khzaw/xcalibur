@@ -194,6 +194,7 @@
     </ClCompile>
     <ClCompile Include="QueryProcessor\CacheTable.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
     <ClCompile Include="PKB\OptimizedCFG.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
@@ -351,6 +352,7 @@
     </ClInclude>
     <ClInclude Include="QueryProcessor\CacheTable.h">
       <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
     <ClInclude Include="PKB\OptimizedCFG.h">
       <Filter>Header Files\PKB</Filter>
     </ClInclude>

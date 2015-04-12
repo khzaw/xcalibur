@@ -18,232 +18,157 @@ void iterativeCFGTest::tearDown()
 CPPUNIT_TEST_SUITE_REGISTRATION( iterativeCFGTest );
 // method to test insertion of procedures
 
-void iterativeCFGTest::testNoLoops(){
+void iterativeCFGTest::testSourceProgram() {
+  /** SIMPLE source code
+	procedure First{
+		x = 2;					// 1
+		z = 3;					// 2
+		call Second;}			// 3
+	procedure Second{
+		x = 0;					// 4
+		i = 5;					// 5
+		while i {				// 6
+			x = x + 2 * y		// 7
+			if m then {			// 8
+				m = n;}			// 9
+			else {
+				n = Second;}	// 10
+			call Third;			// 11
+			i = i - 1;}			// 12
+		if x then {				// 13
+			x = x + 1;			// 14
+			while m {			// 15
+				m = m - 1;}}	// 16
+		else {
+			z = 1;}				// 17
+		z = z + x + i;			// 18
+		y = z + 2;				// 19
+		x = x * y + z;}			// 20
+	procedure Third{
+		z = 5;					// 21
+		v = z;}					// 22
+	**/
+
+	TNode stmt1("ASSIGN_NODE", "2 ", 1, 0); // x = 2
+	TNode stmt2("ASSIGN_NODE", "3 ", 2, 0); // z = 3
+	TNode stmt3("CALL_NODE", "Second", 3, 0);
+	TNode stmt4("ASSIGN_NODE", "0 ", 4, 1); // x = 0
+	TNode stmt5("ASSIGN_NODE", "5 ", 5, 1); // i = 5
+	TNode stmt6("WHILE_NODE", "i", 6, 1);
+	TNode stmt7("ASSIGN_NODE", "x 2 y * + ", 7, 1); //x = x + 2 * y
+	TNode stmt8("IF_NODE", "m", 8, 1);
+	TNode stmt9("ASSIGN_NODE", "n ", 9, 1); // m = n
+	TNode stmt10("ASSIGN_NODE", "Second ", 10, 1); // n = Second
+	TNode stmt11("CALL_NODE", "Third", 11, 1);
+	TNode stmt12("ASSIGN_NODE", "i 1 - ", 12, 1); // i = i - 1
+	TNode stmt13("IF_NODE", "x", 13, 1);
+	TNode stmt14("ASSIGN_NODE", "x 1 + ", 14, 1); //x = x + 1
+	TNode stmt15("WHILE_NODE", "m", 15, 1);
+	TNode stmt16("ASSIGN_NODE", "m 1 - ", 16, 1); // m = m - 1
+	TNode stmt17("ASSIGN_NODE", "1 ", 17, 1); // z = 1
+	TNode stmt18("ASSIGN_NODE", "z x + i + ", 18, 1); //z = z + x + i
+	TNode stmt19("ASSIGN_NODE", "z 2 + ", 19, 1); // y = z + 2
+	TNode stmt20("ASSIGN_NODE", "x y * z + ", 20, 1); // x = x * y + z
+	TNode stmt21("ASSIGN_NODE", "5 ", 21, 2); // z = 5
+	TNode stmt22("ASSIGN_NODE", "z ", 22, 2); // v = z
 	
-	//	manually create AST
-	//	NoLoops
-	//	procedure NoLoops {
-	//	a = 1;
-	//	b = 2;
-	//	c = 3;
-	//	d = 4; }
+	TNode rootNode1("PROC_NODE", "First", -1, 0);
+	TNode stmtListNode1("STMTLST_NODE", "", 0, 0); 
+	stmtListNode1.addParent(&rootNode1); 
+	rootNode1.addChild(&stmtListNode1);
+	stmt1.addParent(&stmtListNode1); stmtListNode1.addChild(&stmt1); stmt1.addRightSibling(&stmt2);
+	stmt2.addParent(&stmtListNode1); stmtListNode1.addChild(&stmt2); stmt2.addRightSibling(&stmt3);
+	stmt3.addParent(&stmtListNode1); stmtListNode1.addChild(&stmt3);
 
-	TNode rootNode = TNode("PROC_NODE", "value", 0, 1);
-	TNode stmtListNode = TNode("STMTLIST_NODE", "value", 0, 1); stmtListNode.addParent(&rootNode); rootNode.addChild(&stmtListNode);
-	TNode aNode = TNode("ASSIGN_NODE", "a", 1, 1); aNode.addParent(&stmtListNode); stmtListNode.addChild(&aNode);  
-	TNode bNode = TNode("ASSIGN_NODE", "b", 2, 1); bNode.addParent(&stmtListNode); stmtListNode.addChild(&bNode);  
-	TNode cNode = TNode("ASSIGN_NODE", "c", 3, 1); cNode.addParent(&stmtListNode); stmtListNode.addChild(&cNode);  
-	TNode dNode = TNode("ASSIGN_NODE", "d", 4, 1); dNode.addParent(&stmtListNode); stmtListNode.addChild(&dNode);  
-	
-	//std::cout << "Constructing CFG from rootNode.\n";
-	// create CFG
-	CFG newCFG(&rootNode);	
-	//std::cout << "Done building CFG.\n";
+	TNode rootNode2("PROC_NODE", "Second", -1, 1);
+	TNode stmtListNode2("STMTLST_NODE", "", 0, 1); 
+	stmtListNode2.addParent(&rootNode2); 
+	rootNode2.addChild(&stmtListNode2);
+	// base
+	stmt4.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt4); stmt4.addRightSibling(&stmt5);
+	stmt5.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt5); stmt5.addRightSibling(&stmt6);
+	stmt6.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt6); stmt6.addRightSibling(&stmt13);
+	stmt13.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt13); stmt13.addRightSibling(&stmt18);
+	stmt18.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt18); stmt18.addRightSibling(&stmt19);
+	stmt19.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt19); stmt19.addRightSibling(&stmt20);
+	stmt20.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt20);
+	// statement 6 nesting
+	TNode stmtListNode2_1("STMTLST_NODE", "", 0, 1); 
+	stmtListNode2_1.addParent(&stmt6); stmt6.addChild(&stmtListNode2_1);
+	stmt7.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt7); stmt7.addRightSibling(&stmt8);
+	stmt8.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt8); stmt8.addRightSibling(&stmt11);
+	stmt11.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt11); stmt11.addRightSibling(&stmt12);
+	stmt12.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt12);
+		// statement 8 nesting
+		TNode stmtListNode2_1_1("STMTLST_NODE", "", 0, 1); TNode thennode211("THEN_NODE", "then", 0, 1);
+		TNode stmtListNode2_1_2("STMTLST_NODE", "", 0, 1); TNode elsenode212("ELSE_NODE", "else", 0, 1);
+		thennode211.addParent(&stmt8); stmt8.addChild(&thennode211); thennode211.addRightSibling(&elsenode212);
+		elsenode212.addParent(&stmt8); stmt8.addChild(&elsenode212);
+		stmtListNode2_1_1.addParent(&thennode211); thennode211.addChild(&stmtListNode2_1_1);
+		stmtListNode2_1_2.addParent(&elsenode212); elsenode212.addChild(&stmtListNode2_1_2);
+		stmt9.addParent(&stmtListNode2_1_1); stmtListNode2_1_1.addChild(&stmt9);
+		stmt10.addParent(&stmtListNode2_1_2); stmtListNode2_1_2.addChild(&stmt10);
+	// statement 13 nesting
+	TNode stmtListNode2_2("STMTLST_NODE", "", 0, 1); TNode thennode222("THEN_NODE", "then", 0, 1);
+	TNode stmtListNode2_3("STMTLST_NODE", "", 0, 1); TNode elsenode223("ELSE_NODE", "else", 0, 1);
+	thennode222.addParent(&stmt13); stmt13.addChild(&thennode222); thennode222.addRightSibling(&elsenode223);
+	elsenode223.addParent(&stmt13); stmt13.addChild(&elsenode223);
+	stmtListNode2_2.addParent(&thennode222); thennode222.addChild(&stmtListNode2_2);
+	stmtListNode2_3.addParent(&elsenode223); elsenode223.addChild(&stmtListNode2_3);
+	stmt14.addParent(&stmtListNode2_2); stmtListNode2_2.addChild(&stmt14); stmt14.addRightSibling(&stmt15);
+	stmt15.addParent(&stmtListNode2_2); stmtListNode2_2.addChild(&stmt15);
+		// statement 15 nesting
+		TNode stmtListNode2_2_1("STMTLST_NODE", "", 0, 1); 
+		stmtListNode2_2_1.addParent(&stmt15); stmt15.addChild(&stmtListNode2_2_1);
+		stmt16.addParent(&stmtListNode2_2_1); stmtListNode2_2_1.addChild(&stmt16);
+	stmtListNode2_3.addParent(&stmt13); stmt13.addChild(&stmtListNode2_3);
+	stmt17.addParent(&stmtListNode2_3); stmtListNode2_3.addChild(&stmt17);
 
-	// should be true
-	CPPUNIT_ASSERT(newCFG.isNext(1,2));
-	CPPUNIT_ASSERT(newCFG.isNext(2,3));
-	CPPUNIT_ASSERT(newCFG.isNext(3,4));
-
-	// should be false
-	CPPUNIT_ASSERT(!newCFG.isNext(1,3));
-
-	// supposed to fail
-	// CPPUNIT_ASSERT(newCFG.isNext(2,4));
-
-	return;
-}
-
-void iterativeCFGTest::testIfElseLoop(){
-	//	manually create AST
-	//	IfElseLoop
-	//	procedure IfElseLoop {
-	//		a = 1;
-	//		b = 2;
-	//		if (a == 1) {
-	//			c = 3;
-	//			d = 4;
-	//		}
-	//		else {
-	//			e = 5;
-	//			f = 6;
-	//		}	
-	//		g = 7; 
-	//  }
-	
-	TNode rootNode = TNode("PROC_NODE", "value", 0, 1);
-	TNode stmtListNode = TNode("STMTLIST_NODE", "value", 0, 1); stmtListNode.addParent(&rootNode); rootNode.addChild(&stmtListNode);
-	TNode aNode = TNode("ASSIGN_NODE", "a", 1, 1); aNode.addParent(&stmtListNode); stmtListNode.addChild(&aNode);  
-	TNode bNode = TNode("ASSIGN_NODE", "b", 2, 1); bNode.addParent(&stmtListNode); stmtListNode.addChild(&bNode);  
-	TNode ifNode = TNode("IF_NODE", "value", 3, 1); ifNode.addParent(&stmtListNode); stmtListNode.addChild(&ifNode);
-	TNode ifVarNode = TNode("VAR_NODE", "a", 3, 1); ifVarNode.addParent(&ifNode); ifNode.addChild(&ifVarNode);
-	TNode thenNode = TNode("STMTLIST_NODE", "value", 3, 1); thenNode.addParent(&ifNode); ifNode.addChild(&thenNode);
-	TNode then1Node = TNode("ASSIGN_NODE", "c", 4, 1); then1Node.addParent(&thenNode); thenNode.addChild(&then1Node);
-	TNode then2Node = TNode("ASSIGN_NODE", "d", 5, 1); then2Node.addParent(&thenNode); thenNode.addChild(&then2Node);
-	TNode elseNode = TNode("STMTLIST_NODE", "value", 3, 1); elseNode.addParent(&ifNode); ifNode.addChild(&elseNode);
-	TNode else1Node = TNode("ASSIGN_NODE", "e", 6, 1); else1Node.addParent(&elseNode); elseNode.addChild(&else1Node);
-	TNode else2Node = TNode("ASSIGN_NODE", "f", 7, 1); else2Node.addParent(&thenNode); elseNode.addChild(&else2Node);
-	TNode gNode = TNode("ASSIGN_NODE", "g", 8, 1); gNode.addParent(&stmtListNode); stmtListNode.addChild(&gNode);
+	TNode rootNode3("PROC_NODE", "Third", -1, 2);
+	TNode stmtListNode3("STMTLST_NODE", "", 0, 2); 
+	stmtListNode3.addParent(&rootNode3); 
+	rootNode3.addChild(&stmtListNode3);
+	stmt21.addParent(&stmtListNode3); stmtListNode3.addChild(&stmt21); stmt21.addRightSibling(&stmt22);
+	stmt22.addParent(&stmtListNode3); stmtListNode3.addChild(&stmt22);
 
 
-	// create CFG
-	//std::cout << "Creating CFG.\n";	
-	CFG newCFG(&rootNode);
-	//std::cout << "Done building CFG.\n";
-	
-	// test basic linking
-	CPPUNIT_ASSERT(newCFG.isNext(2,3));
+  iterativeCFG CFG1(&rootNode1);
+  iterativeCFG CFG2(&rootNode2);
+  iterativeCFG CFG3(&rootNode3);
 
-	// testing link from if to child
-	CPPUNIT_ASSERT(newCFG.isNext(3,4));
-	CPPUNIT_ASSERT(newCFG.isNext(3,6));
 
-	// testing link from last child to if
-	CPPUNIT_ASSERT(newCFG.isNext(5,8));
-	CPPUNIT_ASSERT(newCFG.isNext(7,8));
+  CPPUNIT_ASSERT(CFG1.isNext(1,2));
+  CPPUNIT_ASSERT(CFG1.isNext(2,3));
+  CPPUNIT_ASSERT(CFG1.isNextStar(1,3));
+  CPPUNIT_ASSERT(!CFG1.isNext(3,1));
 
-	// test nextT
-	CPPUNIT_ASSERT(newCFG.isNextStar(2,4));
-	CPPUNIT_ASSERT(newCFG.isNextStar(2,5));
-	CPPUNIT_ASSERT(newCFG.isNextStar(2,6));
+  CPPUNIT_ASSERT(CFG2.isNext(4,5));
+  CPPUNIT_ASSERT(CFG2.isNext(6,7));
+  CPPUNIT_ASSERT(CFG2.isNext(8,9));
+  CPPUNIT_ASSERT(CFG2.isNext(8,10));
+  CPPUNIT_ASSERT(CFG2.isNext(9,11));
+  CPPUNIT_ASSERT(CFG2.isNext(10,11));
 
-	// should be false
-	CPPUNIT_ASSERT(!newCFG.isNext(4,3));
-	
-	// supposed to fail
-	// CPPUNIT_ASSERT(newCFG.isNext(5,3));
+  CPPUNIT_ASSERT(CFG2.isNext(6,13));
+  CPPUNIT_ASSERT(CFG2.isNext(16,15));
+  CPPUNIT_ASSERT(CFG2.isNext(15,18));
+  CPPUNIT_ASSERT(CFG2.isNext(17,18));
 
-	return;
-}
-
-void iterativeCFGTest::testWhileLoop() {
-	//  manually create AST
-	//	ProgramWithWhileLoop
-	//	procedure ProgramWithWhileLoop {
-	//		a = 1;
-	//		b = 2;
-	//		while (a < 10) {
-	//			a = a + 1;
-	//			c = a + 1; }
-	//		d = 4; 
-	//  }
-		
-	TNode rootNode = TNode("PROC_NODE", "value", 0, 1);
-	TNode stmtListNode = TNode("STMTLIST_NODE", "value", 0, 1); stmtListNode.addParent(&rootNode); rootNode.addChild(&stmtListNode);
-	TNode aNode = TNode("ASSIGN_NODE", "a", 1, 1); aNode.addParent(&stmtListNode); stmtListNode.addChild(&aNode);  
-	TNode bNode = TNode("ASSIGN_NODE", "b", 2, 1); bNode.addParent(&stmtListNode); stmtListNode.addChild(&bNode);  
-	TNode whileNode = TNode("WHILE_NODE", "value", 3, 1); whileNode.addParent(&stmtListNode); stmtListNode.addChild(&whileNode);
-	TNode whileVarNode = TNode("VAR_NODE", "a", 3, 1); whileVarNode.addParent(&whileNode); whileNode.addChild(&whileVarNode);	
-	TNode whileListNode = TNode("STMTLIST_NODE", "value", 3, 1); whileListNode.addParent(&whileNode); whileNode.addChild(&whileListNode);
-	TNode w1Node = TNode("ASSIGN_NODE", "a", 4, 1); w1Node.addParent(&whileListNode); whileListNode.addChild(&w1Node);
-	TNode w2Node = TNode("ASSIGN_NODE", "c", 5, 1); w2Node.addParent(&whileListNode); whileListNode.addChild(&w2Node);
-	TNode dNode = TNode("ASSIGN_NODE", "d", 6, 1); dNode.addParent(&stmtListNode); stmtListNode.addChild(&dNode);
-	
-	// create CFG
-	//std::cout << "Creating CFG.\n";
-	CFG newCFG(&rootNode);
-	//std::cout << "Done building CFG.\n";
-
-	// test basic linking
-	CPPUNIT_ASSERT(newCFG.isNext(1,2));
-	CPPUNIT_ASSERT(newCFG.isNext(2,3));
-
-	// test linking while to child
-	CPPUNIT_ASSERT(newCFG.isNext(3,4));
-	CPPUNIT_ASSERT(newCFG.isNext(4,5));
-
-	// test linking last child to while
-	CPPUNIT_ASSERT(newCFG.isNext(5,3));
-
-	// test NextT
-	CPPUNIT_ASSERT(newCFG.isNextStar(1,4));
-	CPPUNIT_ASSERT(newCFG.isNextStar(2,5));
-	CPPUNIT_ASSERT(newCFG.isNextStar(4,6));
-	CPPUNIT_ASSERT(newCFG.isNextStar(5,6));
-
-	// should fail
-	// CPPUNIT_ASSERT(newCFG.isNext(2,5));
-
-	return;
-}
-
-void iterativeCFGTest::testIfIfLoop() {
-	//	manually create AST
-	//	IfIfLoop
-	//	procedure IfIfLoop {
-	//		a = 1;
-	//		b = 2;
-	//		if (a == 1) {
-	//			c = 3;
-	//			if (c==3) {
-	//				d = 4; 
-	//				e = 5; }
-	//			else { 
-	//				d =	14;
-	//				e = 15; }
-	//			f = 6;
-	//		}
-	//		else {
-	//			c = 23;
-	//			if (c==23) {
-	//				d = 24; 
-	//				e = 25;}
-	//			else { 
-	//				d = 34;
-	//				e = 35; }
-	//			f = 16;
-	//		}
-	//		g =8 ; 
-	//  }
-
-	TNode rootNode = TNode("PROC_NODE", "value", 0, 1);
-	TNode stmtListNode = TNode("STMTLIST_NODE", "value", 0, 1); stmtListNode.addParent(&rootNode); rootNode.addChild(&stmtListNode);
-	TNode aNode = TNode("ASSIGN_NODE", "a", 1, 1); aNode.addParent(&stmtListNode); stmtListNode.addChild(&aNode);  
-	TNode bNode = TNode("ASSIGN_NODE", "b", 2, 1); bNode.addParent(&stmtListNode); stmtListNode.addChild(&bNode);  
-	
-	TNode if1Node = TNode("IF_NODE", "value", 3, 1); if1Node.addParent(&stmtListNode); stmtListNode.addChild(&if1Node);
-		TNode if1VarNode = TNode("VAR_NODE", "a", 3, 1); if1VarNode.addParent(&if1Node); if1Node.addChild(&if1VarNode);
-		TNode then1Node = TNode("STMTLIST_NODE", "value", 3, 1); then1Node.addParent(&if1Node); if1Node.addChild(&then1Node);
-			TNode c1Node = TNode("ASSIGN_NODE", "c", 4, 1); c1Node.addParent(&then1Node); then1Node.addChild(&c1Node);
-	
-			TNode if2Node = TNode("IF_NODE", "value", 5, 1); if2Node.addParent(&then1Node); then1Node.addChild(&if2Node);
-				TNode if2VarNode = TNode("VAR_NODE", "c", 5, 1); if2VarNode.addParent(&if2Node); if2Node.addChild(&if2VarNode);
-				TNode then2Node = TNode("STMTLIST_NODE", "value", 5, 1); then2Node.addParent(&if2Node); if2Node.addChild(&then2Node);
-					TNode d1Node = TNode("ASSIGN_NODE", "d", 6, 1); d1Node.addParent(&then2Node); then2Node.addChild(&d1Node);
-					TNode e1Node = TNode("ASSIGN_NODE", "e", 7, 1); e1Node.addParent(&then2Node); then2Node.addChild(&e1Node);
-	
-				TNode else2Node = TNode("STMTLIST_NODE", "value", 5, 1); else2Node.addParent(&if2Node); if2Node.addChild(&else2Node);
-					TNode d2Node = TNode("ASSIGN_NODE", "d", 8, 1); d2Node.addParent(&else2Node); else2Node.addChild(&d2Node);
-					TNode e2Node = TNode("ASSIGN_NODE", "e", 9, 1); e2Node.addParent(&else2Node); else2Node.addChild(&e2Node);
-
-			TNode f1Node = TNode("ASSIGN_NODE", "f", 10, 1); f1Node.addParent(&then1Node); then1Node.addChild(&f1Node);
-
-		TNode else1Node = TNode("STMTLIST_NODE", "value", 3, 1); else1Node.addParent(&if1Node); if1Node.addChild(&else1Node);
-	
-			TNode c2Node = TNode("ASSIGN_NODE", "c", 11, 1); c2Node.addParent(&else1Node); else1Node.addChild(&c2Node);
-			TNode if3Node = TNode("IF_NODE", "value", 12, 1); if3Node.addParent(&else1Node); else1Node.addChild(&if3Node);
-				TNode if3VarNode = TNode("VAR_NODE", "c", 12, 1); if3VarNode.addParent(&if3Node); if3Node.addChild(&if3VarNode);
-				TNode then3Node = TNode("STMTLIST_NODE", "value", 12, 1); then3Node.addParent(&if3Node); if3Node.addChild(&then3Node);
-					TNode d3Node = TNode("ASSIGN_NODE", "d", 13, 1); d3Node.addParent(&then3Node); then3Node.addChild(&d3Node);
-					TNode e3Node = TNode("ASSIGN_NODE", "e", 14, 1); e3Node.addParent(&then3Node); then3Node.addChild(&e3Node);
-	
-				TNode else3Node = TNode("STMTLIST_NODE", "value", 12, 1); else3Node.addParent(&if3Node); if3Node.addChild(&else3Node);
-					TNode d4Node = TNode("ASSIGN_NODE", "d", 15, 1); d4Node.addParent(&else3Node); else3Node.addChild(&d4Node);
-					TNode e4Node = TNode("ASSIGN_NODE", "e", 16, 1); e4Node.addParent(&else3Node); else3Node.addChild(&e4Node);
-
-			TNode f2Node = TNode("ASSIGN_NODE", "f", 17, 1); f1Node.addParent(&else1Node); else1Node.addChild(&f2Node);
-
-	TNode gNode = TNode("ASSIGN_NODE", "g", 18, 1); gNode.addParent(&stmtListNode); stmtListNode.addChild(&gNode);
-
-	// create CFG
-	//std::cout << "Creating CFG.\n";
-	CFG newCFG(&rootNode);
-	//std::cout << "Done building CFG.\n";
-	
-	//std::cout << "testing ifif\n";
-	/*
-	// print out ds
-	for (std::map<int, set<int>>::iterator it=newCFG.AdjListFwd.begin(); it!=newCFG.AdjListFwd.end(); it++) {
+  
+  CPPUNIT_ASSERT(CFG2.isNextStar(4,20));
+  CPPUNIT_ASSERT(CFG2.isNextStar(9,20));
+  CPPUNIT_ASSERT(CFG2.isNextStar(10,20));
+  CPPUNIT_ASSERT(CFG2.isNextStar(12,20));
+  CPPUNIT_ASSERT(CFG2.isNextStar(16,20));
+  CPPUNIT_ASSERT(CFG2.isNextStar(17,20));
+  
+  CPPUNIT_ASSERT(CFG2.isNextStar(9,8));
+  CPPUNIT_ASSERT(CFG2.isNextStar(10,8));
+  CPPUNIT_ASSERT(CFG2.isNextStar(11,8));
+  CPPUNIT_ASSERT(CFG2.isNextStar(12,8));
+  /*
+  std::cout << endl << "printing out AdjList for proc 2 " << endl;
+  for (std::map<int, set<int>>::iterator it=CFG2.AdjListFwd.begin(); it!=CFG2.AdjListFwd.end(); it++) {
 		std::cout << "for line " << (*it).first << ": ";
 		set<int> list = (*it).second;
 		for (std::set<int>::iterator it2=list.begin(); it2!=list.end(); it2++) {
@@ -251,256 +176,5 @@ void iterativeCFGTest::testIfIfLoop() {
 		}
 		std::cout << endl;
 	}
-	*/
-
-	// test basic linking
-	CPPUNIT_ASSERT(newCFG.isNext(1,2));
-
-	// test if block
-	CPPUNIT_ASSERT(newCFG.isNext(3,4));
-	CPPUNIT_ASSERT(newCFG.isNext(5,6));
-	CPPUNIT_ASSERT(newCFG.isNext(5,8));
-	CPPUNIT_ASSERT(newCFG.isNext(7,10));
-	CPPUNIT_ASSERT(newCFG.isNext(9,10));
-	
-	// test else block
-	CPPUNIT_ASSERT(newCFG.isNext(3,11));
-	CPPUNIT_ASSERT(newCFG.isNext(12,13));
-	CPPUNIT_ASSERT(newCFG.isNext(12,15));
-	CPPUNIT_ASSERT(newCFG.isNext(14,17));
-	CPPUNIT_ASSERT(newCFG.isNext(16,17));
-	
-	CPPUNIT_ASSERT(newCFG.isNext(10,18));
-	CPPUNIT_ASSERT(newCFG.isNext(17,18));
-
-	// test NextT
-	CPPUNIT_ASSERT(newCFG.isNextStar(2,18));
-	
-	// should fail
-	// CPPUNIT_ASSERT(!newCFG.isNext(1,2));
-}
-
-void iterativeCFGTest::testIfWhileLoop() {
-	//	manually create AST
-	//	IfWhileLoop
-	//	procedure IfWhileLoop {
-	//		a = 1;
-	//		b = 2;
-	//		if (a == 1) {
-	//			c = 3;
-	//			while (c < 13) {
-	//			c = c + 1; }
-	//			f = 6;
-	//		}
-	//		else {
-	//			c = 23;
-	//			while (c < 33) {
-	//			c = c + 1; }
-	//			f = 16;
-	//		}
-	//		g = 8 ; 
-	//  }
-
-	TNode rootNode = TNode("PROC_NODE", "value", 0, 1);
-	TNode stmtListNode = TNode("STMTLIST_NODE", "value", 0, 1); stmtListNode.addParent(&rootNode); rootNode.addChild(&stmtListNode);
-	TNode aNode = TNode("ASSIGN_NODE", "a", 1, 1); aNode.addParent(&stmtListNode); stmtListNode.addChild(&aNode);  
-	TNode bNode = TNode("ASSIGN_NODE", "b", 2, 1); bNode.addParent(&stmtListNode); stmtListNode.addChild(&bNode);  
-	
-	TNode if1Node = TNode("IF_NODE", "value", 3, 1); if1Node.addParent(&stmtListNode); stmtListNode.addChild(&if1Node);
-		TNode if1VarNode = TNode("VAR_NODE", "a", 3, 1); if1VarNode.addParent(&if1Node); if1Node.addChild(&if1VarNode);
-		TNode then1Node = TNode("STMTLIST_NODE", "value", 3, 1); then1Node.addParent(&if1Node); if1Node.addChild(&then1Node);
-			TNode c1Node = TNode("ASSIGN_NODE", "c", 4, 1); c1Node.addParent(&then1Node); then1Node.addChild(&c1Node);
-	
-			TNode while1Node = TNode("WHILE_NODE", "value", 5, 1); while1Node.addParent(&then1Node); then1Node.addChild(&while1Node);
-				TNode while1VarNode = TNode("VAR_NODE", "c", 5, 1) ; while1VarNode.addParent(&while1Node); while1Node.addChild(&while1VarNode);
-				TNode while1ListNode = TNode("STMTLIST_NODE", "value", 5, 1); while1ListNode.addParent(&while1Node); while1Node.addChild(&while1ListNode);
-					TNode c2Node = TNode("ASSIGN_NODE", "c", 6, 1); c2Node.addParent(&while1ListNode); while1ListNode.addChild(&c2Node);
-
-			TNode f1Node = TNode("ASSIGN_NODE", "f", 7, 1); f1Node.addParent(&then1Node); then1Node.addChild(&f1Node);
-
-		TNode else1Node = TNode("STMTLIST_NODE", "value", 3, 1); else1Node.addParent(&if1Node); if1Node.addChild(&else1Node);
-	
-			TNode c3Node = TNode("ASSIGN_NODE", "c", 8, 1); c3Node.addParent(&else1Node); else1Node.addChild(&c3Node);
-			TNode while2Node = TNode("WHILE_NODE", "value", 9, 1); while2Node.addParent(&else1Node); else1Node.addChild(&while2Node);
-				TNode while2VarNode = TNode("ASSIGN_NODE", "c", 9, 1) ; while2VarNode.addParent(&while2Node); while2Node.addChild(&while2VarNode);
-				TNode while2ListNode = TNode("STMTLIST_NODE", "value", 9, 1); while2ListNode.addParent(&while2Node); while2Node.addChild(&while2ListNode);
-					TNode c4Node = TNode("ASSIGN_NODE", "c", 10, 1); c4Node.addParent(&while2ListNode); while2ListNode.addChild(&c4Node);
-
-			TNode f2Node = TNode("ASSIGN_NODE", "f", 11, 1); f1Node.addParent(&else1Node); else1Node.addChild(&f2Node);
-
-	TNode gNode = TNode("ASSIGN_NODE", "g", 12, 1); gNode.addParent(&stmtListNode); stmtListNode.addChild(&gNode);
-
-	// create CFG
-	//std::cout << "Creating CFG 5.\n\n\n\n\n\n";
-	CFG newCFG(&rootNode);
-	//std::cout << "Done building CFG 5.\n\n";
-	/*
-	std::cout << "testing ifwhile\n";
-	// print out ds
-	for (std::map<int, set<int>>::iterator it=newCFG.AdjListFwd.begin(); it!=newCFG.AdjListFwd.end(); it++) {
-		std::cout << "for line " << (*it).first << ": ";
-		set<int> list = (*it).second;
-		for (std::set<int>::iterator it2=list.begin(); it2!=list.end(); it2++) {
-			std::cout << *it2 << " ";
-		}
-		std::cout << endl;
-	}
-	*/
-	// test basic linking
-	CPPUNIT_ASSERT(newCFG.isNext(1,2));
-
-	// test while in if
-	CPPUNIT_ASSERT(newCFG.isNext(3,4));
-	CPPUNIT_ASSERT(newCFG.isNext(4,5));
-	CPPUNIT_ASSERT(newCFG.isNext(5,6));
-	CPPUNIT_ASSERT(newCFG.isNext(6,5));
-	CPPUNIT_ASSERT(newCFG.isNext(5,7));
-
-	// test while in else
-	CPPUNIT_ASSERT(newCFG.isNext(8,9));	
-	CPPUNIT_ASSERT(newCFG.isNext(9,10));
-	CPPUNIT_ASSERT(newCFG.isNext(10,9));
-	CPPUNIT_ASSERT(newCFG.isNext(9,11));
-
-	CPPUNIT_ASSERT(newCFG.isNext(7,12));
-	CPPUNIT_ASSERT(newCFG.isNext(11,12));
-
-	// should fail
-	// CPPUNIT_ASSERT(!newCFG.isNext(1,2));
-	
-}
-
-void iterativeCFGTest::testWhileIfLoop() {
-	//	manually create AST
-	//	IfWhileLoop
-	//	procedure IfWhileLoop {
-	//		a = 1;
-	//		b = 2;
-	//		while (b < 10) {
-	//			if (a == 1) {
-	//				c = 3;
-	//				d = 6;
-	//			}
-	//			else {
-	//				c = 23;
-	//				d = 16;
-	//			}
-	//			g = 8 ;
-	//		}
-	//		h = 9;
-	//  }
-
-	TNode rootNode = TNode("PROC_NODE", "value", 0, 1);
-	TNode stmtListNode = TNode("STMTLIST_NODE", "value", 0, 1); stmtListNode.addParent(&rootNode); rootNode.addChild(&stmtListNode);
-	TNode aNode = TNode("ASSIGN_NODE", "a", 1, 1); aNode.addParent(&stmtListNode); stmtListNode.addChild(&aNode);  
-	TNode bNode = TNode("ASSIGN_NODE", "b", 2, 1); bNode.addParent(&stmtListNode); stmtListNode.addChild(&bNode);  
-	TNode whileNode = TNode("WHILE_NODE", "value", 3, 1); whileNode.addParent(&stmtListNode); stmtListNode.addChild(&whileNode);
-	TNode whileVarNode = TNode("VAR_NODE", "a", 3, 1); whileVarNode.addParent(&whileNode); whileNode.addChild(&whileVarNode);	
-	TNode whileListNode = TNode("STMTLIST_NODE", "value", 3, 1); whileListNode.addParent(&whileNode); whileNode.addChild(&whileListNode);
-	TNode ifNode = TNode("IF_NODE", "value", 4, 1); ifNode.addParent(&whileListNode); whileListNode.addChild(&ifNode);
-	TNode ifVarNode = TNode("VAR_NODE", "a", 3, 1); ifVarNode.addParent(&ifNode); ifNode.addChild(&ifVarNode);	
-	TNode thenNode = TNode("STMTLIST_NODE", "value", 4, 1); thenNode.addParent(&ifNode); ifNode.addChild(&thenNode);
-	TNode c1Node = TNode("ASSIGN_NODE", "c", 5, 1); c1Node.addParent(&thenNode); thenNode.addChild(&c1Node);
-	TNode d1Node = TNode("ASSIGN_NODE", "d", 6, 1); d1Node.addParent(&thenNode); thenNode.addChild(&d1Node);
-	TNode elseNode = TNode("STMTLIST_NODE", "value", 4, 1); elseNode.addParent(&ifNode); ifNode.addChild(&elseNode);
-	TNode c2Node = TNode("ASSIGN_NODE", "c", 7, 1); c2Node.addParent(&elseNode); elseNode.addChild(&c2Node);
-	TNode d2Node = TNode("ASSIGN_NODE", "d", 8, 1); d2Node.addParent(&elseNode); elseNode.addChild(&d2Node);
-	
-	TNode gNode = TNode("ASSIGN_NODE", "g", 9, 1); gNode.addParent(&whileListNode); whileListNode.addChild(&gNode);
-	TNode fNode = TNode("ASSIGN_NODE", "f", 10, 1); fNode.addParent(&stmtListNode); stmtListNode.addChild(&fNode);
-		
-	// create CFG
-	 std::cout << "Creating CFG 5.\n";
-	CFG newCFG(&rootNode);
-	 std::cout << "Done building CFG 5.\n";
-
-	// test basic linking
-	CPPUNIT_ASSERT(newCFG.isNext(1,2));
-	CPPUNIT_ASSERT(newCFG.isNext(2,3));
-
-	// test if-else first child
-	CPPUNIT_ASSERT(newCFG.isNext(3,4));
-	CPPUNIT_ASSERT(newCFG.isNext(4,5));
-	CPPUNIT_ASSERT(newCFG.isNext(4,7));
-
-	// test if-else last child
-	CPPUNIT_ASSERT(newCFG.isNext(6,9));
-	CPPUNIT_ASSERT(newCFG.isNext(8,9));
-	
-	// test link from last child back to while
-	CPPUNIT_ASSERT(newCFG.isNext(9,3));
-
-	// test link from while to neighbour
-	CPPUNIT_ASSERT(newCFG.isNext(3,10));
-
-	// should fail
-	// CPPUNIT_ASSERT(!newCFG.isNext(1,2));
-}
-
-void iterativeCFGTest::testWhileWhileLoop() {
-	//	manually create AST
-	//	IfWhileLoop
-	//	procedure IfWhileLoop {
-	//		a = 1;
-	//		b = 2;
-	//		while (b < 10) {
-	//			while (a < 3) {
-	//				a = a + 1;
-	//				b = b + 1 ;
-	//			}
-	//		}
-	//		c = 9;
-	//  }
-
-	TNode rootNode = TNode("PROC_NODE", "value", 0, 1);
-	TNode stmtListNode = TNode("STMTLIST_NODE", "value", 0, 1); stmtListNode.addParent(&rootNode); rootNode.addChild(&stmtListNode);
-	TNode aNode = TNode("ASSIGN_NODE", "a", 1, 1); aNode.addParent(&stmtListNode); stmtListNode.addChild(&aNode);  
-	TNode bNode = TNode("ASSIGN_NODE", "b", 2, 1); bNode.addParent(&stmtListNode); stmtListNode.addChild(&bNode);  
-	TNode while1Node = TNode("WHILE_NODE", "value", 3, 1); while1Node.addParent(&stmtListNode); stmtListNode.addChild(&while1Node);
-	TNode while1VarNode = TNode("VAR_NODE", "b", 3, 1); while1VarNode.addParent(&while1Node); while1Node.addChild(&while1VarNode);
-	TNode while1ListNode = TNode("STMTLIST_NODE", "value", 3, 1); while1ListNode.addParent(&while1Node); while1Node.addChild(&while1ListNode);
-	
-	TNode while2Node = TNode("WHILE_NODE", "value", 4, 1); while2Node.addParent(&while1ListNode); while1ListNode.addChild(&while2Node);
-	TNode while2VarNode = TNode("VAR_NODE", "b", 4, 1); while2VarNode.addParent(&while2Node); while2Node.addChild(&while2VarNode);
-	TNode while2ListNode = TNode("STMTLIST_NODE", "value", 4, 1); while2ListNode.addParent(&while2Node); while2Node.addChild(&while2ListNode);
-	
-	TNode a2Node = TNode("ASSIGN_NODE", "a", 5, 1); a2Node.addParent(&while2ListNode); while2ListNode.addChild(&a2Node);
-	TNode b2Node = TNode("ASSIGN_NODE", "a", 6, 1); b2Node.addParent(&while2ListNode); while2ListNode.addChild(&b2Node);
-
-	TNode cNode = TNode("ASSIGN_NODE", "c", 7, 1); cNode.addParent(&stmtListNode); stmtListNode.addChild(&cNode);
-	
-	// create CFG
-	std::cout << "Creating CFG 6.\n";
-	CFG newCFG(&rootNode);
-	std::cout << "Done building CFG 6.\n\n\n\n\n\n";
-
-	/*
-	// print out ds
-	for (std::map<int, set<int>>::iterator it=newCFG.AdjListFwd.begin(); it!=newCFG.AdjListFwd.end(); it++) {
-		std::cout << "for line " << (*it).first << ": ";
-		set<int> list = (*it).second;
-		for (std::set<int>::iterator it2=list.begin(); it2!=list.end(); it2++) {
-			std::cout << *it2 << " ";
-		}
-		std::cout << endl;
-	}
-	*/
-
-	// test basic linking
-	CPPUNIT_ASSERT(newCFG.isNext(1,2));
-	CPPUNIT_ASSERT(newCFG.isNext(2,3));
-
-	// test link from while to first child
-	CPPUNIT_ASSERT(newCFG.isNext(3,4));
-	CPPUNIT_ASSERT(newCFG.isNext(4,5));
-
-	// test link back
-	CPPUNIT_ASSERT(newCFG.isNext(6,4));
-	CPPUNIT_ASSERT(newCFG.isNext(4,3));
-
-	// test neighbour of parent while
-	CPPUNIT_ASSERT(newCFG.isNext(3,7));
-
-	// should fail
-	// CPPUNIT_ASSERT(!newCFG.isNext(1,2));
+  */
 }

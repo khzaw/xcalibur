@@ -97,13 +97,16 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		int index = tuple->addSynonym(leftSynonym);
 		tuple->addSynonymToMap(leftSynonym, index);
-		set<int> tempPrevious;
+		vector<int> previous = vector<int>();
+		vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
+		set<int> tempPrevious = set<int>();
 		if (isSyn == 2) {	// Affects(syn, stmt): Get Previous of stmt
-			tempPrevious = pkb->affectsExtractor->getAffectsBy(rightIndex);
+			for (size_t i = 0; i < assStmt.size(); i++) {
+				if (pkb->affectsExtractor->isAffects(assStmt[i], rightIndex)) {
+					tempPrevious.insert(assStmt[i]);
+				} 
+			}
 		} else {	// Affects(syn, _): Get all Previous stmt
-			// getAllPrevious Statements
-			tempPrevious = set<int>();
-			vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 			for (size_t i = 0; i < assStmt.size(); i++) {
 				for (size_t j = 0; j < assStmt.size(); j++) {
 					if (pkb->affectsExtractor->isAffects(assStmt[i], assStmt[j])) {
@@ -111,12 +114,11 @@ public:
 					}
 				}
 			}
-			//tempPrevious = pkb->nextExtractor->getAllPrev();
 		}
+
 		vector<int> Previous(tempPrevious.begin(), tempPrevious.end());
 		for(size_t i = 0; i < Previous.size(); i++) {
-			vector<int> temp = vector<int>();
-			
+			vector<int> temp = vector<int>();	
 			temp.push_back(Previous.at(i));
 			tuple->addResultRow(temp);
 		}
@@ -177,17 +179,24 @@ public:
 		ResultTuple* result = new ResultTuple();
 		result->setSynonym(tuple->getSynonyms());
 		result->setSynonymMap(tuple->getSynonymMap());
-
+		int size = tuple->getAllResults().size();
+		vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 		int index = tuple->getSynonymIndex(rightSynonym);
-		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
-			vector<int> temp = tuple->getAllResults().at(i);
-			if (isSyn == 1) {	// Affects(stmt, syn)
-				if (pkb->affectsExtractor->isAffects(leftIndex, temp.at(index))) {
+		if (isSyn == 1) {	// Affects(stmt, syn)
+			for (size_t i = 0; i < size; i++) {
+				vector<int> temp = tuple->getAllResults().at(i);
+				if (pkb->affectsExtractor->isAffects(leftIndex, temp[index])) {
 					result->addResultRow(temp);
 				}
-			} else {	// Affects(_, syn)
-				if (!pkb->affectsExtractor->getAffectsBy(temp.at(index)).empty()) {
-					result->addResultRow(temp);
+			}
+		} else {	// Affects(_, syn)
+			for (size_t i = 0; i < size; i++) {
+				vector<int> temp = tuple->getAllResults().at(i);
+				for (size_t j = 0; j < assStmt.size(); j++) {
+					if (pkb->affectsExtractor->isAffects(assStmt[j], temp[index])) {
+						result->addResultRow(temp);
+						break;
+					}
 				}
 			}
 		}
@@ -248,16 +257,27 @@ public:
 			}
 		} else if (lIndex == -1) { //case 3: only right is inside
 			int index = result->addSynonym(leftSynonym);
+			int size = tuple->getAllResults().size();
 			result->addSynonymToMap(leftSynonym, index);
+			
+			// to store already calcultated solution
 			map<int, vector<int>> prevSolution = map<int, vector<int>>();
-			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
-				int rightValue = tuple->getResultAt(i, rIndex);
-				if (prevSolution.find(rightValue) == prevSolution.end()){
-					set<int> tV = pkb->affectsExtractor->getAffectsBy(rightValue);
-					vector<int> tempValues(tV.begin(), tV.end());
-					prevSolution.insert(make_pair(rightValue, tempValues));
+
+			for (size_t i = 0; i < size; i++) {
+				int right = tuple->getResultAt(i, rIndex);
+				// check if already calculated
+				if (prevSolution.find(right) == prevSolution.end()) {
+					vector<int> pre = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
+					vector<int> ans = vector<int>();
+					for (size_t x = 0; x < pre.size(); x++) {
+						if (pkb->affectsExtractor->isAffects(pre[x], right)) {
+							ans.push_back(pre[x]);
+						}
+					}
+					prevSolution.insert(make_pair(right, ans));
 				}
-				vector<int> vals = prevSolution.at(rightValue);
+
+				vector<int> vals = prevSolution.at(right);
 				for (size_t j = 0; j < vals.size(); j++){
 					vector<int> newRow(tuple->getResultRow(i));
 					newRow.push_back(vals[j]);

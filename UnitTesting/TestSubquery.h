@@ -54,6 +54,7 @@ public:
 	void testCallsT();
 	void testCallsTTuple();
 	void testPattern();
+	void testPatternTuple();
 	void testWith();
 	void testWithTuple();
 	void testNext();
@@ -61,6 +62,8 @@ public:
 	void testNextStar();
 	void testNextStarTuple();
 	void testAffects();
-
+	void testAffectsTuple();
+	void testAffectsStar();
+	void testAffectsStarTuple();
 };
 #endif

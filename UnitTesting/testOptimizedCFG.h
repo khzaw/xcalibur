@@ -1,9 +1,10 @@
-#ifndef testIterativeCFG_h
-#define testIterativeCFG_h
+#ifndef testOptimizedCFG_h
+#define testOptimizedCFG_h
 #include <cppunit/extensions/HelperMacros.h>
+#include "..\SPA\PKB\PKBController.h"
 
-class iterativeCFGTest : public CPPUNIT_NS::TestFixture {
-	CPPUNIT_TEST_SUITE(iterativeCFGTest);
+class OptimizedCFGTest : public CPPUNIT_NS::TestFixture {
+	CPPUNIT_TEST_SUITE(OptimizedCFGTest);
 	//CPPUNIT_TEST(testNoLoops);
 	//CPPUNIT_TEST(testIfElseLoop);
 	//CPPUNIT_TEST(testWhileLoop);
@@ -16,16 +17,11 @@ class iterativeCFGTest : public CPPUNIT_NS::TestFixture {
 	CPPUNIT_TEST_SUITE_END();
 
 public:
+  PKBController* pk;
+	map<string, string> synonymTable;
 	void setUp();
 	void tearDown();
-	void testNoLoops();
-	void testIfElseLoop();
-	void testWhileLoop();
-	void testIfIfLoop();
-	void testIfWhileLoop();
-	void testWhileIfLoop();
-	void testWhileWhileLoop();
-  void testSourceProgram();
+	void testSourceProgram();
 
 };
 #endif

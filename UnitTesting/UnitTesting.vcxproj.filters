@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TestModifies.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TestProcTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -69,7 +66,10 @@
     <ClCompile Include="TestOptimizedQE.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestSimpleSubquery.cpp">
+    <ClCompile Include="TestSubquery.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testOptimizedCFG.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -123,6 +123,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TestOptimizedQE.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="testOptimizedCFG.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

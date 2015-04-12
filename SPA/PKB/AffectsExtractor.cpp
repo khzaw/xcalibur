@@ -46,6 +46,7 @@ set<int> AffectsExtractor::getAffects(int progLine1)
 {
 	checkerAffects.clear();
 	std::queue<shared_ptr<GNode>> queue ;
+	getAffectResultSet.clear();
 
 	map<int,std::shared_ptr<GNode>> nodeMap = nextExtractor->getNodeMap();
 	std::map<int, shared_ptr<GNode>>::iterator it = nodeMap.find(progLine1);
@@ -66,6 +67,7 @@ set<int> AffectsExtractor::getAffectsBy(int progLine2)
 {
 	
 	std::queue<shared_ptr<GNode>> queue ;
+	getAffectByResultSet.clear();
 	map<int,std::shared_ptr<GNode>> nodeMap = nextExtractor->getNodeMap();
 	std::map<int, shared_ptr<GNode>>::iterator it;
 	it = nodeMap.find(progLine2);
@@ -706,7 +708,7 @@ set<int> AffectsExtractor::getAffectByProcess(int usesVar, int ifStmt, std::queu
 
 bool AffectsExtractor::isAffectsStar(int progLine1 , int progLine2) 
 {
-	
+	isAffectStarResultSet.clear();
 	if (isAffects(progLine1,progLine2)) {
 		return true;
 	} else {
@@ -775,7 +777,7 @@ set<int> AffectsExtractor::getAffectsStar(int progLine1)
 {
 	std::map<int,bool> checker;
 	std::queue<shared_ptr<GNode>> queue ;
-
+	getAffectStarResultSet.clear();
 	map<int,std::shared_ptr<GNode>> nodeMap = nextExtractor->getNodeMap();
 	std::map<int, shared_ptr<GNode>>::iterator it;
 	it = nodeMap.find(progLine1);
@@ -837,7 +839,7 @@ set<int> AffectsExtractor::getAffectsStarBy(int progLine2)
 {
 	std::map<int,bool> checker;
 	std::queue<shared_ptr<GNode>> queue ;
-
+	getAffectStarByResultSet.clear();
 
 	map<int,std::shared_ptr<GNode>> nodeMap = nextExtractor->getNodeMap();
 	std::map<int, shared_ptr<GNode>>::iterator it;

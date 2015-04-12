@@ -9,20 +9,20 @@
 #include "iterativeCFG.h"
 #include "..\Frontend\TNode.h"
 
-CFG::CFG() {
+iterativeCFG::iterativeCFG() {
 }
 
-bool CFG::isNext(int line1, int line2) {
+bool iterativeCFG::isNext(int line1, int line2) {
 	return !(AdjListFwd[line1].find(line2)==AdjListFwd[line1].end());
 }
 
-bool CFG::isPrev(int line1, int line2) {
+bool iterativeCFG::isPrev(int line1, int line2) {
 	if (AdjListBwd[line1].find(line2)==AdjListBwd[line1].end())
 		return false;
 	else return true;
 }
 
-bool CFG::isNextStar(int line1, int line2) {
+bool iterativeCFG::isNextStar(int line1, int line2) {
 
 	// check for try/catch out_of_range exception
 	try {
@@ -71,19 +71,19 @@ bool CFG::isNextStar(int line1, int line2) {
 	return ans;
 }
 
-bool CFG::isPrevStar(int line1, int line2) {
+bool iterativeCFG::isPrevStar(int line1, int line2) {
 	return isNextStar(line2, line1);
 }
 
-set<int> CFG::getNext(int line) {
+set<int> iterativeCFG::getNext(int line) {
 	return AdjListFwd[line];
 }
 
-set<int> CFG::getPrev(int line) {
+set<int> iterativeCFG::getPrev(int line) {
 	return AdjListBwd[line];
 }
 
-set<int> CFG::getNextStar(int line1) {
+set<int> iterativeCFG::getNextStar(int line1) {
 	
 	std::stack<int> pq; 
 	pq.push(line1);
@@ -121,7 +121,7 @@ set<int> CFG::getNextStar(int line1) {
 	return ans;
 }
 
-set<int> CFG::getPrevStar(int line1) {
+set<int> iterativeCFG::getPrevStar(int line1) {
 
 	std::stack<int> pq; 
 	pq.push(line1);
@@ -159,8 +159,8 @@ set<int> CFG::getPrevStar(int line1) {
 	return ans;
 }
 
-// build CFG from AST root
-CFG::CFG(TNode* root) {
+// build iterativeCFG from AST root
+iterativeCFG::iterativeCFG(TNode* root) {
 
 	std::stack<TNode*> pq;
 
@@ -180,20 +180,12 @@ CFG::CFG(TNode* root) {
 		// then link stmtList of if and stmtList of else separately
 		// link last child of if & else to next neighbour after if-else loop
 		if (type=="IF_NODE") {
-			// vector of children must be of size 3
-			if (curr->getChildren().size()!=3 ) {
-				break; cout << "Error! If node has not exactly 3 children.  ";
-			}
-			if (curr->getChild(1)->getNodeType() != "STMTLIST_NODE"
-				||curr->getChild(2)->getNodeType() != "STMTLIST_NODE") {
-					break; cout << "Missing STMTLIST_NODE.  ";
-			}
-
+			
 			// std::cout << "in if-node\n";
 
 			// get if-else stmtLists
-			vector<TNode*> thenStmtList = curr->getChild(1)->getChildren();
-			vector<TNode*> elseStmtList = curr->getChild(2)->getChildren();
+			vector<TNode*> thenStmtList = curr->getChild(0)->getChild(0)->getChildren();
+			vector<TNode*> elseStmtList = curr->getChild(1)->getChild(0)->getChildren();
 
 			// link IF_NODE to first child of each stmtList
 			addLink(curr->getStmtNum(), thenStmtList.at(0)->getStmtNum());
@@ -218,17 +210,9 @@ CFG::CFG(TNode* root) {
 		// link everything in stmtList 
 		// last child link back to while node
 		else if (type=="WHILE_NODE") {
-			// must have exaclty 2 children
-			if (curr->getChildren().size()!=2 ) {
-				break; cout << "Error! Vector has not only 2 children.\n";
-			}
-			TNode* stmtListNode = curr->getChild(1);
-			if (stmtListNode->getNodeType() != "STMTLIST_NODE") {
-				break; cout << "Expecting STMTLIST_NODE!";
-			}
 			
 			// std::cout << "ín while-node\n";
-
+      TNode* stmtListNode = curr->getChild(0);
 			vector<TNode*> stmtList = stmtListNode->getChildren();
 			
 			// std::cout << "a" << curr->getChildren().size() << endl;
@@ -289,7 +273,7 @@ CFG::CFG(TNode* root) {
 }
 
 
-void CFG::addLink(int line1, int line2) {
+void iterativeCFG::addLink(int line1, int line2) {
 	if (line1 != line2) {
 		AdjListFwd[line1].insert(line2);
 		AdjListBwd[line2].insert(line1);
@@ -299,7 +283,7 @@ void CFG::addLink(int line1, int line2) {
 	else std::cout << "Error! Line 1 must be different from Line 2!\n";
 }
 
-void CFG::linkStmtList(vector<TNode*> stmtList) {
+void iterativeCFG::linkStmtList(vector<TNode*> stmtList) {
 	for (int i=0; i<stmtList.size()-1; i++) {
 
 		if (stmtList.at(i)->getNodeType()!="IF_NODE") {
@@ -315,7 +299,7 @@ void CFG::linkStmtList(vector<TNode*> stmtList) {
 	}
 }
 
-void CFG::pushStmtListOntoStack(std::stack<TNode*>* pq, vector<TNode*> stmtList) {
+void iterativeCFG::pushStmtListOntoStack(std::stack<TNode*>* pq, vector<TNode*> stmtList) {
 	for (int i=stmtList.size()-1; i>=0; i--) {
 		pq->push(stmtList.at(i));
 	}

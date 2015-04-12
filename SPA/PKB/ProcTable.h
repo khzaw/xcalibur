@@ -29,6 +29,8 @@ string getProcName(int);	// get variable name using its index
 int getProcIndex(string);	// get variable index using its string
 set<int> getAllProc();		// get all procedures indices
 
+vector<TNode*> getProcRootTable();
+
 //Mutator
 int insertProc(string); // insert procedure into the proc Map if it does not exist
 

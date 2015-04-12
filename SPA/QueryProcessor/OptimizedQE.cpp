@@ -166,7 +166,7 @@ ResultTuple* OptimizedQE::solve() {
 	OptimizedSubquerySolver qss = OptimizedSubquerySolver();
 	//joinQuerySolutions(qss.multithreadSolve(queries));
 	//return finalSolution;
-	return optimizedJoin(qss.multithreadSolve(queries));
+	return optimizedJoin(qss.singlethreadSolve(queries));
 }
 
 vector<ResultTuple*> OptimizedQE::solve2() {

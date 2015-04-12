@@ -18,11 +18,16 @@
     <ClCompile Include="Frontend\Operator.cpp" />
     <ClCompile Include="Frontend\TNode.cpp" />
     <ClCompile Include="PKB\AffectsExtractor.cpp" />
-    <ClCompile Include="PKB\CacheTable.cpp" />
+    <ClCompile Include="PKB\AggNode.cpp" />
+    <ClCompile Include="PKB\Contains.cpp" />
+    <ClCompile Include="PKB\extractContainsFromAst.cpp" />
     <ClCompile Include="PKB\iterativeCFG.cpp" />
     <ClCompile Include="PKB\CFG.cpp" />
     <ClCompile Include="PKB\GNode.cpp" />
     <ClCompile Include="PKB\NextExtractor.cpp" />
+    <ClCompile Include="PKB\OptimizedCFG.cpp" />
+    <ClCompile Include="PKB\Siblings.cpp" />
+    <ClCompile Include="PKB\SiblingsExtractor.cpp" />
     <ClCompile Include="PKB\StatementTable.cpp" />
     <ClCompile Include="PKB\Uses.cpp" />
     <ClCompile Include="PKB\VarTable.cpp" />
@@ -36,6 +41,8 @@
     <ClCompile Include="PKB\Calls.cpp" />
     <ClCompile Include="QueryProcessor\AffectsStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\AffectsSubquery.cpp" />
+    <ClCompile Include="QueryProcessor\CacheTable.cpp" />
+    <ClCompile Include="QueryProcessor\ContainsSubquery.cpp" />
     <ClCompile Include="QueryProcessor\NextStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\NextSubquery.cpp" />
     <ClCompile Include="QueryProcessor\NewQueryParser.cpp" />
@@ -46,8 +53,10 @@
     <ClCompile Include="QueryProcessor\WithSubquery.cpp" />
     <ClInclude Include="Frontend\Parser.h" />
     <ClInclude Include="PKB\AffectsExtractor.h" />
-    <ClInclude Include="PKB\CacheTable.h" />
+    <ClInclude Include="PKB\AggNode.h" />
     <ClInclude Include="PKB\CallsExtractor.cpp" />
+    <ClInclude Include="PKB\Contains.h" />
+    <ClInclude Include="PKB\extractContainsFromAst.h" />
     <ClInclude Include="PKB\iterativeCFG.h" />
     <ClInclude Include="PKB\CfgNode.cpp" />
     <ClInclude Include="PKB\CFG.h" />
@@ -55,7 +64,10 @@
     <ClInclude Include="PKB\GNode.h" />
     <ClInclude Include="PKB\ModifiesExtractor.cpp" />
     <ClInclude Include="PKB\NextExtractor.h" />
+    <ClInclude Include="PKB\OptimizedCFG.h" />
     <ClInclude Include="PKB\ParentExtractor.cpp" />
+    <ClInclude Include="PKB\Siblings.h" />
+    <ClInclude Include="PKB\SiblingsExtractor.h" />
     <ClInclude Include="PKB\UsesExtractor.cpp" />
     <ClCompile Include="QueryProcessor\CallsStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\CallsSubquery.cpp" />
@@ -98,6 +110,7 @@
     <ClInclude Include="PKB\ModifiesExtractor.h" />
     <ClInclude Include="PKB\ParentExtractor.h" />
     <ClInclude Include="PKB\UsesExtractor.h" />
+    <ClInclude Include="QueryProcessor\CacheTable.h" />
     <ClInclude Include="QueryProcessor\NewQueryParser.h" />
     <ClInclude Include="QueryProcessor\OptimizedQE.h" />
     <ClInclude Include="QueryProcessor\OptimizedSubquerySolver.h" />

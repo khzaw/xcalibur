@@ -117,12 +117,16 @@ private:
 	void matchNextStar();
 	void matchAffects();
 	void matchAffectsStar();
+	void matchContains();
+	void matchContainsStar();
+	void matchSiblings();
 
 
 	string matchVarRef();
 	string matchEntRef(bool, Subquery*&, bool = false, bool = false);
 	string matchStmtRef();
 	string matchLineRef();
+	string matchNodeRef();
 
 	// debug
 	void printMap();

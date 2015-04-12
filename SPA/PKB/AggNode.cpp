@@ -32,9 +32,7 @@ set<int> AggNode::getVarModifiedByThisNode() {
 }
 
 void AggNode::addVarUsedByThisNode(set<int> vars) {
-  
-  varUsed.insert(vars.begin(), vars.end());
-
+    varUsed.insert(vars.begin(), vars.end());
 }
 
 set<int> AggNode::getVarUsedByThisNode() {
@@ -42,33 +40,36 @@ set<int> AggNode::getVarUsedByThisNode() {
 }
 
 void AggNode::setNextAggNode(AggNode* next) {
-    nextAggNode1 = next;
-}
-
-AggNode* AggNode::getNextAggNode() {
-    return nextAggNode1;
-}
-
-void AggNode::setBranchingAggNode(AggNode* next) {
-    if (nextAggNode1==NULL) nextAggNode1 = next;
-    else {
-      if (nextAggNode2==NULL) nextAggNode2 = next;
-      else std::cout << "Error!" << endl;
+    if (nextAggNodes.size()<2) {
+      nextAggNodes.insert(next);
     }
+    else cout << "too many next nodes!!!" << endl;
+}
+
+set<AggNode*> AggNode::getNextAggNodes() {
+    return nextAggNodes;
+}
+
+/*
+void AggNode::setBranchingAggNode(AggNode* next) {
+    if (branchingAggNodes.size()<2) {
+      branchingAggNodes.insert(next);
+    }
+    else cout << "too many branches!!" << endl;
+
 }
 
 std::set<AggNode*> AggNode::getBranchingAggNode() {
-    std::set<AggNode*> temp_set;
-    if (nextAggNode1!=NULL) temp_set.insert(nextAggNode1);
-    if (nextAggNode2!=NULL) temp_set.insert(nextAggNode2);
-
-    return temp_set;
+    return branchingAggNodes;
 }
+*/
 
 void AggNode::setPrevAggNode(AggNode* prev) {
-    prevAggNode = prev;
+    if (prevAggNodes.size()<2) {
+        prevAggNodes.insert(prev);
+    }
 }
 
-AggNode* AggNode::getPrevAggNode() {
-    return prevAggNode;
+set<AggNode*> AggNode::getPrevAggNodes() {
+    return prevAggNodes;
 }

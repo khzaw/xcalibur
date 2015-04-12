@@ -348,7 +348,7 @@ std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList
         stmtToAggNodeMap[currStmtNum] = temp;
         first_line_of_Agg_AC_Node = currStmtNum;
 
-        if (curr_ANode!=NULL) { 
+        if (curr_ANode!=NULL && curr_ANode->getType()!="IF_NODE") { 
           curr_ANode->setNextAggNode(temp);
           temp->setPrevAggNode(curr_ANode);
         }
@@ -385,7 +385,7 @@ std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList
   // link first child of stmtList to prevNode
   if (prevNode!=NULL) {
     AggNode* firstNode = stmtToAggNodeMap.at(stmtList.at(0)->getStmtNum());
-    prevNode->setBranchingAggNode(firstNode);
+    prevNode->setNextAggNode(firstNode);
     firstNode->setPrevAggNode(prevNode);
   }
   
@@ -435,37 +435,49 @@ void OptimizedCFG::printAggNodeMap() {
 
   std::stack<AggNode*> stack_print;
   stack_print.push(first);
+  std::set<AggNode*> visited_nodes;
 
   while (!stack_print.empty()) {
-    AggNode* curr = stack_print.top(); stack_print.pop();
+    AggNode* curr = stack_print.top(); 
+    
+    if (visited_nodes.find(curr)!=visited_nodes.end()) {
+      cout << "already visited this node at line " << *(curr->getProgLines().begin()) << endl;
+      stack_print.pop();
+      continue;
+    }
+    else {
+    visited_nodes.insert(curr);
+    }
+    
+    stack_print.pop();
 
-    cout << curr->getType() <<endl;
+    // get lines in this node
+    cout << curr->getType() << " ";
     std::set<int> lines = curr->getProgLines();
     for (std::set<int>::iterator it=lines.begin(); it!=lines.end(); it++) {
       cout << *it << " ";
     }
     cout <<endl;
 
-    // push nextNode onto stack
-    if (curr->getType()=="IF_NODE" || curr->getType()=="WHILE_NODE") {
-        std::set<AggNode*> next = curr->getBranchingAggNode();
-        stack_print.push(*next.begin());
-        stack_print.push(*next.rbegin());
-    }
-    else {       
-      if (curr->getNextAggNode()!=NULL)
-        stack_print.push(curr->getNextAggNode());
+    // push nextNode onto stack      
+    if (!curr->getNextAggNodes().empty()) {
+      set<AggNode*> next = curr->getNextAggNodes();
+      for (std::set<AggNode*>::iterator it=next.begin(); it!=next.end(); it++) {
+        stack_print.push(*it);
+      }
     }
   }
 
-  //return true;
+  cout << "last line of printing " << endl;
 }
 
 bool OptimizedCFG::isAffects(int line1, int line2) {
-  //bool ans = false;
+  bool ans = false;
 
-  //OutputDebugString("printing AggNodeMap");
-  printAggNodeMap();
+  // OutputDebugString("printing AggNodeMap");
+  // printAggNodeMap();
+  // cout << "after printing " << endl; 
+
 
   std::set<int> modified_by_line1 = pk->modifiesTable->getModifiedVarStmt(line1);
   std::set<int> used_by_line2 = pk->usesTable->getUsedVarStmt(line2);
@@ -480,6 +492,9 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
   if (!isNextStar(line1, line2)) { return false; }
   
   else {
+
+    cout << "check within containing nodes" << endl;
+
     // check within the nodes
 
     AggNode* ANode1 = stmtToAggNodeMap.at(line1);
@@ -500,18 +515,20 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
     }
     cout<<endl;
 
+
     std::set<int> those_lines;
     // if different nodes
     if (ANode1!=ANode2) {
       std::set<int> lines_in_ANode1 = ANode1->getProgLines();
       std::set<int> lines_in_ANode2 = ANode2->getProgLines();
     
-      lines_in_ANode1.erase(lines_in_ANode1.begin(), lines_in_ANode1.lower_bound(line1));
+      lines_in_ANode1.erase(lines_in_ANode1.begin(), lines_in_ANode1.upper_bound(line1));
       lines_in_ANode2.erase(lines_in_ANode2.lower_bound(line2), lines_in_ANode2.end());
     
       those_lines.insert(lines_in_ANode1.begin(), lines_in_ANode1.end()); 
       those_lines.insert(lines_in_ANode2.begin(), lines_in_ANode2.end()); 
     }
+    // if same node
     else {
       std::set<int> lines_in_ANode1 = ANode1->getProgLines();
       if(line2>line1) {
@@ -526,6 +543,8 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
     for (std::set<int>::iterator it1=those_lines.begin(); it1!=those_lines.end(); it1++) {
       std::set<int> foo = pk->modifiesTable->getModifiedVarStmt(*it1);
       if (foo.find(common_var)!=foo.end()) {
+        // flag
+        cout << "returning false here" << endl;
         return false;
       }
     }
@@ -533,48 +552,70 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
     
     // check in-between nodes on the path
 
+    cout << "checking in-between nodes" << endl;
     std::stack<AggNode*> stack_;
-    
+    std::set<AggNode*> visited_nodes;
+    visited_nodes.insert(ANode1);
+    visited_nodes.insert(ANode2);
+
+
     // push nextNode of ANode1 onto stack
-    if (ANode1->getType()=="IF_NODE"|| ANode1->getType()=="WHILE_NODE") {
-          std::set<AggNode*> next = ANode1->getBranchingAggNode();
-          stack_.push(*next.begin());
-          stack_.push(*next.rbegin());
-      }
-      else {
-        if (ANode1->getNextAggNode()!=NULL)
-          stack_.push(ANode1->getNextAggNode());
-      }
+    if (!ANode1->getNextAggNodes().empty()) {
+      set<AggNode*> next1 = ANode1->getNextAggNodes();
+      for (std::set<AggNode*>::iterator it=next1.begin(); it!=next1.end(); it++) {
+        stack_.push(*it);
+      } 
+    }
 
 
     while(!stack_.empty()) {
-      AggNode* curr = stack_.top(); stack_.pop();
+      AggNode* curr = stack_.top(); 
+      if (visited_nodes.find(curr)!=visited_nodes.end()) {
+        stack_.pop();
+        continue;
+      }
+      else {
+      visited_nodes.insert(curr);
+      }
+     
+      stack_.pop();
     
-      if (curr==ANode2) break;
+      if (curr==ANode2) {
+        cout << "reached node of line 2." << endl;
+        break;
+      }
+
+      if (!isNextStar(*(curr->getProgLines().begin()),line2)) {
+        cout << "this path no longer leads to line " << line2 << endl;
+        continue;
+      }
+
 
       std::set<int> modified_by_curr = curr->getVarModifiedByThisNode();
       
-      cout << curr->getType() <<endl;
+      cout << curr->getType() << " ";
       std::set<int> lines3 = curr->getProgLines();
       for (std::set<int>::iterator it=lines3.begin(); it!=lines3.end(); it++) {
         cout << *it << " ";
       }
       cout<<endl;
 
-      if (modified_by_curr.find(common_var)!=modified_by_curr.end()) {
+
+      if ( !pk->parentTable->evaluateIsParentStar(*(curr->getProgLines().begin()), line2)
+        && !pk->parentTable->evaluateIsParentStar(*(curr->getProgLines().begin()), line1)
+        && modified_by_curr.find(common_var)!=modified_by_curr.end()) {
+        // flag
+        cout << "this node does not contain either lines and it modifies var "<<common_var<<". false." << endl;
         return false;
       }
 
 
-      // push nextNode onto stack
-      if (curr->getType()=="IF_NODE" || curr->getType()=="WHILE_NODE") {
-          std::set<AggNode*> next = curr->getBranchingAggNode();
-          stack_.push(*next.begin());
-          stack_.push(*next.rbegin());
-      }
-      else {
-        if (curr->getNextAggNode()!=NULL)
-          stack_.push(curr->getNextAggNode());
+      // push nextNode onto stack      
+      if (!curr->getNextAggNodes().empty()) {
+        set<AggNode*> next = curr->getNextAggNodes();
+        for (std::set<AggNode*>::iterator it=next.begin(); it!=next.end(); it++) {
+          stack_.push(*it);
+        } 
       }
     }
   }

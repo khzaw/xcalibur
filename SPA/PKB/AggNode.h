@@ -20,12 +20,13 @@ public:
     set<int> getVarUsedByThisNode();
 
     void setNextAggNode(AggNode*);
-    AggNode* getNextAggNode();
-    void setBranchingAggNode(AggNode*);
-    std::set<AggNode*> getBranchingAggNode();
+    set<AggNode*> getNextAggNodes();
+
+    //void setBranchingAggNode(AggNode*);
+    //std::set<AggNode*> getBranchingAggNode();
     
     void setPrevAggNode(AggNode*);
-    AggNode* getPrevAggNode();
+    set<AggNode*> getPrevAggNodes();
     
 private:
     set<int> progLines;
@@ -34,8 +35,9 @@ private:
     set<int> varModified;
     set<int> varUsed;
 
-    AggNode* nextAggNode1;
-    AggNode* nextAggNode2;
+    set<AggNode*> nextAggNodes;
 
-    AggNode* prevAggNode;
+    //set<AggNode*> branchingAggNodes;
+
+    set<AggNode*> prevAggNodes;
 };

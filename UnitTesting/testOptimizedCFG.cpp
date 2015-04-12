@@ -414,14 +414,18 @@ void OptimizedCFGTest::testSourceProgram() {
   CPPUNIT_ASSERT(!CFG2.isAffects(14,16));
 
   // CFG2.printAggNodeMap();
-  cout << endl << "printing out NextList for proc 2 " << endl;
+  //cout << endl << "printing out NextList for proc 2 " << endl;
   
   CPPUNIT_ASSERT(CFG2.isAffects(4,7));
+  
+  CPPUNIT_ASSERT(CFG2.isAffects(4,14));
   CPPUNIT_ASSERT(CFG2.isAffects(5,12));
   CPPUNIT_ASSERT(CFG2.isAffects(17,18));
   CPPUNIT_ASSERT(CFG2.isAffects(18,19));
   CPPUNIT_ASSERT(CFG2.isAffects(19,20));
 
+  CPPUNIT_ASSERT(CFG2.isAffects(12,18));
+  CPPUNIT_ASSERT(!CFG2.isAffects(17, 19));
 
   // failed
   CPPUNIT_ASSERT(!CFG2.isNextStar(12,8));

@@ -28,9 +28,6 @@
 #include "..\PKB\extractContainsFromAst.h"
 #include "..\PKB\SiblingsExtractor.h"
 
-#include "..\PKB\CacheTable.h"
-
-
 using namespace std;
 
 class PKBController {
@@ -58,7 +55,6 @@ public:
 	AffectsExtractor* affectsExtractor;
 	ExtractContainsFromAST* containsExtractor;
 	SiblingsExtractor* siblingsExtractor;
-	CacheTable* cache;
 
 	map<int, stack<int>> procAndContainers;
 

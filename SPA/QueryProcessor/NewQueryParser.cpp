@@ -526,6 +526,12 @@ void NewQueryParser::matchRelRef() {
 		matchAffects();
 	} else if(relation == "Affects*") {
 		matchAffectsStar();
+	} else if(relation == "Contains") {
+		matchContains();
+	} else if(relation == "Contains*") {
+		matchContainsStar();
+	} else if(relation == "Sibling") {
+		matchSiblings();
 	} else {
 		cout << "SYNTAX ERROR" << nextToken.name << endl;
 		return;
@@ -796,4 +802,44 @@ void NewQueryParser::matchAffectsStar() {
     match(")");
 	setSynonymsHelper(fst, snd, affectsStarSq);
 	// cout << "Affects: fst -> " << fst << "\tsnd -> " << snd;
+}
+
+void NewQueryParser::matchContains() {
+	match("(");
+	string fst = matchNodeRef();
+	match(",");
+	string snd = matchNodeRef();
+	match(")");
+
+}
+
+void NewQueryParser::matchContainsStar() {
+	match("(");
+	string fst = matchNodeRef();
+	match(",");
+	string snd = matchNodeRef();
+	match(")");
+}
+
+void NewQueryParser::matchSiblings() {
+	match("(");
+	string fst = matchNodeRef();
+	match(",");
+	string snd = matchNodeRef();
+	match(")");
+}
+
+
+string NewQueryParser::matchNodeRef() {
+	string param;
+	if(nextToken.token == INT_LIT) {
+		param = nextToken.name;
+		match(INT_LIT);
+	} else if(nextToken.token == IDENT || nextToken.token == SIMPLE_IDENT) {
+		param = nextToken.name;
+		match(nextToken.name);
+	} else {
+		cout << "SYNTAX ERROR -> " << nextToken.name << "\t" << nextToken.token << endl;
+	}
+	return param;
 }

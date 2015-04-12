@@ -1,8 +1,8 @@
 1 - ParenStar
-while w;
-Select w such that Parent*(w, 12)
+stmt a, b, c, d, e, f;
+Select e such that Follows(a, b) and Next*(a, b)
 10
-5000
+100000
 2 - FollowsStar
 stmt s; while w;
 Select w such that Follows* (s, w)
@@ -25,14 +25,24 @@ Select a such that Modifies (a, "y") and Uses (a, "y")
 5000
 6 - CallsStar
 procedure p;
-Select p such that Calls* (p, "Trio")
+Select p such that Calls* (p, "ProcHobo")
 Solo,Duo
 5000
-8 - NextStar
-prog_line n;
-Select n such that Next* (9, n) and Next* (n, 12)
+8.1 - NextStar
+stmt n;
+Select n such that Next*(9, n)
 10,11,12
-5000
+50000
+8.2 - NextStar
+stmt n;
+Select n such that Next*(n, 12)
+10,11,12
+50000
+8 - NextStar
+stmt n;
+Select n such that Next*(9, n) and Next*(n, 12)
+10,11,12
+50000
 9 - With
 stmt s; constant co;
 Select s with s.stmt# = co.value

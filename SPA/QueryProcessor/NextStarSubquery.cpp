@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include "Subquery.h"
+#include "CacheTable.h"
 
 using namespace std;
 
@@ -60,6 +61,7 @@ public:
 				} else {
 					priority = (pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))])).size();
 				}
+				priority -= leftIndex;
 				break;
 			case 2: // (syn, int)
 				isLeftSynStmtOrProgLine = (synonymTable->at(leftSynonym) == "stmt" || synonymTable->at(leftSynonym) == "prog_line");
@@ -68,6 +70,7 @@ public:
 				} else {
 					priority = (pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))])).size();
 				}
+				priority /= rightIndex;
 				break;
 			case 3: // (syn, syn)
 				isLeftSynStmtOrProgLine = (synonymTable->at(leftSynonym) == "stmt" || synonymTable->at(leftSynonym) == "prog_line");
@@ -128,23 +131,41 @@ public:
 		int index = tuple->addSynonym(leftSynonym);
 		tuple->addSynonymToMap(leftSynonym, index);
 		set<int> tempPrevious;
+		string type = synonymTable->at(leftSynonym);
+
 		if (isSyn == 2) {	// NextStar(syn, stmt): Get Previous of stmt
 			tempPrevious = pkb->nextExtractor->getPrevStar(rightIndex);
+			/*
+			vector<int> stmts;
+			if (type == "stmt" || type == "prog_line") {
+				stmts = pkb->statementTable->getAllStmtNum();
+			} else {
+				stmts = pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(type)]);
+			}
+			
+			for (size_t i = 0; i < stmts.size(); i++) {
+				if (tempPrevious.find(stmts[i]) != tempPrevious.end() && pkb->nextExtractor->isNextStar(stmts[i], rightIndex)) {
+					tempPrevious.insert(stmts[i]);
+				}
+			}
+			*/
 		} else {	// NextStar(syn, _): Get all Previous stmt
 			// getAllPrevious Statements
 			tempPrevious = pkb->nextExtractor->getAllPrev();
 		}
+
 		vector<int> Previous(tempPrevious.begin(), tempPrevious.end());
 		for(size_t i = 0; i < Previous.size(); i++) {
 			vector<int> temp = vector<int>();
 			// synonym type check here
-			if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if" || synonymTable->at(leftSynonym)=="call")
-				&& pkb->statementTable->getTNode(Previous[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
+			if ((type == "assign" || type == "while" || type == "if" || type == "call")
+				&& pkb->statementTable->getTNode(Previous[i])->getNodeType() != TNODE_NAMES[synToNodeType.at(type)]){
 				continue;
 			}
 			temp.push_back(Previous.at(i));
 			tuple->addResultRow(temp);
 		}
+
 		return tuple;
 	}
 
@@ -161,7 +182,7 @@ public:
 					result->addResultRow(temp);
 				}
 			} else {	// NextStar(syn, _)
-				if (!pkb->nextExtractor->getNextStar(temp.at(index)).empty()) {
+				if (!pkb->nextExtractor->getNext(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -171,26 +192,41 @@ public:
 
 	ResultTuple* solveRightSyn() {
 		ResultTuple* tuple = new ResultTuple();
-		int index = tuple->addSynonym(rightSynonym);
-		tuple->addSynonymToMap(rightSynonym, index);
-		
+		tuple->addSynonymToMap(rightSynonym, tuple->addSynonym(rightSynonym));
+		string type = synonymTable->at(rightSynonym);
 		set<int> tempNextStar;
+
 		if (isSyn == 1) {	// NextStar(stmt, syn): Get NextStar of stmt
 			tempNextStar = pkb->nextExtractor->getNextStar(leftIndex);
+			/*
+			vector<int> stmts;
+			if (type == "stmt" || type == "prog_line") {
+				stmts = pkb->statementTable->getAllStmtNum();
+			} else {
+				stmts = pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(type)]);
+			}
+
+			for (size_t i = 0; i < stmts.size(); i++) {
+				if (tempNextStar.find(stmts[i]) != tempNextStar.end() && pkb->nextExtractor->isNextStar(leftIndex, stmts[i])) {
+					tempNextStar.insert(stmts[i]);
+				}
+			}
+			*/
 		} else {	// NextStar(_, syn): Get all NextStar stmt
 			tempNextStar = pkb->nextExtractor->getAllNext();
 		}
+
 		vector<int> NextStar(tempNextStar.begin(), tempNextStar.end());
 		for(size_t i = 0; i < NextStar.size(); i++) {
 			vector<int> temp = vector<int>();
-			// synonym type check here
-			if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if" || synonymTable->at(rightSynonym)=="call")
-				&& pkb->statementTable->getTNode(NextStar[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
+			if ((type == "assign" || type == "while" || type == "if" || type == "call")
+				&& pkb->statementTable->getTNode(NextStar[i])->getNodeType() != TNODE_NAMES[synToNodeType.at(type)]){
 				continue;
 			}
 			temp.push_back(NextStar.at(i));
 			tuple->addResultRow(temp);
 		}
+
 		return tuple;
 	}
 
@@ -207,7 +243,7 @@ public:
 					result->addResultRow(temp);
 				}
 			} else {	// NextStar(_, syn)
-				if (!pkb->nextExtractor->getPrevStar(temp.at(index)).empty()) {
+				if (!pkb->nextExtractor->getPrev(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -217,27 +253,44 @@ public:
 
 	ResultTuple* solveBothSyn() {
 		ResultTuple* tuple = new ResultTuple();
-		int index = tuple->addSynonym(leftSynonym);
-		tuple->addSynonymToMap(leftSynonym, index);
-		index = tuple->addSynonym(rightSynonym);
-		tuple->addSynonymToMap(rightSynonym, index);
+		tuple->addSynonymToMap(leftSynonym, tuple->addSynonym(leftSynonym));
+		tuple->addSynonymToMap(rightSynonym, tuple->addSynonym(rightSynonym));
+		string left = synonymTable->at(leftSynonym), right = synonymTable->at(rightSynonym);
 
 		// get all Previous statement
 		// for each followee statement, get its NextStar
+		map<int, vector<int>>* pcache = CacheTable::getNextStarCache();
 		set<int> tempPrevious = pkb->nextExtractor->getAllPrev();
 		vector<int> Previous(tempPrevious.begin(), tempPrevious.end());
+
 		for (size_t i = 0; i < Previous.size(); i++) {
 			// synonym type check
-			if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if" || synonymTable->at(leftSynonym)=="call")
-				&& pkb->statementTable->getTNode(Previous[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
+			if ((left == "assign" || left == "while" || left == "if" || left == "call")
+				&& pkb->statementTable->getTNode(Previous[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(left)]){
 				continue;
 			}
+			
+			/*
+			//Check if cache contains solution to (x, previous[i])
+			vector<int> NextStar;
+			if (pcache != NULL && pcache->find(Previous[i]) != pcache->end()) {
+				NextStar = pcache->at(Previous[i]);
+			} else {
+				if (pcache == NULL) {
+					pcache = new map<int, vector<int>>();
+				}
+				set<int> tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
+				NextStar = vector<int>(tempNextStar.begin(), tempNextStar.end());
+				pcache->insert(map<int, vector<int>>::value_type(Previous[i], NextStar));
+			}
+			*/
 			set<int> tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
-			vector<int> NextStar(tempNextStar.begin(), tempNextStar.end());
+			vector<int> NextStar = vector<int>(tempNextStar.begin(), tempNextStar.end());
+
 			for (size_t j = 0; j < NextStar.size(); j++) {
 				// synonym type check
-				if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if" || synonymTable->at(rightSynonym)=="call")
-				&& pkb->statementTable->getTNode(NextStar[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
+				if ((right == "assign" || right =="while" || right =="if" || right == "call")
+				&& pkb->statementTable->getTNode(NextStar[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(right)]){
 					continue;
 				}
 				vector<int> row = vector<int>();
@@ -246,6 +299,7 @@ public:
 				tuple->addResultRow(row);
 			}
 		}
+		//CacheTable::updateNextStarCache(pcache);
 		return tuple;
 	}
 
@@ -317,9 +371,9 @@ public:
 		if(isSyn == 0) {	//(digit, digit)
 			tuple->setEmpty(!pkb->nextExtractor->isNextStar(leftIndex, rightIndex));
 		} else if (isSyn == 7) {	//(_, digit)
-			tuple->setEmpty(pkb->nextExtractor->getPrevStar(rightIndex).empty());
+			tuple->setEmpty(pkb->nextExtractor->getPrev(rightIndex).empty());
 		} else if (isSyn == 8) {	//(digit, _)
-			tuple->setEmpty(pkb->nextExtractor->getNextStar(leftIndex).empty());
+			tuple->setEmpty(pkb->nextExtractor->getNext(leftIndex).empty());
 		} else {	//(_, _)
 			tuple->setEmpty(pkb->nextExtractor->getAllNext().empty());
 		}

@@ -393,6 +393,7 @@ void OptimizedCFGTest::testSourceProgram() {
   CPPUNIT_ASSERT(CFG2.isNext(15,18));
   CPPUNIT_ASSERT(CFG2.isNext(17,18));
 
+  CPPUNIT_ASSERT(CFG2.isNextStar(4,7));
   CPPUNIT_ASSERT(CFG2.isNextStar(4,20));
   CPPUNIT_ASSERT(CFG2.isNextStar(9,20));
   CPPUNIT_ASSERT(CFG2.isNextStar(10,20));
@@ -403,9 +404,29 @@ void OptimizedCFGTest::testSourceProgram() {
   CPPUNIT_ASSERT(CFG2.isNextStar(9,8));
   CPPUNIT_ASSERT(CFG2.isNextStar(10,8));
   CPPUNIT_ASSERT(CFG2.isNextStar(11,8));
+  
+  // Affects
+  CPPUNIT_ASSERT(!CFG2.isAffects(4,5));
+  CPPUNIT_ASSERT(!CFG2.isAffects(5,7));
+  CPPUNIT_ASSERT(!CFG2.isAffects(7,9));
+  CPPUNIT_ASSERT(!CFG2.isAffects(9,10));
+  CPPUNIT_ASSERT(!CFG2.isAffects(12,14));
+  CPPUNIT_ASSERT(!CFG2.isAffects(14,16));
+
+  // CFG2.printAggNodeMap();
+  cout << endl << "printing out NextList for proc 2 " << endl;
+  
+  CPPUNIT_ASSERT(CFG2.isAffects(4,7));
+  CPPUNIT_ASSERT(CFG2.isAffects(5,12));
+  CPPUNIT_ASSERT(CFG2.isAffects(17,18));
+  CPPUNIT_ASSERT(CFG2.isAffects(18,19));
+  CPPUNIT_ASSERT(CFG2.isAffects(19,20));
+
+
+  // failed
   CPPUNIT_ASSERT(!CFG2.isNextStar(12,8));
 
-  std::cout << endl << "printing out NextList for proc 2 " << endl;
+  cout << endl << "printing out NextList for proc 2 " << endl;
   /*
   for (std::map<int, set<int>>::iterator it=CFG2.AdjListFwd.begin(); it!=CFG2.AdjListFwd.end(); it++) {
 		std::cout << "for line " << (*it).first << ": ";

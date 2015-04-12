@@ -5,7 +5,9 @@
 #include <queue>
 #include <iostream>
 #include <stdexcept>
-
+#include <algorithm>
+#include <iterator>
+#include <Windows.h>
 
 #include "OptimizedCFG.h"
 #include "..\Frontend\TNode.h"
@@ -15,7 +17,8 @@ OptimizedCFG::OptimizedCFG() {
 }
 
 // build OptimizedCFG from AST root
-OptimizedCFG::OptimizedCFG(TNode* root, PKBController* pk) {
+OptimizedCFG::OptimizedCFG(TNode* root, PKBController* pk_) {
+  pk = pk_;
 
 	std::stack<TNode*> pq;
 
@@ -132,7 +135,7 @@ OptimizedCFG::OptimizedCFG(TNode* root, PKBController* pk) {
   // end handle end sentinels linking
 
   // AggNode Map
-  stmtToAggNodeMap = populateAggNodeMap(firstStmtList, stmtToAggNodeMap, pk, NULL, NULL);
+  stmtToAggNodeMap = populateAggNodeMap(firstStmtList, stmtToAggNodeMap, NULL, NULL);
 
 }
 
@@ -323,7 +326,7 @@ AggNode* OptimizedCFG::getAggNodeOfStmt(int line) {
 }
 
 // recursive
-std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList, std::map<int, AggNode*> stmtToAggNodeMap, PKBController* pk, AggNode* prevNode, AggNode* nextNode) {
+std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList, std::map<int, AggNode*> stmtToAggNodeMap, AggNode* prevNode, AggNode* nextNode) {
 
   int first_line_of_Agg_AC_Node = -1;
   AggNode* curr_ANode = NULL;
@@ -356,21 +359,20 @@ std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList
         curr_ANode->addProgLine(currStmtNum);
         stmtToAggNodeMap[currStmtNum] = curr_ANode;
         curr_ANode->addVarModifiedByThisNode(pk->modifiesTable->getModifiedVarStmt(currStmtNum));
-        curr_ANode->addVarUsedByThisNode(pk->usesTable->getUsedVarStmt(currStmtNum));
-        
+        curr_ANode->addVarUsedByThisNode(pk->usesTable->getUsedVarStmt(currStmtNum));    
       }
     }
 
     else {
       AggNode* temp = new AggNode();
       temp->addProgLine(currStmtNum);
+      temp->setType(type);
       stmtToAggNodeMap[currStmtNum] = temp;
 
       temp->addVarModifiedByThisNode(pk->modifiesTable->getModifiedVarStmt(currStmtNum));
       temp->addVarUsedByThisNode(pk->usesTable->getUsedVarStmt(currStmtNum));
         
-
-      if (curr_ANode!=NULL) { 
+      if (curr_ANode!=NULL && curr_ANode->getType()!="IF_NODE") { 
         curr_ANode->setNextAggNode(temp);
         temp->setPrevAggNode(curr_ANode);
       }
@@ -404,19 +406,182 @@ std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList
 
     if (type=="WHILE_NODE") {
       vector<TNode*> while_stmtList = curr_TNode->getChild(0)->getChildren();
-      stmtToAggNodeMap = populateAggNodeMap(while_stmtList, stmtToAggNodeMap, pk, thisNode, thisNode);
+      stmtToAggNodeMap = populateAggNodeMap(while_stmtList, stmtToAggNodeMap, thisNode, thisNode);
     }
     else {
       if (type=="IF_NODE") {
         vector<TNode*> then_stmtList = curr_TNode->getChild(0)->getChild(0)->getChildren();
         vector<TNode*> else_stmtList = curr_TNode->getChild(1)->getChild(0)->getChildren();
         
-        stmtToAggNodeMap = populateAggNodeMap(then_stmtList, stmtToAggNodeMap, pk, thisNode, thisNode->getNextAggNode());
-        stmtToAggNodeMap = populateAggNodeMap(else_stmtList, stmtToAggNodeMap, pk, thisNode, thisNode->getNextAggNode());
+        AggNode* nodeAfterThisNode;
+        if (curr_TNode->getRightSibling()!=NULL) {
+          int neighbour = curr_TNode->getRightSibling()->getStmtNum();
+          nodeAfterThisNode = stmtToAggNodeMap.at(neighbour);
+        }
+        else nodeAfterThisNode = NULL;
+
+        stmtToAggNodeMap = populateAggNodeMap(then_stmtList, stmtToAggNodeMap, thisNode, nodeAfterThisNode);
+        stmtToAggNodeMap = populateAggNodeMap(else_stmtList, stmtToAggNodeMap, thisNode, nodeAfterThisNode);
 
       }
     }
   }
   
   return stmtToAggNodeMap;
+}
+
+void OptimizedCFG::printAggNodeMap() {
+  AggNode* first = stmtToAggNodeMap.begin()->second;
+
+  std::stack<AggNode*> stack_print;
+  stack_print.push(first);
+
+  while (!stack_print.empty()) {
+    AggNode* curr = stack_print.top(); stack_print.pop();
+
+    cout << curr->getType() <<endl;
+    std::set<int> lines = curr->getProgLines();
+    for (std::set<int>::iterator it=lines.begin(); it!=lines.end(); it++) {
+      cout << *it << " ";
+    }
+    cout <<endl;
+
+    // push nextNode onto stack
+    if (curr->getType()=="IF_NODE" || curr->getType()=="WHILE_NODE") {
+        std::set<AggNode*> next = curr->getBranchingAggNode();
+        stack_print.push(*next.begin());
+        stack_print.push(*next.rbegin());
+    }
+    else {       
+      if (curr->getNextAggNode()!=NULL)
+        stack_print.push(curr->getNextAggNode());
+    }
+  }
+
+  //return true;
+}
+
+bool OptimizedCFG::isAffects(int line1, int line2) {
+  //bool ans = false;
+
+  //OutputDebugString("printing AggNodeMap");
+  printAggNodeMap();
+
+  std::set<int> modified_by_line1 = pk->modifiesTable->getModifiedVarStmt(line1);
+  std::set<int> used_by_line2 = pk->usesTable->getUsedVarStmt(line2);
+
+  int common_var = *modified_by_line1.begin();
+  cout << "lines: " << line1 << " " << line2 << " var: " << common_var << endl;
+
+  // line2 doesnt use var modified by line1
+  if (used_by_line2.find(common_var)==used_by_line2.end()) { return false; }
+  
+  // if no control flow path
+  if (!isNextStar(line1, line2)) { return false; }
+  
+  else {
+    // check within the nodes
+
+    AggNode* ANode1 = stmtToAggNodeMap.at(line1);
+    AggNode* ANode2 = stmtToAggNodeMap.at(line2);
+  
+    cout << ANode1->getType() << endl;
+    
+    std::set<int> lines1 = ANode1->getProgLines();
+    for (std::set<int>::iterator it=lines1.begin(); it!=lines1.end(); it++) {
+      cout << *it << " ";
+    }
+    cout<<endl;
+    
+    cout << ANode2->getType() << endl;
+    std::set<int> lines2 = ANode2->getProgLines();
+    for (std::set<int>::iterator it=lines2.begin(); it!=lines2.end(); it++) {
+      cout << *it << " ";
+    }
+    cout<<endl;
+
+    std::set<int> those_lines;
+    // if different nodes
+    if (ANode1!=ANode2) {
+      std::set<int> lines_in_ANode1 = ANode1->getProgLines();
+      std::set<int> lines_in_ANode2 = ANode2->getProgLines();
+    
+      lines_in_ANode1.erase(lines_in_ANode1.begin(), lines_in_ANode1.lower_bound(line1));
+      lines_in_ANode2.erase(lines_in_ANode2.lower_bound(line2), lines_in_ANode2.end());
+    
+      those_lines.insert(lines_in_ANode1.begin(), lines_in_ANode1.end()); 
+      those_lines.insert(lines_in_ANode2.begin(), lines_in_ANode2.end()); 
+    }
+    else {
+      std::set<int> lines_in_ANode1 = ANode1->getProgLines();
+      if(line2>line1) {
+        lines_in_ANode1.erase(lines_in_ANode1.lower_bound(line1), lines_in_ANode1.upper_bound(line2));
+        those_lines.insert(lines_in_ANode1.begin(), lines_in_ANode1.end());
+      }
+      else {
+        those_lines.insert(lines_in_ANode1.lower_bound(line1), lines_in_ANode1.upper_bound(line2));
+      }
+    }
+
+    for (std::set<int>::iterator it1=those_lines.begin(); it1!=those_lines.end(); it1++) {
+      std::set<int> foo = pk->modifiesTable->getModifiedVarStmt(*it1);
+      if (foo.find(common_var)!=foo.end()) {
+        return false;
+      }
+    }
+  
+    
+    // check in-between nodes on the path
+
+    std::stack<AggNode*> stack_;
+    
+    // push nextNode of ANode1 onto stack
+    if (ANode1->getType()=="IF_NODE"|| ANode1->getType()=="WHILE_NODE") {
+          std::set<AggNode*> next = ANode1->getBranchingAggNode();
+          stack_.push(*next.begin());
+          stack_.push(*next.rbegin());
+      }
+      else {
+        if (ANode1->getNextAggNode()!=NULL)
+          stack_.push(ANode1->getNextAggNode());
+      }
+
+
+    while(!stack_.empty()) {
+      AggNode* curr = stack_.top(); stack_.pop();
+    
+      if (curr==ANode2) break;
+
+      std::set<int> modified_by_curr = curr->getVarModifiedByThisNode();
+      
+      cout << curr->getType() <<endl;
+      std::set<int> lines3 = curr->getProgLines();
+      for (std::set<int>::iterator it=lines3.begin(); it!=lines3.end(); it++) {
+        cout << *it << " ";
+      }
+      cout<<endl;
+
+      if (modified_by_curr.find(common_var)!=modified_by_curr.end()) {
+        return false;
+      }
+
+
+      // push nextNode onto stack
+      if (curr->getType()=="IF_NODE" || curr->getType()=="WHILE_NODE") {
+          std::set<AggNode*> next = curr->getBranchingAggNode();
+          stack_.push(*next.begin());
+          stack_.push(*next.rbegin());
+      }
+      else {
+        if (curr->getNextAggNode()!=NULL)
+          stack_.push(curr->getNextAggNode());
+      }
+    }
+  }
+  
+  return true;
+}
+
+bool OptimizedCFG::isAffectsStar(int line1, int line2) {
+  return false;
 }

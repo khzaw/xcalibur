@@ -34,9 +34,8 @@ private:
     set<int> varModified;
     set<int> varUsed;
 
-    AggNode* nextAggNode;
-    AggNode* prevAggNode;
+    AggNode* nextAggNode1;
+    AggNode* nextAggNode2;
 
-    AggNode* branchingAggNode1;
-    AggNode* branchingAggNode2;
+    AggNode* prevAggNode;
 };

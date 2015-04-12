@@ -42,25 +42,25 @@ set<int> AggNode::getVarUsedByThisNode() {
 }
 
 void AggNode::setNextAggNode(AggNode* next) {
-    nextAggNode = next;
+    nextAggNode1 = next;
 }
 
 AggNode* AggNode::getNextAggNode() {
-    return nextAggNode;
+    return nextAggNode1;
 }
 
 void AggNode::setBranchingAggNode(AggNode* next) {
-    if (branchingAggNode1==NULL) branchingAggNode1 = next;
+    if (nextAggNode1==NULL) nextAggNode1 = next;
     else {
-      if (branchingAggNode2==NULL) branchingAggNode2 = next;
+      if (nextAggNode2==NULL) nextAggNode2 = next;
       else std::cout << "Error!" << endl;
     }
 }
 
 std::set<AggNode*> AggNode::getBranchingAggNode() {
     std::set<AggNode*> temp_set;
-    if (branchingAggNode1!=NULL) temp_set.insert(branchingAggNode1);
-    if (branchingAggNode2!=NULL) temp_set.insert(branchingAggNode2);
+    if (nextAggNode1!=NULL) temp_set.insert(nextAggNode1);
+    if (nextAggNode2!=NULL) temp_set.insert(nextAggNode2);
 
     return temp_set;
 }

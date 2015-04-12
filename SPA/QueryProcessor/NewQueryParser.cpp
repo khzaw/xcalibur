@@ -530,6 +530,8 @@ void NewQueryParser::matchRelRef() {
 		matchContains();
 	} else if(relation == "Contains*") {
 		matchContainsStar();
+	} else if(relation == "Sibling") {
+		matchSiblings();
 	} else {
 		cout << "SYNTAX ERROR" << nextToken.name << endl;
 		return;
@@ -820,6 +822,11 @@ void NewQueryParser::matchContainsStar() {
 }
 
 void NewQueryParser::matchSiblings() {
+	match("(");
+	string fst = matchNodeRef();
+	match(",");
+	string snd = matchNodeRef();
+	match(")");
 }
 
 

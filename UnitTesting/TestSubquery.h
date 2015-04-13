@@ -24,6 +24,7 @@ class SubqueryTest : public CPPUNIT_NS::TestFixture // Note 2
 	CPPUNIT_TEST(testPattern);
 	CPPUNIT_TEST(testWith);
 	*/
+
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -60,6 +61,7 @@ public:
 	void testNext();
 	void testNextTuple();
 	void testNextStar();
+  void testOptimizedNextStar();
 	void testNextStarTuple();
 	void testAffects();
 	void testAffectsTuple();

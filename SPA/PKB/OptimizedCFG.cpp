@@ -368,7 +368,6 @@ set<int> OptimizedCFG::getNextStar(int line1) {
 	return ans;
 }
 
-
 set<int> OptimizedCFG::getPrevStar(int line1) {
 
 	std::stack<int> pq; 

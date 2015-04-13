@@ -4,7 +4,6 @@
 #include <map>
 #include "Subquery.h"
 #include "CacheTable.h"
-#include "PKB\OptimizedCFG.h"
 
 using namespace std;
 
@@ -135,7 +134,7 @@ public:
 		string type = synonymTable->at(leftSynonym);
 
 		if (isSyn == 2) {	// NextStar(syn, stmt): Get Previous of stmt
-			tempPrevious = cfg->getPrevStar(rightIndex);
+			tempPrevious = pkb->nextExtractor->getPrevStar(rightIndex);
 			/*
 			vector<int> stmts;
 			if (type == "stmt" || type == "prog_line") {
@@ -145,14 +144,14 @@ public:
 			}
 			
 			for (size_t i = 0; i < stmts.size(); i++) {
-				if (tempPrevious.find(stmts[i]) != tempPrevious.end() && cfg->isNextStar(stmts[i], rightIndex)) {
+				if (tempPrevious.find(stmts[i]) != tempPrevious.end() && pkb->optimizedCFG->isNextStar(stmts[i], rightIndex)) {
 					tempPrevious.insert(stmts[i]);
 				}
 			}
 			*/
 		} else {	// NextStar(syn, _): Get all Previous stmt
 			// getAllPrevious Statements
-			tempPrevious = cfg->getAllPrev();
+			tempPrevious = pkb->nextExtractor->getAllPrev();
 		}
 
 		vector<int> Previous(tempPrevious.begin(), tempPrevious.end());
@@ -179,11 +178,11 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 2) {	// NextStar(syn, stmt)
-				if (cfg->isNextStar(temp.at(index), rightIndex)) {
+				if (pkb->optimizedCFG->isNextStar(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}
 			} else {	// NextStar(syn, _)
-				if (!cfg->getNext(temp.at(index)).empty()) {
+				if (!pkb->nextExtractor->getNext(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -198,7 +197,7 @@ public:
 		set<int> tempNextStar;
 
 		if (isSyn == 1) {	// NextStar(stmt, syn): Get NextStar of stmt
-			tempNextStar = cfg->getNextStar(leftIndex);
+			tempNextStar = pkb->nextExtractor->getNextStar(leftIndex);
 			/*
 			vector<int> stmts;
 			if (type == "stmt" || type == "prog_line") {
@@ -208,13 +207,13 @@ public:
 			}
 
 			for (size_t i = 0; i < stmts.size(); i++) {
-				if (tempNextStar.find(stmts[i]) != tempNextStar.end() && cfg->isNextStar(leftIndex, stmts[i])) {
+				if (tempNextStar.find(stmts[i]) != tempNextStar.end() && pkb->optimizedCFG->isNextStar(leftIndex, stmts[i])) {
 					tempNextStar.insert(stmts[i]);
 				}
 			}
 			*/
 		} else {	// NextStar(_, syn): Get all NextStar stmt
-			tempNextStar = cfg->getAllNext();
+			tempNextStar = pkb->nextExtractor->getAllNext();
 		}
 
 		vector<int> NextStar(tempNextStar.begin(), tempNextStar.end());
@@ -240,11 +239,11 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 1) {	// NextStar(stmt, syn)
-				if (cfg->isNextStar(leftIndex, temp.at(index))) {
+				if (pkb->optimizedCFG->isNextStar(leftIndex, temp.at(index))) {
 					result->addResultRow(temp);
 				}
 			} else {	// NextStar(_, syn)
-				if (!cfg->getPrev(temp.at(index)).empty()) {
+				if (!pkb->nextExtractor->getPrev(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -261,7 +260,7 @@ public:
 		// get all Previous statement
 		// for each followee statement, get its NextStar
 		map<int, vector<int>>* pcache = CacheTable::getNextStarCache();
-		set<int> tempPrevious = cfg->getAllPrev();
+		set<int> tempPrevious = pkb->nextExtractor->getAllPrev();
 		vector<int> Previous(tempPrevious.begin(), tempPrevious.end());
 
 		for (size_t i = 0; i < Previous.size(); i++) {
@@ -280,12 +279,12 @@ public:
 				if (pcache == NULL) {
 					pcache = new map<int, vector<int>>();
 				}
-				set<int> tempNextStar = cfg->getNextStar(Previous[i]);
+				set<int> tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
 				NextStar = vector<int>(tempNextStar.begin(), tempNextStar.end());
 				pcache->insert(map<int, vector<int>>::value_type(Previous[i], NextStar));
 			}
 			*/
-			set<int> tempNextStar = cfg->getNextStar(Previous[i]);
+			set<int> tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
 			vector<int> NextStar = vector<int>(tempNextStar.begin(), tempNextStar.end());
 
 			for (size_t j = 0; j < NextStar.size(); j++) {
@@ -313,7 +312,7 @@ public:
 		int rIndex = tuple->getSynonymIndex(rightSynonym);
 		if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++){
-				if (cfg->isNextStar(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
+				if (pkb->optimizedCFG->isNextStar(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
 					result->addResultRow(tuple->getResultRow(i));
 				}
 			}
@@ -324,7 +323,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
-					set<int> tV = cfg->getNextStar(leftValue);
+					set<int> tV = pkb->nextExtractor->getNextStar(leftValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
@@ -346,7 +345,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					set<int> tV = cfg->getPrevStar(rightValue);
+					set<int> tV = pkb->nextExtractor->getPrevStar(rightValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
@@ -370,16 +369,14 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		tuple->setBool(true);
 		if(isSyn == 0) {	//(digit, digit)
-			tuple->setEmpty(!cfg->isNextStar(leftIndex, rightIndex));
+			tuple->setEmpty(!pkb->optimizedCFG->isNextStar(leftIndex, rightIndex));
 		} else if (isSyn == 7) {	//(_, digit)
-			tuple->setEmpty(cfg->getPrev(rightIndex).empty());
+			tuple->setEmpty(pkb->nextExtractor->getPrev(rightIndex).empty());
 		} else if (isSyn == 8) {	//(digit, _)
-			tuple->setEmpty(cfg->getNext(leftIndex).empty());
+			tuple->setEmpty(pkb->nextExtractor->getNext(leftIndex).empty());
 		} else {	//(_, _)
-			tuple->setEmpty(cfg->getAllNext().empty());
+			tuple->setEmpty(pkb->nextExtractor->getAllNext().empty());
 		}
 		return tuple;
 	}
-
-  
 };

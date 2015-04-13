@@ -46,6 +46,7 @@
     <ClCompile Include="QueryProcessor\NextStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\NextSubquery.cpp" />
     <ClCompile Include="QueryProcessor\NewQueryParser.cpp" />
+    <ClCompile Include="QueryProcessor\OptimizedNextStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\OptimizedSubquerySolver.cpp" />
     <ClCompile Include="QueryProcessor\PatternSubquery.cpp" />
     <ClCompile Include="QueryProcessor\StubSubquery.cpp" />

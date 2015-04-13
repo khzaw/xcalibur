@@ -131,20 +131,22 @@ public:
 		} else if (leftSynType == "stmt" || leftSynType == "prog_line" || leftSynType == "while" || leftSynType == "if"){
 			results = pkb->containsTable->getStmtContainingStarStmt(rightIndex);
 			for (std::set<int>::iterator it = results.begin(); it!= results.end();){
-				if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(leftSynType)]){
-					results.erase(it++);
-				} else {
-					++it;
-				}	
+				if (leftSynType == "while" || leftSynType == "if"){
+					if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(leftSynType)]){
+						results.erase(it++);
+					} else {
+						++it;
+					}	
+				}
 			}
 		} else if (leftSynType == "procedure"){
 			results = pkb->containsTable->getProcContainingStarStmt(rightIndex);
 		}
 
-		vector<int> result(results.begin(), results.end());
-		for(size_t i = 0; i < result.size(); i++) {
+		vector<int> finalResult(results.begin(), results.end());
+		for(size_t i = 0; i < finalResult.size(); i++) {
 			vector<int> temp = vector<int>();
-			temp.push_back(result.at(i));
+			temp.push_back(finalResult.at(i));
 			tuple->addResultRow(temp);
 		}
 		return tuple;
@@ -200,10 +202,12 @@ public:
 					rightSynType == "while" || rightSynType == "if" || rightSynType == "call"){
 			tempResults = pkb->containsTable->getStmtContainedStarInStmt(leftIndex);
 			for (std::set<int>::iterator it = tempResults.begin(); it!= tempResults.end();){
-				if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(rightSynType)]){
-					tempResults.erase(it++);
-				} else {
-					++it;
+				if (rightSynType == "assign" || rightSynType == "while" || rightSynType == "if" || rightSynType == "call"){
+					if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(rightSynType)]){
+						tempResults.erase(it++);
+					} else {
+						++it;
+					}
 				}
 			}
 		}
@@ -279,10 +283,12 @@ public:
 					|| rightSynType == "while" || rightSynType == "if" || rightSynType == "call"){
 					rightVals = pkb->containsTable->getStmtContainedStarInProc(*it1);
 					for (std::set<int>::iterator it = rightVals.begin(); it!= rightVals.end();){
-						if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(rightSynType)]){
-							rightVals.erase(it++);
-						} else {
-							++it;
+						if (rightSynType == "assign" || rightSynType == "while" || rightSynType == "if" || rightSynType == "call"){
+							if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(rightSynType)]){
+								rightVals.erase(it++);
+							} else {
+								++it;
+							}
 						}
 					}
 				} else if (rightSynType == "variable"){
@@ -313,10 +319,12 @@ public:
 					|| rightSynType == "while" || rightSynType == "if" || rightSynType == "call"){
 					rightVals = pkb->containsTable->getStmtContainedStarInStmtLst(*it1);
 					for (std::set<int>::iterator it = rightVals.begin(); it!= rightVals.end();){
-						if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(rightSynType)]){
-							rightVals.erase(it++);
-						} else {
-							++it;
+						if (rightSynType == "assign" || rightSynType == "while" || rightSynType == "if" || rightSynType == "call"){
+							if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(rightSynType)]){
+								rightVals.erase(it++);
+							} else {
+								++it;
+							}
 						}
 					}
 				} else if (rightSynType == "variable"){
@@ -340,8 +348,10 @@ public:
 		} else if (leftSynType == "assign" || leftSynType == "while" || leftSynType == "if" || leftSynType == "stmt" || leftSynType == "prog_line"){
 			set<int> leftVals = pkb->containsTable->getAllStmtLstStmtContainees();
 			for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
-				if (pkb->statementTable->getTNode(*it1)->getNodeType()!=TNODE_NAMES[synToNodeType.at(leftSynType)]){
-					continue;
+				if (leftSynType == "assign" || leftSynType == "while" || leftSynType == "if"){
+					if (pkb->statementTable->getTNode(*it1)->getNodeType()!=TNODE_NAMES[synToNodeType.at(leftSynType)]){
+						continue;
+					}
 				}
 				set<int> rightVals;
 				if (rightSynType == "variable"){
@@ -360,10 +370,12 @@ public:
 					|| rightSynType == "while" || rightSynType == "if" || rightSynType == "call"){
 					rightVals = pkb->containsTable->getStmtContainedStarInStmt(*it1);
 					for (std::set<int>::iterator it = rightVals.begin(); it!= rightVals.end();){
-						if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(rightSynType)]){
-							rightVals.erase(it++);
-						} else {
-							++it;
+						if (rightSynType == "assign" || rightSynType == "if" || rightSynType == "while" || rightSynType == "call"){
+							if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(rightSynType)]){
+								rightVals.erase(it++);
+							} else {
+								++it;
+							}
 						}
 					}
 				}
@@ -634,10 +646,12 @@ public:
 						rightSynType == "while" || rightSynType == "if" || rightSynType == "call"){
 							tV = pkb->containsTable->getStmtContainedStarInProc(leftValue);
 							for (std::set<int>::iterator it = tV.begin(); it!= tV.end();){
-								if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(rightSynType)]){
-									tV.erase(it++);
-								} else {
-									++it;
+								if (rightSynType == "assign" || rightSynType == "while" || rightSynType == "if" || rightSynType == "call"){
+									if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(rightSynType)]){
+										tV.erase(it++);
+									} else {
+										++it;
+									}
 								}
 							}
 						} else if (rightSynType == "variable"){
@@ -658,10 +672,12 @@ public:
 						rightSynType == "while" || rightSynType == "if" || rightSynType == "call"){
 							tV = pkb->containsTable->getStmtContainedStarInStmtLst(leftValue);
 							for (std::set<int>::iterator it = tV.begin(); it!= tV.end();){
-								if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(rightSynType)]){
-									tV.erase(it++);
-								} else {
-									++it;
+								if (rightSynType == "assign" || rightSynType == "while" || rightSynType == "if" || rightSynType == "call"){
+									if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(rightSynType)]){
+										tV.erase(it++);
+									} else {
+										++it;
+									}
 								}
 							}
 						} else if (rightSynType == "variable"){
@@ -692,10 +708,12 @@ public:
 						rightSynType == "while" || rightSynType == "if" || rightSynType == "call"){
 							tV = pkb->containsTable->getStmtContainedStarInStmt(leftValue);
 							for (std::set<int>::iterator it = tV.begin(); it!= tV.end();){
-								if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(rightSynType)]){
-									tV.erase(it++);
-								} else {
-									++it;
+								if (rightSynType == "assign" || rightSynType == "while" || rightSynType == "if" || rightSynType == "call"){
+									if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(rightSynType)]){
+										tV.erase(it++);
+									} else {
+										++it;
+									}
 								}
 							}
 						}
@@ -808,11 +826,13 @@ public:
 							tV = pkb->containsTable->getStmtContainingStarStmt(rightValue);
 						}
 						for (std::set<int>::iterator it = tV.begin(); it!= tV.end();){
-							if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(leftSynType)]){
-								tV.erase(it++);
-							} else {
-								++it;
-							}	
+							if (leftSynType == "assign" || leftSynType == "while" || leftSynType == "if"){
+								if (pkb->statementTable->getTNode(*it)->getNodeType()!=TNODE_NAMES[synToNodeType.at(leftSynType)]){
+									tV.erase(it++);
+								} else {
+									++it;
+								}	
+							}
 						}
 					} else if (leftSynType == "plus"){
 						if (rightSynType == "variable"){

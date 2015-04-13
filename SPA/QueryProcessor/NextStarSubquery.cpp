@@ -8,9 +8,22 @@
 using namespace std;
 
 class NextStarSubquery : public Subquery {
+private:
+	bool isConcurrent;
+	map<pair<int, int>, bool> isNextStarCache;
+	map<int, vector<int>> nextStarCache;
+	map<int, vector<int>> previousStarCache;
+
 public:
 	NextStarSubquery(map<string, string>* m, PKBController* p) : Subquery(m, p){
 	
+	}
+
+	void initCache() {
+		isConcurrent = true;
+		isNextStarCache = map<pair<int, int>, bool>() ;
+		nextStarCache = map<int, vector<int>>();
+		previousStarCache = map<int, vector<int>>();
 	}
 
 	ResultTuple* solve(){
@@ -46,6 +59,8 @@ public:
 				return false;
 			}
 		}
+
+		type = 1;
 		return true;
 	}
 
@@ -132,36 +147,42 @@ public:
 		tuple->addSynonymToMap(leftSynonym, index);
 		set<int> tempPrevious;
 		string type = synonymTable->at(leftSynonym);
-
+		vector<int> Previous;
+		
 		if (isSyn == 2) {	// NextStar(syn, stmt): Get Previous of stmt
-			tempPrevious = pkb->nextExtractor->getPrevStar(rightIndex);
-			/*
-			vector<int> stmts;
-			if (type == "stmt" || type == "prog_line") {
-				stmts = pkb->statementTable->getAllStmtNum();
+			if (!isConcurrent) {
+				tempPrevious = pkb->nextExtractor->getPrevStar(rightIndex);
+				Previous.assign(tempPrevious.begin(), tempPrevious.end());
 			} else {
-				stmts = pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(type)]);
-			}
-			
-			for (size_t i = 0; i < stmts.size(); i++) {
-				if (tempPrevious.find(stmts[i]) != tempPrevious.end() && pkb->nextExtractor->isNextStar(stmts[i], rightIndex)) {
-					tempPrevious.insert(stmts[i]);
+				if (previousStarCache.find(rightIndex) != previousStarCache.end()) {
+					Previous = previousStarCache.at(rightIndex);
+				} else {
+					tempPrevious = pkb->nextExtractor->getPrevStar(rightIndex);
+					Previous.assign(tempPrevious.begin(), tempPrevious.end());
+					previousStarCache.insert(map<int, vector<int>>::value_type(rightIndex, Previous));
 				}
 			}
-			*/
 		} else {	// NextStar(syn, _): Get all Previous stmt
 			// getAllPrevious Statements
 			tempPrevious = pkb->nextExtractor->getAllPrev();
+			Previous.assign(tempPrevious.begin(), tempPrevious.end());
 		}
 
-		vector<int> Previous(tempPrevious.begin(), tempPrevious.end());
+		pair<int, int> p = pair<int, int>();
+		p.second = rightIndex;
 		for(size_t i = 0; i < Previous.size(); i++) {
+			if (isConcurrent && isSyn == 2) {
+				p.first = Previous[i];
+				isNextStarCache[p] = true;
+			}
+			
 			vector<int> temp = vector<int>();
-			// synonym type check here
+			
 			if ((type == "assign" || type == "while" || type == "if" || type == "call")
 				&& pkb->statementTable->getTNode(Previous[i])->getNodeType() != TNODE_NAMES[synToNodeType.at(type)]){
 				continue;
 			}
+
 			temp.push_back(Previous.at(i));
 			tuple->addResultRow(temp);
 		}
@@ -173,14 +194,33 @@ public:
 		ResultTuple* result = new ResultTuple();
 		result->setSynonym(tuple->getSynonyms());
 		result->setSynonymMap(tuple->getSynonymMap());
+		pair<int, int> p = pair<int, int>();
+		p.second = rightIndex;
 
 		int index = tuple->getSynonymIndex(leftSynonym);
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 2) {	// NextStar(syn, stmt)
-				if (pkb->nextExtractor->isNextStar(temp.at(index), rightIndex)) {
+				p.first = temp.at(index);
+
+				if (isConcurrent) {
+					try {
+						if (isNextStarCache.at(p)) {
+							result->addResultRow(temp);
+						}
+					} catch (exception& e) {
+						if (pkb->nextExtractor->isNextStar(temp.at(index), rightIndex)) {
+							result->addResultRow(temp);
+							isNextStarCache[p] = true;
+						} else {
+							isNextStarCache[p] = false;
+						}
+					}
+
+				} else if (pkb->nextExtractor->isNextStar(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}
+
 			} else {	// NextStar(syn, _)
 				if (!pkb->nextExtractor->getNext(temp.at(index)).empty()) {
 					result->addResultRow(temp);
@@ -195,29 +235,33 @@ public:
 		tuple->addSynonymToMap(rightSynonym, tuple->addSynonym(rightSynonym));
 		string type = synonymTable->at(rightSynonym);
 		set<int> tempNextStar;
+		vector<int> NextStar;
 
 		if (isSyn == 1) {	// NextStar(stmt, syn): Get NextStar of stmt
-			tempNextStar = pkb->nextExtractor->getNextStar(leftIndex);
-			/*
-			vector<int> stmts;
-			if (type == "stmt" || type == "prog_line") {
-				stmts = pkb->statementTable->getAllStmtNum();
+			if (!isConcurrent) {
+				tempNextStar = pkb->nextExtractor->getNextStar(leftIndex);
+				NextStar.assign(tempNextStar.begin(), tempNextStar.end());
 			} else {
-				stmts = pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(type)]);
-			}
-
-			for (size_t i = 0; i < stmts.size(); i++) {
-				if (tempNextStar.find(stmts[i]) != tempNextStar.end() && pkb->nextExtractor->isNextStar(leftIndex, stmts[i])) {
-					tempNextStar.insert(stmts[i]);
+				if (nextStarCache.find(leftIndex) != nextStarCache.end()) {
+					NextStar = nextStarCache.at(leftIndex);
+				} else {
+					tempNextStar = pkb->nextExtractor->getNextStar(leftIndex);
+					NextStar.assign(tempNextStar.begin(), tempNextStar.end());
+					nextStarCache.insert(map<int, vector<int>>::value_type(leftIndex, NextStar));
 				}
 			}
-			*/
 		} else {	// NextStar(_, syn): Get all NextStar stmt
 			tempNextStar = pkb->nextExtractor->getAllNext();
+			NextStar.assign(tempNextStar.begin(), tempNextStar.end());
 		}
 
-		vector<int> NextStar(tempNextStar.begin(), tempNextStar.end());
+		pair<int, int> p = pair<int, int>();
+		p.first = leftIndex;
 		for(size_t i = 0; i < NextStar.size(); i++) {
+			if (isConcurrent && isSyn == 1) {
+				p.second = NextStar[i];
+				isNextStarCache[p] = true;
+			}
 			vector<int> temp = vector<int>();
 			if ((type == "assign" || type == "while" || type == "if" || type == "call")
 				&& pkb->statementTable->getTNode(NextStar[i])->getNodeType() != TNODE_NAMES[synToNodeType.at(type)]){
@@ -234,12 +278,30 @@ public:
 		ResultTuple* result = new ResultTuple();
 		result->setSynonym(tuple->getSynonyms());
 		result->setSynonymMap(tuple->getSynonymMap());
+		pair<int, int> p = pair<int, int>();
+		p.first = leftIndex;
 
 		int index = tuple->getSynonymIndex(rightSynonym);
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 1) {	// NextStar(stmt, syn)
-				if (pkb->nextExtractor->isNextStar(leftIndex, temp.at(index))) {
+				 p.second = temp.at(index);
+
+				if (isConcurrent) {
+					try {
+						if (isNextStarCache.at(p)) {
+							result->addResultRow(temp);
+						}
+					} catch (exception& e) {
+						if (pkb->nextExtractor->isNextStar(leftIndex, temp.at(index))) {
+							result->addResultRow(temp);
+							isNextStarCache[p] = true;
+						} else {
+							isNextStarCache[p] = false;
+						}
+					}
+
+				} else if (pkb->nextExtractor->isNextStar(leftIndex, temp.at(index))) {
 					result->addResultRow(temp);
 				}
 			} else {	// NextStar(_, syn)
@@ -259,7 +321,6 @@ public:
 
 		// get all Previous statement
 		// for each followee statement, get its NextStar
-		map<int, vector<int>>* pcache = CacheTable::getNextStarCache();
 		set<int> tempPrevious = pkb->nextExtractor->getAllPrev();
 		vector<int> Previous(tempPrevious.begin(), tempPrevious.end());
 
@@ -269,25 +330,29 @@ public:
 				&& pkb->statementTable->getTNode(Previous[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(left)]){
 				continue;
 			}
-			
-			/*
-			//Check if cache contains solution to (x, previous[i])
-			vector<int> NextStar;
-			if (pcache != NULL && pcache->find(Previous[i]) != pcache->end()) {
-				NextStar = pcache->at(Previous[i]);
-			} else {
-				if (pcache == NULL) {
-					pcache = new map<int, vector<int>>();
-				}
-				set<int> tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
-				NextStar = vector<int>(tempNextStar.begin(), tempNextStar.end());
-				pcache->insert(map<int, vector<int>>::value_type(Previous[i], NextStar));
-			}
-			*/
-			set<int> tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
-			vector<int> NextStar = vector<int>(tempNextStar.begin(), tempNextStar.end());
 
+			set<int> tempNextStar;
+			vector<int> NextStar;
+			if (isConcurrent) {
+				try {
+					NextStar = nextStarCache.at(Previous[i]);
+				} catch (exception& e) {
+					tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
+					NextStar.assign(tempNextStar.begin(), tempNextStar.end());
+					nextStarCache.insert(map<int, vector<int>>::value_type(Previous[i], NextStar));
+				}
+			} else {
+				tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
+				NextStar.assign(tempNextStar.begin(), tempNextStar.end());
+			}
+			
+
+			
 			for (size_t j = 0; j < NextStar.size(); j++) {
+				if (isConcurrent) {
+					pair<int, int> p = pair<int, int>(Previous[i], NextStar[j]);
+					isNextStarCache.insert(make_pair(p, true));
+				}
 				// synonym type check
 				if ((right == "assign" || right =="while" || right =="if" || right == "call")
 				&& pkb->statementTable->getTNode(NextStar[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(right)]){
@@ -299,7 +364,7 @@ public:
 				tuple->addResultRow(row);
 			}
 		}
-		//CacheTable::updateNextStarCache(pcache);
+		
 		return tuple;
 	}
 
@@ -310,31 +375,75 @@ public:
 
 		int lIndex = tuple->getSynonymIndex(leftSynonym);
 		int rIndex = tuple->getSynonymIndex(rightSynonym);
+		vector<vector<int>> allres = tuple->getAllResults();
+
+		pair<int, int> p = pair<int, int>();
 		if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
-			for (size_t i = 0; i < tuple->getAllResults().size(); i++){
-				if (pkb->nextExtractor->isNextStar(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
-					result->addResultRow(tuple->getResultRow(i));
+			for (size_t i = 0; i < allres.size(); i++){
+				if (isConcurrent) {
+					p.first = allres[i][lIndex];
+					p.second = allres[i][rIndex];
+					
+					try {
+						if (isNextStarCache.at(p)) {
+							result->addResultRow(allres[i]);
+						}
+					} catch (exception& e) {
+						if (pkb->nextExtractor->isNextStar(allres[i][lIndex], allres[i][rIndex])){
+							result->addResultRow(allres[i]);
+							isNextStarCache[p] = true;
+						} else {
+							isNextStarCache[p] = false;
+						}
+					}
+				} else {
+					if (pkb->nextExtractor->isNextStar(allres[i][lIndex], allres[i][rIndex])){
+						result->addResultRow(allres[i]);
+					}
 				}
 			}
 		} else if (rIndex == -1) { //case 2: only left is inside
 			int index = result->addSynonym(rightSynonym);
 			result->addSynonymToMap(rightSynonym, index);
 			map<int, vector<int>> prevSolution = map<int, vector<int>>();
+			string right = synonymTable->at(rightSynonym);
+
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
-				if (prevSolution.find(leftValue) == prevSolution.end()){
-					set<int> tV = pkb->nextExtractor->getNextStar(leftValue);
-					vector<int> tempValues(tV.begin(), tV.end());
-					prevSolution.insert(make_pair(leftValue, tempValues));
+				set<int> tempNextStar;
+				vector<int> NextStar;
+				
+				if (isConcurrent) {
+					try {
+						NextStar = nextStarCache.at(leftValue);
+					} catch (exception& e) {
+						tempNextStar = pkb->nextExtractor->getNextStar(leftValue);
+						NextStar.assign(tempNextStar.begin(), tempNextStar.end());
+						nextStarCache.insert(map<int, vector<int>>::value_type(leftValue, NextStar));
+					}
+				} else {
+					try {
+						NextStar = prevSolution.at(leftValue);
+					} catch (exception& e) {
+						tempNextStar = pkb->nextExtractor->getNextStar(leftValue);
+						NextStar.assign(tempNextStar.begin(), tempNextStar.end());
+						prevSolution.insert(map<int, vector<int>>::value_type(leftValue, NextStar));
+					}
 				}
-				vector<int> vals = prevSolution.at(leftValue);
-				for (size_t j = 0; j < vals.size(); j++){
-					if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if" || synonymTable->at(rightSynonym)=="call")
-						&& pkb->statementTable->getTNode(vals[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
+				
+				p.first = leftValue;
+				for (size_t j = 0; j < NextStar.size(); j++){
+					if (isConcurrent) {
+						p.second = NextStar[j];
+						isNextStarCache[p] = true;
+					}
+
+					if ((right == "assign" || right == "while" || right == "if" || right == "call")
+						&& pkb->statementTable->getTNode(NextStar[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(right)]){
 						continue;
 					}
 					vector<int> newRow(tuple->getResultRow(i));
-					newRow.push_back(vals[j]);
+					newRow.push_back(NextStar[j]);
 					result->addResultRow(newRow);
 				}
 			}
@@ -342,21 +451,44 @@ public:
 			int index = result->addSynonym(leftSynonym);
 			result->addSynonymToMap(leftSynonym, index);
 			map<int, vector<int>> prevSolution = map<int, vector<int>>();
+			string left = synonymTable->at(leftSynonym);
+
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
-				if (prevSolution.find(rightValue) == prevSolution.end()){
-					set<int> tV = pkb->nextExtractor->getPrevStar(rightValue);
-					vector<int> tempValues(tV.begin(), tV.end());
-					prevSolution.insert(make_pair(rightValue, tempValues));
+				set<int> tempPreviousStar;
+				vector<int> PreviousStar;
+				
+				if (isConcurrent) {
+					try {
+						PreviousStar = previousStarCache.at(rightValue);
+					} catch (exception& e) {
+						tempPreviousStar = pkb->nextExtractor->getPrevStar(rightValue);
+						PreviousStar.assign(tempPreviousStar.begin(), tempPreviousStar.end());
+						previousStarCache.insert(map<int, vector<int>>::value_type(rightValue, PreviousStar));
+					}
+				} else {
+					try {
+						PreviousStar = prevSolution.at(rightValue);
+					} catch (exception& e) {
+						tempPreviousStar = pkb->nextExtractor->getPrevStar(rightValue);
+						PreviousStar.assign(tempPreviousStar.begin(), tempPreviousStar.end());
+						prevSolution.insert(map<int, vector<int>>::value_type(rightValue, PreviousStar));
+					}
 				}
-				vector<int> vals = prevSolution.at(rightValue);
-				for (size_t j = 0; j < vals.size(); j++){
-					if ((synonymTable->at(leftSynonym)=="assign" || synonymTable->at(leftSynonym)=="while" || synonymTable->at(leftSynonym)=="if" || synonymTable->at(leftSynonym)=="call")
-						&& pkb->statementTable->getTNode(vals[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
+				
+				p.second = rightValue;
+				for (size_t j = 0; j < PreviousStar.size(); j++){
+					if (isConcurrent) {
+						p.first = PreviousStar[j];
+						isNextStarCache[p] = true;
+					}
+
+					if ((left == "assign" || left == "while" || left == "if" || left == "call")
+						&& pkb->statementTable->getTNode(PreviousStar[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(left)]){
 						continue;
 					}
 					vector<int> newRow(tuple->getResultRow(i));
-					newRow.push_back(vals[j]);
+					newRow.push_back(PreviousStar[j]);
 					result->addResultRow(newRow);
 				}
 			}

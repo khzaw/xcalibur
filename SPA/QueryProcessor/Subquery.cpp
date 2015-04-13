@@ -11,6 +11,7 @@ using namespace std;
 
 // constructor
 Subquery::Subquery(map<string, string>* m, PKBController* p){
+	isConcurrent = false;
 	synonymTable = m;
 	pkb = p;
 	synToNodeType = map<string, TNODE_TYPE>();
@@ -19,6 +20,7 @@ Subquery::Subquery(map<string, string>* m, PKBController* p){
 	synToNodeType.insert(make_pair("if", IF_NODE));
 	synToNodeType.insert(make_pair("call", CALL_NODE));
 	priority = 0;
+	type = 0;
 }
 
 void Subquery::setSynonyms(string str1, string str2){

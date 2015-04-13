@@ -205,6 +205,10 @@
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
     <ClCompile Include="QueryProcessor\OptimizedNextStarSubquery.cpp">
+    <ClCompile Include="QueryProcessor\ContainsStarSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\SiblingSubquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
   </ItemGroup>

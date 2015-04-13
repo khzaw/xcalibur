@@ -42,6 +42,7 @@
     <ClCompile Include="QueryProcessor\AffectsStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\AffectsSubquery.cpp" />
     <ClCompile Include="QueryProcessor\CacheTable.cpp" />
+    <ClCompile Include="QueryProcessor\ContainsStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\ContainsSubquery.cpp" />
     <ClCompile Include="QueryProcessor\NextStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\NextSubquery.cpp" />
@@ -49,6 +50,7 @@
     <ClCompile Include="QueryProcessor\OptimizedNextStarSubquery.cpp" />
     <ClCompile Include="QueryProcessor\OptimizedSubquerySolver.cpp" />
     <ClCompile Include="QueryProcessor\PatternSubquery.cpp" />
+    <ClCompile Include="QueryProcessor\SiblingSubquery.cpp" />
     <ClCompile Include="QueryProcessor\StubSubquery.cpp" />
     <ClCompile Include="QueryProcessor\UsesSubquery.cpp" />
     <ClCompile Include="QueryProcessor\WithSubquery.cpp" />

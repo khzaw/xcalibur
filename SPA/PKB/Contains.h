@@ -333,6 +333,9 @@ public:
 	bool isContainsStarStmtMinus(int,int); //returns true if contains*(stmt,minus) holds 
 	bool isContainsStarStmtTimes(int,int); //returns true if contains*(stmt, times) holds 
 	bool isContainsStarStmtStmtLst(int,int); //returns true if contains*(stmt,stmtlst) holds 
+	// MISSING
+	bool isContainsStarStmtStmt(int,int);
+	
 	bool isContainsStarPlusVar(int,int); //returns true if contains*(plus,var) holds 
 	bool isContainsStarPlusConst(int,int); //returns true if contains*(plus,const) holds
 	bool isContainsStarMinusVar(int,int); //returns true if contains*(minus,var) holds

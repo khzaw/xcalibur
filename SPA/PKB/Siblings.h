@@ -87,6 +87,31 @@ public :
 	set<int> getVarSiblingOfVar(int);
 	set<int> getConstSiblingOfConst(int);
 
+	// MISSING
+	set<int> getVarSiblingOfStmtLst(int);
+	set<int> getStmtLstSiblingOfVar(int);
+	set<int> getPlusSiblingOfVar(int);
+	set<int> getMinusSiblingOfVar(int);
+	set<int> getTimesSiblingOfVar(int);
+	set<int> getPlusSiblingOfConst(int);
+	set<int> getMinusSiblingOfConst(int);
+	set<int> getTimesSiblingOfConst(int);
+	set<int> getVarSiblingOfPlus(int);
+	set<int> getConstSiblingOfPlus(int);
+	set<int> getPlusSiblingOfPlus(int);
+	set<int> getMinusSiblingOfPlus(int);
+	set<int> getTimesSiblingOfPlus(int);
+	set<int> getVarSiblingOfMinus(int);
+	set<int> getConstSiblingOfMinus(int);
+	set<int> getPlusSiblingOfMinus(int);
+	set<int> getMinusSiblingOfMinus(int);
+	set<int> getTimesSiblingOfMinus(int);
+	set<int> getVarSiblingOfTimes(int);
+	set<int> getConstSiblingOfTimes(int);
+	set<int> getPlusSiblingOfTimes(int);
+	set<int> getMinusSiblingOfTimes(int);
+	set<int> getTimesSiblingOfTimes(int);
+
 	set<int> getAllProcsSiblingOfProc();
 	set<int> getAllStmtLstSiblingOfStmtLst();
 	set<int> getAllStmtSiblingOfStmt();

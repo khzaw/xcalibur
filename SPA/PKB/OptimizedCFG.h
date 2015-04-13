@@ -1,19 +1,32 @@
+#pragma once
+
 #include <map>
 #include <set>
 #include <queue>
 #include <stack>
 
-#include "PKBController.h"
 #include "AST.h"
 #include "..\Frontend\TNode.h"
 #include "AggNode.h"
 
+#include "ProcTable.h"
+#include "StatementTable.h"
+#include "Parent.h"
+#include "Follows.h"
+#include "Modifies.h"
+#include "Uses.h"
+
 using namespace std;
+
+//class ProcTable;
 
 class OptimizedCFG {
   public:
     OptimizedCFG();
-    OptimizedCFG(TNode*, PKBController*);
+    OptimizedCFG(ProcTable*, StatementTable*, Parent*, Follows*, Modifies*, Uses* );
+    
+    void construct();
+    void constructCFGFromProc(TNode*);
 
 	// CFG construction
     void addLink(int, int);
@@ -42,7 +55,13 @@ class OptimizedCFG {
 
 	private:
 
-    PKBController* pk;
+    ProcTable* procTable; //declaration
+	  StatementTable* statementTable;//declaration
+    Parent* parentTable;
+    Follows* followsTable;
+    Modifies* modifiesTable;
+    Uses* usesTable;
+    
     // ds for Next relationships  
     std::map<int, std::set<int> > NextListFwd;
     std::map<int, std::set<int> > NextListBwd;

@@ -349,6 +349,7 @@ void OptimizedCFGTest::testSourceProgram() {
 	pk->constructModifies();
 	pk->constructParent();
 	pk->constructNext();
+  pk->constructOptimizedNext();
 	pk->constructUses();
 
 	synonymTable["s1"]="stmt";
@@ -371,94 +372,102 @@ void OptimizedCFGTest::testSourceProgram() {
 	synonymTable["const1"]="constant";
 	synonymTable["const2"]="constant";
 
-  OptimizedCFG CFG1(&rootNode1, pk);
-  OptimizedCFG CFG2(&rootNode2, pk);
-  OptimizedCFG CFG3(&rootNode3, pk);
+  //OptimizedCFG CFG2(pk->procTable, pk->statementTable, pk->parentTable, pk->followsTable, pk->);
 
+  OptimizedCFG* CFG2 = pk->optimizedCFG;
 
-  CPPUNIT_ASSERT(CFG1.isNext(1,2));
-  CPPUNIT_ASSERT(CFG1.isNext(2,3));
-  CPPUNIT_ASSERT(CFG1.isNextStar(1,3));
-  CPPUNIT_ASSERT(!CFG1.isNext(3,1));
+  CPPUNIT_ASSERT(CFG2->isNext(1,2));
+  CPPUNIT_ASSERT(CFG2->isNext(2,3));
+  CPPUNIT_ASSERT(CFG2->isNextStar(1,3));
+  CPPUNIT_ASSERT(!CFG2->isNext(3,1));
 
-  CPPUNIT_ASSERT(CFG2.isNext(4,5));
-  CPPUNIT_ASSERT(CFG2.isNext(6,7));
-  CPPUNIT_ASSERT(CFG2.isNext(8,9));
-  CPPUNIT_ASSERT(CFG2.isNext(8,10));
-  CPPUNIT_ASSERT(CFG2.isNext(9,11));
-  CPPUNIT_ASSERT(CFG2.isNext(10,11));
+  CPPUNIT_ASSERT(CFG2->isNext(4,5));
+  CPPUNIT_ASSERT(CFG2->isNext(6,7));
+  CPPUNIT_ASSERT(CFG2->isNext(8,9));
+  CPPUNIT_ASSERT(CFG2->isNext(8,10));
+  CPPUNIT_ASSERT(CFG2->isNext(9,11));
+  CPPUNIT_ASSERT(CFG2->isNext(10,11));
 
-  CPPUNIT_ASSERT(CFG2.isNext(6,13));
-  CPPUNIT_ASSERT(CFG2.isNext(16,15));
-  CPPUNIT_ASSERT(CFG2.isNext(15,18));
-  CPPUNIT_ASSERT(CFG2.isNext(17,18));
+  CPPUNIT_ASSERT(CFG2->isNext(6,13));
+  CPPUNIT_ASSERT(CFG2->isNext(16,15));
+  CPPUNIT_ASSERT(CFG2->isNext(15,18));
+  CPPUNIT_ASSERT(CFG2->isNext(17,18));
 
   // testing is next star
 
   
-  CPPUNIT_ASSERT(CFG2.isNextStar(4,7));
-  CPPUNIT_ASSERT(CFG2.isNextStar(4,20));
-  CPPUNIT_ASSERT(CFG2.isNextStar(9,20));
-  CPPUNIT_ASSERT(CFG2.isNextStar(10,20));
-  CPPUNIT_ASSERT(CFG2.isNextStar(12,20));
-  CPPUNIT_ASSERT(CFG2.isNextStar(16,20));
-  CPPUNIT_ASSERT(CFG2.isNextStar(14,20));
-  CPPUNIT_ASSERT(CFG2.isNextStar(17,20));
+  CPPUNIT_ASSERT(CFG2->isNextStar(4,7));
+  CPPUNIT_ASSERT(CFG2->isNextStar(4,20));
+  CPPUNIT_ASSERT(CFG2->isNextStar(9,20));
+  CPPUNIT_ASSERT(CFG2->isNextStar(10,20));
+  CPPUNIT_ASSERT(CFG2->isNextStar(12,20));
+  CPPUNIT_ASSERT(CFG2->isNextStar(16,20));
+  CPPUNIT_ASSERT(CFG2->isNextStar(14,20));
+  CPPUNIT_ASSERT(CFG2->isNextStar(17,20));
   
-  CPPUNIT_ASSERT(CFG2.isNextStar(8,9));
-  CPPUNIT_ASSERT(CFG2.isNextStar(8,12));
-  CPPUNIT_ASSERT(CFG2.isNextStar(9,12));
-  CPPUNIT_ASSERT(CFG2.isNextStar(10,12));
-  CPPUNIT_ASSERT(CFG2.isNextStar(9,16));
-  CPPUNIT_ASSERT(CFG2.isNextStar(10,17));
+  CPPUNIT_ASSERT(CFG2->isNextStar(8,9));
+  CPPUNIT_ASSERT(CFG2->isNextStar(8,12));
+  CPPUNIT_ASSERT(CFG2->isNextStar(9,12));
+  CPPUNIT_ASSERT(CFG2->isNextStar(10,12));
+  CPPUNIT_ASSERT(CFG2->isNextStar(9,16));
+  CPPUNIT_ASSERT(CFG2->isNextStar(10,17));
   
-  CPPUNIT_ASSERT(CFG2.isNextStar(9,10));
+  CPPUNIT_ASSERT(CFG2->isNextStar(9,10));
 
-  CPPUNIT_ASSERT(CFG2.isNextStar(9,8));
-  CPPUNIT_ASSERT(CFG2.isNextStar(10,8));
-  CPPUNIT_ASSERT(CFG2.isNextStar(11,8));
+  CPPUNIT_ASSERT(CFG2->isNextStar(9,8));
+  CPPUNIT_ASSERT(CFG2->isNextStar(10,8));
+  CPPUNIT_ASSERT(CFG2->isNextStar(11,8));
   
-  CPPUNIT_ASSERT(CFG2.isNextStar(13,14));
-  CPPUNIT_ASSERT(CFG2.isNextStar(13,15));
-  CPPUNIT_ASSERT(CFG2.isNextStar(13,16));
-  CPPUNIT_ASSERT(CFG2.isNextStar(13,17));
+  CPPUNIT_ASSERT(CFG2->isNextStar(13,14));
+  CPPUNIT_ASSERT(CFG2->isNextStar(13,15));
+  CPPUNIT_ASSERT(CFG2->isNextStar(13,16));
+  CPPUNIT_ASSERT(CFG2->isNextStar(13,17));
 
-  CPPUNIT_ASSERT(!CFG2.isNextStar(14,13));
-  CPPUNIT_ASSERT(!CFG2.isNextStar(15,13));
-  CPPUNIT_ASSERT(CFG2.isNextStar(16,13));
-  CPPUNIT_ASSERT(CFG2.isNextStar(17,13));
+  CPPUNIT_ASSERT(!CFG2->isNextStar(14,13));
+  CPPUNIT_ASSERT(!CFG2->isNextStar(15,13));
+  CPPUNIT_ASSERT(!CFG2->isNextStar(16,13));
+  CPPUNIT_ASSERT(!CFG2->isNextStar(17,13));
+
+  CPPUNIT_ASSERT(!CFG2->isNextStar(14,17));
+  CPPUNIT_ASSERT(!CFG2->isNextStar(15,17));
+  CPPUNIT_ASSERT(!CFG2->isNextStar(16,17));
+  CPPUNIT_ASSERT(!CFG2->isNextStar(17,14));
+  CPPUNIT_ASSERT(!CFG2->isNextStar(17,15));
+  CPPUNIT_ASSERT(!CFG2->isNextStar(17,16));
+  
+  
 
 
 
   // Affects
-  CPPUNIT_ASSERT(!CFG2.isAffects(4,5));
-  CPPUNIT_ASSERT(!CFG2.isAffects(5,7));
-  CPPUNIT_ASSERT(!CFG2.isAffects(7,9));
-  CPPUNIT_ASSERT(!CFG2.isAffects(9,10));
-  CPPUNIT_ASSERT(!CFG2.isAffects(12,14));
-  CPPUNIT_ASSERT(!CFG2.isAffects(14,16));
+  CPPUNIT_ASSERT(!CFG2->isAffects(4,5));
+  CPPUNIT_ASSERT(!CFG2->isAffects(5,7));
+  CPPUNIT_ASSERT(!CFG2->isAffects(7,9));
+  CPPUNIT_ASSERT(!CFG2->isAffects(9,10));
+  CPPUNIT_ASSERT(!CFG2->isAffects(12,14));
+  CPPUNIT_ASSERT(!CFG2->isAffects(14,16));
 
 
-  // CFG2.printAggNodeMap();
+  // CFG2->printAggNodeMap();
   //cout << endl << "printing out NextList for proc 2 " << endl;
   
-  CPPUNIT_ASSERT(CFG2.isAffects(4,7));
+  CPPUNIT_ASSERT(CFG2->isAffects(4,7));
   
-  CPPUNIT_ASSERT(CFG2.isAffects(4,14));
-  CPPUNIT_ASSERT(CFG2.isAffects(5,12));
-  CPPUNIT_ASSERT(CFG2.isAffects(17,18));
-  CPPUNIT_ASSERT(CFG2.isAffects(18,19));
-  CPPUNIT_ASSERT(CFG2.isAffects(19,20));
+  CPPUNIT_ASSERT(CFG2->isAffects(4,14));
+  CPPUNIT_ASSERT(CFG2->isAffects(5,12));
+  CPPUNIT_ASSERT(CFG2->isAffects(17,18));
+  CPPUNIT_ASSERT(CFG2->isAffects(18,19));
+  CPPUNIT_ASSERT(CFG2->isAffects(19,20));
 
-  CPPUNIT_ASSERT(CFG2.isAffects(12,18));
-  CPPUNIT_ASSERT(!CFG2.isAffects(17, 19));
+  CPPUNIT_ASSERT(CFG2->isAffects(12,18));
+  CPPUNIT_ASSERT(!CFG2->isAffects(17, 19));
 
   // failed
-  CPPUNIT_ASSERT(!CFG2.isNextStar(12,8));
+  CPPUNIT_ASSERT(!CFG2->isNextStar(12,8));
 
   cout << endl << "printing out NextList for proc 2 " << endl;
   /*
-  for (std::map<int, set<int>>::iterator it=CFG2.AdjListFwd.begin(); it!=CFG2.AdjListFwd.end(); it++) {
+  for (std::map<int, set<int>>::iterator it=CFG2->AdjListFwd.begin(); it!=CFG2->AdjListFwd.end(); it++) {
 		std::cout << "for line " << (*it).first << ": ";
 		set<int> list = (*it).second;
 		for (std::set<int>::iterator it2=list.begin(); it2!=list.end(); it2++) {

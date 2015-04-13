@@ -4,6 +4,7 @@
 #include <map>
 #include "TestSubquery.h"
 #include "..\SPA\PKB\NextExtractor.h"
+#include "..\SPA\PKB\OptimizedCFG.h"
 #include "QueryProcessor\Subquery.h"
 #include "QueryProcessor\Subquery.cpp"
 #include "QueryProcessor\FollowsSubquery.cpp"
@@ -19,6 +20,7 @@
 #include "QueryProcessor\CallsStarSubquery.cpp"
 #include "QueryProcessor\NextSubquery.cpp"
 #include "QueryProcessor\NextStarSubquery.cpp"
+//#include "QueryProcessor\OptimizedNextStarSubquery.cpp"
 #include "QueryProcessor\AffectsSubquery.cpp"
 #include "QueryProcessor\AffectsStarSubquery.cpp"
 #include "QueryProcessor\PatternSubquery.cpp"
@@ -15004,6 +15006,8 @@ void SubqueryTest::testNextStar() {
 	CPPUNIT_ASSERT(actualResultNextStarsubquery143->isBool());
 	CPPUNIT_ASSERT(!actualResultNextStarsubquery143->isEmpty());
 }
+
+
 
 void SubqueryTest::testNextStarTuple() {
 	// testTuple:

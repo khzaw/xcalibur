@@ -32,6 +32,7 @@ PKBController::PKBController(){
 	this->modifiesExtractor = new ModifiesExtractor(modifiesTable, procTable, callsTable);
 	this->usesExtractor = new UsesExtractor(usesTable);
 	this->nextExtractor = new NextExtractor(procTable, statementTable);
+  this->optimizedCFG = new OptimizedCFG(procTable, statementTable, parentTable, followsTable, modifiesTable, usesTable);
 	this->affectsExtractor = new AffectsExtractor(modifiesTable,usesTable,nextExtractor ,varTable, statementTable,callsTable);
 	this->containsExtractor = new ExtractContainsFromAST(containsTable, varTable, constantTable, procTable);
 	this->siblingsExtractor = new SiblingsExtractor(siblingTable, varTable, constantTable, procTable);
@@ -63,6 +64,10 @@ void PKBController::constructUses() {
 
 void PKBController::constructNext(){
 	nextExtractor->construct();
+}
+
+void PKBController::constructOptimizedNext(){
+	optimizedCFG->construct();
 }
 
 void PKBController::constructContains(){

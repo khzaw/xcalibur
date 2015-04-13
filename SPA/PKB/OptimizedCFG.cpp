@@ -10,15 +10,33 @@
 #include <Windows.h>
 
 #include "OptimizedCFG.h"
-#include "..\Frontend\TNode.h"
+//#include "..\Frontend\TNode.h"
 
 // Constructor
 OptimizedCFG::OptimizedCFG() {
 }
 
+OptimizedCFG::OptimizedCFG(ProcTable* procedureTable, StatementTable* statementTable, Parent* parentTable, Follows* followsTable, Modifies* modifiesTable, Uses* usesTable ){
+  this->procTable = procedureTable;
+	this->statementTable = statementTable;
+  this->parentTable = parentTable;
+  this->followsTable = followsTable;
+  this->modifiesTable = modifiesTable;
+  this->usesTable = usesTable;
+}
+
+void OptimizedCFG::construct() {
+
+  int numOfProc = procTable->getSize();
+	for(int i =0; i < numOfProc; i++)
+	{
+    TNode* rootNode = this->procTable->getASTRootNode(i); 
+    constructCFGFromProc(rootNode);
+  }
+}
+
 // build OptimizedCFG from AST root
-OptimizedCFG::OptimizedCFG(TNode* root, PKBController* pk_) {
-  pk = pk_;
+void OptimizedCFG::constructCFGFromProc(TNode* root) {
 
 	std::stack<TNode*> pq;
 
@@ -239,8 +257,8 @@ bool OptimizedCFG::isNextStar(int line1, int line2) {
 bool OptimizedCFG::isNextStar(int line1, int line2) {
   cout << "evaluating next*"<< line1<< ","<< line2<< endl;
    
-  set<int> parentStarOfLine1 = pk->parentTable->getParentStar(line1);
-  set<int> parentStarOfLine2 = pk->parentTable->getParentStar(line2);
+  set<int> parentStarOfLine1 = parentTable->getParentStar(line1);
+  set<int> parentStarOfLine2 = parentTable->getParentStar(line2);
 
   parentStarOfLine1.insert(line1);
   parentStarOfLine2.insert(line2);
@@ -249,7 +267,7 @@ bool OptimizedCFG::isNextStar(int line1, int line2) {
   int size2 = parentStarOfLine2.size();
   
   // same stmtList
-  if (pk->followsTable->evaluateIsFollowsStar(line1, line2)) {
+  if (followsTable->evaluateIsFollowsStar(line1, line2)) {
     cout << line1 << " in same stmtList as " << line2 << endl;
     return true;
   }
@@ -258,7 +276,7 @@ bool OptimizedCFG::isNextStar(int line1, int line2) {
   // parent of line 2 same nesting level as line 1
   if (!parentStarOfLine2.empty()) {
     int parentOfLine2 = *(std::next(parentStarOfLine2.begin(), size1));
-    if (pk->followsTable->evaluateIsFollowsStar(line1, parentOfLine2)) 
+    if (followsTable->evaluateIsFollowsStar(line1, parentOfLine2)) 
       return true;
   }
   */
@@ -282,13 +300,13 @@ bool OptimizedCFG::isNextStar(int line1, int line2) {
     std::set<int>::iterator it1=parentStarOfLine1.begin();
     std::set<int>::iterator it2=parentStarOfLine2.begin();
 
-    if(*it1==*it2 && pk->statementTable->getTNodeType(*it1)=="WHILE_NODE") {
+    if(*it1==*it2 && statementTable->getTNodeType(*it1)=="WHILE_NODE") {
       cout << "common while ancestor at "<<*it2 << endl;
       return true;
     }
 
     cout << "checking follows*("<<*it1<<","<<*it2<<")"<<endl;
-    if (pk->followsTable->evaluateIsFollowsStar(*it1, *it2)) {
+    if (followsTable->evaluateIsFollowsStar(*it1, *it2)) {
       cout << "true. terminating"<<endl;
       return true;
     }
@@ -412,8 +430,8 @@ std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList
         AggNode* temp = new AggNode();
         temp->setType(type);
         temp->addProgLine(currStmtNum);
-        temp->addVarModifiedByThisNode(pk->modifiesTable->getModifiedVarStmt(currStmtNum));
-        temp->addVarUsedByThisNode(pk->usesTable->getUsedVarStmt(currStmtNum));
+        temp->addVarModifiedByThisNode(modifiesTable->getModifiedVarStmt(currStmtNum));
+        temp->addVarUsedByThisNode(usesTable->getUsedVarStmt(currStmtNum));
         stmtToAggNodeMap[currStmtNum] = temp;
         first_line_of_Agg_AC_Node = currStmtNum;
 
@@ -427,8 +445,8 @@ std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList
       else {
         curr_ANode->addProgLine(currStmtNum);
         stmtToAggNodeMap[currStmtNum] = curr_ANode;
-        curr_ANode->addVarModifiedByThisNode(pk->modifiesTable->getModifiedVarStmt(currStmtNum));
-        curr_ANode->addVarUsedByThisNode(pk->usesTable->getUsedVarStmt(currStmtNum));    
+        curr_ANode->addVarModifiedByThisNode(modifiesTable->getModifiedVarStmt(currStmtNum));
+        curr_ANode->addVarUsedByThisNode(usesTable->getUsedVarStmt(currStmtNum));    
       }
     }
 
@@ -438,8 +456,8 @@ std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList
       temp->setType(type);
       stmtToAggNodeMap[currStmtNum] = temp;
 
-      temp->addVarModifiedByThisNode(pk->modifiesTable->getModifiedVarStmt(currStmtNum));
-      temp->addVarUsedByThisNode(pk->usesTable->getUsedVarStmt(currStmtNum));
+      temp->addVarModifiedByThisNode(modifiesTable->getModifiedVarStmt(currStmtNum));
+      temp->addVarUsedByThisNode(usesTable->getUsedVarStmt(currStmtNum));
         
       if (curr_ANode!=NULL && curr_ANode->getType()!="IF_NODE") { 
         curr_ANode->setNextAggNode(temp);
@@ -548,8 +566,8 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
   // cout << "after printing " << endl; 
 
 
-  std::set<int> modified_by_line1 = pk->modifiesTable->getModifiedVarStmt(line1);
-  std::set<int> used_by_line2 = pk->usesTable->getUsedVarStmt(line2);
+  std::set<int> modified_by_line1 = modifiesTable->getModifiedVarStmt(line1);
+  std::set<int> used_by_line2 = usesTable->getUsedVarStmt(line2);
 
   int common_var = *modified_by_line1.begin();
   cout << "lines: " << line1 << " " << line2 << " var: " << common_var << endl;
@@ -610,7 +628,7 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
     }
 
     for (std::set<int>::iterator it1=those_lines.begin(); it1!=those_lines.end(); it1++) {
-      std::set<int> foo = pk->modifiesTable->getModifiedVarStmt(*it1);
+      std::set<int> foo = modifiesTable->getModifiedVarStmt(*it1);
       if (foo.find(common_var)!=foo.end()) {
         // flag
         cout << "returning false here" << endl;
@@ -670,8 +688,8 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
       cout<<endl;
 
 
-      if ( !pk->parentTable->evaluateIsParentStar(*(curr->getProgLines().begin()), line2)
-        && !pk->parentTable->evaluateIsParentStar(*(curr->getProgLines().begin()), line1)
+      if ( !parentTable->evaluateIsParentStar(*(curr->getProgLines().begin()), line2)
+        && !parentTable->evaluateIsParentStar(*(curr->getProgLines().begin()), line1)
         && modified_by_curr.find(common_var)!=modified_by_curr.end()) {
         // flag
         cout << "this node does not contain either lines and it modifies var "<<common_var<<". false." << endl;

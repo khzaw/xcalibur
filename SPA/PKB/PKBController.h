@@ -28,6 +28,8 @@
 #include "..\PKB\extractContainsFromAst.h"
 #include "..\PKB\SiblingsExtractor.h"
 
+#include "..\PKB\OptimizedCFG.h"
+
 using namespace std;
 
 class PKBController {
@@ -44,6 +46,7 @@ public:
 	Calls* callsTable;
 	Contains* containsTable;
 	Sibling* siblingTable;
+  OptimizedCFG* optimizedCFG;
 
 	//Design Extractor
 	CallsExtractor* callsExtractor;
@@ -68,6 +71,7 @@ public:
 	void constructModifies();
 	void constructUses();
 	void constructNext();
+  void constructOptimizedNext();
 	void constructContains();
 	void constructSiblings();
 };

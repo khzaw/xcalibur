@@ -17,6 +17,8 @@ public:
 	int leftIndex, rightIndex;
 	string leftSynonym, rightSynonym, specialValue;
 	map<string, TNODE_TYPE> synToNodeType;
+	int type;
+	bool isConcurrent;
 	bool isUnderscore;
 	int isSyn;	// variable to indicate how many synonyms are there,
 				// 0: both are int, 1: left int, right string

@@ -11,10 +11,15 @@ using namespace std;
 
 class OptimizedQE {
 private:
+	int nextLeftCount, nextRightCount, nextCount,
+		affLeftCount, affRightCount, affCount,
+		affStarLeftCount, affStarRightCount, affStarCount,
+		totalCount;
 	map<string, int> disjointCheck;
 	bool useOptimizedSolver;
 	vector<pair<int, int>> unionOrder;
 	void addQuery(Subquery*);
+	void setConcurrency(void);
 
 public:
 	vector<ResultTuple*> solutions;

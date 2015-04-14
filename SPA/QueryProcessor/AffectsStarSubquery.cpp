@@ -3,11 +3,13 @@
 #include <vector>
 #include <map>
 #include "Subquery.h"
+#include "CacheTable.h";
 
 using namespace std;
 // TODO: 77, 119, 236?
 class AffectsStarSubquery : public Subquery {
 public:
+	bool isConcurrent;
 	AffectsStarSubquery(map<string, string>* m, PKBController* p) : Subquery(m, p){
 	
 	}
@@ -27,6 +29,7 @@ public:
 			default:
 				ans = solveOther();
 		}
+		type = 3;
 		return ans;
 	}
 	
@@ -99,27 +102,70 @@ public:
 		tuple->addSynonymToMap(leftSynonym, index);
 		vector<int> previous = vector<int>();
 		vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
-		set<int> tempPrevious = set<int>();
-		if (isSyn == 2) {	// AffectsStar(syn, stmt): Get Previous of stmt
-			for (size_t i = 0; i < assStmt.size(); i++) {
-				if (pkb->affectsExtractor->isAffectsStar(assStmt[i], rightIndex)) {
-					tempPrevious.insert(assStmt[i]);
-				} 
+
+		set<int> tempAffectedStar = set<int>();
+		vector<int> AffectedStar;
+
+		if (isSyn == 2) {	// AffectsStar(syn, stmt)
+			if (isConcurrent) {
+				try {
+					AffectedStar = CacheTable::instance()->affectedStarCache.at(rightIndex);
+				} catch (exception& e) {
+					for (size_t i = 0; i < assStmt.size(); i++) {
+						if (pkb->affectsExtractor->isAffectsStar(assStmt[i], rightIndex)) {
+							tempAffectedStar.insert(assStmt[i]);
+						} 
+					}
+					AffectedStar.assign(tempAffectedStar.begin(), tempAffectedStar.end());
+				}
+			} else {
+				for (size_t i = 0; i < assStmt.size(); i++) {
+					if (pkb->affectsExtractor->isAffectsStar(assStmt[i], rightIndex)) {
+						tempAffectedStar.insert(assStmt[i]);
+					} 
+				}
+				AffectedStar.assign(tempAffectedStar.begin(), tempAffectedStar.end());
 			}
-		} else {	// Affects(syn, _): Get all Previous stmt
-			for (size_t i = 0; i < assStmt.size(); i++) {
-				for (size_t j = 0; j < assStmt.size(); j++) {
-					if (pkb->affectsExtractor->isAffectsStar(assStmt[i], assStmt[j])) {
-						tempPrevious.insert(assStmt[i]);
+		} else {	// AffectsStar(syn, _): Get all AffectedStar stmt
+			if (isConcurrent) {
+				for (size_t i = 0; i < assStmt.size(); i++) {
+					for (size_t j = 0; j < assStmt.size(); j++) {
+						try {
+							if (CacheTable::instance()->isAffectsStarCache.at(make_pair(assStmt[i], assStmt[j]))) {
+								tempAffectedStar.insert(assStmt[i]);
+								break;
+							}
+						} catch (exception& e) {
+							if (pkb->affectsExtractor->isAffectsStar(assStmt[i], assStmt[j])) {
+								tempAffectedStar.insert(assStmt[i]);
+								break;
+							}
+						}
+					}
+				}
+			} else {
+				for (size_t i = 0; i < assStmt.size(); i++) {
+					for (size_t j = 0; j < assStmt.size(); j++) {
+						if (pkb->affectsExtractor->isAffectsStar(assStmt[i], assStmt[j])) {
+							tempAffectedStar.insert(assStmt[i]);
+							break;
+						}
 					}
 				}
 			}
+			AffectedStar.assign(tempAffectedStar.begin(), tempAffectedStar.end());
 		}
 
-		vector<int> Previous(tempPrevious.begin(), tempPrevious.end());
-		for(size_t i = 0; i < Previous.size(); i++) {
+		pair<int, int> p = pair<int, int>();
+		p.second = rightIndex;
+		for(size_t i = 0; i < AffectedStar.size(); i++) {
+			if (isConcurrent && isSyn == 1) {
+				p.second = AffectedStar[i];
+				CacheTable::instance()->isAffectsStarCache[p] = true;
+			}
+
 			vector<int> temp = vector<int>();	
-			temp.push_back(Previous.at(i));
+			temp.push_back(AffectedStar.at(i));
 			tuple->addResultRow(temp);
 		}
 		return tuple;
@@ -129,13 +175,32 @@ public:
 		ResultTuple* result = new ResultTuple();
 		result->setSynonym(tuple->getSynonyms());
 		result->setSynonymMap(tuple->getSynonymMap());
+		pair<int, int> p = pair<int, int>();
+		p.second = rightIndex;
 
 		int index = tuple->getSynonymIndex(leftSynonym);
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 2) {	// AffectsStar(syn, stmt)
-				if (pkb->affectsExtractor->isAffectsStar(temp.at(index), rightIndex)) {
-					result->addResultRow(temp);
+				p.first = temp.at(index);
+
+				if (isConcurrent) {
+					try {
+						if (CacheTable::instance()->isAffectsStarCache.at(p)) {
+							result->addResultRow(temp);
+						}
+					} catch (exception& e) {
+						if (pkb->affectsExtractor->isAffectsStar(temp.at(index), rightIndex)) {
+							result->addResultRow(temp);
+							CacheTable::instance()->isAffectsStarCache[p] = true;
+						} else {
+							CacheTable::instance()->isAffectsStarCache[p] = false;	
+						}
+					}
+				} else {
+					if (pkb->affectsExtractor->isAffectsStar(temp.at(index), rightIndex)) {
+						result->addResultRow(temp);
+					}
 				}
 			} else {	// AffectsStar(syn, _)
 				if (!pkb->affectsExtractor->getAffectsStar(temp.at(index)).empty()) {
@@ -150,26 +215,64 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		int index = tuple->addSynonym(rightSynonym);
 		tuple->addSynonymToMap(rightSynonym, index);
-		
-		set<int> tempNext;
+		set<int> tempAffectsStar;
+		vector<int> AffectsStar;
+
 		if (isSyn == 1) {	// AffectsStar(stmt, syn): Get AffectsStar of stmt
-			tempNext = pkb->affectsExtractor->getAffectsStar(leftIndex);
-		} else {	// AffectsStar(_, syn): Get all Affected stmt
-			tempNext = set<int>();
+			if (isConcurrent) {
+				try {
+					AffectsStar = CacheTable::instance()->affectsStarCache.at(leftIndex);
+				} catch (exception& e) {
+					tempAffectsStar = pkb->affectsExtractor->getAffectsStar(leftIndex);
+					AffectsStar.assign(tempAffectsStar.begin(), tempAffectsStar.end());
+					CacheTable::instance()->affectsStarCache.insert(make_pair(leftIndex, AffectsStar));
+				}
+			} else {
+				tempAffectsStar = pkb->affectsExtractor->getAffectsStar(leftIndex);
+				AffectsStar.assign(tempAffectsStar.begin(), tempAffectsStar.end());
+				CacheTable::instance()->affectsStarCache.insert(make_pair(leftIndex, AffectsStar));
+			}
+		} else {	// AffectsStar(_, syn): Get all AffectedStar stmt
 			vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
-			for (size_t i = 0; i < assStmt.size(); i++) {
-				for (size_t j = 0; j < assStmt.size(); j++) {
-					if (pkb->affectsExtractor->isAffectsStar(assStmt[i], assStmt[j])) {
-						tempNext.insert(assStmt[j]);
+			if (isConcurrent) {
+				for (size_t i = 0; i < assStmt.size(); i++) {
+					for (size_t j = 0; j < assStmt.size(); j++) {
+						try {
+							if (CacheTable::instance()->isAffectsStarCache.at(make_pair(assStmt[j], assStmt[i]))) {
+								tempAffectsStar.insert(assStmt[i]);
+								break;
+							}
+						} catch (exception& e) {
+							if (pkb->affectsExtractor->isAffectsStar(assStmt[j], assStmt[i])) {
+								tempAffectsStar.insert(assStmt[i]);
+								break;
+							}
+						}
+					}
+				}
+			} else {
+				for (size_t i = 0; i < assStmt.size(); i++) {
+					for (size_t j = 0; j < assStmt.size(); j++) {
+						if (pkb->affectsExtractor->isAffectsStar(assStmt[j], assStmt[i])) {
+							tempAffectsStar.insert(assStmt[i]);
+							break;
+						}
 					}
 				}
 			}
-			//tempNext = pkb->nextExtractor->getAllNext();
+			AffectsStar.assign(tempAffectsStar.begin(), tempAffectsStar.end());
 		}
-		vector<int> Next(tempNext.begin(), tempNext.end());
-		for(size_t i = 0; i < Next.size(); i++) {
+
+		pair<int, int> p = pair<int, int>();
+		p.first = leftIndex;
+		for(size_t i = 0; i < AffectsStar.size(); i++) {
+			if (isConcurrent && isSyn == 1) {
+				p.second = AffectsStar[i];
+				CacheTable::instance()->isAffectsStarCache[p] = true;
+			}
+			
 			vector<int> temp = vector<int>();
-			temp.push_back(Next.at(i));
+			temp.push_back(AffectsStar.at(i));
 			tuple->addResultRow(temp);
 		}
 		return tuple;
@@ -182,20 +285,58 @@ public:
 		int size = tuple->getAllResults().size();
 		vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 		int index = tuple->getSynonymIndex(rightSynonym);
-		if (isSyn == 1) {	// Affects(stmt, syn)
+		pair<int, int> p = pair<int, int>();
+
+		if (isSyn == 1) {	// AffectsStar(stmt, syn)
+			p.first = leftIndex;
 			for (size_t i = 0; i < size; i++) {
 				vector<int> temp = tuple->getAllResults().at(i);
-				if (pkb->affectsExtractor->isAffectsStar(leftIndex, temp[index])) {
-					result->addResultRow(temp);
+				p.second = temp.at(index);
+				if (isConcurrent) {
+					try {
+						if (CacheTable::instance()->isAffectsStarCache.at(make_pair(leftIndex, temp[index]))) {
+							result->addResultRow(temp);
+						}
+					} catch (exception& e) {
+						if (pkb->affectsExtractor->isAffectsStar(leftIndex, temp[index])) {
+							result->addResultRow(temp);
+							CacheTable::instance()->isAffectsStarCache[p] = true;
+						} else {
+							CacheTable::instance()->isAffectsStarCache[p] = false;
+						}
+					}
+				} else {
+					if (pkb->affectsExtractor->isAffectsStar(leftIndex, temp[index])) {
+						result->addResultRow(temp);
+					}
 				}
 			}
-		} else {	// Affects(_, syn)
+		} else {	// AffectsStar(_, syn)
 			for (size_t i = 0; i < size; i++) {
 				vector<int> temp = tuple->getAllResults().at(i);
+				p.second = temp[index];
 				for (size_t j = 0; j < assStmt.size(); j++) {
-					if (pkb->affectsExtractor->isAffectsStar(assStmt[j], temp[index])) {
-						result->addResultRow(temp);
-						break;
+					p.first = assStmt[j];
+					if (isConcurrent) {
+						try {
+							if (CacheTable::instance()->isAffectsStarCache.at(make_pair(assStmt[j], temp[index]))) {
+								result->addResultRow(temp);
+								break;
+							}
+						} catch (exception& e) {
+							if (pkb->affectsExtractor->isAffectsStar(assStmt[j], temp[index])) {
+								result->addResultRow(temp);
+								CacheTable::instance()->isAffectsStarCache[p] = true;
+								break;
+							} else {
+								CacheTable::instance()->isAffectsStarCache[p] = false;
+							}
+						}
+					} else {
+						if (pkb->affectsExtractor->isAffectsStar(assStmt[j], temp[index])) {
+							result->addResultRow(temp);
+							break;
+						}
 					}
 				}
 			}
@@ -209,16 +350,40 @@ public:
 		tuple->addSynonymToMap(leftSynonym, index);
 		index = tuple->addSynonym(rightSynonym);
 		tuple->addSynonymToMap(rightSynonym, index);
+		pair<int, int> p = pair<int, int>();
 
-		vector<int> previous = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
-		for (size_t i = 0; i < previous.size(); i++) {
-			set<int> tempAffectsStar = pkb->affectsExtractor->getAffectsStar(previous[i]);
-			vector<int> AffectsStar(tempAffectsStar.begin(), tempAffectsStar.end());
-			for (size_t j = 0; j < AffectsStar.size(); j++) {
-				vector<int> row = vector<int>();
-				row.push_back(previous.at(i));
-				row.push_back(AffectsStar.at(j));
-				tuple->addResultRow(row);
+		vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
+		for (size_t i = 0; i < assStmt.size(); i++) {
+			p.first = assStmt[i];
+			for (size_t j = 0; j < assStmt.size(); j++) {
+				p.second = assStmt[j];
+				if (isConcurrent) {
+					try {
+						if (CacheTable::instance()->isAffectsStarCache.at(p)) {
+							vector<int> row = vector<int>();
+							row.push_back(assStmt.at(i));
+							row.push_back(assStmt.at(j));
+							tuple->addResultRow(row);
+						}
+					} catch (exception& e) {
+						if (pkb->affectsExtractor->isAffectsStar(assStmt[i], assStmt[j])) {
+							vector<int> row = vector<int>();
+							row.push_back(assStmt.at(i));
+							row.push_back(assStmt.at(j));
+							tuple->addResultRow(row);
+							CacheTable::instance()->isAffectsStarCache[p] = true;
+						} else {
+							CacheTable::instance()->isAffectsStarCache[p] = false;
+						}
+					}
+				} else {				
+					if (pkb->affectsExtractor->isAffectsStar(assStmt[i], assStmt[j])) {
+						vector<int> row = vector<int>();
+						row.push_back(assStmt.at(i));
+						row.push_back(assStmt.at(j));
+						tuple->addResultRow(row);
+					}
+				}
 			}
 		}
 		return tuple;
@@ -228,30 +393,69 @@ public:
 		ResultTuple* result = new ResultTuple();
 		result->setSynonym(tuple->getSynonyms());
 		result->setSynonymMap(tuple->getSynonymMap());
-
+		pair<int, int> p = pair<int, int>();
 		int lIndex = tuple->getSynonymIndex(leftSynonym);
 		int rIndex = tuple->getSynonymIndex(rightSynonym);
 		if (lIndex != -1 && rIndex != -1){ //case 1: both are inside
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++){
-				if (pkb->affectsExtractor->isAffectsStar(tuple->getAllResults()[i][lIndex], tuple->getAllResults()[i][rIndex])){
-					result->addResultRow(tuple->getResultRow(i));
+				if (isConcurrent) {
+					p.first = tuple->getResultAt(i, lIndex);
+					p.second = tuple->getResultAt(i, rIndex);
+					try {
+						if (CacheTable::instance()->isAffectsStarCache.at(p)) {
+							result->addResultRow(tuple->getResultRow(i));
+						}
+					} catch (exception& e) {
+						if (pkb->affectsExtractor->isAffectsStar(tuple->getResultAt(i, lIndex), tuple->getResultAt(i, rIndex))){
+							result->addResultRow(tuple->getResultRow(i));
+							CacheTable::instance()->isAffectsStarCache[p] = true;
+						} else {
+							CacheTable::instance()->isAffectsStarCache[p] = false;
+						}
+					}
+				} else {
+					if (pkb->affectsExtractor->isAffectsStar(tuple->getResultAt(i, lIndex), tuple->getResultAt(i, rIndex))){
+						result->addResultRow(tuple->getResultRow(i));
+					}
 				}
 			}
 		} else if (rIndex == -1) { //case 2: only left is inside
 			int index = result->addSynonym(rightSynonym);
 			result->addSynonymToMap(rightSynonym, index);
 			map<int, vector<int>> prevSolution = map<int, vector<int>>();
+			
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
+				vector<int> AffectsStar;
+				set<int> tempAffectsStar;
 				int leftValue = tuple->getResultAt(i, lIndex);
-				if (prevSolution.find(leftValue) == prevSolution.end()){
-					set<int> tV = pkb->affectsExtractor->getAffectsStar(leftValue);
-					vector<int> tempValues(tV.begin(), tV.end());
-					prevSolution.insert(make_pair(leftValue, tempValues));
+
+				if (isConcurrent) {
+					try {
+						AffectsStar = CacheTable::instance()->affectsStarCache.at(leftValue);
+					} catch (exception& e) {
+						tempAffectsStar = pkb->affectsExtractor->getAffectsStar(leftValue);
+						AffectsStar.assign(tempAffectsStar.begin(), tempAffectsStar.end());
+						CacheTable::instance()->affectsStarCache.insert(make_pair(leftValue, AffectsStar));
+					}
+				} else {
+					try {
+						AffectsStar = prevSolution.at(leftValue);
+					} catch (exception& e) {
+						tempAffectsStar = pkb->affectsExtractor->getAffectsStar(leftValue);
+						AffectsStar.assign(tempAffectsStar.begin(), tempAffectsStar.end());
+						prevSolution.insert(make_pair(leftValue, AffectsStar));
+					}
 				}
-				vector<int> vals = prevSolution.at(leftValue);
-				for (size_t j = 0; j < vals.size(); j++){
+				
+				p.first = leftValue;
+				for (size_t j = 0; j < AffectsStar.size(); j++){
+					if (isConcurrent) {
+						p.second = AffectsStar[j];
+						CacheTable::instance()->isAffectsStarCache[p] = true;
+					}
+					
 					vector<int> newRow(tuple->getResultRow(i));
-					newRow.push_back(vals[j]);
+					newRow.push_back(AffectsStar[j]);
 					result->addResultRow(newRow);
 				}
 			}
@@ -259,34 +463,54 @@ public:
 			int index = result->addSynonym(leftSynonym);
 			int size = tuple->getAllResults().size();
 			result->addSynonymToMap(leftSynonym, index);
-			
-			// to store already calcultated solution
 			map<int, vector<int>> prevSolution = map<int, vector<int>>();
-
+			vector<int> pre = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
+						
 			for (size_t i = 0; i < size; i++) {
-				int right = tuple->getResultAt(i, rIndex);
-				// check if already calculated
-				if (prevSolution.find(right) == prevSolution.end()) {
-					vector<int> pre = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
-					vector<int> ans = vector<int>();
-					for (size_t x = 0; x < pre.size(); x++) {
-						if (pkb->affectsExtractor->isAffectsStar(pre[x], right)) {
-							ans.push_back(pre[x]);
+				int rightValue = tuple->getResultAt(i, rIndex);
+				set<int> tempAffectedStar;
+				vector<int> AffectedStar;
+
+				if (isConcurrent) {
+					try {
+						AffectedStar = CacheTable::instance()->affectedStarCache.at(rightValue);
+					} catch (exception& e) {
+						for (size_t x = 0; x < pre.size(); x++) {
+							if (pkb->affectsExtractor->isAffectsStar(pre[x], rightValue)) {
+								AffectedStar.push_back(pre[x]);
+							}
 						}
+						CacheTable::instance()->affectedStarCache.insert(make_pair(rightValue, AffectedStar));
 					}
-					prevSolution.insert(make_pair(right, ans));
+				} else {
+					try {
+						AffectedStar = prevSolution.at(rightValue);
+					} catch (exception& e) {
+						for (size_t x = 0; x < pre.size(); x++) {
+							if (pkb->affectsExtractor->isAffectsStar(pre[x], rightValue)) {
+								AffectedStar.push_back(pre[x]);
+							}
+						}
+						prevSolution.insert(make_pair(rightValue, AffectedStar));
+					}
 				}
 
-				vector<int> vals = prevSolution.at(right);
-				for (size_t j = 0; j < vals.size(); j++){
+				p.second = rightValue;
+				for (size_t j = 0; j < AffectedStar.size(); j++){
+					if (isConcurrent) {
+						p.first = AffectedStar[j];
+						CacheTable::instance()->isAffectsStarCache[p] = true;
+					}
+
 					vector<int> newRow(tuple->getResultRow(i));
-					newRow.push_back(vals[j]);
+					newRow.push_back(AffectedStar[j]);
 					result->addResultRow(newRow);
 				}
 			}
 		}
 		return result;
 	}
+
 
 	// BOOLEAN Result
 	ResultTuple* solveOther() {

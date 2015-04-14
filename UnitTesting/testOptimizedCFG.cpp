@@ -435,9 +435,6 @@ void OptimizedCFGTest::testSourceProgram() {
   CPPUNIT_ASSERT(!CFG2->isNextStar(17,15));
   CPPUNIT_ASSERT(!CFG2->isNextStar(17,16));
   
-  
-
-
 
   // Affects
   CPPUNIT_ASSERT(!CFG2->isAffects(4,5));
@@ -462,7 +459,7 @@ void OptimizedCFGTest::testSourceProgram() {
   CPPUNIT_ASSERT(CFG2->isAffects(12,18));
   CPPUNIT_ASSERT(!CFG2->isAffects(17, 19));
 
-  // failed
+  // should fail to show that unit test has indeed been run
   CPPUNIT_ASSERT(!CFG2->isNextStar(12,8));
 
   cout << endl << "printing out NextList for proc 2 " << endl;

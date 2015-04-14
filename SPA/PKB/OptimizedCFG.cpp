@@ -558,12 +558,10 @@ void OptimizedCFG::printAggNodeMap() {
 }
 
 bool OptimizedCFG::isAffects(int line1, int line2) {
-  bool ans = false;
-
+  // bool ans = false;
   // OutputDebugString("printing AggNodeMap");
   // printAggNodeMap();
   // cout << "after printing " << endl; 
-
 
   std::set<int> modified_by_line1 = modifiesTable->getModifiedVarStmt(line1);
   std::set<int> used_by_line2 = usesTable->getUsedVarStmt(line2);
@@ -571,13 +569,17 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
   int common_var = *modified_by_line1.begin();
   cout << "lines: " << line1 << " " << line2 << " var: " << common_var << endl;
 
+  int number_of_paths = 0;
+
   // line2 doesnt use var modified by line1
   if (used_by_line2.find(common_var)==used_by_line2.end()) { return false; }
   
   // if no control flow path
   if (!isNextStar(line1, line2)) { return false; }
-  
+
   else {
+
+    number_of_paths = 1;
 
     cout << "check within containing nodes" << endl;
 
@@ -630,7 +632,8 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
       std::set<int> foo = modifiesTable->getModifiedVarStmt(*it1);
       if (foo.find(common_var)!=foo.end()) {
         // flag
-        cout << "returning false here" << endl;
+        cout << "immediate neighbours modifies var " << common_var << endl;
+        //number_of_paths -= 1;
         return false;
       }
     }
@@ -673,6 +676,7 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
 
       if (!isNextStar(*(curr->getProgLines().begin()),line2)) {
         cout << "this path no longer leads to line " << line2 << endl;
+        number_of_paths -= 1;
         continue;
       }
 
@@ -691,14 +695,19 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
         && !parentTable->evaluateIsParentStar(*(curr->getProgLines().begin()), line1)
         && modified_by_curr.find(common_var)!=modified_by_curr.end()) {
         // flag
-        cout << "this node does not contain either lines and it modifies var "<<common_var<<". false." << endl;
-        return false;
+        cout << "this node does not contain either lines and it modifies var "<<common_var<<". skipping this path." << endl;
+        number_of_paths -= 1;
+        //return false;
       }
 
 
       // push nextNode onto stack      
       if (!curr->getNextAggNodes().empty()) {
         set<AggNode*> next = curr->getNextAggNodes();
+        
+        if (next.size()>1) {
+          number_of_paths += (next.size()-1);
+        }
         for (std::set<AggNode*>::iterator it=next.begin(); it!=next.end(); it++) {
           stack_.push(*it);
         } 
@@ -706,7 +715,7 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
     }
   }
   
-  return true;
+  return (number_of_paths>0);
 }
 
 bool OptimizedCFG::isAffectsStar(int line1, int line2) {

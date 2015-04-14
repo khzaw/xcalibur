@@ -59,11 +59,13 @@ public:
 	void testWith();
 	void testWithTuple();
 	void testNext();
+  void testOptimizedNext();
 	void testNextTuple();
 	void testNextStar();
   void testOptimizedNextStar();
 	void testNextStarTuple();
 	void testAffects();
+  void testOptimizedAffects();
 	void testAffectsTuple();
 	void testAffectsStar();
 	void testAffectsStarTuple();

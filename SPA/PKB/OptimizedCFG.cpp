@@ -144,9 +144,9 @@ void OptimizedCFG::constructCFGFromProc(TNode* root) {
 			while (!stack.empty()) {
 				int endSentinel = stack.top(); stack.pop(); visited.insert(endSentinel);
 					for (std::set<int>::iterator it3=NextListFwd[endSentinel].begin(); it3!=NextListFwd[endSentinel].end(); it3++) {
-						if (*it3<0 && visited.find(endSentinel)!=visited.end()) stack.push(*it3);
+						if (*it3<0 && visited.find(*it3)!=visited.end()) stack.push(*it3);
 						else (*it).second.insert(*it3);
-				}
+          }
 			}
 		}
 	}
@@ -173,7 +173,7 @@ void OptimizedCFG::linkStmtList(vector<TNode*> stmtList) {
 
 		if (stmtList.at(i)->getNodeType()!="IF_NODE") {
 			// std::cout << "linking non-if to next neighbour. line " << stmtList.at(i)->getStmtNum() <<" to line " << stmtList.at(i+1)->getStmtNum() <<"\n";
-			addLink(stmtList.at(i)->getStmtNum(), stmtList.at(i+1)->getStmtNum());
+      addLink(stmtList.at(i)->getStmtNum(), stmtList.at(i+1)->getStmtNum());
 		}
 		// if IF_NODE, create an END_IF sentinel (encoded as negative of stmtNum of IF_NODE)
 		// link END_IF sentinel to next neighbour
@@ -323,11 +323,28 @@ bool OptimizedCFG::isPrevStar(int line1, int line2) {
 }
 
 set<int> OptimizedCFG::getNext(int line) {
-	return NextListFwd[line];
+	set<int> ans;
+
+  if (!NextListFwd[line].empty()) {
+    for (std::set<int>::iterator it=NextListFwd[line].begin(); it!=NextListFwd[line].end(); it++) {
+      if (*it > 0) ans.insert(*it);
+    }
+  }
+
+  return ans;
 }
 
 set<int> OptimizedCFG::getPrev(int line) {
-	return NextListBwd[line];
+	set<int> ans;
+
+  if (!NextListBwd[line].empty()) {
+    for (std::set<int>::iterator it=NextListBwd[line].begin(); it!=NextListBwd[line].end(); it++) {
+      if (*it > 0) ans.insert(*it);
+    }
+  }
+
+  return ans;
+
 }
 
 set<int> OptimizedCFG::getNextStar(int line1) {
@@ -405,6 +422,29 @@ set<int> OptimizedCFG::getPrevStar(int line1) {
 	
 	return ans;
 }
+
+set<int> OptimizedCFG::getAllPrev() {
+  set<int> ans;
+  
+  for (map<int, set<int>>::iterator it=NextListFwd.begin(); it!=NextListFwd.end(); it++) {
+    if (it->first>0 && !it->second.empty() && *(it->second.rbegin())>0)
+      ans.insert(it->first);
+  }
+
+  return ans;
+}
+
+set<int> OptimizedCFG::getAllNext() {
+  set<int> ans;
+  
+  for (map<int, set<int>>::iterator it=NextListBwd.begin(); it!=NextListBwd.end(); it++) {
+    if (it->first>0 && !it->second.empty() && *(it->second.rbegin())>0)
+      ans.insert(it->first);
+  }
+
+  return ans;
+}
+
 
 // AggNodeMap accessors
 AggNode* OptimizedCFG::getAggNodeOfStmt(int line) {
@@ -721,3 +761,10 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
 bool OptimizedCFG::isAffectsStar(int line1, int line2) {
   return false;
 }
+
+/*
+std::map<int,set<int>> OptimizedCFG::getNextListFwd() {
+  return NextListFwd;
+}
+*/
+

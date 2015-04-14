@@ -458,13 +458,39 @@ void OptimizedCFGTest::testSourceProgram() {
 
   CPPUNIT_ASSERT(CFG2->isAffects(12,18));
   CPPUNIT_ASSERT(!CFG2->isAffects(17, 19));
+  
+  cout << endl << "printing out NextList for proc 2 " << endl;
+  
+  for (std::map<int, set<int>>::iterator it=CFG2->NextListFwd.begin(); it!=CFG2->NextListFwd.end(); it++) {
+		std::cout << "for line " << (*it).first << ": ";
+		set<int> list = (*it).second;
+		for (std::set<int>::iterator it2=list.begin(); it2!=list.end(); it2++) {
+			std::cout << *it2 << " ";
+		}
+		std::cout << "" << endl;
+  }
+
+  std::set<int> allNext = CFG2->getAllNext(); 
+  std::set<int> allPrev = CFG2->getAllPrev();
+  cout << "why2" << endl;
+  
+  std::cout << endl << "printing allNext" << endl;
+  for (std::set<int>::iterator it=allNext.begin(); it!=allNext.end(); it++){ 
+    std::cout << *it << " ";
+  }
+  std::cout << endl;
+
+  std::cout << endl << "printing allPrev" << endl;
+  for (std::set<int>::iterator it=allPrev.begin(); it!=allPrev.end(); it++){ 
+    std::cout << *it << " ";
+  }
+  std::cout << endl;
 
   // should fail to show that unit test has indeed been run
   CPPUNIT_ASSERT(!CFG2->isNextStar(12,8));
 
-  cout << endl << "printing out NextList for proc 2 " << endl;
   /*
-  for (std::map<int, set<int>>::iterator it=CFG2->AdjListFwd.begin(); it!=CFG2->AdjListFwd.end(); it++) {
+  for (std::map<int, set<int>>::iterator it=CFG2->getNextListFwd().begin(); it!=CFG2->getNextListFwd().end(); it++) {
 		std::cout << "for line " << (*it).first << ": ";
 		set<int> list = (*it).second;
 		for (std::set<int>::iterator it2=list.begin(); it2!=list.end(); it2++) {
@@ -473,4 +499,4 @@ void OptimizedCFGTest::testSourceProgram() {
 		std::cout << endl;
 	}
   */
-}
+}  

@@ -372,7 +372,7 @@ set<int> OptimizedCFG::getNextStar(int line1) {
 			// enqueue linked nodes
 			for (std::set<int>::iterator it=temp.begin(); it!=temp.end(); it++) {
 				// insert item
-				ans.insert(*it);
+				if (*it>0) ans.insert(*it);
 				
 				// only enqueue unvisited nodes
 				if (visited.find(*it)==visited.end()) { 
@@ -410,7 +410,7 @@ set<int> OptimizedCFG::getPrevStar(int line1) {
 			// enqueue linked nodes
 			for (std::set<int>::iterator it=temp.begin(); it!=temp.end(); it++) {
 				// insert item
-				ans.insert(*it);
+				if (*it>0) ans.insert(*it);
 				
 				// only enqueue unvisited nodes
 				if (visited.find(*it)==visited.end()) { 

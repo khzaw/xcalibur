@@ -259,7 +259,7 @@ public:
 
 		// get all Previous statement
 		// for each followee statement, get its NextStar
-		map<int, vector<int>>* pcache = CacheTable::getNextStarCache();
+		//map<int, vector<int>>* pcache = CacheTable::instance()nextStarCache;
 		set<int> tempPrevious = pkb->nextExtractor->getAllPrev();
 		vector<int> Previous(tempPrevious.begin(), tempPrevious.end());
 

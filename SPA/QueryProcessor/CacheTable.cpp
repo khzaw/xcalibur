@@ -18,11 +18,23 @@ CacheTable* CacheTable::instance() {
 CacheTable::CacheTable() {
 	CacheTable::isNextStarCache = map<pair<int, int>, bool>() ;
 	CacheTable::nextStarCache = map<int, vector<int>>();
-	previousStarCache = map<int, vector<int>>();
+	CacheTable::previousStarCache = map<int, vector<int>>();
+	CacheTable::isAffectsCache = map<pair<int, int>, bool>() ;
+	CacheTable::affectsCache = map<int, vector<int>>();
+	CacheTable::affectedCache = map<int, vector<int>>();
+	CacheTable::isAffectsStarCache = map<pair<int, int>, bool>() ;
+	CacheTable::affectsStarCache = map<int, vector<int>>();
+	CacheTable::affectedStarCache = map<int, vector<int>>();
 }
 
 void CacheTable::initCache() {
 	CacheTable::isNextStarCache = map<pair<int, int>, bool>() ;
 	CacheTable::nextStarCache = map<int, vector<int>>();
-	previousStarCache = map<int, vector<int>>();
+	CacheTable::previousStarCache = map<int, vector<int>>();
+	CacheTable::isAffectsCache = map<pair<int, int>, bool>() ;
+	CacheTable::affectsCache = map<int, vector<int>>();
+	CacheTable::affectedCache = map<int, vector<int>>();
+	CacheTable::isAffectsStarCache = map<pair<int, int>, bool>() ;
+	CacheTable::affectsStarCache = map<int, vector<int>>();
+	CacheTable::affectedStarCache = map<int, vector<int>>();
 }

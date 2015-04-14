@@ -140,12 +140,14 @@ public:
 		if (isSyn == 2) {	// NextStar(syn, stmt): Get Previous of stmt
 			if (!isConcurrent) {
 				tempPrevious = pkb->nextExtractor->getPrevStar(rightIndex);
+				//tempPrevious = pkb->optimizedCFG->getPrevStar(rightIndex);
 				Previous.assign(tempPrevious.begin(), tempPrevious.end());
 			} else {
 				if (CacheTable::instance()->previousStarCache.find(rightIndex) != CacheTable::instance()->previousStarCache.end()) {
 					Previous = CacheTable::instance()->previousStarCache.at(rightIndex);
 				} else {
 					tempPrevious = pkb->nextExtractor->getPrevStar(rightIndex);
+					//tempPrevious = pkb->optimizedCFG->getPrevStar(rightIndex);
 					Previous.assign(tempPrevious.begin(), tempPrevious.end());
 					CacheTable::instance()->previousStarCache.insert(map<int, vector<int>>::value_type(rightIndex, Previous));
 				}
@@ -198,6 +200,7 @@ public:
 						}
 					} catch (exception& e) {
 						if (pkb->nextExtractor->isNextStar(temp.at(index), rightIndex)) {
+						//if (pkb->optimizedCFG->isNextStar(temp.at(index), rightIndex)) {
 							result->addResultRow(temp);
 							CacheTable::instance()->isNextStarCache[p] = true;
 						} else {
@@ -206,6 +209,7 @@ public:
 					}
 
 				} else if (pkb->nextExtractor->isNextStar(temp.at(index), rightIndex)) {
+				//} else if (pkb->optimizedCFG->isNextStar(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}
 
@@ -228,12 +232,14 @@ public:
 		if (isSyn == 1) {	// NextStar(stmt, syn): Get NextStar of stmt
 			if (!isConcurrent) {
 				tempNextStar = pkb->nextExtractor->getNextStar(leftIndex);
+				//tempNextStar = pkb->optimizedCFG->getNextStar(leftIndex);
 				NextStar.assign(tempNextStar.begin(), tempNextStar.end());
 			} else {
 				if (CacheTable::instance()->nextStarCache.find(leftIndex) != CacheTable::instance()->nextStarCache.end()) {
 					NextStar = CacheTable::instance()->nextStarCache.at(leftIndex);
 				} else {
 					tempNextStar = pkb->nextExtractor->getNextStar(leftIndex);
+					//tempNextStar = pkb->optimizedCFG->getNextStar(leftIndex);
 					NextStar.assign(tempNextStar.begin(), tempNextStar.end());
 					CacheTable::instance()->nextStarCache.insert(map<int, vector<int>>::value_type(leftIndex, NextStar));
 				}
@@ -282,6 +288,7 @@ public:
 						}
 					} catch (exception& e) {
 						if (pkb->nextExtractor->isNextStar(leftIndex, temp.at(index))) {
+						//if (pkb->optimizedCFG->isNextStar(leftIndex, temp.at(index))) {
 							result->addResultRow(temp);
 							CacheTable::instance()->isNextStarCache[p] = true;
 						} else {
@@ -290,6 +297,7 @@ public:
 					}
 
 				} else if (pkb->nextExtractor->isNextStar(leftIndex, temp.at(index))) {
+				//} else if (pkb->optimizedCFG->isNextStar(leftIndex, temp.at(index))) {
 					result->addResultRow(temp);
 				}
 			} else {	// NextStar(_, syn)
@@ -326,11 +334,13 @@ public:
 					NextStar = CacheTable::instance()->nextStarCache.at(Previous[i]);
 				} catch (exception& e) {
 					tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
+					//tempNextStar = pkb->optimizedCFG->getNextStar(Previous[i]);
 					NextStar.assign(tempNextStar.begin(), tempNextStar.end());
 					CacheTable::instance()->nextStarCache.insert(map<int, vector<int>>::value_type(Previous[i], NextStar));
 				}
 			} else {
 				tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
+				//tempNextStar = pkb->optimizedCFG->getNextStar(Previous[i]);
 				NextStar.assign(tempNextStar.begin(), tempNextStar.end());
 			}
 			
@@ -378,6 +388,7 @@ public:
 						}
 					} catch (exception& e) {
 						if (pkb->nextExtractor->isNextStar(allres[i][lIndex], allres[i][rIndex])){
+						//if (pkb->optimizedCFG->isNextStar(allres[i][lIndex], allres[i][rIndex])){
 							result->addResultRow(allres[i]);
 							CacheTable::instance()->isNextStarCache[p] = true;
 						} else {
@@ -386,6 +397,7 @@ public:
 					}
 				} else {
 					if (pkb->nextExtractor->isNextStar(allres[i][lIndex], allres[i][rIndex])){
+					//if (pkb->optimizedCFG->isNextStar(allres[i][lIndex], allres[i][rIndex])){
 						result->addResultRow(allres[i]);
 					}
 				}
@@ -406,6 +418,7 @@ public:
 						NextStar = CacheTable::instance()->nextStarCache.at(leftValue);
 					} catch (exception& e) {
 						tempNextStar = pkb->nextExtractor->getNextStar(leftValue);
+						//tempNextStar = pkb->optimizedCFG->getNextStar(leftValue);
 						NextStar.assign(tempNextStar.begin(), tempNextStar.end());
 						CacheTable::instance()->nextStarCache.insert(map<int, vector<int>>::value_type(leftValue, NextStar));
 					}
@@ -414,6 +427,7 @@ public:
 						NextStar = prevSolution.at(leftValue);
 					} catch (exception& e) {
 						tempNextStar = pkb->nextExtractor->getNextStar(leftValue);
+						//tempNextStar = pkb->optimizedCFG->getNextStar(leftValue);
 						NextStar.assign(tempNextStar.begin(), tempNextStar.end());
 						prevSolution.insert(map<int, vector<int>>::value_type(leftValue, NextStar));
 					}
@@ -451,6 +465,7 @@ public:
 						PreviousStar = CacheTable::instance()->previousStarCache.at(rightValue);
 					} catch (exception& e) {
 						tempPreviousStar = pkb->nextExtractor->getPrevStar(rightValue);
+						//tempPreviousStar = pkb->optimizedCFG->getPrevStar(rightValue);
 						PreviousStar.assign(tempPreviousStar.begin(), tempPreviousStar.end());
 						CacheTable::instance()->previousStarCache.insert(map<int, vector<int>>::value_type(rightValue, PreviousStar));
 					}
@@ -459,6 +474,7 @@ public:
 						PreviousStar = prevSolution.at(rightValue);
 					} catch (exception& e) {
 						tempPreviousStar = pkb->nextExtractor->getPrevStar(rightValue);
+						//tempPreviousStar = pkb->optimizedCFG->getPrevStar(rightValue);
 						PreviousStar.assign(tempPreviousStar.begin(), tempPreviousStar.end());
 						prevSolution.insert(map<int, vector<int>>::value_type(rightValue, PreviousStar));
 					}

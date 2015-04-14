@@ -24,6 +24,7 @@
 #include "QueryProcessor\AffectsSubquery.cpp"
 #include "QueryProcessor\AffectsStarSubquery.cpp"
 #include "QueryProcessor\PatternSubquery.cpp"
+#include "QueryProcessor\CacheTable.h"
 
 void 
 SubqueryTest::setUp()
@@ -18637,6 +18638,7 @@ void SubqueryTest::testAffectsTuple() {
 }
 
 void SubqueryTest::testAffectsStar() {
+	CacheTable::instance()->initCache();
 	// Test 1: AffectsStar(s1, s2)
 	AffectsStarSubquery affectsStarSubquery1 = AffectsStarSubquery(&synonymTable, pk);
 	affectsStarSubquery1.setSynonyms("s1", "s2");

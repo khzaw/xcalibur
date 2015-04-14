@@ -1,6 +1,11 @@
 1 - ParenStar
 stmt a, b, c, d, e, f;
-Select e such that Follows(a, b) and Next*(a, b)
+Select a such that Next*(a, b)
+10
+100000
+1 - ParenStar
+if a, b, c, d, e, f;
+Select a such that Next*(a, b) and Next*(c, d)
 10
 100000
 2 - FollowsStar

@@ -8,22 +8,10 @@
 using namespace std;
 
 class NextStarSubquery : public Subquery {
-private:
-	bool isConcurrent;
-	map<pair<int, int>, bool> isNextStarCache;
-	map<int, vector<int>> nextStarCache;
-	map<int, vector<int>> previousStarCache;
-
 public:
+	bool isConcurrent;
 	NextStarSubquery(map<string, string>* m, PKBController* p) : Subquery(m, p){
 	
-	}
-
-	void initCache() {
-		isConcurrent = true;
-		isNextStarCache = map<pair<int, int>, bool>() ;
-		nextStarCache = map<int, vector<int>>();
-		previousStarCache = map<int, vector<int>>();
 	}
 
 	ResultTuple* solve(){
@@ -154,12 +142,12 @@ public:
 				tempPrevious = pkb->nextExtractor->getPrevStar(rightIndex);
 				Previous.assign(tempPrevious.begin(), tempPrevious.end());
 			} else {
-				if (previousStarCache.find(rightIndex) != previousStarCache.end()) {
-					Previous = previousStarCache.at(rightIndex);
+				if (CacheTable::instance()->previousStarCache.find(rightIndex) != CacheTable::instance()->previousStarCache.end()) {
+					Previous = CacheTable::instance()->previousStarCache.at(rightIndex);
 				} else {
 					tempPrevious = pkb->nextExtractor->getPrevStar(rightIndex);
 					Previous.assign(tempPrevious.begin(), tempPrevious.end());
-					previousStarCache.insert(map<int, vector<int>>::value_type(rightIndex, Previous));
+					CacheTable::instance()->previousStarCache.insert(map<int, vector<int>>::value_type(rightIndex, Previous));
 				}
 			}
 		} else {	// NextStar(syn, _): Get all Previous stmt
@@ -173,7 +161,7 @@ public:
 		for(size_t i = 0; i < Previous.size(); i++) {
 			if (isConcurrent && isSyn == 2) {
 				p.first = Previous[i];
-				isNextStarCache[p] = true;
+				CacheTable::instance()->isNextStarCache[p] = true;
 			}
 			
 			vector<int> temp = vector<int>();
@@ -205,15 +193,15 @@ public:
 
 				if (isConcurrent) {
 					try {
-						if (isNextStarCache.at(p)) {
+						if (CacheTable::instance()->isNextStarCache.at(p)) {
 							result->addResultRow(temp);
 						}
 					} catch (exception& e) {
 						if (pkb->nextExtractor->isNextStar(temp.at(index), rightIndex)) {
 							result->addResultRow(temp);
-							isNextStarCache[p] = true;
+							CacheTable::instance()->isNextStarCache[p] = true;
 						} else {
-							isNextStarCache[p] = false;
+							CacheTable::instance()->isNextStarCache[p] = false;
 						}
 					}
 
@@ -242,12 +230,12 @@ public:
 				tempNextStar = pkb->nextExtractor->getNextStar(leftIndex);
 				NextStar.assign(tempNextStar.begin(), tempNextStar.end());
 			} else {
-				if (nextStarCache.find(leftIndex) != nextStarCache.end()) {
-					NextStar = nextStarCache.at(leftIndex);
+				if (CacheTable::instance()->nextStarCache.find(leftIndex) != CacheTable::instance()->nextStarCache.end()) {
+					NextStar = CacheTable::instance()->nextStarCache.at(leftIndex);
 				} else {
 					tempNextStar = pkb->nextExtractor->getNextStar(leftIndex);
 					NextStar.assign(tempNextStar.begin(), tempNextStar.end());
-					nextStarCache.insert(map<int, vector<int>>::value_type(leftIndex, NextStar));
+					CacheTable::instance()->nextStarCache.insert(map<int, vector<int>>::value_type(leftIndex, NextStar));
 				}
 			}
 		} else {	// NextStar(_, syn): Get all NextStar stmt
@@ -260,7 +248,7 @@ public:
 		for(size_t i = 0; i < NextStar.size(); i++) {
 			if (isConcurrent && isSyn == 1) {
 				p.second = NextStar[i];
-				isNextStarCache[p] = true;
+				CacheTable::instance()->isNextStarCache[p] = true;
 			}
 			vector<int> temp = vector<int>();
 			if ((type == "assign" || type == "while" || type == "if" || type == "call")
@@ -289,15 +277,15 @@ public:
 
 				if (isConcurrent) {
 					try {
-						if (isNextStarCache.at(p)) {
+						if (CacheTable::instance()->isNextStarCache.at(p)) {
 							result->addResultRow(temp);
 						}
 					} catch (exception& e) {
 						if (pkb->nextExtractor->isNextStar(leftIndex, temp.at(index))) {
 							result->addResultRow(temp);
-							isNextStarCache[p] = true;
+							CacheTable::instance()->isNextStarCache[p] = true;
 						} else {
-							isNextStarCache[p] = false;
+							CacheTable::instance()->isNextStarCache[p] = false;
 						}
 					}
 
@@ -335,11 +323,11 @@ public:
 			vector<int> NextStar;
 			if (isConcurrent) {
 				try {
-					NextStar = nextStarCache.at(Previous[i]);
+					NextStar = CacheTable::instance()->nextStarCache.at(Previous[i]);
 				} catch (exception& e) {
 					tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
 					NextStar.assign(tempNextStar.begin(), tempNextStar.end());
-					nextStarCache.insert(map<int, vector<int>>::value_type(Previous[i], NextStar));
+					CacheTable::instance()->nextStarCache.insert(map<int, vector<int>>::value_type(Previous[i], NextStar));
 				}
 			} else {
 				tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
@@ -351,7 +339,7 @@ public:
 			for (size_t j = 0; j < NextStar.size(); j++) {
 				if (isConcurrent) {
 					pair<int, int> p = pair<int, int>(Previous[i], NextStar[j]);
-					isNextStarCache.insert(make_pair(p, true));
+					CacheTable::instance()->isNextStarCache.insert(make_pair(p, true));
 				}
 				// synonym type check
 				if ((right == "assign" || right =="while" || right =="if" || right == "call")
@@ -385,15 +373,15 @@ public:
 					p.second = allres[i][rIndex];
 					
 					try {
-						if (isNextStarCache.at(p)) {
+						if (CacheTable::instance()->isNextStarCache.at(p)) {
 							result->addResultRow(allres[i]);
 						}
 					} catch (exception& e) {
 						if (pkb->nextExtractor->isNextStar(allres[i][lIndex], allres[i][rIndex])){
 							result->addResultRow(allres[i]);
-							isNextStarCache[p] = true;
+							CacheTable::instance()->isNextStarCache[p] = true;
 						} else {
-							isNextStarCache[p] = false;
+							CacheTable::instance()->isNextStarCache[p] = false;
 						}
 					}
 				} else {
@@ -415,11 +403,11 @@ public:
 				
 				if (isConcurrent) {
 					try {
-						NextStar = nextStarCache.at(leftValue);
+						NextStar = CacheTable::instance()->nextStarCache.at(leftValue);
 					} catch (exception& e) {
 						tempNextStar = pkb->nextExtractor->getNextStar(leftValue);
 						NextStar.assign(tempNextStar.begin(), tempNextStar.end());
-						nextStarCache.insert(map<int, vector<int>>::value_type(leftValue, NextStar));
+						CacheTable::instance()->nextStarCache.insert(map<int, vector<int>>::value_type(leftValue, NextStar));
 					}
 				} else {
 					try {
@@ -435,7 +423,7 @@ public:
 				for (size_t j = 0; j < NextStar.size(); j++){
 					if (isConcurrent) {
 						p.second = NextStar[j];
-						isNextStarCache[p] = true;
+						CacheTable::instance()->isNextStarCache[p] = true;
 					}
 
 					if ((right == "assign" || right == "while" || right == "if" || right == "call")
@@ -460,11 +448,11 @@ public:
 				
 				if (isConcurrent) {
 					try {
-						PreviousStar = previousStarCache.at(rightValue);
+						PreviousStar = CacheTable::instance()->previousStarCache.at(rightValue);
 					} catch (exception& e) {
 						tempPreviousStar = pkb->nextExtractor->getPrevStar(rightValue);
 						PreviousStar.assign(tempPreviousStar.begin(), tempPreviousStar.end());
-						previousStarCache.insert(map<int, vector<int>>::value_type(rightValue, PreviousStar));
+						CacheTable::instance()->previousStarCache.insert(map<int, vector<int>>::value_type(rightValue, PreviousStar));
 					}
 				} else {
 					try {
@@ -480,7 +468,7 @@ public:
 				for (size_t j = 0; j < PreviousStar.size(); j++){
 					if (isConcurrent) {
 						p.first = PreviousStar[j];
-						isNextStarCache[p] = true;
+						CacheTable::instance()->isNextStarCache[p] = true;
 					}
 
 					if ((left == "assign" || left == "while" || left == "if" || left == "call")

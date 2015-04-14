@@ -9,6 +9,7 @@
 #include "OptimizedSubquerySolver.h"
 #include "Subquery.h"
 #include "ResultTuple.h"
+#include "CacheTable.h"
 
 using namespace std;
 
@@ -17,6 +18,7 @@ OptimizedQE::OptimizedQE(){
 
 // syn = synonyms required in solution. Put Boolean in here too
 OptimizedQE::OptimizedQE(vector<Subquery*> subs, vector<string> synos) {
+	CacheTable::instance()->initCache();
 	disjointCheck = map<string, int>();	//string for synonym, int for positions in the vector which hold the synonym
 	queries = makeDisjointSets(subs);
 	solutions = vector<ResultTuple*>();
@@ -31,13 +33,37 @@ vector<vector<Subquery*> > OptimizedQE::makeDisjointSets(vector<Subquery*> syn){
 	for_each(syn.begin(), syn.end(), [&](Subquery* s) {
 		if (s->isSyn == 1 || s->isSyn == 4){
 			synonyms.insert(s->rightSynonym);
+			if (s->type == 1) {
+				s->isConcurrent = false;
+				nextRightCount++;
+			} else if (s->type == 2) {
+				affRightCount++;
+			} else if (s->type == 3) {
+				affStarRightCount++;
+			}
 		}
 		if (s->isSyn == 2 || s->isSyn == 5){
 			synonyms.insert(s->leftSynonym);
+			if (s->type == 1) {
+				s->isConcurrent = false;
+				nextLeftCount++;
+			} else if (s->type == 2) {
+				affLeftCount++;
+			} else if (s->type == 3) {
+				affStarLeftCount++;
+			}
 		}
 		if (s->isSyn == 3){
 			synonyms.insert(s->leftSynonym);
 			synonyms.insert(s->rightSynonym);
+			if (s->type == 1) {
+				s->isConcurrent = false;
+				nextCount++;
+			} else if (s->type == 2) {
+				affCount++;
+			} else if (s->type == 3) {
+				affStarCount++;
+			}
 		}
 	});
 	map<string, string> parents;
@@ -164,9 +190,27 @@ void OptimizedQE::unionQuerySets() {
 
 ResultTuple* OptimizedQE::solve() {
 	OptimizedSubquerySolver qss = OptimizedSubquerySolver();
-	//joinQuerySolutions(qss.multithreadSolve(queries));
-	//return finalSolution;
+
+	if (nextCount > 1 || affCount > 1 || affStarCount > 1) {
+		setConcurrency();
+		return optimizedJoin(qss.singlethreadSolve(queries));
+	}
+	if (queries.size() >= 3) {
+		return optimizedJoin(qss.multithreadSolve(queries));
+	}
+
+	setConcurrency();
 	return optimizedJoin(qss.singlethreadSolve(queries));
+}
+
+void OptimizedQE::setConcurrency() {
+	for(size_t i = 0; i < queries.size(); i++) {
+		for (size_t j = 0; j < queries[i].size(); j++) {
+			if (queries[i][j]->type == 1) {
+				queries[i][j]->isConcurrent = true;
+			}
+		}
+	}
 }
 
 vector<ResultTuple*> OptimizedQE::solve2() {
@@ -279,7 +323,8 @@ ResultTuple* OptimizedQE::optimizedJoin(vector<ResultTuple*> r) {
 
 		// reduce the columns for each row
 		set<vector<int>> sets = set<vector<int>>();
-		for (size_t l = 0; l < r[i]->getAllResults().size(); l++ ) {
+		int size = r[i]->getAllResults().size();
+		for (size_t l = 0; l < size; l++ ) {
 			vector<int> oldRow = r[i]->getResultRow(l);
 			vector<int> newRow = vector<int>();
 			for (size_t m = 0; m < synons.size(); m++) {

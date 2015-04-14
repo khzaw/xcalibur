@@ -596,3 +596,215 @@ bool Sibling::isSiblingConstStmtLst(int const1, int stmtLst) {
 	}
 	return false;
 }
+
+set<int> Sibling::getVarSiblingOfStmtLst(int stmtLst){
+	set<int> results;
+	for(int i=0; i<varStmtLst.size(); i++){
+		if(varStmtLst.at(i).second==stmtLst)
+			results.insert(varStmtLst.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getStmtLstSiblingOfVar(int var){
+	set<int> results;
+	for(int i=0; i<varStmtLst.size(); i++){
+		if(varStmtLst.at(i).first==var)
+			results.insert(varStmtLst.at(i).second);
+	}
+	return results;
+}
+
+set<int> Sibling::getPlusSiblingOfVar(int var){
+	set<int> results;
+	for(int i=0; i<varPlus.size(); i++){
+		if(varPlus.at(i).first==var)
+			results.insert(varPlus.at(i).second);
+	}
+	return results;
+}
+
+set<int> Sibling::getMinusSiblingOfVar(int var){
+	set<int> results;
+	for(int i=0; i<varMinus.size(); i++){
+		if(varMinus.at(i).first==var)
+			results.insert(varMinus.at(i).second);
+	}
+	return results;
+}
+
+set<int> Sibling::getTimesSiblingOfVar(int var){
+	set<int> results;
+	for(int i=0; i<varTimes.size(); i++){
+		if(varTimes.at(i).first==var)
+			results.insert(varTimes.at(i).second);
+	}
+	return results;
+}
+
+set<int> Sibling::getPlusSiblingOfConst(int constant){
+	set<int> results;
+	for(int i=0; i<constPlus.size(); i++){
+		if(constPlus.at(i).first==constant)
+			results.insert(constPlus.at(i).second);
+	}
+	return results;
+}
+
+set<int> Sibling::getMinusSiblingOfConst(int constant){
+	set<int> results;
+	for(int i=0; i<constMinus.size(); i++){
+		if(constMinus.at(i).first==constant)
+			results.insert(constMinus.at(i).second);
+	}
+	return results;
+}
+
+set<int> Sibling::getTimesSiblingOfConst(int constant){
+	set<int> results;
+	for(int i=0; i<constTimes.size(); i++){
+		if(constTimes.at(i).first==constant)
+			results.insert(constTimes.at(i).second);
+	}
+	return results;
+}
+
+set<int> Sibling::getVarSiblingOfPlus(int plus){
+	set<int> results;
+	for(int i=0; i<varPlus.size(); i++){
+		if(varPlus.at(i).second==plus)
+			results.insert(varPlus.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getConstSiblingOfPlus(int plus){
+	set<int> results;
+	for(int i=0; i<constPlus.size(); i++){
+		if(constPlus.at(i).second==plus)
+			results.insert(constPlus.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getPlusSiblingOfPlus(int plus){
+	set<int> results;
+	for(int i=0; i<plusPlus.size(); i++){
+		if(plusPlus.at(i).second==plus)
+			results.insert(plusPlus.at(i).first);
+		if(plusPlus.at(i).first==plus)
+			results.insert(plusPlus.at(i).second);
+	}
+	return results;
+}
+
+set<int> Sibling::getMinusSiblingOfPlus(int plus){
+	set<int> results;
+	for(int i=0; i<plusMinus.size(); i++){
+		if(plusMinus.at(i).first==plus)
+			results.insert(plusMinus.at(i).second);
+	}
+	return results;
+}
+set<int> Sibling::getTimesSiblingOfPlus(int plus){
+	set<int> results;
+	for(int i=0; i<plusTimes.size(); i++){
+		if(plusTimes.at(i).first==plus)
+			results.insert(plusTimes.at(i).second);
+	}
+	return results;
+}
+
+set<int> Sibling::getVarSiblingOfMinus(int minus){
+	set<int> results;
+	for(int i=0; i<varMinus.size(); i++){
+		if(varMinus.at(i).second==minus)
+			results.insert(varMinus.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getConstSiblingOfMinus(int minus){
+	set<int> results;
+	for(int i=0; i<constMinus.size(); i++){
+		if(constMinus.at(i).second==minus)
+			results.insert(constMinus.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getPlusSiblingOfMinus(int minus){
+	set<int> results;
+	for(int i=0; i<plusMinus.size(); i++){
+		if(plusMinus.at(i).second==minus)
+			results.insert(plusMinus.at(i).first);
+	}
+	return results;
+}
+
+set<int> Sibling::getMinusSiblingOfMinus(int minus){
+	set<int> results;
+	for(int i=0; i<minusMinus.size(); i++){
+		if(minusMinus.at(i).second==minus)
+			results.insert(minusMinus.at(i).first);
+		if(minusMinus.at(i).first==minus)
+			results.insert(minusMinus.at(i).second);
+	}
+	return results;
+}
+
+set<int> Sibling::getTimesSiblingOfMinus(int minus){
+	set<int> results;
+	for(int i=0; i<minusTimes.size(); i++){
+		if(minusTimes.at(i).first==minus)
+			results.insert(minusTimes.at(i).second);
+	}
+	return results;	
+}
+
+set<int> Sibling::getVarSiblingOfTimes(int times){
+	set<int> results;
+	for(int i=0; i<varTimes.size(); i++){
+		if(varTimes.at(i).second==times)
+			results.insert(varTimes.at(i).first);
+	}
+	return results;	
+}
+
+set<int> Sibling::getConstSiblingOfTimes(int times){
+	set<int> results;
+	for(int i=0; i<constTimes.size(); i++){
+		if(constTimes.at(i).second==times)
+			results.insert(constTimes.at(i).first);
+	}
+	return results;	
+}
+
+set<int> Sibling::getPlusSiblingOfTimes(int times){
+	set<int> results;
+	for(int i=0; i<plusTimes.size(); i++){
+		if(plusTimes.at(i).second==times)
+			results.insert(plusTimes.at(i).first);
+	}
+	return results;	
+}
+
+set<int> Sibling::getMinusSiblingOfTimes(int times){
+	set<int> results;
+	for(int i=0; i<minusTimes.size(); i++){
+		if(minusTimes.at(i).second==times)
+			results.insert(minusTimes.at(i).first);
+	}
+	return results;	
+}
+
+set<int> Sibling::getTimesSiblingOfTimes(int times){
+	set<int> results;
+	for(int i=0; i<timesTimes.size(); i++){
+		if(timesTimes.at(i).second==times)
+			results.insert(timesTimes.at(i).first);
+		if(timesTimes.at(i).first==times)
+			results.insert(timesTimes.at(i).second);
+	}
+	return results;	
+}

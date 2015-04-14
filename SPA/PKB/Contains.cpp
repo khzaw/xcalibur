@@ -2939,7 +2939,14 @@ Contains::Contains(){
 			return false;
 	}
 
-
+	bool Contains::isContainsStarStmtStmt(int stmt1, int stmt2) {
+		set<int> stmts = getStmtContainedStarInStmt(stmt1);
+		std::set<int>::iterator it = stmts.find(stmt2);
+		if(it!=stmts.end())
+			return true;
+		else
+			return false;
+	}
 
 	bool Contains:: isContainsStarPlusVar(int plus, int var){ //returns true if contains*(plus,var) holds 
 		set<int> vars = getVarContainedStarInPlus(plus);

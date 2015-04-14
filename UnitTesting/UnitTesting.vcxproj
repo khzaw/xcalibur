@@ -77,6 +77,7 @@
     <ClCompile Include="TestAST.cpp" />
     <ClCompile Include="testCalls.cpp" />
     <ClCompile Include="testConstant.cpp" />
+    <ClCompile Include="TestContains.cpp" />
     <ClCompile Include="testFollows.cpp" />
     <ClCompile Include="testIterativeCFG.cpp" />
     <ClCompile Include="testOptimizedCFG.cpp" />
@@ -97,6 +98,7 @@
   <ItemGroup>
     <ClInclude Include="TestAST.h" />
     <ClInclude Include="testCalls.h" />
+    <ClInclude Include="TestContains.h" />
     <ClInclude Include="testIterativeCFG.h" />
     <ClInclude Include="testConstant.h" />
     <ClInclude Include="testFollows.h" />

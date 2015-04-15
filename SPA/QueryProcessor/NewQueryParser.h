@@ -10,6 +10,7 @@
 #include "QE.h"
 #include "..\PKB\PKBController.h"
 #include "Subquery.h"
+#include "WithSubquery.cpp"
 
 using namespace std;
 
@@ -72,6 +73,7 @@ public:
 	bool withVar;
 	bool withProc;
 	bool withVal;
+	bool withStmtNum;
 	string withFirst;
 	string withSecond;
 
@@ -89,7 +91,7 @@ private:
 	void matchSuchThat();
 	void matchWith();
 	void matchAttrCompare();
-	string matchRef(bool);
+	string matchRef(bool, WithSubquery*);
 
 	void matchPatternCl();
 	void matchPatternCond();

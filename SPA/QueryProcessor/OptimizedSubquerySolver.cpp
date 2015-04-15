@@ -61,7 +61,7 @@ vector<ResultTuple* > OptimizedSubquerySolver::multithreadSolve(vector<vector<Su
 }
 
 vector<ResultTuple* > OptimizedSubquerySolver::singlethreadSolve(vector<vector<Subquery*> > disjointSubqueries){
-	vector<ResultTuple* > ans;
+	vector<ResultTuple* > ans = vector<ResultTuple*>();
 	for_each(begin(disjointSubqueries), end(disjointSubqueries), [&](vector<Subquery* > n) {
 		ans.push_back(solveSet(n));
 	});

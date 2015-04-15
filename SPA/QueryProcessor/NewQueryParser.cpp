@@ -70,6 +70,7 @@ NewQueryParser::NewQueryParser(string s, PKBController* controller) {
 	this->withVar = false;
 	this->withProc = false;
 	this->withVal = false;
+	this->withStmtNum = false;
 	this->withFirst = "";
 	this->withSecond = "";
 
@@ -436,10 +437,10 @@ void NewQueryParser::matchAttrCompare() {
 	// attrCompare : ref '=' ref
 	// lhs and rhs 'ref' msut be of teh same type (INTEGER or character string)	
 
-	Subquery* withSq = new WithSubquery(&synonyms, controller);
-	string fst = matchRef(true);
+	WithSubquery* withSq = new WithSubquery(&synonyms, controller);
+	string fst = matchRef(true, withSq);
 	match("=");
-	string snd = matchRef(false);
+	string snd = matchRef(false, withSq);
 
 	if(withSecond == "procName") {
 		fst = to_string((long long)controller->procTable->getProcIndex(fst));
@@ -452,7 +453,7 @@ void NewQueryParser::matchAttrCompare() {
 	setSynonymsHelper(fst, snd, withSq);
 }
 
-string NewQueryParser::matchRef(bool lhs) {
+string NewQueryParser::matchRef(bool lhs, WithSubquery* withsq) {
 	// ref: attrRef | synonym | '"' IDENT '"' | INTEGER
 	// in the above synonym must be a synonym of prog_line
 	// attRef: synonym '.' attrname
@@ -476,9 +477,10 @@ string NewQueryParser::matchRef(bool lhs) {
 		if(nextToken.name.compare(".") == 0) {
 			match(".");
 			string attrname = nextToken.name;
-			if(attrname == "procName")  withProc = true;
-			if(attrname == "varName") withVar = true;
-			if(attrname == "value") withVal = true;
+			if(attrname == "procName")  {withProc = true; withsq->setAttr("procName", lhs);}
+			if(attrname == "varName") {withVar = true; withsq->setAttr("varName", lhs);}
+			if(attrname == "value") {withVal = true; withsq->setAttr("value", lhs);}
+			if(attrname == "stmt#") {withStmtNum = true; withsq->setAttr("stmt#", lhs);}
 			if(!lhs) {
 				withSecond = attrname;
 			}

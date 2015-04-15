@@ -89,6 +89,7 @@
     <ClCompile Include="TestQueryParser.cpp" />
     <ClCompile Include="testRecursiveCFG.cpp" />
     <ClCompile Include="testRecursiveCFG.h" />
+    <ClCompile Include="TestSiblings.cpp" />
     <ClCompile Include="testStatement.cpp" />
     <ClCompile Include="TestSubquery.cpp" />
     <ClCompile Include="TestUses.cpp" />
@@ -111,6 +112,7 @@
     <ClInclude Include="TestProcTable.h" />
     <ClInclude Include="TestQE.h" />
     <ClInclude Include="TestQueryParser.h" />
+    <ClInclude Include="TestSiblings.h" />
     <ClInclude Include="testStatement.h" />
     <ClInclude Include="TestSubquery.h" />
     <ClInclude Include="TestUses.h" />

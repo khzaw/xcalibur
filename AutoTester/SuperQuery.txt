@@ -1,6 +1,6 @@
 1 - Parent
 constant c; variable b; assign a;
-Select b such that Sibling(b, c)
+Select BOOLEAN
 
 5000
 1 - Parent
@@ -207,4 +207,29 @@ Select a such that Uses(a, v);
 call a;
 Select a such that Uses(a, "z");
 8,33,77,79,82,84,87,89,93,94,95,96
+5000
+31 - Next
+while a, b;
+Select a such that Next(a, b)
+2,9,12,15,35,37,41,42,43,44,45,60
+5000
+32 - Next
+if a, b;
+Select a such that Next(a, b)
+50,51
+5000
+33 - Next
+call a, b;
+Select a such that Next(a, b)
+32,33,66,77,78,79,82,83,84,87,88,89,91,92,93,94,95,96,97
+5000
+34 - Next - loop
+while a; prog_line b;
+Select <a,b> such that Next(a, b) and Next (b, a)
+35 36,17 18,69 70,41 42,42 43,43 44, 44 45, 45 46
+5000
+35 - Next
+while a; if b; assign c;
+Select a such that Next(a, b) and Next(b,c)
+9,81,58,43
 5000

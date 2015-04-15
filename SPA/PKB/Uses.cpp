@@ -26,6 +26,14 @@ using namespace std;
 		return result;
 	}
 
+	 set<int> Uses::getAllVariablesUsedByProc(int procIndex) {
+		 set<int> results;
+		 for(size_t i = 0; i < procUses.size(); i++) {
+			 results.insert(procUses[i].second);
+		 }
+		 return results;
+	 }
+
    set<int> Uses::getAllUsedVarStmt(){
 	    set<int> result;
 		for(size_t i = 0; i < stmtUses.size(); i++){
@@ -150,6 +158,7 @@ using namespace std;
 		return it->second;
 	}
 	}
+
 
 	set<int> Uses::evaluateGetUsersStmt(int varIndex){
 		set<int> result;

@@ -35,7 +35,8 @@ Parser::Parser(string filepath) {
 void Parser::constructRelations() {
 	this->controller->constructCalls();
 	this->controller->constructFollows();
-	populateAdditionalInfo();
+	populateAdditionalModifiesInfo();
+	populateAdditionalUsesInfo();
 	this->controller->constructModifies();
 	this->controller->constructParent();
 	this->controller->constructNext();
@@ -45,7 +46,7 @@ void Parser::constructRelations() {
 	// cout << "yay" << endl;
 }
 
-void Parser::populateAdditionalInfo() {
+void Parser::populateAdditionalModifiesInfo() {
 	for(size_t i = 0; i < procedureNames.size(); i++) {
 		int procIndex = getProcedureIndex(procedureNames.at(i));
 		
@@ -73,6 +74,30 @@ void Parser::populateAdditionalInfo() {
 		}
 	}
 	//this->controller->callsTable->getAllCallers(
+}
+
+void Parser::populateAdditionalUsesInfo() {
+	for(size_t i = 0; i < procedureNames.size(); i++) {
+		int procIndex = getProcedureIndex(procedureNames.at(i));
+
+		// get all variables used by a procdeure
+		set<int> allVars = this->controller->usesTable->getAllVariablesUsedByProc(procIndex);
+		set<int> allCalleeStars = this->controller->callsTable->getCallerStar(procIndex);
+		for(std::set<int>::iterator it = allCalleeStars.begin(); it != allCalleeStars.end(); ++it) {
+			for(std::set<int>::iterator it2 = allVars.begin(); it2 != allVars.end(); ++it2) {
+
+				// call statements in a procedure
+				set<int> callStatementsInProc = callees[*it];
+				if(!callStatementsInProc.empty()) {
+					for(std::set<int>::iterator it3 = callStatementsInProc.begin(); it3 != callStatementsInProc.end(); ++it3) {
+						this->controller->usesTable->insertUsesStmt(*it3, *it2);
+					}
+				}
+
+				this->controller->usesTable->insertUsesProc(*it, *it2);
+			}
+		}
+	}
 }
 
 Parser::~Parser() {
@@ -213,17 +238,6 @@ void Parser::stmt(TNode* parent) {
 				containerStack.push(tempStack.top());
 				tempStack.pop();
 			}
-
-
-
-
-
-
-
-
-
-
-			
 		} else {
 			set<int> calls;
 			calls.insert(line);

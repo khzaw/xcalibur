@@ -1,5 +1,10 @@
 4 - Modifies
 variable v;
-Select v such that Modifies (18, v)
+Select v such that Modifies (17, v)
 m,x,y,z
+5000
+5 - Uses
+variable v;
+Select v such that Uses (17, v)
+y,m,x,z,k,n
 5000

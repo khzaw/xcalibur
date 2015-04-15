@@ -18286,7 +18286,7 @@ void SubqueryTest::testAffects() {
 	CPPUNIT_ASSERT(actualResultaffectssubquery143->isEmpty());
 
   // should fail
-  CPPUNIT_ASSERT_EQUAL(0, 1);
+  //CPPUNIT_ASSERT_EQUAL(0, 1);
 }
 
 void SubqueryTest::testAffectsTuple() {	

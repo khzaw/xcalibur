@@ -519,7 +519,7 @@ void OptimizedCFGTest::testSourceProgram() {
 
 
   // should fail to show that unit test has indeed been run
-  CPPUNIT_ASSERT(!CFG2->isNextStar(12,8));
+  // CPPUNIT_ASSERT(!CFG2->isNextStar(12,8));
 
   /*
   for (std::map<int, set<int>>::iterator it=CFG2->getNextListFwd().begin(); it!=CFG2->getNextListFwd().end(); it++) {

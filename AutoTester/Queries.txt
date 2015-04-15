@@ -1,70 +1,15 @@
-1 - ParenStar
-stmt a, b, c, d, e, f;
-Select a such that Next*(a, b)
-10
-100000
-1 - ParenStar
-if a, b, c, d, e, f;
-Select a such that Next*(a, b) and Next*(c, d)
-10
-100000
-2 - FollowsStar
-stmt s; while w;
-Select w such that Follows* (s, w)
-10
+1 - Contains
+stmt a; variable v;
+Select a such that Contains(a, v) with v.varName = "x"
+none
 5000
-3 - FollowsStar
-if ifstat;
-Select ifstat such that Follows* (ifstat, 17)
-8
+2 - ContainsStar
+stmt a; variable v;
+Select a such that Contains*(a, v) with v.varName = "x"
+1
 5000
-4 - Modifies
-variable v;
-Select v such that Modifies (18, v)
-m,x,y,z
-5000
-5 - Modifies, Uses
-assign a;
-Select a such that Modifies (a, "y") and Uses (a, "y")
-16,21
-5000
-6 - CallsStar
-procedure p;
-Select p such that Calls* (p, "ProcHobo")
-Solo,Duo
-5000
-8.1 - NextStar
-stmt n;
-Select n such that Next*(9, n)
-10,11,12
-50000
-8.2 - NextStar
-stmt n;
-Select n such that Next*(n, 12)
-10,11,12
-50000
-8 - NextStar
-stmt n;
-Select n such that Next*(9, n) and Next*(n, 12)
-10,11,12
-50000
-9 - With
-stmt s; constant co;
-Select s with s.stmt# = co.value
-1, 2, 3, 10, 20
-5000
-10 - Modifies, Uses, Follows, ParentStar, multiple clauses
-assign a;
-Select a such that Modifies (a, "y") and Uses (a, "y") and Follows (15, a) and Parent* (_, a)
-16
-5000
-7 - Pattern
-assign a;
-Select a pattern a (_, _"3 * x"_)
-19
-5000
-8 - while pattern
-while w;
-Select w pattern w("y", _)
-18
+3 - Sibling
+variable a, b;
+Select a such that Sibling(a, b) with b.varName = "x"
+b
 5000

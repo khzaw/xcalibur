@@ -254,7 +254,7 @@ void Parser::stmt(TNode* parent) {
 		populateFollows(line, false, prev, assignNode);
 		populateParent(parent, line);
 
-//		TNode* varNode = createASTNode("VAR_NODE", nextToken.name, assignNode, line, currentProc);
+		TNode* varNode = createASTNode("VAR_NODE", nextToken.name, assignNode, line, currentProc);
 		variableName();
 
 		populateModifies(line, currentProc);
@@ -267,8 +267,10 @@ void Parser::stmt(TNode* parent) {
 			popOperator(operatorStack.top());
 		}
 
-		//controller->ast->assignChild(assignNode, (operandStack.top()));
-		//controller->ast->assignParent(operandStack.top(), assignNode);
+		//TNode top = operandStack.top();
+
+		controller->ast->assignChild(assignNode, (operandStack.top()));
+		controller->ast->assignParent(operandStack.top(), assignNode);
 
 		cout << "postfix : " << postfix << endl;
 		assignNode->setData(postfix);
@@ -573,16 +575,16 @@ void Parser::populateRoot(TNode* procedureNode, int procedureIndex) {
 }
 
 void Parser::popOperator(Operator op) {
-	TNode operatorNode = TNode(OPERATORS_NODE_NAMES[op.op] , op.value, line, currentProc);
+	TNode* operatorNode = new TNode(OPERATORS_NODE_NAMES[op.op] , op.value, line, currentProc);
 	
 	TNode* rightOperand = operandStack.top();	operandStack.pop();
 	TNode* leftOperand = operandStack.top();	operandStack.pop();
 
-	operatorNode.addChild(leftOperand);
-	operatorNode.addChild(rightOperand);
+	operatorNode->addChild(leftOperand);
+	operatorNode->addChild(rightOperand);
 
 	operatorStack.pop();
-	operandStack.push(&operatorNode);
+	operandStack.push(operatorNode);
 
 	postfix += " " + op.value; 
 }

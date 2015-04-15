@@ -48,7 +48,8 @@ void Parser::constructRelations() {
 
 void Parser::populateAdditionalModifiesInfo() {
 	for(size_t i = 0; i < procedureNames.size(); i++) {
-		int procIndex = getProcedureIndex(procedureNames.at(i));
+		string name = procedureNames.at(i);
+		int procIndex = getProcedureIndex(name);
 		
 		// get all variables modified by a proc
 		set<int> allVars = this->controller->modifiesTable->getAllVariablesModifiedByProc(procIndex);
@@ -61,10 +62,11 @@ void Parser::populateAdditionalModifiesInfo() {
 				
 				
 				// call statements in a procedure
-				set<int> callStatementsInProc = callees[*it];
+				set<pair<int, string>> callStatementsInProc = callees[*it];
 				if(!callStatementsInProc.empty()) {
-					for(std::set<int>::iterator it3 = callStatementsInProc.begin(); it3 != callStatementsInProc.end(); ++it3) {
-						this->controller->modifiesTable->insertModifiesStmt(*it3, *it2);
+					for(set<pair<int, string>>::iterator it3 = callStatementsInProc.begin(); it3 != callStatementsInProc.end(); ++it3) {
+						if((*it3).second == name)
+							this->controller->modifiesTable->insertModifiesStmt((*it3).first, *it2);
 					}
 				}
 				
@@ -78,7 +80,8 @@ void Parser::populateAdditionalModifiesInfo() {
 
 void Parser::populateAdditionalUsesInfo() {
 	for(size_t i = 0; i < procedureNames.size(); i++) {
-		int procIndex = getProcedureIndex(procedureNames.at(i));
+		string name = procedureNames.at(i);
+		int procIndex = getProcedureIndex(name);
 
 		// get all variables used by a procdeure
 		set<int> allVars = this->controller->usesTable->getAllVariablesUsedByProc(procIndex);
@@ -87,10 +90,11 @@ void Parser::populateAdditionalUsesInfo() {
 			for(std::set<int>::iterator it2 = allVars.begin(); it2 != allVars.end(); ++it2) {
 
 				// call statements in a procedure
-				set<int> callStatementsInProc = callees[*it];
+				set<pair<int, string>> callStatementsInProc = callees[*it];
 				if(!callStatementsInProc.empty()) {
-					for(std::set<int>::iterator it3 = callStatementsInProc.begin(); it3 != callStatementsInProc.end(); ++it3) {
-						//this->controller->usesTable->insertUsesStmt(*it3, *it2);
+					for(set<pair<int, string>>::iterator it3 = callStatementsInProc.begin(); it3 != callStatementsInProc.end(); ++it3) {
+						if((*it3).second == name)
+							this->controller->usesTable->insertUsesStmt((*it3).first, *it2);
 					}
 				}
 
@@ -225,13 +229,13 @@ void Parser::stmt(TNode* parent) {
 		int procIndex = getProcedureIndex(newProcedure);
 
 		if(callees.find(currentProc) != callees.end()) {
-			callees[currentProc].insert(line);
+			callees[currentProc].insert(make_pair(line, newProcedure));
 
 			stack<int> tempStack = stack<int>();
 			while(containerStack.size() > 0) {
 				int top = containerStack.top(); containerStack.pop();
 				tempStack.push(top);
-				callees[currentProc].insert(top);
+				callees[currentProc].insert(make_pair(top, newProcedure));
 			}
 
 			while(tempStack.size() > 0) {
@@ -239,14 +243,14 @@ void Parser::stmt(TNode* parent) {
 				tempStack.pop();
 			}
 		} else {
-			set<int> calls;
-			calls.insert(line);
+			set<std::pair<int, string>> calls;
+			calls.insert(std::make_pair(line, newProcedure));
 
 			stack<int> tempStack = stack<int>();
 			while(containerStack.size() > 0) {
 				int top = containerStack.top(); containerStack.pop();
 				tempStack.push(top);
-				calls.insert(top);
+				calls.insert(std::make_pair(top, newProcedure));
 			}
 
 			while(tempStack.size() > 0) {
@@ -254,7 +258,7 @@ void Parser::stmt(TNode* parent) {
 				tempStack.pop();
 			}
 
-			callees.insert(std::pair<int, set<int>>(currentProc, calls));
+			callees.insert(std::pair<int, set<pair<int, string>>>(currentProc, calls));
 		}
 
 		controller->callsTable->insertCalls(currentProc, procIndex);

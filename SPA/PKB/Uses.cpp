@@ -29,7 +29,9 @@ using namespace std;
 	 set<int> Uses::getAllVariablesUsedByProc(int procIndex) {
 		 set<int> results;
 		 for(size_t i = 0; i < procUses.size(); i++) {
+		   if(procUses[i].first == procIndex) {
 			 results.insert(procUses[i].second);
+		   }
 		 }
 		 return results;
 	 }

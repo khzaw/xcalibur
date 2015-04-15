@@ -1,4 +1,14 @@
 1 - Parent
+plus c; variable b; assign a;
+Select b with b.varName="x"
+
+5000
+1 - Parent
+plus c; variable b; assign a;
+Select b such that Contains(c, b)
+
+5000
+1 - Parent
 stmt a, b;
 Select a such that Parent(a, b)
 2,3,4,9,10,12,15,17,23,24,31,35,37,41,42,43,44,45,47,50,51,52,57,58,59,60,69,74,81,86
@@ -61,8 +71,128 @@ Select b such that Follows(a, b)
 13 - Follows
 if a; stmt b;
 Select a such that Follows(a, b)
+4
+5000
+14 - Follows
+while a; stmt b;
+Select a such that Follows(a, b)
+2,3,24,17,43,69,81
+5000
+15 - Follows
+while a; if b;
+Select a such that Follows(a, b)
+24,43,81
+5000
+16 - FollowsStar
+stmt a, b;
+Select a such that Follows*(a, b)
+1,2,3,4,7,8,11,13,14,16,17,21,22,24,25,26,27,28,29,32,33,39,43,61,62,65,66,67,68,69,71,72,73,77,78,79,80,81,82,83,84,87,88,89,91,92,93,94,95,96,97
+5000
+17 - FollowsStar
+stmt a, b;
+Select b such that Follows*(a, b)
+2,7,8,9,12,14,15,17,19,21,22,23,26,27,28,29,30,31,33,34,39,40,47,62,63,66,67,68,69,71,72,73,74,78,79,80,81,83,84,85,86,88,89,90,92,93,94,95,96,97,98
+5000
+18 - FollowsStar
+if a; stmt b;
+Select b such that Follows*(a, b)
+7,8,9
+5000
+19 - FollowsStar
+while a; stmt b;
+Select b such that Follows*(a, b)
+19,21,22,23,31,39,40,47,71,72,73,74,86
+5000
+20 - FollowsStar
+while a; if b;
+Select a such that Follows*(a, b)
+3,24,69,81,43
+5000
+21 - Modifies Assign
+assign a; variable v;
+Select a such that Modifies(a, v);
+1,5,7,11,13,14,16,18,19,21,22,25,26,27,28,29,30,38,39,40,46,48,49,53,54,56,62,63,64,65,68,71,72,73,75
+5000
+22 - Modifies Assign2
+assign a;
+Select a such that Modifies(a, "z");
+46
+5000
+23 - Modifies If
+if a; variable v;
+Select a such that Modifies(a, v);
+4,10,23,31,47,50,51,52,57,59,74,86
+5000
+24 - Modifies If2
+if a;
+Select a such that Modifies(a, "z");
+none
+5000
+25 - Modifies while
+while a; variable v;
+Select a such that Modifies(a, v);
+2,3,9,12,15,17,24,35,37,41,42,43,44,45,58,60,69,81
+5000
+26 - Modifies while2
+while a;
+Select a such that Modifies(a, "z");
+41,42,43,44,45
+5000
+27 - Modifies proc
+procedure a; variable v;
+Select a such that Modifies(a, v);
+One, Two, Three, Four, Five
+5000
+28 - Modifies proc2
+procedure a;
+Select a such that Modifies(a, "x");
+Five, Four, Three, One
+5000
+29 - Modifies calls
+call a; variable v;
+Select a such that Modifies(a, v);
+6, 8, 20, 32, 33, 34, 36, 55,61, 66, 67, 70, 76, 77, 78, 79, 80, 82, 83, 84, 85, 87,88,89,90,91,92,93,94,95,96,97,98
+5000
+30 - Modifies calls2
+call a;
+Select a such that Modifies(a, "yolo");
+8,20,33,34,36,55,77,79, 80, 82,84, 85, 87,89,90,91,92,95,96,97,98
+5000
+31 - Uses Assign
+assign a; variable v;
+Select a such that Uses(a, v);
+1,5,7,11,13,14,16,19,21,22,25,26,27,28,29,30,38,39,40,48,49,56,62,63,64,65,68,71,72,73,75
+5000
+33 - Uses Assign2
+assign a;
+Select a such that Uses(a, "z");
+56,39,40
+5000
+33 - Uses If
+if a; variable v;
+Select a such that Uses(a, v);
+4,10,23,31,47,50,51,52,57,59,74,86
+5000
+34 - Uses If2
+if a;
+Select a such that Uses(a, "z");
+none
+5000
+35 - Uses while
+while a; variable v;
+Select a such that Uses(a, v);
+2,3,9,12,15,17,24,35,37,41,42,43,44,45,58,60,69,81
+5000
+36 - Uses while2
+while a;
+Select a such that Uses(a, "z");
+37
+5000
+37 - Uses proc
+procedure a; variable v;
+Select a such that Uses(a, v);
 
-500005000
+5000
 38 - Uses proc2
 procedure a;
 Select a such that Uses(a, "z");
@@ -76,105 +206,5 @@ Select a such that Uses(a, v);
 30 - Uses calls2
 call a;
 Select a such that Uses(a, "z");
-
-5000
-31 - Next
-stmt a, b;
-Select a such that Next(a, b)
-
-5000
-32 - Next
-stmt a, b;
-Select <a, b> such that Next(a, b)
-
-5000
-33 - Next
-if a; stmt b;
-Select a such that Next(a, b)
-
-5000
-34 - Next
-while a; stmt b;
-Select a such that Next(a, b)
-
-5000
-35 - Next
-while a; if b;
-Select a such that Next(a, b)
-
-5000
-36 - NextStar
-stmt a, b;
-Select a such that Next*(a, b)
-
-5000
-37 - NextStar
-stmt a, b;
-Select <a, b> such that Next*(a, b)
-
-5000
-38 - NextStar
-if a; stmt b;
-Select a such that Next*(a, b)
-
-5000
-39 - NextStar
-while a; stmt b;
-Select a such that Next*(a, b)
-
-5000
-40 - NextStar
-while a; if b;
-Select a such that Next*(a, b)
-
-5000
-41 - Affects
-stmt a, b;
-Select a such that Affects(a, b)
-
-5000
-42 - Affects
-stmt a, b;
-Select b such that Affects(a, b)
-
-5000
-43 - Affects
-if a; stmt b;
-Select a such that Affects(a, b)
-
-5000
-44 - Affects
-while a; stmt b;
-Select a such that Affects(1, b)
-none
-5000
-45 - Affects
-assign a;
-Select a such that Affects(a, 2)
-
-5000
-46 - AffectsStar
-stmt a, b;
-Select a such that Affects*(a, b)
-
-5000
-47 - AffectsStar
-stmt a, b;
-Select b such that Affects*(a, b)
-
-5000
-48 - AffectsStar
-if a; stmt b;
-Select a such that Affects*(a, b)
-
-5000
-49 - AffectsStar
-prog_line a; stmt b;
-Select a such that Affects*(a, 1)
-
-5000
-50 - AffectsStar
-assign a; prog_line b;
-Select a such that Affects*(1, b)
 
 5000

@@ -337,12 +337,12 @@ Contains::Contains(){
 
 	//for plus node as container 
 	set<int> Contains::getVarContainedInPlus(int plus) { //returns all those variables which are children of the plus node in the AST
-		set<int> result;
+		set<int> result = set<int>();
 		for(int i=0; i<plusVar.size(); i++){
 			if(plusVar[i].first==plus)
 				result.insert(plusVar[i].second);
 		}
-	return result;
+		return result;
 	}
 
 	set<int> Contains::getPlusContainingVar(int var) { //returns all those pluses which contain the variable node

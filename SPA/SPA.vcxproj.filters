@@ -183,10 +183,10 @@
     <ClInclude Include="Frontend\TNode.h">
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
-    <ClInclude Include="QueryProcessor\QTNode.h">
-      <Filter>Header Files\Frontend</Filter>
-    </ClInclude>
     <ClInclude Include="QueryProcessor\Subquery.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\QTNode.h">
       <Filter>Header Files\QueryProcessor</Filter>
     </ClInclude>
   </ItemGroup>
@@ -362,13 +362,13 @@
     <ClCompile Include="Frontend\TNode.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
-    <ClCompile Include="QueryProcessor\QTNode.cpp">
-      <Filter>Source Files\Frontend</Filter>
-    </ClCompile>
     <ClCompile Include="QueryProcessor\ResultTuple.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
     <ClCompile Include="QueryProcessor\OptimizedNextStarSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\QTNode.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
   </ItemGroup>

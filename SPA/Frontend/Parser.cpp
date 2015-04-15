@@ -39,6 +39,8 @@ void Parser::constructRelations() {
 	this->controller->constructParent();
 	this->controller->constructNext();
 	this->controller->constructUses();
+	this->controller->constructContains();
+//	this->controller->constructSiblings();
 	// cout << "yay" << endl;
 }
 

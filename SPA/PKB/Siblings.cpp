@@ -121,7 +121,7 @@ void Sibling::insertVarConst(int var, int constant){
 
 void Sibling::insertVarPlus(int var, int plus){
 	pair<int,int> pair1(var,plus);
-	if(isSiblingVarPlus(var,plus))
+	if(isSiblingVarPlus(var,plus)==false)
 		varPlus.push_back(pair1);
 }
 
@@ -133,7 +133,7 @@ void Sibling::insertVarMinus(int var,int minus){
 
 void Sibling::insertVarTimes(int var, int times){
 	pair<int,int> pair1(var,times);
-	if(isSiblingVarTimes(var,times))
+	if(isSiblingVarTimes(var,times)==false)
 		varTimes.push_back(pair1);
 }
 

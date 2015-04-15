@@ -82,7 +82,7 @@ void SiblingsExtractor::recursiveExtractSibling(TNode* root){
 				int constant = constTable->getConstIndex(atoi(root->getChild(1)->getData().c_str()));
 				sibling->insertVarConst(var,constant);
 			}
-			if(root->getChild(1)->getNodeType().compare("+")==0){
+			if(root->getChild(1)->getNodeType().compare("PLUS_NODE")==0){
 				plusCount ++;
 				sibling->insertVarPlus(var,plusCount);
 			}

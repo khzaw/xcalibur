@@ -5,6 +5,7 @@
 #include "TestSubquery.h"
 #include "..\SPA\PKB\NextExtractor.h"
 //#include "..\SPA\PKB\OptimizedCFG.h"
+#include "Frontend\Operator.h"
 #include "QueryProcessor\Subquery.h"
 #include "QueryProcessor\Subquery.cpp"
 #include "QueryProcessor\FollowsSubquery.cpp"
@@ -95,32 +96,101 @@ void SubqueryTest::testSubqueries() {
 	TNode stmt22("ASSIGN_NODE", "z ", 22, 2); // v = z
 	
 	TNode rootNode1("PROC_NODE", "First", -1, 0);
-	TNode stmtListNode1("STMTLST_NODE", "", 0, 0); 
+	TNode stmtListNode1("STMTLST_NODE", "", 1, 0); 
 	stmtListNode1.addParent(&rootNode1); 
 	rootNode1.addChild(&stmtListNode1);
 	stmt1.addParent(&stmtListNode1); stmtListNode1.addChild(&stmt1); stmt1.addRightSibling(&stmt2);
+	TNode var1("VAR_NODE", "x", 1, 0);
+	TNode const1("CONSTANT_NODE", "2", 1, 0);
+	var1.addParent(&stmt1); stmt1.addChild(&var1); var1.addRightSibling(&const1);
+	const1.addParent(&stmt1); stmt1.addChild(&const1);
 	stmt2.addParent(&stmtListNode1); stmtListNode1.addChild(&stmt2); stmt2.addRightSibling(&stmt3);
+	TNode var2("VAR_NODE", "z", 2, 0);
+	TNode const2("CONSTANT_NODE", "3", 2, 0);
+	var2.addParent(&stmt2); stmt2.addChild(&var2); var2.addRightSibling(&const2);
+	const2.addParent(&stmt2); stmt2.addChild(&const2);
 	stmt3.addParent(&stmtListNode1); stmtListNode1.addChild(&stmt3);
 
 	TNode rootNode2("PROC_NODE", "Second", -1, 1);
-	TNode stmtListNode2("STMTLST_NODE", "", 0, 1); 
+	rootNode1.addRightSibling(&rootNode2);
+	TNode stmtListNode2("STMTLST_NODE", "", 4, 1); 
 	stmtListNode2.addParent(&rootNode2); 
 	rootNode2.addChild(&stmtListNode2);
 	// base
 	stmt4.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt4); stmt4.addRightSibling(&stmt5);
+	TNode var3("VAR_NODE", "x", 4, 1);
+	TNode const3("CONSTANT_NODE", "0", 4, 1);
+	var3.addParent(&stmt4); stmt4.addChild(&var3); var3.addRightSibling(&const3);
+	const3.addParent(&stmt4); stmt4.addChild(&const3);
 	stmt5.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt5); stmt5.addRightSibling(&stmt6);
+	TNode var4("VAR_NODE", "i", 5, 1);
+	TNode const4("CONSTANT_NODE", "5", 5, 1);
+	var4.addParent(&stmt5); stmt5.addChild(&var4); var4.addRightSibling(&const4);
+	const4.addParent(&stmt5); stmt5.addChild(&const4);
 	stmt6.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt6); stmt6.addRightSibling(&stmt13);
 	stmt13.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt13); stmt13.addRightSibling(&stmt18);
 	stmt18.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt18); stmt18.addRightSibling(&stmt19);
+	TNode var5("VAR_NODE", "z", 18, 1);
+	TNode plus1("PLUS_NODE", "+", 18, 1);
+	var5.addParent(&stmt18); stmt18.addChild(&var5); var5.addRightSibling(&plus1);
+	plus1.addParent(&stmt18); stmt18.addChild(&plus1);
+	TNode var6("VAR_NODE", "z", 18, 1);
+	TNode plus2("PLUS_NODE", "+", 18, 1);
+	var6.addParent(&plus1); plus1.addChild(&var6); var6.addRightSibling(&plus2);
+	plus2.addParent(&plus1); plus1.addChild(&plus2);
+	TNode var7("VAR_NODE", "x", 18, 1);
+	TNode var8("VAR_NODE", "i", 18, 1);
+	var7.addParent(&plus2); plus2.addChild(&var7); var7.addRightSibling(&var8);
+	var8.addParent(&plus2); plus2.addChild(&var8);
 	stmt19.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt19); stmt19.addRightSibling(&stmt20);
+	TNode var9("VAR_NODE", "y", 19, 1);
+	TNode plus3("PLUS_NODE", "+", 19, 1);
+	var9.addParent(&stmt19); stmt19.addChild(&var9); var9.addRightSibling(&plus3);
+	plus3.addParent(&stmt19); stmt19.addChild(&plus3);
+	TNode var10("VAR_NODE", "z", 19, 1);
+	TNode const5("CONSTANT_NODE", "2", 19, 1);
+	var10.addParent(&plus3); plus3.addChild(&var10); var10.addRightSibling(&const5);
+	const5.addParent(&plus3); plus3.addChild(&const5);
 	stmt20.addParent(&stmtListNode2); stmtListNode2.addChild(&stmt20);
+	TNode var11("VAR_NODE", "x", 20, 1);
+	TNode plus4("PLUS_NODE", "+", 20, 1);
+	var11.addParent(&stmt20); stmt20.addChild(&var11); var11.addRightSibling(&plus4);
+	plus4.addParent(&stmt20); stmt20.addChild(&plus4);
+	TNode times1("MULTIPLY_NODE", "*", 20, 1);
+	TNode var12("VAR_NODE", "z", 20, 1);
+	times1.addParent(&plus4); plus4.addChild(&times1); times1.addRightSibling(&var12);
+	var12.addParent(&plus4); plus4.addChild(&var12);
+	TNode var13("VAR_NODE", "x", 20, 1);
+	TNode var14("VAR_NODE", "y", 20, 1);
+	var13.addParent(&times1); times1.addChild(&var13); var13.addRightSibling(&var14);
+	var14.addParent(&times1); times1.addChild(&var14);
 	// statement 6 nesting
 	TNode stmtListNode2_1("STMTLST_NODE", "", 0, 1); 
 	stmtListNode2_1.addParent(&stmt6); stmt6.addChild(&stmtListNode2_1);
 	stmt7.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt7); stmt7.addRightSibling(&stmt8);
+	TNode var15("VAR_NODE", "x", 7, 1);
+	TNode plus5("PLUS_NODE", "+", 7, 1);
+	var15.addParent(&stmt7); stmt7.addChild(&var15); var15.addRightSibling(&plus5);
+	plus5.addParent(&stmt7); stmt7.addChild(&plus5);
+	TNode var16("VAR_NODE", "x", 7, 1);
+	TNode times2("MULTIPLY_NODE", "*", 7, 1);
+	var16.addParent(&plus5); plus5.addChild(&var16); var16.addRightSibling(&times2);
+	times2.addParent(&plus5); plus5.addChild(&times2);
+	TNode const6("CONSTANT_NODE", "2", 7, 1);
+	TNode var17("VAR_NODE", "y", 7, 1);
+	const6.addParent(&times2); times2.addChild(&const6); const6.addRightSibling(&var17);
+	var17.addParent(&times2); times2.addChild(&var17);
 	stmt8.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt8); stmt8.addRightSibling(&stmt11);
 	stmt11.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt11); stmt11.addRightSibling(&stmt12);
 	stmt12.addParent(&stmtListNode2_1); stmtListNode2_1.addChild(&stmt12);
+	TNode var18("VAR_NODE", "i", 12, 1);
+	TNode minus1("MINUS_NODE", "-", 12, 1);
+	var18.addParent(&stmt12); stmt12.addChild(&var18); var18.addRightSibling(&minus1);
+	minus1.addParent(&stmt12); stmt12.addChild(&minus1);
+	TNode var19("VAR_NODE", "i", 12, 1);
+	TNode const7("CONSTANT_NODE", "1", 12, 1);
+	var19.addParent(&minus1); minus1.addChild(&var19); var19.addRightSibling(&const7);
+	const7.addParent(&minus1); minus1.addChild(&const7);
 		// statement 8 nesting
 		TNode stmtListNode2_1_1("STMTLST_NODE", "", 0, 1); TNode thennode211("THEN_NODE", "then", 0, 1);
 		TNode stmtListNode2_1_2("STMTLST_NODE", "", 0, 1); TNode elsenode212("ELSE_NODE", "else", 0, 1);
@@ -129,7 +199,15 @@ void SubqueryTest::testSubqueries() {
 		stmtListNode2_1_1.addParent(&thennode211); thennode211.addChild(&stmtListNode2_1_1);
 		stmtListNode2_1_2.addParent(&elsenode212); elsenode212.addChild(&stmtListNode2_1_2);
 		stmt9.addParent(&stmtListNode2_1_1); stmtListNode2_1_1.addChild(&stmt9);
+		TNode var20("VAR_NODE", "m", 9, 1);
+		TNode var21("VAR_NODE", "n", 9, 1);
+		var20.addParent(&stmt9); stmt9.addChild(&var20); var20.addRightSibling(&var21);
+		var21.addParent(&stmt9); stmt9.addChild(&var21);
 		stmt10.addParent(&stmtListNode2_1_2); stmtListNode2_1_2.addChild(&stmt10);
+		TNode var22("VAR_NODE", "n", 10, 1);
+		TNode var23("VAR_NODE", "Second", 10, 1);
+		var22.addParent(&stmt10); stmt10.addChild(&var22); var22.addRightSibling(&var23);
+		var23.addParent(&stmt10); stmt10.addChild(&var23);
 	// statement 13 nesting
 	TNode stmtListNode2_2("STMTLST_NODE", "", 0, 1); TNode thennode222("THEN_NODE", "then", 0, 1);
 	TNode stmtListNode2_3("STMTLST_NODE", "", 0, 1); TNode elsenode223("ELSE_NODE", "else", 0, 1);
@@ -138,20 +216,49 @@ void SubqueryTest::testSubqueries() {
 	stmtListNode2_2.addParent(&thennode222); thennode222.addChild(&stmtListNode2_2);
 	stmtListNode2_3.addParent(&elsenode223); elsenode223.addChild(&stmtListNode2_3);
 	stmt14.addParent(&stmtListNode2_2); stmtListNode2_2.addChild(&stmt14); stmt14.addRightSibling(&stmt15);
+	TNode var24("VAR_NODE", "x", 14, 1);
+	TNode plus6("PLUS_NODE", "+", 14, 1);
+	var24.addParent(&stmt14); stmt14.addChild(&var24); var24.addRightSibling(&plus6);
+	plus6.addParent(&stmt14); stmt14.addChild(&plus6);
+	TNode var25("VAR_NODE", "x", 14, 1);
+	TNode const8("CONSTANT_NODE", "1", 14, 1);
+	var25.addParent(&plus6); plus6.addChild(&var25); var25.addRightSibling(&const8);
+	const8.addParent(&plus6); plus6.addChild(&const8);
 	stmt15.addParent(&stmtListNode2_2); stmtListNode2_2.addChild(&stmt15);
 		// statement 15 nesting
 		TNode stmtListNode2_2_1("STMTLST_NODE", "", 0, 1); 
 		stmtListNode2_2_1.addParent(&stmt15); stmt15.addChild(&stmtListNode2_2_1);
 		stmt16.addParent(&stmtListNode2_2_1); stmtListNode2_2_1.addChild(&stmt16);
+		TNode var26("VAR_NODE", "m", 16, 1);
+		TNode minus2("MINUS_NODE", "-", 16, 1);
+		var26.addParent(&stmt16); stmt16.addChild(&var26); var26.addRightSibling(&minus2);
+		minus2.addParent(&stmt16); stmt16.addChild(&minus2);
+		TNode var27("VAR_NODE", "m", 16, 1);
+		TNode const9("CONSTANT_NODE", "1", 16, 1);
+		var27.addParent(&minus2); minus2.addChild(&var27); var27.addRightSibling(&const9);
+		const9.addParent(&minus2); minus2.addChild(&const9);
 	stmtListNode2_3.addParent(&stmt13); stmt13.addChild(&stmtListNode2_3);
 	stmt17.addParent(&stmtListNode2_3); stmtListNode2_3.addChild(&stmt17);
+	TNode var28("VAR_NODE", "z", 17, 1);
+	TNode const10("CONSTANT_NODE", "1", 17, 1);
+	var28.addParent(&stmt17); stmt17.addChild(&var28); var28.addRightSibling(&const10);
+	const10.addParent(&stmt17); stmt17.addChild(&const10);
 
 	TNode rootNode3("PROC_NODE", "Third", -1, 2);
-	TNode stmtListNode3("STMTLST_NODE", "", 0, 2); 
+	rootNode2.addRightSibling(&rootNode3);
+	TNode stmtListNode3("STMTLST_NODE", "", 21, 2); 
 	stmtListNode3.addParent(&rootNode3); 
 	rootNode3.addChild(&stmtListNode3);
 	stmt21.addParent(&stmtListNode3); stmtListNode3.addChild(&stmt21); stmt21.addRightSibling(&stmt22);
+	TNode var29("VAR_NODE", "z", 21, 2);
+	TNode const11("CONSTANT_NODE", "5", 21, 2);
+	var29.addParent(&stmt21); stmt21.addChild(&var29); var29.addRightSibling(&const11);
+	const11.addParent(&stmt21); stmt21.addChild(&const11);
 	stmt22.addParent(&stmtListNode3); stmtListNode3.addChild(&stmt22);
+	TNode var30("VAR_NODE", "v", 22, 2);
+	TNode varFinal("VAR_NODE", "z", 22, 2);
+	var30.addParent(&stmt22); stmt22.addChild(&var30); var30.addRightSibling(&varFinal);
+	varFinal.addParent(&stmt22); stmt22.addChild(&varFinal);
 
 	pk->ast->insertRoot(&rootNode1);
 	pk->ast->insertRoot(&rootNode2);

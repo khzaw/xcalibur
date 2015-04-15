@@ -1,0 +1,5 @@
+test - contains
+plus a; variable b;
+Select b such that Contains(a, b);
+
+50000

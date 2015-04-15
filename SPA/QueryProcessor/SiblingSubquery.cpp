@@ -34,20 +34,20 @@ public:
 	}
 	
 	bool validate() {
-		if (isSyn != 0 || isSyn != 1 || isSyn != 2 || isSyn != 3){
+		if (isSyn != 0 && isSyn != 1 && isSyn != 2 && isSyn != 3){
 			return false;
 		}
 		if (isSyn == 1){
 			string synonymType = synonymTable->at(rightSynonym);
-			if (synonymType != "stmt" || synonymType != "prog_line" || synonymType != "assign"
-				|| synonymType != "while" || synonymType != "if" || synonymType != "call"){
+			if (synonymType != "stmt" && synonymType != "prog_line" && synonymType != "assign"
+				&& synonymType != "while" && synonymType != "if" && synonymType != "call"){
 				return false;
 			}
 		}
 		if (isSyn == 2){
 			string synonymType = synonymTable->at(leftSynonym);
-			if (synonymType != "stmt" || synonymType != "prog_line"
-				|| synonymType != "while" || synonymType != "if" || synonymType != "call" || synonymType != "assign"){
+			if (synonymType != "stmt" && synonymType != "prog_line"
+				&& synonymType != "while" && synonymType != "if" && synonymType != "call" && synonymType != "assign"){
 				return false;
 			}
 		}
@@ -121,6 +121,8 @@ public:
 				} else {
 					++it;
 				}	
+			} else {
+				++it;
 			}
 		}
 
@@ -164,6 +166,8 @@ public:
 				} else {
 					++it;
 				}	
+			} else {
+				++it;
 			}
 		}
 
@@ -238,6 +242,8 @@ public:
 					} else {
 						++it;
 					}	
+				} else {
+					++it;
 				}
 			}
 			for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
@@ -249,6 +255,8 @@ public:
 						} else {
 							++it;
 						}	
+					} else {
+						++it;
 					}
 				}
 				for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
@@ -660,6 +668,8 @@ public:
 									} else {
 										++it;
 									}
+								} else {
+									++it;
 								}
 							}
 						}
@@ -766,6 +776,8 @@ public:
 									} else {
 										++it;
 									}
+								} else {
+									++it;
 								}
 							}
 						}

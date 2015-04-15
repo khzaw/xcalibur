@@ -34,22 +34,22 @@ public:
 	}
 	
 	bool validate() {
-		if (isSyn != 0 || isSyn != 1 || isSyn != 2 || isSyn != 3){
+		if (isSyn != 0 && isSyn != 1 && isSyn != 2 && isSyn != 3){
 			return false;
 		}
 		if (isSyn == 1){
 			string synonymType = synonymTable->at(rightSynonym);
-			if (synonymType != "stmtLst" || synonymType != "plus" || synonymType != "minus" 
-				|| synonymType != "times" || synonymType != "variable" || synonymType != "constant"
-				|| synonymType != "stmt" || synonymType != "prog_line" || synonymType != "assign"
-				|| synonymType != "while" || synonymType != "if" || synonymType != "call"){
+			if (synonymType != "stmtLst" && synonymType != "plus" && synonymType != "minus" 
+				&& synonymType != "times" && synonymType != "variable" && synonymType != "constant"
+				&& synonymType != "stmt" && synonymType != "prog_line" && synonymType != "assign"
+				&& synonymType != "while" && synonymType != "if" && synonymType != "call"){
 				return false;
 			}
 		}
 		if (isSyn == 2){
 			string synonymType = synonymTable->at(leftSynonym);
-			if (synonymType != "stmtLst" || synonymType != "procedure" || synonymType != "stmt" || synonymType != "prog_line"
-				|| synonymType != "while" || synonymType != "if"){
+			if (synonymType != "stmtLst" && synonymType != "procedure" && synonymType != "stmt" && synonymType != "prog_line"
+				&& synonymType != "while" && synonymType != "if"){
 				return false;
 			}
 		}
@@ -137,6 +137,8 @@ public:
 					} else {
 						++it;
 					}	
+				} else {
+					++it;
 				}
 			}
 		} else if (leftSynType == "procedure"){
@@ -208,6 +210,8 @@ public:
 					} else {
 						++it;
 					}
+				} else {
+					++it;
 				}
 			}
 		}
@@ -274,7 +278,7 @@ public:
 		string rightSynType = synonymTable->at(rightSynonym);
 
 		if (leftSynType == "procedure"){
-			set<int> leftVals = pkb->containsTable->getAllProcStmtLstContainers();
+			set<int> leftVals = pkb->containsTable->getAllProcs();
 			for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
 				set<int> rightVals;
 				if (rightSynType == "stmtLst"){
@@ -289,6 +293,8 @@ public:
 							} else {
 								++it;
 							}
+						} else {
+							++it;
 						}
 					}
 				} else if (rightSynType == "variable"){
@@ -310,7 +316,7 @@ public:
 				}
 			} 
 		} else if (leftSynType == "stmtLst"){
-			set<int> leftVals = pkb->containsTable->getAllStmtLstStmtContainers();
+			set<int> leftVals = pkb->containsTable->getAllStmtLsts();
 			for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
 				set<int> rightVals;
 				if (rightSynType == "stmtLst"){
@@ -325,6 +331,8 @@ public:
 							} else {
 								++it;
 							}
+						} else {
+							++it;
 						}
 					}
 				} else if (rightSynType == "variable"){
@@ -346,7 +354,7 @@ public:
 				}
 			}
 		} else if (leftSynType == "assign" || leftSynType == "while" || leftSynType == "if" || leftSynType == "stmt" || leftSynType == "prog_line"){
-			set<int> leftVals = pkb->containsTable->getAllStmtLstStmtContainees();
+			set<int> leftVals = pkb->containsTable->getAllStmts();
 			for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
 				if (leftSynType == "assign" || leftSynType == "while" || leftSynType == "if"){
 					if (pkb->statementTable->getTNode(*it1)->getNodeType()!=TNODE_NAMES[synToNodeType.at(leftSynType)]){
@@ -376,6 +384,8 @@ public:
 							} else {
 								++it;
 							}
+						} else {
+							++it;
 						}
 					}
 				}
@@ -387,7 +397,7 @@ public:
 				}
 			}
 		} else if (leftSynType == "plus"){
-			set<int> leftVals = pkb->containsTable->getAllStmtPlusContainees();
+			set<int> leftVals = pkb->containsTable->getAllPlus();
 			for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
 				set<int> rightVals;
 				if (rightSynType == "variable"){
@@ -409,7 +419,7 @@ public:
 				}
 			}
 		} else if (leftSynType == "minus"){
-			set<int> leftVals = pkb->containsTable->getAllStmtMinusContainees();
+			set<int> leftVals = pkb->containsTable->getAllMinus();
 			for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
 				set<int> rightVals;
 				if (rightSynType == "variable"){
@@ -431,7 +441,7 @@ public:
 				}
 			}
 		} else if (leftSynType == "times"){
-			set<int> leftVals = pkb->containsTable->getAllStmtTimesContainees();
+			set<int> leftVals = pkb->containsTable->getAllTimes();
 			for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
 				set<int> rightVals;
 				if (rightSynType == "variable"){
@@ -652,6 +662,8 @@ public:
 									} else {
 										++it;
 									}
+								} else {
+									++it;
 								}
 							}
 						} else if (rightSynType == "variable"){
@@ -678,6 +690,8 @@ public:
 									} else {
 										++it;
 									}
+								} else {
+									++it;
 								}
 							}
 						} else if (rightSynType == "variable"){
@@ -714,6 +728,8 @@ public:
 									} else {
 										++it;
 									}
+								} else {
+									++it;
 								}
 							}
 						}
@@ -832,6 +848,8 @@ public:
 								} else {
 									++it;
 								}	
+							} else {
+								++it;
 							}
 						}
 					} else if (leftSynType == "plus"){

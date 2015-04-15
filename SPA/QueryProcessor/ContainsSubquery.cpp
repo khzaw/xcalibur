@@ -203,9 +203,9 @@ public:
 		string rightSynType = synonymTable->at(rightSynonym);
 
 		if (leftSynType == "procedure"){
-			set<int> leftVals = pkb->containsTable->getAllProcStmtLstContainers();
-			for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
-				if (rightSynType == "stmtLst"){
+			if (rightSynType == "stmtLst"){
+				set<int> leftVals = pkb->containsTable->getAllProcStmtLstContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
 					set<int> rightVals = pkb->containsTable->getStmtLstContainedInProc(*it1);
 					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
 						vector<int> row = vector<int>();
@@ -213,12 +213,12 @@ public:
 						row.push_back(*it2);
 						tuple->addResultRow(row);
 					}
-				}
-			} 
+				} 
+			}
 		} else if (leftSynType == "stmtLst"){
-			set<int> leftVals = pkb->containsTable->getAllStmtLstStmtContainers();
-			for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
-				if (rightSynType == "stmt" || rightSynType == "prog_line" || rightSynType == "assign" || rightSynType == "while" || rightSynType == "if" || rightSynType == "call"){
+			if (rightSynType == "stmt" || rightSynType == "prog_line" || rightSynType == "assign" || rightSynType == "while" || rightSynType == "if" || rightSynType == "call"){
+				set<int> leftVals = pkb->containsTable->getAllStmtLstStmtContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
 					set<int> rightVals = pkb->containsTable->getStmtContainedInStmtLst(*it1);
 					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
 						if (rightSynType == "assign" || rightSynType == "while" || rightSynType == "if" || rightSynType == "call"){
@@ -234,98 +234,276 @@ public:
 				}
 			}
 		} else if (leftSynType == "assign" || leftSynType == "while" || leftSynType == "if" || leftSynType == "stmt" || leftSynType == "prog_line"){
-			set<int> leftVals = pkb->containsTable->getAllStmtLstStmtContainees();
-			for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
-				if (leftSynType == "assign" || leftSynType == "while" || leftSynType == "if"){
-					if (pkb->statementTable->getTNode(*it1)->getNodeType()!=TNODE_NAMES[synToNodeType.at(leftSynType)]){
-						continue;
+			set<int> leftVals; 
+			if (rightSynType == "variable"){
+				leftVals = pkb->containsTable->getAllStmtVarContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					if (leftSynType == "assign" || leftSynType == "while" || leftSynType == "if"){
+						if (pkb->statementTable->getTNode(*it1)->getNodeType()!=TNODE_NAMES[synToNodeType.at(leftSynType)]){
+							continue;
+						}
+					}
+					set<int> rightVals = pkb->containsTable->getVarContainedInStmt(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
 					}
 				}
-				set<int> rightVals;
-				if (rightSynType == "variable"){
-					rightVals = pkb->containsTable->getVarContainedInStmt(*it1);
-				} else if (rightSynType == "constant"){
-					rightVals = pkb->containsTable->getConstContainedInStmt(*it1);
-				} else if (rightSynType == "plus"){
-					rightVals = pkb->containsTable->getPlusContainedInStmt(*it1);
-				} else if (rightSynType == "minus"){
-					rightVals = pkb->containsTable->getMinusContainedInStmt(*it1);
-				} else if (rightSynType == "times"){
-					rightVals = pkb->containsTable->getTimesContainedInStmt(*it1);
-				} else if (rightSynType == "stmtLst"){
-					rightVals = pkb->containsTable->getStmtLstContainedInStmt(*it1);
+			} else if (rightSynType == "constant"){
+				leftVals = pkb->containsTable->getAllStmtConstContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					if (leftSynType == "assign" || leftSynType == "while" || leftSynType == "if"){
+						if (pkb->statementTable->getTNode(*it1)->getNodeType()!=TNODE_NAMES[synToNodeType.at(leftSynType)]){
+							continue;
+						}
+					}
+					set<int> rightVals = pkb->containsTable->getConstContainedInStmt(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
 				}
-				for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
-					vector<int> row = vector<int>();
-					row.push_back(*it1);
-					row.push_back(*it2);
-					tuple->addResultRow(row);
+			} else if (rightSynType == "plus"){
+				leftVals = pkb->containsTable->getAllStmtPlusContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					if (leftSynType == "assign" || leftSynType == "while" || leftSynType == "if"){
+						if (pkb->statementTable->getTNode(*it1)->getNodeType()!=TNODE_NAMES[synToNodeType.at(leftSynType)]){
+							continue;
+						}
+					}
+					set<int> rightVals = pkb->containsTable->getPlusContainedInStmt(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
+				}
+			} else if (rightSynType == "minus"){
+				leftVals = pkb->containsTable->getAllStmtMinusContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					if (leftSynType == "assign" || leftSynType == "while" || leftSynType == "if"){
+						if (pkb->statementTable->getTNode(*it1)->getNodeType()!=TNODE_NAMES[synToNodeType.at(leftSynType)]){
+							continue;
+						}
+					}
+					set<int> rightVals = pkb->containsTable->getMinusContainedInStmt(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
+				}
+			} else if (rightSynType == "times"){
+				leftVals = pkb->containsTable->getAllStmtTimesContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					if (leftSynType == "assign" || leftSynType == "while" || leftSynType == "if"){
+						if (pkb->statementTable->getTNode(*it1)->getNodeType()!=TNODE_NAMES[synToNodeType.at(leftSynType)]){
+							continue;
+						}
+					}
+					set<int> rightVals = pkb->containsTable->getTimesContainedInStmt(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
+				}
+			} else if (rightSynType == "stmtLst"){
+				leftVals = pkb->containsTable->getAllStmtStmtLstContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					if (leftSynType == "assign" || leftSynType == "while" || leftSynType == "if"){
+						if (pkb->statementTable->getTNode(*it1)->getNodeType()!=TNODE_NAMES[synToNodeType.at(leftSynType)]){
+							continue;
+						}
+					}
+					set<int> rightVals = pkb->containsTable->getStmtLstContainedInStmt(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
 				}
 			}
 		} else if (leftSynType == "plus"){
-			set<int> leftVals = pkb->containsTable->getAllStmtPlusContainees();
-			for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
-				set<int> rightVals;
-				if (rightSynType == "variable"){
-					rightVals = pkb->containsTable->getVarContainedInPlus(*it1);
-				} else if (rightSynType == "constant"){
-					rightVals = pkb->containsTable->getConstContainedInPlus(*it1);
-				} else if (rightSynType == "plus"){
-					rightVals = pkb->containsTable->getPlusContainedInPlus(*it1);
-				} else if (rightSynType == "minus"){
-					rightVals = pkb->containsTable->getMinusContainedInPlus(*it1);
-				} else if (rightSynType == "times"){
-					rightVals = pkb->containsTable->getTimesContainedInPlus(*it1);
+			set<int> leftVals;
+			if (rightSynType == "variable"){
+				leftVals = pkb->containsTable->getAllPlusVarContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					set<int> rightVals = pkb->containsTable->getVarContainedInPlus(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
 				}
-				for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
-					vector<int> row = vector<int>();
-					row.push_back(*it1);
-					row.push_back(*it2);
-					tuple->addResultRow(row);
+			} else if (rightSynType == "constant"){
+				leftVals = pkb->containsTable->getAllPlusConstContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					set<int> rightVals = pkb->containsTable->getConstContainedInPlus(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
+				}
+			} else if (rightSynType == "plus"){
+				leftVals = pkb->containsTable->getAllPlusPlusContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					set<int> rightVals = pkb->containsTable->getPlusContainedInPlus(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
+				}
+			} else if (rightSynType == "minus"){
+				leftVals = pkb->containsTable->getAllPlusMinusContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					set<int> rightVals = pkb->containsTable->getMinusContainedInPlus(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
+				}
+			} else if (rightSynType == "times"){
+				leftVals = pkb->containsTable->getAllPlusTimesContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					set<int> rightVals = pkb->containsTable->getTimesContainedInPlus(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
 				}
 			}
 		} else if (leftSynType == "minus"){
-			set<int> leftVals = pkb->containsTable->getAllStmtMinusContainees();
-			for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
-				set<int> rightVals;
-				if (rightSynType == "variable"){
-					rightVals = pkb->containsTable->getVarContainedInMinus(*it1);
-				} else if (rightSynType == "constant"){
-					rightVals = pkb->containsTable->getConstContainedInMinus(*it1);
-				} else if (rightSynType == "plus"){
-					rightVals = pkb->containsTable->getPlusContainedInMinus(*it1);
-				} else if (rightSynType == "minus"){
-					rightVals = pkb->containsTable->getMinusContainedInMinus(*it1);
-				} else if (rightSynType == "times"){
-					rightVals = pkb->containsTable->getTimesContainedInMinus(*it1);
+			set<int> leftVals;
+			if (rightSynType == "variable"){
+				leftVals = pkb->containsTable->getAllMinusVarContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					set<int> rightVals = pkb->containsTable->getVarContainedInMinus(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
 				}
-				for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
-					vector<int> row = vector<int>();
-					row.push_back(*it1);
-					row.push_back(*it2);
-					tuple->addResultRow(row);
+			} else if (rightSynType == "constant"){
+				leftVals = pkb->containsTable->getAllMinusConstContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					set<int> rightVals = pkb->containsTable->getConstContainedInMinus(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
+				}
+			} else if (rightSynType == "plus"){
+				leftVals = pkb->containsTable->getAllMinusPlusContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					set<int> rightVals = pkb->containsTable->getPlusContainedInMinus(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
+				}
+			} else if (rightSynType == "minus"){
+				leftVals = pkb->containsTable->getAllMinusMinusContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					set<int> rightVals = pkb->containsTable->getMinusContainedInMinus(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
+				}
+			} else if (rightSynType == "times"){
+				leftVals = pkb->containsTable->getAllMinusTimesContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					set<int> rightVals = pkb->containsTable->getTimesContainedInMinus(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
 				}
 			}
 		} else if (leftSynType == "times"){
-			set<int> leftVals = pkb->containsTable->getAllStmtTimesContainees();
-			for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
-				set<int> rightVals;
-				if (rightSynType == "variable"){
-					rightVals = pkb->containsTable->getVarContainedInTimes(*it1);
-				} else if (rightSynType == "constant"){
-					rightVals = pkb->containsTable->getConstContainedInTimes(*it1);
-				} else if (rightSynType == "plus"){
-					rightVals = pkb->containsTable->getPlusContainedInTimes(*it1);
-				} else if (rightSynType == "minus"){
-					rightVals = pkb->containsTable->getMinusContainedInTimes(*it1);
-				} else if (rightSynType == "times"){
-					rightVals = pkb->containsTable->getTimesContainedInTimes(*it1);
+			set<int> leftVals;
+			if (rightSynType == "variable"){
+				leftVals = pkb->containsTable->getAllTimesVarContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					set<int> rightVals = pkb->containsTable->getVarContainedInTimes(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
 				}
-				for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
-					vector<int> row = vector<int>();
-					row.push_back(*it1);
-					row.push_back(*it2);
-					tuple->addResultRow(row);
+			} else if (rightSynType == "constant"){
+				leftVals = pkb->containsTable->getAllTimesConstContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					set<int> rightVals = pkb->containsTable->getConstContainedInTimes(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
+				}
+			} else if (rightSynType == "plus"){
+				leftVals = pkb->containsTable->getAllTimesPlusContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					set<int> rightVals = pkb->containsTable->getPlusContainedInTimes(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
+				}
+			} else if (rightSynType == "minus"){
+				leftVals = pkb->containsTable->getAllTimesMinusContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					set<int> rightVals = pkb->containsTable->getMinusContainedInTimes(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
+				}
+			} else if (rightSynType == "times"){
+				leftVals = pkb->containsTable->getAllTimesTimesContainers();
+				for (std::set<int>::iterator it1 = leftVals.begin(); it1 != leftVals.end(); ++it1){
+					set<int> rightVals = pkb->containsTable->getTimesContainedInTimes(*it1);
+					for (std::set<int>::iterator it2 = rightVals.begin(); it2 != rightVals.end(); ++it2){
+						vector<int> row = vector<int>();
+						row.push_back(*it1);
+						row.push_back(*it2);
+						tuple->addResultRow(row);
+					}
 				}
 			}
 		}
@@ -469,6 +647,8 @@ public:
 									} else {
 										++it;
 									}
+								} else {
+									++it;
 								}
 							}
 					} else if (leftSynType == "stmt" || leftSynType == "prog_line" || leftSynType == "assign" || leftSynType == "while" || leftSynType == "if"){
@@ -568,6 +748,8 @@ public:
 								} else {
 									++it;
 								}	
+							} else {
+								++it;
 							}
 						}
 					} else if (leftSynType == "plus"){

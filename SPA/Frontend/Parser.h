@@ -1,6 +1,8 @@
 #pragma once
 
 #include <stack>
+#include <map>
+#include <set>
 #include "../PKB/PKBController.h"
 #include "TNode.h"
 #include "Operator.h"
@@ -26,6 +28,7 @@ class Parser {
 	stack<TNode*> containerNodeStack;
 	vector<string> procedureNames;
 	map<int, string> callStatements;
+	map<int, set<int>> callees;
 	map<int, stack<int>> procAndContainers;
 
 	int totalParents;
@@ -69,6 +72,8 @@ private:
 	void populateRoot(TNode*, int);
 
 	void popOperator(Operator);
+
+	void populateAdditionalInfo();
 
 	void populateProcAndContainers(int, int);
 	void constructRelations();

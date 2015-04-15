@@ -38,12 +38,32 @@ private:
 	vector<pair<int,int>> timesTimes; //contains the times and the times node that the times node contains
 
 
-	
+	// all design entities
+
+	set<int> allPlus;
+	set<int> allMinus;
+	set<int> allTimes;
+	set<int> allStmtLsts;
+	set<int> allStmts;
+	set<int> allVars;
+	set<int> allConsts;
+	set<int> allProcs;
+
+
 
 public:
 
 	//containers
 	Contains();
+
+	set<int> getAllPlus();
+	set<int> getAllMinus();
+	set<int> getAllTimes();
+	set<int> getAllStmtLsts();
+	set<int> getAllStmts();
+	set<int> getAllVars();
+	set<int> getAllConsts();
+	set<int> getAllProcs();
 	
 	void insertProcStmtLst(int,int); 
 	void insertStmtLstStmt(int,int); 

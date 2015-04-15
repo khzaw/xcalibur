@@ -1,6 +1,6 @@
 1 - Parent
-plus c; variable b; assign a;
-Select b with b.varName="x"
+constant c; variable b; assign a;
+Select b such that Sibling(b, c)
 
 5000
 1 - Parent
@@ -191,20 +191,20 @@ Select a such that Uses(a, "z");
 37 - Uses proc
 procedure a; variable v;
 Select a such that Uses(a, v);
-
+One, Two, Three, Four, Five
 5000
 38 - Uses proc2
 procedure a;
 Select a such that Uses(a, "z");
-
+One,Three, Five
 5000
 39 - Uses calls
 call a; variable v;
 Select a such that Uses(a, v);
-
+6, 8, 20, 32, 33, 34, 36, 55,61, 66, 67, 70, 76, 77, 78, 79, 80, 82, 83, 84, 85, 87,88,89,90,91,92,93,94,95,96,97,98
 5000
-30 - Uses calls2
+40 - Uses calls2
 call a;
 Select a such that Uses(a, "z");
-
+8,33,77,79,82,84,87,89,93,94,95,96
 5000

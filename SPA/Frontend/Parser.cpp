@@ -201,9 +201,45 @@ void Parser::stmt(TNode* parent) {
 
 		if(callees.find(currentProc) != callees.end()) {
 			callees[currentProc].insert(line);
+
+			stack<int> tempStack = stack<int>();
+			while(containerStack.size() > 0) {
+				int top = containerStack.top(); containerStack.pop();
+				tempStack.push(top);
+				callees[currentProc].insert(top);
+			}
+
+			while(tempStack.size() > 0) {
+				containerStack.push(tempStack.top());
+				tempStack.pop();
+			}
+
+
+
+
+
+
+
+
+
+
+			
 		} else {
 			set<int> calls;
 			calls.insert(line);
+
+			stack<int> tempStack = stack<int>();
+			while(containerStack.size() > 0) {
+				int top = containerStack.top(); containerStack.pop();
+				tempStack.push(top);
+				calls.insert(top);
+			}
+
+			while(tempStack.size() > 0) {
+				containerStack.push(tempStack.top());
+				tempStack.pop();
+			}
+
 			callees.insert(std::pair<int, set<int>>(currentProc, calls));
 		}
 

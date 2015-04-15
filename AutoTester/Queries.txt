@@ -1,15 +1,5 @@
-1 - Contains
-stmt a; variable v;
-Select a such that Contains(a, v) with v.varName = "x"
-none
-5000
-2 - ContainsStar
-stmt a; variable v;
-Select a such that Contains*(a, v) with v.varName = "x"
-1
-5000
-3 - Sibling
-variable a, b;
-Select a such that Sibling(a, b) with b.varName = "x"
-b
+4 - Modifies
+variable v;
+Select v such that Modifies (18, v)
+m,x,y,z
 5000

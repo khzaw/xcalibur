@@ -511,8 +511,8 @@ Contains::Contains(){
 
 	set<int> Contains::getTimesContainedInPlus(int plus) { //returns all those times which are children of the plus node in the AST
 		set<int> result;
-		for(int i=0; i<timesPlus.size(); i++){
-			if(timesPlus[i].first==plus)
+		for(int i=0; i<plusTimes.size(); i++){
+			if(plusTimes[i].first==plus)
 				result.insert(plusTimes[i].second);
 		}
 		return result;
@@ -520,8 +520,8 @@ Contains::Contains(){
 
 	set<int> Contains::getPlusContainingTimes(int times) { //returns all those pluses which contain the times node
 		set<int> result;
-		for(int i=0; i<timesPlus.size(); i++) {
-			if(timesPlus[i].second==times)
+		for(int i=0; i<plusTimes.size(); i++) {
+			if(plusTimes[i].second==times)
 				result.insert(plusTimes[i].first);
 		}
 		return result;

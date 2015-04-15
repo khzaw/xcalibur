@@ -91,7 +91,10 @@ public:
 
 	void setPriority() {
 		//TODO: - need priority calculation methods
-		priority = 100;
+		priority = pkb->containsTable->getAllProcs().size() + pkb->containsTable->getAllStmtLsts().size()
+			+ pkb->containsTable->getAllStmts().size() + pkb->containsTable->getAllVars().size()
+			+ pkb->containsTable->getAllConsts().size() + pkb->containsTable->getAllPlus().size()
+			+ pkb->containsTable->getAllMinus().size() + pkb->containsTable->getAllTimes().size();
 	}
 
 	ResultTuple* solve(ResultTuple* tuple) {

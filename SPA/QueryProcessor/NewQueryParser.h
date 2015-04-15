@@ -26,8 +26,7 @@ static const string design_entity[] = {
 	"prog_line",
 	"plus",
 	"minus",
-	"times",
-	"procedure"
+	"times"
 };
 
 static vector<string> DESIGN_ENTITIES(design_entity, design_entity + sizeof(design_entity) / sizeof(design_entity[0]));

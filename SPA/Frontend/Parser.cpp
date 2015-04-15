@@ -468,7 +468,7 @@ void Parser::factor(TNode* assignNode) {
 
 		populateUses(line, currentProc, true);
 	} else {
-		operandStack.push(new TNode("CONST_NODE", nextToken.name, line, currentProc));
+		operandStack.push(new TNode("CONSTANT_NODE", nextToken.name, line, currentProc));
 		if(postfix.length() > 0) postfix += " ";
 		postfix += nextToken.name;
 

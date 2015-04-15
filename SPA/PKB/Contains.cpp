@@ -257,7 +257,7 @@ Contains::Contains(){
 		return allTimes;
 	}
 
-	set<int> Contains::getllStmtLsts(){
+	set<int> Contains::getAllStmtLsts(){
 		return allStmtLsts;
 	}
 

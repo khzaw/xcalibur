@@ -49,21 +49,21 @@ private:
 	set<int> allConsts;
 	set<int> allProcs;
 
-	set<int> getAllPlus();
-	set<int> getAllMinus();
-	set<int> getAllTimes();
-	set<int> getllStmtLsts();
-	set<int> getAllStmts();
-	set<int> getAllVars();
-	set<int> getAllConsts();
-	set<int> getAllProcs();
-
 
 
 public:
 
 	//containers
 	Contains();
+
+	set<int> getAllPlus();
+	set<int> getAllMinus();
+	set<int> getAllTimes();
+	set<int> getAllStmtLsts();
+	set<int> getAllStmts();
+	set<int> getAllVars();
+	set<int> getAllConsts();
+	set<int> getAllProcs();
 	
 	void insertProcStmtLst(int,int); 
 	void insertStmtLstStmt(int,int); 

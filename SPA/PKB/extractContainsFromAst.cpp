@@ -49,7 +49,15 @@ void ExtractContainsFromAST::recursiveExtractContains(TNode* root){
 		}
 
 		if(nodeType.compare("STMTLST_NODE")==0 || nodeType.compare("ELSE_NODE")==0 || nodeType.compare("THEN_NODE")==0){
-			int stmtLstNum = root->getChild(0)->getStmtNum();
+			int stmtLstNum;
+			if(nodeType.compare("STMTLST_NODE")==0){
+				stmtLstNum = root->getChild(0)->getStmtNum();
+			}
+			else{
+				stmtLstNum = root->getChild(0)->getChild(0)->getStmtNum();
+				root = root->getChild(0);
+			}
+
 			for(int i=0; i<root->getNumChildren(); i++) {
 				contains->insertStmtLstStmt(root->getChild(0)->getStmtNum(),root->getChild(i)->getStmtNum());
 				recursiveExtractContains(root->getChild(i));
@@ -59,10 +67,16 @@ void ExtractContainsFromAST::recursiveExtractContains(TNode* root){
 
 		if(nodeType.compare("ASSIGN_NODE")==0 || (nodeType.compare("IF_NODE")==0) || (nodeType.compare("WHILE_NODE")==0)){
 			int stmtNum = root->getStmtNum();
+			if((nodeType.compare("IF_NODE")==0) || (nodeType.compare("WHILE_NODE")==0)){
+				int varIndex = varTable->getVarIndex(root->getData());
+				contains->insertStmtVar(stmtNum,varIndex);
+			}
 			for(int i=0; i<root->getNumChildren(); i++) {
 				string nodeTypeC = root->getChild(i)->getNodeType();
-				if(nodeTypeC.compare("STMTLST_NODE")==0 || nodeTypeC.compare("THEN_NODE")==0 || nodeTypeC.compare("ELSE_NODE")==0)
+				if(nodeTypeC.compare("STMTLST_NODE")==0)
 					contains->insertStmtStmtLst(stmtNum,root->getChild(i)->getChild(0)->getStmtNum());
+				if(nodeTypeC.compare("THEN_NODE")==0 || nodeTypeC.compare("ELSE_NODE")==0)
+					contains->insertStmtStmtLst(stmtNum,root->getChild(i)->getChild(0)->getChild(0)->getStmtNum());
 				if(nodeTypeC.compare("VAR_NODE")==0){
 					int varIndex = varTable->getVarIndex(root->getChild(i)->getData());
 					contains->insertStmtVar(stmtNum,varIndex);

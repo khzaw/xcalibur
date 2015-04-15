@@ -512,6 +512,10 @@ void OptimizedCFGTest::testSourceProgram() {
   }
   std::cout << endl << " why5." << endl;
 
+  CPPUNIT_ASSERT(CFG2->isNextStar(16,16));
+  CPPUNIT_ASSERT(!CFG2->isNextStar(18,18));
+
+  CPPUNIT_ASSERT(CFG2->isNextStar(12,12));
 
 
   // should fail to show that unit test has indeed been run

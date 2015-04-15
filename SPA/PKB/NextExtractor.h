@@ -57,10 +57,6 @@ private:
 	ProcTable* procTable; //declaration
 	Calls* calls;//declaration
 	StatementTable* statementTable;//declaration
-  Parent* parentTable;
-  Follows* followsTable;
-  Modifies* modifiesTable;
-  Uses* usesTable;
 
 
 	map<int,std::shared_ptr<GNode>> nodeMap; // store normal stmt and GNodes

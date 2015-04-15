@@ -344,9 +344,6 @@
     <ClCompile Include="QueryProcessor\QE.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
-    <ClCompile Include="PKB\NextExtractor.cpp">
-      <Filter>Header Files\PKB</Filter>
-    </ClCompile>
     <ClCompile Include="PKB\Parent.cpp">
       <Filter>Header Files\PKB</Filter>
     </ClCompile>
@@ -370,6 +367,9 @@
     </ClCompile>
     <ClCompile Include="QueryProcessor\QTNode.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\NextExtractor.cpp">
+      <Filter>Source Files\PKB</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

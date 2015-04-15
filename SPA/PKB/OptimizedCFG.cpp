@@ -263,6 +263,11 @@ bool OptimizedCFG::isNextStar(int line1, int line2) {
   set<int> parentStarOfLine1 = parentTable->getParentStar(line1);
   set<int> parentStarOfLine2 = parentTable->getParentStar(line2);
 
+  if (parentStarOfLine2.find(line1)!=parentStarOfLine2.end()) {
+    cout << line1 << " is parent* of " << line2 << endl;
+    return true;
+  }
+
   parentStarOfLine1.insert(line1);
   parentStarOfLine2.insert(line2);
 
@@ -275,20 +280,6 @@ bool OptimizedCFG::isNextStar(int line1, int line2) {
     return true;
   }
   
-  /*
-  // parent of line 2 same nesting level as line 1
-  if (!parentStarOfLine2.empty()) {
-    int parentOfLine2 = *(std::next(parentStarOfLine2.begin(), size1));
-    if (followsTable->evaluateIsFollowsStar(line1, parentOfLine2)) 
-      return true;
-  }
-  */
-
-  if (parentStarOfLine2.find(line1)!=parentStarOfLine2.end()) {
-    cout << line1 << " is parent* of " << line2 << endl;
-    return true;
-  }
-
   // keep only first n elems of 2 sets, n=min(size1,size2)
   if (size1!=size2) {
     if (size1>size2) {
@@ -299,9 +290,10 @@ bool OptimizedCFG::isNextStar(int line1, int line2) {
     }
   }
 
+  std::set<int>::iterator it1=parentStarOfLine1.begin();
+  std::set<int>::iterator it2=parentStarOfLine2.begin();
+  
   for (int i=0; i<parentStarOfLine1.size(); i++) {
-    std::set<int>::iterator it1=parentStarOfLine1.begin();
-    std::set<int>::iterator it2=parentStarOfLine2.begin();
 
     if(*it1==*it2 && statementTable->getTNodeType(*it1)=="WHILE_NODE") {
       cout << "common while ancestor at "<<*it2 << endl;
@@ -314,8 +306,18 @@ bool OptimizedCFG::isNextStar(int line1, int line2) {
       return true;
     }
 
-    ++it1; ++it2;
-    cout << "moving on to next nesting level"<< endl;
+    it1++; it2++;
+    //cout << "moving on to next nesting level"<< endl;
+  }
+
+  cout << endl << "parentStar of " << line1 << endl;
+  for (std::set<int>::iterator it1=parentStarOfLine1.begin(); it1!=parentStarOfLine1.end(); it1++) {
+    cout << *it1 << "  ";
+  }
+
+  cout << endl << "parentStar of " << line2 << endl;
+  for (std::set<int>::iterator it2=parentStarOfLine2.begin(); it2!=parentStarOfLine2.end(); it2++) {
+    cout << *it2 << "  ";
   }
 
   return false;
@@ -484,8 +486,8 @@ std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList
         AggNode* temp = new AggNode();
         temp->setType(type);
         temp->addProgLine(currStmtNum);
-        temp->addVarModifiedByThisNode(modifiesTable->getModifiedVarStmt(currStmtNum));
-        temp->addVarUsedByThisNode(usesTable->getUsedVarStmt(currStmtNum));
+        temp->addVarModifiedByThisNode(modifiesTable->evaluateGetModifiedVarStmt(currStmtNum));
+        temp->addVarUsedByThisNode(usesTable->evaluateGetUsedVarStmt(currStmtNum));
         stmtToAggNodeMap[currStmtNum] = temp;
         first_line_of_Agg_AC_Node = currStmtNum;
 
@@ -499,8 +501,8 @@ std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList
       else {
         curr_ANode->addProgLine(currStmtNum);
         stmtToAggNodeMap[currStmtNum] = curr_ANode;
-        curr_ANode->addVarModifiedByThisNode(modifiesTable->getModifiedVarStmt(currStmtNum));
-        curr_ANode->addVarUsedByThisNode(usesTable->getUsedVarStmt(currStmtNum));    
+        curr_ANode->addVarModifiedByThisNode(modifiesTable->evaluateGetModifiedVarStmt(currStmtNum));
+        curr_ANode->addVarUsedByThisNode(usesTable->evaluateGetUsedVarStmt(currStmtNum));    
       }
     }
 
@@ -510,8 +512,8 @@ std::map<int, AggNode*> OptimizedCFG::populateAggNodeMap(vector<TNode*> stmtList
       temp->setType(type);
       stmtToAggNodeMap[currStmtNum] = temp;
 
-      temp->addVarModifiedByThisNode(modifiesTable->getModifiedVarStmt(currStmtNum));
-      temp->addVarUsedByThisNode(usesTable->getUsedVarStmt(currStmtNum));
+      temp->addVarModifiedByThisNode(modifiesTable->evaluateGetModifiedVarStmt(currStmtNum));
+      temp->addVarUsedByThisNode(usesTable->evaluateGetUsedVarStmt(currStmtNum));
         
       if (curr_ANode!=NULL && curr_ANode->getType()!="IF_NODE") { 
         curr_ANode->setNextAggNode(temp);
@@ -613,13 +615,11 @@ void OptimizedCFG::printAggNodeMap() {
 }
 
 bool OptimizedCFG::isAffects(int line1, int line2) {
-  // bool ans = false;
-  // OutputDebugString("printing AggNodeMap");
-  // printAggNodeMap();
-  // cout << "after printing " << endl; 
 
-  std::set<int> modified_by_line1 = modifiesTable->getModifiedVarStmt(line1);
-  std::set<int> used_by_line2 = usesTable->getUsedVarStmt(line2);
+  if (statementTable->getTNodeType(line1)!="ASSIGN_NODE" || statementTable->getTNodeType(line2)!="ASSIGN_NODE") return false;
+
+  std::set<int> modified_by_line1 = modifiesTable->evaluateGetModifiedVarStmt(line1);
+  std::set<int> used_by_line2 = usesTable->evaluateGetUsedVarStmt(line2);
 
   int common_var = *modified_by_line1.begin();
   cout << "lines: " << line1 << " " << line2 << " var: " << common_var << endl;
@@ -674,23 +674,28 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
     // if same node
     else {
       std::set<int> lines_in_ANode1 = ANode1->getProgLines();
-      if(line2>line1) {
+      if (line2>line1) {
         lines_in_ANode1.erase(lines_in_ANode1.lower_bound(line1), lines_in_ANode1.upper_bound(line2));
         those_lines.insert(lines_in_ANode1.begin(), lines_in_ANode1.end());
       }
-      else {
-        those_lines.insert(lines_in_ANode1.lower_bound(line1), lines_in_ANode1.upper_bound(line2));
+      else if (line1<line2) {
+        those_lines.insert(lines_in_ANode1.lower_bound(line1), lines_in_ANode1.upper_bound(line2-1));
       }
+      // if line1 == line2
+
     }
 
     for (std::set<int>::iterator it1=those_lines.begin(); it1!=those_lines.end(); it1++) {
-      std::set<int> foo = modifiesTable->getModifiedVarStmt(*it1);
-      if (foo.find(common_var)!=foo.end()) {
-        // flag
-        cout << "immediate neighbours modifies var " << common_var << endl;
-        //number_of_paths -= 1;
-        return false;
-      }
+      //if (*it1==line1 && *it1==line2) continue;
+      
+        std::set<int> foo = modifiesTable->evaluateGetModifiedVarStmt(*it1);
+        if (foo.find(common_var)!=foo.end()) {
+          // flag
+          cout << "immediate neighbours modifies var " << common_var << endl;
+          //number_of_paths -= 1;
+          return false;
+        }
+      
     }
   
     
@@ -773,9 +778,58 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
   return (number_of_paths>0);
 }
 
+set<int> OptimizedCFG::getAffects(int line) {
+  set<int> ans;
+  
+  if (statementTable->getTNodeType(line)!="ASSIGN_NODE") return ans;
+
+  set<int> var_used = usesTable->evaluateGetUsedVarStmt(line);
+  
+  set<int> lines_modifying_var;
+  
+  for (set<int>::iterator it=var_used.begin(); it!=var_used.end(); it++) {
+    lines_modifying_var.insert(modifiesTable->evaluateGetModifiersStmt(*it).begin(), modifiesTable->evaluateGetModifiersStmt(*it).end()) ;
+  }
+
+  for (set<int>::iterator it=lines_modifying_var.begin(); it!=lines_modifying_var.end(); it++) {
+    if (isAffects(*it,line)) ans.insert(*it);
+  }
+
+  return ans;
+}
+
+set<int> OptimizedCFG::getAffectsBy(int line) {
+  set<int> ans;
+
+  if (statementTable->getTNodeType(line)!="ASSIGN_NODE") return ans;
+
+  int var_modified = *(modifiesTable->evaluateGetModifiedVarStmt(line).begin());
+  set<int> lines_using_var = usesTable->evaluateGetUsersStmt(var_modified);
+
+  for (set<int>::iterator it=lines_using_var.begin(); it!=lines_using_var.end(); it++) {
+    if (isAffects(line, *it)) ans.insert(*it);
+  }
+
+  return ans;
+}
+
+
 bool OptimizedCFG::isAffectsStar(int line1, int line2) {
   return false;
 }
+
+set<int> OptimizedCFG::getAffectsStar(int line) {
+  set<int> ans;
+
+  return ans;
+}
+
+set<int> OptimizedCFG::getAffectsStarBy(int line) {
+  set<int> ans;
+
+  return ans;
+}
+
 
 /*
 std::map<int,set<int>> OptimizedCFG::getNextListFwd() {

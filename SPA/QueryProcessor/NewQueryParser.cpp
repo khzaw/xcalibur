@@ -30,6 +30,8 @@
 #include "AffectsSubquery.cpp"
 #include "AffectsStarSubquery.cpp"
 #include "PatternSubquery.cpp"
+#include "ContainsSubquery.cpp"
+#include "ContainsStarSubquery.cpp"
 
 
 using namespace std;
@@ -805,20 +807,23 @@ void NewQueryParser::matchAffectsStar() {
 }
 
 void NewQueryParser::matchContains() {
+	ContainsSubquery* containsSq = new ContainsSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchNodeRef();
 	match(",");
 	string snd = matchNodeRef();
 	match(")");
-
+	setSynonymsHelper(fst, snd, containsSq);
 }
 
 void NewQueryParser::matchContainsStar() {
+	ContainsStarSubquery* containsStarSq = new ContainsStarSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchNodeRef();
 	match(",");
 	string snd = matchNodeRef();
 	match(")");
+	setSynonymsHelper(fst, snd, containsStarSq);
 }
 
 void NewQueryParser::matchSiblings() {

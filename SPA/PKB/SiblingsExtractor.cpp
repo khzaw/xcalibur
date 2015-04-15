@@ -52,7 +52,14 @@ void SiblingsExtractor::recursiveExtractSibling(TNode* root){
 		}
 
 		if(nodeType.compare("STMTLST_NODE")==0 || nodeType.compare("ELSE_NODE")==0 || nodeType.compare("THEN_NODE")==0){
-			int stmtLstNum = root->getChild(0)->getStmtNum();
+			int stmtLstNum;
+			if(nodeType.compare("STMTLST_NODE")==0){
+				stmtLstNum = root->getChild(0)->getStmtNum();
+			}
+			else{
+				stmtLstNum = root->getChild(0)->getChild(0)->getStmtNum();
+				root = root->getChild(0);
+			}
 			vector<TNode*> children = root->getChildren(); 
 			for(int i=0; i<root->getNumChildren(); i++) {
 				for(int j=i+1; j<root->getNumChildren(); j++){
@@ -92,25 +99,25 @@ void SiblingsExtractor::recursiveExtractSibling(TNode* root){
 		}
 
 		if(nodeType.compare("IF_NODE")==0) {
-			int var = varTable->getVarIndex(root->getChild(0)->getData());
-			string c1NodeType = root->getChild(1)->getNodeType();
-			string c2NodeType = root->getChild(2)->getNodeType();
-			int thenStmtNum = root->getChild(1)->getChild(0)->getStmtNum();
-			int elseStmtNum = root->getChild(2)->getChild(0)->getStmtNum();
+			int var = varTable->getVarIndex(root->getData());
+			string c1NodeType = root->getChild(0)->getNodeType();
+			string c2NodeType = root->getChild(1)->getNodeType();
+			int thenStmtNum = root->getChild(0)->getChild(0)->getChild(0)->getStmtNum();
+			int elseStmtNum = root->getChild(1)->getChild(0)->getChild(0)->getStmtNum();
 			sibling->inserVarStmtLst(var,thenStmtNum);
 			sibling->inserVarStmtLst(var,elseStmtNum);
 			sibling->insertStmtLstStmtLst(thenStmtNum,elseStmtNum);
+			recursiveExtractSibling(root->getChild(0));
 			recursiveExtractSibling(root->getChild(1));
-			recursiveExtractSibling(root->getChild(2));
 			return;
 		}
 
 		if(nodeType.compare("WHILE_NODE")==0){
-			int var = varTable->getVarIndex(root->getChild(0)->getData());
-			string c1NodeType = root->getChild(1)->getNodeType();
-			int stmtLstNum = root->getChild(1)->getChild(0)->getStmtNum();
+			int var = varTable->getVarIndex(root->getData());
+			string c1NodeType = root->getChild(0)->getNodeType();
+			int stmtLstNum = root->getChild(0)->getChild(0)->getStmtNum();
 			sibling->inserVarStmtLst(var,stmtLstNum);
-			recursiveExtractSibling(root->getChild(1));
+			recursiveExtractSibling(root->getChild(0));
 			return;
 		}
 

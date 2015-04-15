@@ -116,7 +116,7 @@ Select a such that Modifies(a, v);
 24 - Modifies If2
 if a;
 Select a such that Modifies(a, "z");
-none
+10,23,31,4,50,51,57,59,74,86
 5000
 25 - Modifies while
 while a; variable v;
@@ -126,7 +126,7 @@ Select a such that Modifies(a, v);
 26 - Modifies while2
 while a;
 Select a such that Modifies(a, "z");
-41,42,43,44,45
+41,42,43,44,45, 2, 3, 35, 58, 60, 69, 81, 9
 5000
 27 - Modifies proc
 procedure a; variable v;
@@ -146,7 +146,7 @@ Select a such that Modifies(a, v);
 30 - Modifies calls2
 call a;
 Select a such that Modifies(a, "yolo");
-8,20,33,34,36,55,77,79, 80, 82,84, 85, 87,89,90,91,92,95,96,97,98
+8,33,34,55,77,79, 80, 82,84, 85, 87,89,90,91,92,95,96,97,98
 5000
 31 - Uses Assign
 assign a; variable v;
@@ -166,7 +166,7 @@ Select a such that Uses(a, v);
 34 - Uses If2
 if a;
 Select a such that Uses(a, "z");
-none
+23,31,50,86
 5000
 35 - Uses while
 while a; variable v;
@@ -176,7 +176,7 @@ Select a such that Uses(a, v);
 36 - Uses while2
 while a;
 Select a such that Uses(a, "z");
-37
+37, 2, 81
 5000
 37 - Uses proc
 procedure a; variable v;
@@ -196,7 +196,7 @@ Select a such that Uses(a, v);
 40 - Uses calls2
 call a;
 Select a such that Uses(a, "z");
-8,33,77,79,82,84,87,89,93,94,95,96
+8,33,77,79,82,84,87,89,95,96,91,92
 5000
 31 - Next
 while a, b;

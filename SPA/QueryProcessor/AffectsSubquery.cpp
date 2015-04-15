@@ -112,7 +112,7 @@ public:
 					Affected = CacheTable::instance()->affectedCache.at(rightIndex);
 				} catch (exception& e) {
 					for (size_t i = 0; i < assStmt.size(); i++) {
-						if (pkb->affectsExtractor->isAffects(assStmt[i], rightIndex)) {
+						if (pkb->optimizedCFG->isAffects(assStmt[i], rightIndex)) {
 							tempAffected.insert(assStmt[i]);
 						} 
 					}
@@ -120,7 +120,7 @@ public:
 				}
 			} else {
 				for (size_t i = 0; i < assStmt.size(); i++) {
-					if (pkb->affectsExtractor->isAffects(assStmt[i], rightIndex)) {
+					if (pkb->optimizedCFG->isAffects(assStmt[i], rightIndex)) {
 						tempAffected.insert(assStmt[i]);
 					} 
 				}
@@ -136,7 +136,7 @@ public:
 								break;
 							}
 						} catch (exception& e) {
-							if (pkb->affectsExtractor->isAffects(assStmt[i], assStmt[j])) {
+							if (pkb->optimizedCFG->isAffects(assStmt[i], assStmt[j])) {
 								tempAffected.insert(assStmt[i]);
 								break;
 							}
@@ -146,7 +146,7 @@ public:
 			} else {
 				for (size_t i = 0; i < assStmt.size(); i++) {
 					for (size_t j = 0; j < assStmt.size(); j++) {
-						if (pkb->affectsExtractor->isAffects(assStmt[i], assStmt[j])) {
+						if (pkb->optimizedCFG->isAffects(assStmt[i], assStmt[j])) {
 							tempAffected.insert(assStmt[i]);
 							break;
 						}
@@ -190,7 +190,7 @@ public:
 							result->addResultRow(temp);
 						}
 					} catch (exception& e) {
-						if (pkb->affectsExtractor->isAffects(temp.at(index), rightIndex)) {
+						if (pkb->optimizedCFG->isAffects(temp.at(index), rightIndex)) {
 							result->addResultRow(temp);
 							CacheTable::instance()->isAffectsStarCache[p] = true;
 						} else {
@@ -198,7 +198,7 @@ public:
 						}
 					}
 				} else {
-					if (pkb->affectsExtractor->isAffects(temp.at(index), rightIndex)) {
+					if (pkb->optimizedCFG->isAffects(temp.at(index), rightIndex)) {
 						result->addResultRow(temp);
 					}
 				}
@@ -243,7 +243,7 @@ public:
 								break;
 							}
 						} catch (exception& e) {
-							if (pkb->affectsExtractor->isAffects(assStmt[j], assStmt[i])) {
+							if (pkb->optimizedCFG->isAffects(assStmt[j], assStmt[i])) {
 								tempAffects.insert(assStmt[i]);
 								break;
 							}
@@ -253,7 +253,7 @@ public:
 			} else {
 				for (size_t i = 0; i < assStmt.size(); i++) {
 					for (size_t j = 0; j < assStmt.size(); j++) {
-						if (pkb->affectsExtractor->isAffects(assStmt[j], assStmt[i])) {
+						if (pkb->optimizedCFG->isAffects(assStmt[j], assStmt[i])) {
 							tempAffects.insert(assStmt[i]);
 							break;
 						}
@@ -298,7 +298,7 @@ public:
 							result->addResultRow(temp);
 						}
 					} catch (exception& e) {
-						if (pkb->affectsExtractor->isAffects(leftIndex, temp[index])) {
+						if (pkb->optimizedCFG->isAffects(leftIndex, temp[index])) {
 							result->addResultRow(temp);
 							CacheTable::instance()->isAffectsStarCache[p] = true;
 						} else {
@@ -306,7 +306,7 @@ public:
 						}
 					}
 				} else {
-					if (pkb->affectsExtractor->isAffects(leftIndex, temp[index])) {
+					if (pkb->optimizedCFG->isAffects(leftIndex, temp[index])) {
 						result->addResultRow(temp);
 					}
 				}
@@ -324,7 +324,7 @@ public:
 								break;
 							}
 						} catch (exception& e) {
-							if (pkb->affectsExtractor->isAffects(assStmt[j], temp[index])) {
+							if (pkb->optimizedCFG->isAffects(assStmt[j], temp[index])) {
 								result->addResultRow(temp);
 								CacheTable::instance()->isAffectsStarCache[p] = true;
 								break;
@@ -333,7 +333,7 @@ public:
 							}
 						}
 					} else {
-						if (pkb->affectsExtractor->isAffects(assStmt[j], temp[index])) {
+						if (pkb->optimizedCFG->isAffects(assStmt[j], temp[index])) {
 							result->addResultRow(temp);
 							break;
 						}
@@ -366,7 +366,7 @@ public:
 							tuple->addResultRow(row);
 						}
 					} catch (exception& e) {
-						if (pkb->affectsExtractor->isAffects(assStmt[i], assStmt[j])) {
+						if (pkb->optimizedCFG->isAffects(assStmt[i], assStmt[j])) {
 							vector<int> row = vector<int>();
 							row.push_back(assStmt.at(i));
 							row.push_back(assStmt.at(j));
@@ -377,7 +377,7 @@ public:
 						}
 					}
 				} else {				
-					if (pkb->affectsExtractor->isAffects(assStmt[i], assStmt[j])) {
+					if (pkb->optimizedCFG->isAffects(assStmt[i], assStmt[j])) {
 						vector<int> row = vector<int>();
 						row.push_back(assStmt.at(i));
 						row.push_back(assStmt.at(j));
@@ -406,7 +406,7 @@ public:
 							result->addResultRow(tuple->getResultRow(i));
 						}
 					} catch (exception& e) {
-						if (pkb->affectsExtractor->isAffects(tuple->getResultAt(i, lIndex), tuple->getResultAt(i, rIndex))){
+						if (pkb->optimizedCFG->isAffects(tuple->getResultAt(i, lIndex), tuple->getResultAt(i, rIndex))){
 							result->addResultRow(tuple->getResultRow(i));
 							CacheTable::instance()->isAffectsStarCache[p] = true;
 						} else {
@@ -414,7 +414,7 @@ public:
 						}
 					}
 				} else {
-					if (pkb->affectsExtractor->isAffects(tuple->getResultAt(i, lIndex), tuple->getResultAt(i, rIndex))){
+					if (pkb->optimizedCFG->isAffects(tuple->getResultAt(i, lIndex), tuple->getResultAt(i, rIndex))){
 						result->addResultRow(tuple->getResultRow(i));
 					}
 				}
@@ -476,7 +476,7 @@ public:
 						Affected = CacheTable::instance()->affectedCache.at(rightValue);
 					} catch (exception& e) {
 						for (size_t x = 0; x < pre.size(); x++) {
-							if (pkb->affectsExtractor->isAffects(pre[x], rightValue)) {
+							if (pkb->optimizedCFG->isAffects(pre[x], rightValue)) {
 								Affected.push_back(pre[x]);
 							}
 						}
@@ -487,7 +487,7 @@ public:
 						Affected = prevSolution.at(rightValue);
 					} catch (exception& e) {
 						for (size_t x = 0; x < pre.size(); x++) {
-							if (pkb->affectsExtractor->isAffects(pre[x], rightValue)) {
+							if (pkb->optimizedCFG->isAffects(pre[x], rightValue)) {
 								Affected.push_back(pre[x]);
 							}
 						}
@@ -516,7 +516,7 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		tuple->setBool(true);
 		if(isSyn == 0) {	//(digit, digit)
-			tuple->setEmpty(!pkb->affectsExtractor->isAffects(leftIndex, rightIndex));
+			tuple->setEmpty(!pkb->optimizedCFG->isAffects(leftIndex, rightIndex));
 		} else if (isSyn == 7) {	//(_, digit)
 			tuple->setEmpty(pkb->affectsExtractor->getAffectsBy(rightIndex).empty());
 		} else if (isSyn == 8) {	//(digit, _)
@@ -525,7 +525,7 @@ public:
 			vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 			for (size_t i = 0; i < assStmt.size(); i++) {
 				for (size_t j = 0; j < assStmt.size(); j++) {
-					if (pkb->affectsExtractor->isAffects(assStmt[i], assStmt[j])) {
+					if (pkb->optimizedCFG->isAffects(assStmt[i], assStmt[j])) {
 						tuple->setEmpty(false);
 						return tuple;
 					}

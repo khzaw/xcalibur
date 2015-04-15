@@ -49,7 +49,12 @@ class OptimizedCFG {
 
     // Affect and AffectStar
     bool isAffects(int, int);
+    set<int> getAffects(int);
+    set<int> getAffectsBy(int);
+
     bool isAffectsStar(int, int);
+    set<int> getAffectsStar(int);
+    set<int> getAffectsStarBy(int);
 
     // AggNodeMap
     AggNode* getAggNodeOfStmt(int);
@@ -68,7 +73,6 @@ class OptimizedCFG {
     Follows* followsTable;
     Modifies* modifiesTable;
     Uses* usesTable;
-    
     
     
     // methods

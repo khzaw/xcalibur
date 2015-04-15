@@ -349,7 +349,7 @@ void OptimizedCFGTest::testSourceProgram() {
 	pk->constructModifies();
 	pk->constructParent();
 	pk->constructNext();
-  pk->constructOptimizedNext();
+  pk->constructOptimizedCFG();
 	pk->constructUses();
 
 	synonymTable["s1"]="stmt";
@@ -470,6 +470,16 @@ void OptimizedCFGTest::testSourceProgram() {
 		std::cout << "" << endl;
   }
 
+  cout << endl << "printing BackList "<< endl;
+  for (std::map<int, set<int>>::iterator it=CFG2->NextListBwd.begin(); it!=CFG2->NextListBwd.end(); it++) {
+		std::cout << "for line " << (*it).first << ": ";
+		set<int> list = (*it).second;
+		for (std::set<int>::iterator it2=list.begin(); it2!=list.end(); it2++) {
+			std::cout << *it2 << " ";
+		}
+		std::cout << "" << endl;
+  }
+
   std::set<int> allNext = CFG2->getAllNext(); 
   std::set<int> allPrev = CFG2->getAllPrev();
   cout << "why2" << endl;
@@ -484,7 +494,29 @@ void OptimizedCFGTest::testSourceProgram() {
   for (std::set<int>::iterator it=allPrev.begin(); it!=allPrev.end(); it++){ 
     std::cout << *it << " ";
   }
+  std::cout << endl << " why3." << endl;
+
+  std::set<int> NextStar4 = CFG2->getNextStar(4); 
+  std::set<int> PrevStar20 = CFG2->getPrevStar(20);
+  std::cout << "why4" << endl;
+  
+  std::cout << endl << "printing NextStar4: " << NextStar4.size() << endl;
+  for (std::set<int>::iterator it=NextStar4.begin(); it!=NextStar4.end(); it++){ 
+    std::cout << *it << " ";
+  }
   std::cout << endl;
+
+  std::cout << endl << "printing PrevStar20: " << PrevStar20.size() << endl;
+  for (std::set<int>::iterator it=PrevStar20.begin(); it!=PrevStar20.end(); it++){ 
+    std::cout << *it << " ";
+  }
+  std::cout << endl << " why5." << endl;
+
+  CPPUNIT_ASSERT(CFG2->isNextStar(16,16));
+  CPPUNIT_ASSERT(!CFG2->isNextStar(18,18));
+
+  CPPUNIT_ASSERT(CFG2->isNextStar(12,12));
+
 
   // should fail to show that unit test has indeed been run
   CPPUNIT_ASSERT(!CFG2->isNextStar(12,8));

@@ -13,7 +13,7 @@ class ProcTable;
 class NextExtractor {
 public:
 	NextExtractor();
-	NextExtractor(ProcTable* procTable,StatementTable* sTable);
+	NextExtractor(ProcTable* procTable,StatementTable* sTable );
 	
 	 //called by PQL
 	bool isNextStar(int progline1, int progline2);
@@ -26,7 +26,8 @@ public:
 	set<int> getAllPrev();
 	set<int> getNextStar(int progLine);
 	set<int> getPrevStar(int progLine);
-	//called by front end controller
+	
+  //called by front end controller
 	void construct();
 	map<int,std::shared_ptr<GNode>> getNodeMap();
 	map<int,std::shared_ptr<GNode>> getLastIfNode();
@@ -56,6 +57,7 @@ private:
 	ProcTable* procTable; //declaration
 	Calls* calls;//declaration
 	StatementTable* statementTable;//declaration
+
 
 	map<int,std::shared_ptr<GNode>> nodeMap; // store normal stmt and GNodes
 	map<int,std::shared_ptr<GNode>> lastIfNode; //for affects "to check last node of if comparison"

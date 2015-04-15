@@ -1153,6 +1153,7 @@ Contains::Contains(){
 	set<int> Contains::getProcContainingStarStmtLst(int stmtLst) { //returns the procedure which contains the given stmtLst directly/indirectly
 		set<int> results;
 		set<int> procs = getProcContainingStmtLst(stmtLst);
+		results.insert(procs.begin(), procs.end());
 		set<int> stmts = getStmtContainingStmtLst(stmtLst);
 		for(std::set<int>::iterator it=stmts.begin(); it!=stmts.end(); it++){
 			set<int> procs1 = getProcContainingStarStmt(*it);
@@ -1747,6 +1748,7 @@ Contains::Contains(){
 	set<int> Contains::getStmtLstContainedStarInStmt (int stmt) {//returns the statementList which are ContainedStar in statement (WILL NEVER APPEAR AS QUERY!!!)
 		set<int> results;
 		set<int> stmtLst1 = getStmtLstContainedInStmt(stmt);
+		results.insert(stmtLst1.begin(), stmtLst1.end()); 
 		for(std::set<int>::iterator i=stmtLst1.begin(); i!=stmtLst1.end(); i++) {
 			set<int> stmtLsts = getStmtLstContainedStarInStmtLst(*i);
 			results.insert(stmtLsts.begin(), stmtLsts.end());
@@ -1756,6 +1758,7 @@ Contains::Contains(){
 	set<int> Contains::getStmtContainingStarStmtLst (int stmtLst) { //returns the statements contain statementList 
 		set<int> results;
 		set<int> stmts = getStmtContainingStmtLst(stmtLst);
+		results.insert(stmts.begin(), stmts.end());
 		for(std::set<int>::iterator i=stmts.begin(); i!=stmts.end(); i++) {
 			set<int> stmts = getStmtContainingStarStmt(*i);
 			results.insert(stmts.begin(), stmts.end());

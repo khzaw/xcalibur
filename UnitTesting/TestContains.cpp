@@ -28,13 +28,13 @@ void ContainsTest::testInsert(){
 	contains.insertStmtVar(3,1);
 	CPPUNIT_ASSERT(contains.isContainsStmtVar(3,1));
 	contains.insertStmtConst(3,1);
-	CPPUNIT_ASSERT(contains.isContainsStmtConst(3,4));
+	CPPUNIT_ASSERT(contains.isContainsStmtConst(3,1));
 
 }
 
 //tests for procedures as containers
 void ContainsTest::testGetStmtLstContainedStarInProc(){
-	 Contains contains;
+	Contains contains;
 	contains.insertProcStmtLst(1,1);
 	contains.insertStmtLstStmt(1,3);
 	contains.insertStmtStmtLst(3,4);
@@ -49,11 +49,11 @@ void ContainsTest::testGetStmtLstContainedStarInProc(){
 }
 
 void ContainsTest::testGetProcContainingStarStmtLst(){
-	 Contains contains;
+	Contains contains;
 	contains.insertProcStmtLst(1,1);
 	contains.insertStmtLstStmt(1,3);
 	contains.insertStmtStmtLst(3,4);
-	set<int> results = contains.getProcContainingStarStmtLst(4);
+	set<int> results = contains.getProcContainingStarStmtLst(1);
 	int size = results.size();
 	CPPUNIT_ASSERT_EQUAL(1, size);
 	std::set<int>::iterator it= results.begin();
@@ -61,7 +61,7 @@ void ContainsTest::testGetProcContainingStarStmtLst(){
 }
 
 void ContainsTest::testGetStmtContainedStarInProc(){
-	 Contains contains;
+	Contains contains;
 	contains.insertProcStmtLst(1,1);
 	contains.insertStmtLstStmt(1,3);
 	contains.insertStmtStmtLst(3,4);
@@ -73,7 +73,7 @@ void ContainsTest::testGetStmtContainedStarInProc(){
 }
 
 void ContainsTest::testGetProcContainingStarStmt(){
-	 Contains contains;
+	Contains contains;
 	contains.insertProcStmtLst(1,1);
 	contains.insertStmtLstStmt(1,3);
 	contains.insertStmtStmtLst(3,4);
@@ -86,7 +86,7 @@ void ContainsTest::testGetProcContainingStarStmt(){
 
 
 void ContainsTest::testGetVarContainedStarInProc(){
-	 Contains contains;
+	Contains contains;
 	contains.insertProcStmtLst(1,1);
 	contains.insertStmtLstStmt(1,3);
 	contains.insertStmtStmtLst(3,4);
@@ -100,7 +100,7 @@ void ContainsTest::testGetVarContainedStarInProc(){
 }
 
 void ContainsTest::testGetProcsContainingStarVar(){
-	 Contains contains;
+	Contains contains;
 	contains.insertProcStmtLst(1,1);
 	contains.insertStmtLstStmt(1,3);
 	contains.insertStmtStmtLst(3,4);
@@ -115,7 +115,7 @@ void ContainsTest::testGetProcsContainingStarVar(){
 }
 
 void ContainsTest::testGetConstContainedStarInProc(){
-	 Contains contains;
+	Contains contains;
 	contains.insertProcStmtLst(1,1);
 	contains.insertStmtLstStmt(1,3);
 	contains.insertStmtStmtLst(3,4);
@@ -129,7 +129,7 @@ void ContainsTest::testGetConstContainedStarInProc(){
 }
 
 void ContainsTest::testGetProcContainingStarConst(){
-	 Contains contains;
+	Contains contains;
 	contains.insertProcStmtLst(1,1);
 	contains.insertStmtLstStmt(1,3);
 	contains.insertStmtStmtLst(3,4);
@@ -144,7 +144,7 @@ void ContainsTest::testGetProcContainingStarConst(){
 
 //tests for statementsLists as containers
 void ContainsTest::testGetStmtContainedStarInStmtLst(){
-	 Contains contains;
+	Contains contains;
 	contains.insertProcStmtLst(1,1);
 	contains.insertStmtLstStmt(1,3);
 	contains.insertStmtStmtLst(3,4);
@@ -155,13 +155,13 @@ void ContainsTest::testGetStmtContainedStarInStmtLst(){
 	int size = results.size();
 	CPPUNIT_ASSERT_EQUAL(2, size);
 	std::set<int>::iterator it= results.begin();
-	CPPUNIT_ASSERT_EQUAL(1,*it);
+	CPPUNIT_ASSERT_EQUAL(3,*it);
 	it++;
 	CPPUNIT_ASSERT_EQUAL(4,*it); 
 }
 
 void ContainsTest::testGetStmtLstContainingStarStmt(){
-	 Contains contains;
+	Contains contains;
 	contains.insertProcStmtLst(1,1);
 	contains.insertStmtLstStmt(1,3);
 	contains.insertStmtStmtLst(3,4);
@@ -177,7 +177,7 @@ void ContainsTest::testGetStmtLstContainingStarStmt(){
 }
 
 void ContainsTest::testGetVarContainedStarInStmtLst(){
-	 Contains contains;
+	Contains contains;
 	contains.insertProcStmtLst(1,1);
 	contains.insertStmtLstStmt(1,3);
 	contains.insertStmtStmtLst(3,4);
@@ -194,7 +194,7 @@ void ContainsTest::testGetVarContainedStarInStmtLst(){
 
 
 void ContainsTest::testGetStmtLstContainingStarVar(){
-	 Contains contains;
+	Contains contains;
 	contains.insertProcStmtLst(1,1);
 	contains.insertStmtLstStmt(1,3);
 	contains.insertStmtStmtLst(3,4);
@@ -211,7 +211,7 @@ void ContainsTest::testGetStmtLstContainingStarVar(){
 
 
 void ContainsTest::testGetConstContainedStarInStmtLst(){
-	 Contains contains;
+	Contains contains;
 	contains.insertProcStmtLst(1,1);
 	contains.insertStmtLstStmt(1,3);
 	contains.insertStmtStmtLst(3,4);
@@ -324,7 +324,7 @@ void ContainsTest::testGetStmtLstContainedStarInStmt(){
 	int size = results.size();
 	CPPUNIT_ASSERT_EQUAL(1, size);
 	std::set<int>::iterator it= results.begin();
-	CPPUNIT_ASSERT_EQUAL(1,*it);
+	CPPUNIT_ASSERT_EQUAL(4,*it);
 	it++; 
 }
 

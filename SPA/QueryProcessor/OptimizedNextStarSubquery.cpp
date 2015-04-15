@@ -134,7 +134,7 @@ public:
 		string type = synonymTable->at(leftSynonym);
 
 		if (isSyn == 2) {	// NextStar(syn, stmt): Get Previous of stmt
-			tempPrevious = pkb->nextExtractor->getPrevStar(rightIndex);
+			tempPrevious = pkb->optimizedCFG->getPrevStar(rightIndex);
 			/*
 			vector<int> stmts;
 			if (type == "stmt" || type == "prog_line") {
@@ -151,7 +151,7 @@ public:
 			*/
 		} else {	// NextStar(syn, _): Get all Previous stmt
 			// getAllPrevious Statements
-			tempPrevious = pkb->nextExtractor->getAllPrev();
+			tempPrevious = pkb->optimizedCFG->getAllPrev();
 		}
 
 		vector<int> Previous(tempPrevious.begin(), tempPrevious.end());
@@ -182,7 +182,7 @@ public:
 					result->addResultRow(temp);
 				}
 			} else {	// NextStar(syn, _)
-				if (!pkb->nextExtractor->getNext(temp.at(index)).empty()) {
+				if (!pkb->optimizedCFG->getNext(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -197,7 +197,7 @@ public:
 		set<int> tempNextStar;
 
 		if (isSyn == 1) {	// NextStar(stmt, syn): Get NextStar of stmt
-			tempNextStar = pkb->nextExtractor->getNextStar(leftIndex);
+			tempNextStar = pkb->optimizedCFG->getNextStar(leftIndex);
 			/*
 			vector<int> stmts;
 			if (type == "stmt" || type == "prog_line") {
@@ -213,7 +213,7 @@ public:
 			}
 			*/
 		} else {	// NextStar(_, syn): Get all NextStar stmt
-			tempNextStar = pkb->nextExtractor->getAllNext();
+			tempNextStar = pkb->optimizedCFG->getAllNext();
 		}
 
 		vector<int> NextStar(tempNextStar.begin(), tempNextStar.end());
@@ -243,7 +243,7 @@ public:
 					result->addResultRow(temp);
 				}
 			} else {	// NextStar(_, syn)
-				if (!pkb->nextExtractor->getPrev(temp.at(index)).empty()) {
+				if (!pkb->optimizedCFG->getPrev(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -260,7 +260,7 @@ public:
 		// get all Previous statement
 		// for each followee statement, get its NextStar
 		//map<int, vector<int>>* pcache = CacheTable::instance()nextStarCache;
-		set<int> tempPrevious = pkb->nextExtractor->getAllPrev();
+		set<int> tempPrevious = pkb->optimizedCFG->getAllPrev();
 		vector<int> Previous(tempPrevious.begin(), tempPrevious.end());
 
 		for (size_t i = 0; i < Previous.size(); i++) {
@@ -279,12 +279,12 @@ public:
 				if (pcache == NULL) {
 					pcache = new map<int, vector<int>>();
 				}
-				set<int> tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
+				set<int> tempNextStar = pkb->optimizedCFG->getNextStar(Previous[i]);
 				NextStar = vector<int>(tempNextStar.begin(), tempNextStar.end());
 				pcache->insert(map<int, vector<int>>::value_type(Previous[i], NextStar));
 			}
 			*/
-			set<int> tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
+			set<int> tempNextStar = pkb->optimizedCFG->getNextStar(Previous[i]);
 			vector<int> NextStar = vector<int>(tempNextStar.begin(), tempNextStar.end());
 
 			for (size_t j = 0; j < NextStar.size(); j++) {
@@ -323,7 +323,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
-					set<int> tV = pkb->nextExtractor->getNextStar(leftValue);
+					set<int> tV = pkb->optimizedCFG->getNextStar(leftValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
@@ -345,7 +345,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					set<int> tV = pkb->nextExtractor->getPrevStar(rightValue);
+					set<int> tV = pkb->optimizedCFG->getPrevStar(rightValue);
 					vector<int> tempValues(tV.begin(), tV.end());
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
@@ -371,11 +371,11 @@ public:
 		if(isSyn == 0) {	//(digit, digit)
 			tuple->setEmpty(!pkb->optimizedCFG->isNextStar(leftIndex, rightIndex));
 		} else if (isSyn == 7) {	//(_, digit)
-			tuple->setEmpty(pkb->nextExtractor->getPrev(rightIndex).empty());
+			tuple->setEmpty(pkb->optimizedCFG->getPrev(rightIndex).empty());
 		} else if (isSyn == 8) {	//(digit, _)
-			tuple->setEmpty(pkb->nextExtractor->getNext(leftIndex).empty());
+			tuple->setEmpty(pkb->optimizedCFG->getNext(leftIndex).empty());
 		} else {	//(_, _)
-			tuple->setEmpty(pkb->nextExtractor->getAllNext().empty());
+			tuple->setEmpty(pkb->optimizedCFG->getAllNext().empty());
 		}
 		return tuple;
 	}

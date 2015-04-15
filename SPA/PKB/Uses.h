@@ -84,4 +84,6 @@ class Uses{
 	set<int> evaluateGetUsedVarStmt(int); //O(1)
 	set<int> evaluateGetUsersProc(int);  //O(1)
 	set<int> evaluateGetUsedVarProc(int); //O(1)
+
+	set<int> getAllVariablesUsedByProc(int);
 };

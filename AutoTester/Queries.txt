@@ -1,5 +1,25 @@
-4 - Modifies
-variable v;
-Select v such that Modifies (18, v)
-m,x,y,z
+1 - Contains
+stmt a; variable v;
+Select a such that Contains(a, v) with v.varName = "x"
+none
+5000
+2 - ContainsStar
+stmt a; variable v;
+Select a such that Contains*(a, v) with v.varName = "x"
+1
+5000
+3 - Sibling
+variable a, b;
+Select a such that Sibling(a, b) with b.varName = "x"
+b
+5000
+4 - ContainsStar
+variable v; plus p;
+Select v such that Contains*(p, v)
+b, c, x, y, z
+5000
+5 - Multiple Contains
+plus p1, p2; times t; constant c;
+Select c such that Contains(p2, c)
+15
 5000

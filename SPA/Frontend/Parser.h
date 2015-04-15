@@ -73,7 +73,8 @@ private:
 
 	void popOperator(Operator);
 
-	void populateAdditionalInfo();
+	void populateAdditionalModifiesInfo();
+	void populateAdditionalUsesInfo();
 
 	void populateProcAndContainers(int, int);
 	void constructRelations();

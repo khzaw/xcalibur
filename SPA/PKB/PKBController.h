@@ -71,7 +71,7 @@ public:
 	void constructModifies();
 	void constructUses();
 	void constructNext();
-  void constructOptimizedNext();
+  void constructOptimizedCFG();
 	void constructContains();
 	void constructSiblings();
 };

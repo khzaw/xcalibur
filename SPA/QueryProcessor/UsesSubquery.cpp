@@ -143,7 +143,7 @@ public:
 		
 		vector<int> used;
 		if (isSyn == 1) {	// Uses(stmt, varnum): Get Users of varnum
-			set<int> tempUsed = pkb->usesTable->evaluateGetUsersStmt(leftIndex);
+			set<int> tempUsed = pkb->usesTable->evaluateGetUsedVarStmt(leftIndex);
 			copy(tempUsed.begin(), tempUsed.end(), back_inserter(used));
 		} else {	// Uses(_, varnum)
 			//invalid

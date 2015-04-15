@@ -12,12 +12,13 @@ NextExtractor::NextExtractor()
 {
 }
 
-NextExtractor::NextExtractor(ProcTable* procedureTable, StatementTable* statementTable )
+NextExtractor::NextExtractor(ProcTable* procedureTable, StatementTable* statementTable)
 {
 	this->procTable = procedureTable;
 	this->statementTable = statementTable;
 	//this->calls = Calls;
 	//this->statementTable = StmtTable;
+
 }
 
 vector<std::shared_ptr<CFG>> NextExtractor::constructCFG()
@@ -434,7 +435,6 @@ bool NextExtractor::isNextStar(int progLine1, int progLine2)
 		return false;
 	}
 }
-
 
 bool NextExtractor::isPrevStar(int progLine1, int progLine2)
 {

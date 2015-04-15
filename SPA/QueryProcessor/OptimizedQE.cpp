@@ -306,7 +306,12 @@ ResultTuple* OptimizedQE::optimizedJoin(vector<ResultTuple*> r) {
 	if (synonyms[0] == "BOOLEAN") {
 		answer->setBool(true);
 		for (size_t i = 0; i < r.size(); i++) {
-			if (r[i]->getAllResults().size() == 0) {
+			if (r[i]->isBool()) {
+				if (r[i]->isEmpty()) {
+					answer->setEmpty(true);
+					return answer;
+				}
+			} else if (r[i]->getAllResults().size() == 0) {
 				answer->setEmpty(true);
 				return answer;
 			}

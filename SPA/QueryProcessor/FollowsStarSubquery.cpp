@@ -200,18 +200,27 @@ public:
 				&& pkb->statementTable->getTNode(followees[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
 				continue;
 			}
-			set<int> tempFollowers = pkb->followsTable->evaluateGetFollowerStar(followees[i]);
-			vector<int> followers(tempFollowers.begin(), tempFollowers.end()); 
-			for (size_t j = 0; j < followers.size(); j++) {
-				// synonym type check
-				if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if" || synonymTable->at(rightSynonym)=="call")
-				&& pkb->statementTable->getTNode(followers[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
-					continue;
+			
+			if (leftSynonym == rightSynonym) {
+				if (pkb->followsTable->evaluateIsFollows(followees[i], followees[i])) {
+					vector<int> row = vector<int>();
+					row.push_back(followees.at(i));
+					tuple->addResultRow(row);
 				}
-				vector<int> row = vector<int>();
-				row.push_back(followees.at(i));
-				row.push_back(followers.at(j));
-				tuple->addResultRow(row);
+			} else {
+				set<int> tempFollowers = pkb->followsTable->evaluateGetFollowerStar(followees[i]);
+				vector<int> followers(tempFollowers.begin(), tempFollowers.end()); 
+				for (size_t j = 0; j < followers.size(); j++) {
+					// synonym type check
+					if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if" || synonymTable->at(rightSynonym)=="call")
+					&& pkb->statementTable->getTNode(followers[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
+						continue;
+					}
+					vector<int> row = vector<int>();
+					row.push_back(followees.at(i));
+					row.push_back(followers.at(j));
+					tuple->addResultRow(row);
+				}
 			}
 		}
 		return tuple;

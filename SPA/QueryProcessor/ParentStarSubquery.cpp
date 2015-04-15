@@ -199,18 +199,27 @@ public:
 				&& pkb->statementTable->getTNode(parents[i])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(leftSynonym))]){
 				continue;
 			}
-			set<int> tempChildren =pkb->parentTable->evaluateGetChildrenStar(parents[i]);
-			vector<int> children(tempChildren.begin(), tempChildren.end());
-			for (size_t j = 0; j < children.size(); j++) {
-				// synonym type check
-				if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if" || synonymTable->at(rightSynonym)=="call")
-				&& pkb->statementTable->getTNode(children[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
-					continue;
+
+			if (leftSynonym == rightSynonym) {
+				if (pkb->parentTable->evaluateIsParentStar(parents[i], parents[i])) {
+					vector<int> row = vector<int>();
+					row.push_back(parents.at(i));
+					tuple->addResultRow(row);
 				}
-				vector<int> row = vector<int>();
-				row.push_back(parents.at(i));
-				row.push_back(children.at(j));
-				tuple->addResultRow(row);
+			} else {
+				set<int> tempChildren =pkb->parentTable->evaluateGetChildrenStar(parents[i]);
+				vector<int> children(tempChildren.begin(), tempChildren.end());
+				for (size_t j = 0; j < children.size(); j++) {
+					// synonym type check
+					if ((synonymTable->at(rightSynonym)=="assign" || synonymTable->at(rightSynonym)=="while" || synonymTable->at(rightSynonym)=="if" || synonymTable->at(rightSynonym)=="call")
+					&& pkb->statementTable->getTNode(children[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
+						continue;
+					}
+					vector<int> row = vector<int>();
+					row.push_back(parents.at(i));
+					row.push_back(children.at(j));
+					tuple->addResultRow(row);
+				}
 			}
 		}
 		return tuple;

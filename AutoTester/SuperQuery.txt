@@ -176,7 +176,7 @@ Select a such that Uses(a, v);
 36 - Uses while2
 while a;
 Select a such that Uses(a, "z");
-37, 2, 81
+37, 2, 81, 3
 5000
 37 - Uses proc
 procedure a; variable v;

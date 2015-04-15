@@ -442,10 +442,10 @@ void NewQueryParser::matchAttrCompare() {
 	match("=");
 	string snd = matchRef(false, withSq);
 
-	if(withSecond == "procName") {
+	if(withSecond == "procName" && withFirst == "") {
 		fst = to_string((long long)controller->procTable->getProcIndex(fst));
 	}
-	if(withSecond == "varName") {
+	if(withSecond == "varName" && withFirst == "") {
 		fst = to_string((long long)controller->varTable->getVarIndex(fst));
 	}
 
@@ -483,6 +483,8 @@ string NewQueryParser::matchRef(bool lhs, WithSubquery* withsq) {
 			if(attrname == "stmt#") {withStmtNum = true; withsq->setAttr("stmt#", lhs);}
 			if(!lhs) {
 				withSecond = attrname;
+			} else {
+				withFirst = attrname;
 			}
 			match(nextToken.name);
 			return result;

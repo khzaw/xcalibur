@@ -226,6 +226,7 @@ void Parser::stmt(TNode* parent) {
 
 
 		string newProcedure = procedureName();
+		callNode->setData(newProcedure);
 		int procIndex = getProcedureIndex(newProcedure);
 
 		if(callees.find(currentProc) != callees.end()) {

@@ -33,10 +33,258 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PKB\AST.h">
+      <Filter>Header Files\Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\CallsExtractor.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\CfgNode.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\CacheTable.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\Calls.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\CallsExtractor.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\AggNode.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\AffectsExtractor.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\CFG.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\ConstantTable.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\Contains.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\Follows.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\GNode.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\FollowsExtractor.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\extractContainsFromAst.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\ModifiesExtractor.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\FollowsExtractor.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="Frontend\Lexeme.h">
+      <Filter>Header Files\Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="Frontend\Lexer.h">
+      <Filter>Header Files\Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\ModifiesExtractor.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\Modifies.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\iterativeCFG.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\OptimizedCFG.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\NextExtractor.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\Parent.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\ParentExtractor.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\PKBController.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\ProcTable.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\Siblings.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\SiblingsExtractor.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\StatementTable.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\UsesExtractor.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="Frontend\Parser.h">
+      <Filter>Header Files\Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\NewQueryParser.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="Frontend\Operator.h">
+      <Filter>Header Files\Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\OptimizedQE.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\OptimizedSubquerySolver.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\QE.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\QueryEvaluator.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\QueryLexer.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\QueryException.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\QueryParser.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\QueryTree.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\ResultTuple.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\VarTable.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\UsesExtractor.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\Uses.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\PKB.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="PKB\ParentExtractor.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="Frontend\TNode.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\QTNode.h">
+      <Filter>Header Files\Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryProcessor\Subquery.h">
+      <Filter>Header Files\QueryProcessor</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="PKB\AST.cpp">
+      <Filter>Source Files\Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\Calls.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\CFG.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
     <ClCompile Include="PKB\ConstantTable.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
-    <ClCompile Include="PKB\AST.cpp">
+    <ClCompile Include="PKB\Contains.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\extractContainsFromAst.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\AggNode.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\AffectsExtractor.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\AffectsStarSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\AffectsSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\CacheTable.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\iterativeCFG.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\GNode.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\CallsStarSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\CallsSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\ContainsStarSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\ContainsSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\FollowsStarSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\FollowsSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files\Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\WithSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\UsesSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\UsesProcSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\Subquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\StubSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\SiblingSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\PatternSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\ParentSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\ParentStarSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\ModifiesProcSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\ModifiesSubquery.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\Modifies.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
     <ClCompile Include="PKB\Follows.cpp">
@@ -48,106 +296,7 @@
     <ClCompile Include="Frontend\Lexer.cpp">
       <Filter>Source Files\Frontend</Filter>
     </ClCompile>
-    <ClCompile Include="PKB\Modifies.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="Frontend\Operator.cpp">
-      <Filter>Source Files\Frontend</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\Parent.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\PKBController.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\ProcTable.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\QTNode.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\QueryLexer.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\QueryParser.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\QueryTree.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\StatementTable.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="Frontend\TNode.cpp">
-      <Filter>Source Files\Frontend</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\Uses.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\VarTable.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\Subquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\ResultTuple.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files\Frontend</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\FollowsSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\FollowsStarSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\ParentStarSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\QE.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\ModifiesSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\ParentSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\Calls.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\CFG.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\GNode.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\NextExtractor.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\iterativeCFG.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\CallsStarSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\WithSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\CallsSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\ModifiesProcSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\OptimizedQE.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\PatternSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\UsesProcSubquery.cpp">
+    <ClCompile Include="QueryProcessor\NewQueryParser.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
     <ClCompile Include="QueryProcessor\NextStarSubquery.cpp">
@@ -156,218 +305,71 @@
     <ClCompile Include="QueryProcessor\NextSubquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
-    <ClCompile Include="QueryProcessor\NewQueryParser.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\UsesSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="Frontend\Parser.cpp">
-      <Filter>Source Files\Frontend</Filter>
-    </ClCompile>
     <ClCompile Include="QueryProcessor\OptimizedSubquerySolver.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
-    <ClCompile Include="PKB\AffectsExtractor.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryProcessor\AffectsSubquery.cpp">
+    <ClCompile Include="QueryProcessor\OptimizedQE.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
-    <ClCompile Include="QueryProcessor\AffectsStarSubquery.cpp">
+    <ClCompile Include="QueryProcessor\QueryLexer.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
-    <ClCompile Include="QueryProcessor\StubSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-    <ClCompile Include="PKB\Contains.cpp">
+    <ClCompile Include="PKB\VarTable.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
-    <ClCompile Include="PKB\extractContainsFromAst.cpp">
+    <ClCompile Include="PKB\Uses.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
-    <ClCompile Include="PKB\Siblings.cpp">
+    <ClCompile Include="PKB\StatementTable.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
     <ClCompile Include="PKB\SiblingsExtractor.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
-    <ClCompile Include="QueryProcessor\CacheTable.cpp">
+    <ClCompile Include="PKB\Siblings.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="Frontend\Parser.cpp">
+      <Filter>Source Files\Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="Frontend\Operator.cpp">
+      <Filter>Source Files\Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\QueryParser.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\QueryTree.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\QE.cpp">
+      <Filter>Source Files\QueryProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\NextExtractor.cpp">
+      <Filter>Header Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="PKB\Parent.cpp">
+      <Filter>Header Files\PKB</Filter>
     </ClCompile>
     <ClCompile Include="PKB\OptimizedCFG.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
-    <ClCompile Include="PKB\AggNode.cpp">
+    <ClCompile Include="PKB\PKBController.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
-    <ClCompile Include="QueryProcessor\ContainsSubquery.cpp">
+    <ClCompile Include="PKB\ProcTable.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="Frontend\TNode.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\QTNode.cpp">
+      <Filter>Source Files\Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryProcessor\ResultTuple.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
     <ClCompile Include="QueryProcessor\OptimizedNextStarSubquery.cpp">
-    <ClCompile Include="QueryProcessor\ContainsStarSubquery.cpp">
       <Filter>Source Files\QueryProcessor</Filter>
     </ClCompile>
-    <ClCompile Include="QueryProcessor\SiblingSubquery.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="PKB\AST.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\ConstantTable.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\Follows.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="Frontend\Lexeme.h">
-      <Filter>Header Files\Frontend</Filter>
-    </ClInclude>
-    <ClInclude Include="Frontend\Lexer.h">
-      <Filter>Header Files\Frontend</Filter>
-    </ClInclude>
-    <ClInclude Include="Frontend\Operator.h">
-      <Filter>Header Files\Frontend</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\Modifies.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\Parent.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\PKB.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\PKBController.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\ProcTable.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryProcessor\QTNode.h">
-      <Filter>Header Files\QueryProcessor</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryProcessor\QueryTree.h">
-      <Filter>Header Files\QueryProcessor</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryProcessor\QueryEvaluator.h">
-      <Filter>Header Files\QueryProcessor</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryProcessor\QueryException.h">
-      <Filter>Header Files\QueryProcessor</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryProcessor\QueryLexer.h">
-      <Filter>Header Files\QueryProcessor</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryProcessor\QueryParser.h">
-      <Filter>Header Files\QueryProcessor</Filter>
-    </ClInclude>
-    <ClInclude Include="Frontend\TNode.h">
-      <Filter>Header Files\Frontend</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\StatementTable.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\Uses.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\VarTable.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryProcessor\Subquery.h">
-      <Filter>Header Files\QueryProcessor</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryProcessor\ResultTuple.h">
-      <Filter>Header Files\QueryProcessor</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryProcessor\QE.h">
-      <Filter>Header Files\QueryProcessor</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\ParentExtractor.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\CallsExtractor.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\FollowsExtractor.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\ModifiesExtractor.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\UsesExtractor.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\Calls.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\UsesExtractor.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\CallsExtractor.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\FollowsExtractor.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\ModifiesExtractor.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\ParentExtractor.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\CFG.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\GNode.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\NextExtractor.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\iterativeCFG.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\CfgNode.cpp">
-      <Filter>Source Files\QueryProcessor</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryProcessor\OptimizedQE.h">
-      <Filter>Header Files\QueryProcessor</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryProcessor\NewQueryParser.h">
-      <Filter>Header Files\QueryProcessor</Filter>
-    </ClInclude>
-    <ClInclude Include="Frontend\Parser.h">
-      <Filter>Header Files\Frontend</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryProcessor\OptimizedSubquerySolver.h">
-      <Filter>Header Files\QueryProcessor</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\AffectsExtractor.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\Contains.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\extractContainsFromAst.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\Siblings.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\SiblingsExtractor.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="QueryProcessor\CacheTable.h">
-      <Filter>Header Files\QueryProcessor</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\OptimizedCFG.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="PKB\AggNode.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

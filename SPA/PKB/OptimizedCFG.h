@@ -41,8 +41,11 @@ class OptimizedCFG {
 	  set<int> getNextStar(int);
 	  set<int> getPrevStar(int);
 
-	  map<int, set<int>> getNextListFwd;
-	  map<int, set<int>> getNextListBwd;
+    set<int> getAllNext();
+    set<int> getAllPrev();
+
+	  map<int, set<int>> getNextListFwd();
+	  map<int, set<int>> getNextListBwd();
 
     // Affect and AffectStar
     bool isAffects(int, int);
@@ -53,6 +56,10 @@ class OptimizedCFG {
     std::map<int, AggNode*> populateAggNodeMap(vector<TNode*>, std::map<int, AggNode*>, AggNode*, AggNode*);
     void printAggNodeMap();
 
+    // ds for Next relationships  
+    std::map<int, std::set<int> > NextListFwd;
+    std::map<int, std::set<int> > NextListBwd;
+
 	private:
 
     ProcTable* procTable; //declaration
@@ -62,9 +69,7 @@ class OptimizedCFG {
     Modifies* modifiesTable;
     Uses* usesTable;
     
-    // ds for Next relationships  
-    std::map<int, std::set<int> > NextListFwd;
-    std::map<int, std::set<int> > NextListBwd;
+    
     
     // methods
     void linkStmtList(vector<TNode*>);

@@ -1156,7 +1156,7 @@ Contains::Contains(){
 		set<int> stmts = getStmtContainingStmtLst(stmtLst);
 		for(std::set<int>::iterator it=stmts.begin(); it!=stmts.end(); it++){
 			set<int> procs1 = getProcContainingStarStmt(*it);
-			results.insert(procs1.begin(),procs.end());
+			results.insert(procs1.begin(),procs1.end());
 		}
 		return results;
 	}

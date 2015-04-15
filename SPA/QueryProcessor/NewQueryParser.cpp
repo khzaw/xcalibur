@@ -110,11 +110,13 @@ void NewQueryParser::parse() {
 void NewQueryParser::matchDeclaration() {
 	nextToken = getToken();
 	if(nextToken.name.compare("Select") != 0) { // start of synonyms
-		for(size_t i = 0; i < DESIGN_ENTITIES.size(); ++i) {
-			if(nextToken.name == DESIGN_ENTITIES[i]) {
-				match(DESIGN_ENTITIES[i]);
-				matchDeclarationVariables(DESIGN_ENTITIES[i]); 
-				i = 0;
+		for(auto i = DESIGN_ENTITIES.begin(); i != DESIGN_ENTITIES.end();) {
+			if(nextToken.name == *i) {
+				match(*i);
+				matchDeclarationVariables(*i); 
+				i = DESIGN_ENTITIES.begin();
+			} else {
+				i++;
 			}
 		}
 	}

@@ -13,169 +13,269 @@ Contains::Contains(){
 	//insert contains(proc,stmtLst)
 	void Contains::insertProcStmtLst(int proc, int stmtLst){
 		pair<int,int> record(proc, stmtLst);
-		if(isContainsProcStmtLst(proc,stmtLst)==false)
+		if(isContainsProcStmtLst(proc,stmtLst)==false){
 			procStmtLst.push_back(record);
+			allProcs.insert(proc);
+			allStmtLsts.insert(stmtLst);
+		}
 	}
 
 	//insert contains(stmtLst,stmt)
 	void Contains::insertStmtLstStmt(int stmtLst,int stmt){
 		pair<int,int> record(stmtLst,stmt);
-		if(!isContainsStmtLstStmt(stmtLst,stmt))
+		if(!isContainsStmtLstStmt(stmtLst,stmt)){
 			stmtLstStmt.push_back(record);
-
+			allStmtLsts.insert(stmtLst);
+			allStmts.insert(stmt);
+		}
 	}
 
 	//insert contains(stmt,var)
 	void Contains::insertStmtVar(int stmt, int var){
 		pair<int,int> record(stmt, var);
-		if(isContainsStmtVar(stmt, var)==false)
+		if(isContainsStmtVar(stmt, var)==false){
 			stmtVar.push_back(record);
-
+			allStmts.insert(stmt);
+			allVars.insert(var);
+		}
 	}
 
 	//insert contains(stmt, const)
 	void Contains::insertStmtConst(int stmt, int constant){
 		pair<int,int> record(stmt, constant);
-		if(isContainsStmtConst(stmt, constant)==false)
+		if(isContainsStmtConst(stmt, constant)==false){
 			stmtConst.push_back(record);
-
+			allStmts.insert(stmt);
+			allConsts.insert(constant);
+		}
 	}
 
 	//insert contains(stmt, plus)
 	void Contains::insertStmtPlus(int stmt, int plus){
 		pair<int,int> record(stmt,plus);
-		if(isContainsStmtPlus(stmt,plus)==false)
+		if(isContainsStmtPlus(stmt,plus)==false){
 			stmtPlus.push_back(record);
+			allStmts.insert(stmt);
+			allPlus.insert(plus);
+		}
 	}
 
 	//insert contains(stmt, minus)
 	void Contains::insertStmtMinus(int stmt, int minus) {
 		pair<int,int> record(stmt,minus);
-		if(isContainsStmtMinus(stmt,minus)==false)
+		if(isContainsStmtMinus(stmt,minus)==false){
 			stmtMinus.push_back(record);
+			allStmts.insert(stmt);
+			allMinus.insert(minus);
+
+		}
 	}
 
 	//insert contains(stmt,times)
 	void Contains::insertStmtTimes(int stmt, int times) {
 		pair<int,int> record(stmt,times);
-		if(isContainsStmtTimes(stmt,times)==false)
+		if(isContainsStmtTimes(stmt,times)==false){
 			stmtTimes.push_back(record);
+			allStmts.insert(stmt);
+			allTimes.insert(times);
+		}
 	}
 
 	//insert contains(stmt, stmtLst)
 	void Contains::insertStmtStmtLst(int stmt,int stmtLst){
 		pair<int,int> record(stmt,stmtLst);
-		if(isContainsStmtStmtLst(stmt,stmtLst)==false)
+		if(isContainsStmtStmtLst(stmt,stmtLst)==false){
 			stmtStmtLst.push_back(record);
+			allStmts.insert(stmt);
+			allStmtLsts.insert(stmtLst);
+		}
 	}
 
 	// insert contains(plus,var)
 	void Contains::insertPlusVar(int plus, int var){
 		pair<int,int> record(plus,var);
-		if(isContainsPlusVar(plus,var)==false)
+		if(isContainsPlusVar(plus,var)==false) {
 			plusVar.push_back(record);
+			allPlus.insert(plus);
+			allVars.insert(var);
+		}
 	}
 
 	//insert contains(plus,const)
 	void Contains::insertPlusConst(int plus, int constant){
 		pair<int,int> record(plus,constant);
-		if(isContainsPlusConst(plus,constant)==false)
+		if(isContainsPlusConst(plus,constant)==false){
 			plusConst.push_back(record);
+			allPlus.insert(plus);
+			allConsts.insert(constant);
+		}
 	}
 
 	//insert contains(minus,var)
 	void Contains::insertMinusVar(int minus, int var){
 		pair<int,int> record(minus,var);
-		if(isContainsMinusVar(minus,var)==false)
+		if(isContainsMinusVar(minus,var)==false){
 			minusVar.push_back(record);
+			allMinus.insert(minus);
+			allVars.insert(var);
+		}
 	}
 
 	//insert contains(minus,contant)
 	void Contains::insertMinusConst(int minus, int constant) {
 		pair<int,int> record(minus, constant);
-		if(isContainsMinusConst(minus,constant)==false)
+		if(isContainsMinusConst(minus,constant)==false){
 			minusConst.push_back(record);
+			allMinus.insert(minus);
+			allConsts.insert(constant);
+		}
 	}
 
 	//insert contains(times,var)
 	void Contains::insertTimesVar(int times, int var) {
 		pair<int,int> record(times,var);
-		if(isContainsTimesVar(times,var)==false)
+		if(isContainsTimesVar(times,var)==false){
 			timesVar.push_back(record);
+			allTimes.insert(times);
+			allVars.insert(var);
+		}
 	}
 
 	//insert contains(times,const)
 	void Contains::insertTimesConst(int times, int constant) {
 		pair<int,int> record(times,constant);
-		if(isContainsTimesConst(times,constant)==false)
+		if(isContainsTimesConst(times,constant)==false){
 			timesConst.push_back(record);
+			allTimes.insert(times);
+			allConsts.insert(constant);
+		}
 	}
 
 	//insert contains(plus,plus)
 	void Contains::insertPlusPlus(int plus, int plus1){
 		pair<int,int> record(plus,plus1);
-		if(isContainsPlusPlus(plus,plus1)==false)
+		if(isContainsPlusPlus(plus,plus1)==false){
 			plusPlus.push_back(record);
+			allPlus.insert(plus);
+			allPlus.insert(plus1);
+		}
 	}
 
 	//insert contains(plus,minus)
 	void Contains::insertPlusMinus(int plus, int minus){
 		pair<int,int> record(plus,minus);
-		if(isContainsPlusMinus(plus,minus)==false)
+		if(isContainsPlusMinus(plus,minus)==false){
 			plusMinus.push_back(record);
+			allPlus.insert(plus);
+			allMinus.insert(minus);
+		}
 	}
 
 	//insert contains(Plus,Times)
 	void Contains::insertPlusTimes(int plus, int times){
 		pair<int,int> record(plus,times);
-		if(isContainsPlusTimes(plus,times)==false)
+		if(isContainsPlusTimes(plus,times)==false){
 			plusTimes.push_back(record);
+			allPlus.insert(plus);
+			allTimes.insert(times);
+		}
 	}
 
 
 	//insert contains(Minus,Times)
 	void Contains::insertMinusTimes(int minus, int times){
 		pair<int,int> record(minus,times);
-		if(isContainsMinusTimes(minus,times)==false)
+		if(isContainsMinusTimes(minus,times)==false){
 			minusTimes.push_back(record);
+			allTimes.insert(times);
+			allMinus.insert(minus);
+		}
 	}
 
 	//insert contains(Minus,plus)
 	void Contains::insertMinusPlus(int minus,int plus){
 		pair<int,int> record(minus,plus);
-		if(isContainsMinusPlus(minus,plus)==false)
+		if(isContainsMinusPlus(minus,plus)==false){
 			minusPlus.push_back(record);
+			allMinus.insert(minus);
+			allPlus.insert(plus);
+		}
 	}
 
 	//insert contains(minus,minus)
 	void Contains::insertMinusMinus(int minus, int minus1){
 		pair<int,int> record(minus,minus1);
-		if(isContainsMinusMinus(minus,minus1)==false)
+		if(isContainsMinusMinus(minus,minus1)==false){
 			minusMinus.push_back(record);
+			allMinus.insert(minus);
+			allMinus.insert(minus1);
+		}
 	}
 
 	//insert contains(times,plus)
 	void Contains::insertTimesPlus (int times, int plus){
 		pair<int,int> record(times,plus);
-		if(isContainsTimesPlus(times,plus)==false)
+		if(isContainsTimesPlus(times,plus)==false){
 			timesPlus.push_back(record);
+			allTimes.insert(times);
+			allPlus.insert(plus);
+		}
 	}
 
 	//insert contains(times,minus)
 	void Contains::insertTimesMinus(int times, int plus){
 		pair<int,int> record(times,plus);
-		if(isContainsTimesMinus(times,plus)==false)
+		if(isContainsTimesMinus(times,plus)==false){
 			timesMinus.push_back(record);
+			allTimes.insert(times);
+			allMinus.insert(minus);
+		}
 	}
 
 	//insert contains(times,times)
 	void Contains::insertTimesTimes(int times, int times1){
 		pair<int,int> record(times,times1);
-		if(isContainsTimesTimes(times,times1)==false)
+		if(isContainsTimesTimes(times,times1)==false){
 			timesTimes.push_back(record);
+			allTimes.insert(times);
+			allTimes.insert(times1);
+		}
 	}
 
 	//getters
+
+
+	set<int> Contains::getAllPlus(){
+		return allPlus;
+	}
+	
+	set<int> Contains::getAllMinus(){
+		return allMinus;
+	}
+
+	set<int> Contains::getAllTimes(){
+		return allTimes;
+	}
+
+	set<int> Contains::getllStmtLsts(){
+		return allStmtLsts;
+	}
+
+	set<int> Contains::getAllStmts(){
+		return allStmts;
+	}
+
+	set<int> Contains::getAllVars(){
+		return allVars;
+	}
+
+	set<int> Contains::getAllConsts(){
+		return allConsts;
+	}
+
+	set<int> Contains::getAllProcs(){
+		return allProcs;
+	}
 
 	//for procedures as containers
 	set<int> Contains::getStmtLstContainedInProc(int proc) { //returns the statement list contained in proc (WILL NEVER BE QUERIED !!!)

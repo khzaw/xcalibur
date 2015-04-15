@@ -203,7 +203,7 @@ public:
 					}
 				}
 			} else {	// AffectsStar(syn, _)
-				if (!pkb->affectsExtractor->getAffects(temp.at(index)).empty()) {
+				if (!pkb->optimizedCFG->getAffects(temp.at(index)).empty()) {
 					result->addResultRow(temp);
 				}
 			}
@@ -223,12 +223,12 @@ public:
 				try {
 					AffectsStar = CacheTable::instance()->affectsCache.at(leftIndex);
 				} catch (exception& e) {
-					tempAffects = pkb->affectsExtractor->getAffects(leftIndex);
+					tempAffects = pkb->optimizedCFG->getAffects(leftIndex);
 					AffectsStar.assign(tempAffects.begin(), tempAffects.end());
 					CacheTable::instance()->affectsStarCache.insert(make_pair(leftIndex, AffectsStar));
 				}
 			} else {
-				tempAffects = pkb->affectsExtractor->getAffects(leftIndex);
+				tempAffects = pkb->optimizedCFG->getAffects(leftIndex);
 				AffectsStar.assign(tempAffects.begin(), tempAffects.end());
 				CacheTable::instance()->affectsStarCache.insert(make_pair(leftIndex, AffectsStar));
 			}
@@ -433,7 +433,7 @@ public:
 					try {
 						AffectsStar = CacheTable::instance()->affectsCache.at(leftValue);
 					} catch (exception& e) {
-						tempAffects = pkb->affectsExtractor->getAffects(leftValue);
+						tempAffects = pkb->optimizedCFG->getAffects(leftValue);
 						AffectsStar.assign(tempAffects.begin(), tempAffects.end());
 						CacheTable::instance()->affectsCache.insert(make_pair(leftValue, AffectsStar));
 					}
@@ -441,7 +441,7 @@ public:
 					try {
 						AffectsStar = prevSolution.at(leftValue);
 					} catch (exception& e) {
-						tempAffects = pkb->affectsExtractor->getAffects(leftValue);
+						tempAffects = pkb->optimizedCFG->getAffects(leftValue);
 						AffectsStar.assign(tempAffects.begin(), tempAffects.end());
 						prevSolution.insert(make_pair(leftValue, AffectsStar));
 					}
@@ -518,9 +518,9 @@ public:
 		if(isSyn == 0) {	//(digit, digit)
 			tuple->setEmpty(!pkb->optimizedCFG->isAffects(leftIndex, rightIndex));
 		} else if (isSyn == 7) {	//(_, digit)
-			tuple->setEmpty(pkb->affectsExtractor->getAffectsBy(rightIndex).empty());
+			tuple->setEmpty(pkb->optimizedCFG->getAffectsBy(rightIndex).empty());
 		} else if (isSyn == 8) {	//(digit, _)
-			tuple->setEmpty(pkb->affectsExtractor->getAffects(leftIndex).empty());
+			tuple->setEmpty(pkb->optimizedCFG->getAffects(leftIndex).empty());
 		} else {	//(_, _)
 			vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 			for (size_t i = 0; i < assStmt.size(); i++) {

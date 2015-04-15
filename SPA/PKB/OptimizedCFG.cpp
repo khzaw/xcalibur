@@ -778,7 +778,7 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
   return (number_of_paths>0);
 }
 
-set<int> OptimizedCFG::getAffects(int line) {
+set<int> OptimizedCFG::getAffectsBy(int line) {
   set<int> ans;
   
   if (statementTable->getTNodeType(line)!="ASSIGN_NODE") return ans;
@@ -787,8 +787,11 @@ set<int> OptimizedCFG::getAffects(int line) {
   
   set<int> lines_modifying_var;
   
-  for (set<int>::iterator it=var_used.begin(); it!=var_used.end(); it++) {
-    lines_modifying_var.insert(modifiesTable->evaluateGetModifiersStmt(*it).begin(), modifiesTable->evaluateGetModifiersStmt(*it).end()) ;
+  for (set<int>::iterator it=var_used.begin(); it!=var_used.end(); ++it) {
+    set<int> lines_modifying_this_var = modifiesTable->evaluateGetModifiersStmt(*it);
+
+    lines_modifying_var.insert(lines_modifying_this_var.begin(), lines_modifying_this_var.end()) ;
+
   }
 
   for (set<int>::iterator it=lines_modifying_var.begin(); it!=lines_modifying_var.end(); it++) {
@@ -798,7 +801,7 @@ set<int> OptimizedCFG::getAffects(int line) {
   return ans;
 }
 
-set<int> OptimizedCFG::getAffectsBy(int line) {
+set<int> OptimizedCFG::getAffects(int line) {
   set<int> ans;
 
   if (statementTable->getTNodeType(line)!="ASSIGN_NODE") return ans;

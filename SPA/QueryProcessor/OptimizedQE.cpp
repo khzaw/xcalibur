@@ -321,7 +321,7 @@ ResultTuple* OptimizedQE::optimizedJoin(vector<ResultTuple*> r) {
 	}
 	
 	for (size_t i = 0; i < r.size(); i++) {
-		if ((r[i]->isBool() && r[i]->isEmpty()) || r[i]->getAllResults().empty()) {
+		if ((r[i]->isBool() && r[i]->isEmpty()) || (!r[i]->isBool() && r[i]->getAllResults().empty())) {
 			return answer;
 		} 
 
@@ -364,6 +364,9 @@ ResultTuple* OptimizedQE::optimizedJoin(vector<ResultTuple*> r) {
 
 	answer = tuples[0];
 	for (size_t n = 1; n < tuples.size(); n++) {
+		if (tuples[n]->isBool()) {
+			continue;
+		}
 		answer = answer->cross(tuples[n]);
 	}
 

@@ -575,7 +575,18 @@ void Parser::populateRoot(TNode* procedureNode, int procedureIndex) {
 }
 
 void Parser::popOperator(Operator op) {
-	TNode* operatorNode = new TNode(OPERATORS_NODE_NAMES[op.op] , op.value, line, currentProc);
+	string nodeName = "";
+
+	if(op.value == "+") {
+		nodeName = "PLUS_NODE";
+	} else if(op.value == "-") {
+		nodeName = "MINUS_NODE";
+	} else if(op.value == "*") {
+		nodeName = "TIMES_NODE";
+	}
+
+
+	TNode* operatorNode = new TNode(nodeName, op.value, line, currentProc);
 	
 	TNode* rightOperand = operandStack.top();	operandStack.pop();
 	TNode* leftOperand = operandStack.top();	operandStack.pop();

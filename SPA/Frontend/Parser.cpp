@@ -35,6 +35,7 @@ Parser::Parser(string filepath) {
 void Parser::constructRelations() {
 	this->controller->constructCalls();
 	this->controller->constructFollows();
+	populateAdditionalInfo();
 	this->controller->constructModifies();
 	this->controller->constructParent();
 	this->controller->constructNext();
@@ -42,6 +43,36 @@ void Parser::constructRelations() {
 	this->controller->constructContains();
 	this->controller->constructSiblings();
 	// cout << "yay" << endl;
+}
+
+void Parser::populateAdditionalInfo() {
+	for(size_t i = 0; i < procedureNames.size(); i++) {
+		int procIndex = getProcedureIndex(procedureNames.at(i));
+		
+		// get all variables modified by a proc
+		set<int> allVars = this->controller->modifiesTable->getAllVariablesModifiedByProc(procIndex);
+
+		// get all callee stars of that procedure
+		set<int> allCalleeStars = this->controller->callsTable->getCallerStar(procIndex);
+
+		for(std::set<int>::iterator it = allCalleeStars.begin(); it != allCalleeStars.end(); ++it) {
+			for(std::set<int>::iterator it2 = allVars.begin(); it2 != allVars.end(); ++it2) {
+				
+				
+				// call statements in a procedure
+				set<int> callStatementsInProc = callees[*it];
+				if(!callStatementsInProc.empty()) {
+					for(std::set<int>::iterator it3 = callStatementsInProc.begin(); it3 != callStatementsInProc.end(); ++it3) {
+						this->controller->modifiesTable->insertModifiesStmt(*it3, *it2);
+					}
+				}
+				
+				//jthis->controller->modifiesTable->insertModifiesStmt(
+				this->controller->modifiesTable->insertModifiesProc(*it, *it2);
+			}
+		}
+	}
+	//this->controller->callsTable->getAllCallers(
 }
 
 Parser::~Parser() {
@@ -164,8 +195,17 @@ void Parser::stmt(TNode* parent) {
 		match("call");
 
 
+
 		string newProcedure = procedureName();
 		int procIndex = getProcedureIndex(newProcedure);
+
+		if(callees.find(currentProc) != callees.end()) {
+			callees[currentProc].insert(line);
+		} else {
+			set<int> calls;
+			calls.insert(line);
+			callees.insert(std::pair<int, set<int>>(currentProc, calls));
+		}
 
 		controller->callsTable->insertCalls(currentProc, procIndex);
 		callStatements.insert(pair<int, string>(line, newProcedure));
@@ -474,6 +514,8 @@ void Parser::populateModifies(int line, int procedure) {
 
 	set<int> callers = controller->callsTable->getCallerS(procedure);
 	string currentProcedureName = procedureNames.at(procedure);
+	if(currentProcedureName == "Trio") {
+	}
 	// for assignment statement
 	controller->modifiesTable->insertModifiesStmt(line, lastVarIndex);
 	controller->modifiesTable->insertModifiesProc(procedure, lastVarIndex);

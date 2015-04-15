@@ -38,12 +38,14 @@ list<string> QE::solve() {
 		return none;
 	}
 
-	if (useOptimizedSolver) {
-		OptimizedQE solver = OptimizedQE(queries, synonyms);
-		solution = solver.solve();
-		//answers = solver.solve2();
-	} else {
-		basicSolve();
+	if (queries.size() > 0) {
+		if (useOptimizedSolver) {
+			OptimizedQE solver = OptimizedQE(queries, synonyms);
+			solution = solver.solve();
+			//answers = solver.solve2();
+		} else {
+			basicSolve();
+		}
 	}
 
 	return convertSolutionToString();
@@ -74,7 +76,7 @@ bool QE::validateQueries() {
 
 	//check for extra synonyms
 	for (size_t i = 0; i < synonyms.size() ; i++) {
-		if (synMap.find(synonyms[i]) == synMap.end()) {
+		if (synMap.find(synonyms[i]) == synMap.end() && synonyms[i] != "BOOLEAN") {
 			StubSubquery* s = new StubSubquery(&synonymTable, pkb);//new StubSubquery(synonymTable, pkb); 
 			s->setSynonyms(synonyms[i], 0);
 			addQuery(s);
@@ -237,6 +239,11 @@ list<string> QE::getAnswers(vector<int> row, vector<int> col, int index) {
 list<string> QE::convertSolutionToString() {
 	list<string> ans = list<string>();
 	if (synonyms[0] == "BOOLEAN") {
+		if (queries.size() == 0) {
+			ans.push_back("FALSE");
+			ans.push_back("TRUE");
+			return ans;
+		}
 		if (solution->isBool()) {
 			if (solution->isEmpty()){
 				ans.push_back("FALSE");

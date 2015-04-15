@@ -34,22 +34,22 @@ public:
 	}
 	
 	bool validate() {
-		if (isSyn != 0 || isSyn != 1 || isSyn != 2 || isSyn != 3){
+		if (isSyn != 0 && isSyn != 1 && isSyn != 2 && isSyn != 3){
 			return false;
 		}
 		if (isSyn == 1){
 			string synonymType = synonymTable->at(rightSynonym);
-			if (synonymType != "stmtLst" || synonymType != "plus" || synonymType != "minus" 
-				|| synonymType != "times" || synonymType != "variable" || synonymType != "constant"
-				|| synonymType != "stmt" || synonymType != "prog_line" || synonymType != "assign"
-				|| synonymType != "while" || synonymType != "if" || synonymType != "call"){
+			if (synonymType != "stmtLst" && synonymType != "plus" && synonymType != "minus" 
+				&& synonymType != "times" && synonymType != "variable" && synonymType != "constant"
+				&& synonymType != "stmt" && synonymType != "prog_line" && synonymType != "assign"
+				&& synonymType != "while" && synonymType != "if" && synonymType != "call"){
 				return false;
 			}
 		}
 		if (isSyn == 2){
 			string synonymType = synonymTable->at(leftSynonym);
-			if (synonymType != "stmtLst" || synonymType != "procedure" || synonymType != "stmt" || synonymType != "prog_line"
-				|| synonymType != "while" || synonymType != "if"){
+			if (synonymType != "stmtLst" && synonymType != "procedure" && synonymType != "stmt" && synonymType != "prog_line"
+				&& synonymType != "while" && synonymType != "if"){
 				return false;
 			}
 		}
@@ -137,6 +137,8 @@ public:
 					} else {
 						++it;
 					}	
+				} else {
+					++it;
 				}
 			}
 		} else if (leftSynType == "procedure"){
@@ -208,6 +210,8 @@ public:
 					} else {
 						++it;
 					}
+				} else {
+					++it;
 				}
 			}
 		}
@@ -289,6 +293,8 @@ public:
 							} else {
 								++it;
 							}
+						} else {
+							++it;
 						}
 					}
 				} else if (rightSynType == "variable"){
@@ -325,6 +331,8 @@ public:
 							} else {
 								++it;
 							}
+						} else {
+							++it;
 						}
 					}
 				} else if (rightSynType == "variable"){
@@ -376,6 +384,8 @@ public:
 							} else {
 								++it;
 							}
+						} else {
+							++it;
 						}
 					}
 				}
@@ -652,6 +662,8 @@ public:
 									} else {
 										++it;
 									}
+								} else {
+									++it;
 								}
 							}
 						} else if (rightSynType == "variable"){
@@ -678,6 +690,8 @@ public:
 									} else {
 										++it;
 									}
+								} else {
+									++it;
 								}
 							}
 						} else if (rightSynType == "variable"){
@@ -714,6 +728,8 @@ public:
 									} else {
 										++it;
 									}
+								} else {
+									++it;
 								}
 							}
 						}
@@ -832,6 +848,8 @@ public:
 								} else {
 									++it;
 								}	
+							} else {
+								++it;
 							}
 						}
 					} else if (leftSynType == "plus"){

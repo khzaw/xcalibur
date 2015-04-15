@@ -647,6 +647,8 @@ public:
 									} else {
 										++it;
 									}
+								} else {
+									++it;
 								}
 							}
 					} else if (leftSynType == "stmt" || leftSynType == "prog_line" || leftSynType == "assign" || leftSynType == "while" || leftSynType == "if"){
@@ -746,6 +748,8 @@ public:
 								} else {
 									++it;
 								}	
+							} else {
+								++it;
 							}
 						}
 					} else if (leftSynType == "plus"){

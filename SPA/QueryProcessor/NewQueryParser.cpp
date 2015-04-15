@@ -32,6 +32,7 @@
 #include "PatternSubquery.cpp"
 #include "ContainsSubquery.cpp"
 #include "ContainsStarSubquery.cpp"
+#include "SiblingSubquery.cpp"
 
 
 using namespace std;
@@ -827,11 +828,13 @@ void NewQueryParser::matchContainsStar() {
 }
 
 void NewQueryParser::matchSiblings() {
+	SiblingSubquery* siblingSq = new SiblingSubquery(&synonyms, controller);
 	match("(");
 	string fst = matchNodeRef();
 	match(",");
 	string snd = matchNodeRef();
 	match(")");
+	setSynonymsHelper(fst, snd, siblingSq);
 }
 
 

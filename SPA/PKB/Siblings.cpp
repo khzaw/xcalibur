@@ -474,7 +474,7 @@ bool Sibling::isSiblingVarPlus(int var,int plus){
 bool Sibling::isSiblingVarMinus(int var,int minus){
 	vector<pair<int,int>> varMinus = getVarMinusSibling();
 	for(int i=0; i<varMinus.size(); i++){
-		if(procProc.at(i).first==var && procProc.at(i).second==minus )
+		if(varMinus.at(i).first==var && varMinus.at(i).second==minus )
 			return true;
 	}
 	return false;

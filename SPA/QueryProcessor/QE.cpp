@@ -252,7 +252,7 @@ list<string> QE::convertSolutionToString() {
 			}
 			return ans;
 		}
-		if (solution->getAllResults().size()){
+		if (solution->getAllResults().size() > 0){
 			ans.push_back("TRUE");
 		} else {
 			ans.push_back("FALSE");

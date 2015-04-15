@@ -1,5 +1,180 @@
-test - contains
-plus a; variable b;
-Select b such that Contains(a, b);
+1 - Parent
+stmt a, b;
+Select a such that Parent(a, b)
+2,3,4,9,10,12,15,17,23,24,31,35,37,41,42,43,44,45,47,50,51,52,57,58,59,60,69,74,81,86
+5000
+2 - Parent
+stmt a, b;
+Select b such that Parent(a, b)
+3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,42,43,44,45,46,47,48,49,51,52,53,54,55,56,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,82,83,84,85,87,88,89,90,91,92,93,94,95,96,97,98
+5000
+3 - Parent
+if a; stmt b;
+Select a such that Parent(a, b)
+4,10,23,31,47,50,51,52,57,59,74,86
+5000
+4 - Parent
+while a; stmt b;
+Select a such that Parent(a, b)
+2,3,9,12,15,17,24,35,37,41,42,43,44,45,58,60,69,81
+5000
+5 - Parent
+while a; if b;
+Select a such that Parent(a, b)
+2,3,9,42,58
+5000
+6 - ParentStar
+stmt a, b;
+Select a such that Parent*(a, b)
+2,3,4,9,10,12,15,17,23,24,31,35,37,41,42,43,44,45,47,50,51,52,57,58,59,60,69,74,81,86
+5000
+7 - ParentStar
+stmt a, b;
+Select b such that Parent*(a, b)
+3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,42,43,44,45,46,47,48,49,51,52,53,54,55,56,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,82,83,84,85,87,88,89,90,91,92,93,94,95,96,97,98
+5000
+8 - ParentStar
+if a; stmt b;
+Select b such that Parent*(a, b)
+5,6,11,12,13,14,15,16,17,18,19,20,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,48,49,51,52,53,54,55,56,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,87,88,89,90,91,92,93,94,95,96,97,98
+5000
+9 - ParentStar
+while a; stmt b;
+Select b such that Parent*(a, b)
+3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,42,43,44,45,46,47,48,49,59,60,61,62,63,64,70,82,83,84,85
+5000
+10 - ParentStar
+while a; if b;
+Select a such that Parent*(a, b)
+2,3,9,41,42,58
+5000
+11 - Follows
+stmt a, b;
+Select a such that Follows(a, b)
+1,2,3,4,7,8,11,13,14,16,17,21,22,24,25,26,27,28,29,32,33,39,43,61,62,65,66,67,68,69,71,72,73,77,78,79,80,81,82,83,84,87,88,89,91,92,93,94,95,96,97
+5000
+12 - Follows
+stmt a, b;
+Select b such that Follows(a, b)
+2,7,8,9,12,14,15,17,19,21,22,23,26,27,28,29,30,31,33,34,39,40,47,62,63,66,67,68,69,71,72,73,74,78,79,80,81,83,84,85,86,88,89,90,92,93,94,95,96,97,98
+5000
+13 - Follows
+if a; stmt b;
+Select a such that Follows(a, b)
 
-50000
+500005000
+38 - Uses proc2
+procedure a;
+Select a such that Uses(a, "z");
+
+5000
+39 - Uses calls
+call a; variable v;
+Select a such that Uses(a, v);
+
+5000
+30 - Uses calls2
+call a;
+Select a such that Uses(a, "z");
+
+5000
+31 - Next
+stmt a, b;
+Select a such that Next(a, b)
+
+5000
+32 - Next
+stmt a, b;
+Select <a, b> such that Next(a, b)
+
+5000
+33 - Next
+if a; stmt b;
+Select a such that Next(a, b)
+
+5000
+34 - Next
+while a; stmt b;
+Select a such that Next(a, b)
+
+5000
+35 - Next
+while a; if b;
+Select a such that Next(a, b)
+
+5000
+36 - NextStar
+stmt a, b;
+Select a such that Next*(a, b)
+
+5000
+37 - NextStar
+stmt a, b;
+Select <a, b> such that Next*(a, b)
+
+5000
+38 - NextStar
+if a; stmt b;
+Select a such that Next*(a, b)
+
+5000
+39 - NextStar
+while a; stmt b;
+Select a such that Next*(a, b)
+
+5000
+40 - NextStar
+while a; if b;
+Select a such that Next*(a, b)
+
+5000
+41 - Affects
+stmt a, b;
+Select a such that Affects(a, b)
+
+5000
+42 - Affects
+stmt a, b;
+Select b such that Affects(a, b)
+
+5000
+43 - Affects
+if a; stmt b;
+Select a such that Affects(a, b)
+
+5000
+44 - Affects
+while a; stmt b;
+Select a such that Affects(1, b)
+none
+5000
+45 - Affects
+assign a;
+Select a such that Affects(a, 2)
+
+5000
+46 - AffectsStar
+stmt a, b;
+Select a such that Affects*(a, b)
+
+5000
+47 - AffectsStar
+stmt a, b;
+Select b such that Affects*(a, b)
+
+5000
+48 - AffectsStar
+if a; stmt b;
+Select a such that Affects*(a, b)
+
+5000
+49 - AffectsStar
+prog_line a; stmt b;
+Select a such that Affects*(a, 1)
+
+5000
+50 - AffectsStar
+assign a; prog_line b;
+Select a such that Affects*(1, b)
+
+5000

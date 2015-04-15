@@ -223,9 +223,9 @@ Contains::Contains(){
 	}
 
 	//insert contains(times,minus)
-	void Contains::insertTimesMinus(int times, int plus){
-		pair<int,int> record(times,plus);
-		if(isContainsTimesMinus(times,plus)==false){
+	void Contains::insertTimesMinus(int times, int minus){
+		pair<int,int> record(times,minus);
+		if(isContainsTimesMinus(times,minus)==false){
 			timesMinus.push_back(record);
 			allTimes.insert(times);
 			allMinus.insert(minus);

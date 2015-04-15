@@ -1,14 +1,4 @@
 1 - Parent
-constant c; variable b; assign a;
-Select BOOLEAN
-
-5000
-1 - Parent
-plus c; variable b; assign a;
-Select b such that Contains(c, b)
-
-5000
-1 - Parent
 stmt a, b;
 Select a such that Parent(a, b)
 2,3,4,9,10,12,15,17,23,24,31,35,37,41,42,43,44,45,47,50,51,52,57,58,59,60,69,74,81,86
@@ -226,10 +216,40 @@ Select a such that Next(a, b)
 34 - Next - loop
 while a; prog_line b;
 Select <a,b> such that Next(a, b) and Next (b, a)
-35 36,17 18,69 70,41 42,42 43,43 44, 44 45, 45 46
+35 36,17 18,69 70,41 42,42 41,44 43,45 44,43 44, 44 45, 45 46,37 38
 5000
 35 - Next
 while a; if b; assign c;
 Select a such that Next(a, b) and Next(b,c)
-9,81,58,43
+9,58,43, 3
+5000
+36 - NextStar
+if a; while b;
+Select a such that Next*(a, b)
+10,23,31,47,57,59,4
+5000
+37 - NextStar
+while a, b; if c;
+Select c such that Next*(a, b) and Next*(b, c)
+4,23,31,10,47,59,74,86
+5000
+38 - NextStar
+if a,b,c;
+Select a such that Next*(a, b) and Next*(b, c)
+23, 31, 4, 10, 47, 57, 59, 50
+5000
+39 - NextStar
+if a;
+Select a such that Next*(a, a)
+23,31,4,10,47,59
+5000
+40 - NextStar
+while a,b,c,d;
+Select BOOLEAN such that Next*(c, 45) and Next*(b, c) and Next*(a, b) and Next*(a, c)
+TRUE
+5000
+41 - Affects
+stmt a, b;
+Select b such that Affects(a, b) and Modifies(a, "x")
+39,40,68,75
 5000

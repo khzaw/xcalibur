@@ -90,7 +90,7 @@ void Parser::populateAdditionalUsesInfo() {
 				set<int> callStatementsInProc = callees[*it];
 				if(!callStatementsInProc.empty()) {
 					for(std::set<int>::iterator it3 = callStatementsInProc.begin(); it3 != callStatementsInProc.end(); ++it3) {
-						this->controller->usesTable->insertUsesStmt(*it3, *it2);
+						//this->controller->usesTable->insertUsesStmt(*it3, *it2);
 					}
 				}
 

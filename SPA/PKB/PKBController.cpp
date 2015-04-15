@@ -66,7 +66,7 @@ void PKBController::constructNext(){
 	nextExtractor->construct();
 }
 
-void PKBController::constructOptimizedNext(){
+void PKBController::constructOptimizedCFG(){
 	optimizedCFG->construct();
 }
 

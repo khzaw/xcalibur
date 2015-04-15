@@ -1,0 +1,160 @@
+procedure ProcHobo {
+	a = 478 + 126 * Yeoman - Baldwin + 379;								//1
+	if Blackman then {										//2
+		b = 263;										//3
+		b = 710;										//4
+	}
+	else {												
+		if Hoboman then {									//5
+										
+				if Blackman then {							//6
+					zhao = Machamp + Hoboman - x12;					//7
+					life = 488;							//8
+					life = eggs - x10 - Baldwin - Hoboman;				//9
+				}
+				else {								
+					x11 = love + 860 * 197;						//10
+				}
+				
+				if Yeoman then {							//11
+					eggs = x11;							//12
+				}
+				else {								
+					eggs = y - x12 - life - 573;					//13
+					dummy_dummy_dummy_var = 1;					//14
+					b = Blackman;							//15
+					b = 694 * 109 + Hoboman;					//16
+				}
+
+				if love then {								//17
+					Chocoman = zhao + 356;						//18
+				}
+				else {								
+					is = z - x11 * Romeo - 909;					//19
+					x12 = 426;							//20
+				}
+												
+				zhao = eggs * love * Romeo * Yeoman - 947;				//21
+				zhao = 452;								//22
+				Baldwin = Yeoman * 645 + Blackman;					//23
+			
+		}
+		else {											
+			life = eggs * is * 935;								//24
+		}
+	}
+	x11 = a - 476 + zhao - 733 * x12;								//25
+	Hoboman = 852 - 592 * Chocoman;									//26
+	while Baldwin {											//27
+		if Romeo then {										//28
+			b = Romeo;									//29
+
+			if Hoboman then {								//30
+				Juliet = Romeo;								//31
+				eggs = 734 + 990 + c * jin;						//32
+				eggs = eggs * x12 - 848 * Hoboman;					//33
+				x = eggs + 792;								//34
+			}
+			else {									
+				jin = 135;								//35
+			}
+			
+			x11 = x12 + y;									//36
+			x = love;									//37
+			Blackman = Chocoman - 741 + 279;						//38
+			x10 = c;									//39
+			while love {									//40
+				Juliet = 88 + 198 * Machamp + Juliet * 57;				//41
+				love = 717 - 654 - 774 * x;						//42
+				Juliet = 872;								//43
+				x10 = x11;								//44
+			}
+			
+			x = x10 - zhao - b * x12 * life;						//45
+			x = 676 - 477;									//46
+			if y then {									//47
+				love = is - jin * 243 - 197;						//48
+				if b then {								//49
+					x = is * a - 214 * x;						//50
+					x11 = 935 + Hoboman * 942;					//51
+					x10 = c + 524 - zhao + love;					//52
+				} else {
+					c = 806 * love - 140;						//53
+				}
+			} else {
+				is = Hoboman * 773 - Juliet + a;					//54
+				x = y * 952 * 403;							//55
+
+			}
+		} else {							
+			Romeo = 268;									//56
+			x10 = 609;									//57
+			Chocoman = 234;									//58
+			Machamp = 642 * Romeo * 618 * 465;						//59
+		}
+
+		while c {										//60
+			a = y * 999 - b;								//61
+		}
+
+		if life then {										//62
+			while jin {									//63
+				b = 954 - 580 + 341;							//64
+			}
+			while x12 {									//65
+				if b then {								//66
+					x = 814 + a - 653 - 895;					//67
+					x = Baldwin;							//68
+					z = x12;							//69
+					b = 348;							//70
+					love = x10 * eggs * 28 * 441 + 139;				//71
+					Blackman = jin + c - 791 * x10 - 774;				//72
+				}
+				else {							
+					x11 = 707 - 917 * eggs + 756 * Romeo;				//73
+					Hoboman = love - Hoboman;					//74
+					c = b + c + x + 648;						//75
+					c = 983 + x10 * 985 + love;					//76
+					if Blackman then {						//77
+						Romeo = 764 * 488 + Juliet - 472;			//78
+					}
+					else {								
+						Hoboman = jin + Yeoman;					//79
+						Juliet = Chocoman - 919 - is + Baldwin;			//80
+					}
+				}
+				if x then {								//81
+					is = 637 - 424 - 255 - 566;					//82
+				}
+				else {									
+					z = 959 + 162 * jin - jin - 961;				//83
+					love = 866 - 808 + 249;						//84
+					x11 = life + 433;						//85
+				}
+
+				love = Yeoman;								//86
+			}
+			b = 375 + jin - 901 * 762;							//87
+		}
+		else {											
+			if x10 then {									//88
+				while Juliet {								//89
+					b = 547 - x11 + Baldwin;					//90
+					x12 = 892 - z;							//91
+					z = love * 482 - a + Blackman - Chocoman;			//92
+				}
+			}
+			else {
+				zhao = Machamp - 598;							//93
+				while eggs {								//94
+					c = 851 * 983 + b;						//95
+					jin = Blackman * x10 + is;					//96
+
+				}
+				zhao = is * 155;							//97
+			}
+		}
+		x11 = 142;										//98
+	}
+}
+

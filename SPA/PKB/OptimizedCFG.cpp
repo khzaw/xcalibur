@@ -145,7 +145,10 @@ void OptimizedCFG::constructCFGFromProc(TNode* root) {
 				int endSentinel = stack.top(); stack.pop(); visited.insert(endSentinel);
 					for (std::set<int>::iterator it3=NextListFwd[endSentinel].begin(); it3!=NextListFwd[endSentinel].end(); it3++) {
 						if (*it3<0 && visited.find(*it3)!=visited.end()) stack.push(*it3);
-						else (*it).second.insert(*it3);
+						else {
+              (*it).second.insert(*it3); // equivalent to NextListFwd[(*it).first].insert(*it3);
+              NextListBwd[*it3].insert((*it).first);
+            }
           }
 			}
 		}
@@ -372,7 +375,7 @@ set<int> OptimizedCFG::getNextStar(int line1) {
 			// enqueue linked nodes
 			for (std::set<int>::iterator it=temp.begin(); it!=temp.end(); it++) {
 				// insert item
-				if (*it>0) ans.insert(*it);
+				if (*it > 0) ans.insert(*it);
 				
 				// only enqueue unvisited nodes
 				if (visited.find(*it)==visited.end()) { 
@@ -410,7 +413,7 @@ set<int> OptimizedCFG::getPrevStar(int line1) {
 			// enqueue linked nodes
 			for (std::set<int>::iterator it=temp.begin(); it!=temp.end(); it++) {
 				// insert item
-				if (*it>0) ans.insert(*it);
+				if (*it > 0) ans.insert(*it);
 				
 				// only enqueue unvisited nodes
 				if (visited.find(*it)==visited.end()) { 
@@ -427,8 +430,14 @@ set<int> OptimizedCFG::getAllPrev() {
   set<int> ans;
   
   for (map<int, set<int>>::iterator it=NextListFwd.begin(); it!=NextListFwd.end(); it++) {
-    if (it->first>0 && !it->second.empty() && *(it->second.rbegin())>0)
-      ans.insert(it->first);
+    if (it->first>0 && !it->second.empty()) {
+      for (set<int>::iterator it2=it->second.begin(); it2!=it->second.end(); it2++) {
+        if (*it2>0) {
+          ans.insert(it->first);
+          break;
+        }
+      }
+    }
   }
 
   return ans;
@@ -438,8 +447,14 @@ set<int> OptimizedCFG::getAllNext() {
   set<int> ans;
   
   for (map<int, set<int>>::iterator it=NextListBwd.begin(); it!=NextListBwd.end(); it++) {
-    if (it->first>0 && !it->second.empty() && *(it->second.rbegin())>0)
-      ans.insert(it->first);
+    if (it->first>0 && !it->second.empty()) {
+      for (set<int>::iterator it2=it->second.begin(); it2!=it->second.end(); it2++) {
+        if (*it2>0) {
+          ans.insert(it->first);
+          break;
+        }
+      }
+    }
   }
 
   return ans;

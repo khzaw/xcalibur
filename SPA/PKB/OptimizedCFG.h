@@ -70,7 +70,6 @@ class OptimizedCFG {
     Uses* usesTable;
     
     
-    
     // methods
     void linkStmtList(vector<TNode*>);
     void pushStmtListOntoStack(std::stack<TNode*>*, vector<TNode*>);

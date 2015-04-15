@@ -366,6 +366,7 @@ void SubqueryTest::testSubqueries() {
 	pk->constructModifies();
 	pk->constructParent();
 	pk->constructNext();
+  pk->constructOptimizedCFG();
 	pk->constructUses();
 
 	synonymTable["s1"]="stmt";
@@ -415,7 +416,7 @@ void SubqueryTest::testSubqueries() {
   //testOptimizedNext();
 	testNextTuple();
 	testNextStar();
-  //testOptimizedNextStar();
+  testOptimizedNextStar();
 	testNextStarTuple();
 	testPattern();
 	testPatternTuple();
@@ -15035,6 +15036,7 @@ void SubqueryTest::testOptimizedNextStar() {
 		{14, 18}, {14, 19}, {14, 20}, {15, 15}, {15, 16}, {15, 18}, {15, 19}, {15, 20}, {16, 15}, {16, 16}, 
 		{16, 18}, {16, 19}, {16, 20}, {17, 18}, {17, 19}, {17, 20}, {18, 19}, {18, 20}, {19, 20}, {21, 22} 
 	};
+
 	CPPUNIT_ASSERT_EQUAL((size_t)168, actualResultsOptimizedNextStarSubquery1->getAllResults().size());
 	for (size_t i = 0; i < 168; i++){
 		for (size_t j = 0; j < 2; j++){
@@ -16301,6 +16303,9 @@ void SubqueryTest::testOptimizedNextStar() {
 	CPPUNIT_ASSERT_EQUAL((size_t)0, actualResultOptimizedNextStarSubquery143->getAllResults().size());
 	CPPUNIT_ASSERT(actualResultOptimizedNextStarSubquery143->isBool());
 	CPPUNIT_ASSERT(!actualResultOptimizedNextStarSubquery143->isEmpty());
+
+  //should fail
+  CPPUNIT_ASSERT_EQUAL(0, 1);
 }
 
 void SubqueryTest::testNextStarTuple() {

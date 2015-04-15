@@ -31,13 +31,13 @@ public:
 	}
 	
 	bool validate() {
-		if (isSyn != 1 || isSyn != 2 || isSyn != 3){
+		if (isSyn != 1 && isSyn != 2 && isSyn != 3){
 			return false;
 		}
 		if (isSyn == 1){
 			string synonymType = synonymTable->at(rightSynonym);
-			if (synonymType != "stmtLst" || synonymType != "plus" || synonymType != "minus" 
-				|| synonymType != "times" || synonymType != "variable" || synonymType != "constant"){
+			if (synonymType != "stmtLst" && synonymType != "plus" && synonymType != "minus" 
+				&& synonymType != "times" && synonymType != "variable" && synonymType != "constant"){
 				return false;
 			}
 		}

@@ -185,8 +185,15 @@ void NewQueryParser::matchTuple() {
 
 void NewQueryParser::matchTupleElements(bool recursive) {
 	string elem = nextToken.name;
-	selectVariables.push_back(elem);
 	match(elem);
+	if(nextToken.name == ".") {
+		elem += ".";
+		match(".");
+		string attribute = nextToken.name;
+		elem += attribute;
+		match(nextToken.name);
+	}
+	selectVariables.push_back(elem);
 
 	if(recursive && nextToken.name == ",") {
 		match(","); 

@@ -146,8 +146,8 @@ void OptimizedCFG::constructCFGFromProc(TNode* root) {
 					for (std::set<int>::iterator it3=NextListFwd[endSentinel].begin(); it3!=NextListFwd[endSentinel].end(); it3++) {
 						if (*it3<0 && visited.find(*it3)!=visited.end()) stack.push(*it3);
 						else {
-              (*it).second.insert(*it3); // equivalent to NextListFwd[(*it).first].insert(*it3);
-              NextListBwd[*it3].insert((*it).first);
+              it->second.insert(*it3); // equivalent to NextListFwd[(*it).first].insert(*it3);
+              NextListBwd[*it3].insert(it->first);
             }
           }
 			}
@@ -185,6 +185,26 @@ void OptimizedCFG::linkStmtList(vector<TNode*> stmtList) {
 			addLink(0-stmtList.at(i)->getStmtNum(), stmtList.at(i+1)->getStmtNum());
 		}
 	}
+
+
+  // edge case: only if last node of stmtList is IF_NODE
+  TNode* curr = stmtList.at(stmtList.size()-1);
+
+  // until not corner case
+  while(curr->getNodeType()=="IF_NODE" && curr->getParent()->getNodeType()=="IF_NODE" && curr->getParent()->getRightSibling()==NULL) {
+    addLink(0-curr->getStmtNum(), 0-curr->getParent()->getStmtNum());
+    curr = curr->getParent();
+  }  
+    
+  // curr is not if node or curr's parent does have right sibling
+  if (curr->getNodeType()=="IF_NODE" && curr->getParent()->getRightSibling()!=NULL) {
+    addLink(0-curr->getStmtNum(), curr->getParent()->getRightSibling()->getStmtNum());
+  }
+
+  if (curr->getParent()->getNodeType()=="WHILE_NODE") {
+    addLink(0-curr->getStmtNum(), 0-curr->getParent()->getStmtNum());
+  }
+
 }
 
 void OptimizedCFG::pushStmtListOntoStack(std::stack<TNode*>* pq, vector<TNode*> stmtList) {
@@ -397,7 +417,28 @@ set<int> OptimizedCFG::getPrevStar(int line1) {
 	pq.push(line1);
 	std::set<int> visited, temp, ans;
 	int curr;
+  /*
+  cout << endl << "printing out NextList " << endl;
+  
+  for (std::map<int, set<int>>::iterator it=NextListFwd.begin(); it!=NextListFwd.end(); it++) {
+		std::cout << "for line " << (*it).first << ": ";
+		set<int> list = (*it).second;
+		for (std::set<int>::iterator it2=list.begin(); it2!=list.end(); it2++) {
+			std::cout << *it2 << " ";
+		}
+		std::cout << "" << endl;
+  }
 
+  cout << endl << "printing BackList "<< endl;
+  for (std::map<int, set<int>>::iterator it=NextListBwd.begin(); it!=NextListBwd.end(); it++) {
+		std::cout << "for line " << (*it).first << ": ";
+		set<int> list = (*it).second;
+		for (std::set<int>::iterator it2=list.begin(); it2!=list.end(); it2++) {
+			std::cout << *it2 << " ";
+		}
+		std::cout << "" << endl;
+  }
+  */
 	while (!pq.empty()) {
 		curr = pq.top(); pq.pop();
 
@@ -612,7 +653,7 @@ void OptimizedCFG::printAggNodeMap() {
     }
   }
 
-  cout << "last line of printing " << endl;
+  //cout << "last line of printing " << endl;
 }
 
 bool OptimizedCFG::isAffects(int line1, int line2) {
@@ -643,7 +684,7 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
 
     AggNode* ANode1 = stmtToAggNodeMap.at(line1);
     AggNode* ANode2 = stmtToAggNodeMap.at(line2);
-  
+  /*
     cout << ANode1->getType() << endl;
     
     std::set<int> lines1 = ANode1->getProgLines();
@@ -658,7 +699,7 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
       cout << *it << " ";
     }
     cout<<endl;
-
+    */
 
     std::set<int> those_lines;
     // if different nodes
@@ -693,7 +734,7 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
         std::set<int> foo = modifiesTable->evaluateGetModifiedVarStmt(*it1);
         if (foo.find(common_var)!=foo.end()) {
           // flag
-          cout << "immediate neighbours modifies var " << common_var << endl;
+          // cout << "immediate neighbours modifies var " << common_var << endl;
           //number_of_paths -= 1;
           return false;
         }
@@ -703,7 +744,7 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
     
     // check in-between nodes on the path
 
-    cout << "checking in-between nodes" << endl;
+    // cout << "checking in-between nodes" << endl;
     std::stack<AggNode*> stack_;
     std::set<AggNode*> visited_nodes;
     visited_nodes.insert(ANode1);
@@ -744,14 +785,14 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
 
 
       std::set<int> modified_by_curr = curr->getVarModifiedByThisNode();
-      
+      /*
       cout << curr->getType() << " ";
       std::set<int> lines3 = curr->getProgLines();
       for (std::set<int>::iterator it=lines3.begin(); it!=lines3.end(); it++) {
         cout << *it << " ";
       }
       cout<<endl;
-
+      */
 
       if ( !parentTable->evaluateIsParentStar(*(curr->getProgLines().begin()), line2)
         && !parentTable->evaluateIsParentStar(*(curr->getProgLines().begin()), line1)

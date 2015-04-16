@@ -459,7 +459,7 @@ void OptimizedCFGTest::testSourceProgram() {
   CPPUNIT_ASSERT(CFG2->isAffects(12,18));
   CPPUNIT_ASSERT(!CFG2->isAffects(17, 19));
   
-  cout << endl << "printing out NextList for proc 2 " << endl;
+  cout << endl << "printing out NextList " << endl;
   
   for (std::map<int, set<int>>::iterator it=CFG2->NextListFwd.begin(); it!=CFG2->NextListFwd.end(); it++) {
 		std::cout << "for line " << (*it).first << ": ";

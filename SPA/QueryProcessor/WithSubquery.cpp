@@ -22,19 +22,94 @@ using namespace std;
 // with const1.value = 5          |    wsubquery.setSynonyms("const1", 5) // DO NOT use constant index of 5 in constantTable, just use 5
 
 class WithSubquery : public Subquery{
+private: 
+	string leftAttr;
+	string rightAttr;
 public:
 	WithSubquery(map<string, string>* m, PKBController* p) : Subquery(m, p){
-	
+		leftAttr = "";
+		rightAttr = "";
+	}
+
+	void setAttr(string s, bool isLeft){
+		if (isLeft) leftAttr = s;
+		else rightAttr = s;
 	}
 
 	bool validate() {
 		//both synonym
+		if (isSyn != 0 && isSyn != 1 && isSyn != 2 && isSyn != 3){
+			return false;
+		}
+		if (isSyn == 1){
+			string s1 = synonymTable->at(rightSynonym);
+			if (s1 == "procedure" && rightAttr == "procName"){
+				return true;
+			} else if (s1 == "variable" && rightAttr == "varName"){
+				return true;
+			} else if ((s1 == "stmt" || s1 == "assign" || s1 == "while" || s1 == "if" || s1 == "stmtLst") && rightAttr == "stmt#"){
+				return true;
+			} else if (s1 == "prog_line" && (rightAttr == "" || rightAttr == "value")){
+				return true;
+			} else if (s1 == "call" && (rightAttr == "procName" || rightAttr == "stmt#")){
+				return true;
+			} else if (s1 == "constant" && rightAttr == "value"){
+				return true;
+			} else {
+				return false;
+			}
+		}
+		if (isSyn == 2) {
+			string s1 = synonymTable->at(leftSynonym);
+			if (s1 == "procedure" && leftAttr == "procName"){
+				return true;
+			} else if (s1 == "variable" && leftAttr == "varName"){
+				return true;
+			} else if ((s1 == "stmt" || s1 == "assign" || s1 == "while" || s1 == "if" || s1 == "stmtLst") && leftAttr == "stmt#"){
+				return true;
+			} else if (s1 == "prog_line" && (leftAttr == "" || leftAttr == "value")){
+				return true;
+			} else if (s1 == "call" && (leftAttr == "procName" || leftAttr == "stmt#")){
+				return true;
+			} else if (s1 == "constant" && leftAttr == "value"){
+				return true;
+			} else {
+				return false;
+			}
+		}
 		if (isSyn == 3) {
 			string s1 = synonymTable->at(leftSynonym);
 			string s2 = synonymTable->at(rightSynonym);
-			if ((s1 == "procedure" || s1 == "variable") && !(s2 == "procedure" || s2 == "variable")) {
+			if (s1 == "procedure" && leftAttr != "procName"){
 				return false;
-			} else if ((s2 == "procedure" || s2 == "variable") && !(s1 == "procedure" || s1 == "variable")){
+			} else if (s1 == "variable" && leftAttr != "varName"){
+				return false;
+			} else if ((s1 == "stmt" || s1 == "assign" || s1 == "while" || s1 == "if" || s1 == "stmtLst") && leftAttr != "stmt#"){
+				return false;
+			} else if (s1 == "prog_line" && !(leftAttr == "" || leftAttr == "value")){
+				return false;
+			} else if (s1 == "call" && !(leftAttr == "procName" || leftAttr == "stmt#")){
+				return false;
+			} else if (s1 == "constant" && leftAttr != "value"){
+				return false;
+			}
+			if (s2 == "procedure" && rightAttr != "procName"){
+				return false;
+			} else if (s2 == "variable" && rightAttr != "varName"){
+				return false;
+			} else if ((s2 == "stmt" || s2 == "assign" || s2 == "while" || s2 == "if" || s2 == "stmtLst") && rightAttr != "stmt#"){
+				return false;
+			} else if (s2 == "prog_line" && !(rightAttr == "" || rightAttr == "value")){
+				return false;
+			} else if (s2 == "call" && !(rightAttr == "procName" || rightAttr == "stmt#")){
+				return false;
+			} else if (s2 == "constant" && rightAttr != "value"){
+				return false;
+			}
+			if ((leftAttr == "procName" || leftAttr == "varName") && !(rightAttr == "procName" || rightAttr == "varName")) {
+				return false;
+			} 
+			if ((leftAttr == "value" || leftAttr == "stmt#" || s1 == "prog_line") && !(rightAttr == "value" || rightAttr == "stmt#" || s2 == "prog_line")){
 				return false;
 			}
 		}
@@ -44,10 +119,10 @@ public:
 	ResultTuple* solve(){
 		ResultTuple* ans;
 		switch (isSyn) {
-			case 1: case 4:
+			case 1:
 				ans = solveRightSyn();
 				break;
-			case 2: case 5:
+			case 2:
 				ans = solveLeftSyn();
 				break;
 			case 3:
@@ -63,10 +138,10 @@ public:
 	ResultTuple* solve(ResultTuple* tuple) {
 		ResultTuple* ans;
 		switch (isSyn) {
-			case 1: case 4:
+			case 1:
 				ans = solveRightSyn(tuple);
 				break;
-			case 2: case 5:
+			case 2:
 				ans = solveLeftSyn(tuple);
 				break;
 			case 3:
@@ -81,7 +156,7 @@ public:
 		priority = 1;
 	}
 
-	vector<int> getValues(string syn, int index){
+	vector<int> getValues(string syn, string attr, int index){
 		vector<int> values = vector<int>();
 		if (synonymTable->at(syn)=="procedure"){
 			if (index < pkb->procTable->getSize() && index >= 0){
@@ -94,6 +169,13 @@ public:
 		} else if (synonymTable->at(syn)=="constant"){
 			if (pkb->constantTable->containsConst(index)){
 				values.push_back(pkb->constantTable->getConstIndex(index));
+			}
+		} else if (synonymTable->at(syn)=="call" && attr == "procName"){
+			vector<TNode*> callNodes = pkb->statementTable->getNodesMatchingNodeType("CALL_NODE");
+			for (size_t i = 0; i < callNodes.size(); i++){
+				if (callNodes[i]->getData() == pkb->procTable->getProcName(index)){
+					values.push_back(callNodes[i]->getStmtNum());
+				}
 			}
 		} else {
 			if (synonymTable->at(syn)=="stmt" || synonymTable->at(syn) == "prog_line"){
@@ -109,17 +191,21 @@ public:
 		return values;
 	}
 
-	vector<int> getValues(string targetSyn, string sourceSyn, int sourceIndex){
+	vector<int> getValues(string targetSyn, string sourceSyn, string targetAttr, string sourceAttr, int sourceIndex){
 		vector<int> result = vector<int>();
 		string sourceSynType = synonymTable->at(sourceSyn);
 		string targetSynType = synonymTable->at(targetSyn);
-		if ((sourceSynType == "variable" || sourceSynType == "procedure") && (targetSynType == "variable" || targetSynType == "procedure")) {
+		if ((sourceSynType == "variable" || sourceSynType == "procedure" || (sourceSynType == "call" && sourceAttr == "procName")) && 
+			(targetSynType == "variable" || targetSynType == "procedure" || (targetSynType == "call" && targetAttr == "procName"))){
 			string sourceString;
 			if (sourceSynType == "variable"){
 				sourceString = pkb->varTable->getVarName(sourceIndex);
 			}
 			if (sourceSynType == "procedure"){
 				sourceString = pkb->procTable->getProcName(sourceIndex);
+			}
+			if (sourceSynType == "call"){
+				sourceString = pkb->statementTable->getTNode(sourceIndex)->getData();
 			}
 			if (targetSynType == "variable"){
 				if(pkb->varTable->containsVar(sourceString)){
@@ -129,6 +215,14 @@ public:
 			if (targetSynType == "procedure"){
 				if(pkb->procTable->containsProc(sourceString)){
 					result.push_back(pkb->procTable->getProcIndex(sourceString));
+				}
+			}
+			if (targetSynType == "call"){
+				vector<TNode*> callNodes = pkb->statementTable->getNodesMatchingNodeType("CALL_NODE");
+				for (size_t i = 0; i < callNodes.size(); i++){
+					if (callNodes[i]->getData() == sourceString){
+						result.push_back(callNodes[i]->getStmtNum());
+					}
 				}
 			}
 		} else if ((sourceSynType=="stmt" || sourceSynType=="assign" || sourceSynType=="call" || sourceSynType=="while" || sourceSynType=="if" || sourceSynType=="constant" || sourceSynType=="prog_line") &&
@@ -162,7 +256,7 @@ public:
 		tuple->addSynonymToMap(leftSynonym, index);
 		vector<int> values = vector<int>();
 		if (isSyn == 2) {	// with syn.attr = varnum: Get syn that have attr equals to varnum
-			values = getValues(leftSynonym, rightIndex);
+			values = getValues(leftSynonym, leftAttr, rightIndex);
 		} else {	// Uses(syn, _): Get all users
 			// invalid
 		}
@@ -202,7 +296,7 @@ public:
 		tuple->addSynonymToMap(rightSynonym, index);
 		vector<int> values = vector<int>();
 		if (isSyn == 1) {	// with syn.attr = varnum: Get syn that have attr equals to varnum
-			values = getValues(rightSynonym, leftIndex);
+			values = getValues(rightSynonym, rightAttr, leftIndex);
 		} else {	// Uses(syn, _): Get all users
 			// invalid
 		}
@@ -247,8 +341,8 @@ public:
 		string rightSynType = synonymTable->at(rightSynonym);
 
 		vector<pair<int, int> > joinValues;
-		if ((leftSynType=="procedure" || leftSynType=="variable") &&
-			(rightSynType=="procedure" || rightSynType=="variable")){
+		if ((leftSynType=="procedure" || leftSynType=="variable" || (leftSynType == "call" && leftAttr == "procName") &&
+			(rightSynType=="procedure" || rightSynType=="variable" || (rightSynType == "call" && rightAttr == "procName")))){
 			joinValues = getJoinStrings(leftSynonym, rightSynonym);
 		} else if ((leftSynType=="stmt" || leftSynType=="assign" || leftSynType=="call" || leftSynType=="while" || leftSynType=="if" || leftSynType=="constant" || leftSynType=="prog_line") &&
 			(rightSynType=="stmt" || rightSynType=="assign" || rightSynType=="call" || rightSynType=="while" || rightSynType=="if" || rightSynType=="constant" || rightSynType=="prog_line")){
@@ -275,6 +369,15 @@ public:
 			}
 		} else if (synType=="variable"){
 			results = pkb->varTable->getAllVar();
+		} else if (synType=="call"){
+			vector<TNode*> callNodes = pkb->statementTable->getNodesMatchingNodeType("CALL_NODE");
+			set<string> tempStrings;
+			for (size_t i = 0; i < callNodes.size(); i++){
+				tempStrings.insert(callNodes[i]->getData());
+			}
+			for (std::set<string>::iterator it = tempStrings.begin(); it != tempStrings.end(); ++it){
+				results.push_back(*it);
+			}
 		} else {
 			// invalid
 		}
@@ -308,6 +411,13 @@ public:
 						results.push_back(make_pair(pkb->procTable->getProcIndex(leftStrings[i]), pkb->procTable->getProcIndex(leftStrings[i])));
 					} else if (syn1Type == "variable"){
 						results.push_back(make_pair(pkb->varTable->getVarIndex(leftStrings[i]), pkb->procTable->getProcIndex(leftStrings[i])));
+					} else if (syn1Type == "call"){
+						vector<TNode*> callNodes = pkb->statementTable->getNodesMatchingNodeType("CALL_NODE");
+						for (size_t j = 0; j < callNodes.size(); j++){
+							if (leftStrings[i] == callNodes[j]->getData()){
+								results.push_back(make_pair(callNodes[j]->getStmtNum(), pkb->procTable->getProcIndex(leftStrings[i])));
+							}
+						}
 					} else {
 						// invalid
 					}
@@ -320,8 +430,35 @@ public:
 						results.push_back(make_pair(pkb->procTable->getProcIndex(leftStrings[i]), pkb->varTable->getVarIndex(leftStrings[i])));
 					} else if (syn1Type == "variable"){
 						results.push_back(make_pair(pkb->varTable->getVarIndex(leftStrings[i]), pkb->varTable->getVarIndex(leftStrings[i])));
+					} else if (syn1Type == "call"){
+						vector<TNode*> callNodes = pkb->statementTable->getNodesMatchingNodeType("CALL_NODE");
+						for (size_t j = 0; j < callNodes.size(); j++){
+							if (leftStrings[i] == callNodes[j]->getData()){
+								results.push_back(make_pair(callNodes[j]->getStmtNum(), pkb->varTable->getVarIndex(leftStrings[i])));
+							}
+						}
 					} else {
 						// invalid
+					}
+				}
+			}
+		} else if (syn2Type == "call"){
+			vector<TNode*> callNodes = pkb->statementTable->getNodesMatchingNodeType("CALL_NODE");
+			for (size_t i = 0; i < leftStrings.size(); i++){
+				for (size_t j = 0; j < callNodes.size(); j++){
+					if (callNodes[j]->getData() == leftStrings[i]){
+						if (syn1Type == "procedure"){
+							results.push_back(make_pair(pkb->procTable->getProcIndex(leftStrings[i]), callNodes[j]->getStmtNum()));
+						} else if (syn1Type == "variable"){
+							results.push_back(make_pair(pkb->varTable->getVarIndex(leftStrings[i]), callNodes[j]->getStmtNum()));
+						} else if (syn1Type == "call"){
+							vector<TNode*> copyCallNodes = pkb->statementTable->getNodesMatchingNodeType("CALL_NODE");
+							for (size_t k = 0; k < copyCallNodes.size(); k++){
+								if (copyCallNodes[k]->getData() == leftStrings[i]){
+									results.push_back(make_pair(copyCallNodes[k]->getStmtNum(),callNodes[j]->getStmtNum()));
+								}
+							}
+						}
 					}
 				}
 			}
@@ -379,7 +516,8 @@ public:
 		vector<int> rowValues = tuple->getResultRow(row);
 		string leftSynType = synonymTable->at(leftSynonym);
 		string rightSynType = synonymTable->at(rightSynonym);
-		if ((leftSynType == "variable" || leftSynType == "procedure") && (rightSynType == "variable" || rightSynType == "procedure")) {
+		if ((leftSynType == "variable" || leftSynType == "procedure" || (leftSynType == "call" && leftAttr == "procName")) && 
+			(rightSynType == "variable" || rightSynType == "procedure" || (rightSynType == "call" && rightAttr == "procName"))) {
 			string leftString, rightString;
 			if (leftSynType == "variable"){
 				leftString = pkb->varTable->getVarName(tuple->getResultAt(row, index1));
@@ -387,11 +525,17 @@ public:
 			if (leftSynType == "procedure"){
 				leftString = pkb->procTable->getProcName(tuple->getResultAt(row, index1));
 			}
+			if (leftSynType == "call"){
+				leftString = pkb->statementTable->getTNode(tuple->getResultAt(row, index1))->getData();
+			}
 			if (rightSynType == "variable"){
 				rightString = pkb->varTable->getVarName(tuple->getResultAt(row, index2));
 			}
 			if (rightSynType == "procedure"){
 				rightString = pkb->procTable->getProcName(tuple->getResultAt(row, index2));
+			}
+			if (rightSynType == "call"){
+				rightString = pkb->statementTable->getTNode(tuple->getResultAt(row, index2))->getData();
 			}
 			return leftString == rightString;
 		} else if ((leftSynType=="stmt" || leftSynType=="assign" || leftSynType=="call" || leftSynType=="while" || leftSynType=="if" || leftSynType=="constant" || leftSynType=="prog_line") &&
@@ -432,7 +576,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int leftValue = tuple->getResultAt(i, lIndex);
 				if (prevSolution.find(leftValue) == prevSolution.end()){
-					vector<int> tempValues = getValues(rightSynonym, leftSynonym, leftValue);
+					vector<int> tempValues = getValues(rightSynonym, leftSynonym, rightAttr, leftAttr, leftValue);
 					prevSolution.insert(make_pair(leftValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(leftValue);
@@ -449,7 +593,7 @@ public:
 			for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 				int rightValue = tuple->getResultAt(i, rIndex);
 				if (prevSolution.find(rightValue) == prevSolution.end()){
-					vector<int> tempValues = getValues(leftSynonym, rightSynonym, rightValue);
+					vector<int> tempValues = getValues(leftSynonym, rightSynonym, leftAttr, rightAttr, rightValue);
 					prevSolution.insert(make_pair(rightValue, tempValues));
 				}
 				vector<int> vals = prevSolution.at(rightValue);

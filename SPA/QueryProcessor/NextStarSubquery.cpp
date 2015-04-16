@@ -199,8 +199,8 @@ public:
 							result->addResultRow(temp);
 						}
 					} catch (exception& e) {
-						if (pkb->nextExtractor->isNextStar(temp.at(index), rightIndex)) {
-						//if (pkb->nextExtractor->isNextStar(temp.at(index), rightIndex)) {
+						if (pkb->optimizedCFG->isNextStar(temp.at(index), rightIndex)) {
+						//if (pkb->optimizedCFG->isNextStar(temp.at(index), rightIndex)) {
 							result->addResultRow(temp);
 							CacheTable::instance()->isNextStarCache[p] = true;
 						} else {
@@ -208,8 +208,8 @@ public:
 						}
 					}
 
-				} else if (pkb->nextExtractor->isNextStar(temp.at(index), rightIndex)) {
-				//} else if (pkb->nextExtractor->isNextStar(temp.at(index), rightIndex)) {
+				} else if (pkb->optimizedCFG->isNextStar(temp.at(index), rightIndex)) {
+				//} else if (pkb->optimizedCFG->isNextStar(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}
 
@@ -287,8 +287,8 @@ public:
 							result->addResultRow(temp);
 						}
 					} catch (exception& e) {
-						if (pkb->nextExtractor->isNextStar(leftIndex, temp.at(index))) {
-						//if (pkb->nextExtractor->isNextStar(leftIndex, temp.at(index))) {
+						if (pkb->optimizedCFG->isNextStar(leftIndex, temp.at(index))) {
+						//if (pkb->optimizedCFG->isNextStar(leftIndex, temp.at(index))) {
 							result->addResultRow(temp);
 							CacheTable::instance()->isNextStarCache[p] = true;
 						} else {
@@ -296,8 +296,8 @@ public:
 						}
 					}
 
-				} else if (pkb->nextExtractor->isNextStar(leftIndex, temp.at(index))) {
-				//} else if (pkb->nextExtractor->isNextStar(leftIndex, temp.at(index))) {
+				} else if (pkb->optimizedCFG->isNextStar(leftIndex, temp.at(index))) {
+				//} else if (pkb->optimizedCFG->isNextStar(leftIndex, temp.at(index))) {
 					result->addResultRow(temp);
 				}
 			} else {	// NextStar(_, syn)
@@ -337,7 +337,7 @@ public:
 						}
 					} catch (exception& e) {
 						pair<int, int> p = pair<int, int>(Previous[i], Previous[i]);
-						if(pkb->nextExtractor->isNextStar(Previous[i], Previous[i])) {
+						if(pkb->optimizedCFG->isNextStar(Previous[i], Previous[i])) {
 							NextStar.push_back(Previous[i]);
 							CacheTable::instance()->isNextStarCache[p] = true;
 						} else {
@@ -345,7 +345,7 @@ public:
 						}
 					}
 				} else {
-					if(pkb->nextExtractor->isNextStar(Previous[i], Previous[i])) {
+					if(pkb->optimizedCFG->isNextStar(Previous[i], Previous[i])) {
 						NextStar.push_back(Previous[i]);
 					}
 				}
@@ -409,8 +409,8 @@ public:
 							result->addResultRow(allres[i]);
 						}
 					} catch (exception& e) {
-						if (pkb->nextExtractor->isNextStar(allres[i][lIndex], allres[i][rIndex])){
-						//if (pkb->nextExtractor->isNextStar(allres[i][lIndex], allres[i][rIndex])){
+						if (pkb->optimizedCFG->isNextStar(allres[i][lIndex], allres[i][rIndex])){
+						//if (pkb->optimizedCFG->isNextStar(allres[i][lIndex], allres[i][rIndex])){
 							result->addResultRow(allres[i]);
 							CacheTable::instance()->isNextStarCache[p] = true;
 						} else {
@@ -418,8 +418,8 @@ public:
 						}
 					}
 				} else {
-					if (pkb->nextExtractor->isNextStar(allres[i][lIndex], allres[i][rIndex])){
-					//if (pkb->nextExtractor->isNextStar(allres[i][lIndex], allres[i][rIndex])){
+					if (pkb->optimizedCFG->isNextStar(allres[i][lIndex], allres[i][rIndex])){
+					//if (pkb->optimizedCFG->isNextStar(allres[i][lIndex], allres[i][rIndex])){
 						result->addResultRow(allres[i]);
 					}
 				}
@@ -527,7 +527,7 @@ public:
 		ResultTuple* tuple = new ResultTuple();
 		tuple->setBool(true);
 		if(isSyn == 0) {	//(digit, digit)
-			tuple->setEmpty(!pkb->nextExtractor->isNextStar(leftIndex, rightIndex));
+			tuple->setEmpty(!pkb->optimizedCFG->isNextStar(leftIndex, rightIndex));
 		} else if (isSyn == 7) {	//(_, digit)
 			tuple->setEmpty(pkb->nextExtractor->getPrev(rightIndex).empty());
 		} else if (isSyn == 8) {	//(digit, _)

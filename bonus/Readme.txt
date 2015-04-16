@@ -1,0 +1,2 @@
+To add Contains and Siblings in the SPA, in Parser.cpp lines 45-46, either comment/uncomment the construction of Contains and Sibling components of the PKB.
+Afterward AutoTester can run Queries for Contains and Sibling

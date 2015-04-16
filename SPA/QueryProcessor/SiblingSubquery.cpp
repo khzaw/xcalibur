@@ -106,7 +106,7 @@ public:
 	ResultTuple* solveNoSyn(){
 		ResultTuple* result = new ResultTuple();
 		result->setBool(true);
-		result->setEmpty(pkb->siblingTable->isSiblingStmtStmt(leftIndex, rightIndex));
+		result->setEmpty(!pkb->siblingTable->isSiblingStmtStmt(leftIndex, rightIndex));
 		return result;
 	}
 

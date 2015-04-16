@@ -252,6 +252,7 @@ public:
 
 	ResultTuple* solveLeftSyn() {
 		ResultTuple* tuple = new ResultTuple();
+		if (rightIndex == -1) return tuple;
 		int index = tuple->addSynonym(leftSynonym);
 		tuple->addSynonymToMap(leftSynonym, index);
 		vector<int> values = vector<int>();
@@ -271,6 +272,7 @@ public:
 
 	ResultTuple* solveLeftSyn(ResultTuple* tuple) {
 		ResultTuple* result = new ResultTuple();
+		if (leftIndex == -1) return tuple;
 		result->setSynonym(tuple->getSynonyms());
 		result->setSynonymMap(tuple->getSynonymMap());
 
@@ -292,6 +294,7 @@ public:
 
 	ResultTuple* solveRightSyn() {
 		ResultTuple* tuple = new ResultTuple();
+		if (leftIndex == -1) return tuple;
 		int index = tuple->addSynonym(rightSynonym);
 		tuple->addSynonymToMap(rightSynonym, index);
 		vector<int> values = vector<int>();
@@ -311,6 +314,7 @@ public:
 
 	ResultTuple* solveRightSyn(ResultTuple* tuple) {
 		ResultTuple* result = new ResultTuple();
+		if (leftIndex == -1) return tuple;
 		result->setSynonym(tuple->getSynonyms());
 		result->setSynonymMap(tuple->getSynonymMap());
 

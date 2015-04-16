@@ -329,10 +329,19 @@ ResultTuple* OptimizedQE::optimizedJoin(vector<ResultTuple*> r) {
 		vector<int> synons = vector<int>();
 		// check which synonyms are inside
 		for (size_t j = 0; j < synonyms.size(); j++) {
-			int temp = r[i]->getSynonymIndex(synonyms[j]);
+
+			int temp = -1;
+			string sn;
+			if (synonyms[j].find(".") != string::npos) {
+				sn = synonyms[j].substr(0, synonyms[j].find("."));
+				temp = r[i]->getSynonymIndex(sn);
+			} else {
+				sn = synonyms[j];
+				temp = r[i]->getSynonymIndex(synonyms[j]);
+			}
 			if (temp >= 0) {
 				synons.push_back(temp);
-				rt->addSynonymToMap(synonyms[j], rt->addSynonym(synonyms[j]));
+				rt->addSynonymToMap(sn, rt->addSynonym(sn));
 			}
 		}
 		if (synons.size() == 0) {

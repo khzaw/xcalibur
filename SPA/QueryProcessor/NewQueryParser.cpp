@@ -76,7 +76,7 @@ NewQueryParser::NewQueryParser(string s, PKBController* controller) {
 
 	parse();
 	this->evaluator->setSynonymTable(synonyms);
-	//printMap();
+	// printMap();
 }
 
 void NewQueryParser::printMap() {
@@ -281,6 +281,9 @@ void NewQueryParser::matchPatternAssign(string s) {
 
 	if(nextToken.name == "_") {
 		match(UNDERSCORE);
+		if(nextToken.name != ")") {
+			cout << "Crash!" << endl;
+		}
 		//value += "_";
 	}
 	match(")");
@@ -301,7 +304,6 @@ QTNode* NewQueryParser::matchExpression() {
 	QTNode* current;
 
 	//shunting yard algorithm
-	next:
 	while(nextToken.name.compare("\"") != 0) {
 		string popped;
 		if (nextToken.token == OPEN_PARENTHESES) {
@@ -309,30 +311,30 @@ QTNode* NewQueryParser::matchExpression() {
 			operatorStack.push("(");
 		} else if (nextToken.token == CLOSE_PARENTHESES) {
 			match(CLOSE_PARENTHESES);
-			while(!operatorStack.empty()) {
-				popped = operatorStack.top();
-				operatorStack.pop();
+			while(!operatorStack.empty() && operatorStack.top() != "(") {
+				popped = operatorStack.top(); operatorStack.pop();
 				if (popped.compare("(") == 0) {
-					goto next;
+					
 				} else {
 					//add node(operandStack, popped);
-					right = operandStack.top();
-					operandStack.pop();
-					left = operandStack.top();
-					operandStack.pop();
+					right = operandStack.top(); operandStack.pop();
+					left = operandStack.top(); operandStack.pop();
 					current = new QTNode(popped);
 					current->addChild(left);
 					current->addChild(right);
 					operandStack.push(current);
+					result += " " + popped;
 				}
 			}
+			if(operatorStack.top() == "(") operatorStack.pop();
 			//throw unbalance parentheses exception
 		} else {
 			if(nextToken.token == PLUS || nextToken.token == MINUS || nextToken.token == TIMES) {
 				string op1 = nextToken.name;
 				match(op1);
 				string op2;
-				while (!operatorStack.empty() && !(op2 = operatorStack.top()).empty()) {
+				while (!operatorStack.empty() && (operatorStack.top() != "(")) {
+					op2 = operatorStack.top();
 					if(comparePrecedence(op1, op2) <= 0) {
 						operatorStack.pop();
 						//addNode(operandStack, o2)
@@ -365,12 +367,9 @@ QTNode* NewQueryParser::matchExpression() {
 		}	
 	}
 	while(!operatorStack.empty()) {
-		string op = operatorStack.top();
-		operatorStack.pop();
-		right = operandStack.top();
-		operandStack.pop();
-		left = operandStack.top();
-		operandStack.pop();
+		string op = operatorStack.top(); operatorStack.pop();
+		right = operandStack.top(); operandStack.pop();
+		left = operandStack.top(); operandStack.pop();
 		current = new QTNode(op);
 		current->addChild(left);
 		current->addChild(right);

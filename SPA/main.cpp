@@ -44,11 +44,11 @@ int main() {
 	//query = "variable v; Select v.varName such that Modifies(12, v)";
 	//parser = new NewQueryParser(query, controller);
 
-	query = "variable v; if i; Select <v.varName, i> such that Modifies(v, i)";
-	parser = new NewQueryParser(query, controller);
-
-	//query = "variable v; Select v such that Modifies (18, v)";
+	//query = "assign a; Select a pattern a (\"x\", \"x*y+z\")";
 	//parser = new NewQueryParser(query, controller);
+
+	query = "assign a; Select a pattern a(_, \"(x*(y+z) + z)*z\")";
+	parser = new NewQueryParser(query, controller);
 
 	//query = "assign a; Select a such that Modifies (a, \"y\") and Uses (a, \"y\")";
 	//parser = new NewQueryParser(query, controller);

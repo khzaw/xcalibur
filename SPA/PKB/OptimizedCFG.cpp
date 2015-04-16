@@ -257,6 +257,7 @@ bool OptimizedCFG::isNextStar(int line1, int line2) {
 
 // complexity: O(k) where k = level of nesting, i.e. no. of ParentStar
 
+
 bool OptimizedCFG::isNextStar(int line1, int line2) {
   cout << "evaluating next*"<< line1<< ","<< line2<< endl;
    
@@ -675,7 +676,8 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
     else {
       std::set<int> lines_in_ANode1 = ANode1->getProgLines();
       if (line2>line1) {
-        lines_in_ANode1.erase(lines_in_ANode1.lower_bound(line1), lines_in_ANode1.upper_bound(line2));
+        lines_in_ANode1.erase(lines_in_ANode1.begin(), lines_in_ANode1.upper_bound(line1));
+      	lines_in_ANode1.erase(lines_in_ANode1.lower_bound(line2), lines_in_ANode1.end());  
         those_lines.insert(lines_in_ANode1.begin(), lines_in_ANode1.end());
       }
       else if (line1<line2) {
@@ -778,6 +780,7 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
   return (number_of_paths>0);
 }
 
+// select a st Affects(_, a)
 set<int> OptimizedCFG::getAffectsBy(int line) {
   set<int> ans;
   
@@ -801,6 +804,7 @@ set<int> OptimizedCFG::getAffectsBy(int line) {
   return ans;
 }
 
+// select a st Affects (a, _)
 set<int> OptimizedCFG::getAffects(int line) {
   set<int> ans;
 

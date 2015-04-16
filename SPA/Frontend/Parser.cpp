@@ -41,8 +41,9 @@ void Parser::constructRelations() {
 	this->controller->constructParent();
 	this->controller->constructNext();
 	this->controller->constructUses();
+  this->controller->constructOptimizedCFG();
 	this->controller->constructContains();
-	this->controller->constructSiblings();
+	//this->controller->constructSiblings();
 	// cout << "yay" << endl;
 }
 

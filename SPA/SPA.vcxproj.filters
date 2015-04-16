@@ -323,9 +323,6 @@
     <ClCompile Include="PKB\StatementTable.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
-    <ClCompile Include="PKB\SiblingsExtractor.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
     <ClCompile Include="PKB\Siblings.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>

@@ -161,7 +161,7 @@ public:
 				if (pkb->modifiesTable->evaluateIsModifiesStmt(assign[j], r->getResultAt(i, index)) && 
 					matchPattern(pkb->statementTable->getTNode(assign[j])->getData())) {
 						answer->addResultRow(r->getResultRow(i));
-						answer->addResult(r->getAllResults().size()-1, assign[j]);
+						answer->addResult(answer->getAllResults().size()-1, assign[j]);
 				}
 			}
 		}

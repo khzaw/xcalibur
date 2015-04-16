@@ -250,6 +250,46 @@ TRUE
 5000
 41 - Affects
 stmt a, b;
-Select b such that Affects(a, b) and Modifies(a, "x")
-39,40,68,75
+Select b such that Affects(a, b) and Modifies(a, "x") and Parent(b, a)
+
+5000
+42 - Pattern
+variable v; assign a;
+Select v pattern a(v, _"v"_)
+
+5000
+43 - Pattern
+variable v; if i;
+Select v pattern i("v", _, _)
+
+5000
+44 - Pattern
+variable v; while w;
+Select v pattern w(v,_)
+a,x,b,c,y,j,z, One
+5000
+45 - With
+procedure p; call c;
+Select p with p.procName = c.procName and c.stmt#=8
+Three
+5000
+46 - With
+constant c; 
+Select c with c.value=1
+1
+5000
+47 - With
+call v; while w; stmt s;
+Select v with v.stmt#=s.stmt# and s.stmt# = w.stmt#
+
+5000
+48 - Multiple
+stmt s1, s2; assign a1, a2; if i1, i2; while w1, w2; call c1,c2; prog_line p1, p2; procedure proc1, proc2; variable v1, v2; constant c1, c2;
+Select <v1, a1> such that Modifies(a1, v1) and Modifies(a2, v2) and Follows(a1, a2)
+j 25, j 26, j 27, j 28, j 29,a 62,y 72,yolo 13,yolo 21,yolo 39,yolo 71
+5000
+49 - Multiple
+stmt s1, s2; assign a1, a2; if i1, i2; while w1, w2; call c1,c2; prog_line p1, p2; procedure proc1, proc2; variable v1, v2; constant con1, con2;
+Select proc1 such that c1.procName = proc1.procName
+Two, Three, Four
 5000

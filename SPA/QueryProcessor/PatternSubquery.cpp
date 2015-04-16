@@ -50,7 +50,11 @@ public:
 			return true;
 		}
 		if (isUnderscore) {
-			return (target.find(specialValue) != std::string::npos);
+			string s = specialValue;
+			s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::bind1st(std::not_equal_to<char>(), ' ')));
+			s.erase(std::find_if(s.rbegin(), s.rend(), std::bind1st(std::not_equal_to<char>(), ' ')).base(), s.end());
+			s = " " + s;
+			return (target.find(s) != std::string::npos);
 		} else {
 			return (specialValue == target);
 		}

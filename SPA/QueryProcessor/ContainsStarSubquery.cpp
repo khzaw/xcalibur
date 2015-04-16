@@ -118,7 +118,7 @@ public:
 	ResultTuple* solveNoSyn(){
 		ResultTuple* result = new ResultTuple();
 		result->setBool(true);
-		result->setEmpty(pkb->containsTable->isContainsStarStmtStmt(leftIndex, rightIndex));
+		result->setEmpty(!pkb->containsTable->isContainsStarStmtStmt(leftIndex, rightIndex));
 		return result;
 	}
 

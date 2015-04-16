@@ -1,0 +1,60 @@
+1 - Contains
+variable v; if ifStmt;
+Select v such that Contains(ifStmt, v)
+i
+5000
+2 - Contains, Contains*, with
+variable v; if ifStmt; procedure p;
+Select v such that Contains(ifStmt, v) and Contains*(p, ifStmt) with p.procName = "John"
+i
+5000
+3 - Contains, with
+assign a; variable v;
+Select a such that Contains*(a, v) with v.varName = "x"
+1, 3, 4, 5, 6, 8, 10, 11
+5000
+4 - Contains*, with
+procedure p; constant c;
+Select p such that Contains*(p, c) with c.value = 2
+Bill
+5000
+5 - Contains*, with
+assign a; plus add; variable v;
+Select a such that Contains* (a, add) and Contains* (add, v) with v.varName="x"
+3, 5, 8, 10
+5000
+6 - Contains*
+procedure p; if ifStmt; while w;
+Select p such that Contains* (p, ifStmt) and Contains* (ifStmt, w)
+none
+5000
+7 - Contains
+stmt s;
+Select s such that Contains* (9, s)
+10, 11
+5000
+8 - Contains*
+
+Select BOOLEAN such that Contains* (9, 10)
+TRUE
+5000
+9 - Contains*
+variable v;
+Select v such that Contains* (10, v)
+x, z
+5000
+10 - Sibling
+stmt s;
+Select s such that Sibling (s, 4)
+1, 2, 3, 5
+5000
+11 - Sibling, with
+variable v, v1;
+Select v such that Sibling (v, v1) with v1.varName = "x"
+y, z
+5000
+12 - Contains, Modifies, pattern
+variable v; if ifStmt; stmtLst then, else; assign a, a1;
+Select v such that Contains (ifStmt, v) and Modifies (“Bill”, v) pattern ifStmt(“i”, then, else) such that Contains (then, a) and Contains (else, a1) and Sibling(v, then) and Sibling(v, else)
+i
+5000

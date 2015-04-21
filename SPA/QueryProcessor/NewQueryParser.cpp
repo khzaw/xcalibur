@@ -261,6 +261,7 @@ void NewQueryParser::matchPatternAssign(string s) {
 	// assign : synonym "(" varRef "," expression-spec | "_" ")"
 	// expression-spec : """ expr | "_" """ expr """ "_"
 	Subquery* patternAssignSq = new PatternSubquery(&synonyms, controller);
+	patternAssignSq->isUnderscore = false;
 	result = "";
 	string value = result;
 	match("(");
@@ -284,6 +285,7 @@ void NewQueryParser::matchPatternAssign(string s) {
 		if(nextToken.name != ")") {
 			cout << "Crash!" << endl;
 		}
+		patternAssignSq->isUnderscore = true;
 		//value += "_";
 	}
 	match(")");

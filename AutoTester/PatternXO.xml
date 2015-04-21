@@ -1,0 +1,8 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>AutoTester</name><parsing_time_taken>2587.000000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnTuple="1" Pattern="1" CondNum="2" RelNum="0" comment="Pattern Test 9">9</id><querystr><![CDATA[assign a; variable v; Select <a, v> pattern a(v, "x * x * 11")]]></querystr>

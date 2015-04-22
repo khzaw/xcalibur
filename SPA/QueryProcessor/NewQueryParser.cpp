@@ -279,7 +279,7 @@ void NewQueryParser::matchPatternAssign(string s) {
 		value += result;
 		match("\"");
 	}
-
+	patternAssignSq->setValue(value, false);
 	if(nextToken.name == "_") {
 		match(UNDERSCORE);
 		if(nextToken.name != ")") {
@@ -294,7 +294,6 @@ void NewQueryParser::matchPatternAssign(string s) {
 	// cout << "fst: " << fst << "\tsnd: "
 	// cout << "POSTFIX : " << result << "\n";
 	// result postfix is ready
-	patternAssignSq->setValue(value, true);
 	setSynonymsHelper(fst, snd, patternAssignSq);
 }
 

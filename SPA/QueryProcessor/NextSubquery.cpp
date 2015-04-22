@@ -165,6 +165,9 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 2) {	// Next(syn, stmt)
+				if (temp.at(index) == rightIndex) {
+					continue;
+				}
 				if (pkb->nextExtractor->isNext(temp.at(index), rightIndex)) {
 					result->addResultRow(temp);
 				}
@@ -211,6 +214,9 @@ public:
 		for (size_t i = 0; i < tuple->getAllResults().size(); i++) {
 			vector<int> temp = tuple->getAllResults().at(i);
 			if (isSyn == 1) {	// Next(stmt, syn)
+				if (leftIndex == temp.at(index)) {
+					continue;
+				}
 				if (pkb->nextExtractor->isNext(leftIndex, temp.at(index))) {
 					result->addResultRow(temp);
 				}
@@ -246,6 +252,11 @@ public:
 				&& pkb->statementTable->getTNode(Next[j])->getNodeType()!=TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]){
 					continue;
 				}
+
+				if (Previous.at(i) == Next.at(j)) {
+					continue;
+				}
+
 				vector<int> row = vector<int>();
 				row.push_back(Previous.at(i));
 				row.push_back(Next.at(j));

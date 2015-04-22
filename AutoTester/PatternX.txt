@@ -1,8 +1,3 @@
-1 - Affects Test 1
-stmt a, b; variable v;
-Select a such that Next(a, b);
-
-5000
 1 - Pattern Test 1
 assign a; variable v;
 Select a pattern a(v, "x")

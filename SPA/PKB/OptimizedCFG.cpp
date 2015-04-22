@@ -57,7 +57,7 @@ void OptimizedCFG::constructCFGFromProc(TNode* root) {
 		// link last child of if & else to next neighbour after if-else loop
 		if (type=="IF_NODE") {
 		
-			// std::cout << "in if-node\n";
+			// std:://cout << "in if-node\n";
 
 			// get if-else stmtLists
 			vector<TNode*> thenStmtList = curr->getChild(0)->getChild(0)->getChildren();
@@ -79,7 +79,7 @@ void OptimizedCFG::constructCFGFromProc(TNode* root) {
 			pushStmtListOntoStack(&pq, thenStmtList);
 			pushStmtListOntoStack(&pq, elseStmtList);
 
-			// std::cout << "done with this if-node\n";
+			// std:://cout << "done with this if-node\n";
 		}
 
 		// while loop
@@ -87,17 +87,17 @@ void OptimizedCFG::constructCFGFromProc(TNode* root) {
 		// last child link back to while node
 		else if (type=="WHILE_NODE") {
 			
-			// std::cout << "ín while-node\n";
+			// std:://cout << "ín while-node\n";
 
       TNode* stmtListNode = curr->getChild(0);
 			vector<TNode*> stmtList = stmtListNode->getChildren();
 			
-			// std::cout << "a" << curr->getChildren().size() << endl;
-			// std::cout << "b" << stmtListNode->getChildren().size() << endl;
-			// std::cout << "c" << stmtList.size() << "\n";
+			// std:://cout << "a" << curr->getChildren().size() << endl;
+			// std:://cout << "b" << stmtListNode->getChildren().size() << endl;
+			// std:://cout << "c" << stmtList.size() << "\n";
 			// for (int i=0; i<stmtList.size(); i++)
-			// 	std::cout<< stmtList.at(i) << " ";
-			// std::cout << "00\n" << endl;
+			// 	std:://cout<< stmtList.at(i) << " ";
+			// std:://cout << "00\n" << endl;
 
 			// link WHILE_NODE to first child of stmtList
 			addLink(curr->getStmtNum(), stmtList[0]->getStmtNum());
@@ -113,7 +113,7 @@ void OptimizedCFG::constructCFGFromProc(TNode* root) {
 			// push stmtList onto stack
 			pushStmtListOntoStack(&pq, stmtList);
 		
-			// std::cout << "done with this while-node\n";
+			// std:://cout << "done with this while-node\n";
 		}
 
 		// straightforward: assignment, call, 
@@ -168,20 +168,20 @@ void OptimizedCFG::addLink(int line1, int line2) {
 	}
 
 	// if line1 == line 2: raise error
-	else std::cout << "Error! Line 1 must be different from Line 2!\n";
+	//else std:://cout << "Error! Line 1 must be different from Line 2!\n";
 }
 
 void OptimizedCFG::linkStmtList(vector<TNode*> stmtList) {
 	for (int i=0; i<stmtList.size()-1; i++) {
 
 		if (stmtList.at(i)->getNodeType()!="IF_NODE") {
-			// std::cout << "linking non-if to next neighbour. line " << stmtList.at(i)->getStmtNum() <<" to line " << stmtList.at(i+1)->getStmtNum() <<"\n";
+			// std:://cout << "linking non-if to next neighbour. line " << stmtList.at(i)->getStmtNum() <<" to line " << stmtList.at(i+1)->getStmtNum() <<"\n";
       addLink(stmtList.at(i)->getStmtNum(), stmtList.at(i+1)->getStmtNum());
 		}
 		// if IF_NODE, create an END_IF sentinel (encoded as negative of stmtNum of IF_NODE)
 		// link END_IF sentinel to next neighbour
 		else {
-			// std::cout << "linking sentinel of if at line " << stmtList.at(i)->getStmtNum() <<" to next neighbour " << stmtList.at(i+1)->getStmtNum() << ".\n";
+			// std:://cout << "linking sentinel of if at line " << stmtList.at(i)->getStmtNum() <<" to next neighbour " << stmtList.at(i+1)->getStmtNum() << ".\n";
 			addLink(0-stmtList.at(i)->getStmtNum(), stmtList.at(i+1)->getStmtNum());
 		}
 	}
@@ -256,15 +256,15 @@ bool OptimizedCFG::isNextStar(int line1, int line2) {
 				temp = NextListFwd.at(curr);
 			}
 			catch (const out_of_range& e) {
-				// cout << "Nothing after "<< curr <<". ";
+				// //cout << "Nothing after "<< curr <<". ";
 			}
 
-			//cout << "exploring list at position " << curr << " " << temp.size() << " ";
+			////cout << "exploring list at position " << curr << " " << temp.size() << " ";
 			// enqueue linked nodes
 			for (std::set<int>::iterator it=temp.begin(); it!=temp.end(); it++) {
 				// only enqueue unvisited nodes
 				if (visited.find(*it)==visited.end()) { 
-					pq.push(*it); //cout << "pushed "<<*it<<" onto pq"<< endl; 
+					pq.push(*it); ////cout << "pushed "<<*it<<" onto pq"<< endl; 
 				}
 			}
 		}
@@ -279,13 +279,13 @@ bool OptimizedCFG::isNextStar(int line1, int line2) {
 
 
 bool OptimizedCFG::isNextStar(int line1, int line2) {
-  cout << "evaluating next*"<< line1<< ","<< line2<< endl;
+  ////cout << "evaluating next*"<< line1<< ","<< line2<< endl;
    
   set<int> parentStarOfLine1 = parentTable->getParentStar(line1);
   set<int> parentStarOfLine2 = parentTable->getParentStar(line2);
 
   if (parentStarOfLine2.find(line1)!=parentStarOfLine2.end()) {
-    cout << line1 << " is parent* of " << line2 << endl;
+    ////cout << line1 << " is parent* of " << line2 << endl;
     return true;
   }
 
@@ -297,7 +297,7 @@ bool OptimizedCFG::isNextStar(int line1, int line2) {
   
   // same stmtList
   if (followsTable->evaluateIsFollowsStar(line1, line2)) {
-    cout << line1 << " in same stmtList as " << line2 << endl;
+    //cout << line1 << " in same stmtList as " << line2 << endl;
     return true;
   }
   
@@ -317,28 +317,28 @@ bool OptimizedCFG::isNextStar(int line1, int line2) {
   for (int i=0; i<parentStarOfLine1.size(); i++) {
 
     if(*it1==*it2 && statementTable->getTNodeType(*it1)=="WHILE_NODE") {
-      cout << "common while ancestor at "<<*it2 << endl;
+      //cout << "common while ancestor at "<<*it2 << endl;
       return true;
     }
 
-    cout << "checking follows*("<<*it1<<","<<*it2<<")"<<endl;
+    //cout << "checking follows*("<<*it1<<","<<*it2<<")"<<endl;
     if (followsTable->evaluateIsFollowsStar(*it1, *it2)) {
-      cout << "true. terminating"<<endl;
+      //cout << "true. terminating"<<endl;
       return true;
     }
 
     it1++; it2++;
-    //cout << "moving on to next nesting level"<< endl;
+    ////cout << "moving on to next nesting level"<< endl;
   }
 
-  cout << endl << "parentStar of " << line1 << endl;
+  //cout << endl << "parentStar of " << line1 << endl;
   for (std::set<int>::iterator it1=parentStarOfLine1.begin(); it1!=parentStarOfLine1.end(); it1++) {
-    cout << *it1 << "  ";
+    //cout << *it1 << "  ";
   }
 
-  cout << endl << "parentStar of " << line2 << endl;
+  //cout << endl << "parentStar of " << line2 << endl;
   for (std::set<int>::iterator it2=parentStarOfLine2.begin(); it2!=parentStarOfLine2.end(); it2++) {
-    cout << *it2 << "  ";
+    //cout << *it2 << "  ";
   }
 
   return false;
@@ -391,10 +391,10 @@ set<int> OptimizedCFG::getNextStar(int line1) {
 				temp = NextListFwd.at(curr);
 			}
 			catch (const out_of_range& e) {
-				// cout << "Nothing after "<< curr <<". ";
+				// //cout << "Nothing after "<< curr <<". ";
 			}
 
-			// cout << "exploring list at position " << curr << " " << temp.size() << " ";
+			// //cout << "exploring list at position " << curr << " " << temp.size() << " ";
 			// enqueue linked nodes
 			for (std::set<int>::iterator it=temp.begin(); it!=temp.end(); it++) {
 				// insert item
@@ -402,7 +402,7 @@ set<int> OptimizedCFG::getNextStar(int line1) {
 				
 				// only enqueue unvisited nodes
 				if (visited.find(*it)==visited.end()) { 
-					pq.push(*it); //cout << "pushed "<<*it<<" onto pq"<< endl; 
+					pq.push(*it); ////cout << "pushed "<<*it<<" onto pq"<< endl; 
 				}
 			}
 		}
@@ -418,25 +418,25 @@ set<int> OptimizedCFG::getPrevStar(int line1) {
 	std::set<int> visited, temp, ans;
 	int curr;
   /*
-  cout << endl << "printing out NextList " << endl;
+  //cout << endl << "printing out NextList " << endl;
   
   for (std::map<int, set<int>>::iterator it=NextListFwd.begin(); it!=NextListFwd.end(); it++) {
-		std::cout << "for line " << (*it).first << ": ";
+		std:://cout << "for line " << (*it).first << ": ";
 		set<int> list = (*it).second;
 		for (std::set<int>::iterator it2=list.begin(); it2!=list.end(); it2++) {
-			std::cout << *it2 << " ";
+			std:://cout << *it2 << " ";
 		}
-		std::cout << "" << endl;
+		std:://cout << "" << endl;
   }
 
-  cout << endl << "printing BackList "<< endl;
+  //cout << endl << "printing BackList "<< endl;
   for (std::map<int, set<int>>::iterator it=NextListBwd.begin(); it!=NextListBwd.end(); it++) {
-		std::cout << "for line " << (*it).first << ": ";
+		std:://cout << "for line " << (*it).first << ": ";
 		set<int> list = (*it).second;
 		for (std::set<int>::iterator it2=list.begin(); it2!=list.end(); it2++) {
-			std::cout << *it2 << " ";
+			std:://cout << *it2 << " ";
 		}
-		std::cout << "" << endl;
+		std:://cout << "" << endl;
   }
   */
 	while (!pq.empty()) {
@@ -450,10 +450,10 @@ set<int> OptimizedCFG::getPrevStar(int line1) {
 				temp = NextListBwd.at(curr);
 			}
 			catch (const out_of_range& e) {
-				// cout << "Nothing after "<< curr <<". ";
+				// //cout << "Nothing after "<< curr <<". ";
 			}
 
-			// cout << "exploring list at position " << curr << " " << temp.size() << " ";
+			// //cout << "exploring list at position " << curr << " " << temp.size() << " ";
 			// enqueue linked nodes
 			for (std::set<int>::iterator it=temp.begin(); it!=temp.end(); it++) {
 				// insert item
@@ -461,7 +461,7 @@ set<int> OptimizedCFG::getPrevStar(int line1) {
 				
 				// only enqueue unvisited nodes
 				if (visited.find(*it)==visited.end()) { 
-					pq.push(*it); //cout << "pushed "<<*it<<" onto pq"<< endl; 
+					pq.push(*it); ////cout << "pushed "<<*it<<" onto pq"<< endl; 
 				}
 			}
 		}
@@ -626,7 +626,7 @@ void OptimizedCFG::printAggNodeMap() {
     AggNode* curr = stack_print.top(); 
     
     if (visited_nodes.find(curr)!=visited_nodes.end()) {
-      cout << "already visited this node at line " << *(curr->getProgLines().begin()) << endl;
+      //cout << "already visited this node at line " << *(curr->getProgLines().begin()) << endl;
       stack_print.pop();
       continue;
     }
@@ -637,12 +637,12 @@ void OptimizedCFG::printAggNodeMap() {
     stack_print.pop();
 
     // get lines in this node
-    cout << curr->getType() << " ";
+    //cout << curr->getType() << " ";
     std::set<int> lines = curr->getProgLines();
     for (std::set<int>::iterator it=lines.begin(); it!=lines.end(); it++) {
-      cout << *it << " ";
+      //cout << *it << " ";
     }
-    cout <<endl;
+    //cout <<endl;
 
     // push nextNode onto stack      
     if (!curr->getNextAggNodes().empty()) {
@@ -653,7 +653,7 @@ void OptimizedCFG::printAggNodeMap() {
     }
   }
 
-  //cout << "last line of printing " << endl;
+  ////cout << "last line of printing " << endl;
 }
 
 bool OptimizedCFG::isAffects(int line1, int line2) {
@@ -664,7 +664,7 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
   std::set<int> used_by_line2 = usesTable->evaluateGetUsedVarStmt(line2);
 
   int common_var = *modified_by_line1.begin();
-  cout << "lines: " << line1 << " " << line2 << " var: " << common_var << endl;
+  //cout << "lines: " << line1 << " " << line2 << " var: " << common_var << endl;
 
   int number_of_paths = 0;
 
@@ -678,27 +678,27 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
 
     number_of_paths = 1;
 
-    cout << "check within containing nodes" << endl;
+    //cout << "check within containing nodes" << endl;
 
     // check within the nodes
 
     AggNode* ANode1 = stmtToAggNodeMap.at(line1);
     AggNode* ANode2 = stmtToAggNodeMap.at(line2);
   /*
-    cout << ANode1->getType() << endl;
+    //cout << ANode1->getType() << endl;
     
     std::set<int> lines1 = ANode1->getProgLines();
     for (std::set<int>::iterator it=lines1.begin(); it!=lines1.end(); it++) {
-      cout << *it << " ";
+      //cout << *it << " ";
     }
-    cout<<endl;
+    //cout<<endl;
     
-    cout << ANode2->getType() << endl;
+    //cout << ANode2->getType() << endl;
     std::set<int> lines2 = ANode2->getProgLines();
     for (std::set<int>::iterator it=lines2.begin(); it!=lines2.end(); it++) {
-      cout << *it << " ";
+      //cout << *it << " ";
     }
-    cout<<endl;
+    //cout<<endl;
     */
 
     std::set<int> those_lines;
@@ -734,7 +734,7 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
         std::set<int> foo = modifiesTable->evaluateGetModifiedVarStmt(*it1);
         if (foo.find(common_var)!=foo.end()) {
           // flag
-          // cout << "immediate neighbours modifies var " << common_var << endl;
+          // //cout << "immediate neighbours modifies var " << common_var << endl;
           //number_of_paths -= 1;
           return false;
         }
@@ -744,7 +744,7 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
     
     // check in-between nodes on the path
 
-    // cout << "checking in-between nodes" << endl;
+    // //cout << "checking in-between nodes" << endl;
     std::stack<AggNode*> stack_;
     std::set<AggNode*> visited_nodes;
     visited_nodes.insert(ANode1);
@@ -773,12 +773,12 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
       stack_.pop();
     
       if (curr==ANode2) {
-        cout << "reached node of line 2." << endl;
+        //cout << "reached node of line 2." << endl;
         break;
       }
 
       if (!isNextStar(*(curr->getProgLines().begin()),line2)) {
-        cout << "this path no longer leads to line " << line2 << endl;
+        //cout << "this path no longer leads to line " << line2 << endl;
         number_of_paths -= 1;
         continue;
       }
@@ -786,19 +786,19 @@ bool OptimizedCFG::isAffects(int line1, int line2) {
 
       std::set<int> modified_by_curr = curr->getVarModifiedByThisNode();
       /*
-      cout << curr->getType() << " ";
+      //cout << curr->getType() << " ";
       std::set<int> lines3 = curr->getProgLines();
       for (std::set<int>::iterator it=lines3.begin(); it!=lines3.end(); it++) {
-        cout << *it << " ";
+        //cout << *it << " ";
       }
-      cout<<endl;
+      //cout<<endl;
       */
 
       if ( !parentTable->evaluateIsParentStar(*(curr->getProgLines().begin()), line2)
         && !parentTable->evaluateIsParentStar(*(curr->getProgLines().begin()), line1)
         && modified_by_curr.find(common_var)!=modified_by_curr.end()) {
         // flag
-        cout << "this node does not contain either lines and it modifies var "<<common_var<<". skipping this path." << endl;
+        //cout << "this node does not contain either lines and it modifies var "<<common_var<<". skipping this path." << endl;
         number_of_paths -= 1;
         //return false;
       }

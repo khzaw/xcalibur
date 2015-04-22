@@ -54,6 +54,10 @@ public:
 				return false;
 			}
 		}
+		if (isSyn == 3 && leftSynonym == rightSynonym) {
+			return false;
+		}
+
 		return true;
 	}
 

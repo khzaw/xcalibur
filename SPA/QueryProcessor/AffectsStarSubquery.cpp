@@ -355,21 +355,52 @@ public:
 		vector<int> assStmt = pkb->statementTable->getStmtNumUsingNodeType("ASSIGN_NODE");
 		for (size_t i = 0; i < assStmt.size(); i++) {
 			p.first = assStmt[i];
-			for (size_t j = 0; j < assStmt.size(); j++) {
-				p.second = assStmt[j];
-				if (isConcurrent) {
-					try {
-						if (CacheTable::instance()->isAffectsStarCache.at(p)) {
+			if (leftSynonym != rightSynonym) {
+				for (size_t j = 0; j < assStmt.size(); j++) {
+					p.second = assStmt[j];
+					if (isConcurrent) {
+						try {
+							if (CacheTable::instance()->isAffectsStarCache.at(p)) {
+								vector<int> row = vector<int>();
+								row.push_back(assStmt.at(i));
+								row.push_back(assStmt.at(j));
+								tuple->addResultRow(row);
+							}
+						} catch (exception& e) {
+							if (pkb->affectsExtractor->isAffectsStar(assStmt[i], assStmt[j])) {
+								vector<int> row = vector<int>();
+								row.push_back(assStmt.at(i));
+								row.push_back(assStmt.at(j));
+								tuple->addResultRow(row);
+								CacheTable::instance()->isAffectsStarCache[p] = true;
+							} else {
+								CacheTable::instance()->isAffectsStarCache[p] = false;
+							}
+						}
+					} else {				
+						if (pkb->affectsExtractor->isAffectsStar(assStmt[i], assStmt[j])) {
 							vector<int> row = vector<int>();
 							row.push_back(assStmt.at(i));
 							row.push_back(assStmt.at(j));
 							tuple->addResultRow(row);
 						}
-					} catch (exception& e) {
-						if (pkb->affectsExtractor->isAffectsStar(assStmt[i], assStmt[j])) {
+					}
+				}
+			} else {
+				p.second = assStmt[i];
+				if (isConcurrent) {
+					try {
+						if (CacheTable::instance()->isAffectsStarCache.at(p)) {
 							vector<int> row = vector<int>();
 							row.push_back(assStmt.at(i));
-							row.push_back(assStmt.at(j));
+							row.push_back(assStmt.at(i));
+							tuple->addResultRow(row);
+						}
+					} catch (exception& e) {
+						if (pkb->affectsExtractor->isAffectsStar(assStmt[i], assStmt[i])) {
+							vector<int> row = vector<int>();
+							row.push_back(assStmt.at(i));
+							row.push_back(assStmt.at(i));
 							tuple->addResultRow(row);
 							CacheTable::instance()->isAffectsStarCache[p] = true;
 						} else {
@@ -377,10 +408,10 @@ public:
 						}
 					}
 				} else {				
-					if (pkb->affectsExtractor->isAffectsStar(assStmt[i], assStmt[j])) {
+					if (pkb->affectsExtractor->isAffectsStar(assStmt[i], assStmt[i])) {
 						vector<int> row = vector<int>();
 						row.push_back(assStmt.at(i));
-						row.push_back(assStmt.at(j));
+						row.push_back(assStmt.at(i));
 						tuple->addResultRow(row);
 					}
 				}

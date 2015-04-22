@@ -1,7 +1,7 @@
-9 - Pattern Test 9
-assign a; variable v;
-Select <a, v> pattern a(v, "x * x * 11")
-93 x
+1 - Affects Test 1
+stmt a, b; variable v;
+Select a such that Next(a, b);
+
 5000
 1 - Pattern Test 1
 assign a; variable v;
@@ -42,6 +42,11 @@ Select <a,v> pattern a(v, "a + b")
 assign a; variable v;
 Select <a, v> pattern a(v, _"c + d"_)
 5 b
+5000
+9 - Pattern Test 9
+assign a; variable v;
+Select <a, v> pattern a(v, "x * x * 11")
+93 x
 5000
 10 - Pattern Test 10
 assign a; variable v;

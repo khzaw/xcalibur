@@ -45,6 +45,9 @@ public:
 				return false;
 			}
 		}
+		if (isSyn == 3 && leftSynonym == rightSynonym) {
+			return false;
+		}
 		return true;
 	}
 
@@ -70,6 +73,11 @@ public:
 				}
 				break;
 			case 3: // (syn, syn)
+				if (leftSynonym == rightSynonym) {
+					priority = 0;
+					break;
+				}
+
 				isLeftSynStmtOrProgLine = (synonymTable->at(leftSynonym) == "stmt" || synonymTable->at(leftSynonym) == "prog_line");
 				isRightSynStmtOrProgLine = (synonymTable->at(rightSynonym) == "stmt" || synonymTable->at(rightSynonym) == "prog_line");
 				if (isLeftSynStmtOrProgLine && isRightSynStmtOrProgLine){

@@ -147,7 +147,6 @@ void OptimizedCFG::constructCFGFromProc(TNode* root) {
 						if (*it3<0 && visited.find(*it3)!=visited.end()) stack.push(*it3);
 						else {
               it->second.insert(*it3); // equivalent to NextListFwd[(*it).first].insert(*it3);
-              NextListBwd[*it3].insert(it->first);
             }
           }
 			}
@@ -155,16 +154,24 @@ void OptimizedCFG::constructCFGFromProc(TNode* root) {
 	}
   // end handle end sentinels linking
 
+  // construct NextListBwd from NextListFwd
+  for (std::map<int, set<int>>::iterator it=NextListFwd.begin(); it!=NextListFwd.end(); it++) {
+		for (std::set<int>::iterator it2=it->second.begin(); it2!=it->second.end(); it2++) {
+        NextListBwd[*it2].insert(it->first);
+    }
+  }
+
+
   // AggNode Map
   stmtToAggNodeMap = populateAggNodeMap(firstStmtList, stmtToAggNodeMap, NULL, NULL);
 
 }
 
 // CFG construction
+// construct NextListFwd (1 direction)
 void OptimizedCFG::addLink(int line1, int line2) {
 	if (line1 != line2) {
 		NextListFwd[line1].insert(line2);
-		NextListBwd[line2].insert(line1);
 	}
 
 	// if line1 == line 2: raise error

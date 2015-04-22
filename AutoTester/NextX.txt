@@ -248,6 +248,56 @@ stmt a, b;
 Select a such that Next*(66, a)
 54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81
 5000
+51 - Affects* Test 1
+stmt a, b; 
+Select b such that Affects*(b, 54)
+
+5000
+52 - Affects* Test 2
+stmt a, b; 
+Select b such that Affects*(b, 49)
+
+5000
+53 - Affects* Test 3
+stmt a, b; 
+Select b such that Affects*(b, 50)
+
+5000
+54 - Affects* Test 4
+stmt a, b; 
+Select b such that Affects*(b, 16)
+
+5000
+55 - Affects* Test 5
+stmt a, b; 
+Select b such that Affects*(b, 17)
+5
+5000
+56 - Affects* Test 6
+stmt a, b; 
+Select b such that Affects*(b, 98)
+94,98, 96
+5000
+57 - Affects* Test 7
+stmt b;
+Select b such that Affects*(b, 99)
+83
+5000
+58 - Affects* Test 8
+stmt a, b; 
+Select b such that Affects*(b, 59)
+62
+5000
+59 - Affects* Test 9
+stmt a, b; 
+Select b such that Affects*(b, 71)
+
+5000
+60 - Affects* Test 10
+stmt a, b; 
+Select b such that Affects*(b, 74)
+59,62
+5000
 99 - Next Test 99
 assign a; call b;  
 Select <a,b> such that Next(a, b)

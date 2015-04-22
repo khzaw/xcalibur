@@ -319,7 +319,10 @@ public:
 		// for each followee statement, get its NextStar
 		set<int> tempPrevious = pkb->nextExtractor->getAllPrev();
 		vector<int> Previous(tempPrevious.begin(), tempPrevious.end());
-
+		vector<int> tempNext;
+		if (!(right == "stmt" || right == "prog_line")) {
+			tempNext = pkb->statementTable->getStmtNumUsingNodeType(TNODE_NAMES[synToNodeType.at(synonymTable->at(rightSynonym))]);
+		}
 		for (size_t i = 0; i < Previous.size(); i++) {
 			// synonym type check
 			if ((left == "assign" || left == "while" || left == "if" || left == "call")
@@ -360,9 +363,17 @@ public:
 						CacheTable::instance()->nextStarCache.insert(map<int, vector<int>>::value_type(Previous[i], NextStar));
 					}
 				} else {
-					tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
-					//tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
-					NextStar.assign(tempNextStar.begin(), tempNextStar.end());
+					if (right == "stmt" || right == "prog_line") {
+						tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
+						//tempNextStar = pkb->nextExtractor->getNextStar(Previous[i]);
+						NextStar.assign(tempNextStar.begin(), tempNextStar.end());
+					} else {
+						for (size_t x = 0; x < tempNext.size(); x++) {
+							if (pkb->nextExtractor->isNextStar(Previous[i], tempNext[x])) {
+								NextStar.push_back(tempNext[x]);
+							}
+						}
+					}
 				}
 			}
 			

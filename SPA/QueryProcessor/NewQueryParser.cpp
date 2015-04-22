@@ -576,12 +576,8 @@ string NewQueryParser::matchEntRef(bool excludeUnderScore, Subquery*& subquery, 
 	// entRef: synonym | "_" | """ IDENT """ | INTEGER
 	string fst = "";
 	if(nextToken.name.compare("_") == 0) {
-		if(!excludeUnderScore) {
-			fst = "_";
-			match(UNDERSCORE);
-		} else {
-			throw(QueryException("VAGUE QUERY ERROR: The first argument of Uses and Modifies cannot be a \"_\""));
-		}
+		fst = "_";
+		match(UNDERSCORE);
 	} else if(nextToken.token == INT_LIT) {
 		fst = nextToken.name;
 		match(nextToken.name);

@@ -48,3 +48,18 @@ procedure p;
 Select p such that Modifies(p, "lewsi")
 none
 5000
+11 - Modifies with first param blank
+variable v;
+Select v such that Modifies(_, v)
+none
+5000
+12 - Modifies with second param var and first parma first index
+variable v;
+Select v such that Modifies("one", v)
+a,b,bool,c,d,e,four,one,query,spa,true,two,x,y,z
+5000
+13 - Modifes
+variable v;
+Select v such that Modifies("a", v)
+none
+5000

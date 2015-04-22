@@ -56,9 +56,9 @@ void Parser::populateAdditionalModifiesInfo() {
 		set<int> allVars = this->controller->modifiesTable->getAllVariablesModifiedByProc(procIndex);
 
 		// get all callee stars of that procedure
-		set<int> allCalleeStars = this->controller->callsTable->getCallerStar(procIndex);
+		set<int> allCallerStars = this->controller->callsTable->getCallerStar(procIndex);
 
-		for(std::set<int>::iterator it = allCalleeStars.begin(); it != allCalleeStars.end(); ++it) {
+		for(std::set<int>::iterator it = allCallerStars.begin(); it != allCallerStars.end(); ++it) {
 			for(std::set<int>::iterator it2 = allVars.begin(); it2 != allVars.end(); ++it2) {
 				
 				
@@ -86,8 +86,8 @@ void Parser::populateAdditionalUsesInfo() {
 
 		// get all variables used by a procdeure
 		set<int> allVars = this->controller->usesTable->getAllVariablesUsedByProc(procIndex);
-		set<int> allCalleeStars = this->controller->callsTable->getCallerStar(procIndex);
-		for(std::set<int>::iterator it = allCalleeStars.begin(); it != allCalleeStars.end(); ++it) {
+		set<int> allCallerStars = this->controller->callsTable->getCallerStar(procIndex);
+		for(std::set<int>::iterator it = allCallerStars.begin(); it != allCallerStars.end(); ++it) {
 			for(std::set<int>::iterator it2 = allVars.begin(); it2 != allVars.end(); ++it2) {
 
 				// call statements in a procedure

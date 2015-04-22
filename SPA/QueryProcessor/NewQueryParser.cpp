@@ -604,17 +604,27 @@ string NewQueryParser::matchEntRef(bool excludeUnderScore, Subquery*& subquery, 
 		if(controller->procTable->getProcIndex(fst) != -1) {
 			fst = to_string((long long)controller->procTable->getProcIndex(fst));
 			if(modifies || uses) {
-				if(modifies) subquery = new ModifiesProcSubquery(&synonyms, controller);
-				if(uses) subquery = new UsesProcSubquery(&synonyms, controller);
+				if(modifies) {
+					fst = "_";
+					subquery = new ModifiesProcSubquery(&synonyms, controller);
+				}
+				if(uses) { 
+					fst = "_";
+					subquery = new UsesProcSubquery(&synonyms, controller);
+				}
 			}
 		}
 		if(controller->varTable->getVarIndex(fst) != -1) {
 			fst = to_string((long long)controller->varTable->getVarIndex(fst));
 			if(modifies || uses) {
-				if(modifies) 
+				if(modifies)  {
+					fst = "_";
 					subquery = new ModifiesSubquery(&synonyms, controller);
-				if(uses)
+				}
+				if(uses) {
+					fst = "_";
 					subquery = new UsesSubquery(&synonyms, controller);
+				}
 			}
 		}
 		// check with synoyntable

@@ -47,7 +47,7 @@ int main() {
 	//query = "assign a; Select a pattern a (\"x\", \"x*y+z\")";
 	//parser = new NewQueryParser(query, controller);
 
-	query = "assign a; Select a pattern a(_, \"(x*(y+z) + z)*z\")";
+	query = "assign a; variable v; Select <a, v> pattern a(v, _\"c + d\"_)";
 	parser = new NewQueryParser(query, controller);
 
 	//query = "assign a; Select a such that Modifies (a, \"y\") and Uses (a, \"y\")";

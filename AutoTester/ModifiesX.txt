@@ -38,3 +38,13 @@ if i;
 Select i such that Modifies(i, "bool")
 14,19,26,29,40,68,69
 5000
+9 - Modifies with non existing procedure
+variable v;
+Select v such that Modifies("xxxx", v)
+none
+5000
+10 - Modifies with non existing variable
+procedure p;
+Select p such that Modifies(p, "lewsi")
+none
+5000

@@ -32,6 +32,10 @@ public:
 	}
 	
 	bool validate() {
+		if(isSyn == 4 || isSyn == 6 || isSyn == 7) {
+			return false;
+		}
+	
 		//right synonym
 		if(isSyn == 1 || isSyn == 4 || isSyn == 3) {
 			string s = synonymTable->at(rightSynonym);

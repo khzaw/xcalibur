@@ -1,0 +1,40 @@
+1 - Modifies
+variable a;
+Select a such that Modifies(2, a)
+a,b,one,two,x,y,d,e,z,bool,c,spa,four,query,true
+5000
+2 - Procedure Modifies
+variable a;
+Select a such that Modifies("two", a)
+a,one,two,x,y,d,e,z,bool,c,four,spa,query,true
+5000
+3 - Procedure Modifies
+procedure p;
+Select p such that Modifies(p, "true")
+one,two,three
+5000
+4 - Procedure Modifies
+procedure p;
+Select p such that Modifies(p, "spa")
+one,two,three,four
+5000
+5 - Modifies
+stmt s; variable v;
+Select s such that Modifies(s, "spa")
+82,83,8,100,38,51,60,61,65,73,77,54,10,76,72,11,12,13,14,16,18,19,2,23,26,27,29,31,33,4,40,41,42,46,47,52,53,57,6,64,68,69,7
+5000
+6 - Modifies call
+call c;
+Select c such that Modifies(c, "spa")
+10,12,16,23,27,31,33,38,42,46,51,53,60,61,65,7,73,77,8
+5000
+7 - Modifies while
+while w;
+Select w such that Modifies(w, "true")
+11,13,18,2,4,41,47,52,6
+5000
+7 - Modifies if
+if i;
+Select i such that Modifies(i, "bool")
+14,19,26,29,40,68,69
+5000

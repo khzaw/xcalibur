@@ -381,6 +381,10 @@ QTNode* NewQueryParser::matchExpression() {
 
 	//cout << "postfix : " << result << endl;
 
+	if(result.length() > 0) {
+		result = " " + result + " ";
+	}
+
 	return operandStack.top();
 }
 

@@ -368,6 +368,10 @@ void Parser::stmt(TNode* parent) {
 		controller->ast->assignChild(assignNode, (operandStack.top()));
 		controller->ast->assignParent(operandStack.top(), assignNode);
 
+		if(postfix.length() > 0) {
+			postfix = " " + postfix + " ";
+		}
+
 		cout << "postfix : " << postfix << endl;
 		assignNode->setData(postfix);
 
